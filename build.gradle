@@ -1,0 +1,55 @@
+plugins {
+    id 'java'
+    id 'org.openjfx.javafxplugin' version '0.0.9' apply false
+    id 'biz.aQute.bnd.builder' version '5.1.2' apply false
+}
+
+group 'it.paprojects.materialfx'
+version '0.1-ALPHA'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+subprojects {
+    if (name.endsWith('demo')) {
+        apply plugin: 'application'
+    }
+    if (name.endsWith("materialfx")) {
+        apply plugin: 'biz.aQute.bnd.builder'
+    }
+    apply plugin: 'org.openjfx.javafxplugin'
+
+    javafx {
+        version = "14.0.2.1"
+        modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.web' ]
+    }
+
+    version '0.1-ALPHA'
+
+    javadoc {
+        excludes = ['**/*.html', 'META-INF/**']
+
+        options.use = true
+        options.splitIndex = true
+        options.encoding = 'UTF-8'
+        options.author = true
+        options.version = true
+        options.windowTitle = "$project.name $project.version API"
+        options.docTitle = "$project.name $project.version API"
+        options.links = ['https://docs.oracle.com/en/java/javase/11/docs/api',
+                         'https://openjfx.io/javadoc/14']
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+                'Bundle-Name': project.name,
+                'Bundle-Description': "Material controls for JavaFX",
+                'Bundle-SymbolicName': 'it.paprojects',
+                'Export-Package': 'it.paprojects.materialfx.*, it.paprojects.materialfx.demo.*'
+        )
+    }
+}

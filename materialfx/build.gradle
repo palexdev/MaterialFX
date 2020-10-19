@@ -1,0 +1,16 @@
+group 'it.paprojects.materialfx'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+compileJava   {
+    // This is necessary since Gluon devs are assholes :)
+    sourceCompatibility = '11'
+    targetCompatibility = '11'
+}
+
+dependencies {
+    testImplementation('junit:junit:4.13')
+}

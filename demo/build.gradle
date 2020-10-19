@@ -1,0 +1,17 @@
+plugins {
+    id 'application'
+}
+
+group 'it.paprojects.materialfx.demo'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    implementation "fr.brouillard.oss:cssfx:11.4.0"
+    implementation project(':materialfx')
+}
+
+mainClassName = 'it.paprojects.materialfx.demo.Demo'

@@ -1,0 +1,12 @@
+.mfx-button:armed,
+.mfx-button:hover,
+.mfx-button:focused,
+.mfx-button {
+    -fx-background-radius: 3px;
+    -fx-background-insets: 0px;
+}
+
+.mfx-button,
+.mfx-button:armed {
+    -fx-background-color: white;
+}
