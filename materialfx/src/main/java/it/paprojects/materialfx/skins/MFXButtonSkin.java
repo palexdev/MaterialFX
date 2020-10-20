@@ -33,7 +33,7 @@ public class MFXButtonSkin extends ButtonSkin {
                 break;
             }
             case FLAT: {
-                getSkinnable().setEffect(null);
+                getSkinnable().setEffect(MFXDepthManager.shadowOf(DepthLevel.LEVEL0));
                 getSkinnable().setPickOnBounds(true);
                 break;
             }

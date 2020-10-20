@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
  * Enumerator which defines 5 levels of {@code DropShadow} effects from {@code LEVEL1} to {@code LEVEL5}.
  */
 public enum DepthLevel {
-    //LEVEL0(Color.rgb(0, 0, 0, 0), 0, 0, 0, 0),
+    LEVEL0(Color.rgb(0, 0, 0, 0), 0, 0, 0, 0),
     LEVEL1(Color.rgb(0, 0, 0, 0.20), 10, 0.12, -1, 2),
     LEVEL2(Color.rgb(0, 0, 0, 0.20), 15, 0.16, 0, 4),
     LEVEL3(Color.rgb(0, 0, 0, 0.20), 20, 0.19, 0, 6),

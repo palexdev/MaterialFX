@@ -20,7 +20,7 @@ import java.util.List;
 import static it.paprojects.materialfx.effects.MFXDepthManager.shadowOf;
 
 public class RippleGenerator extends Group {
-    private final String STYLE_CLASS = "rippleGenerator";
+    private final String STYLE_CLASS = "ripple-generator";
     private static final StyleablePropertyFactory<RippleGenerator> FACTORY = new StyleablePropertyFactory<>(Group.getClassCssMetaData());
 
     private final Control control;

@@ -4,5 +4,6 @@ module MaterialFX.demo.main {
     requires fr.brouillard.oss.cssfx;
     requires javafx.graphics;
     requires javafx.controls;
+    requires javafx.fxml;
     exports it.paprojects.materialfx.demo;
 }
