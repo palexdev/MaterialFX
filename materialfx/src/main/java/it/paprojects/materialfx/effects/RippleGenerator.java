@@ -20,6 +20,9 @@ import java.util.List;
 import static it.paprojects.materialfx.effects.MFXDepthManager.shadowOf;
 
 public class RippleGenerator extends Group {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final String STYLE_CLASS = "ripple-generator";
     private static final StyleablePropertyFactory<RippleGenerator> FACTORY = new StyleablePropertyFactory<>(Group.getClassCssMetaData());
 
@@ -43,6 +46,9 @@ public class RippleGenerator extends Group {
     private double generatorCenterX = 100.0;
     private double generatorCenterY = 100.0;
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public RippleGenerator(Control control) {
         this.control = control;
         getStyleClass().add(STYLE_CLASS);
@@ -58,6 +64,9 @@ public class RippleGenerator extends Group {
         });
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
     public void createRipple() {
         final Ripple ripple = new Ripple(generatorCenterX, generatorCenterY);
         getChildren().add(ripple);
@@ -136,6 +145,9 @@ public class RippleGenerator extends Group {
     }
 
     private class Ripple extends Circle {
+        //================================================================================
+        // Properties
+        //================================================================================
         private final int shadowDelta = 2;
 
         private final Timeline inAnimation = new Timeline();
@@ -144,6 +156,9 @@ public class RippleGenerator extends Group {
         private final SequentialTransition sequentialTransition = new SequentialTransition();
         private final ParallelTransition parallelTransition = new ParallelTransition();
 
+        //================================================================================
+        // Constructors
+        //================================================================================
         private Ripple(double centerX, double centerY) {
             super(centerX, centerY, 0, Color.TRANSPARENT);
             setFill(rippleColor.get());
@@ -152,6 +167,9 @@ public class RippleGenerator extends Group {
             buildAnimation();
         }
 
+        //================================================================================
+        // Methods
+        //================================================================================
         private void buildAnimation() {
             DropShadow buttonShadow = (DropShadow) ((MFXButton) control.getSkin().getSkinnable()).getEffect();
             DepthLevel depthLevel = ((MFXButton) control).getDepthLevel();

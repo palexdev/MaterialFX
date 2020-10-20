@@ -23,7 +23,7 @@ public class MFXButtonSkin extends ButtonSkin {
     }
 
     //================================================================================
-    // Private Methods
+    // Methods
     //================================================================================
     private void updateButtonType(MFXButton button, DepthLevel depthLevel) {
         switch (button.getButtonType()) {

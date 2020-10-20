@@ -53,6 +53,9 @@ public class MFXButton extends Button {
         init();
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
     private void init() {
         getStyleClass().add(STYLE_CLASS);
         setAlignment(Pos.CENTER);
