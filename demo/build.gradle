@@ -13,5 +13,6 @@ dependencies {
     implementation "fr.brouillard.oss:cssfx:11.4.0"
     implementation project(':materialfx')
 }
-
-mainClassName = 'it.paprojects.materialfx.demo.Demo'
+application {
+    mainClassName = 'MaterialFX.demo.main/it.paprojects.materialfx.demo.Demo'
+}

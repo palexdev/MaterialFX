@@ -1,0 +1,25 @@
+@font-face {
+    font-family: 'Comfortaa';
+    src: url('fonts/Comfortaa/Comfortaa-VariableFont_wght.ttf');
+}
+
+@font-face {
+    font-family: "Comfortaa SemiBold";
+    src: url('fonts/Comfortaa/Comfortaa-SemiBold.ttf');
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url('fonts/Roboto/Roboto-Regular.ttf');
+}
+
+.label {
+    -fx-background-color: linear-gradient(to bottom right, #0093E9 0%, #7be4bc 100%);
+    -fx-background-radius: 7;
+    -fx-border-color: lightgray;
+    -fx-border-radius: 5;
+    -fx-border-width: 2;
+    -fx-font-family: Comfortaa-SemiBold;
+    -fx-font-size: 12.5;
+    -fx-text-fill: white;
+}

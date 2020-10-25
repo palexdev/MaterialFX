@@ -8,7 +8,8 @@ import java.net.URL;
  */
 public class MFXResources {
 
-    private MFXResources() {}
+    private MFXResources() {
+    }
 
     public static URL load(String path) {
         return MFXResources.class.getResource(path);

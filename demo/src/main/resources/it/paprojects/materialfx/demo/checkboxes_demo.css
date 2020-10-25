@@ -1,0 +1,5 @@
+@import url("common.css");
+
+#custom-ripple .ripple-container .ripple-generator {
+    -mfx-ripple-color: rgb(195, 255, 190);
+}

@@ -15,9 +15,8 @@ public class MFXButtonSkin extends ButtonSkin {
     public MFXButtonSkin(MFXButton button, DepthLevel depthLevel) {
         super(button);
 
-
         button.buttonTypeProperty().addListener(
-                ((observable, oldValue, newValue) -> updateButtonType(button, depthLevel)));
+                (observable, oldValue, newValue) -> updateButtonType(button, depthLevel));
 
         updateButtonType(button, depthLevel);
     }

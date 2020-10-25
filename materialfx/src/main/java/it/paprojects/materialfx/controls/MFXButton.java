@@ -219,7 +219,6 @@ public class MFXButton extends Button {
     //================================================================================
     // Override Methods
     //================================================================================
-
     @Override
     protected Skin<?> createDefaultSkin() {
         MFXButtonSkin skin = new MFXButtonSkin(this, depthLevel.get());

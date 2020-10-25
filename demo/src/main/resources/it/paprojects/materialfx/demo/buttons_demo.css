@@ -1,0 +1,56 @@
+@import url("common.css");
+
+.flat-button {
+    -fx-background-color: transparent;
+}
+
+.flat-button .ripple-generator {
+    -mfx-ripple-color: lightgray;
+}
+
+.flat-button .text {
+    -fx-font-family: Comfortaa-SemiBold;
+    -fx-font-size: 12;
+    -fx-font-weight: bold;
+}
+
+.raised-button {
+    -fx-background-color: white;
+    -mfx-button-type: raised;
+}
+
+.raised-button .ripple-generator {
+    -mfx-ripple-color: lightgray;
+}
+
+.raised-button .text {
+    -fx-font-family: Comfortaa-SemiBold;
+    -fx-font-size: 12;
+    -fx-font-weight: bold;
+}
+
+#colored-raised {
+    -fx-background-color: #b700ff;
+    -fx-text-fill: white;
+}
+
+#colored-raised .text {
+    -fx-fill: white;
+}
+
+#colored-raised .ripple-generator {
+    -mfx-ripple-color: rgba(255, 255, 255, 0.4);
+}
+
+#custom-ripple {
+    -fx-background-color: #55bbff;
+    -fx-text-fill: white;
+}
+
+#custom-ripple .text {
+    -fx-fill: white;
+}
+
+#custom-ripple .ripple-generator {
+    -mfx-ripple-color: #1900ff;
+}

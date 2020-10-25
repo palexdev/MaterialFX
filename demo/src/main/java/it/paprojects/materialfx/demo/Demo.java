@@ -15,10 +15,10 @@ public class Demo extends Application {
     public void start(Stage primaryStage) throws IOException {
         CSSFX.start();
 
-        AnchorPane anchorPane = FXMLLoader.load(MFXResources.load("buttons_demo.fxml"));
+        AnchorPane demo = FXMLLoader.load(MFXResources.load("main_demo.fxml"));
 
-        primaryStage.setTitle("HELLO THERE");
-        primaryStage.setScene(new Scene(anchorPane));
+        primaryStage.setTitle("MaterialFX Demo - Features Preview");
+        primaryStage.setScene(new Scene(demo));
         primaryStage.show();
     }
 
