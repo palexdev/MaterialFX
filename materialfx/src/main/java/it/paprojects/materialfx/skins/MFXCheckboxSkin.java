@@ -1,14 +1,18 @@
 package it.paprojects.materialfx.skins;
 
 import it.paprojects.materialfx.controls.MFXCheckbox;
+import it.paprojects.materialfx.effects.RippleClipType;
+import it.paprojects.materialfx.effects.RippleGenerator;
 import it.paprojects.materialfx.utils.NodeUtils;
 import javafx.geometry.Insets;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.skin.CheckBoxSkin;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.SVGPath;
+import javafx.util.Duration;
 
 /**
  *  This is the implementation of the {@code Skin} associated with every {@code MFXCheckbox}.
@@ -20,6 +24,7 @@ public class MFXCheckboxSkin extends CheckBoxSkin {
     private final AnchorPane rippleContainer;
     private final StackPane box;
     private final StackPane mark;
+    private final RippleGenerator rippleGenerator;
 
     private final double rippleContainerWidth = 30;
     private final double rippleContainerHeight = 30;
@@ -68,7 +73,12 @@ public class MFXCheckboxSkin extends CheckBoxSkin {
         mark.getStyleClass().setAll("mark");
         box.getChildren().add(mark);
 
-        rippleContainer.getChildren().add(box);
+        rippleGenerator = new RippleGenerator(rippleContainer, RippleClipType.NOCLIP);
+        rippleGenerator.setRippleRadius(18);
+        rippleGenerator.setInDuration(Duration.millis(400));
+        rippleGenerator.setAnimateBackground(false);
+
+        rippleContainer.getChildren().addAll(rippleGenerator, box);
 
         updateChildren();
         updateMarkType(control);
@@ -102,6 +112,15 @@ public class MFXCheckboxSkin extends CheckBoxSkin {
         control.uncheckedColorProperty().addListener(
                 (observable, oldValue, newValue) -> updateColors(control)
         );
+
+        /* Listener on control but if the coordinates of the event are greater than then ripple container size
+         * then the center of the ripple is set to the width and/or height of container
+         */
+        control.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            rippleGenerator.setGeneratorCenterX(Math.min(event.getX(), rippleContainer.getWidth()));
+            rippleGenerator.setGeneratorCenterY(Math.min(event.getY(), rippleContainer.getHeight()));
+            rippleGenerator.createRipple();
+        });
     }
 
     /**

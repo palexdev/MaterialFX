@@ -2,17 +2,12 @@ package it.paprojects.materialfx.controls;
 
 import it.paprojects.materialfx.MFXResources;
 import it.paprojects.materialfx.controls.enums.MarkType;
-import it.paprojects.materialfx.effects.RippleClipType;
-import it.paprojects.materialfx.effects.RippleGenerator;
 import it.paprojects.materialfx.skins.MFXCheckboxSkin;
 import javafx.css.*;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Skin;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.util.Duration;
 
 import java.util.List;
 
@@ -23,7 +18,6 @@ public class MFXCheckbox extends CheckBox {
     private static final StyleablePropertyFactory<MFXCheckbox> FACTORY = new StyleablePropertyFactory<>(CheckBox.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-checkbox";
     private final String STYLESHEET = MFXResources.load("css/mfx-checkbox.css").toString();
-    private RippleGenerator rippleGenerator;
 
     //================================================================================
     // Constructors
@@ -148,25 +142,7 @@ public class MFXCheckbox extends CheckBox {
 
     @Override
     protected Skin<?> createDefaultSkin() {
-        MFXCheckboxSkin skin = new MFXCheckboxSkin(this);
-        Pane rippleContainer = skin.getRippleContainer();
-
-        rippleGenerator = new RippleGenerator(rippleContainer, RippleClipType.NOCLIP);
-        rippleGenerator.setRippleRadius(18);
-        rippleGenerator.setInDuration(Duration.millis(400));
-        rippleGenerator.setAnimateBackground(false);
-        rippleContainer.getChildren().add(0, rippleGenerator);
-
-        /* Listener on control but if the coordinates of the event are greater than then ripple container size
-         * then the center of the ripple is set to the width and/or height of container
-         */
-        this.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            rippleGenerator.setGeneratorCenterX(Math.min(event.getX(), rippleContainer.getWidth()));
-            rippleGenerator.setGeneratorCenterY(Math.min(event.getY(), rippleContainer.getHeight()));
-            rippleGenerator.createRipple();
-        });
-
-        return skin;
+        return new MFXCheckboxSkin(this);
     }
 
     @Override
