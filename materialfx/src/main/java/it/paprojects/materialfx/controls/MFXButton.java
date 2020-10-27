@@ -1,10 +1,10 @@
 package it.paprojects.materialfx.controls;
 
 import it.paprojects.materialfx.MFXResources;
+import it.paprojects.materialfx.controls.enums.ButtonType;
 import it.paprojects.materialfx.effects.DepthLevel;
 import it.paprojects.materialfx.effects.RippleGenerator;
 import it.paprojects.materialfx.skins.MFXButtonSkin;
-import it.paprojects.materialfx.utils.ButtonType;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
