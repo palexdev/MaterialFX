@@ -1,9 +1,7 @@
 package it.paprojects.materialfx.effects;
 
 import javafx.animation.*;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.css.*;
 import javafx.scene.Group;
@@ -39,7 +37,12 @@ public class RippleGenerator extends Group {
         @Override public Object getBean() { return this; }
         @Override public String getName() { return "rippleColor"; }
     };
-    private final DoubleProperty rippleRadius = new SimpleDoubleProperty(10.0);
+    private final StyleableDoubleProperty rippleRadius = new SimpleStyleableDoubleProperty(
+            StyleableProperties.RIPPLE_RADIUS,
+            this,
+            "rippleRadius",
+            10.0
+    );
     private final ObjectProperty<Duration> inDuration = new SimpleObjectProperty<>(Duration.millis(700));
     private final ObjectProperty<Duration> outDuration = new SimpleObjectProperty<>(inDuration.get().divide(2));
 
@@ -143,7 +146,7 @@ public class RippleGenerator extends Group {
         return rippleRadius.get();
     }
 
-    public DoubleProperty rippleRadiusProperty() {
+    public StyleableDoubleProperty rippleRadiusProperty() {
         return rippleRadius;
     }
 
@@ -262,8 +265,15 @@ public class RippleGenerator extends Group {
                         rippleGenerator -> (StyleableProperty<Color>) rippleGenerator.rippleColorProperty()
                 );
 
+        private static final CssMetaData<RippleGenerator, Number> RIPPLE_RADIUS =
+                FACTORY.createSizeCssMetaData(
+                        "-mfx-ripple-radius",
+                        RippleGenerator::rippleRadiusProperty,
+                        10.0
+                );
+
         static {
-            cssMetaDataList = List.of(RIPPLE_COLOR);
+            cssMetaDataList = List.of(RIPPLE_COLOR, RIPPLE_RADIUS);
         }
 
     }
