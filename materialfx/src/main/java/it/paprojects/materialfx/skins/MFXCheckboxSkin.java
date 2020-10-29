@@ -175,10 +175,6 @@ public class MFXCheckboxSkin extends CheckBoxSkin {
         AnchorPane.setLeftAnchor(box, hInset);
     }
 
-    public Pane getRippleContainer() {
-        return rippleContainer;
-    }
-
     //================================================================================
     // Override Methods
     //================================================================================

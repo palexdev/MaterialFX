@@ -11,6 +11,12 @@ import javafx.scene.paint.Paint;
 
 import java.util.List;
 
+/**
+ * This is the implementation of a checkbox following Google's material design guidelines in JavaFX.
+ * <p>
+ * Extends {@code CheckBox}, redefines the style class to "mfx-checkbox" for usage in CSS and
+ * includes a {@code RippleGenerator}(in the Skin) to generate ripple effect on click.
+ */
 public class MFXCheckbox extends CheckBox {
     //================================================================================
     // Properties
@@ -42,6 +48,11 @@ public class MFXCheckbox extends CheckBox {
     //================================================================================
     // Stylesheet properties
     //================================================================================
+
+    /**
+     * Specifies the color of the box when it's checked.
+     * @see Color
+     */
     private final StyleableObjectProperty<Paint> checkedColor = new SimpleStyleableObjectProperty<>(
             StyleableProperties.CHECKED_COLOR,
             this,
@@ -49,6 +60,10 @@ public class MFXCheckbox extends CheckBox {
             Color.rgb(15, 157, 88)
     );
 
+    /**
+     * Specifies the color of the box when it's unchecked.
+     * @see Color
+     */
     private final StyleableObjectProperty<Paint> uncheckedColor = new SimpleStyleableObjectProperty<>(
             StyleableProperties.UNCHECKED_COLOR,
             this,
@@ -56,6 +71,10 @@ public class MFXCheckbox extends CheckBox {
             Color.rgb(90, 90, 90)
     );
 
+    /**
+     * Specifies the SVG path(shape) of the mark from a predefined set.
+     * @see javafx.scene.shape.SVGPath
+     */
     private final StyleableObjectProperty<MarkType> markType = new SimpleStyleableObjectProperty<>(
             StyleableProperties.MARK_TYPE,
             this,

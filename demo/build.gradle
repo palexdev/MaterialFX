@@ -11,8 +11,12 @@ repositories {
 
 dependencies {
     implementation "fr.brouillard.oss:cssfx:11.4.0"
+    implementation 'org.kordamp.ikonli:ikonli-core:11.5.0'
+    implementation 'org.kordamp.ikonli:ikonli-javafx:11.5.0'
+    implementation 'org.kordamp.ikonli:ikonli-fontawesome5-pack:11.5.0'
     implementation project(':materialfx')
 }
 application {
     mainClassName = 'MaterialFX.demo.main/it.paprojects.materialfx.demo.Demo'
+//    mainClassName = 'MaterialFX.demo.main/it.paprojects.materialfx.demo.TestDemo'
 }

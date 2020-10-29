@@ -1,0 +1,5 @@
+@import url("common.css");
+
+#customRippleRadius .container .ripple-generator {
+    -mfx-ripple-radius: 15;
+}

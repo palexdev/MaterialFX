@@ -6,92 +6,88 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.Stop?>
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-           prefWidth="600.0" stylesheets="@checkboxes_demo.css" xmlns="http://javafx.com/javafx/11.0.1">
-    <Label alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Checkboxes color"
-           StackPane.alignment="TOP_CENTER">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@checkboxes_demo.css" xmlns="http://javafx.com/javafx/11.0.1">
+    <Label alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Checkboxes color" StackPane.alignment="TOP_CENTER">
         <StackPane.margin>
-            <Insets top="20.0"/>
+            <Insets top="20.0" />
         </StackPane.margin>
     </Label>
     <MFXCheckbox allowIndeterminate="true" StackPane.alignment="TOP_CENTER">
         <StackPane.margin>
-            <Insets right="200.0" top="65.0"/>
+            <Insets right="200.0" top="65.0" />
         </StackPane.margin>
     </MFXCheckbox>
-    <MFXCheckbox allowIndeterminate="true" checkedColor="#b200ff" markType="VARIANT6" uncheckedColor="RED"
-                 StackPane.alignment="TOP_CENTER">
+    <MFXCheckbox allowIndeterminate="true" checkedColor="#b200ff" markType="VARIANT6" uncheckedColor="RED" StackPane.alignment="TOP_CENTER">
         <StackPane.margin>
-            <Insets top="65.0"/>
+            <Insets top="65.0" />
         </StackPane.margin>
     </MFXCheckbox>
     <MFXCheckbox allowIndeterminate="true" uncheckedColor="#008bff" StackPane.alignment="TOP_CENTER">
         <StackPane.margin>
-            <Insets left="200.0" top="65.0"/>
+            <Insets left="200.0" top="65.0" />
         </StackPane.margin>
         <checkedColor>
-            <LinearGradient endX="1.0" endY="1.0">
+            <LinearGradient>
                 <stops>
-                    <Stop color="#0098ff"/>
-                    <Stop color="#00ffcb" offset="0.8748091603053434"/>
-                    <Stop color="#00ffcb" offset="1.0"/>
+                    <Stop color="#0098ff" />
+                    <Stop color="#00ffcb" offset="0.8748091603053434" />
+                    <Stop color="#00ffcb" offset="1.0" />
                 </stops>
             </LinearGradient>
         </checkedColor>
     </MFXCheckbox>
-    <MFXCheckbox id="custom-ripple" prefHeight="30.0" prefWidth="164.0" text="CheckBox Custom Ripple"
-                 StackPane.alignment="TOP_CENTER">
+    <MFXCheckbox id="custom-ripple" prefHeight="30.0" prefWidth="164.0" text="CheckBox Custom Ripple" StackPane.alignment="TOP_CENTER">
         <StackPane.margin>
-            <Insets top="110.0"/>
+            <Insets top="110.0" />
         </StackPane.margin>
         <opaqueInsets>
-            <Insets/>
+            <Insets />
         </opaqueInsets>
     </MFXCheckbox>
-    <Label alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Checkboxes Mark Types"/>
-    <MFXCheckbox markType="CASPIAN">
+    <Label alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Checkboxes Mark Types" />
+    <MFXCheckbox markType="CASPIAN" text="Caspian">
         <StackPane.margin>
-            <Insets right="300.0" top="65.0"/>
+            <Insets right="300.0" top="65.0" />
         </StackPane.margin>
     </MFXCheckbox>
-    <MFXCheckbox>
+    <MFXCheckbox text="Modena">
         <StackPane.margin>
-            <Insets right="100.0" top="65.0"/>
+            <Insets right="100.0" top="65.0" />
         </StackPane.margin>
     </MFXCheckbox>
-    <MFXCheckbox markType="VARIANT3">
+    <MFXCheckbox markType="VARIANT3" text="Variant 3">
         <StackPane.margin>
-            <Insets left="100.0" top="65.0"/>
+            <Insets left="100.0" top="65.0" />
         </StackPane.margin>
     </MFXCheckbox>
-    <MFXCheckbox markType="VARIANT4">
+    <MFXCheckbox markType="VARIANT4" text="Variant 4">
         <StackPane.margin>
-            <Insets left="300.0" top="65.0"/>
+            <Insets left="300.0" top="65.0" />
         </StackPane.margin>
     </MFXCheckbox>
-    <MFXCheckbox markType="VARIANT5">
+    <MFXCheckbox markType="VARIANT5" text="Variant 5">
         <StackPane.margin>
-            <Insets right="300.0" top="130.0"/>
+            <Insets right="300.0" top="130.0" />
         </StackPane.margin>
     </MFXCheckbox>
-    <MFXCheckbox markType="VARIANT6">
+    <MFXCheckbox markType="VARIANT6" text="Variant 6">
         <StackPane.margin>
-            <Insets right="100.0" top="130.0"/>
+            <Insets right="100.0" top="130.0" />
         </StackPane.margin>
     </MFXCheckbox>
-    <MFXCheckbox markType="VARIANT7">
+    <MFXCheckbox markType="VARIANT7" text="Variant 7">
         <StackPane.margin>
-            <Insets left="100.0" top="130.0"/>
+            <Insets left="100.0" top="130.0" />
         </StackPane.margin>
     </MFXCheckbox>
-    <MFXCheckbox markType="VARIANT8">
+    <MFXCheckbox markType="VARIANT8" text="Variant 8">
         <StackPane.margin>
-            <Insets left="300.0" top="130.0"/>
+            <Insets left="300.0" top="130.0" />
         </StackPane.margin>
     </MFXCheckbox>
-    <MFXCheckbox markType="VARIANT9">
+    <MFXCheckbox markType="VARIANT9" text="Variant 9">
         <StackPane.margin>
-            <Insets top="195.0"/>
+            <Insets top="195.0" />
         </StackPane.margin>
     </MFXCheckbox>
 </StackPane>

@@ -24,6 +24,10 @@ public class MFXButtonSkin extends ButtonSkin {
     //================================================================================
     // Methods
     //================================================================================
+
+    /**
+     * Changes the button type
+     */
     private void updateButtonType(MFXButton button, DepthLevel depthLevel) {
         switch (button.getButtonType()) {
             case RAISED: {
