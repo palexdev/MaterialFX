@@ -1,12 +1,56 @@
-group 'it.paprojects.materialfx'
+plugins {
+    id 'biz.aQute.bnd.builder' version '5.1.2'
+    id 'com.vanniktech.maven.publish' version '0.13.0'
+}
 
 repositories {
     mavenCentral()
     jcenter()
 }
 
+
 compileJava   {
     // This is necessary since Gluon devs are assholes :)
     sourceCompatibility = '11'
     targetCompatibility = '11'
+}
+
+dependencies {
+    testImplementation('junit:junit:4.13')
+    implementation 'com.vanniktech:gradle-maven-publish-plugin:0.13.0'
+}
+
+javadoc {
+    excludes = ['**/*.html', 'META-INF/**']
+
+    options.use = true
+    options.splitIndex = true
+    options.encoding = 'UTF-8'
+    options.author = true
+    options.version = true
+    options.windowTitle = "$project.name $project.version API"
+    options.docTitle = "$project.name $project.version API"
+    options.links = ['https://docs.oracle.com/en/java/javase/11/docs/api',
+                     'https://openjfx.io/javadoc/14']
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    archiveClassifier.set('javadoc')
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives jar
+}
+
+jar {
+    manifest {
+        attributes(
+                'Bundle-Name': project.name,
+                'Bundle-Description': "Material controls for JavaFX",
+                'Bundle-SymbolicName': 'io.github.palexdev',
+                'Export-Package': 'io.github.palexdev.materialfx.*, io.github.palexdev.materialfx.demo.*'
+        )
+    }
 }

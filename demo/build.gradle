@@ -1,8 +1,7 @@
 plugins {
     id 'application'
+    id 'org.beryx.jlink' version '2.21.3'
 }
-
-group 'it.paprojects.materialfx.demo'
 
 repositories {
     mavenCentral()
@@ -17,6 +16,10 @@ dependencies {
     implementation project(':materialfx')
 }
 application {
-    mainClassName = 'MaterialFX.demo.main/it.paprojects.materialfx.demo.Demo'
-//    mainClassName = 'MaterialFX.demo.main/it.paprojects.materialfx.demo.TestDemo'
+    mainClassName = 'MaterialFX.demo.main/io.github.palexdev.materialfx.demo.Demo'
+//    mainClassName = 'MaterialFX.demo.main/io.github.palexdev.materialfx.demo.TestDemo'
+}
+
+jlink {
+    imageZip = file("$buildDir/$rootProject.name-$rootProject.version" + '.zip')
 }

@@ -10,5 +10,6 @@ out/
 !gradle-wrapper.jar
 
 # Others
+materialfx/gradle.properties
 demo/src/test
 materialfx/src/test

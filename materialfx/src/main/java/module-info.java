@@ -1,13 +1,12 @@
 module MaterialFX.materialfx.main {
-    requires javafx.base;
     requires javafx.controls;
     requires javafx.graphics;
     requires java.desktop;
 
-    exports it.paprojects.materialfx.controls;
-    exports it.paprojects.materialfx.controls.enums;
-    exports it.paprojects.materialfx.effects;
-    exports it.paprojects.materialfx.skins;
-    exports it.paprojects.materialfx.utils;
-    exports it.paprojects.materialfx;
+    exports io.github.palexdev.materialfx.controls;
+    exports io.github.palexdev.materialfx.controls.enums;
+    exports io.github.palexdev.materialfx.effects;
+    exports io.github.palexdev.materialfx.skins;
+    exports io.github.palexdev.materialfx.utils;
+    exports io.github.palexdev.materialfx;
 }
