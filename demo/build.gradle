@@ -17,7 +17,7 @@ dependencies {
 }
 application {
     mainClassName = 'MaterialFX.demo.main/io.github.palexdev.materialfx.demo.Demo'
-//    mainClassName = 'MaterialFX.demo.main/io.github.palexdev.materialfx.demo.TestDemo'
+    //mainClassName = 'MaterialFX.demo.main/io.github.palexdev.materialfx.demo.TestDemo'
 }
 
 jlink {

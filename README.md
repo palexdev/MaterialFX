@@ -54,7 +54,7 @@ With the release of JDK 11 in 2018, Oracle has made JavaFX part of the OpenJDK u
 Key features:
    - FXML and SceneBuilder, A designer can code in FXML or use JavaFX Scene Builder to interactively design the graphical user interface (GUI). Scene Builder generates FXML markup that can be ported to an IDE where a developer can add the business logic.
    - Built-in UI controls and CSS, JavaFX provides all the major UI controls required to develop a full-featured application. Components can be skinned with standard Web technologies such as CSS.
-   - Self-contained application deployment model. Self-contained application packages have all of the application resources and a private copy of the Java and JavaFX runtimes.
+   - Self-contained application deployment model. Self-contained application packages have all the application resources and a private copy of the Java and JavaFX runtimes.
      They are distributed as native installable packages and provide the same installation and launch experience as native applications for that operating system.
    JavaFX is a software platform for creating and delivering desktop applications, as well as rich Internet applications (RIAs) that can run across a wide variety of devices.
 
@@ -86,7 +86,7 @@ repositories {
 }
 
 dependencies {
-implementation 'io.github.palexdev:materialfx:11.1.0'
+implementation 'io.github.palexdev:materialfx:11.2.1'
 }
 ```
 ###### Maven
@@ -94,7 +94,7 @@ implementation 'io.github.palexdev:materialfx:11.1.0'
 <dependency>
   <groupId>io.github.palexdev</groupId>
   <artifactId>materialfx</artifactId>
-  <version>11.1.0</version>
+  <version>11.2.1</version>
 </dependency>
 ```
 
@@ -104,7 +104,7 @@ See the [open issues](https://github.com/palexdev/MaterialFX/issues) for a list 
 
 <!-- CONTRIBUTING -->
 ## Contributing
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create.
+Contributions are what make the open source community such an amazing place to learn, inspire, and create.
 Any contributions you make are **greatly appreciated**.
 
 1. Fork the Project

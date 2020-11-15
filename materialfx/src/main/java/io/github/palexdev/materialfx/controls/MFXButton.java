@@ -1,6 +1,6 @@
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResources;
+import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.enums.ButtonType;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.effects.RippleGenerator;
@@ -32,7 +32,7 @@ public class MFXButton extends Button {
     //================================================================================
     private static final StyleablePropertyFactory<MFXButton> FACTORY = new StyleablePropertyFactory<>(Button.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-button";
-    private final String STYLESHEET = MFXResources.load("css/mfx-button.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-button.css").toString();
     private final RippleGenerator rippleGenerator = new RippleGenerator(this);
 
     //================================================================================
@@ -40,29 +40,38 @@ public class MFXButton extends Button {
     //================================================================================
     public MFXButton() {
         setText("Button");
-        init();
+        initialize();
     }
 
     public MFXButton(String text) {
         super(text);
-        init();
+        initialize();
+    }
+
+    public MFXButton(String text, double prefWidth, double prefHeight) {
+        super(text);
+        setPrefSize(prefWidth, prefHeight);
+        initialize();
     }
 
     public MFXButton(String text, Node graphic) {
         super(text, graphic);
-        init();
+        initialize();
     }
 
     //================================================================================
     // Methods
     //================================================================================
-    private void init() {
+    private void initialize() {
         getStyleClass().add(STYLE_CLASS);
         setAlignment(Pos.CENTER);
         setBindings();
+
+        setRippleRadius(25);
+        setRippleColor(Color.rgb(190, 190, 190));
     }
 
-    //================================================================================
+//================================================================================
     // Ripple properties
     //================================================================================
 

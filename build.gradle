@@ -4,38 +4,22 @@ plugins {
 }
 
 group 'io.github.palexdev'
-version '11.1.0'
+version '11.2.1'
 
 repositories {
     mavenCentral()
     jcenter()
 }
 
-/*subprojects {
+subprojects {
     apply plugin: 'org.openjfx.javafxplugin'
 
     javafx {
         version = "14.0.2.1"
-        modules = [ 'javafx.controls', 'javafx.fxml' ]
-    }
-}*/
-
-project(":demo") {
-    apply plugin: 'application'
-    apply plugin: 'org.openjfx.javafxplugin'
-
-    javafx {
-        version = '14.0.2.1'
-        modules = [ 'javafx.controls', 'javafx.fxml' ]
+        modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.web' ]
     }
 }
 
-project(":materialfx") {
-    apply plugin: 'org.openjfx.javafxplugin'
 
-    javafx {
-        version = '14.0.2.1'
-        modules = [ 'javafx.controls' ]
-    }
-}
+
 

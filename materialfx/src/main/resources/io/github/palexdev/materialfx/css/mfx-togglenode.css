@@ -8,3 +8,11 @@
     -fx-background-radius: 3px;
     -fx-background-insets: 0px;
 }
+
+.mfx-toggle-node {
+    -fx-opacity: 0.5;
+}
+
+.mfx-toggle-node:selected {
+    -fx-opacity: 1.0;
+}

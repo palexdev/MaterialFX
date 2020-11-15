@@ -3,6 +3,8 @@ package io.github.palexdev.materialfx.utils;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
+import javafx.scene.Node;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Region;
@@ -56,6 +58,32 @@ public class NodeUtils {
         }
 
         region.setBackground(new Background(fills.toArray(BackgroundFill[]::new)));
+    }
+
+    /**
+     * Centers the specified node in an {@code AnchorPane}.
+     */
+    public static void centerNodeInAnchorPane(Node node, double topBottom, double leftRight) {
+        AnchorPane.setTopAnchor(node, topBottom);
+        AnchorPane.setBottomAnchor(node, topBottom);
+        AnchorPane.setLeftAnchor(node, leftRight);
+        AnchorPane.setRightAnchor(node, leftRight);
+    }
+
+    /**
+     * Checks if the specified element is in the hierarchy of the specified node.
+     */
+    public static boolean inHierarchy(Node node, Node element) {
+        if (element == null) {
+            return true;
+        }
+        while (node != null) {
+            if (node == element) {
+                return true;
+            }
+            node = node.getParent();
+        }
+        return false;
     }
 
     /* The next two methods are copied from com.sun.javafx.scene.control.skin.Utils class

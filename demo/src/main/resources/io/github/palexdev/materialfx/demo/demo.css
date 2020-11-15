@@ -1,0 +1,57 @@
+@import "common.css";
+
+#demoPane {
+    -fx-background-color: #2b194f;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+}
+
+#contentPane {
+    -fx-background-color: #F4F5F6;
+    -fx-background-insets: 0 2 2 2;
+    -fx-background-radius: 10;
+    -fx-border-color: #005cd4;
+    -fx-border-radius: 10;
+    -fx-border-insets: 0 1 1 1;
+    -fx-border-width: 1.8;
+}
+
+#hLoader {
+    -fx-background-color: #005cd4;
+    -fx-background-radius: 10;
+    -fx-border-color: #565656;
+    -fx-border-width: 0.5;
+    -fx-border-radius: 10;
+}
+
+#hLoader .mfx-toggle-node {
+    -fx-background-color: #5c1ed9;
+    -fx-background-radius: 6;
+    -fx-background-insets: -1;
+    -fx-border-radius: 6;
+    -fx-border-insets: -1;
+    -fx-opacity: 0.6;
+    -mfx-shape: rectangle;
+    -mfx-size: 30px;
+}
+
+#hLoader .mfx-toggle-node .text {
+    -fx-font-family: 'Open Sans SemiBold';
+    -fx-font-size: 12.5;
+    -fx-fill: white;
+    -fx-opacity: 0.5;
+}
+
+#hLoader .mfx-toggle-node:selected {
+    -fx-background-color: linear-gradient(to right, #4a00e0 15%, #8e2de2 95%);;
+    -fx-opacity: 1;
+}
+
+#hLoader .mfx-toggle-node:selected .text {
+    -fx-opacity: 1.0;
+}
+
+#hLoader .mfx-toggle-node .ripple-generator {
+    -mfx-ripple-radius: 35px;
+    -mfx-ripple-color: rgba(198, 198, 198, 0.3)
+}

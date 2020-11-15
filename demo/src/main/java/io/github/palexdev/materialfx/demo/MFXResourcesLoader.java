@@ -6,12 +6,12 @@ import java.net.URL;
  * Utility class which manages the access to this project's assets.
  * Helps keeping the assets files structure organized.
  */
-public class MFXResources {
+public class MFXResourcesLoader {
 
-    private MFXResources() {
+    private MFXResourcesLoader() {
     }
 
     public static URL load(String path) {
-        return MFXResources.class.getResource(path);
+        return MFXResourcesLoader.class.getResource(path);
     }
 }

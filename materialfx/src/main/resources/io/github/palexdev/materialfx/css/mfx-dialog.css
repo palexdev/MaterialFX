@@ -1,0 +1,47 @@
+@import "fonts.css";
+
+/*================================================================================*/
+/* Common Dialog
+/*================================================================================*/
+.mfx-dialog {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #7a7a7a;
+    -fx-border-width: 0.2;
+    -fx-border-radius: 10;
+}
+
+.mfx-dialog .title-label {
+    -fx-font-family: "Open Sans";
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+}
+
+.mfx-dialog .content-label {
+    -fx-font-family: "Open Sans";
+    -fx-font-size: 11.5;
+}
+
+.mfx-dialog .buttons-box .mfx-button {
+    -fx-background-color: white;
+    -fx-font-weight: bold;
+}
+
+.mfx-dialog .buttons-box .mfx-button:hover {
+    -fx-background-color: #f4f1ff
+}
+
+/*================================================================================*/
+/* Others
+/*================================================================================*/
+.mfx-dialog .header-node {
+    -fx-background-radius: 10 10 0 0;
+}
+
+.mfx-dialog .header-node .mfx-button {
+    -fx-background-color: transparent;
+}
+
+.mfx-dialog .header-node .mfx-button .ripple-generator {
+    -mfx-animate-background: false;
+}

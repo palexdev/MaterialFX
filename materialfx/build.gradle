@@ -39,8 +39,14 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
 }
 
+task sourcesJarBuild(type: Jar, dependsOn: classes) {
+    archiveClassifier.set('sources')
+    from sourceSets.main.allSource
+}
+
 artifacts {
     archives javadocJar
+    archives sourcesJarBuild
     archives jar
 }
 
@@ -54,3 +60,16 @@ jar {
         )
     }
 }
+
+task copyJar(type: Copy) {
+    from jar
+    into 'C:/Users/thund/AppData/Roaming/Scene Builder/Library'
+}
+
+task removeBnd(type: Delete) {
+    delete fileTree(project.buildDir) {
+        include '**/*.bnd'
+    }
+}
+
+build.dependsOn copyJar, removeBnd

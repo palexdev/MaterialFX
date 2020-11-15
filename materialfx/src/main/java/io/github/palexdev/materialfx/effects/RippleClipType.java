@@ -10,7 +10,10 @@ public enum RippleClipType {
         @Override
         public Shape buildClip(Region region) {
             double radius = Math.sqrt(Math.pow(region.getWidth(), 2) + Math.pow(region.getHeight(), 2)) / 2;
-            return new Circle(radius);
+            Circle circle = new Circle(radius);
+            circle.setTranslateX(region.getWidth() / 2);
+            circle.setTranslateY(region.getHeight() / 2);
+            return circle;
         }
     },
     RECTANGLE {

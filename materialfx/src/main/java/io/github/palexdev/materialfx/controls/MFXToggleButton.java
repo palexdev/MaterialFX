@@ -1,6 +1,6 @@
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResources;
+import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.skins.MFXToggleButtonSkin;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -25,7 +25,7 @@ public class MFXToggleButton extends ToggleButton {
     //================================================================================
     private static final StyleablePropertyFactory<MFXToggleButton> FACTORY = new StyleablePropertyFactory<>(ToggleButton.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-toggle-button";
-    private final String STYLESHEET = MFXResources.load("css/mfx-togglebutton.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-togglebutton.css").toString();
 
     //================================================================================
     // Constructors

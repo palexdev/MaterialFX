@@ -1,7 +1,7 @@
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResources;
-import io.github.palexdev.materialfx.controls.enums.MarkType;
+import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.MFXResourcesManager.MarkType;
 import io.github.palexdev.materialfx.skins.MFXCheckboxSkin;
 import javafx.css.*;
 import javafx.scene.control.CheckBox;
@@ -23,7 +23,7 @@ public class MFXCheckbox extends CheckBox {
     //================================================================================
     private static final StyleablePropertyFactory<MFXCheckbox> FACTORY = new StyleablePropertyFactory<>(CheckBox.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-checkbox";
-    private final String STYLESHEET = MFXResources.load("css/mfx-checkbox.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-checkbox.css").toString();
 
     //================================================================================
     // Constructors
