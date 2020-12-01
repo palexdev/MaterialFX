@@ -1,0 +1,15 @@
+.mfx-notification {
+    -fx-background-color: white;
+}
+
+.mfx-notification .title-label {
+    -fx-font-size: 12.5;
+    -fx-font-weight: bold;
+}
+
+.mfx-button {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+}
+

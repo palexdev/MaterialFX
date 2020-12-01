@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 /**
- * Factory class to build {@code MFXStageDialog}s
+ * Factory class to build {@code MFXStageDialog}s.
  */
 public class MFXStageDialogFactory {
 
@@ -18,7 +18,7 @@ public class MFXStageDialogFactory {
     //================================================================================
 
     /**
-     * Builds a MFXStageDialog from type, title and content
+     * Builds a MFXStageDialog from type, title and content.
      * @param type The dialog type
      * @param title The dialog's title
      * @param content The dialog's content
@@ -45,7 +45,7 @@ public class MFXStageDialogFactory {
     }
 
     /**
-     * Builds a MFXStageDialog from an AbstractMFXDialog or subclasses
+     * Builds a MFXStageDialog from an AbstractMFXDialog or subclasses.
      * @param dialog The dialog
      * @return The MFXStageDialog's stage
      */
@@ -64,8 +64,7 @@ public class MFXStageDialogFactory {
     }
 
     /**
-     * Creates a TRANSPARENT {@code Scene} however it doesn't seem to work
-     * so the dialog is clipped with a {@code Rectangle} to keep round corners
+     * Creates a TRANSPARENT {@code Scene}.
      * @param pane The dialog
      * @return The MFXStageDialog scene
      */

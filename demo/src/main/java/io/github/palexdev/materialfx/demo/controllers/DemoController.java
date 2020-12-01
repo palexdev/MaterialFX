@@ -55,6 +55,8 @@ public class DemoController implements Initializable {
         hLoader.addItem(1, "CHECKBOXES", new MFXToggleNode("CHECKBOXES"), MFXResourcesLoader.load("checkboxes_demo.fxml"));
         hLoader.addItem(2, "TOGGLES", new MFXToggleNode("TOGGLES"), MFXResourcesLoader.load("toggle_buttons_demo.fxml"));
         hLoader.addItem(3, "DIALOGS", new MFXToggleNode("DIALOGS"), MFXResourcesLoader.load("dialogs_demo.fxml"), controller -> new DialogsController(demoPane));
+        hLoader.addItem(4, "NOTIFICATIONS", new MFXToggleNode("NOTIFICATIONS"), MFXResourcesLoader.load("notifications_demo.fxml"));
+        hLoader.addItem(5, "SCROLLPANE", new MFXToggleNode("SCROLLPANE"), MFXResourcesLoader.load("scrollpane_demo.fxml"));
         hLoader.setDefault("BUTTONS");
 
         /*

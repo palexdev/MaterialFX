@@ -22,4 +22,10 @@ application {
 
 jlink {
     imageZip = file("$buildDir/$rootProject.name-$rootProject.version" + '.zip')
+    launcher {
+        name = 'MaterialFX Demo'
+    }
+    jpackage {
+        imageOptions = ['--icon', 'src/main/resources/logo.ico']
+    }
 }

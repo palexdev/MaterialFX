@@ -60,7 +60,7 @@ public class MFXToggleButton extends ToggleButton {
     }
 
     //================================================================================
-    // Styleable properties
+    // Styleable Properties
     //================================================================================
 
     /**
@@ -249,14 +249,13 @@ public class MFXToggleButton extends ToggleButton {
         }
     }
 
-    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
+    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
         return StyleableProperties.cssMetaDataList;
     }
 
     //================================================================================
     // Override Methods
     //================================================================================
-
     @Override
     protected Skin<?> createDefaultSkin() {
         return new MFXToggleButtonSkin(this);
@@ -269,6 +268,6 @@ public class MFXToggleButton extends ToggleButton {
 
     @Override
     public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return getClassCssMetaData();
+        return this.getControlCssMetaDataList();
     }
 }

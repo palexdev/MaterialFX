@@ -24,7 +24,7 @@ import java.util.List;
  * This is the implementation of a button following Google's material design guidelines in JavaFX.
  * <p>
  * Extends {@code Button}, redefines the style class to "mfx-button" for usage in CSS and
- * includes a {@code RippleGenerator} to generate ripple effect on click.
+ * includes a {@code RippleGenerator} to generate ripple effects on click.
  */
 public class MFXButton extends Button {
     //================================================================================
@@ -71,7 +71,7 @@ public class MFXButton extends Button {
         setRippleColor(Color.rgb(190, 190, 190));
     }
 
-//================================================================================
+    //================================================================================
     // Ripple properties
     //================================================================================
 
@@ -154,7 +154,7 @@ public class MFXButton extends Button {
     }
 
     //================================================================================
-    // Stylesheet properties
+    // Styleable Properties
     //================================================================================
 
     /**

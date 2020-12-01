@@ -13,6 +13,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 
+/**
+ * Base class for a material dialog.
+ * <p>
+ * Extends {@code BorderPane}.
+ */
 public abstract class AbstractMFXDialog extends BorderPane {
     //================================================================================
     // Properties

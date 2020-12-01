@@ -6,6 +6,7 @@ import io.github.palexdev.materialfx.controls.MFXDialog;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXDialog;
 import io.github.palexdev.materialfx.controls.enums.ButtonType;
 import io.github.palexdev.materialfx.controls.enums.DialogType;
+import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -143,8 +144,8 @@ public class MFXDialogFactory {
         headerNode.setStyle("-fx-background-color: " + color + ";\n");
 
         SVGPath closeSvg = SVGResources.X.getSvgPath();
-        closeSvg.setScaleX(0.2);
-        closeSvg.setScaleY(0.2);
+        closeSvg.setScaleX(0.17);
+        closeSvg.setScaleY(0.17);
         closeSvg.setFill(Color.WHITE);
 
         if (dialog.getType() != null && dialog.getType().equals(DialogType.GENERIC)) {
@@ -156,9 +157,11 @@ public class MFXDialogFactory {
         closeButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         closeButton.setGraphic(closeSvg);
         closeButton.setRippleRadius(15);
-        closeButton.setRippleColor(Color.rgb(230, 230, 230, 0.7));
+        closeButton.setRippleColor(Color.rgb(255, 0, 0, 0.1));
         closeButton.setRippleInDuration(Duration.millis(500));
         closeButton.setButtonType(ButtonType.FLAT);
+
+        NodeUtils.makeRegionCircular(closeButton);
 
         StackPane.setAlignment(closeButton, Pos.TOP_RIGHT);
         StackPane.setMargin(closeButton, new Insets(7, 7, 0, 0));

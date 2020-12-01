@@ -32,12 +32,12 @@
     -fx-border-insets: -1;
     -fx-opacity: 0.6;
     -mfx-shape: rectangle;
-    -mfx-size: 30px;
+    -mfx-size: 27px;
 }
 
 #hLoader .mfx-toggle-node .text {
     -fx-font-family: 'Open Sans SemiBold';
-    -fx-font-size: 12.5;
+    -fx-font-size: 9;
     -fx-fill: white;
     -fx-opacity: 0.5;
 }

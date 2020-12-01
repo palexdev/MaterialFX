@@ -10,7 +10,6 @@ import javafx.scene.control.skin.CheckBoxSkin;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.SVGPath;
 import javafx.util.Duration;
 
@@ -26,10 +25,8 @@ public class MFXCheckboxSkin extends CheckBoxSkin {
     private final StackPane mark;
     private final RippleGenerator rippleGenerator;
 
-    private final double rippleContainerWidth = 30;
-    private final double rippleContainerHeight = 30;
-    private final double boxWidth = 26;
-    private final double boxHeight = 26;
+    private final double rippleContainerSize = 30;
+    private final double boxSize = 26;
 
     private final double labelOffset = 2;
 
@@ -41,20 +38,16 @@ public class MFXCheckboxSkin extends CheckBoxSkin {
 
         // Contains the ripple generator and the box
         rippleContainer = new AnchorPane();
-        rippleContainer.setPrefSize(rippleContainerWidth, rippleContainerHeight);
+        rippleContainer.setPrefSize(rippleContainerSize, rippleContainerSize);
         rippleContainer.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         rippleContainer.getStyleClass().setAll("ripple-container");
 
         // To make ripple container appear like a Circle
-        Circle circle = new Circle();
-        circle.setCenterX(rippleContainerWidth / 2);
-        circle.setCenterY(rippleContainerHeight / 2);
-        circle.setRadius(rippleContainerWidth * 0.6);
-        rippleContainer.setClip(circle);
+        NodeUtils.makeRegionCircular(rippleContainer, rippleContainerSize * 0.55);
 
-        // Contains the mark which is a SVG path defined in css
+        // Contains the mark which is a SVG path defined in CSS
         box = new StackPane();
-        box.setPrefSize(boxWidth, boxHeight);
+        box.setPrefSize(boxSize, boxSize);
         box.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         box.getStyleClass().setAll("box");
         box.setBorder(new Border(new BorderStroke(
@@ -167,8 +160,8 @@ public class MFXCheckboxSkin extends CheckBoxSkin {
      */
     private void centerBox() {
         final double offsetPercentage = 3;
-        final double vInset = ((rippleContainerHeight - boxHeight) / 2) * offsetPercentage;
-        final double hInset = ((rippleContainerWidth - boxWidth) / 2) * offsetPercentage;
+        final double vInset = ((rippleContainerSize - boxSize) / 2) * offsetPercentage;
+        final double hInset = ((rippleContainerSize - boxSize) / 2) * offsetPercentage;
         AnchorPane.setTopAnchor(box, vInset);
         AnchorPane.setRightAnchor(box, hInset);
         AnchorPane.setBottomAnchor(box, vInset);

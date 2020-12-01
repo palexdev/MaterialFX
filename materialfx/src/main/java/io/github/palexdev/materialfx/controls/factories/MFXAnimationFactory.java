@@ -8,7 +8,7 @@ import javafx.scene.Node;
 import javafx.util.Duration;
 
 /**
- * Convenience factory for various animations applied to {@code Node}s
+ * Convenience factory for various animations applied to {@code Node}s.
  *
  * @see Timeline
  */

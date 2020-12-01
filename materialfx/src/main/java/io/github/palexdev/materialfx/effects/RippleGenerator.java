@@ -17,6 +17,11 @@ import java.util.List;
 
 import static io.github.palexdev.materialfx.effects.MFXDepthManager.shadowOf;
 
+/**
+ * Convenience class for creating highly customizable ripple effects.
+ * <p>
+ * Extends {@code Group} and sets the style class to "ripple-generator" for usage in CSS.
+ */
 public class RippleGenerator extends Group {
     //================================================================================
     // Properties
@@ -266,7 +271,7 @@ public class RippleGenerator extends Group {
     }
 
     //================================================================================
-    // Stylesheet properties
+    // Stylesheet Properties
     //================================================================================
     private static class StyleableProperties {
         private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;

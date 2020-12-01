@@ -5,9 +5,9 @@ import java.net.URL;
 /**
  * Convenience class to avoid duplicated code in {@code MFXHLoader} and {@code MFXVLoader} classes
  */
-public class Loader {
+public class LoaderUtils {
 
-    private Loader() {
+    private LoaderUtils() {
     }
 
     /**

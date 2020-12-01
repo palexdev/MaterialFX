@@ -2,7 +2,7 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.beans.MFXLoadItem;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
-import io.github.palexdev.materialfx.utils.Loader;
+import io.github.palexdev.materialfx.utils.LoaderUtils;
 import io.github.palexdev.materialfx.utils.ToggleButtonsUtil;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -81,11 +81,12 @@ public class MFXHLoader extends HBox {
         this.executor = new ThreadPoolExecutor(
                 2,
                 4,
-                20,
+                10,
                 TimeUnit.SECONDS,
                 new LinkedBlockingDeque<>(),
                 runnable -> {
                     Thread t = Executors.defaultThreadFactory().newThread(runnable);
+                    t.setName("MFXHLoaderThread");
                     t.setDaemon(true);
                     return t;
                 }
@@ -156,8 +157,8 @@ public class MFXHLoader extends HBox {
      * @param fxmlFile The given fxml file
      */
     public void addItem(int index, ToggleButton button, URL fxmlFile) {
-        Loader.checkFxmlFile(fxmlFile);
-        addItem(index, Loader.generateKey(fxmlFile), button, fxmlFile);
+        LoaderUtils.checkFxmlFile(fxmlFile);
+        addItem(index, LoaderUtils.generateKey(fxmlFile), button, fxmlFile);
     }
 
     /**
@@ -170,7 +171,7 @@ public class MFXHLoader extends HBox {
      * @param fxmlFile The given fxml file
      */
     public void addItem(int index, String key, ToggleButton button, URL fxmlFile) {
-        Loader.checkFxmlFile(fxmlFile);
+        LoaderUtils.checkFxmlFile(fxmlFile);
         this.getChildren().add(button);
         button.setToggleGroup(toggleGroup);
         ToggleButtonsUtil.addAlwaysOneSelectedSupport(toggleGroup);
@@ -187,8 +188,8 @@ public class MFXHLoader extends HBox {
      * @param controllerFactory The given controller factory
      */
     public void addItem(int index, ToggleButton button, URL fxmlFile, Callback<Class<?>, Object> controllerFactory) {
-        Loader.checkFxmlFile(fxmlFile);
-        addItem(index, Loader.generateKey(fxmlFile), button, fxmlFile, controllerFactory);
+        LoaderUtils.checkFxmlFile(fxmlFile);
+        addItem(index, LoaderUtils.generateKey(fxmlFile), button, fxmlFile, controllerFactory);
     }
 
     /**
@@ -202,7 +203,7 @@ public class MFXHLoader extends HBox {
      * @param controllerFactory The given controller factory
      */
     public void addItem(int index, String key, ToggleButton button, URL fxmlFile, Callback<Class<?>, Object> controllerFactory) {
-        Loader.checkFxmlFile(fxmlFile);
+        LoaderUtils.checkFxmlFile(fxmlFile);
         this.getChildren().add(button);
         button.setToggleGroup(toggleGroup);
         ToggleButtonsUtil.addAlwaysOneSelectedSupport(toggleGroup);

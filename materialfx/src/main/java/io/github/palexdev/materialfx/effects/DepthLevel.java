@@ -3,7 +3,7 @@ package io.github.palexdev.materialfx.effects;
 import javafx.scene.paint.Color;
 
 /**
- * Enumerator which defines 5 levels of {@code DropShadow} effects from {@code LEVEL1} to {@code LEVEL5}.
+ * Enumerator which defines 6 levels of {@code DropShadow} effects from {@code LEVEL0} to {@code LEVEL5}.
  */
 public enum DepthLevel {
     LEVEL0(Color.rgb(0, 0, 0, 0), 0, 0, 0, 0),

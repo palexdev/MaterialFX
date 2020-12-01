@@ -9,6 +9,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +85,41 @@ public class NodeUtils {
             node = node.getParent();
         }
         return false;
+    }
+
+    /**
+     * Makes the given region circular.
+     * <p>
+     * <b>Notice: the region's pref width and height must be set and be equals</b>
+     * @param region The given region
+     */
+    public static void makeRegionCircular(Region region) {
+        Circle circle = new Circle(region.getPrefWidth() / 2.0);
+        circle.centerXProperty().bind(region.widthProperty().divide(2.0));
+        circle.centerYProperty().bind(region.heightProperty().divide(2.0));
+        try {
+            region.setClip(circle);
+        } catch (IllegalArgumentException ex) {
+            LoggingUtils.logException("Could not set region's clip to make it circular", ex);
+        }
+    }
+
+    /**
+     * Makes the given region circular with the specified radius.
+     * <p>
+     * <b>Notice: the region's pref width and height must be set and be equals</b>
+     * @param region The given region
+     * @param radius The wanted radius
+     */
+    public static void makeRegionCircular(Region region, double radius) {
+        Circle circle = new Circle(radius);
+        circle.centerXProperty().bind(region.widthProperty().divide(2.0));
+        circle.centerYProperty().bind(region.heightProperty().divide(2.0));
+        try {
+            region.setClip(circle);
+        } catch (IllegalArgumentException ex) {
+            LoggingUtils.logException("Could not set region's clip to make it circular", ex);
+        }
     }
 
     /* The next two methods are copied from com.sun.javafx.scene.control.skin.Utils class

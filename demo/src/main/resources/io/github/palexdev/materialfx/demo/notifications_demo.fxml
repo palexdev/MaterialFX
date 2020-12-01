@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+           prefWidth="600.0" stylesheets="@notifications_demo.css" xmlns="http://javafx.com/javafx/11.0.1"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="io.github.palexdev.materialfx.demo.controllers.NotificationsController">
+   <Label alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Notifications Positions"
+          StackPane.alignment="TOP_CENTER">
+      <StackPane.margin>
+         <Insets top="16.0"/>
+      </StackPane.margin>
+   </Label>
+   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="200.0"
+         spacing="35.0" StackPane.alignment="TOP_CENTER">
+      <StackPane.margin>
+         <Insets top="60.0"/>
+      </StackPane.margin>
+      <MFXButton buttonType="RAISED" onAction="#showTopLeft" rippleColor="#c8c8c8" rippleRadius="30.0"
+                 text="TOP LEFT"/>
+      <MFXButton buttonType="RAISED" onAction="#showTopCenter" rippleColor="#c8c8c8" rippleRadius="30.0"
+                 text="TOP CENTER"/>
+      <MFXButton buttonType="RAISED" onAction="#showTopRight" rippleColor="#c8c8c8" rippleRadius="30.0"
+                 text="TOP RIGHT"/>
+   </HBox>
+   <HBox alignment="CENTER" maxHeight="-Infinity" prefHeight="50.0" prefWidth="200.0" spacing="35.0"
+         StackPane.alignment="TOP_CENTER">
+      <StackPane.margin>
+         <Insets top="120.0"/>
+      </StackPane.margin>
+      <MFXButton buttonType="RAISED" onAction="#showBottomLeft" rippleColor="#c8c8c8" rippleRadius="35.0"
+                 text="BOTTOM LEFT"/>
+      <MFXButton buttonType="RAISED" onAction="#showBottomCenter" rippleColor="#c8c8c8" rippleRadius="35.0"
+                 text="BOTTOM CENTER"/>
+      <MFXButton buttonType="RAISED" onAction="#showBottomRight" rippleColor="#c8c8c8" rippleRadius="35.0"
+                 text="BOTTOM RIGHT"/>
+   </HBox>
+</StackPane>

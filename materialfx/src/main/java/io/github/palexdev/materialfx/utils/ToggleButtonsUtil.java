@@ -7,6 +7,9 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 
+/**
+ * Utils class for {@code ToggleButton}s.
+ */
 public class ToggleButtonsUtil {
 
     private static final EventHandler<MouseEvent> consumeMouseEventFilter = (MouseEvent mouseEvent) -> {
@@ -21,6 +24,11 @@ public class ToggleButtonsUtil {
         ((ToggleButton) toggle).addEventFilter(MouseEvent.MOUSE_CLICKED, consumeMouseEventFilter);
     }
 
+    /**
+     * Adds a handler to the given {@code ToggleGroup} to make sure there's always at least
+     * one {@code ToggleButton} selected.
+     * @param toggleGroup The given ToggleGroup
+     */
     public static void addAlwaysOneSelectedSupport(final ToggleGroup toggleGroup) {
         toggleGroup.getToggles().addListener((ListChangeListener.Change<? extends Toggle> c) -> {
             while (c.next()) {

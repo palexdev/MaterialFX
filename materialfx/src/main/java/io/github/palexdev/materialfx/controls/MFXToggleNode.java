@@ -3,6 +3,7 @@ package io.github.palexdev.materialfx.controls;
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.enums.ToggleNodeShape;
 import io.github.palexdev.materialfx.effects.RippleGenerator;
+import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.css.*;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -16,11 +17,17 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
 import java.util.List;
 
+/**
+ * This control is basically a {@code ToggleButton} but it is mostly used to contain graphic rather than text.
+ * It's also possible to make it appear circular for a modern like design.
+ * <p>
+ * Extends {@code ToggleButton}, redefines the style class to "mfx-toggle-node" for usage in CSS and
+ * includes a {@code RippleGenerator} to generate ripple effects on click.
+ */
 public class MFXToggleNode extends ToggleButton {
     //================================================================================
     // Properties
@@ -109,14 +116,11 @@ public class MFXToggleNode extends ToggleButton {
      */
     private void clip() {
         setClip(null);
-        Circle circle = new Circle(getSize() * 0.5);
-        circle.centerXProperty().bind(widthProperty().divide(2.0));
-        circle.centerYProperty().bind(heightProperty().divide(2.0));
-        setClip(circle);
+        NodeUtils.makeRegionCircular(this);
     }
 
     //================================================================================
-    // Styleable properties
+    // Styleable Properties
     //================================================================================
 
     /**
@@ -251,14 +255,13 @@ public class MFXToggleNode extends ToggleButton {
         }
     }
 
-    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
+    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
         return StyleableProperties.cssMetaDataList;
     }
 
     //================================================================================
     // Override Methods
     //================================================================================
-
     @Override
     protected Skin<?> createDefaultSkin() {
         ToggleButtonSkin skin = new ToggleButtonSkin(this);
@@ -278,6 +281,6 @@ public class MFXToggleNode extends ToggleButton {
 
     @Override
     public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return getClassCssMetaData();
+        return this.getControlCssMetaDataList();
     }
 }

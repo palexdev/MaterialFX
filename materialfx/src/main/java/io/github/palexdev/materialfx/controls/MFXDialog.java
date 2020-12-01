@@ -10,6 +10,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
+/**
+ * This is the implementation of a dialog following Google's material design guidelines in JavaFX.
+ * <p>
+ * It's a concrete implementation of {@code AbstractMFXDialog} and redefines the style class to "mfx-dialog"
+ * for usage in CSS.
+ */
 public class MFXDialog extends AbstractMFXDialog {
     //================================================================================
     // Properties
