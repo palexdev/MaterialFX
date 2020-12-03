@@ -17,6 +17,9 @@ import javafx.scene.layout.Region;
  * Base class for a material dialog.
  * <p>
  * Extends {@code BorderPane}.
+ * <p>
+ * <b>Notice: the dialog is visible so during initialization, before showing it you should
+ * use {@code setVisible(false)}</b>
  */
 public abstract class AbstractMFXDialog extends BorderPane {
     //================================================================================
@@ -141,13 +144,17 @@ public abstract class AbstractMFXDialog extends BorderPane {
     //================================================================================
     // Constructors
     //================================================================================
+
+    /**
+     * <b>Notice: the dialog is visible so during initialization, before showing it you should
+     * use {@code setVisible(false)}</b>
+     */
     public AbstractMFXDialog() {
         setPrefSize(400, 300);
         setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
         this.closeButton = new MFXButton("");
         this.closeButton.addEventHandler(MouseEvent.MOUSE_PRESSED, closeHandler);
-        setVisible(false);
     }
 
     //================================================================================

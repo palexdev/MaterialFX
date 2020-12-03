@@ -1,6 +1,7 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.skins.MFXScrollPaneSkin;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -12,6 +13,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Skin;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
@@ -216,6 +218,12 @@ public class MFXScrollPane extends ScrollPane {
     //================================================================================
     // Override Methods
     //================================================================================
+
+    @Override
+    protected Skin<?> createDefaultSkin() {
+        return new MFXScrollPaneSkin(this);
+    }
+
     @Override
     public String getUserAgentStylesheet() {
         return STYLESHEET;

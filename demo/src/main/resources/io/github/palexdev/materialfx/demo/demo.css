@@ -1,57 +1,117 @@
 @import "common.css";
 
 #demoPane {
-    -fx-background-color: #2b194f;
+    -fx-background-color: #FAFAFA;
     -fx-background-radius: 10;
     -fx-border-radius: 10;
+}
+
+#closeButton,
+#minimizeButton,
+#expandButton {
+    -fx-background-color: transparent;
+}
+
+#closeButton:hover {
+    -fx-background-color: #ffe6e6;
+}
+
+#minimizeButton:hover {
+    -fx-background-color: #e6ecff;
+}
+
+#expandButton:hover {
+    -fx-background-color: #fffdd6;
+}
+
+#infoButton {
+    -fx-background-color: white, white;
+    -fx-background-radius: 16.4, 15;
+    -fx-background-insets: -1.4, 0;
+    -fx-border-radius: 15;
+    -fx-border-width: 2;
+    -fx-border-color: rgb(75, 181, 255);
+    -fx-padding: 0;
+    -fx-font-size: 0;
+}
+
+#infoButton .ripple-generator {
+    -mfx-ripple-color: #e7ecff;
 }
 
 #contentPane {
-    -fx-background-color: #F4F5F6;
+    -fx-background-color: #FAFAFA;
     -fx-background-insets: 0 2 2 2;
     -fx-background-radius: 10;
-    -fx-border-color: #005cd4;
-    -fx-border-radius: 10;
-    -fx-border-insets: 0 1 1 1;
-    -fx-border-width: 1.8;
 }
 
-#hLoader {
-    -fx-background-color: #005cd4;
-    -fx-background-radius: 10;
-    -fx-border-color: #565656;
-    -fx-border-width: 0.5;
-    -fx-border-radius: 10;
+#navButton {
+    -fx-background-color: white, white;
+    -fx-background-radius: 16.4, 15;
+    -fx-background-insets: -1.4, 0;
+    -fx-border-radius: 15;
+    -fx-border-width: 1.2;
+    -fx-border-color: rgba(127, 15, 255, 0.35);
+    -fx-padding: 0;
+    -fx-font-size: 0;
 }
 
-#hLoader .mfx-toggle-node {
-    -fx-background-color: #5c1ed9;
-    -fx-background-radius: 6;
-    -fx-background-insets: -1;
-    -fx-border-radius: 6;
-    -fx-border-insets: -1;
-    -fx-opacity: 0.6;
-    -mfx-shape: rectangle;
-    -mfx-size: 27px;
+#navButton .ripple-generator {
+    -mfx-ripple-color: #e2caff;
 }
 
-#hLoader .mfx-toggle-node .text {
-    -fx-font-family: 'Open Sans SemiBold';
-    -fx-font-size: 9;
-    -fx-fill: white;
+#navButton .ikonli-font-icon {
+    -fx-icon-color: #6e0ede;
     -fx-opacity: 0.5;
 }
 
-#hLoader .mfx-toggle-node:selected {
-    -fx-background-color: linear-gradient(to right, #4a00e0 15%, #8e2de2 95%);;
-    -fx-opacity: 1;
-}
-
-#hLoader .mfx-toggle-node:selected .text {
+#navButton .ikonli-font-icon:hover {
+    -fx-icon-color: #6e0ede;
     -fx-opacity: 1.0;
 }
 
-#hLoader .mfx-toggle-node .ripple-generator {
-    -mfx-ripple-radius: 35px;
-    -mfx-ripple-color: rgba(198, 198, 198, 0.3)
+#navBar {
+    -fx-background-radius: 10;
+    -fx-border-color: #7F0FFF;
+    -fx-border-width: 0.2;
+    -fx-border-radius: 10;
+}
+
+#vLoader .mfx-toggle-node {
+    -fx-background-color: white;
+    -fx-background-radius: 6;
+    -fx-background-insets: -1;
+    -fx-border-color: #7F0FFF;
+    -fx-border-radius: 6;
+    -fx-border-insets: -1;
+    -fx-border-width: 1.2;
+    -mfx-shape: rectangle;
+    -mfx-size: 35px;
+}
+
+#vLoader .mfx-toggle-node .text {
+    -fx-font-family: 'Open Sans Bold';
+    -fx-fill: #7F0FFF;
+    -fx-font-size: 13;
+    -fx-opacity: 0.7;
+}
+
+#vLoader .mfx-toggle-node:hover,
+#vLoader .mfx-toggle-node:hover .text{
+    -fx-opacity: 1.0;
+}
+
+#vLoader .mfx-toggle-node:selected {
+    -fx-background-color: white;
+    -fx-opacity: 1;
+}
+
+#vLoader .mfx-toggle-node:selected .text {
+    -fx-opacity: 1.0;
+}
+
+#vLoader .mfx-toggle-node .ripple-generator {
+    -mfx-ripple-radius: 40px;
+    -mfx-ripple-color: #e2caff;
+    -mfx-animate-background: true;
 }

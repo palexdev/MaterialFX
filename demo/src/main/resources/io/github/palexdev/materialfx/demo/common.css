@@ -215,12 +215,15 @@
 }
 
 .label {
-    -fx-background-color: linear-gradient(to bottom right, #0093E9 0%, #7be4bc 100%);
+    -fx-background-color: linear-gradient(to bottom right, #C01ADD 0%, #6A6AF8 100%);;
     -fx-background-radius: 7;
-    -fx-border-color: lightgray;
+    -fx-border-color: #7F0FFF;
     -fx-border-radius: 5;
     -fx-border-width: 2;
-    -fx-font-family: Comfortaa-SemiBold;
+}
+
+.label .text {
+    -fx-font-family: "Open Sans Bold";
     -fx-font-size: 12.5;
-    -fx-text-fill: white;
+    -fx-fill: white;
 }

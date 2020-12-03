@@ -1,10 +1,11 @@
 package io.github.palexdev.materialfx.demo;
 
 import fr.brouillard.oss.cssfx.CSSFX;
+import io.github.palexdev.materialfx.demo.controllers.DemoController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -20,7 +21,8 @@ public class Demo extends Application {
         CSSFX.start();
 
         FXMLLoader fxmlLoader = new FXMLLoader(MFXResourcesLoader.load("demo.fxml"));
-        AnchorPane demoPane = fxmlLoader.load();
+        fxmlLoader.setControllerFactory(controller -> new DemoController(primaryStage, getHostServices()));
+        StackPane demoPane = fxmlLoader.load();
 
         demoPane.setOnMousePressed(event -> {
             xOffset = primaryStage.getX() - event.getScreenX();

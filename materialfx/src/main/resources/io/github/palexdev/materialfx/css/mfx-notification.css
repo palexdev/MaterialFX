@@ -1,5 +1,9 @@
 .mfx-notification {
     -fx-background-color: white;
+    -fx-background-radius: 5;
+    -fx-border-color: #D2D2D2;
+    -fx-border-width: 0.8;
+    -fx-border-radius: 5;
 }
 
 .mfx-notification .title-label {

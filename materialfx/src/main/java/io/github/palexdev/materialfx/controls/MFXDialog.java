@@ -15,6 +15,9 @@ import javafx.util.Duration;
  * <p>
  * It's a concrete implementation of {@code AbstractMFXDialog} and redefines the style class to "mfx-dialog"
  * for usage in CSS.
+ * <p>
+ * <b>Notice: the dialog is visible so during initialization, before showing it you should
+ * use {@code setVisible(false)}</b>
  */
 public class MFXDialog extends AbstractMFXDialog {
     //================================================================================
@@ -26,6 +29,11 @@ public class MFXDialog extends AbstractMFXDialog {
     //================================================================================
     // Constructors
     //================================================================================
+
+    /**
+     * <b>Notice: the dialog is visible so during initialization, before showing it you should
+     * use {@code setVisible(false)}</b>
+     */
     public MFXDialog() {
         initialize();
     }

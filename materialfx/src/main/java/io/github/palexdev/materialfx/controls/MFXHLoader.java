@@ -232,7 +232,7 @@ public class MFXHLoader extends HBox {
                 if (item.getRoot() == null) {
                     this.runAndReset();
                 } else {
-                    item.getButton().setSelected(true);
+                    Platform.runLater(() -> item.getButton().setSelected(true));
                 }
                 return null;
             }

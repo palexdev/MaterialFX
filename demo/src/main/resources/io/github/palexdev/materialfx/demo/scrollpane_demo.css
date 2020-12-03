@@ -1,12 +1,13 @@
-@import url("common.css");
-
 .label {
     -fx-background-color: white;
     -fx-background-radius: 0;
     -fx-border-color: transparent;
     -fx-border-radius: 0;
     -fx-border-width: 0;
-    -fx-font-family: System;
+}
+
+.label .text {
+    -fx-font-family: "Open Sans";
     -fx-font-size: 12;
-    -fx-text-fill: black;
+    -fx-fill: black;
 }

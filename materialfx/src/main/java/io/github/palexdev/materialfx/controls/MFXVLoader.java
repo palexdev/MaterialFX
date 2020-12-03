@@ -81,7 +81,7 @@ public class MFXVLoader extends VBox {
         this.executor = new ThreadPoolExecutor(
                 2,
                 4,
-                20,
+                10,
                 TimeUnit.SECONDS,
                 new LinkedBlockingDeque<>(),
                 runnable -> {
@@ -232,7 +232,7 @@ public class MFXVLoader extends VBox {
                 if (item.getRoot() == null) {
                     this.runAndReset();
                 } else {
-                    item.getButton().setSelected(true);
+                    Platform.runLater(() -> item.getButton().setSelected(true));
                 }
                 return null;
             }

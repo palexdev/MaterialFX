@@ -1,14 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.MFXHLoader?>
+
+<?import io.github.palexdev.materialfx.controls.MFXScrollPane?>
 <?import io.github.palexdev.materialfx.controls.MFXVLoader?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.*?>
-<AnchorPane id="demoPane" fx:id="demoPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="445.0" prefWidth="780.0" stylesheets="@demo.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.DemoController">
-   <MFXHLoader id="hLoader" fx:id="hLoader" layoutX="45.0" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="48.0" prefWidth="691.0" AnchorPane.leftAnchor="45.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="15.0">
-      <padding>
-         <Insets bottom="10.0" />
-      </padding></MFXHLoader>
-   <StackPane id="contentPane" fx:id="contentPane" layoutX="14.0" layoutY="45.0" prefHeight="405.0" prefWidth="760.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0" />
-   <MFXVLoader fx:id="vLoader" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="460.0" prefWidth="100.0" />
-</AnchorPane>
+<StackPane id="demoPane" fx:id="demoPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+           minWidth="-Infinity" prefHeight="432.0" prefWidth="768.0" stylesheets="@demo.css"
+           xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="io.github.palexdev.materialfx.demo.controllers.DemoController">
+   <StackPane id="contentPane" fx:id="contentPane" prefHeight="207.0" prefWidth="441.0">
+      <StackPane.margin>
+         <Insets bottom="15.0" left="20.0" right="20.0" top="15.0"/>
+      </StackPane.margin>
+   </StackPane>
+   <StackPane id="navBar" fx:id="navBar" maxWidth="-Infinity"
+              style="-fx-background-radius: 10; -fx-background-color: white;" translateX="-200.0"
+              StackPane.alignment="CENTER_LEFT">
+      <StackPane.margin>
+         <Insets bottom="15.0" left="15.0" top="15.0"/>
+      </StackPane.margin>
+      <MFXScrollPane fitToWidth="true" hbarPolicy="NEVER" prefWidth="150.0">
+         <StackPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+         </StackPane.margin>
+         <MFXVLoader fx:id="vLoader" alignment="TOP_CENTER" prefHeight="360.0" prefWidth="150.0" spacing="20.0">
+            <padding>
+               <Insets bottom="10.0" left="5.0" right="5.0" top="10.0"/>
+            </padding>
+         </MFXVLoader>
+      </MFXScrollPane>
+   </StackPane>
+</StackPane>

@@ -83,6 +83,9 @@ public class DialogsController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        dialog.setVisible(false);
+        animateDialog.setVisible(false);
+
         pError.setOnAction(event -> {
             resetDialog();
             MFXDialogFactory.convertToSpecific(DialogType.ERROR, dialog);
@@ -108,8 +111,9 @@ public class DialogsController implements Initializable {
             AbstractMFXDialog genericDialog = MFXDialogFactory.buildGenericDialog("MFXDialog - Generic Dialog", text);
             genericDialog.setCloseHandler(c -> {
                 genericDialog.close();
-                this.pane.getChildren().remove(genericDialog);
+                DialogsController.this.pane.getChildren().remove(genericDialog);
             });
+            genericDialog.setVisible(false);
             this.pane.getChildren().add(genericDialog);
             genericDialog.show();
         });

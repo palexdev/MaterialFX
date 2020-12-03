@@ -1,0 +1,50 @@
+.mfx-dialog {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.label .text {
+    -fx-font-family: "Comfortaa Regular";
+}
+
+#materialfxLabel {
+    -fx-background-color: #7F0FFF;
+    -fx-background-radius: 6px;
+}
+
+#materialfxLabel .text {
+    -fx-font-family: "Comfortaa Bold";
+    -fx-font-size: 40px;
+    -fx-fill: white;
+}
+
+#titleLabel .text {
+    -fx-font-family: "Comfortaa Bold";
+    -fx-font-size: 15px;
+}
+
+
+.mfx-button {
+    -fx-background-color: white, white;
+    -fx-background-radius: 16.4, 15;
+    -fx-background-insets: -1.4, 0;
+    -fx-border-radius: 15;
+    -fx-border-width: 1.5;
+    -fx-border-color: rgba(127, 15, 255, 0.35);
+    -fx-padding: 0;
+    -fx-font-size: 0;
+}
+
+.mfx-button .ripple-generator {
+    -mfx-ripple-color: #e2caff;
+}
+
+#contentNode {
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-background-insets: 0px 11px 11px 11px;
+    -fx-border-color: #7F0FFF;
+    -fx-border-radius: 5px;
+    -fx-border-insets: 0px 11px 11px 11px;
+    -fx-border-width: 2px;
+}
