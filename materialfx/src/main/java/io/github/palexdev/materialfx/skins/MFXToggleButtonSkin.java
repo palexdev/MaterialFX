@@ -35,13 +35,13 @@ public class MFXToggleButtonSkin extends ToggleButtonSkin {
     //================================================================================
     // Constructors
     //================================================================================
-    public MFXToggleButtonSkin(MFXToggleButton control) {
-        super(control);
+    public MFXToggleButtonSkin(MFXToggleButton toggleButton) {
+        super(toggleButton);
 
-         circleRadius = control.getSize();
+         circleRadius = toggleButton.getSize();
 
         line = new Line();
-        line.setStroke(control.isSelected() ? control.getToggleLineColor() : control.getUnToggleLineColor());
+        line.setStroke(toggleButton.isSelected() ? toggleButton.getToggleLineColor() : toggleButton.getUnToggleLineColor());
         line.setStartX(0);
         line.setStartY(0);
         line.setEndX(circleRadius * 2 + 4);
@@ -51,7 +51,7 @@ public class MFXToggleButtonSkin extends ToggleButtonSkin {
         line.setSmooth(true);
 
         circle = new Circle(circleRadius);
-        circle.setFill(control.isSelected() ? control.getToggleColor() : control.getUnToggleColor());
+        circle.setFill(toggleButton.isSelected() ? toggleButton.getToggleColor() : toggleButton.getUnToggleColor());
         circle.setTranslateX(-circleRadius);
         circle.setSmooth(true);
         circle.setEffect(MFXDepthManager.shadowOf(DepthLevel.LEVEL1));
@@ -66,15 +66,15 @@ public class MFXToggleButtonSkin extends ToggleButtonSkin {
 
         rippleGenerator = new RippleGenerator(container, RippleClipType.NOCLIP);
         rippleGenerator.setAnimateBackground(false);
-        rippleGenerator.setRippleColor((Color) (control.isSelected() ? control.getUnToggleLineColor() : control.getToggleLineColor()));
+        rippleGenerator.setRippleColor((Color) (toggleButton.isSelected() ? toggleButton.getUnToggleLineColor() : toggleButton.getToggleLineColor()));
         rippleGenerator.setRippleRadius(circleRadius * 1.2);
         rippleGenerator.setInDuration(Duration.millis(400));
         rippleGenerator.setTranslateX(-circleRadius);
         container.getChildren().add(0, rippleGenerator);
 
-        control.setGraphic(container);
+        toggleButton.setGraphic(container);
 
-        setListeners(control);
+        setListeners();
     }
 
     //================================================================================
@@ -83,24 +83,25 @@ public class MFXToggleButtonSkin extends ToggleButtonSkin {
 
     /**
      * Adds listeners for: selected, size and skin(workaround) properties.
-     * @param control The MFXToggleButton associated to this skin
      */
-    private void setListeners(MFXToggleButton control) {
-        control.selectedProperty().addListener((observable, oldValue, newValue) -> {
+    private void setListeners() {
+        MFXToggleButton toggleButton = (MFXToggleButton) getSkinnable();
+
+        toggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
-                line.setStroke(control.getToggleLineColor());
-                rippleGenerator.setRippleColor((Color) control.getToggleLineColor());
-                circle.setFill(control.getToggleColor());
+                line.setStroke(toggleButton.getToggleLineColor());
+                rippleGenerator.setRippleColor((Color) toggleButton.getToggleLineColor());
+                circle.setFill(toggleButton.getToggleColor());
             } else {
-                line.setStroke(control.getUnToggleLineColor());
-                rippleGenerator.setRippleColor((Color) control.getUnToggleLineColor());
-                circle.setFill(control.getUnToggleColor());
+                line.setStroke(toggleButton.getUnToggleLineColor());
+                rippleGenerator.setRippleColor((Color) toggleButton.getUnToggleLineColor());
+                circle.setFill(toggleButton.getUnToggleColor());
             }
         });
 
-        control.selectedProperty().addListener((observable, oldValue, newValue) -> buildAndPlayAnimation(newValue));
+        toggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> buildAndPlayAnimation(newValue));
 
-        control.sizeProperty().addListener((observable, oldValue, newValue) -> {
+        toggleButton.sizeProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.doubleValue() < oldValue.doubleValue()) {
                 double translateX = newValue.doubleValue() + oldValue.doubleValue();
                 circle.setTranslateX(translateX + 2);
@@ -114,8 +115,8 @@ public class MFXToggleButtonSkin extends ToggleButtonSkin {
          * control's skinProperty, when the skin is not null and the ToggleButton isSelected,
          * play the animation.
          */
-        control.skinProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && control.isSelected()) {
+        toggleButton.skinProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && toggleButton.isSelected()) {
                 buildAndPlayAnimation(true);
             }
         });

@@ -115,3 +115,9 @@
     -mfx-ripple-color: #e2caff;
     -mfx-animate-background: true;
 }
+
+#loaderScroll {
+    -mfx-track-color: #e6d7ff;
+    -mfx-thumb-color: #b885ff;
+    -mfx-thumb-hover-color: #9e47ff;
+}

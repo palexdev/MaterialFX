@@ -1,0 +1,28 @@
+.mfx-list-cell {
+    -fx-background-insets: 0.0;
+    -fx-text-fill: BLACK;
+
+    -mfx-hover-color: rgba(50, 150, 255, 0.2);
+}
+
+.mfx-list-cell:odd,
+.mfx-list-cell:even {
+    -fx-background-color: white;
+}
+
+.mfx-list-cell:filled:hover,
+.mfx-list-cell:selected .label {
+    -fx-text-fill: black;
+}
+
+.list-cell .text {
+    -fx-fill: -fx-text-background-color ;
+}
+
+.list-cell:selected .text {
+    -fx-fill: black;
+}
+
+.list-cell:hover .text {
+    -fx-fill: black;
+}

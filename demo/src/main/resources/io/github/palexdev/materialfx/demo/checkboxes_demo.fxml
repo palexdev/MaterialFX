@@ -6,8 +6,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.Stop?>
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@checkboxes_demo.css" xmlns="http://javafx.com/javafx/11.0.1">
-    <Label alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Checkboxes color" StackPane.alignment="TOP_CENTER">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+           prefWidth="600.0" stylesheets="@css/checkboxes_demo.css" xmlns="http://javafx.com/javafx/11.0.1">
+    <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Checkboxes color" StackPane.alignment="TOP_CENTER">
         <StackPane.margin>
             <Insets top="20.0" />
         </StackPane.margin>
@@ -44,7 +45,7 @@
             <Insets />
         </opaqueInsets>
     </MFXCheckbox>
-    <Label alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Checkboxes Mark Types" />
+    <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Checkboxes Mark Types" />
     <MFXCheckbox markType="CASPIAN" text="Caspian">
         <StackPane.margin>
             <Insets right="300.0" top="65.0" />

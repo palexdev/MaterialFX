@@ -151,7 +151,10 @@ public class MFXStageDialog {
      * @see Stage
      */
     public void setOwner(Window owner) {
-        this.dialogStage.initOwner(owner);
+        try {
+            this.dialogStage.initOwner(owner);
+        } catch (IllegalStateException ignored) {
+        }
     }
 
     /**
@@ -159,7 +162,10 @@ public class MFXStageDialog {
      * @see Stage
      */
     public void setModality(Modality modality) {
-        this.dialogStage.initModality(modality);
+        try {
+            this.dialogStage.initModality(modality);
+        } catch (IllegalStateException ignored) {
+        }
     }
 
     /**

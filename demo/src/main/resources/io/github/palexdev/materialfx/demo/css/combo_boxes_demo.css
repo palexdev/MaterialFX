@@ -1,0 +1,7 @@
+#custom {
+    -mfx-line-color: #7F0FFF;
+    -mfx-unfocused-line-color: #E2CAFF;
+    -mfx-line-stroke-width: 2px;
+    -mfx-animate-lines: true;
+    -mfx-validate: true;
+}

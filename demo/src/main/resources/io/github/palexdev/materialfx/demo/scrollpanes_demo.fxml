@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@css/scrollpanes_demo.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.ScrollPaneDemoController">
+   <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" stylesheets="@css/common.css" text="ScrollPane Preview" StackPane.alignment="TOP_CENTER">
+      <StackPane.margin>
+         <Insets top="16.0" />
+      </StackPane.margin>
+   </Label>
+   <MFXScrollPane fx:id="scrollPaneV" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="290.0" prefWidth="290.0" styleClass="mfx-scroll-pane" StackPane.alignment="CENTER_LEFT">
+      <StackPane.margin>
+         <Insets left="5.0" top="5.0" />
+      </StackPane.margin>
+      <padding>
+         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+      </padding>
+      <Label text="Sometimes there isn't a good answer. No matter how you try to rationalize the outcome, it doesn't make sense. And instead of an answer, you are simply left with a question. Why?He took a sip of the drink. He wasn't sure whether he liked it or not, but at this moment it didn't matter. She had made it especially for him so he would have forced it down even if he had absolutely hated it. That's simply the way things worked. She made him a new-fangled drink each day and he took a sip of it and smiled, saying it was excellent.According to the caption on the bronze marker placed by the Multnomah Chapter of the Daughters of the American Revolution on May 12, 1939, “College Hall (is) the oldest building in continuous use for Educational purposes west of the Rocky Mountains. Here were educated men and women who have won recognition throughout the world in all the learned professions.”He heard the loud impact before he ever saw the result. It had been so loud that it had actually made him jump back in his seat. As soon as he recovered from the surprise, he saw the crack in the windshield. It seemed to be an analogy of the current condition of his life.There was something special about this little creature. Donna couldn't quite pinpoint what it was, but she knew with all her heart that it was true. It wasn't a matter of if she was going to try and save it, but a matter of how she was going to save it. She went back to the car to get a blanket and when she returned the creature was gone." wrapText="true" />
+   </MFXScrollPane>
+   <MFXScrollPane fx:id="scrollPaneVH" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="290.0" prefWidth="290.0" styleClass="mfx-scroll-pane" StackPane.alignment="CENTER_RIGHT">
+      <padding>
+         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+      </padding>
+      <StackPane.margin>
+         <Insets right="5.0" top="5.0" />
+      </StackPane.margin>
+      <Label prefWidth="400.0" text="Sometimes there isn't a good answer. No matter how you try to rationalize the outcome, it doesn't make sense. And instead of an answer, you are simply left with a question. Why?He took a sip of the drink. He wasn't sure whether he liked it or not, but at this moment it didn't matter. She had made it especially for him so he would have forced it down even if he had absolutely hated it. That's simply the way things worked. She made him a new-fangled drink each day and he took a sip of it and smiled, saying it was excellent.According to the caption on the bronze marker placed by the Multnomah Chapter of the Daughters of the American Revolution on May 12, 1939, “College Hall (is) the oldest building in continuous use for Educational purposes west of the Rocky Mountains. Here were educated men and women who have won recognition throughout the world in all the learned professions.”He heard the loud impact before he ever saw the result. It had been so loud that it had actually made him jump back in his seat. As soon as he recovered from the surprise, he saw the crack in the windshield. It seemed to be an analogy of the current condition of his life.There was something special about this little creature. Donna couldn't quite pinpoint what it was, but she knew with all her heart that it was true. It wasn't a matter of if she was going to try and save it, but a matter of how she was going to save it. She went back to the car to get a blanket and when she returned the creature was gone." wrapText="true" />
+   </MFXScrollPane>
+   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" prefHeight="34.0" prefWidth="200.0" spacing="20.0" StackPane.alignment="BOTTOM_CENTER">
+      <StackPane.margin>
+         <Insets bottom="10.0" />
+      </StackPane.margin>
+      <MFXButton buttonType="RAISED" onAction="#setRandomTrackColor" text="Random Track Color" />
+      <MFXButton buttonType="RAISED" onAction="#setRandomThumbColor" text="Random Thumb Color" />
+      <MFXButton buttonType="RAISED" onAction="#setRandomThumbHoverColor" text="Random Thumb Hover Color" />
+   </HBox>
+</StackPane>

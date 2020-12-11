@@ -9,6 +9,7 @@ public class StringUtils {
 
     /**
      * Finds the difference between two {@code String}s.
+     *
      * @param str1 The first String
      * @param str2 The second String
      * @return the difference between the two given strings
@@ -29,6 +30,7 @@ public class StringUtils {
 
     /**
      * Finds the index at which two {@code CharSequence}s differ.
+     *
      * @param cs1 The first sequence
      * @param cs2 The second sequence
      */
@@ -49,5 +51,20 @@ public class StringUtils {
             return i;
         }
         return INDEX_NOT_FOUND;
+    }
+
+    /**
+     * Replaces the last occurrence of the given string with a new string.
+     * @param string The string to modify
+     * @param substring The last occurrence to find
+     * @param replacement The replacement
+     * @return The modified string
+     */
+    public static String replaceLast(String string, String substring, String replacement) {
+        int index = string.lastIndexOf(substring);
+        if (index == -1)
+            return string;
+        return string.substring(0, index) + replacement
+                + string.substring(index + substring.length());
     }
 }

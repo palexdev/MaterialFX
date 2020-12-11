@@ -7,6 +7,7 @@ module MaterialFX.materialfx.main {
 
     exports io.github.palexdev.materialfx;
     exports io.github.palexdev.materialfx.beans;
+    exports io.github.palexdev.materialfx.beans.binding;
     exports io.github.palexdev.materialfx.collections;
     exports io.github.palexdev.materialfx.controls;
     exports io.github.palexdev.materialfx.controls.base;
@@ -16,4 +17,6 @@ module MaterialFX.materialfx.main {
     exports io.github.palexdev.materialfx.notifications;
     exports io.github.palexdev.materialfx.skins;
     exports io.github.palexdev.materialfx.utils;
+    exports io.github.palexdev.materialfx.validation;
+    exports io.github.palexdev.materialfx.validation.base;
 }

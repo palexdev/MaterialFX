@@ -1,0 +1,30 @@
+#customView {
+    -mfx-hide-scrollbars: true;
+
+    -mfx-track-color: transparent;
+    -mfx-thumb-color: derive(salmon, 30%);
+    -mfx-thumb-hover-color: red;
+}
+
+#customView .mfx-list-cell {
+    -mfx-selected-color: salmon;
+    -mfx-hover-color: derive(salmon, 70%);
+}
+
+#customView .mfx-list-cell .ripple-generator {
+    -mfx-ripple-color: derive(red, 10%);
+}
+
+#label {
+    -fx-background-color: linear-gradient(to bottom right, #C01ADD 0%, #6A6AF8 100%);
+    -fx-background-radius: 7;
+    -fx-border-color: #7F0FFF;
+    -fx-border-radius: 5;
+    -fx-border-width: 2;
+}
+
+#label .text {
+    -fx-font-family: "Open Sans Bold";
+    -fx-font-size: 10;
+    -fx-fill: white;
+}

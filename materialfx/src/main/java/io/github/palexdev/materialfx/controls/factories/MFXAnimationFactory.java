@@ -145,6 +145,11 @@ public enum MFXAnimationFactory {
     };
 
     private static final Interpolator interpolator = Interpolator.SPLINE(0.25, 0.1, 0.25, 1);
+
+    public static Interpolator getInterpolator() {
+        return interpolator;
+    }
+
     private static void resetNode(Node node) {
         node.setTranslateX(0);
         node.setTranslateY(0);

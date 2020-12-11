@@ -33,8 +33,8 @@ public class MFXCheckboxSkin extends CheckBoxSkin {
     //================================================================================
     // Constructors
     //================================================================================
-    public MFXCheckboxSkin(MFXCheckbox control) {
-        super(control);
+    public MFXCheckboxSkin(MFXCheckbox checkbox) {
+        super(checkbox);
 
         // Contains the ripple generator and the box
         rippleContainer = new AnchorPane();
@@ -51,7 +51,7 @@ public class MFXCheckboxSkin extends CheckBoxSkin {
         box.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         box.getStyleClass().setAll("box");
         box.setBorder(new Border(new BorderStroke(
-                control.getUncheckedColor(),
+                checkbox.getUncheckedColor(),
                 BorderStrokeStyle.SOLID,
                 new CornerRadii(2),
                 new BorderWidths(2.2)
@@ -74,8 +74,8 @@ public class MFXCheckboxSkin extends CheckBoxSkin {
         rippleContainer.getChildren().addAll(rippleGenerator, box);
 
         updateChildren();
-        updateMarkType(control);
-        setListeners(control);
+        updateMarkType();
+        setListeners();
     }
 
     //================================================================================
@@ -84,52 +84,68 @@ public class MFXCheckboxSkin extends CheckBoxSkin {
 
     /**
      * Adds listeners for: markType, selected, indeterminate, checked and unchecked coloros properties.
-     * @param control The MFXCheckbox associated to this skin
      */
-    private void setListeners(MFXCheckbox control) {
-        control.markTypeProperty().addListener(
-                (observable, oldValue, newValue) -> updateMarkType(control));
+    private void setListeners() {
+        MFXCheckbox checkbox = (MFXCheckbox) getSkinnable();
 
-        control.selectedProperty().addListener(
-                (observable, oldValue, newValue) -> updateColors(control)
+        checkbox.markTypeProperty().addListener(
+                (observable, oldValue, newValue) -> updateMarkType()
         );
 
-        control.indeterminateProperty().addListener(
-                (observable, oldValue, newValue) -> updateColors(control)
+        checkbox.selectedProperty().addListener(
+                (observable, oldValue, newValue) -> updateColors()
         );
 
-        control.checkedColorProperty().addListener(
-                (observable, oldValue, newValue) -> updateColors(control)
+        checkbox.indeterminateProperty().addListener(
+                (observable, oldValue, newValue) -> updateColors()
         );
 
-        control.uncheckedColorProperty().addListener(
-                (observable, oldValue, newValue) -> updateColors(control)
+        checkbox.checkedColorProperty().addListener(
+                (observable, oldValue, newValue) -> updateColors()
+        );
+
+        checkbox.uncheckedColorProperty().addListener(
+                (observable, oldValue, newValue) -> updateColors()
         );
 
         /* Listener on control but if the coordinates of the event are greater than then ripple container size
          * then the center of the ripple is set to the width and/or height of container
          */
-        control.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+        checkbox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             rippleGenerator.setGeneratorCenterX(Math.min(event.getX(), rippleContainer.getWidth()));
             rippleGenerator.setGeneratorCenterY(Math.min(event.getY(), rippleContainer.getHeight()));
             rippleGenerator.createRipple();
+        });
+
+        /*
+         * Workaround
+         * When the control is created the Skin is still null, so if the CheckBox is set
+         * to be selected/indeterminate the animation won't be played. To fix this add a listener to the
+         * control's skinProperty, when the skin is not null and the CheckBox isSelected/isIndeterminate,
+         * play the animation.
+         */
+        checkbox.skinProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && (checkbox.isSelected() || checkbox.isIndeterminate())) {
+                updateColors();
+            }
         });
     }
 
     /**
      * This method is called whenever one of the following properties changes:
      * {@code selectedProperty}, {@code indeterminateProperty}, {@code checkedColor} and {@code uncheckedColor} properties
-     * @param control The MFXCheckbox associated to this skin
      * @see NodeUtils
      */
-    private void updateColors(MFXCheckbox control) {
+    private void updateColors() {
+        MFXCheckbox checkbox = (MFXCheckbox) getSkinnable();
+
         final BorderStroke borderStroke = box.getBorder().getStrokes().get(0);
-        if (control.isIndeterminate()) {
-            NodeUtils.updateBackground(box, control.getCheckedColor(), new Insets(4));
-        } else if (control.isSelected()) {
-            NodeUtils.updateBackground(box, control.getCheckedColor(), Insets.EMPTY);
+        if (checkbox.isIndeterminate()) {
+            NodeUtils.updateBackground(box, checkbox.getCheckedColor(), new Insets(4));
+        } else if (checkbox.isSelected()) {
+            NodeUtils.updateBackground(box, checkbox.getCheckedColor(), Insets.EMPTY);
             box.setBorder(new Border(new BorderStroke(
-                    control.getCheckedColor(),
+                    checkbox.getCheckedColor(),
                     borderStroke.getTopStyle(),
                     borderStroke.getRadii(),
                     borderStroke.getWidths()
@@ -137,7 +153,7 @@ public class MFXCheckboxSkin extends CheckBoxSkin {
         } else {
             NodeUtils.updateBackground(box, Color.TRANSPARENT);
             box.setBorder(new Border(new BorderStroke(
-                    control.getUncheckedColor(),
+                    checkbox.getUncheckedColor(),
                     borderStroke.getTopStyle(),
                     borderStroke.getRadii(),
                     borderStroke.getWidths()
@@ -147,11 +163,12 @@ public class MFXCheckboxSkin extends CheckBoxSkin {
 
     /**
      * This method is called whenever the {@code markType} property changes.
-     * @param control The MFXCheckbox associated to this skin
      */
-    private void updateMarkType(MFXCheckbox control) {
+    private void updateMarkType() {
+        MFXCheckbox checkbox = (MFXCheckbox) getSkinnable();
+
         SVGPath svgPath = new SVGPath();
-        svgPath.setContent(control.getMarkType().getSvhPath());
+        svgPath.setContent(checkbox.getMarkType().getSvhPath());
         mark.setShape(svgPath);
     }
 

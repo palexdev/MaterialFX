@@ -1,5 +1,5 @@
 #customRippleRadius .container .ripple-generator {
-    -mfx-ripple-radius: 15;
+    -mfx-ripple-radius: 15px;
 }
 
 .mfx-toggle-node {
@@ -7,6 +7,6 @@
 }
 
 .mfx-toggle-node .ripple-generator {
-    -mfx-ripple-radius: 15;
+    -mfx-ripple-radius: 15px;
     -mfx-ripple-color: #b3b3b3;
 }

@@ -162,7 +162,12 @@ public class MFXButton extends Button {
      * <p>
      * The {@code DropShadow} effect is used to make the control appear {@code RAISED}.
      */
-    private final ObjectProperty<DepthLevel> depthLevel = new SimpleObjectProperty<>(DepthLevel.LEVEL2);
+    private final StyleableObjectProperty<DepthLevel> depthLevel = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.DEPTH_LEVEL,
+            this,
+            "depthLevel",
+            DepthLevel.LEVEL2
+    );
 
     /**
      * Specifies the appearance of this control. According to material design there are two types of buttons:
@@ -178,6 +183,18 @@ public class MFXButton extends Button {
             ButtonType.FLAT
     );
 
+    public DepthLevel getDepthLevel() {
+        return depthLevel.get();
+    }
+
+    public StyleableObjectProperty<DepthLevel> depthLevelProperty() {
+        return depthLevel;
+    }
+
+    public void setDepthLevel(DepthLevel depthLevel) {
+        this.depthLevel.set(depthLevel);
+    }
+
     public ButtonType getButtonType() {
         return buttonType.get();
     }
@@ -190,23 +207,19 @@ public class MFXButton extends Button {
         this.buttonType.set(buttonType);
     }
 
-    public DepthLevel getDepthLevel() {
-        return depthLevel.get();
-    }
-
-    public ObjectProperty<DepthLevel> depthLevelProperty() {
-        return depthLevel;
-    }
-
-    public void setDepthLevel(DepthLevel depthLevel) {
-        this.depthLevel.set(depthLevel);
-    }
-
     //================================================================================
     // CssMetaData
     //================================================================================
     private static class StyleableProperties {
         private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+
+        private static final CssMetaData<MFXButton, DepthLevel> DEPTH_LEVEL =
+                FACTORY.createEnumCssMetaData(
+                        DepthLevel.class,
+                        "-mfx-depth-level",
+                        MFXButton::depthLevelProperty,
+                        DepthLevel.LEVEL2
+                );
 
         private static final CssMetaData<MFXButton, ButtonType> BUTTON_TYPE =
                 FACTORY.createEnumCssMetaData(
@@ -216,7 +229,7 @@ public class MFXButton extends Button {
                         ButtonType.FLAT);
 
         static {
-            cssMetaDataList = List.of(BUTTON_TYPE);
+            cssMetaDataList = List.of(DEPTH_LEVEL, BUTTON_TYPE);
         }
 
     }
@@ -230,7 +243,7 @@ public class MFXButton extends Button {
     //================================================================================
     @Override
     protected Skin<?> createDefaultSkin() {
-        MFXButtonSkin skin = new MFXButtonSkin(this, depthLevel.get());
+        MFXButtonSkin skin = new MFXButtonSkin(this);
         this.getChildren().add(0, rippleGenerator);
         this.setOnMousePressed(event -> {
             rippleGenerator.setGeneratorCenterX(event.getX());

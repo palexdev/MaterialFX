@@ -4,14 +4,24 @@ package io.github.palexdev.materialfx.demo.controllers;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 
-public class ScrollPaneDemoController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class ScrollPaneDemoController implements Initializable {
 
     @FXML
     private MFXScrollPane scrollPaneV;
 
     @FXML
     private MFXScrollPane scrollPaneVH;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        MFXScrollPane.smoothVScrolling(scrollPaneV);
+        MFXScrollPane.smoothVScrolling(scrollPaneVH);
+    }
 
     @FXML
     void setRandomTrackColor() {
@@ -30,5 +40,4 @@ public class ScrollPaneDemoController {
         scrollPaneV.setThumbHoverColor(ColorUtils.getRandomColor());
         scrollPaneVH.setThumbHoverColor(ColorUtils.getRandomColor());
     }
-
 }

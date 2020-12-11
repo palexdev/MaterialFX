@@ -47,6 +47,9 @@ public class DemoController implements Initializable {
     private StackPane navBar;
 
     @FXML
+    private MFXScrollPane scrollPane;
+
+    @FXML
     private MFXVLoader vLoader;
 
     private MFXButton opNavButton;
@@ -127,7 +130,7 @@ public class DemoController implements Initializable {
         StackPane.setAlignment(infoButton, Pos.BOTTOM_RIGHT);
         StackPane.setMargin(infoButton, new Insets(0, 8, 8, 0));
         StackPane.setAlignment(opNavButton, Pos.CENTER_LEFT);
-        StackPane.setMargin(opNavButton, new Insets(0, 0, 0, 9));
+        StackPane.setMargin(opNavButton, new Insets(0, 0, 0, 4));
 
         NodeUtils.makeRegionCircular(closeButton);
         NodeUtils.makeRegionCircular(minimizeButton);
@@ -142,13 +145,17 @@ public class DemoController implements Initializable {
         vLoader.setContentPane(contentPane);
         vLoader.addItem(0, "BUTTONS", new MFXToggleNode("BUTTONS"), MFXResourcesLoader.load("buttons_demo.fxml"));
         vLoader.addItem(1, "CHECKBOXES", new MFXToggleNode("CHECKBOXES"), MFXResourcesLoader.load("checkboxes_demo.fxml"));
-        vLoader.addItem(2, "TOGGLES", new MFXToggleNode("TOGGLES"), MFXResourcesLoader.load("toggle_buttons_demo.fxml"));
+        vLoader.addItem(2, "COMBOBOXES", new MFXToggleNode("COMBOBOXES"), MFXResourcesLoader.load("combo_boxes_demo.fxml"));
         vLoader.addItem(3, "DIALOGS", new MFXToggleNode("DIALOGS"), MFXResourcesLoader.load("dialogs_demo.fxml"), controller -> new DialogsController(demoPane));
-        vLoader.addItem(4, "NOTIFICATIONS", new MFXToggleNode("NOTIFICATIONS"), MFXResourcesLoader.load("notifications_demo.fxml"));
-        vLoader.addItem(5, "SCROLLPANE", new MFXToggleNode("SCROLLPANE"), MFXResourcesLoader.load("scrollpane_demo.fxml"));
+        vLoader.addItem(4, "LISTVIEWS", new MFXToggleNode("LISTVIEWS"), MFXResourcesLoader.load("listviews_demo.fxml"));
+        vLoader.addItem(5, "NOTIFICATIONS", new MFXToggleNode("NOTIFICATIONS"), MFXResourcesLoader.load("notifications_demo.fxml"));
+        vLoader.addItem(6, "RADIOBUTTONS", new MFXToggleNode("RADIOBUTTONS"), MFXResourcesLoader.load("radio_buttons_demo.fxml"));
+        vLoader.addItem(7, "SCROLLPANES", new MFXToggleNode("SCROLLPANES"), MFXResourcesLoader.load("scrollpanes_demo.fxml"));
+        vLoader.addItem(8, "TOGGLES", new MFXToggleNode("TOGGLES"), MFXResourcesLoader.load("toggle_buttons_demo.fxml"));
         vLoader.setDefault("BUTTONS");
 
         // Others
+        MFXScrollPane.smoothVScrolling(scrollPane);
         primaryStage.sceneProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 Scene scene = primaryStage.getScene();
