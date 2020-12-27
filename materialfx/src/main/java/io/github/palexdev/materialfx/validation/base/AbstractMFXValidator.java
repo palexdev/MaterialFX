@@ -7,6 +7,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
@@ -18,8 +19,8 @@ public abstract class AbstractMFXValidator implements IMFXValidator {
     //================================================================================
     // Properties
     //================================================================================
-    protected ObservableList<BooleanProperty> conditions;
-    protected BooleanListBinding validation;
+    protected ObservableList<BooleanProperty> conditions = FXCollections.observableArrayList();
+    protected BooleanListBinding validation = new BooleanListBinding(conditions);
     private final StringProperty validatorMessage = new SimpleStringProperty("Validation failed!");
 
     //================================================================================
@@ -35,6 +36,10 @@ public abstract class AbstractMFXValidator implements IMFXValidator {
 
     public void setValidatorMessage(String validatorMessage) {
         this.validatorMessage.set(validatorMessage);
+    }
+
+    public BooleanListBinding validationProperty() {
+        return validation;
     }
 
     //================================================================================

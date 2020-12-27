@@ -1,5 +1,6 @@
 package io.github.palexdev.materialfx;
 
+import java.io.InputStream;
 import java.net.URL;
 
 /**
@@ -12,5 +13,9 @@ public class MFXResourcesLoader {
 
     public static URL load(String path) {
         return MFXResourcesLoader.class.getResource(path);
+    }
+
+    public static InputStream loadStream(String name) {
+        return MFXResourcesLoader.class.getResourceAsStream(name);
     }
 }

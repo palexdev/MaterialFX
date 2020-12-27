@@ -233,7 +233,7 @@ public class MFXListView<T> extends ListView<T> {
 
     }
 
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
+    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
         return StyleableProperties.cssMetaDataList;
     }
 
@@ -252,6 +252,6 @@ public class MFXListView<T> extends ListView<T> {
 
     @Override
     public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return this.getControlCssMetaDataList();
+        return MFXListView.getControlCssMetaDataList();
     }
 }

@@ -67,4 +67,15 @@ public class StringUtils {
         return string.substring(0, index) + replacement
                 + string.substring(index + substring.length());
     }
+
+    public static String titleCaseWord(String str) {
+        if (str.length() > 0) {
+            int firstChar = str.codePointAt(0);
+            if (!Character.isTitleCase(firstChar)) {
+                str = new String(new int[] { Character.toTitleCase(firstChar) }, 0, 1) +
+                        str.substring(Character.offsetByCodePoints(str, 0, 1));
+            }
+        }
+        return str;
+    }
 }

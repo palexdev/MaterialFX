@@ -1,7 +1,7 @@
 package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
-import io.github.palexdev.materialfx.effects.RippleClipType;
+import io.github.palexdev.materialfx.controls.factories.RippleClipTypeFactory;
 import io.github.palexdev.materialfx.effects.RippleGenerator;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.geometry.Insets;
@@ -66,7 +66,7 @@ public class MFXCheckboxSkin extends CheckBoxSkin {
         mark.getStyleClass().setAll("mark");
         box.getChildren().add(mark);
 
-        rippleGenerator = new RippleGenerator(rippleContainer, RippleClipType.NOCLIP);
+        rippleGenerator = new RippleGenerator(rippleContainer, new RippleClipTypeFactory());
         rippleGenerator.setRippleRadius(18);
         rippleGenerator.setInDuration(Duration.millis(400));
         rippleGenerator.setAnimateBackground(false);

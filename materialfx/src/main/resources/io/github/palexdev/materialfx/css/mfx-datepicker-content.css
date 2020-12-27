@@ -1,0 +1,167 @@
+@import "fonts.css";
+
+* {
+    -fx-font-smoothing-type: gray;
+}
+
+.mfx-datepicker-content {
+    -mfx-main-color: #6200ee;
+}
+
+.mfx-datepicker-content {
+    -fx-background-color: white;
+    -fx-background-insets: 0 0 -3 0;
+    -fx-background-radius: 6 6 5 5;
+
+    -fx-border-color: transparent #d4d4d4 #d4d4d4 #d4d4d4;
+    -fx-border-width: 0.5;
+    -fx-border-radius: 5;
+    -fx-border-insets: 0 0 -3 0;
+}
+
+.header {
+    -fx-background-color: -mfx-main-color;
+    -fx-background-radius: 5 5 0 0;
+    -fx-background-insets: -0.5;
+}
+
+.header .label {
+    -fx-font-family: "Open Sans Bold";
+    -fx-font-size: 11.5;
+    -fx-font-smoothing-type: gray;
+}
+
+#selected-date {
+    -fx-font-family: "Open Sans SemiBold";
+    -fx-font-size: 25;
+}
+
+.month-year-pane {
+    -fx-background-color: white;
+}
+
+.years-button .ripple-generator {
+    -mfx-ripple-color: rgb(220, 220, 220);
+}
+
+.month-back-button .ripple-generator {
+    -mfx-ripple-color: rgb(220, 220, 220);
+}
+
+.month-forward-button .ripple-generator {
+    -mfx-ripple-color: rgb(220, 220, 220);
+}
+
+.change-input-button .ripple-generator {
+    -mfx-ripple-color: rgb(220, 220, 220);
+}
+
+.change-input-button .tooltip {
+    -fx-font-family: "Open Sans Regular";
+    -fx-background-color: rgba(255, 255, 255, 0.9);
+    -fx-text-fill: black;
+    -fx-font-smoothing-type: gray;
+}
+
+#input-field {
+    -fx-prompt-text-fill: rgb(77, 77, 77);
+}
+
+.holder {
+    -fx-background-insets: 0 0 -2 0;
+    -fx-background-radius: 0 0 5 5;
+}
+
+.calendar {
+    -fx-background-color: white;
+    -fx-background-radius: 0 0 5 5;
+}
+
+.years-scrollpane {
+    -mfx-track-color: transparent;
+    -mfx-thumb-color: derive(-mfx-main-color, 70%);
+    -mfx-thumb-hover-color: -mfx-main-color;
+}
+
+.years-scrollpane:focused {
+    -fx-border-color: transparent #d4d4d4 #d4d4d4 #d4d4d4;
+    -fx-border-width: 0.5;
+    -fx-border-radius: 0 0 5 5;
+    -fx-border-insets: -0.8 -0.8 -3 -0.8;
+}
+
+.years-scrollpane .scroll-bar {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-focus-color: transparent;
+    -fx-background-insets: 100%;
+    -fx-border-insets: 100%;
+}
+
+.years {
+    -fx-background-radius: 0 0 5 5;
+}
+
+.day-name-cell {
+    -fx-font-family: "Open Sans SemiBold";
+    -fx-font-size: 14;
+    -fx-text-fill: rgb(130, 130, 130);
+}
+
+.day-cell {
+    -fx-font-family: "Open Sans SemiBold";
+    -fx-font-size: 11;
+    -fx-text-fill: rgb(68, 68, 68);
+}
+
+.day-cell .cell-stroke {
+    -fx-stroke: rgb(68, 68, 68);
+}
+
+.day-cell:current {
+    -fx-font-family: "Open Sans Regular";
+    -fx-font-size: 12.5;
+    -fx-text-fill: rgb(68, 68, 68);
+}
+
+.day-cell:selectedDate {
+    -fx-background-color: -mfx-main-color;
+    -fx-font-family: "Open Sans SemiBold";
+    -fx-font-size: 12.5;
+    -fx-text-fill: white;
+}
+
+.day-cell .ripple-generator {
+    -mfx-ripple-radius: 16px;
+    -mfx-ripple-color: rgba(211, 211, 211, 0.7);
+}
+
+.year-cell {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-font-family: "Open Sans Regular";
+    -fx-font-size: 14;
+}
+
+.year-cell:current {
+    -fx-border-color: -mfx-main-color;
+    -fx-border-width: 0.8;
+    -fx-font-family: "Open Sans Regular";
+}
+
+.year-cell:selectedDate {
+    -fx-background-color: -mfx-main-color;
+    -fx-font-family: "Open Sans SemiBold";
+    -fx-font-size: 16;
+    -fx-text-fill: white;
+}
+
+.year-cell .ripple-generator {
+    -mfx-ripple-radius: 30px;
+    -mfx-ripple-color: rgba(211, 211, 211, 0.6);
+}
+
+.day-name-cell .ripple-generator {
+    -mfx-ripple-radius: 0;
+    -mfx-animate-background: false;
+}

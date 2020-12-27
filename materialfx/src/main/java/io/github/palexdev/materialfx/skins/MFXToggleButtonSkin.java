@@ -1,9 +1,9 @@
 package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.controls.MFXToggleButton;
+import io.github.palexdev.materialfx.controls.factories.RippleClipTypeFactory;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.effects.MFXDepthManager;
-import io.github.palexdev.materialfx.effects.RippleClipType;
 import io.github.palexdev.materialfx.effects.RippleGenerator;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -64,7 +64,7 @@ public class MFXToggleButtonSkin extends ToggleButtonSkin {
         container.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         container.setPrefSize(50, 40);
 
-        rippleGenerator = new RippleGenerator(container, RippleClipType.NOCLIP);
+        rippleGenerator = new RippleGenerator(container, new RippleClipTypeFactory());
         rippleGenerator.setAnimateBackground(false);
         rippleGenerator.setRippleColor((Color) (toggleButton.isSelected() ? toggleButton.getUnToggleLineColor() : toggleButton.getToggleLineColor()));
         rippleGenerator.setRippleRadius(circleRadius * 1.2);
