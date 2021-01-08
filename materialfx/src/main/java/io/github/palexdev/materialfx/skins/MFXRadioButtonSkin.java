@@ -1,7 +1,7 @@
 package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.controls.MFXRadioButton;
-import io.github.palexdev.materialfx.effects.RippleClipType;
+import io.github.palexdev.materialfx.controls.factories.RippleClipTypeFactory;
 import io.github.palexdev.materialfx.effects.RippleGenerator;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
@@ -55,7 +55,7 @@ public class MFXRadioButtonSkin extends RadioButtonSkin {
         container = new StackPane();
         container.getStyleClass().add("radio-container");
 
-        rippleGenerator = new RippleGenerator(container, RippleClipType.NOCLIP);
+        rippleGenerator = new RippleGenerator(container, new RippleClipTypeFactory());
         rippleGenerator.setRippleRadius(radius * 1.2);
         rippleGenerator.setInDuration(Duration.millis(350));
         rippleGenerator.setAnimateBackground(false);

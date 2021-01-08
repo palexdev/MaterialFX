@@ -6,6 +6,7 @@ import io.github.palexdev.materialfx.controls.base.AbstractMFXDialog;
 import io.github.palexdev.materialfx.controls.enums.DialogType;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.controls.factories.MFXDialogFactory;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.Pane;
@@ -78,7 +79,7 @@ public class DialogsController implements Initializable {
         this.animateDialog = MFXDialogFactory.buildDialog(DialogType.INFO, "", text);
         this.animateDialog.setAnimateIn(true);
         this.animateDialog.setAnimateOut(true);
-        this.pane.getChildren().addAll(dialog, animateDialog);
+        Platform.runLater(() -> this.pane.getChildren().addAll(dialog, animateDialog));
     }
 
     @Override

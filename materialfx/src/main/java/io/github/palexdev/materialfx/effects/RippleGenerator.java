@@ -1,5 +1,6 @@
 package io.github.palexdev.materialfx.effects;
 
+import io.github.palexdev.materialfx.controls.factories.RippleClipTypeFactory;
 import javafx.animation.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -10,7 +11,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 
 import java.util.List;
@@ -31,16 +32,17 @@ public class RippleGenerator extends Group {
 
     private final Region region;
 
-    private RippleClipType rippleClipType = RippleClipType.RECTANGLE;
+    private RippleClipTypeFactory rippleClipTypeFactory = new RippleClipTypeFactory(RippleClipType.RECTANGLE);
     private DepthLevel level = null;
     private final Interpolator rippleInterpolator = Interpolator.SPLINE(0.0825, 0.3025, 0.0875, 0.9975);
     //private final Interpolator rippleInterpolator = Interpolator.SPLINE(0.1, 0.50, 0.3, 0.85);
-    private final StyleableObjectProperty<Color> rippleColor = new StyleableObjectProperty<>(Color.ROYALBLUE)
-    {
-        @Override public CssMetaData<RippleGenerator, Color> getCssMetaData() { return StyleableProperties.RIPPLE_COLOR; }
-        @Override public Object getBean() { return this; }
-        @Override public String getName() { return "rippleColor"; }
-    };
+    private final StyleableObjectProperty<Color> rippleColor = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.RIPPLE_COLOR,
+            this,
+            "rippleColor",
+            Color.ROYALBLUE
+    );
+
     private final StyleableDoubleProperty rippleRadius = new SimpleStyleableDoubleProperty(
             StyleableProperties.RIPPLE_RADIUS,
             this,
@@ -82,14 +84,14 @@ public class RippleGenerator extends Group {
         this.level = shadowLevel;
     }
 
-    public RippleGenerator(Region region, RippleClipType rippleClipType) {
+    public RippleGenerator(Region region, RippleClipTypeFactory factory) {
         this(region);
-        this.rippleClipType = rippleClipType;
+        this.rippleClipTypeFactory = factory;
     }
 
-    public RippleGenerator(Region region, DepthLevel shadowLevel, RippleClipType rippleClipType) {
+    public RippleGenerator(Region region, DepthLevel shadowLevel, RippleClipTypeFactory factory) {
         this(region, shadowLevel);
-        this.rippleClipType = rippleClipType;
+        this.rippleClipTypeFactory = factory;
     }
 
     //================================================================================
@@ -106,7 +108,7 @@ public class RippleGenerator extends Group {
         getChildren().add(ripple);
 
         if (animateBackground.get()) {
-            Rectangle fillRect = new Rectangle(region.getWidth(), region.getHeight());
+            Shape fillRect = rippleClipTypeFactory.build(region);
             fillRect.setFill(rippleColor.get());
             fillRect.setOpacity(0);
             getChildren().add(0, fillRect);
@@ -131,8 +133,8 @@ public class RippleGenerator extends Group {
         this.generatorCenterY = generatorCenterY;
     }
 
-    public void setRippleClipType(RippleClipType rippleClipType) {
-        this.rippleClipType = rippleClipType;
+    public void setRippleClipTypeFactory(RippleClipTypeFactory rippleClipTypeFactory) {
+        this.rippleClipTypeFactory = rippleClipTypeFactory;
     }
 
     public Color getRippleColor() {
@@ -217,7 +219,7 @@ public class RippleGenerator extends Group {
         private Ripple(double centerX, double centerY) {
             super(centerX, centerY, 0, Color.TRANSPARENT);
             setFill(rippleColor.get());
-            setClip(rippleClipType.buildClip(region));
+            setClip(rippleClipTypeFactory.build(region));
             buildAnimation();
         }
 
@@ -302,12 +304,12 @@ public class RippleGenerator extends Group {
 
     }
 
-    public List<CssMetaData<? extends Styleable, ?>> getGroupCssMetaDataList() {
+    public static List<CssMetaData<? extends Styleable, ?>> getGroupCssMetaDataList() {
         return RippleGenerator.StyleableProperties.cssMetaDataList;
     }
 
     @Override
     public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
-        return this.getGroupCssMetaDataList();
+        return RippleGenerator.getGroupCssMetaDataList();
     }
 }

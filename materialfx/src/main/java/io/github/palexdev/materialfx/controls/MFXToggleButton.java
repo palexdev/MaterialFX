@@ -249,7 +249,7 @@ public class MFXToggleButton extends ToggleButton {
         }
     }
 
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
+    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
         return StyleableProperties.cssMetaDataList;
     }
 
@@ -268,6 +268,6 @@ public class MFXToggleButton extends ToggleButton {
 
     @Override
     public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return this.getControlCssMetaDataList();
+        return MFXToggleButton.getControlCssMetaDataList();
     }
 }

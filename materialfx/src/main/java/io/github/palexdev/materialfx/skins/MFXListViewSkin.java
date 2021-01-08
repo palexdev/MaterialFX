@@ -20,7 +20,6 @@ import javafx.scene.layout.Region;
 import javafx.util.Duration;
 
 import java.util.Set;
-
 /**
  * This is the implementation of the {@code Skin} associated with every {@code MFXListView}.
  * <p>
@@ -133,6 +132,14 @@ public class MFXListViewSkin<T> extends ListViewSkin<T> {
                 hideBars.play();
             } else {
                 showBars.play();
+            }
+            if (newValue &&
+                    hideBars.getStatus() != Animation.Status.RUNNING ||
+                    vBar.getOpacity() != 0 ||
+                    hBar.getOpacity() != 0
+            ) {
+                vBar.setOpacity(0.0);
+                hBar.setOpacity(0.0);
             }
         });
 

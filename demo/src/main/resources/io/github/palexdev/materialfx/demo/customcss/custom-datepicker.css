@@ -1,0 +1,19 @@
+.years-button .ripple-generator {
+    -mfx-ripple-color: #ff4100;
+}
+
+.month-back-button .ripple-generator {
+    -mfx-ripple-color: #ff4100;
+}
+
+.month-forward-button .ripple-generator {
+    -mfx-ripple-color: #ff4100;
+}
+
+.day-cell .ripple-generator {
+    -mfx-ripple-color: #ff4100;
+}
+
+.year-cell .ripple-generator {
+    -mfx-ripple-color: #ff4100;
+}

@@ -1,5 +1,5 @@
 @font-face {
-    font-family: 'Comfortaa';
+    font-family: 'Comfortaa Bold';
     font-weight: bold;
     font-style: normal;
     font-display: swap;
@@ -7,7 +7,7 @@
 }
 
 @font-face {
-    font-family: 'Comfortaa';
+    font-family: 'Comfortaa Light';
     font-weight: 300px;
     font-style: normal;
     font-display: swap;
@@ -15,7 +15,7 @@
 }
 
 @font-face {
-    font-family: 'Comfortaa';
+    font-family: 'Comfortaa Medium';
     font-weight: 500px;
     font-style: normal;
     font-display: swap;
@@ -23,7 +23,7 @@
 }
 
 @font-face {
-    font-family: 'Comfortaa';
+    font-family: 'Comfortaa Regular';
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -31,7 +31,7 @@
 }
 
 @font-face {
-    font-family: 'Comfortaa';
+    font-family: 'Comfortaa SemiBold';
     font-weight: 600px;
     font-style: normal;
     font-display: swap;
@@ -39,7 +39,7 @@
 }
 
 @font-face {
-    font-family: 'Open Sans';
+    font-family: 'Open Sans Bold';
     font-weight: bold;
     font-style: normal;
     font-display: swap;
@@ -47,7 +47,7 @@
 }
 
 @font-face {
-    font-family: 'Open Sans';
+    font-family: 'Open Sans BoldItalic';
     font-weight: bold;
     font-style: italic;
     font-display: swap;
@@ -55,7 +55,7 @@
 }
 
 @font-face {
-    font-family: 'Open Sans';
+    font-family: 'Open Sans ExtraBold';
     font-weight: 800px;
     font-style: normal;
     font-display: swap;
@@ -63,7 +63,7 @@
 }
 
 @font-face {
-    font-family: 'Open Sans';
+    font-family: 'Open Sans ExtraBoldItalic';
     font-weight: 800px;
     font-style: italic;
     font-display: swap;
@@ -71,7 +71,7 @@
 }
 
 @font-face {
-    font-family: 'Open Sans';
+    font-family: 'Open Sans Light';
     font-weight: 300px;
     font-style: normal;
     font-display: swap;
@@ -79,7 +79,7 @@
 }
 
 @font-face {
-    font-family: 'Open Sans';
+    font-family: 'Open Sans LightItalic';
     font-weight: 300px;
     font-style: italic;
     font-display: swap;
@@ -87,7 +87,7 @@
 }
 
 @font-face {
-    font-family: 'Open Sans';
+    font-family: 'Open Sans Italic';
     font-weight: normal;
     font-style: italic;
     font-display: swap;
@@ -95,7 +95,7 @@
 }
 
 @font-face {
-    font-family: 'Open Sans';
+    font-family: 'Open Sans SemiBold';
     font-weight: 600px;
     font-style: normal;
     font-display: swap;
@@ -103,7 +103,7 @@
 }
 
 @font-face {
-    font-family: 'Open Sans';
+    font-family: 'Open Sans Regular';
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -111,7 +111,7 @@
 }
 
 @font-face {
-    font-family: 'Open Sans';
+    font-family: 'Open Sans SemiBoldItalic';
     font-weight: 600px;
     font-style: italic;
     font-display: swap;
@@ -119,7 +119,7 @@
 }
 
 @font-face {
-    font-family: 'Roboto';
+    font-family: 'Roboto Black';
     font-weight: 900px;
     font-style: normal;
     font-display: swap;
@@ -127,7 +127,7 @@
 }
 
 @font-face {
-    font-family: 'Roboto';
+    font-family: 'Roboto BlackItalic';
     font-weight: 900px;
     font-style: italic;
     font-display: swap;
@@ -135,7 +135,7 @@
 }
 
 @font-face {
-    font-family: 'Roboto';
+    font-family: 'Roboto Bold';
     font-weight: bold;
     font-style: normal;
     font-display: swap;
@@ -143,7 +143,7 @@
 }
 
 @font-face {
-    font-family: 'Roboto';
+    font-family: 'Roboto BoldItalic';
     font-weight: bold;
     font-style: italic;
     font-display: swap;
@@ -151,7 +151,7 @@
 }
 
 @font-face {
-    font-family: 'Roboto';
+    font-family: 'Roboto Light';
     font-weight: 300px;
     font-style: normal;
     font-display: swap;
@@ -159,7 +159,7 @@
 }
 
 @font-face {
-    font-family: 'Roboto';
+    font-family: 'Roboto Italic';
     font-weight: normal;
     font-style: italic;
     font-display: swap;
@@ -167,7 +167,7 @@
 }
 
 @font-face {
-    font-family: 'Roboto';
+    font-family: 'Roboto LightItalic';
     font-weight: 300px;
     font-style: italic;
     font-display: swap;
@@ -175,7 +175,7 @@
 }
 
 @font-face {
-    font-family: 'Roboto';
+    font-family: 'Roboto Medium';
     font-weight: 500px;
     font-style: normal;
     font-display: swap;
@@ -183,7 +183,7 @@
 }
 
 @font-face {
-    font-family: 'Roboto';
+    font-family: 'Roboto MediumItalic';
     font-weight: 500px;
     font-style: italic;
     font-display: swap;
@@ -191,7 +191,7 @@
 }
 
 @font-face {
-    font-family: 'Roboto';
+    font-family: 'Roboto Regular';
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -199,7 +199,7 @@
 }
 
 @font-face {
-    font-family: 'Roboto';
+    font-family: 'Roboto ThinItalic';
     font-weight: 100px;
     font-style: italic;
     font-display: swap;
@@ -207,10 +207,9 @@
 }
 
 @font-face {
-    font-family: 'Roboto';
+    font-family: 'Roboto Thin';
     font-weight: 100px;
     font-style: normal;
     font-display: swap;
     src: url('../fonts/Roboto/Roboto-Thin.ttf') format('truetype');
 }
-

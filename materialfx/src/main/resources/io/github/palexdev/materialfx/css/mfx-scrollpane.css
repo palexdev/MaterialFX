@@ -18,6 +18,14 @@
     -fx-background-color: transparent ;
 }
 
+.mfx-scroll-pane .scroll-bar {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-focus-color: transparent;
+    -fx-background-insets: 100%;
+    -fx-border-insets: 100%;
+}
+
 .mfx-scroll-pane .scroll-bar:horizontal .track {
     -fx-background-color: -mfx-track-color;
     -fx-border-color: transparent;

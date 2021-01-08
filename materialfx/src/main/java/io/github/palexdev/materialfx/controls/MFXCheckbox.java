@@ -151,8 +151,8 @@ public class MFXCheckbox extends CheckBox {
         }
     }
 
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
-        return MFXCheckbox.StyleableProperties.cssMetaDataList;
+    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
+        return StyleableProperties.cssMetaDataList;
     }
 
     //================================================================================
@@ -171,7 +171,7 @@ public class MFXCheckbox extends CheckBox {
 
     @Override
     public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return this.getControlCssMetaDataList();
+        return MFXCheckbox.getControlCssMetaDataList();
     }
 
 }

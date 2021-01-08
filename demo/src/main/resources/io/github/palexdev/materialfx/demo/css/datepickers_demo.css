@@ -1,0 +1,7 @@
+#customPicker {
+    -mfx-main-color: salmon;
+    -mfx-line-color: salmon;
+    -mfx-color-text: true;
+    -mfx-close-on-day-selected: false;
+    -mfx-animate-calendar: false;
+}

@@ -1,0 +1,9 @@
+.mfx-text-field {
+    -fx-prompt-text-fill: #61606C;
+    -fx-padding: 0.333333em 0 0.333333em 0;
+}
+
+.mfx-text-field,
+.mfx-text-field:focused {
+    -fx-background-color: TRANSPARENT, TRANSPARENT, TRANSPARENT;
+}

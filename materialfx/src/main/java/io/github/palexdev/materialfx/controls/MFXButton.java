@@ -146,14 +146,26 @@ public class MFXButton extends Button {
         rippleGenerator.setOutDuration(rippleOutDuration);
     }
 
+    public RippleGenerator getRippleGenerator() {
+        return rippleGenerator;
+    }
+
+    protected void setupRippleGenerator() {
+        this.getChildren().add(0, rippleGenerator);
+        this.setOnMousePressed(event -> {
+            rippleGenerator.setGeneratorCenterX(event.getX());
+            rippleGenerator.setGeneratorCenterY(event.getY());
+            rippleGenerator.createRipple();
+        });
+    }
+
     private void setBindings() {
         rippleColor.bind(rippleGenerator.rippleColorProperty());
         rippleRadius.bind(rippleGenerator.rippleRadiusProperty());
         rippleInDuration.bind(rippleGenerator.inDurationProperty());
         rippleOutDuration.bind(rippleGenerator.outDurationProperty());
     }
-
-    //================================================================================
+//================================================================================
     // Styleable Properties
     //================================================================================
 
@@ -234,7 +246,7 @@ public class MFXButton extends Button {
 
     }
 
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
+    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
         return StyleableProperties.cssMetaDataList;
     }
 
@@ -244,12 +256,7 @@ public class MFXButton extends Button {
     @Override
     protected Skin<?> createDefaultSkin() {
         MFXButtonSkin skin = new MFXButtonSkin(this);
-        this.getChildren().add(0, rippleGenerator);
-        this.setOnMousePressed(event -> {
-            rippleGenerator.setGeneratorCenterX(event.getX());
-            rippleGenerator.setGeneratorCenterY(event.getY());
-            rippleGenerator.createRipple();
-        });
+        setupRippleGenerator();
         return skin;
     }
 
@@ -260,6 +267,6 @@ public class MFXButton extends Button {
 
     @Override
     public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return this.getControlCssMetaDataList();
+        return MFXButton.getControlCssMetaDataList();
     }
 }

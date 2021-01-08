@@ -1,63 +1,43 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
-import io.github.palexdev.materialfx.skins.MFXComboBoxSkin;
+import io.github.palexdev.materialfx.skins.MFXTextFieldSkin;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.collections.ObservableList;
 import javafx.css.*;
-import javafx.scene.SnapshotParameters;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Labeled;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.Skin;
-import javafx.scene.image.WritableImage;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 import java.util.List;
 
 /**
- * This is the implementation of a combo box following Google's material design guidelines in JavaFX.
+ * This is the implementation of a TextField restyled to comply with modern standards.
  * <p>
- * Extends {@code ComboBox}, redefines the style class to "mfx-combo-box" for usage in CSS and
- * includes a {@link MFXDialogValidator}.
- * <p></p>
- * A few notes on features and usage:
+ * Extends {@code TextField}, redefines the style class to "mfx-text-field" for usage in CSS and
+ * includes a {@code MFXDialogValidator} for input validation.
  * <p>
- * If you check {@link ComboBox} documentation you will see a big warning about using nodes as content
- * because the scenegraph only allows for Nodes to be in one place at a time.
- * I found a workaround to this issue using {@link #snapshot(SnapshotParameters, WritableImage)}.
- * Basically I make a "screenshot" of the graphic and then I use an {@code ImageView} to show it.
- * <p>
- * So let's say you have a combo box of labels with icons as graphic, when you select an item, it won't disappear anymore
- * from the list because what you are seeing it's not the real graphic but a screenshot of it.
- * <p>
- * I recommend to use only nodes which are instances of {@code Labeled} since the {@code toString()} method is overridden
- * to return the control's text.
- * @see MFXSnapshotWrapper
+ * <b>Note: validator conditions are empty by default</b>
  */
-public class MFXComboBox<T> extends ComboBox<T> {
+public class MFXTextField extends TextField {
     //================================================================================
     // Properties
     //================================================================================
-    private static final StyleablePropertyFactory<MFXComboBox<?>> FACTORY = new StyleablePropertyFactory<>(ComboBox.getClassCssMetaData());
-    private final String STYLE_CLASS = "mfx-combo-box";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-combobox.css").toString();
+    private static final StyleablePropertyFactory<MFXTextField> FACTORY = new StyleablePropertyFactory<>(TextField.getClassCssMetaData());
+    private final String STYLE_CLASS = "mfx-text-field";
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-textfield.css").toString();
 
     private MFXDialogValidator validator;
 
     //================================================================================
     // Constructors
     //================================================================================
-    public MFXComboBox() {
-        initialize();
+    public MFXTextField() {
+        this("");
     }
 
-    public MFXComboBox(ObservableList<T> observableList) {
-        super(observableList);
+    public MFXTextField(String text) {
+        super(text);
         initialize();
     }
 
@@ -66,58 +46,19 @@ public class MFXComboBox<T> extends ComboBox<T> {
     //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
-        setCellFactory(listCell -> new MFXListCell<>() {
-            @Override
-            protected void updateItem(T item, boolean empty) {
-                super.updateItem(item, empty);
-
-                getChildren().remove(lookup(".ripple-generator"));
-            }
-        });
-
-        setButtonCell(new ListCell<>() {
-            {
-                valueProperty().addListener(observable -> {
-                    if (getValue() == null) {
-                        updateItem(null, true);
-                    }
-                });
-            }
-
-            @Override
-            protected void updateItem(T item, boolean empty) {
-                updateComboItem(this, item, empty);
-            }
-        });
-
         setupValidator();
-    }
 
-    /**
-     * Defines the behavior of the button cell.
-     * <p>
-     * If it's empty or the item is null, shows the prompt text.
-     * <p>
-     * If the item is instanceof {@code Labeled} makes a "screenshot" of the graphic if not null,
-     * and gets item's text. Otherwise calls {@code toString()} on the item.
-     */
-    private void updateComboItem(ListCell<T> cell, T item, boolean empty) {
-
-        if (empty || item == null) {
-            cell.setGraphic(null);
-            cell.setText(getPromptText());
-            return;
-        }
-
-        if (item instanceof Labeled) {
-            Labeled nodeItem = (Labeled) item;
-            if (nodeItem.getGraphic() != null) {
-                cell.setGraphic(new MFXSnapshotWrapper(nodeItem.getGraphic()).getGraphic());
+        textProperty().addListener((observable, oldValue, newValue) -> {
+            int limit = getTextLimit();
+            if (limit == -1) {
+                return;
             }
-            cell.setText(nodeItem.getText());
-        } else {
-            cell.setText(item.toString());
-        }
+
+            if (newValue.length() > limit) {
+                String s = newValue.substring(0, limit);
+                setText(s);
+            }
+        });
     }
 
     /**
@@ -125,10 +66,7 @@ public class MFXComboBox<T> extends ComboBox<T> {
      * if no item is selected. The warning is showed as soon as the control is out of focus.
      */
     private void setupValidator() {
-        BooleanProperty validIndex = new SimpleBooleanProperty(false);
-        validIndex.bind(getSelectionModel().selectedIndexProperty().isNotEqualTo(-1));
         validator = new MFXDialogValidator("Warning");
-        validator.add(validIndex, "Selected index is not valid");
     }
 
     /**
@@ -141,6 +79,13 @@ public class MFXComboBox<T> extends ComboBox<T> {
     //================================================================================
     // Styleable Properties
     //================================================================================
+
+    private final StyleableIntegerProperty textLimit = new SimpleStyleableIntegerProperty(
+            StyleableProperties.TEXT_LIMIT,
+            this,
+            "maxLength",
+            -1
+    );
 
     /**
      * Specifies the line's color when the control is focused.
@@ -185,12 +130,24 @@ public class MFXComboBox<T> extends ComboBox<T> {
     /**
      * Specifies if validation is required for the control.
      */
-    private final StyleableBooleanProperty isValidated = new SimpleStyleableBooleanProperty(
+    private final StyleableBooleanProperty validated = new SimpleStyleableBooleanProperty(
             StyleableProperties.IS_VALIDATED,
             this,
             "isValidated",
             false
     );
+
+    public int getTextLimit() {
+        return textLimit.get();
+    }
+
+    public StyleableIntegerProperty textLimitProperty() {
+        return textLimit;
+    }
+
+    public void setTextLimit(int textLimit) {
+        this.textLimit.set(textLimit);
+    }
 
     public Paint getLineColor() {
         return lineColor.get();
@@ -241,15 +198,15 @@ public class MFXComboBox<T> extends ComboBox<T> {
     }
 
     public boolean isValidated() {
-        return isValidated.get();
+        return validated.get();
     }
 
     public StyleableBooleanProperty isValidatedProperty() {
-        return isValidated;
+        return validated;
     }
 
-    public void setValidated(boolean isValidated) {
-        this.isValidated.set(isValidated);
+    public void setIsValidated(boolean isValidated) {
+        this.validated.set(isValidated);
     }
 
     //================================================================================
@@ -258,43 +215,50 @@ public class MFXComboBox<T> extends ComboBox<T> {
     private static class StyleableProperties {
         private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
-        private static final CssMetaData<MFXComboBox<?>, Paint> LINE_COLOR =
+        private static final CssMetaData<MFXTextField, Number> TEXT_LIMIT =
+                FACTORY.createSizeCssMetaData(
+                        "-mfx-text-limit",
+                        MFXTextField::textLimitProperty,
+                        -1
+                );
+
+        private static final CssMetaData<MFXTextField, Paint> LINE_COLOR =
                 FACTORY.createPaintCssMetaData(
                         "-mfx-line-color",
-                        MFXComboBox::lineColorProperty,
+                        MFXTextField::lineColorProperty,
                         Color.rgb(50, 150, 205)
                 );
 
-        private static final CssMetaData<MFXComboBox<?>, Paint> UNFOCUSED_LINE_COLOR =
+        private static final CssMetaData<MFXTextField, Paint> UNFOCUSED_LINE_COLOR =
                 FACTORY.createPaintCssMetaData(
                         "-mfx-unfocused-line-color",
-                        MFXComboBox::unfocusedLineColorProperty,
+                        MFXTextField::unfocusedLineColorProperty,
                         Color.rgb(77, 77, 77)
                 );
 
-        private final static CssMetaData<MFXComboBox<?>, Number> LINE_STROKE_WIDTH =
+        private final static CssMetaData<MFXTextField, Number> LINE_STROKE_WIDTH =
                 FACTORY.createSizeCssMetaData(
                         "-mfx-line-stroke-width",
-                        MFXComboBox::lineStrokeWidthProperty,
+                        MFXTextField::lineStrokeWidthProperty,
                         1.5
                 );
 
-        private static final CssMetaData<MFXComboBox<?>, Boolean> ANIMATE_LINES =
+        private static final CssMetaData<MFXTextField, Boolean> ANIMATE_LINES =
                 FACTORY.createBooleanCssMetaData(
                         "-mfx-animate-lines",
-                        MFXComboBox::animateLinesProperty,
+                        MFXTextField::animateLinesProperty,
                         true
                 );
 
-        private static final CssMetaData<MFXComboBox<?>, Boolean> IS_VALIDATED =
+        private static final CssMetaData<MFXTextField, Boolean> IS_VALIDATED =
                 FACTORY.createBooleanCssMetaData(
                         "-mfx-validate",
-                        MFXComboBox::isValidatedProperty,
+                        MFXTextField::isValidatedProperty,
                         false
                 );
 
         static {
-            cssMetaDataList = List.of(LINE_COLOR, UNFOCUSED_LINE_COLOR, LINE_STROKE_WIDTH, IS_VALIDATED);
+            cssMetaDataList = List.of(TEXT_LIMIT, LINE_COLOR, UNFOCUSED_LINE_COLOR, LINE_STROKE_WIDTH, IS_VALIDATED);
         }
 
     }
@@ -308,7 +272,7 @@ public class MFXComboBox<T> extends ComboBox<T> {
     //================================================================================
     @Override
     protected Skin<?> createDefaultSkin() {
-        return new MFXComboBoxSkin<>(this);
+        return new MFXTextFieldSkin(this);
     }
 
     @Override
@@ -318,6 +282,6 @@ public class MFXComboBox<T> extends ComboBox<T> {
 
     @Override
     public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return MFXComboBox.getControlCssMetaDataList();
+        return MFXTextField.getControlCssMetaDataList();
     }
 }

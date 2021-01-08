@@ -191,7 +191,7 @@ public class SimpleMFXNotificationPane extends AbstractMFXNotificationPane {
      * Before using the scroll pane for the content label the header had an extra button,
      * an expand button similar to Android's notifications, that button was set to be visible
      * only if the content was truncated and on click the prefHeight was incremented by the specified value with
-     * a Transition, however the problem with this approach was the PositionManager system because as you can see in the above code,
+     * a Transition, however the problem with this approach was the PositionManager system because as you can see in the following code,
      * if the content was still truncated at the end of the transition the method was executed again and again until the isTruncated property
      * was false. The PositionManager had two extra methods, repositionNotifications and buildRepositionAnimation with the expandValue as parameter,
      * the reposition method had to be recalled every time too with the same frequency as the expandNotificationMethod but as you can see this class
