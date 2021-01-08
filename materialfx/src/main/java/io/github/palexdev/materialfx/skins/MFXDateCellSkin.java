@@ -1,6 +1,6 @@
 package io.github.palexdev.materialfx.skins;
 
-import io.github.palexdev.materialfx.controls.MFXDateCell;
+import io.github.palexdev.materialfx.controls.cell.MFXDateCell;
 import io.github.palexdev.materialfx.controls.factories.RippleClipTypeFactory;
 import io.github.palexdev.materialfx.effects.RippleClipType;
 import io.github.palexdev.materialfx.effects.RippleGenerator;

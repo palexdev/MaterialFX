@@ -1,16 +1,16 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="MaterialFX [run]" type="GradleRunConfiguration" factoryName="Gradle">
+  <configuration default="false" name="MaterialFX [jlinkZip]" type="GradleRunConfiguration" factoryName="Gradle">
     <ExternalSystemSettings>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$" />
       <option name="externalSystemIdString" value="GRADLE" />
-      <option name="scriptParameters" value="-PchooseMain=io.github.palexdev.materialfx.demo.Demo" />
+      <option name="scriptParameters" value="" />
       <option name="taskDescriptions">
         <list />
       </option>
       <option name="taskNames">
         <list>
-          <option value="run" />
+          <option value="jlinkZip" />
         </list>
       </option>
       <option name="vmOptions" value="" />

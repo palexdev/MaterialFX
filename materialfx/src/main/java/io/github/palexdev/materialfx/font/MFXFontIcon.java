@@ -2,6 +2,7 @@ package io.github.palexdev.materialfx.font;
 
 import javafx.css.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
@@ -20,6 +21,10 @@ public class MFXFontIcon extends Text {
     //================================================================================
     // Constructors
     //================================================================================
+    public MFXFontIcon() {
+        initialize();
+    }
+
     public MFXFontIcon(String description) {
         this(description, 10);
     }
@@ -32,7 +37,6 @@ public class MFXFontIcon extends Text {
         initialize();
 
         setDescription(description);
-        setFont(FontHandler.getResources());
         setSize(size);
         setColor(color);
 
@@ -43,7 +47,8 @@ public class MFXFontIcon extends Text {
     // Methods
     //================================================================================
     private void initialize() {
-        getStyleClass().setAll(STYLE_CLASS);
+        getStyleClass().add(STYLE_CLASS);
+        setFont(FontHandler.getResources());
 
         sizeProperty().addListener((observable, oldValue, newValue) -> {
             Font font = getFont();
@@ -82,7 +87,7 @@ public class MFXFontIcon extends Text {
     /**
      * Specifies the color of the icon.
      */
-    private final StyleableObjectProperty<Color> color = new SimpleStyleableObjectProperty<>(
+    private final StyleableObjectProperty<Paint> color = new SimpleStyleableObjectProperty<>(
             StyleableProperties.COLOR,
             this,
             "color",
@@ -113,15 +118,15 @@ public class MFXFontIcon extends Text {
         this.size.set(size);
     }
 
-    public Color getColor() {
+    public Paint getColor() {
         return color.get();
     }
 
-    public StyleableObjectProperty<Color> colorProperty() {
+    public StyleableObjectProperty<Paint> colorProperty() {
         return color;
     }
 
-    public void setColor(Color color) {
+    public void setColor(Paint color) {
         this.color.set(color);
     }
 
@@ -144,8 +149,8 @@ public class MFXFontIcon extends Text {
                         10
                 );
 
-        private static final CssMetaData<MFXFontIcon, Color> COLOR =
-                FACTORY.createColorCssMetaData(
+        private static final CssMetaData<MFXFontIcon, Paint> COLOR =
+                FACTORY.createPaintCssMetaData(
                         "-mfx-color",
                         MFXFontIcon::colorProperty,
                         Color.rgb(117, 117, 117)

@@ -151,8 +151,10 @@ public enum MFXAnimationFactory {
     }
 
     private static void resetNode(Node node) {
-        node.setTranslateX(0);
-        node.setTranslateY(0);
+        if (node != null) {
+            node.setTranslateX(0);
+            node.setTranslateY(0);
+        }
     }
     public abstract Timeline build(Node node, double durationMillis);
 }

@@ -2,6 +2,7 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
+import io.github.palexdev.materialfx.controls.cell.MFXListCell;
 import io.github.palexdev.materialfx.skins.MFXComboBoxSkin;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
 import javafx.beans.property.BooleanProperty;

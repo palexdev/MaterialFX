@@ -12,7 +12,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.SVGPath;
-import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 /**
@@ -64,7 +63,6 @@ public class MFXTextFieldSkin extends TextFieldSkin {
         validate = new Label("", stackPane);
         validate.getStyleClass().add("validate-label");
         validate.textProperty().bind(textField.getValidator().validatorMessageProperty());
-        validate.setFont(Font.font(padding));
         validate.setGraphicTextGap(padding);
         validate.setVisible(false);
 
