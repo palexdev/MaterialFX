@@ -9,6 +9,10 @@ repositories {
 }
 
 dependencies {
+    testCompile "org.testfx:testfx-core:4.0.16-alpha"
+    testCompile "junit:junit:4.13-beta-3"
+    testCompile "org.testfx:testfx-junit:4.0.16-alpha"
+
     implementation "fr.brouillard.oss:cssfx:11.4.0"
     implementation 'org.kordamp.ikonli:ikonli-core:11.5.0'
     implementation 'org.kordamp.ikonli:ikonli-javafx:11.5.0'

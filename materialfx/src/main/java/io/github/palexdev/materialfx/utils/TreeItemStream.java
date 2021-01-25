@@ -6,8 +6,8 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class TreeItemStream {
-    public static <T> Stream<AbstractTreeItem<T>> stream(AbstractTreeItem<T> rootItem) {
-        return asStream(new TreeItemIterator<>(rootItem));
+    public static <T> Stream<AbstractTreeItem<T>> stream(AbstractTreeItem<T> item) {
+        return asStream(new TreeItemIterator<>(item));
     }
 
     private static <T> Stream<AbstractTreeItem<T>> asStream(TreeItemIterator<T> iterator) {
@@ -19,10 +19,10 @@ public class TreeItemStream {
         );
     }
 
-    public static <T> Stream<AbstractTreeItem<T>> flattenTree(final AbstractTreeItem<T> root) {
+    public static <T> Stream<AbstractTreeItem<T>> flattenTree(final AbstractTreeItem<T> item) {
         return Stream.concat(
-                Stream.of(root),
-                root.getItems().stream().flatMap(TreeItemStream::flattenTree)
+                Stream.of(item),
+                item.getItems().stream().flatMap(TreeItemStream::flattenTree)
         );
     }
 }

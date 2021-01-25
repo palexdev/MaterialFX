@@ -8,8 +8,8 @@ import java.util.Stack;
 public class TreeItemIterator<T> implements Iterator<AbstractTreeItem<T>> {
     private final Stack<AbstractTreeItem<T>> stack = new Stack<>();
 
-    public TreeItemIterator(AbstractTreeItem<T> root) {
-        stack.push(root);
+    public TreeItemIterator(AbstractTreeItem<T> item) {
+        stack.push(item);
     }
 
     @Override

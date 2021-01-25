@@ -58,8 +58,8 @@ public abstract class AbstractTreeItem<T> extends Control {
                 .count();
     }
 
-    public long getItemsCount(AbstractTreeItem<T> item) {
-        return TreeItemStream.stream(item).count();
+    public long getItemsCount() {
+        return TreeItemStream.stream(this).count();
     }
 
     public int getLevel() {
@@ -76,6 +76,32 @@ public abstract class AbstractTreeItem<T> extends Control {
                 return index;
             }
         }
+    }
+
+    public AbstractTreeItem<T> getNextSibling() {
+        if (isRoot()) {
+            return null;
+        }
+
+        List<AbstractTreeItem<T>> parentItems = getItemParent().getItems();
+        int index = parentItems.indexOf(this);
+        if (index == parentItems.size() - 1) {
+            return null;
+        }
+        return parentItems.get(index + 1);
+    }
+
+    public AbstractTreeItem<T> getPreviousSibling() {
+        if (isRoot()) {
+            return null;
+        }
+
+        List<AbstractTreeItem<T>> parentItems = getItemParent().getItems();
+        int index = parentItems.indexOf(this);
+        if (index == 0) {
+            return null;
+        }
+        return parentItems.get(index - 1);
     }
 
     public TreeView<T> getTreeView() {
