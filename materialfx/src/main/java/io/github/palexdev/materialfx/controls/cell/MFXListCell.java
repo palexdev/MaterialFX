@@ -1,4 +1,4 @@
-package io.github.palexdev.materialfx.controls;
+package io.github.palexdev.materialfx.controls.cell;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.effects.RippleGenerator;

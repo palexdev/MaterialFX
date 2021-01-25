@@ -11,6 +11,7 @@ module MaterialFX.materialfx.main {
     exports io.github.palexdev.materialfx.collections;
     exports io.github.palexdev.materialfx.controls;
     exports io.github.palexdev.materialfx.controls.base;
+    exports io.github.palexdev.materialfx.controls.cell;
     exports io.github.palexdev.materialfx.controls.enums;
     exports io.github.palexdev.materialfx.controls.factories;
     exports io.github.palexdev.materialfx.effects;

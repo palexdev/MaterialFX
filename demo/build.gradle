@@ -15,9 +15,9 @@ dependencies {
     implementation 'org.kordamp.ikonli:ikonli-fontawesome5-pack:11.5.0'
     implementation project(':materialfx')
 }
+
 application {
-    mainClassName = 'MaterialFX.demo.main/io.github.palexdev.materialfx.demo.Demo'
-    //mainClassName = 'MaterialFX.demo.main/io.github.palexdev.materialfx.demo.TestDemo'
+    mainClassName = moduleName.concat('/').concat(project.findProperty("chooseMain").toString())
 }
 
 jlink {

@@ -12,13 +12,12 @@
 }
 
 .mfx-dialog .title-label {
-    -fx-font-family: "Open Sans";
+    -fx-font-family: "Open Sans Bold";
     -fx-font-size: 14;
-    -fx-font-weight: bold;
 }
 
 .mfx-dialog .content-label {
-    -fx-font-family: "Open Sans";
+    -fx-font-family: "Open Sans Regular";
     -fx-font-size: 11.5;
 }
 
