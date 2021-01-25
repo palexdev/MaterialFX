@@ -1,6 +1,7 @@
 package io.github.palexdev.materialfx.utils;
 
 import javafx.geometry.*;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
@@ -131,6 +132,22 @@ public class NodeUtils {
         } catch (IllegalArgumentException ex) {
             LoggingUtils.logException("Could not set region's clip to make it circular", ex);
         }
+    }
+
+    public static double getNodeWidth(Region region) {
+        Group group = new Group(region);
+        Scene scene = new Scene(group);
+        group.applyCss();
+        group.layout();
+        return region.getWidth();
+    }
+
+    public static double getNodeHeight(Region region) {
+        Group group = new Group(region);
+        Scene scene = new Scene(group);
+        group.applyCss();
+        group.layout();
+        return region.getHeight();
     }
 
     /* The following methods are copied from com.sun.javafx.scene.control.skin.Utils class
