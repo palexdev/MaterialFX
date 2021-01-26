@@ -9,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.control.SkinBase;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -81,12 +82,6 @@ public class TreeItemSkin<T> extends SkinBase<TreeItem<T>> {
         }
     }
 
-    protected void checkStartExpanded() {
-        TreeItem<T> item = getSkinnable();
-
-
-    }
-
     private void addListeners() {
         TreeItem<T> item = getSkinnable();
 
@@ -99,7 +94,6 @@ public class TreeItemSkin<T> extends SkinBase<TreeItem<T>> {
 
         item.addEventHandler(TreeItemEvent.EXPAND_EVENT, expandEvent -> {
             buildAnimation((item.getHeight() + expandEvent.getValue()));
-            animation.setOnFinished(event -> System.out.println("Final:" + item.getHeight()));
             animation.play();
 
             if (item.getItemParent() == null) {
@@ -113,6 +107,19 @@ public class TreeItemSkin<T> extends SkinBase<TreeItem<T>> {
                 animation.setOnFinished(event -> box.getChildren().subList(1, box.getChildren().size()).clear());
             }
             animation.play();
+        });
+
+        item.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            if (event.getButton() == MouseButton.PRIMARY &&
+                    event.getClickCount() == 2
+            ) {
+                NodeUtils.fireDummyEvent(cell.getDisclosureNode());
+                return;
+            }
+
+            if (!NodeUtils.inHierarchy(event.getPickResult().getIntersectedNode(), cell.getDisclosureNode())) {
+                item.getSelectionModel().select(item, event);
+            }
         });
 
         //================================================================================

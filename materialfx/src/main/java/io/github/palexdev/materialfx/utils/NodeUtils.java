@@ -1,9 +1,12 @@
 package io.github.palexdev.materialfx.utils;
 
+import javafx.event.Event;
 import javafx.geometry.*;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
@@ -148,6 +151,12 @@ public class NodeUtils {
         group.applyCss();
         group.layout();
         return region.getHeight();
+    }
+
+    public static void fireDummyEvent(Node node) {
+        Event.fireEvent(node, new MouseEvent(MouseEvent.MOUSE_PRESSED,
+               0, 0, 0, 0, MouseButton.PRIMARY, 1,
+                false, false, false, false, true, false, false, false, false, false, null));
     }
 
     /* The following methods are copied from com.sun.javafx.scene.control.skin.Utils class

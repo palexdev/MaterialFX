@@ -1,0 +1,12 @@
+.mfx-tree-cell {
+    -fx-padding: 0px 0px 0px 5px;
+    -fx-background-radius: 7px;
+}
+
+.mfx-tree-cell .ripple-generator {
+    -mfx-ripple-color: green;
+}
+
+.mfx-tree-cell:selected {
+    -fx-background-color: lightgray;
+}

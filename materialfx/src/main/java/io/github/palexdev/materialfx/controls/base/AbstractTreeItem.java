@@ -23,10 +23,13 @@ public abstract class AbstractTreeItem<T> extends Control {
     protected final ObjectProperty<Callback<AbstractTreeItem<T>, AbstractTreeCell<T>>> cellFactory = new SimpleObjectProperty<>();
     private TreeView<T> treeView;
 
+    private final BooleanProperty selected = new SimpleBooleanProperty(false);
+
     public AbstractTreeItem(T data) {
         this.data = data;
     }
 
+    public abstract ISelectionModel<T> getSelectionModel();
     protected abstract void defaultCellFactory();
     protected abstract void updateChildrenParent(List<? extends AbstractTreeItem<T>> treeItems, final AbstractTreeItem<T> newParent);
 
@@ -156,5 +159,17 @@ public abstract class AbstractTreeItem<T> extends Control {
 
     public void setCellFactory(Callback<AbstractTreeItem<T>, AbstractTreeCell<T>> cellFactory) {
         this.cellFactory.set(cellFactory);
+    }
+
+    public boolean isSelected() {
+        return selected.get();
+    }
+
+    public BooleanProperty selectedProperty() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected.set(selected);
     }
 }

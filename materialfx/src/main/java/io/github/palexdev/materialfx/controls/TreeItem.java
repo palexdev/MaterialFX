@@ -1,6 +1,7 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.controls.base.AbstractTreeItem;
+import io.github.palexdev.materialfx.controls.base.ISelectionModel;
 import io.github.palexdev.materialfx.controls.cell.SimpleTreeCell;
 import io.github.palexdev.materialfx.skins.TreeItemSkin;
 import javafx.beans.property.*;
@@ -47,11 +48,6 @@ public class TreeItem<T> extends AbstractTreeItem<T> {
         defaultCellFactory();
     }
 
-    @Override
-    protected void updateChildrenParent(List<? extends AbstractTreeItem<T>> treeItems, final AbstractTreeItem<T> newParent) {
-        treeItems.forEach(item -> ((TreeItem<T>) item).setItemParent(newParent));
-    }
-
     private final StyleableDoubleProperty animationDuration = new SimpleStyleableDoubleProperty(
             StyleableProperties.DURATION,
             this,
@@ -91,8 +87,18 @@ public class TreeItem<T> extends AbstractTreeItem<T> {
     }
 
     @Override
+    public ISelectionModel<T> getSelectionModel() {
+        return getTreeView().getSelectionModel();
+    }
+
+    @Override
     protected void defaultCellFactory() {
-        super.cellFactory.set(item -> new SimpleTreeCell<>(item.getData()));
+        super.cellFactory.set(SimpleTreeCell::new);
+    }
+
+    @Override
+    protected void updateChildrenParent(List<? extends AbstractTreeItem<T>> treeItems, final AbstractTreeItem<T> newParent) {
+        treeItems.forEach(item -> ((TreeItem<T>) item).setItemParent(newParent));
     }
 
     @Override

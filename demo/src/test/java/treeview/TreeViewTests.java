@@ -17,18 +17,21 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 public class TreeViewTests extends ApplicationTest {
     private final String desktopPath = System.getProperty("user.home") + "/Desktop";
     private TreeView<String> treeView;
+    private TreeView<String> expandedTreeView;
     private TreeView<String> complexTreeView;
 
     @Override
     public void start(Stage stage) {
         buildTreeViews();
-        Scene scene = new Scene(new StackPane(treeView, complexTreeView), 100, 100);
+        StackPane stackPane = new StackPane(
+                treeView, expandedTreeView, complexTreeView
+        );
+        Scene scene = new Scene(stackPane, 100, 100);
         stage.setScene(scene);
         stage.show();
         stage.toBack();
@@ -205,6 +208,32 @@ public class TreeViewTests extends ApplicationTest {
         System.out.println("TimePreviousSiblings:" + ((double) (end - start) / 1000000) + "ms");
     }
 
+    @SuppressWarnings("ConstantConditions")
+    @Test
+    public void testStartExpanded() {
+        long start = System.nanoTime();
+        TreeItem<String> root = (TreeItem<String>) expandedTreeView.getRoot();
+        TreeItem<String> i1 = (TreeItem<String>) TreeItemStream.stream(root)
+                .filter(i -> i.getData().equals("I1"))
+                .findFirst().orElse(null);
+        TreeItem<String> i1b = (TreeItem<String>) TreeItemStream.stream(root)
+                .filter(i -> i.getData().equals("I1B"))
+                .findFirst().orElse(null);
+        TreeItem<String> i2a = (TreeItem<String>) TreeItemStream.stream(root)
+                .filter(i -> i.getData().equals("I2A"))
+                .findFirst().orElse(null);
+        TreeItem<String> i3 = (TreeItem<String>) TreeItemStream.stream(root)
+                .filter(i -> i.getData().equals("I3"))
+                .findFirst().orElse(null);
+
+        assertTrue(i1.isExpanded());
+        assertFalse(i1b.isExpanded());
+        assertFalse(i2a.isExpanded());
+        assertTrue(i3.isExpanded());
+        long end = System.nanoTime();
+        System.out.println("TimeStartExpanded:" + ((double) (end - start) / 1000000) + "ms");
+    }
+
     //================================================================================
     // OTHER METHODS
     //================================================================================
@@ -254,6 +283,7 @@ public class TreeViewTests extends ApplicationTest {
         root.getItems().addAll(List.of(i1, i2, i3, i4));
         treeView = new TreeView<>(root);
 
+        buildExpandedTree();
 
         Path dir = Paths.get(desktopPath).toAbsolutePath();
         TreeItem<String> complexRoot = new TreeItem<>(desktopPath);
@@ -264,5 +294,37 @@ public class TreeViewTests extends ApplicationTest {
             }
         }
         complexTreeView = new TreeView<>(complexRoot);
+    }
+
+    private void buildExpandedTree() {
+        TreeItem<String> root = new TreeItem<>("ROOT");
+        TreeItem<String> i1 = new TreeItem<>("I1");
+        TreeItem<String> i1a = new TreeItem<>("I1A");
+        i1a.getItems().add(new TreeItem<>("I11A"));
+
+        TreeItem<String> i1b = new TreeItem<>("I1B");
+        i1.getItems().addAll(List.of(i1a, i1b));
+
+        TreeItem<String> i2 = new TreeItem<>("I2");
+        TreeItem<String> i2a = new TreeItem<>("I2A");
+        i2.getItems().add(i2a);
+
+        TreeItem<String> i3 = new TreeItem<>("I3");
+        TreeItem<String> i3a = new TreeItem<>("I3A");
+        TreeItem<String> i3b = new TreeItem<>("I3B");
+        i3.getItems().addAll(List.of(i3a, i3b));
+
+        TreeItem<String> i4 = new TreeItem<>("I4");
+        TreeItem<String> i4a = new TreeItem<>("I4A");
+        i4.getItems().add(i4a);
+
+        root.getItems().addAll(List.of(i1, i2, i3, i4));
+        expandedTreeView = new TreeView<>(root);
+
+        root.setStartExpanded(true);
+        i1.setStartExpanded(true);
+        i1b.setStartExpanded(true);
+        i2a.setStartExpanded(true);
+        i3.setStartExpanded(true);
     }
 }

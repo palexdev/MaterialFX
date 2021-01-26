@@ -1,7 +1,9 @@
 package io.github.palexdev.materialfx.controls.cell;
 
+import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.TreeItem;
 import io.github.palexdev.materialfx.controls.base.AbstractTreeCell;
+import io.github.palexdev.materialfx.controls.base.AbstractTreeItem;
 import io.github.palexdev.materialfx.effects.RippleGenerator;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.NodeUtils;
@@ -11,18 +13,21 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 
 public class SimpleTreeCell<T> extends AbstractTreeCell<T> {
+    private final String STYLE_CLASS = "mfx-tree-cell";
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-treecell.css").toString();
 
-    public SimpleTreeCell(T data) {
-        super(data);
+    public SimpleTreeCell(AbstractTreeItem<T> item) {
+        super(item);
     }
 
-    public SimpleTreeCell(T data, double fixedHeight) {
-        super(data, fixedHeight);
+    public SimpleTreeCell(AbstractTreeItem<T> item, double fixedHeight) {
+        super(item, fixedHeight);
     }
 
     @Override
-    protected void initialize() {
-        super.initialize();
+    protected void initialize(AbstractTreeItem<T> item) {
+        super.initialize(item);
+        getStyleClass().add(STYLE_CLASS);
 
         defaultDisclosureNode();
         getChildren().add(0, getDisclosureNode());
@@ -88,5 +93,10 @@ public class SimpleTreeCell<T> extends AbstractTreeCell<T> {
         if (item.isStartExpanded()) {
             disclosureNode.setRotate(90);
         }
+    }
+
+    @Override
+    public String getUserAgentStylesheet() {
+        return STYLESHEET;
     }
 }
