@@ -1,8 +1,8 @@
 package treeview;
 
-import io.github.palexdev.materialfx.controls.TreeItem;
-import io.github.palexdev.materialfx.controls.TreeView;
-import io.github.palexdev.materialfx.controls.base.AbstractTreeItem;
+import io.github.palexdev.materialfx.controls.MFXTreeItem;
+import io.github.palexdev.materialfx.controls.MFXTreeView;
+import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
 import io.github.palexdev.materialfx.utils.TreeItemStream;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
@@ -17,13 +17,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class TreeViewTests extends ApplicationTest {
     private final String desktopPath = System.getProperty("user.home") + "/Desktop";
-    private TreeView<String> treeView;
-    private TreeView<String> expandedTreeView;
-    private TreeView<String> complexTreeView;
+    private MFXTreeView<String> treeView;
+    private MFXTreeView<String> expandedTreeView;
+    private MFXTreeView<String> complexTreeView;
 
     @Override
     public void start(Stage stage) {
@@ -41,12 +42,12 @@ public class TreeViewTests extends ApplicationTest {
     @Test
     public void testItemsCountRoot() {
         long start = System.nanoTime();
-        AbstractTreeItem<String> root = treeView.getRoot();
+        AbstractMFXTreeItem<String> root = treeView.getRoot();
 
         long count = root.getItemsCount();
         assertEquals(12, count);
 
-        AbstractTreeItem<String> i1 = TreeItemStream.stream(root)
+        AbstractMFXTreeItem<String> i1 = TreeItemStream.stream(root)
                 .filter(i -> i.getData().equals("I1"))
                 .findFirst().orElse(null);
         count = i1.getItemsCount();
@@ -59,8 +60,8 @@ public class TreeViewTests extends ApplicationTest {
     @Test
     public void testItemsCountItem() {
         long start = System.nanoTime();
-        AbstractTreeItem<String> root = treeView.getRoot();
-        AbstractTreeItem<String> i3 = TreeItemStream.stream(root)
+        AbstractMFXTreeItem<String> root = treeView.getRoot();
+        AbstractMFXTreeItem<String> i3 = TreeItemStream.stream(root)
                 .filter(i -> i.getData().equals("I3"))
                 .findFirst().orElse(null);
         long count = i3.getItemsCount();
@@ -72,7 +73,7 @@ public class TreeViewTests extends ApplicationTest {
     @Test
     public void testItemCountComplex() throws IOException {
         long start = System.nanoTime();
-        AbstractTreeItem<String> root = complexTreeView.getRoot();
+        AbstractMFXTreeItem<String> root = complexTreeView.getRoot();
         long expectedCount = fileCount();
         long count = root.getItemsCount();
         assertEquals(expectedCount, count);
@@ -84,17 +85,17 @@ public class TreeViewTests extends ApplicationTest {
     @Test
     public void testItemIndex() {
         long start = System.nanoTime();
-        AbstractTreeItem<String> root = treeView.getRoot();
-        AbstractTreeItem<String> i1 = TreeItemStream.stream(root)
+        AbstractMFXTreeItem<String> root = treeView.getRoot();
+        AbstractMFXTreeItem<String> i1 = TreeItemStream.stream(root)
                 .filter(i -> i.getData().equals("I1"))
                 .findFirst().orElse(null);
-        AbstractTreeItem<String> i1b = TreeItemStream.stream(root)
+        AbstractMFXTreeItem<String> i1b = TreeItemStream.stream(root)
                 .filter(i -> i.getData().equals("I1B"))
                 .findFirst().orElse(null);
-        AbstractTreeItem<String> i2a = TreeItemStream.stream(root)
+        AbstractMFXTreeItem<String> i2a = TreeItemStream.stream(root)
                 .filter(i -> i.getData().equals("I2A"))
                 .findFirst().orElse(null);
-        AbstractTreeItem<String> i4a = TreeItemStream.stream(root)
+        AbstractMFXTreeItem<String> i4a = TreeItemStream.stream(root)
                 .filter(i -> i.getData().equals("I4A"))
                 .findFirst().orElse(null);
 
@@ -111,17 +112,17 @@ public class TreeViewTests extends ApplicationTest {
     @Test
     public void testItemLevel() {
         long start = System.nanoTime();
-        AbstractTreeItem<String> root = treeView.getRoot();
-        AbstractTreeItem<String> i1 = TreeItemStream.stream(root)
+        AbstractMFXTreeItem<String> root = treeView.getRoot();
+        AbstractMFXTreeItem<String> i1 = TreeItemStream.stream(root)
                 .filter(i -> i.getData().equals("I1"))
                 .findFirst().orElse(null);
-        AbstractTreeItem<String> i1b = TreeItemStream.stream(root)
+        AbstractMFXTreeItem<String> i1b = TreeItemStream.stream(root)
                 .filter(i -> i.getData().equals("I1B"))
                 .findFirst().orElse(null);
-        AbstractTreeItem<String> i2a = TreeItemStream.stream(root)
+        AbstractMFXTreeItem<String> i2a = TreeItemStream.stream(root)
                 .filter(i -> i.getData().equals("I2A"))
                 .findFirst().orElse(null);
-        AbstractTreeItem<String> i11a = TreeItemStream.stream(root)
+        AbstractMFXTreeItem<String> i11a = TreeItemStream.stream(root)
                 .filter(i -> i.getData().equals("I11A"))
                 .findFirst().orElse(null);
 
@@ -137,8 +138,8 @@ public class TreeViewTests extends ApplicationTest {
     @Test
     public void testTreeViewGet() {
         long start = System.nanoTime();
-        AbstractTreeItem<String> root = treeView.getRoot();
-        AbstractTreeItem<String> complexRoot = complexTreeView.getRoot();
+        AbstractMFXTreeItem<String> root = treeView.getRoot();
+        AbstractMFXTreeItem<String> complexRoot = complexTreeView.getRoot();
 
         TreeItemStream.stream(root).forEach(item -> assertEquals(treeView, item.getTreeView()));
         TreeItemStream.stream(complexRoot).forEach(item -> assertEquals(complexTreeView, item.getTreeView()));
@@ -150,20 +151,20 @@ public class TreeViewTests extends ApplicationTest {
     @Test
     public void testNextSiblings() {
         long start = System.nanoTime();
-        AbstractTreeItem<String> root = treeView.getRoot();
-        AbstractTreeItem<String> i1 = TreeItemStream.stream(root)
+        AbstractMFXTreeItem<String> root = treeView.getRoot();
+        AbstractMFXTreeItem<String> i1 = TreeItemStream.stream(root)
                 .filter(i -> i.getData().equals("I1"))
                 .findFirst().orElse(null);
-        AbstractTreeItem<String> i1b = TreeItemStream.stream(root)
+        AbstractMFXTreeItem<String> i1b = TreeItemStream.stream(root)
                 .filter(i -> i.getData().equals("I1B"))
                 .findFirst().orElse(null);
-        AbstractTreeItem<String> i2a = TreeItemStream.stream(root)
+        AbstractMFXTreeItem<String> i2a = TreeItemStream.stream(root)
                 .filter(i -> i.getData().equals("I2A"))
                 .findFirst().orElse(null);
-        AbstractTreeItem<String> i3a = TreeItemStream.stream(root)
+        AbstractMFXTreeItem<String> i3a = TreeItemStream.stream(root)
                 .filter(i -> i.getData().equals("I3A"))
                 .findFirst().orElse(null);
-        AbstractTreeItem<String> i4 = TreeItemStream.stream(root)
+        AbstractMFXTreeItem<String> i4 = TreeItemStream.stream(root)
                 .filter(i -> i.getData().equals("I4"))
                 .findFirst().orElse(null);
 
@@ -181,20 +182,20 @@ public class TreeViewTests extends ApplicationTest {
     @Test
     public void testPreviousSiblings() {
         long start = System.nanoTime();
-        AbstractTreeItem<String> root = treeView.getRoot();
-        AbstractTreeItem<String> i1 = TreeItemStream.stream(root)
+        AbstractMFXTreeItem<String> root = treeView.getRoot();
+        AbstractMFXTreeItem<String> i1 = TreeItemStream.stream(root)
                 .filter(i -> i.getData().equals("I1"))
                 .findFirst().orElse(null);
-        AbstractTreeItem<String> i1b = TreeItemStream.stream(root)
+        AbstractMFXTreeItem<String> i1b = TreeItemStream.stream(root)
                 .filter(i -> i.getData().equals("I1B"))
                 .findFirst().orElse(null);
-        AbstractTreeItem<String> i2a = TreeItemStream.stream(root)
+        AbstractMFXTreeItem<String> i2a = TreeItemStream.stream(root)
                 .filter(i -> i.getData().equals("I2A"))
                 .findFirst().orElse(null);
-        AbstractTreeItem<String> i3a = TreeItemStream.stream(root)
+        AbstractMFXTreeItem<String> i3a = TreeItemStream.stream(root)
                 .filter(i -> i.getData().equals("I3A"))
                 .findFirst().orElse(null);
-        AbstractTreeItem<String> i4 = TreeItemStream.stream(root)
+        AbstractMFXTreeItem<String> i4 = TreeItemStream.stream(root)
                 .filter(i -> i.getData().equals("I4"))
                 .findFirst().orElse(null);
 
@@ -210,36 +211,70 @@ public class TreeViewTests extends ApplicationTest {
 
     @SuppressWarnings("ConstantConditions")
     @Test
-    public void testStartExpanded() {
+    public void testSelected() {
         long start = System.nanoTime();
-        TreeItem<String> root = (TreeItem<String>) expandedTreeView.getRoot();
-        TreeItem<String> i1 = (TreeItem<String>) TreeItemStream.stream(root)
+        MFXTreeItem<String> root = (MFXTreeItem<String>) treeView.getRoot();
+        treeView.getSelectionModel().setAllowsMultipleSelection(false);
+        MFXTreeItem<String> i1 = (MFXTreeItem<String>) TreeItemStream.stream(root)
                 .filter(i -> i.getData().equals("I1"))
                 .findFirst().orElse(null);
-        TreeItem<String> i1b = (TreeItem<String>) TreeItemStream.stream(root)
+        MFXTreeItem<String> i1b = (MFXTreeItem<String>) TreeItemStream.stream(root)
                 .filter(i -> i.getData().equals("I1B"))
                 .findFirst().orElse(null);
-        TreeItem<String> i2a = (TreeItem<String>) TreeItemStream.stream(root)
+        MFXTreeItem<String> i2a = (MFXTreeItem<String>) TreeItemStream.stream(root)
                 .filter(i -> i.getData().equals("I2A"))
                 .findFirst().orElse(null);
-        TreeItem<String> i3 = (TreeItem<String>) TreeItemStream.stream(root)
+        MFXTreeItem<String> i3 = (MFXTreeItem<String>) TreeItemStream.stream(root)
                 .filter(i -> i.getData().equals("I3"))
                 .findFirst().orElse(null);
 
-        assertTrue(i1.isExpanded());
-        assertFalse(i1b.isExpanded());
-        assertFalse(i2a.isExpanded());
-        assertTrue(i3.isExpanded());
+        root.setSelected(true);
+        i1.setSelected(true);
+        i1b.setSelected(true);
+        i2a.setSelected(true);
+        i3.setSelected(true);
+
+        assertEquals(1, treeView.getSelectionModel().getSelectedItems().size());
+        assertEquals(i3, treeView.getSelectionModel().getSelectedItem());
         long end = System.nanoTime();
-        System.out.println("TimeStartExpanded:" + ((double) (end - start) / 1000000) + "ms");
+        System.out.println("TimeSelected:" + ((double) (end - start) / 1000000) + "ms");
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Test
+    public void testSelectedMultiple() {
+        long start = System.nanoTime();
+        MFXTreeItem<String> root = (MFXTreeItem<String>) treeView.getRoot();
+        MFXTreeItem<String> i1 = (MFXTreeItem<String>) TreeItemStream.stream(root)
+                .filter(i -> i.getData().equals("I1"))
+                .findFirst().orElse(null);
+        MFXTreeItem<String> i1b = (MFXTreeItem<String>) TreeItemStream.stream(root)
+                .filter(i -> i.getData().equals("I1B"))
+                .findFirst().orElse(null);
+        MFXTreeItem<String> i2a = (MFXTreeItem<String>) TreeItemStream.stream(root)
+                .filter(i -> i.getData().equals("I2A"))
+                .findFirst().orElse(null);
+        MFXTreeItem<String> i3 = (MFXTreeItem<String>) TreeItemStream.stream(root)
+                .filter(i -> i.getData().equals("I3"))
+                .findFirst().orElse(null);
+
+        root.setSelected(true);
+        i1.setSelected(true);
+        i1b.setSelected(true);
+        i2a.setSelected(true);
+        i3.setSelected(true);
+
+        assertEquals(5, treeView.getSelectionModel().getSelectedItems().size());
+        long end = System.nanoTime();
+        System.out.println("TimeSelectedMultiple:" + ((double) (end - start) / 1000000) + "ms");
     }
 
     //================================================================================
     // OTHER METHODS
     //================================================================================
-    private void createTree(File file, TreeItem<String> parent) {
+    private void createTree(File file, MFXTreeItem<String> parent) {
         if (file.isDirectory()) {
-            TreeItem<String> treeItem = new TreeItem<>(file.getName());
+            MFXTreeItem<String> treeItem = new MFXTreeItem<>(file.getName());
             parent.getItems().add(treeItem);
             File[] fileList = file.listFiles();
             if (fileList != null) {
@@ -248,7 +283,7 @@ public class TreeViewTests extends ApplicationTest {
                 }
             }
         } else {
-            parent.getItems().add(new TreeItem<>(file.getName()));
+            parent.getItems().add(new MFXTreeItem<>(file.getName()));
         }
     }
 
@@ -259,67 +294,67 @@ public class TreeViewTests extends ApplicationTest {
     }
 
     private void buildTreeViews() {
-        TreeItem<String> root = new TreeItem<>("ROOT");
-        TreeItem<String> i1 = new TreeItem<>("I1");
-        TreeItem<String> i1a = new TreeItem<>("I1A");
-        i1a.getItems().add(new TreeItem<>("I11A"));
+        MFXTreeItem<String> root = new MFXTreeItem<>("ROOT");
+        MFXTreeItem<String> i1 = new MFXTreeItem<>("I1");
+        MFXTreeItem<String> i1a = new MFXTreeItem<>("I1A");
+        i1a.getItems().add(new MFXTreeItem<>("I11A"));
 
-        TreeItem<String> i1b = new TreeItem<>("I1B");
+        MFXTreeItem<String> i1b = new MFXTreeItem<>("I1B");
         i1.getItems().addAll(List.of(i1a, i1b));
 
-        TreeItem<String> i2 = new TreeItem<>("I2");
-        TreeItem<String> i2a = new TreeItem<>("I2A");
+        MFXTreeItem<String> i2 = new MFXTreeItem<>("I2");
+        MFXTreeItem<String> i2a = new MFXTreeItem<>("I2A");
         i2.getItems().add(i2a);
 
-        TreeItem<String> i3 = new TreeItem<>("I3");
-        TreeItem<String> i3a = new TreeItem<>("I3A");
-        TreeItem<String> i3b = new TreeItem<>("I3B");
+        MFXTreeItem<String> i3 = new MFXTreeItem<>("I3");
+        MFXTreeItem<String> i3a = new MFXTreeItem<>("I3A");
+        MFXTreeItem<String> i3b = new MFXTreeItem<>("I3B");
         i3.getItems().addAll(List.of(i3a, i3b));
 
-        TreeItem<String> i4 = new TreeItem<>("I4");
-        TreeItem<String> i4a = new TreeItem<>("I4A");
+        MFXTreeItem<String> i4 = new MFXTreeItem<>("I4");
+        MFXTreeItem<String> i4a = new MFXTreeItem<>("I4A");
         i4.getItems().add(i4a);
 
         root.getItems().addAll(List.of(i1, i2, i3, i4));
-        treeView = new TreeView<>(root);
+        treeView = new MFXTreeView<>(root);
 
         buildExpandedTree();
 
         Path dir = Paths.get(desktopPath).toAbsolutePath();
-        TreeItem<String> complexRoot = new TreeItem<>(desktopPath);
+        MFXTreeItem<String> complexRoot = new MFXTreeItem<>(desktopPath);
         File[] fileList = dir.toFile().listFiles();
         if (fileList != null) {
             for (File file : fileList) {
                 createTree(file, complexRoot);
             }
         }
-        complexTreeView = new TreeView<>(complexRoot);
+        complexTreeView = new MFXTreeView<>(complexRoot);
     }
 
     private void buildExpandedTree() {
-        TreeItem<String> root = new TreeItem<>("ROOT");
-        TreeItem<String> i1 = new TreeItem<>("I1");
-        TreeItem<String> i1a = new TreeItem<>("I1A");
-        i1a.getItems().add(new TreeItem<>("I11A"));
+        MFXTreeItem<String> root = new MFXTreeItem<>("ROOT");
+        MFXTreeItem<String> i1 = new MFXTreeItem<>("I1");
+        MFXTreeItem<String> i1a = new MFXTreeItem<>("I1A");
+        i1a.getItems().add(new MFXTreeItem<>("I11A"));
 
-        TreeItem<String> i1b = new TreeItem<>("I1B");
+        MFXTreeItem<String> i1b = new MFXTreeItem<>("I1B");
         i1.getItems().addAll(List.of(i1a, i1b));
 
-        TreeItem<String> i2 = new TreeItem<>("I2");
-        TreeItem<String> i2a = new TreeItem<>("I2A");
+        MFXTreeItem<String> i2 = new MFXTreeItem<>("I2");
+        MFXTreeItem<String> i2a = new MFXTreeItem<>("I2A");
         i2.getItems().add(i2a);
 
-        TreeItem<String> i3 = new TreeItem<>("I3");
-        TreeItem<String> i3a = new TreeItem<>("I3A");
-        TreeItem<String> i3b = new TreeItem<>("I3B");
+        MFXTreeItem<String> i3 = new MFXTreeItem<>("I3");
+        MFXTreeItem<String> i3a = new MFXTreeItem<>("I3A");
+        MFXTreeItem<String> i3b = new MFXTreeItem<>("I3B");
         i3.getItems().addAll(List.of(i3a, i3b));
 
-        TreeItem<String> i4 = new TreeItem<>("I4");
-        TreeItem<String> i4a = new TreeItem<>("I4A");
+        MFXTreeItem<String> i4 = new MFXTreeItem<>("I4");
+        MFXTreeItem<String> i4a = new MFXTreeItem<>("I4A");
         i4.getItems().add(i4a);
 
         root.getItems().addAll(List.of(i1, i2, i3, i4));
-        expandedTreeView = new TreeView<>(root);
+        expandedTreeView = new MFXTreeView<>(root);
 
         root.setStartExpanded(true);
         i1.setStartExpanded(true);

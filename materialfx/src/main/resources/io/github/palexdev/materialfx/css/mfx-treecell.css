@@ -10,3 +10,7 @@
 .mfx-tree-cell:selected {
     -fx-background-color: lightgray;
 }
+
+.mfx-tree-cell * {
+    -fx-font-smoothing-type: gray;
+}

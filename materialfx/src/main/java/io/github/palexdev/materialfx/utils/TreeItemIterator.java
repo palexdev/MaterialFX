@@ -1,14 +1,14 @@
 package io.github.palexdev.materialfx.utils;
 
-import io.github.palexdev.materialfx.controls.base.AbstractTreeItem;
+import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
 
 import java.util.Iterator;
 import java.util.Stack;
 
-public class TreeItemIterator<T> implements Iterator<AbstractTreeItem<T>> {
-    private final Stack<AbstractTreeItem<T>> stack = new Stack<>();
+public class TreeItemIterator<T> implements Iterator<AbstractMFXTreeItem<T>> {
+    private final Stack<AbstractMFXTreeItem<T>> stack = new Stack<>();
 
-    public TreeItemIterator(AbstractTreeItem<T> item) {
+    public TreeItemIterator(AbstractMFXTreeItem<T> item) {
         stack.push(item);
     }
 
@@ -18,8 +18,8 @@ public class TreeItemIterator<T> implements Iterator<AbstractTreeItem<T>> {
     }
 
     @Override
-    public AbstractTreeItem<T> next() {
-        AbstractTreeItem<T> nextItem = stack.pop();
+    public AbstractMFXTreeItem<T> next() {
+        AbstractMFXTreeItem<T> nextItem = stack.pop();
         nextItem.getItems().forEach(stack::push);
 
         return nextItem;

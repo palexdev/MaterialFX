@@ -137,6 +137,11 @@ public class NodeUtils {
         }
     }
 
+    /**
+     * Retrieves the region width if it isn't still laid out.
+     * @param region the Region of which to know the width
+     * @return the calculated width
+     */
     public static double getNodeWidth(Region region) {
         Group group = new Group(region);
         Scene scene = new Scene(group);
@@ -145,6 +150,11 @@ public class NodeUtils {
         return region.getWidth();
     }
 
+    /**
+     * Retrieves the region height if it isn't still laid out.
+     * @param region the Region of which to know the height
+     * @return the calculated height
+     */
     public static double getNodeHeight(Region region) {
         Group group = new Group(region);
         Scene scene = new Scene(group);
@@ -153,6 +163,25 @@ public class NodeUtils {
         return region.getHeight();
     }
 
+    /**
+     * Convenience method for adding the desired value to the region's prefWidth
+     */
+    public static void addPrefWidth(Region region, double value) {
+        double prefW = region.getPrefWidth();
+        region.setPrefWidth(prefW + value);
+    }
+
+    /**
+     * Convenience method for adding the desired value to the region's prefHeight
+     */
+    public static void addPrefHeight(Region region, double value) {
+        double prefH = region.getPrefHeight();
+        region.setPrefHeight(prefH + value);
+    }
+
+    /**
+     * Convenience method for programmatically fire a dummy MOUSE_PRESSED event on the desired node.
+     */
     public static void fireDummyEvent(Node node) {
         Event.fireEvent(node, new MouseEvent(MouseEvent.MOUSE_PRESSED,
                0, 0, 0, 0, MouseButton.PRIMARY, 1,
