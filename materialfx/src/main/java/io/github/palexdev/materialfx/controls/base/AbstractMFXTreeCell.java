@@ -64,7 +64,7 @@ public abstract class AbstractMFXTreeCell<T> extends HBox {
      * adds the needed listeners and binds the {@link #selectedProperty()} to the item's
      * {@link MFXTreeItem#selectedProperty()}
      */
-    protected void initialize(AbstractMFXTreeItem<T> item) {
+    private void initialize(AbstractMFXTreeItem<T> item) {
         setAlignment(Pos.CENTER_LEFT);
         setSpacing(5);
 

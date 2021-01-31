@@ -255,7 +255,7 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
      */
     @Override
     protected void updateChildrenParent(List<? extends AbstractMFXTreeItem<T>> treeItems, final AbstractMFXTreeItem<T> newParent) {
-        treeItems.forEach(item -> ((MFXTreeItem<T>) item).setItemParent(newParent));
+        treeItems.forEach(item -> item.setItemParent(newParent));
     }
 
     @Override

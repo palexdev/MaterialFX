@@ -26,7 +26,7 @@ public class MFXIconWrapper extends StackPane {
     }
 
     public MFXIconWrapper(Node node, double size) {
-        getChildren().setAll(node);
+        super.getChildren().setAll(node);
         setPrefSize(size, size);
         initialize();
     }

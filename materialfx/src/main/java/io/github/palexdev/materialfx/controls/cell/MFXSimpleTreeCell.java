@@ -30,10 +30,12 @@ public class MFXSimpleTreeCell<T> extends AbstractMFXTreeCell<T> {
     //================================================================================
     public MFXSimpleTreeCell(AbstractMFXTreeItem<T> item) {
         super(item);
+        initialize();
     }
 
     public MFXSimpleTreeCell(AbstractMFXTreeItem<T> item, double fixedHeight) {
         super(item, fixedHeight);
+        initialize();
     }
 
     //================================================================================
@@ -45,9 +47,7 @@ public class MFXSimpleTreeCell<T> extends AbstractMFXTreeCell<T> {
      * build and set the default disclosure node {@link MFXSimpleTreeCell#defaultDisclosureNode()}
      * and adds a listener to the disclosure node property in case the user changes it.
      */
-    @Override
-    protected void initialize(AbstractMFXTreeItem<T> item) {
-        super.initialize(item);
+    private void initialize() {
         getStyleClass().add(STYLE_CLASS);
 
         defaultDisclosureNode();

@@ -187,6 +187,7 @@ public abstract class AbstractMFXTreeItem<T> extends Control {
 
     /**
      * Sets this item's TreeView reference to the given one.
+     * <p>
      * <b>WARNING: THIS METHOD IS INTENDED FOR INTERNAL USE ONLY</b>
      * @see MFXTreeView
      */
@@ -217,8 +218,10 @@ public abstract class AbstractMFXTreeItem<T> extends Control {
 
     /**
      * Sets this item's parent. This method should be called by subclasses only.
+     * <p>
+     * <b>WARNING: THIS METHOD IS INTENDED FOR INTERNAL USE ONLY</b>
      */
-    protected void setItemParent(AbstractMFXTreeItem<T> parent) {
+    public void setItemParent(AbstractMFXTreeItem<T> parent) {
         this.parent = parent;
     }
 

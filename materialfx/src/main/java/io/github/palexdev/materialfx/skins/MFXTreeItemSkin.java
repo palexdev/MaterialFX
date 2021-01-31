@@ -292,7 +292,7 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
      * Check if the animation is running on the item or its parent up to the root.
      * This is used in {@link #createCell()} when adding the event handler to the cell's disclosure node.
      */
-    private boolean animationIsRunning() {
+    protected boolean animationIsRunning() {
         MFXTreeItem<T> item = getSkinnable();
         List<MFXTreeItem<T>> tmp = new ArrayList<>();
         while (item != null) {
