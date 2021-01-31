@@ -73,7 +73,7 @@ public class MFXIconWrapper extends StackPane {
         if (getChildren().size() > 1) {
             super.getChildren().set(1, node);
         } else {
-            super.getChildren().add(node);
+            super.getChildren().set(0, node);
         }
     }
 

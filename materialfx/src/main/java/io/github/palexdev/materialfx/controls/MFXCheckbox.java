@@ -1,7 +1,6 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.MFXResourcesManager.MarkType;
 import io.github.palexdev.materialfx.skins.MFXCheckboxSkin;
 import javafx.css.*;
 import javafx.scene.control.CheckBox;
@@ -75,11 +74,11 @@ public class MFXCheckbox extends CheckBox {
      * Specifies the SVG path(shape) of the mark from a predefined set.
      * @see javafx.scene.shape.SVGPath
      */
-    private final StyleableObjectProperty<MarkType> markType = new SimpleStyleableObjectProperty<>(
+    private final StyleableStringProperty markType = new SimpleStyleableStringProperty(
             StyleableProperties.MARK_TYPE,
             this,
             "markType",
-            MarkType.MODENA
+            "mfx-modena-mark"
     );
 
     public Paint getCheckedColor() {
@@ -106,15 +105,15 @@ public class MFXCheckbox extends CheckBox {
         this.uncheckedColor.set(uncheckedColor);
     }
 
-    public MarkType getMarkType() {
+    public String getMarkType() {
         return markType.get();
     }
 
-    public StyleableObjectProperty<MarkType> markTypeProperty() {
+    public StyleableStringProperty markTypeProperty() {
         return markType;
     }
 
-    public void setMarkType(MarkType markType) {
+    public void setMarkType(String markType) {
         this.markType.set(markType);
     }
 
@@ -138,12 +137,11 @@ public class MFXCheckbox extends CheckBox {
                         Color.rgb(90, 90, 90)
                 );
 
-        private static final CssMetaData<MFXCheckbox, MarkType> MARK_TYPE =
-                FACTORY.createEnumCssMetaData(
-                        MarkType.class,
+        private static final CssMetaData<MFXCheckbox, String> MARK_TYPE =
+                FACTORY.createStringCssMetaData(
                         "-mfx-mark-type",
                         MFXCheckbox::markTypeProperty,
-                        MarkType.MODENA
+                        "mfx-modena-mark"
                 );
 
         static {
