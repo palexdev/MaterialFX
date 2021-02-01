@@ -1,7 +1,7 @@
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesManager.SVGResources;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXNotificationPane;
+import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.LoggingUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.event.EventHandler;
@@ -16,7 +16,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.SVGPath;
 
 /**
  * This class extends {@code AbstractMFXNotificationPane} and it serves as an
@@ -59,10 +58,8 @@ public class SimpleMFXNotificationPane extends AbstractMFXNotificationPane {
         closeButton = new MFXButton("");
         closeButton.setPrefSize(18, 18);
         closeButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-        SVGPath x = SVGResources.X.getSvgPath();
-        x.setScaleX(0.14);
-        x.setScaleY(0.14);
-        closeButton.setGraphic(x);
+        MFXFontIcon xIcon = new MFXFontIcon("mfx-x-circle", 14);
+        closeButton.setGraphic(xIcon);
         closeButton.setRippleRadius(12);
         closeButton.setRippleColor(Color.rgb(255, 0, 0, 0.1));
 

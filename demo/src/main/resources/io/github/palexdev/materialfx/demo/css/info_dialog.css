@@ -24,19 +24,16 @@
 }
 
 
-.mfx-button {
-    -fx-background-color: white, white;
+.mfx-icon-wrapper {
+    -fx-background-color: white;
     -fx-background-radius: 16.4, 15;
-    -fx-background-insets: -1.4, 0;
     -fx-border-radius: 15;
-    -fx-border-width: 1.5;
-    -fx-border-color: rgba(127, 15, 255, 0.35);
-    -fx-padding: 0;
-    -fx-font-size: 0;
+    -fx-border-width: 2;
+    -fx-border-color: rgba(127, 15, 255, 0.55);
 }
 
-.mfx-button .ripple-generator {
-    -mfx-ripple-color: #e2caff;
+.mfx-icon-wrapper .ripple-generator {
+    -mfx-ripple-color: #c4acff;
 }
 
 #contentNode {

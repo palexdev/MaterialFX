@@ -1,17 +1,15 @@
 package io.github.palexdev.materialfx.skins;
 
-import io.github.palexdev.materialfx.MFXResourcesManager;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
+import io.github.palexdev.materialfx.controls.MFXIconWrapper;
+import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
 import javafx.animation.FadeTransition;
 import javafx.scene.control.Label;
 import javafx.scene.control.skin.ComboBoxListViewSkin;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
@@ -50,20 +48,14 @@ public class MFXComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
         line.endXProperty().bind(comboBox.widthProperty());
         focusLine.endXProperty().bind(comboBox.widthProperty());
 
-        StackPane stackPane = new StackPane();
-        stackPane.setPrefSize(1, 1);
-        stackPane.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-        SVGPath warn = MFXResourcesManager.SVGResources.EXCLAMATION_TRIANGLE.getSvgPath();
-        warn.setScaleX((padding - 1) / 100);
-        warn.setScaleY((padding  - 1) / 100);
-        warn.setFill(Color.RED);
-        stackPane.getChildren().add(warn);
+        MFXFontIcon warnIcon = new MFXFontIcon("mfx-exclamation-triangle", Color.RED);
+        MFXIconWrapper warnWrapper = new MFXIconWrapper(warnIcon, 10);
 
-        validate = new Label("", stackPane);
+        validate = new Label("", warnWrapper);
         validate.getStyleClass().add("validate-label");
         validate.textProperty().bind(comboBox.getValidator().validatorMessageProperty());
         validate.setFont(Font.font(padding));
-        validate.setGraphicTextGap(padding);
+        validate.setGraphicTextGap(padding / 2);
         validate.setVisible(false);
 
         getChildren().addAll(line, focusLine, validate);
@@ -169,10 +161,12 @@ public class MFXComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
         super.layoutChildren(x, y, w, h);
 
         final double size = padding / 2.5;
+        final double tx = -((w - line.getEndX()) / 2);
 
         focusLine.setTranslateY(h);
         line.setTranslateY(h);
         validate.resize(w * 1.5, h - size);
         validate.setTranslateY(focusLine.getTranslateY() + size);
+        validate.setTranslateX(tx);
     }
 }

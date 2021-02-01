@@ -29,6 +29,10 @@ public class MFXFontIcon extends Text {
         this(description, 10);
     }
 
+    public MFXFontIcon(String description, Color color) {
+        this(description, 10, color);
+    }
+
     public MFXFontIcon(String description, double size) {
         this(description, size, Color.rgb(117, 117, 117));
     }

@@ -6,37 +6,29 @@
     -fx-border-radius: 10;
 }
 
-#closeButton,
-#minimizeButton,
-#expandButton {
-    -fx-background-color: transparent;
-}
-
 #closeButton:hover {
-    -fx-background-color: #ffe6e6;
+    -fx-background-color: #ffdcdc;
 }
 
 #minimizeButton:hover {
-    -fx-background-color: #e6ecff;
+    -fx-background-color: #dce2ff;
 }
 
 #expandButton:hover {
-    -fx-background-color: #fffdd6;
+    -fx-background-color: #fff3cc;
 }
 
 #infoButton {
-    -fx-background-color: white, white;
     -fx-background-radius: 16.4, 15;
     -fx-background-insets: -1.4, 0;
     -fx-border-radius: 15;
     -fx-border-width: 2;
     -fx-border-color: rgb(75, 181, 255);
-    -fx-padding: 0;
-    -fx-font-size: 0;
 }
 
 #infoButton .ripple-generator {
-    -mfx-ripple-color: #e7ecff;
+    -mfx-ripple-radius: 15;
+    -mfx-ripple-color: #d3d8ff;
 }
 
 #contentPane {
@@ -60,13 +52,13 @@
     -mfx-ripple-color: #e2caff;
 }
 
-#navButton .ikonli-font-icon {
-    -fx-icon-color: #6e0ede;
+#navButton .mfx-font-icon {
+    -mfx-color: #6e0ede;
     -fx-opacity: 0.5;
 }
 
-#navButton .ikonli-font-icon:hover {
-    -fx-icon-color: #6e0ede;
+#navButton .mfx-font-icon:hover {
+    -mfx-color: #6e0ede;
     -fx-opacity: 1.0;
 }
 

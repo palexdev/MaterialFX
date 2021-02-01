@@ -71,7 +71,7 @@ public class MFXCheckbox extends CheckBox {
     );
 
     /**
-     * Specifies the SVG path(shape) of the mark from a predefined set.
+     * Specifies the shape of the mark from a predefined set.
      * @see javafx.scene.shape.SVGPath
      */
     private final StyleableStringProperty markType = new SimpleStyleableStringProperty(
@@ -171,5 +171,4 @@ public class MFXCheckbox extends CheckBox {
     public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
         return MFXCheckbox.getControlCssMetaDataList();
     }
-
 }

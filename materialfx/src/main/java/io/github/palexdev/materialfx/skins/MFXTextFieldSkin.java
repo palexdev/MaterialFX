@@ -1,17 +1,15 @@
 package io.github.palexdev.materialfx.skins;
 
-import io.github.palexdev.materialfx.MFXResourcesManager;
+import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
 import javafx.animation.FadeTransition;
 import javafx.scene.control.Label;
 import javafx.scene.control.skin.TextFieldSkin;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.SVGPath;
 import javafx.util.Duration;
 
 /**
@@ -51,16 +49,10 @@ public class MFXTextFieldSkin extends TextFieldSkin {
         line.setManaged(false);
         focusLine.setManaged(false);
 
-        StackPane stackPane = new StackPane();
-        stackPane.setPrefSize(1, 1);
-        stackPane.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-        SVGPath warn = MFXResourcesManager.SVGResources.EXCLAMATION_TRIANGLE.getSvgPath();
-        warn.setScaleX((padding - 1) / 100);
-        warn.setScaleY((padding  - 1) / 100);
-        warn.setFill(Color.RED);
-        stackPane.getChildren().add(warn);
+        MFXFontIcon warnIcon = new MFXFontIcon("mfx-exclamation-triangle", Color.RED);
+        MFXIconWrapper warnWrapper = new MFXIconWrapper(warnIcon, 10);
 
-        validate = new Label("", stackPane);
+        validate = new Label("", warnWrapper);
         validate.getStyleClass().add("validate-label");
         validate.textProperty().bind(textField.getValidator().validatorMessageProperty());
         validate.setGraphicTextGap(padding);
