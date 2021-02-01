@@ -2,6 +2,7 @@ package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
+import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.cell.MFXDateCell;
@@ -92,10 +93,10 @@ public class MFXDatePickerContent extends VBox {
     private GridPane calendar;
     private GridPane years;
     private MFXScrollPane yearsScroll;
-    private StackPane yearsButton;
-    private StackPane monthBackButton;
-    private StackPane monthForwardButton;
-    private StackPane inputButton;
+    private MFXIconWrapper yearsButton;
+    private MFXIconWrapper monthBackButton;
+    private MFXIconWrapper monthForwardButton;
+    private MFXIconWrapper inputButton;
 
     private Timeline yearsOpen;
     private Timeline yearsClose;
@@ -473,14 +474,11 @@ public class MFXDatePickerContent extends VBox {
      */
     private void buildButtons() {
         MFXFontIcon chevronDown = new MFXFontIcon("mfx-chevron-down", 13);
-        yearsButton = new StackPane(chevronDown);
+        yearsButton = new MFXIconWrapper(chevronDown, 20).addRippleGenerator();
         yearsButton.getStyleClass().add("years-button");
-        yearsButton.setPrefSize(20, 20);
-        yearsButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         NodeUtils.makeRegionCircular(yearsButton);
         StackPane.setMargin(chevronDown, new Insets(0.3, 0, 0, 0));
-        RippleGenerator rgYB = new RippleGenerator(yearsButton);
-        yearsButton.getChildren().add(0, rgYB);
+        RippleGenerator rgYB = yearsButton.getRippleGenerator();
         yearsButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             rgYB.setGeneratorCenterX(yearsButton.getWidth() / 2);
             rgYB.setGeneratorCenterY(yearsButton.getHeight() / 2);
@@ -491,13 +489,10 @@ public class MFXDatePickerContent extends VBox {
         });
 
         MFXFontIcon chevronLeft = new MFXFontIcon("mfx-chevron-left", 13);
-        monthBackButton = new StackPane(chevronLeft);
+        monthBackButton = new MFXIconWrapper(chevronLeft, 20).addRippleGenerator();
         monthBackButton.getStyleClass().add("month-back-button");
-        monthBackButton.setPrefSize(20, 20);
-        monthBackButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         NodeUtils.makeRegionCircular(monthBackButton);
-        RippleGenerator rgMB = new RippleGenerator(monthBackButton);
-        monthBackButton.getChildren().add(0, rgMB);
+        RippleGenerator rgMB = monthBackButton.getRippleGenerator();
         monthBackButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             rgMB.setGeneratorCenterX(monthBackButton.getWidth() / 2);
             rgMB.setGeneratorCenterY(monthBackButton.getHeight() / 2);
@@ -507,13 +502,10 @@ public class MFXDatePickerContent extends VBox {
         });
 
         MFXFontIcon chevronRight = new MFXFontIcon("mfx-chevron-right", 13);
-        monthForwardButton = new StackPane(chevronRight);
+        monthForwardButton = new MFXIconWrapper(chevronRight, 20).addRippleGenerator();
         monthForwardButton.getStyleClass().add("month-forward-button");
-        monthForwardButton.setPrefSize(20, 20);
-        monthForwardButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         NodeUtils.makeRegionCircular(monthForwardButton);
-        RippleGenerator rgMF = new RippleGenerator(monthForwardButton);
-        monthForwardButton.getChildren().add(0, rgMF);
+        RippleGenerator rgMF = monthForwardButton.getRippleGenerator();
         monthForwardButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             rgMF.setGeneratorCenterX(monthForwardButton.getWidth() / 2);
             rgMF.setGeneratorCenterY(monthForwardButton.getHeight() / 2);
@@ -523,17 +515,13 @@ public class MFXDatePickerContent extends VBox {
         });
 
         MFXFontIcon calendar = new MFXFontIcon("mfx-calendar-semi-black", 17);
-        inputButton = new StackPane(calendar);
+        inputButton = new MFXIconWrapper(calendar, 35).addRippleGenerator();
         inputButton.getStyleClass().add("change-input-button");
-        inputButton.setPrefSize(35, 35);
-        inputButton.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-        inputButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         Tooltip tooltip = new Tooltip("Switches between mouse input and keyboard input");
         Tooltip.install(inputButton, tooltip);
         NodeUtils.makeRegionCircular(inputButton);
-        RippleGenerator rgIB = new RippleGenerator(inputButton);
+        RippleGenerator rgIB = inputButton.getRippleGenerator();
         rgIB.setInDuration(Duration.millis(500));
-        inputButton.getChildren().add(0, rgIB);
         inputButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             rgIB.setGeneratorCenterX(inputButton.getWidth() / 2);
             rgIB.setGeneratorCenterY(inputButton.getHeight() / 2);
