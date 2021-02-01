@@ -39,7 +39,7 @@
          <Insets left="150.0" top="180.0" />
       </StackPane.margin>
    </MFXTextField>
-   <MFXCheckbox fx:id="checkbox" checkedColor="#00e240" markType="VARIANT9" text="CheckBox Validation" StackPane.alignment="BOTTOM_LEFT">
+   <MFXCheckbox fx:id="checkbox" checkedColor="#00e240" markType="mfx-variant9-mark" text="CheckBox Validation" StackPane.alignment="BOTTOM_LEFT">
       <StackPane.margin>
          <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
       </StackPane.margin>

@@ -65,15 +65,13 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
     // Methods
     //================================================================================
 
-    //TODO change
     /**
      * Sets the style class to "mfx-tree-view".
      * <p>
      * Adds a listener to the items list to update the added/removed item parent accordingly.
      * <p>
-     * Adds a listener to {@link #selectedProperty()} the treeView property allowing item selection before the Scene is shown.
-     * If the treeView property is null and the selectionModel can't be retrieved we add a listener to the treeView property
-     * so that when it is not null anymore we can update the selection state of the items calling {@link ISelectionModel#scanTree(AbstractMFXTreeItem)}.
+     * Adds a listener to {@link #selectedProperty()} and the {@link #treeViewProperty()} allowing item selection before the Scene is shown
+     * by calling the SelectionModel {@link SelectionModel#scanTree(AbstractMFXTreeItem)} method.
      */
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);

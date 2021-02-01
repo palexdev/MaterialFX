@@ -17,6 +17,9 @@ import javafx.scene.shape.Circle;
  * current dates. Includes ripple effects.
  */
 public class MFXDateCell extends DateCell {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final String STYLE_CLASS = "mfx-date-cell";
 
     private static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selectedDate");
@@ -29,6 +32,9 @@ public class MFXDateCell extends DateCell {
 
     private boolean drawGraphic = false;
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXDateCell() {
         initialize();
     }
@@ -44,12 +50,20 @@ public class MFXDateCell extends DateCell {
         initialize();
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
     private void initialize() {
         rippleGenerator.setRippleColor(Color.rgb(220, 220, 220, 0.6));
         getStyleClass().setAll(STYLE_CLASS);
         addListeners();
     }
 
+    /**
+     * Adds listeners to selected and current date properties.
+     * <p>
+     * Adds event handler for ripple generator.
+     */
     private void addListeners() {
         selectedDate.addListener(invalidate -> pseudoClassStateChanged(SELECTED_PSEUDO_CLASS, selectedDate.get()));
         current.addListener(invalidate -> pseudoClassStateChanged(CURRENT_DAY_PSEUDO_CLASS, current.get()));

@@ -81,6 +81,16 @@ public class MFXCheckbox extends CheckBox {
             "mfx-modena-mark"
     );
 
+    /**
+     * Specifies the size of the mark.
+     */
+    private final StyleableDoubleProperty markSize = new SimpleStyleableDoubleProperty(
+            StyleableProperties.MARK_SIZE,
+            this,
+            "markSize",
+            12.0
+    );
+
     public Paint getCheckedColor() {
         return checkedColor.get();
     }
@@ -117,6 +127,18 @@ public class MFXCheckbox extends CheckBox {
         this.markType.set(markType);
     }
 
+    public double getMarkSize() {
+        return markSize.get();
+    }
+
+    public StyleableDoubleProperty markSizeProperty() {
+        return markSize;
+    }
+
+    public void setMarkSize(double markSize) {
+        this.markSize.set(markSize);
+    }
+
     //================================================================================
     // CssMetaData
     //================================================================================
@@ -144,8 +166,15 @@ public class MFXCheckbox extends CheckBox {
                         "mfx-modena-mark"
                 );
 
+        private static final CssMetaData<MFXCheckbox, Number> MARK_SIZE =
+                FACTORY.createSizeCssMetaData(
+                        "-mfx-mark-size",
+                        MFXCheckbox::markSizeProperty,
+                        12
+                );
+
         static {
-            cssMetaDataList = List.of(CHECKED_COLOR, UNCHECKED_COLOR, MARK_TYPE);
+            cssMetaDataList = List.of(CHECKED_COLOR, UNCHECKED_COLOR, MARK_TYPE, MARK_SIZE);
         }
     }
 

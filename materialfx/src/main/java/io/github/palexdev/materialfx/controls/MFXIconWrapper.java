@@ -72,6 +72,8 @@ public class MFXIconWrapper extends StackPane {
     public void setIcon(Node node) {
         if (getChildren().size() > 1) {
             super.getChildren().set(1, node);
+        } else if (!getChildren().isEmpty() && (getChildren().get(0) instanceof RippleGenerator)){
+            super.getChildren().add(0, node);
         } else {
             super.getChildren().set(0, node);
         }

@@ -43,8 +43,7 @@ public class MFXSimpleTreeCell<T> extends AbstractMFXTreeCell<T> {
     //================================================================================
 
     /**
-     * Override of the AbstractMFXTreeCell initialize method to set the cell style class,
-     * build and set the default disclosure node {@link MFXSimpleTreeCell#defaultDisclosureNode()}
+     * Sets the cell style class,build and set the default disclosure node {@link MFXSimpleTreeCell#defaultDisclosureNode()}
      * and adds a listener to the disclosure node property in case the user changes it.
      */
     private void initialize() {
@@ -67,7 +66,6 @@ public class MFXSimpleTreeCell<T> extends AbstractMFXTreeCell<T> {
     protected void defaultDisclosureNode() {
         MFXIconWrapper disclosureNode = new MFXIconWrapper().addRippleGenerator();
         disclosureNode.setSize(22);
-        disclosureNode.setStyle("-fx-border-color: gold");
         disclosureNode.getStyleClass().setAll("disclosure-node");
         NodeUtils.makeRegionCircular(disclosureNode, 9.5);
 
@@ -100,6 +98,7 @@ public class MFXSimpleTreeCell<T> extends AbstractMFXTreeCell<T> {
 
     /**
      * {@inheritDoc}
+     * <p>
      * If the data is a Node then it is added to the box.
      * <p>
      * If it is not a Node than a label is created, the label has style class: "data-label",
@@ -121,7 +120,7 @@ public class MFXSimpleTreeCell<T> extends AbstractMFXTreeCell<T> {
      * {@inheritDoc}
      * Updates the cell when needed. When the items list changes adds or removes the disclosure node's
      * icon accordingly. Also checks if the item has the {@link MFXTreeItem#startExpandedProperty()} set to true,
-     * in this case the disclosure node must be rotated by 90°
+     * in this case the disclosure node must be rotated by 90°.
      */
     @Override
     public void updateCell(MFXTreeItem<T> item) {

@@ -1,9 +1,1 @@
 @import "mfx-treecell.css";
-
-.mfx-check-tree-cell:checked {
-    -fx-background-color: lightgreen;
-}
-
-.mfx-check-tree-cell:indeterminate {
-    -fx-background-color: lightblue;
-}

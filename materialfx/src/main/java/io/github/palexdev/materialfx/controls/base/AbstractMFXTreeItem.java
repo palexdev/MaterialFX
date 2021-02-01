@@ -167,6 +167,13 @@ public abstract class AbstractMFXTreeItem<T> extends Control {
     }
 
     /**
+     * @return if this item is leaf or not.
+     */
+    public boolean isLeaf() {
+        return items.isEmpty();
+    }
+
+    /**
      * Retrieves the instance of the TreeView which contains the tree.
      * <p>
      * The reference is stored only in the root item so this method retrieves the root first

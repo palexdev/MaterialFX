@@ -14,9 +14,26 @@ import java.util.stream.Collectors;
 
 import static io.github.palexdev.materialfx.controls.MFXCheckTreeItem.CheckTreeItemEvent;
 
+/**
+ * Concrete implementation of the {@code ICheckModel} class.
+ * <p>
+ * This provides common methods for items check. Also, since it extends SelectionModel it also provides
+ * all the methods for items selection.
+ * <p>
+ * The check should be handled internally only. This is because the mechanism is kind of tricky.
+ * If you take a look at the MFXCheckTreeItem's skin, {@link io.github.palexdev.materialfx.skins.MFXCheckTreeItemSkin},
+ * you can see that when the checkbox is fired, a CHECK_EVENT is fired and "travels" up to the root. Each item then calls
+ * {@link #check(MFXCheckTreeItem, CheckTreeItemEvent)}.
+ */
 public class CheckModel<T> extends SelectionModel<T> implements ICheckModel<T> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final ListProperty<MFXCheckTreeItem<T>> checkedItems = new SimpleListProperty<>(FXCollections.observableArrayList());
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public CheckModel() {
         super();
         checkedItems.addListener((ListChangeListener<MFXCheckTreeItem<T>>) change -> {
@@ -32,6 +49,86 @@ public class CheckModel<T> extends SelectionModel<T> implements ICheckModel<T> {
         });
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
+
+    /**
+     * This method is called when the event argument passed to {@link #check(MFXCheckTreeItem, CheckTreeItemEvent)}
+     * is null. It is used for example when you want the tree to start with one or more checked items like this:
+     * <pre>
+     *     {@code
+     *         MFXCheckTreeItem<String> root = new MFXCheckTreeItem<>("ROOT");
+     *         MFXCheckTreeItem<String> i1 = new MFXCheckTreeItem<>("I1");
+     *         MFXCheckTreeItem<String> i1a = new MFXCheckTreeItem<>("I1A");
+     *         MFXCheckTreeItem<String> i2 = new MFXCheckTreeItem<>("I1B");
+     *
+     *         i1.setChecked(true);
+     *         i1a.setChecked(true);
+     *         i2.setChecked(true);
+     *     }
+     * </pre>
+     * @see MFXCheckTreeItem
+     * @param item the item to check
+     */
+    private void check(MFXCheckTreeItem<T> item) {
+        if (item.isChecked()) {
+            checkedItems.remove(item);
+        } else {
+            checkedItems.add(item);
+        }
+    }
+
+    /**
+     * Adds all the passed items to the checkedItems list.
+     */
+    private void checkAll(List<MFXCheckTreeItem<T>> items) {
+        checkedItems.addAll(items);
+    }
+
+    /**
+     * Removes all the passed items from the checkedItems list.
+     */
+    private void uncheckAll(List<MFXCheckTreeItem<T>> items) {
+        checkedItems.removeAll(items);
+    }
+
+    /**
+     * Counts all the checked children of the passed item.
+     */
+    private int checkedChildren(MFXCheckTreeItem<T> item) {
+        int cnt = 0;
+        for (AbstractMFXTreeItem<T> treeItem : item.getItems()) {
+            MFXCheckTreeItem<T> cItem = (MFXCheckTreeItem<T>) treeItem;
+            if (cItem.isChecked()) {
+                cnt++;
+            }
+        }
+        return cnt;
+    }
+
+    /**
+     * Counts all the indeterminate children of the passed item.
+     */
+    private int indeterminateChildren(MFXCheckTreeItem<T> item) {
+        int cnt = 0;
+        for (AbstractMFXTreeItem<T> treeItem : item.getItems()) {
+            MFXCheckTreeItem<T> cItem = (MFXCheckTreeItem<T>) treeItem;
+            if (cItem.isIndeterminate()) {
+                cnt++;
+            }
+        }
+        return cnt;
+    }
+
+    //================================================================================
+    // Override Methods
+    //================================================================================
+
+    /**
+     * If you set some item to be checked before the tree is laid out then it's needed
+     * to scan the tree and add all the checked items to the list.
+     */
     @Override
     public void scanTree(MFXCheckTreeItem<T> item) {
         clearChecked();
@@ -40,6 +137,13 @@ public class CheckModel<T> extends SelectionModel<T> implements ICheckModel<T> {
         });
     }
 
+    /**
+     * This method is called by {@link io.github.palexdev.materialfx.skins.MFXCheckTreeItemSkin} when
+     * the checkbox is fired. We need the event as a parameter to distinguish between the item
+     * on which the CHECK_EVENT was fired and the parent items.
+     * <p>
+     * If the event is null we call the other {@link #check(MFXCheckTreeItem)} method.
+     */
     @Override
     public void check(MFXCheckTreeItem<T> item, CheckTreeItemEvent<?> event) {
         if (event == null) {
@@ -73,44 +177,9 @@ public class CheckModel<T> extends SelectionModel<T> implements ICheckModel<T> {
         }
     }
 
-    private void check(MFXCheckTreeItem<T> item) {
-        if (item.isChecked()) {
-            checkedItems.remove(item);
-        } else {
-            checkedItems.add(item);
-        }
-    }
-
-    private void checkAll(List<MFXCheckTreeItem<T>> items) {
-        checkedItems.addAll(items);
-    }
-
-    private void uncheckAll(List<MFXCheckTreeItem<T>> items) {
-        checkedItems.removeAll(items);
-    }
-
-    private int checkedChildren(MFXCheckTreeItem<T> item) {
-        int cnt = 0;
-        for (AbstractMFXTreeItem<T> treeItem : item.getItems()) {
-            MFXCheckTreeItem<T> cItem = (MFXCheckTreeItem<T>) treeItem;
-            if (cItem.isChecked()) {
-                cnt++;
-            }
-        }
-        return cnt;
-    }
-
-    private int indeterminateChildren(MFXCheckTreeItem<T> item) {
-        int cnt = 0;
-        for (AbstractMFXTreeItem<T> treeItem : item.getItems()) {
-            MFXCheckTreeItem<T> cItem = (MFXCheckTreeItem<T>) treeItem;
-            if (cItem.isIndeterminate()) {
-                cnt++;
-            }
-        }
-        return cnt;
-    }
-
+    /**
+     * Resets every item in the list to checked false and then clears the list.
+     */
     @Override
     public void clearChecked() {
         if (checkedItems.isEmpty()) {
@@ -121,14 +190,9 @@ public class CheckModel<T> extends SelectionModel<T> implements ICheckModel<T> {
         checkedItems.clear();
     }
 
-    @Override
-    public MFXCheckTreeItem<T> getCheckedItem() {
-        if (checkedItems.isEmpty()) {
-            return null;
-        }
-        return checkedItems.get(0);
-    }
-
+    /**
+     * @return the ListProperty which contains all the checked items.
+     */
     @Override
     public ListProperty<MFXCheckTreeItem<T>> getCheckedItems() {
         return this.checkedItems;

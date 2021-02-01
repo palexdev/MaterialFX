@@ -13,6 +13,7 @@ import javafx.scene.control.SkinBase;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 /**
@@ -50,7 +51,7 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
         rippleGenerator.setAnimateBackground(false);
 
         // Contains the mark
-        MFXFontIcon icon = new MFXFontIcon(checkbox.getMarkType(), 12, Color.WHITE);
+        MFXFontIcon icon = new MFXFontIcon(checkbox.getMarkType(), checkbox.getMarkSize(), Color.WHITE);
         icon.getStyleClass().add("mark");
         box = new MFXIconWrapper(icon, boxSize);
         box.getStyleClass().add("box");
@@ -95,6 +96,9 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
                 (observable, oldValue, newValue) -> updateMarkType()
         );
 
+        checkBox.markSizeProperty().addListener(
+                (observable, oldValue, newValue) -> ((MFXFontIcon) box.getIcon()).setFont(Font.font(newValue.doubleValue())));
+
         checkBox.selectedProperty().addListener(
                 (observable, oldValue, newValue) -> updateColors()
         );
@@ -114,7 +118,7 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
         /* Listener on control but if the coordinates of the event are greater than then ripple container size
          * then the center of the ripple is set to the width and/or height of container
          */
-        checkBox.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+        checkBox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             if (!NodeUtils.inHierarchy(event.getPickResult().getIntersectedNode(), checkBox)) {
                 return;
             }
@@ -179,10 +183,7 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
     private void updateMarkType() {
         MFXCheckbox checkbox = getSkinnable();
 
-        MFXFontIcon icon = new MFXFontIcon(checkbox.getMarkType(), 12, Color.TRANSPARENT);
-        if (icon.getDescription().equals("mfx-variant9-mark")) {
-            icon.setSize(9);
-        }
+        MFXFontIcon icon = new MFXFontIcon(checkbox.getMarkType(), checkbox.getMarkSize(), Color.TRANSPARENT);
         box.setIcon(icon);
     }
 

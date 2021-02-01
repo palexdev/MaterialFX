@@ -3,24 +3,30 @@ package io.github.palexdev.materialfx.controls.cell;
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.MFXCheckTreeItem;
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
-import io.github.palexdev.materialfx.effects.RippleGenerator;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.css.PseudoClass;
-import javafx.scene.control.CheckBox;
-import javafx.scene.paint.Color;
 
-// TODO change to MFXCheckbox, after refactor
+/**
+ * Implementation of a MFXSimpleTreeCell with a checkbox for usage in MFXCheckTreeViews.
+ * @param <T>
+ */
 public class MFXCheckTreeCell<T> extends MFXSimpleTreeCell<T> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final String STYLE_CLASS = "mfx-check-tree-cell";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-checktreecell.css").toString();
-    private final CheckBox checkbox;
+    private final MFXCheckbox checkbox;
 
     private static final PseudoClass CHECKED_PSEUDO_CLASS = PseudoClass.getPseudoClass("checked");
     private static final PseudoClass INDETERMINATE_PSEUDO_CLASS = PseudoClass.getPseudoClass("indeterminate");
     private final BooleanProperty checked = new SimpleBooleanProperty(false);
     private final BooleanProperty indeterminate = new SimpleBooleanProperty(false);
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXCheckTreeCell(MFXCheckTreeItem<T> item) {
         super(item);
         checkbox = new MFXCheckbox("");
@@ -35,6 +41,14 @@ public class MFXCheckTreeCell<T> extends MFXSimpleTreeCell<T> {
         initialize(item);
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
+
+    /**
+     * Sets the cell style class, sets the fixed cells size to 32, adds bindings for
+     * checked and indeterminate properties.
+     */
     private void initialize(MFXCheckTreeItem<T> item) {
         getStyleClass().add(STYLE_CLASS);
         setFixedCellSize(32);
@@ -42,23 +56,24 @@ public class MFXCheckTreeCell<T> extends MFXSimpleTreeCell<T> {
         addListeners();
         checked.bind(item.checkedProperty());
         indeterminate.bind(item.indeterminateProperty());
+        checkbox.setMarkType("mfx-variant3-mark");
+        checkbox.setMarkSize(8);
     }
 
+    /**
+     * Adds listeners for checked and indeterminate properties.
+     */
     private void addListeners() {
         checked.addListener(invalidate -> pseudoClassStateChanged(CHECKED_PSEUDO_CLASS, checked.get()));
         checked.addListener((observable, oldValue, newValue) -> checkbox.setSelected(newValue));
         indeterminate.addListener(invalidate -> pseudoClassStateChanged(INDETERMINATE_PSEUDO_CLASS, indeterminate.get()));
         indeterminate.addListener((observable, oldValue, newValue) -> checkbox.setIndeterminate(newValue));
-
-        checkbox.skinProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                RippleGenerator rippleGenerator = (RippleGenerator) checkbox.lookup(".ripple-generator");
-                rippleGenerator.setRippleColor(Color.FIREBRICK);
-            }
-        });
     }
 
-    public CheckBox getCheckbox() {
+    /**
+     * @return this cell's checkbox instance
+     */
+    public MFXCheckbox getCheckbox() {
         return checkbox;
     }
 

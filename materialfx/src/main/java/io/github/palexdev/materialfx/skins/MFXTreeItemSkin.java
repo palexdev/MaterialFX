@@ -146,7 +146,7 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
             }
             cell.updateCell(item);
         };
-        addListeners();
+        setListeners();
 
         if (item.isStartExpanded()) {
             forcedUpdate = true;
@@ -189,7 +189,7 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
      * If that is not the case then we trigger the selection, retrieve the selection model and select the item.
      * @see io.github.palexdev.materialfx.controls.SelectionModel
      */
-    private void addListeners() {
+    private void setListeners() {
         MFXTreeItem<T> item = getSkinnable();
 
         item.getItems().addListener(itemsListener);
@@ -341,7 +341,6 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
 
         AbstractMFXTreeCell<T> cell = item.getCellFactory().call(item);
         Node disclosureNode = cell.getDisclosureNode();
-        disclosureNode.setStyle("-fx-border-color: gold");
         disclosureNode.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
             if (item.getItems().isEmpty()) {
                 event.consume();

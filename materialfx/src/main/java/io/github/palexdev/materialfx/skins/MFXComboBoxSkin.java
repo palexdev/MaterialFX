@@ -2,9 +2,10 @@ package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
+import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
-import javafx.animation.FadeTransition;
+import javafx.animation.ScaleTransition;
 import javafx.scene.control.Label;
 import javafx.scene.control.skin.ComboBoxListViewSkin;
 import javafx.scene.input.MouseEvent;
@@ -43,7 +44,7 @@ public class MFXComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
         focusLine.setStroke(comboBox.getLineColor());
         focusLine.setStrokeWidth(comboBox.getLineStrokeWidth());
         focusLine.setSmooth(true);
-        focusLine.setOpacity(0.0);
+        focusLine.setScaleX(0.0);
 
         line.endXProperty().bind(comboBox.widthProperty());
         focusLine.endXProperty().bind(comboBox.widthProperty());
@@ -112,9 +113,9 @@ public class MFXComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
             }
 
             if (newValue) {
-                focusLine.setOpacity(1.0);
+                focusLine.setScaleX(1.0);
             } else {
-                focusLine.setOpacity(0.0);
+                focusLine.setScaleX(0.0);
             }
         });
 
@@ -142,15 +143,16 @@ public class MFXComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
      * Builds and play the lines animation if {@code animateLines} is true.
      */
     private void buildAndPlayAnimation(boolean focused) {
-        FadeTransition fadeTransition = new FadeTransition(Duration.millis(200), focusLine);
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(400), focusLine);
         if (focused) {
-            fadeTransition.setFromValue(0.0);
-            fadeTransition.setToValue(1.0);
+            scaleTransition.setFromX(0.0);
+            scaleTransition.setToX(1.0);
         } else {
-            fadeTransition.setFromValue(1.0);
-            fadeTransition.setToValue(0.0);
+            scaleTransition.setFromX(1.0);
+            scaleTransition.setToX(0.0);
         }
-        fadeTransition.play();
+        scaleTransition.setInterpolator(MFXAnimationFactory.getInterpolator());
+        scaleTransition.play();
     }
 
     //================================================================================

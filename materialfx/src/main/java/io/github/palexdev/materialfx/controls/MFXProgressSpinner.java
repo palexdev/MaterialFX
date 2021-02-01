@@ -9,11 +9,22 @@ import javafx.scene.layout.Region;
 
 import java.util.List;
 
+/**
+ * Implementation of a spinning {@code ProgressIndicator}.
+ * <p>
+ * Extends {@link ProgressIndicator}
+ */
 public class MFXProgressSpinner extends ProgressIndicator {
+    //================================================================================
+    // Properties
+    //================================================================================
     private static final StyleablePropertyFactory<MFXProgressSpinner> FACTORY = new StyleablePropertyFactory<>(ProgressIndicator.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-spinner";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-spinner.css").toString();
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXProgressSpinner() {
         this(-1);
     }
@@ -23,10 +34,20 @@ public class MFXProgressSpinner extends ProgressIndicator {
         initialize();
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
     }
 
+    //================================================================================
+    // Styleable Properties
+    //================================================================================
+
+    /**
+     * Specifies the radius of the spinner.
+     */
     private final StyleableDoubleProperty radius = new SimpleStyleableDoubleProperty(
             StyleableProperties.RADIUS,
             this,
@@ -34,6 +55,9 @@ public class MFXProgressSpinner extends ProgressIndicator {
             Region.USE_COMPUTED_SIZE
     );
 
+    /**
+     * Specifies the starting angle of the animation.
+     */
     private final StyleableDoubleProperty startingAngle = new SimpleStyleableDoubleProperty(
             StyleableProperties.STARTING_ANGLE,
             this,
@@ -65,6 +89,9 @@ public class MFXProgressSpinner extends ProgressIndicator {
         this.startingAngle.set(startingAngle);
     }
 
+    //================================================================================
+    // CssMetaData
+    //================================================================================
     private static class StyleableProperties {
         private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
@@ -91,6 +118,9 @@ public class MFXProgressSpinner extends ProgressIndicator {
         return StyleableProperties.cssMetaDataList;
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
     @Override
     protected Skin<?> createDefaultSkin() {
         return new MFXProgressSpinnerSkin(this);

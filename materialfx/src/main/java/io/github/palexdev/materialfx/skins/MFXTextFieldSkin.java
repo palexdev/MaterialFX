@@ -2,9 +2,10 @@ package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
-import javafx.animation.FadeTransition;
+import javafx.animation.ScaleTransition;
 import javafx.scene.control.Label;
 import javafx.scene.control.skin.TextFieldSkin;
 import javafx.scene.input.MouseEvent;
@@ -42,7 +43,7 @@ public class MFXTextFieldSkin extends TextFieldSkin {
         focusLine.setStroke(textField.getLineColor());
         focusLine.setStrokeWidth(textField.getLineStrokeWidth());
         focusLine.setSmooth(true);
-        focusLine.setOpacity(0.0);
+        focusLine.setScaleX(0.0);
 
         line.endXProperty().bind(textField.widthProperty());
         focusLine.endXProperty().bind(textField.widthProperty());
@@ -111,19 +112,19 @@ public class MFXTextFieldSkin extends TextFieldSkin {
             }
 
             if (newValue) {
-                focusLine.setOpacity(1.0);
+                focusLine.setScaleX(1.0);
             } else {
-                focusLine.setOpacity(0.0);
+                focusLine.setScaleX(0.0);
             }
         });
 
         textField.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            if (textField.isAnimateLines() && focusLine.getOpacity() != 1.0) {
+            if (textField.isAnimateLines() && focusLine.getScaleX() != 1.0) {
                 buildAndPlayAnimation(true);
                 return;
             }
 
-            focusLine.setOpacity(1.0);
+            focusLine.setScaleX(1.0);
         });
 
         textField.isValidatedProperty().addListener((observable, oldValue, newValue) -> {
@@ -151,15 +152,16 @@ public class MFXTextFieldSkin extends TextFieldSkin {
      * Builds and play the lines animation if {@code animateLines} is true.
      */
     private void buildAndPlayAnimation(boolean focused) {
-        FadeTransition fadeTransition = new FadeTransition(Duration.millis(200), focusLine);
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(400), focusLine);
         if (focused) {
-            fadeTransition.setFromValue(0.0);
-            fadeTransition.setToValue(1.0);
+            scaleTransition.setFromX(0.0);
+            scaleTransition.setToX(1.0);
         } else {
-            fadeTransition.setFromValue(1.0);
-            fadeTransition.setToValue(0.0);
+            scaleTransition.setFromX(1.0);
+            scaleTransition.setToX(0.0);
         }
-        fadeTransition.play();
+        scaleTransition.setInterpolator(MFXAnimationFactory.getInterpolator());
+        scaleTransition.play();
     }
 
     //================================================================================

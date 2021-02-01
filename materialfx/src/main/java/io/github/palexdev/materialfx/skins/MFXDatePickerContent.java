@@ -126,7 +126,6 @@ public class MFXDatePickerContent extends VBox {
     public MFXDatePickerContent(LocalDate localDate, DateTimeFormatter dateTimeFormatter) {
         getStyleClass().add(STYLE_CLASS);
         getStylesheets().setAll(STYLESHEET);
-        //setStyle("-fx-border-color: red");
         setPrefSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
@@ -148,7 +147,6 @@ public class MFXDatePickerContent extends VBox {
 
         holder = new StackPane(buildCalendar(), buildScroll());
         holder.getStyleClass().add("holder");
-        //holder.setStyle("-fx-border-color: blue");
         getChildren().add(holder);
 
         initialize();
@@ -607,7 +605,6 @@ public class MFXDatePickerContent extends VBox {
         calendar = new GridPane();
         calendar.getStyleClass().add("calendar");
         calendar.setVgap(10);
-        //calendar.setStyle("-fx-border-color: red");
 
         return calendar;
     }
@@ -621,7 +618,6 @@ public class MFXDatePickerContent extends VBox {
         years.setPadding(DEFAULT_INSETS);
         years.setHgap(10);
         years.setVgap(10);
-        //years.setStyle("-fx-border-color: red");
 
         return years;
     }

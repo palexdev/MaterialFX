@@ -4,7 +4,7 @@
 }
 
 .mfx-tree-cell .ripple-generator {
-    -mfx-ripple-color: green;
+    -mfx-ripple-color: rgba(0, 190, 0, 0.4);
 }
 
 .mfx-tree-cell:selected {

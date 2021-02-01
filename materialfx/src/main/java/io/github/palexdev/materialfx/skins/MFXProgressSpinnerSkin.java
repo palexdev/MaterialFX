@@ -22,7 +22,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ *  This is the implementation of the {@code Skin} associated with every {@code MFXProgressSpinner}.
+ */
 public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private boolean isValid = false;
     private boolean wasIndeterminate = false;
     private double arcLength = -1;
@@ -40,6 +46,9 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
 
     private Timeline timeline;
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXProgressSpinnerSkin(MFXProgressSpinner spinner) {
         super(spinner);
 
@@ -80,6 +89,13 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
         setListeners();
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
+
+    /**
+     * Adds listeners to: indeterminate, progress, visible, parent and scene properties.
+     */
     private void setListeners() {
         MFXProgressSpinner spinner = getSkinnable();
 
@@ -90,6 +106,9 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
         spinner.sceneProperty().addListener((observable, oldValue, newValue) -> updateAnimation());
     }
 
+    /**
+     * Updates the progress.
+     */
     protected void updateProgress() {
         MFXProgressSpinner spinner = getSkinnable();
 
@@ -101,6 +120,9 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
         wasIndeterminate = isIndeterminate;
     }
 
+    /**
+     * Resets the spinner animation.
+     */
     private void reset() {
         MFXProgressSpinner spinner = getSkinnable();
 
@@ -116,6 +138,9 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
         }
     }
 
+    /**
+     * Clears the animation.
+     */
     private void clearAnimation() {
         if (timeline != null) {
             timeline.stop();
@@ -124,6 +149,9 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
         }
     }
 
+    /**
+     * Updates the animation.
+     */
     private void updateAnimation() {
         MFXProgressSpinner spinner = getSkinnable();
 
@@ -137,6 +165,9 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
         }
     }
 
+    /**
+     * Creates the animation.
+     */
     private void createTransition() {
         MFXProgressSpinner spinner = getSkinnable();
 
@@ -169,6 +200,9 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
         timeline.playFromStart();
     }
 
+    /**
+     * Pauses the animation
+     */
     private void pauseTimeline(boolean pause) {
         MFXProgressSpinner spinner = getSkinnable();
 
@@ -184,6 +218,9 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
         }
     }
 
+    /**
+     * Creates the needed key frames for the animation.
+     */
     private List<KeyFrame> getKeyFrames(double angle, double duration, Paint color) {
         MFXProgressSpinner spinner = getSkinnable();
 
@@ -207,6 +244,9 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
         return List.of(kf1, kf2, kf3, kf4);
     }
 
+    /**
+     * Updates the arc.
+     */
     private void updateArcLayout(double radius, double arcSize) {
         arc.setRadiusX(radius);
         arc.setRadiusY(radius);
@@ -220,6 +260,9 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
         track.setStrokeWidth(arc.getStrokeWidth());
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
     @Override
     protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
         MFXProgressSpinner spinner = getSkinnable();
