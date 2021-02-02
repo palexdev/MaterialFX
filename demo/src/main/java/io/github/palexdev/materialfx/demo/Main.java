@@ -23,7 +23,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
         CSSFX.start();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(ResourcesLoader.load("demo.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(ResourcesLoader.load("Demo.fxml"));
         fxmlLoader.setControllerFactory(controller -> new io.github.palexdev.materialfx.demo.controllers.Demo(primaryStage, getHostServices()));
         StackPane demoPane = fxmlLoader.load();
 

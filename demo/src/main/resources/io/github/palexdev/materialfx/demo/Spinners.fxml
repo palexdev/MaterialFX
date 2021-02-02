@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.StackPane?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+           prefHeight="400.0" prefWidth="600.0" stylesheets="@css/toggle_buttons_demo.css"
+           xmlns="http://javafx.com/javafx/11.0.1"
+           fx:controller="io.github.palexdev.materialfx.demo.controllers.Spinners">
+
+</StackPane>
