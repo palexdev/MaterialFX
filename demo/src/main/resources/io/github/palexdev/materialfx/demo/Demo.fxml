@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <StackPane xmlns:fx="http://javafx.com/fxml/1" id="demoPane" fx:id="demoPane" maxHeight="-Infinity" maxWidth="-Infinity"
            minHeight="-Infinity" minWidth="-Infinity" prefHeight="432.0" prefWidth="768.0"
-           stylesheets="@css/demo.css" xmlns="http://javafx.com/javafx/15.0.1"
+           stylesheets="@css/Demo.css" xmlns="http://javafx.com/javafx/15.0.1"
            fx:controller="io.github.palexdev.materialfx.demo.controllers.Demo">
     <StackPane id="contentPane" fx:id="contentPane" prefHeight="207.0" prefWidth="441.0">
         <StackPane.margin>

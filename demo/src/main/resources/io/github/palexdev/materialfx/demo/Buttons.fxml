@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-           prefWidth="600.0" stylesheets="@css/buttons_demo.css" xmlns="http://javafx.com/javafx/11.0.1">
+           prefWidth="600.0" stylesheets="@css/Buttons.css" xmlns="http://javafx.com/javafx/11.0.1">
     <MFXButton rippleRadius="40.0" styleClass="flat-button" StackPane.alignment="TOP_CENTER">
         <font>
             <Font name="Comic Sans MS" size="14.0"/>

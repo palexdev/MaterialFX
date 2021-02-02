@@ -5,7 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <StackPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-           prefHeight="400.0" prefWidth="730.0" stylesheets="@css/listviews_demo.css"
+           prefHeight="400.0" prefWidth="730.0" stylesheets="@css/ListViews.css"
            xmlns="http://javafx.com/javafx/11.0.1"
            fx:controller="io.github.palexdev.materialfx.demo.controllers.ListView">
     <padding>
@@ -43,7 +43,7 @@
               spacing="10.0">
             <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="125.0" text="Customized and CSS"/>
             <MFXListView id="customView" fx:id="cssView" maxHeight="-Infinity" maxWidth="-Infinity"
-                         prefHeight="200.0" prefWidth="110.0" stylesheets="@css/listviews_demo.css"/>
+                         prefHeight="200.0" prefWidth="110.0" stylesheets="@css/ListViews.css"/>
         </VBox>
     </HBox>
     <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="90.0" prefWidth="128.0"

@@ -7,7 +7,7 @@
 <?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.Stop?>
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-           prefWidth="600.0" stylesheets="@css/checkboxes_demo.css" xmlns="http://javafx.com/javafx/15.0.1">
+           prefWidth="600.0" stylesheets="@css/CheckBoxes.css" xmlns="http://javafx.com/javafx/15.0.1">
     <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Checkboxes color"
            StackPane.alignment="TOP_CENTER">
         <StackPane.margin>
