@@ -24,16 +24,12 @@ import static io.github.palexdev.materialfx.effects.MFXDepthManager.shadowOf;
  * Extends {@code Group} and sets the style class to "ripple-generator" for usage in CSS.
  */
 public class RippleGenerator extends Group {
+    private static final StyleablePropertyFactory<RippleGenerator> FACTORY = new StyleablePropertyFactory<>(Group.getClassCssMetaData());
     //================================================================================
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "ripple-generator";
-    private static final StyleablePropertyFactory<RippleGenerator> FACTORY = new StyleablePropertyFactory<>(Group.getClassCssMetaData());
-
     private final Region region;
-
-    private RippleClipTypeFactory rippleClipTypeFactory = new RippleClipTypeFactory(RippleClipType.RECTANGLE);
-    private DepthLevel level = null;
     private final Interpolator rippleInterpolator = Interpolator.SPLINE(0.0825, 0.3025, 0.0875, 0.9975);
     //private final Interpolator rippleInterpolator = Interpolator.SPLINE(0.1, 0.50, 0.3, 0.85);
     private final StyleableObjectProperty<Color> rippleColor = new SimpleStyleableObjectProperty<>(
@@ -42,7 +38,6 @@ public class RippleGenerator extends Group {
             "rippleColor",
             Color.ROYALBLUE
     );
-
     private final StyleableDoubleProperty rippleRadius = new SimpleStyleableDoubleProperty(
             StyleableProperties.RIPPLE_RADIUS,
             this,
@@ -57,7 +52,8 @@ public class RippleGenerator extends Group {
     );
     private final ObjectProperty<Duration> inDuration = new SimpleObjectProperty<>(Duration.millis(700));
     private final ObjectProperty<Duration> outDuration = new SimpleObjectProperty<>(inDuration.get().divide(2));
-
+    private RippleClipTypeFactory rippleClipTypeFactory = new RippleClipTypeFactory(RippleClipType.RECTANGLE);
+    private DepthLevel level = null;
     private double generatorCenterX = 0.0;
     private double generatorCenterY = 0.0;
 
@@ -97,6 +93,10 @@ public class RippleGenerator extends Group {
     //================================================================================
     // Methods
     //================================================================================
+
+    public static List<CssMetaData<? extends Styleable, ?>> getGroupCssMetaDataList() {
+        return RippleGenerator.StyleableProperties.cssMetaDataList;
+    }
 
     /**
      * Creates a new {@code Ripple} at the specified coordinates.
@@ -141,60 +141,97 @@ public class RippleGenerator extends Group {
         return rippleColor.get();
     }
 
-    public final StyleableObjectProperty<Color> rippleColorProperty() {
-        return rippleColor;
-    }
-
     public void setRippleColor(Color rippleColor) {
         this.rippleColor.set(rippleColor);
+    }
+
+    public final StyleableObjectProperty<Color> rippleColorProperty() {
+        return rippleColor;
     }
 
     public double getRippleRadius() {
         return rippleRadius.get();
     }
 
-    public StyleableDoubleProperty rippleRadiusProperty() {
-        return rippleRadius;
-    }
-
     public void setRippleRadius(double rippleRadius) {
         this.rippleRadius.set(rippleRadius);
+    }
+
+    public StyleableDoubleProperty rippleRadiusProperty() {
+        return rippleRadius;
     }
 
     public boolean isAnimateBackground() {
         return animateBackground.get();
     }
 
-    public StyleableBooleanProperty animateBackgroundProperty() {
-        return animateBackground;
-    }
-
     public void setAnimateBackground(boolean animateBackground) {
         this.animateBackground.set(animateBackground);
+    }
+
+    public StyleableBooleanProperty animateBackgroundProperty() {
+        return animateBackground;
     }
 
     public Duration getInDuration() {
         return inDuration.get();
     }
 
-    public ObjectProperty<Duration> inDurationProperty() {
-        return inDuration;
-    }
-
     public void setInDuration(Duration inDuration) {
         this.inDuration.set(inDuration);
+    }
+
+    public ObjectProperty<Duration> inDurationProperty() {
+        return inDuration;
     }
 
     public Duration getOutDuration() {
         return outDuration.get();
     }
 
+    public void setOutDuration(Duration outDuration) {
+        this.outDuration.set(outDuration);
+    }
+
     public ObjectProperty<Duration> outDurationProperty() {
         return outDuration;
     }
 
-    public void setOutDuration(Duration outDuration) {
-        this.outDuration.set(outDuration);
+    @Override
+    public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
+        return RippleGenerator.getGroupCssMetaDataList();
+    }
+
+    //================================================================================
+    // Stylesheet Properties
+    //================================================================================
+    private static class StyleableProperties {
+        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+
+        private static final CssMetaData<RippleGenerator, Color> RIPPLE_COLOR =
+                FACTORY.createColorCssMetaData(
+                        "-mfx-ripple-color",
+                        RippleGenerator::rippleColorProperty
+                );
+
+        private static final CssMetaData<RippleGenerator, Number> RIPPLE_RADIUS =
+                FACTORY.createSizeCssMetaData(
+                        "-mfx-ripple-radius",
+                        RippleGenerator::rippleRadiusProperty,
+                        10.0
+                );
+
+        private static final CssMetaData<RippleGenerator, Boolean> ANIMATE_BACKGROUND =
+                FACTORY.createBooleanCssMetaData(
+                        "-mfx-animate-background",
+                        RippleGenerator::animateBackgroundProperty,
+                        true
+                );
+
+        static {
+            cssMetaDataList = List.of(RIPPLE_COLOR, RIPPLE_RADIUS, ANIMATE_BACKGROUND);
+        }
+
     }
 
     /**
@@ -270,46 +307,5 @@ public class RippleGenerator extends Group {
             parallelTransition.setInterpolator(rippleInterpolator);
             parallelTransition.getChildren().add(sequentialTransition);
         }
-    }
-
-    //================================================================================
-    // Stylesheet Properties
-    //================================================================================
-    private static class StyleableProperties {
-        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
-
-        private static final CssMetaData<RippleGenerator, Color> RIPPLE_COLOR =
-                FACTORY.createColorCssMetaData(
-                        "-mfx-ripple-color",
-                        RippleGenerator::rippleColorProperty
-                );
-
-        private static final CssMetaData<RippleGenerator, Number> RIPPLE_RADIUS =
-                FACTORY.createSizeCssMetaData(
-                        "-mfx-ripple-radius",
-                        RippleGenerator::rippleRadiusProperty,
-                        10.0
-                );
-
-        private static final CssMetaData<RippleGenerator, Boolean> ANIMATE_BACKGROUND =
-                FACTORY.createBooleanCssMetaData(
-                        "-mfx-animate-background",
-                        RippleGenerator::animateBackgroundProperty,
-                        true
-                );
-
-        static {
-            cssMetaDataList = List.of(RIPPLE_COLOR, RIPPLE_RADIUS, ANIMATE_BACKGROUND);
-        }
-
-    }
-
-    public static List<CssMetaData<? extends Styleable, ?>> getGroupCssMetaDataList() {
-        return RippleGenerator.StyleableProperties.cssMetaDataList;
-    }
-
-    @Override
-    public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
-        return RippleGenerator.getGroupCssMetaDataList();
     }
 }

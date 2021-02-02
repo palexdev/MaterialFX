@@ -17,6 +17,32 @@ public class MFXFontIcon extends Text {
     //================================================================================
     private static final StyleablePropertyFactory<MFXFontIcon> FACTORY = new StyleablePropertyFactory<>(Text.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-font-icon";
+    /**
+     * Specifies the icon code of the icon.
+     */
+    private final StyleableStringProperty description = new SimpleStyleableStringProperty(
+            StyleableProperties.DESCRIPTION,
+            this,
+            "description"
+    );
+    /**
+     * Specifies the size of the icon.
+     */
+    private final StyleableDoubleProperty size = new SimpleStyleableDoubleProperty(
+            StyleableProperties.SIZE,
+            this,
+            "size",
+            10.0
+    );
+    /**
+     * Specifies the color of the icon.
+     */
+    private final StyleableObjectProperty<Paint> color = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.COLOR,
+            this,
+            "color",
+            Color.rgb(117, 117, 117)
+    );
 
     //================================================================================
     // Constructors
@@ -47,6 +73,10 @@ public class MFXFontIcon extends Text {
         setText(String.valueOf(FontHandler.getCode(description)));
     }
 
+    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaDataList() {
+        return StyleableProperties.cssMetaDataList;
+    }
+
     //================================================================================
     // Methods
     //================================================================================
@@ -69,69 +99,45 @@ public class MFXFontIcon extends Text {
         });
     }
 
-    /**
-     * Specifies the icon code of the icon.
-     */
-    private final StyleableStringProperty description = new SimpleStyleableStringProperty(
-            StyleableProperties.DESCRIPTION,
-            this,
-            "description"
-    );
-
-    /**
-     * Specifies the size of the icon.
-     */
-    private final StyleableDoubleProperty size = new SimpleStyleableDoubleProperty(
-            StyleableProperties.SIZE,
-            this,
-            "size",
-            10.0
-    );
-
-    /**
-     * Specifies the color of the icon.
-     */
-    private final StyleableObjectProperty<Paint> color = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.COLOR,
-            this,
-            "color",
-            Color.rgb(117, 117, 117)
-    );
-
     public String getDescription() {
         return description.get();
-    }
-
-    public StyleableStringProperty descriptionProperty() {
-        return description;
     }
 
     public void setDescription(String code) {
         this.description.set(code);
     }
 
-    public double getSize() {
-        return size.get();
+    public StyleableStringProperty descriptionProperty() {
+        return description;
     }
 
-    public StyleableDoubleProperty sizeProperty() {
-        return size;
+    public double getSize() {
+        return size.get();
     }
 
     public void setSize(double size) {
         this.size.set(size);
     }
 
+    public StyleableDoubleProperty sizeProperty() {
+        return size;
+    }
+
     public Paint getColor() {
         return color.get();
+    }
+
+    public void setColor(Paint color) {
+        this.color.set(color);
     }
 
     public StyleableObjectProperty<Paint> colorProperty() {
         return color;
     }
 
-    public void setColor(Paint color) {
-        this.color.set(color);
+    @Override
+    public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
+        return MFXFontIcon.getClassCssMetaDataList();
     }
 
     //================================================================================
@@ -163,14 +169,5 @@ public class MFXFontIcon extends Text {
         static {
             cssMetaDataList = List.of(DESCRIPTION, SIZE, COLOR);
         }
-    }
-
-    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaDataList() {
-        return StyleableProperties.cssMetaDataList;
-    }
-
-    @Override
-    public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
-        return MFXFontIcon.getClassCssMetaDataList();
     }
 }

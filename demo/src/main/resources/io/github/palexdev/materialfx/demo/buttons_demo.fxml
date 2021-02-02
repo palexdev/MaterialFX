@@ -9,56 +9,62 @@
            prefWidth="600.0" stylesheets="@css/buttons_demo.css" xmlns="http://javafx.com/javafx/11.0.1">
     <MFXButton rippleRadius="40.0" styleClass="flat-button" StackPane.alignment="TOP_CENTER">
         <font>
-            <Font name="Comic Sans MS" size="14.0" />
+            <Font name="Comic Sans MS" size="14.0"/>
         </font>
         <StackPane.margin>
-            <Insets right="180.0" top="65.0" />
+            <Insets right="180.0" top="65.0"/>
         </StackPane.margin>
     </MFXButton>
-    <MFXButton rippleColor="#d5d5d5" rippleRadius="40.0" styleClass="raised-button" text="Button" StackPane.alignment="TOP_CENTER">
+    <MFXButton rippleColor="#d5d5d5" rippleRadius="40.0" styleClass="raised-button" text="Button"
+               StackPane.alignment="TOP_CENTER">
         <StackPane.margin>
-            <Insets right="180.0" top="165.0" />
+            <Insets right="180.0" top="165.0"/>
         </StackPane.margin>
     </MFXButton>
     <MFXButton rippleRadius="40.0" styleClass="flat-button" textFill="#d400ff" StackPane.alignment="TOP_CENTER">
         <font>
-            <Font name="Comic Sans MS" size="14.0" />
+            <Font name="Comic Sans MS" size="14.0"/>
         </font>
         <StackPane.margin>
-            <Insets top="65.0" />
+            <Insets top="65.0"/>
         </StackPane.margin>
     </MFXButton>
-    <MFXButton id="colored-raised" prefHeight="26.0" prefWidth="55.0" rippleColor="#d5d5d5" rippleRadius="40.0" styleClass="raised-button" StackPane.alignment="TOP_CENTER">
+    <MFXButton id="colored-raised" prefHeight="26.0" prefWidth="55.0" rippleColor="#d5d5d5" rippleRadius="40.0"
+               styleClass="raised-button" StackPane.alignment="TOP_CENTER">
         <StackPane.margin>
-            <Insets top="165.0" />
+            <Insets top="165.0"/>
         </StackPane.margin>
     </MFXButton>
     <MFXButton disable="true" rippleRadius="40.0" styleClass="flat-button" StackPane.alignment="TOP_CENTER">
         <font>
-            <Font name="Comic Sans MS" size="14.0" />
+            <Font name="Comic Sans MS" size="14.0"/>
         </font>
         <StackPane.margin>
-            <Insets left="180.0" top="65.0" />
+            <Insets left="180.0" top="65.0"/>
         </StackPane.margin>
     </MFXButton>
-    <MFXButton disable="true" rippleColor="#d5d5d5" rippleRadius="40.0" styleClass="raised-button" StackPane.alignment="TOP_CENTER">
+    <MFXButton disable="true" rippleColor="#d5d5d5" rippleRadius="40.0" styleClass="raised-button"
+               StackPane.alignment="TOP_CENTER">
         <StackPane.margin>
-            <Insets left="180.0" top="165.0" />
+            <Insets left="180.0" top="165.0"/>
         </StackPane.margin>
     </MFXButton>
-    <MFXButton id="custom-ripple" prefHeight="26.0" prefWidth="150.0" rippleRadius="50.0" styleClass="raised-button" text="Custom Ripple" StackPane.alignment="CENTER">
+    <MFXButton id="custom-ripple" prefHeight="26.0" prefWidth="150.0" rippleRadius="50.0" styleClass="raised-button"
+               text="Custom Ripple" StackPane.alignment="CENTER">
         <StackPane.margin>
-            <Insets top="60.0" />
+            <Insets top="60.0"/>
         </StackPane.margin>
     </MFXButton>
-    <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Flat buttons" StackPane.alignment="TOP_CENTER">
+    <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Flat buttons"
+           StackPane.alignment="TOP_CENTER">
         <StackPane.margin>
-            <Insets top="20.0" />
+            <Insets top="20.0"/>
         </StackPane.margin>
     </Label>
-    <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Raised buttons" StackPane.alignment="TOP_CENTER">
+    <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Raised buttons"
+           StackPane.alignment="TOP_CENTER">
         <StackPane.margin>
-            <Insets top="120.0" />
+            <Insets top="120.0"/>
         </StackPane.margin>
     </Label>
 </StackPane>

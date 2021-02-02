@@ -19,9 +19,10 @@ import java.lang.ref.WeakReference;
  * Simple implementation of a tree item with a checkbox.
  * <p>
  * The default associated {@link Skin} is {@link MFXCheckTreeItemSkin<T>}.
+ *
+ * @param <T> The type of the data within TreeItem.
  * @see MFXCheckTreeView
  * @see ICheckModel
- * @param <T> The type of the data within TreeItem.
  */
 public class MFXCheckTreeItem<T> extends MFXTreeItem<T> {
     //================================================================================
@@ -71,24 +72,24 @@ public class MFXCheckTreeItem<T> extends MFXTreeItem<T> {
         return checked.get();
     }
 
-    public BooleanProperty checkedProperty() {
-        return checked;
-    }
-
     public void setChecked(boolean checked) {
         this.checked.set(checked);
+    }
+
+    public BooleanProperty checkedProperty() {
+        return checked;
     }
 
     public boolean isIndeterminate() {
         return indeterminate.get();
     }
 
-    public BooleanProperty indeterminateProperty() {
-        return indeterminate;
-    }
-
     public void setIndeterminate(boolean indeterminate) {
         this.indeterminate.set(indeterminate);
+    }
+
+    public BooleanProperty indeterminateProperty() {
+        return indeterminate;
     }
 
     //================================================================================
@@ -140,9 +141,8 @@ public class MFXCheckTreeItem<T> extends MFXTreeItem<T> {
      * Of course these events are for internal use only so they should not be used by users.
      */
     public static final class CheckTreeItemEvent<T> extends Event {
-        private final WeakReference<AbstractMFXTreeItem<T>> itemRef;
-
         public static final EventType<CheckTreeItemEvent<?>> CHECK_EVENT = new EventType<>(ANY, "CHECK_EVENT");
+        private final WeakReference<AbstractMFXTreeItem<T>> itemRef;
 
         public CheckTreeItemEvent(EventType<? extends Event> eventType, AbstractMFXTreeItem<T> item) {
             super(eventType);

@@ -20,15 +20,15 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.util.Duration;
 
 /**
- *  This is the implementation of the {@code Skin} associated with every {@code MFXToggleButton}.
+ * This is the implementation of the {@code Skin} associated with every {@code MFXToggleButton}.
  */
 public class MFXToggleButtonSkin extends ToggleButtonSkin {
+    final double circleRadius;
     //================================================================================
     // Properties
     //================================================================================
     private final StackPane container;
     private final Circle circle;
-    final double circleRadius;
     private final Line line;
     private final RippleGenerator rippleGenerator;
 
@@ -38,7 +38,7 @@ public class MFXToggleButtonSkin extends ToggleButtonSkin {
     public MFXToggleButtonSkin(MFXToggleButton toggleButton) {
         super(toggleButton);
 
-         circleRadius = toggleButton.getSize();
+        circleRadius = toggleButton.getSize();
 
         line = new Line();
         line.setStroke(toggleButton.isSelected() ? toggleButton.getToggleLineColor() : toggleButton.getUnToggleLineColor());
@@ -124,6 +124,7 @@ public class MFXToggleButtonSkin extends ToggleButtonSkin {
 
     /**
      * Re-builds and plays the translation animation every time the control is selected/unselected.
+     *
      * @param isSelected The control's state
      */
     private void buildAndPlayAnimation(boolean isSelected) {
@@ -145,6 +146,7 @@ public class MFXToggleButtonSkin extends ToggleButtonSkin {
 
     /**
      * Computes the final x coordinate of the translate animation.
+     *
      * @param isSelected The control's state
      * @return The final x coordinate.
      */

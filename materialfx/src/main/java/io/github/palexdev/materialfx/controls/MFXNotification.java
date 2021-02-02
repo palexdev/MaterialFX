@@ -18,13 +18,12 @@ import javafx.util.Duration;
  * close automatically the notification after some specified time.
  */
 public class MFXNotification extends Popup {
+    private final BooleanProperty hideAfter = new SimpleBooleanProperty(false);
     //================================================================================
     // Properties
     //================================================================================
     private Region content;
     private boolean animate = false;
-    private final BooleanProperty hideAfter = new SimpleBooleanProperty(false);
-
     private Timeline inAnimation;
     private Timeline outAnimation;
     private PauseTransition hideAfterTransition;
@@ -68,8 +67,8 @@ public class MFXNotification extends Popup {
 
     /**
      * Closes the notification, plays out animation if requested.
-     *  <p>
-     *  <b>Note: this method should be used rather than Popup's hide() method</b>
+     * <p>
+     * <b>Note: this method should be used rather than Popup's hide() method</b>
      */
     public void hideNotification() {
         if (animate) {
@@ -151,9 +150,10 @@ public class MFXNotification extends Popup {
     /**
      * Shows the notification on screen, plays in animation if requested,
      * starts the close countdown if it's set to hide automatically.
+     *
      * @param ownerWindow The owner of the popup. This must not be null.
-     * @param anchorX The x position of the popup anchor in screen coordinates
-     * @param anchorY The y position of the popup anchor in screen coordinates
+     * @param anchorX     The x position of the popup anchor in screen coordinates
+     * @param anchorY     The y position of the popup anchor in screen coordinates
      * @throws NullPointerException if content is null
      */
     @Override

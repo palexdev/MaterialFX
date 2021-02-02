@@ -29,10 +29,11 @@ import java.util.List;
  * <p>
  * Overrides the layoutChildren method to set the {@link #items} margin to 20 by default.
  * To change it you have to override the method inline or by extending this class.
+ *
+ * @param <T> The type of the data within TreeItem.
  * @see AbstractMFXTreeCell
  * @see MFXTreeView
  * @see ISelectionModel
- * @param <T> The type of the data within TreeItem.
  */
 public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
     //================================================================================
@@ -45,6 +46,17 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
     private final BooleanProperty expanded = new SimpleBooleanProperty(false);
     private final ReadOnlyBooleanWrapper animationRunning = new ReadOnlyBooleanWrapper(false);
     private final ReadOnlyDoubleWrapper initialHeight = new ReadOnlyDoubleWrapper(0);
+    /**
+     * Specifies the duration of the expand/collapse animation (milliseconds).
+     * <p>
+     * Too high values are not recommended.
+     */
+    private final StyleableDoubleProperty animationDuration = new SimpleStyleableDoubleProperty(
+            StyleableProperties.DURATION,
+            this,
+            "animationDuration",
+            250.0
+    );
 
     //================================================================================
     // Constructors
@@ -55,15 +67,19 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
         initialize();
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
+
     public MFXTreeItem(T data, Callback<AbstractMFXTreeItem<T>, AbstractMFXTreeCell<T>> cellFactory) {
         super(data);
         setCellFactory(cellFactory);
         initialize();
     }
 
-    //================================================================================
-    // Methods
-    //================================================================================
+    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
+        return StyleableProperties.cssMetaDataList;
+    }
 
     /**
      * Sets the style class to "mfx-tree-view".
@@ -109,15 +125,6 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
     }
 
     /**
-     * Expand property.
-     * <p>
-     * <b>NOTE: if you want the item to be expanded by default you must use {@link #startExpandedProperty()} instead.</b>
-     */
-    public BooleanProperty expandedProperty() {
-        return expanded;
-    }
-
-    /**
      * Sets the item's expand state.
      * <p>
      * <b>WARNING: THIS METHOD IS FOR INTERNAL USE ONLY, THUS ITS USAGE IS NOT RECOMMENDED.</b>
@@ -127,10 +134,28 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
     }
 
     /**
+     * Expand property.
+     * <p>
+     * <b>NOTE: if you want the item to be expanded by default you must use {@link #startExpandedProperty()} instead.</b>
+     */
+    public BooleanProperty expandedProperty() {
+        return expanded;
+    }
+
+    /**
      * @return the item's height when it's first laid out
      */
     public double getInitialHeight() {
         return initialHeight.get();
+    }
+
+    /**
+     * Sets the initial height property.
+     * <p>
+     * <b>WARNING: THIS METHOD IS FOR INTERNAL USE ONLY, THUS ITS USAGE IS NOT RECOMMENDED.</b>
+     */
+    public void setInitialHeight(double height) {
+        initialHeight.set(height);
     }
 
     /**
@@ -145,14 +170,9 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
         return initialHeight;
     }
 
-    /**
-     * Sets the initial height property.
-     * <p>
-     * <b>WARNING: THIS METHOD IS FOR INTERNAL USE ONLY, THUS ITS USAGE IS NOT RECOMMENDED.</b>
-     */
-    public void setInitialHeight(double height) {
-        initialHeight.set(height);
-    }
+    //================================================================================
+    // Styleable Properties
+    //================================================================================
 
     /**
      * @return the state of the expand/collapse animation on this item.
@@ -163,65 +183,24 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
 
     /**
      * Property to check if an animation is running on the control. It is bound into the Skin class.
+     *
      * @see MFXTreeItemSkin
      */
     public ReadOnlyBooleanWrapper animationRunningProperty() {
         return animationRunning;
     }
 
-    //================================================================================
-    // Styleable Properties
-    //================================================================================
-
-    /**
-     * Specifies the duration of the expand/collapse animation (milliseconds).
-     * <p>
-     * Too high values are not recommended.
-     */
-    private final StyleableDoubleProperty animationDuration = new SimpleStyleableDoubleProperty(
-            StyleableProperties.DURATION,
-            this,
-            "animationDuration",
-            250.0
-    );
-
     public double getAnimationDuration() {
         return animationDuration.get();
-    }
-
-    public StyleableDoubleProperty animationDurationProperty() {
-        return animationDuration;
     }
 
     public void setAnimationDuration(double animationDuration) {
         this.animationDuration.set(animationDuration);
     }
 
-    //================================================================================
-    // CssMetaData
-    //================================================================================
-    private static class StyleableProperties {
-        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
-
-        private static final CssMetaData<MFXTreeItem<?>, Number> DURATION =
-                FACTORY.createSizeCssMetaData(
-                        "-mfx-animation-duration",
-                        MFXTreeItem::animationDurationProperty,
-                        250.0
-                );
-
-        static {
-            cssMetaDataList = List.of(DURATION);
-        }
+    public StyleableDoubleProperty animationDurationProperty() {
+        return animationDuration;
     }
-
-    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
-        return StyleableProperties.cssMetaDataList;
-    }
-
-    //================================================================================
-    // Override Methods
-    //================================================================================
 
     /**
      * Retrieves the selection model instance from the TreeView which contains the tree.
@@ -233,6 +212,10 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
         }
         return null;
     }
+
+    //================================================================================
+    // Override Methods
+    //================================================================================
 
     /**
      * If no cell factory is specified in the constructor then we provide a default one.
@@ -248,6 +231,7 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
      * Used in the items listener added by the {@link #initialize()} method.
      * <p>
      * When an item is added/removed its parent should be updated accordingly.
+     *
      * @param treeItems the items for which to update the parent
      * @param newParent the parent to set (or null in case of removed items)
      */
@@ -286,7 +270,7 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
     @Override
     public String toString() {
         String className = getClass().getName();
-        String simpleName = className.substring(className.lastIndexOf('.')+1);
+        String simpleName = className.substring(className.lastIndexOf('.') + 1);
         StringBuilder sb = new StringBuilder();
         sb.append("[").append(simpleName);
         sb.append('@');
@@ -298,6 +282,24 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
         }
 
         return sb.toString();
+    }
+
+    //================================================================================
+    // CssMetaData
+    //================================================================================
+    private static class StyleableProperties {
+        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+
+        private static final CssMetaData<MFXTreeItem<?>, Number> DURATION =
+                FACTORY.createSizeCssMetaData(
+                        "-mfx-animation-duration",
+                        MFXTreeItem::animationDurationProperty,
+                        250.0
+                );
+
+        static {
+            cssMetaDataList = List.of(DURATION);
+        }
     }
 
     //================================================================================
@@ -318,12 +320,11 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
      * Of course these events are for internal use only so they should not be used by users.
      */
     public static class TreeItemEvent<T> extends Event {
-        private final WeakReference<AbstractMFXTreeItem<T>> itemRef;
-        private final double value;
-
         public static final EventType<TreeItemEvent<?>> ADD_REMOVE_ITEM_EVENT = new EventType<>(ANY, "ADD_ITEM_EVENT");
         public static final EventType<TreeItemEvent<?>> EXPAND_EVENT = new EventType<>(ANY, "EXPAND_EVENT");
         public static final EventType<TreeItemEvent<?>> COLLAPSE_EVENT = new EventType<>(ANY, "COLLAPSE_EVENT");
+        private final WeakReference<AbstractMFXTreeItem<T>> itemRef;
+        private final double value;
 
         public TreeItemEvent(EventType<? extends Event> eventType, AbstractMFXTreeItem<T> item, double value) {
             super(eventType);

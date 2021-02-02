@@ -19,7 +19,7 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 /**
- *  This is the implementation of the {@code Skin} associated with every {@code MFXRadioButton}.
+ * This is the implementation of the {@code Skin} associated with every {@code MFXRadioButton}.
  */
 public class MFXRadioButtonSkin extends RadioButtonSkin {
     //================================================================================
@@ -84,7 +84,7 @@ public class MFXRadioButtonSkin extends RadioButtonSkin {
         radioButton.unSelectedColorProperty().addListener((observable, oldValue, newValue) -> updateColors());
         radioButton.unSelectedTextColorProperty().addListener((observable, oldValue, newValue) -> updateColors());
 
-        radioButton.selectedProperty().addListener((observableValue, oldValue, newValue) ->  {
+        radioButton.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
             buildAndPlayAnimation();
             updateColors();
             rippleGenerator.setGeneratorCenterX(container.getWidth() / 2.0 - 0.3);

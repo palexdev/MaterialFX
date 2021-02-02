@@ -139,8 +139,8 @@ public class SimpleMFXNotificationPane extends AbstractMFXNotificationPane {
     }
 
     /**
-     *  Since this class has no references to {@code MFXNotification} because they are two distinct and separate concepts,
-     *  the close button action must be set after instantiating a {@code MFXNotification}.
+     * Since this class has no references to {@code MFXNotification} because they are two distinct and separate concepts,
+     * the close button action must be set after instantiating a {@code MFXNotification}.
      */
     public void setCloseHandler(EventHandler<MouseEvent> closeHandler) {
         if (this.closeHandler != null) {

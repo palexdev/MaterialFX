@@ -9,7 +9,8 @@ import java.net.URL;
  */
 public class MFXResourcesLoader {
 
-    private MFXResourcesLoader() {}
+    private MFXResourcesLoader() {
+    }
 
     public static URL load(String path) {
         return MFXResourcesLoader.class.getResource(path);

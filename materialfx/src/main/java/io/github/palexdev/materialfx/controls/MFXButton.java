@@ -34,6 +34,56 @@ public class MFXButton extends Button {
     private final String STYLE_CLASS = "mfx-button";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-button.css").toString();
     private final RippleGenerator rippleGenerator = new RippleGenerator(this);
+    /**
+     * Specifies the ripples color of this control.
+     *
+     * @see Color
+     */
+    private final ObjectProperty<Paint> rippleColor = new SimpleObjectProperty<>();
+    /**
+     * Specifies the ripples radius of this control.
+     */
+    private final DoubleProperty rippleRadius = new SimpleDoubleProperty();
+    /**
+     * Specifies the ripples in animation duration of this control.
+     *
+     * @see Duration
+     */
+    private final ObjectProperty<Duration> rippleInDuration = new SimpleObjectProperty<>();
+    /**
+     * Specifies the ripples out animation duration of this control.
+     *
+     * @see Duration
+     */
+    private final ObjectProperty<Duration> rippleOutDuration = new SimpleObjectProperty<>();
+    /**
+     * Specifies how intense is the {@code DropShadow} effect applied to this control.
+     * <p>
+     * The {@code DropShadow} effect is used to make the control appear {@code RAISED}.
+     */
+    private final StyleableObjectProperty<DepthLevel> depthLevel = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.DEPTH_LEVEL,
+            this,
+            "depthLevel",
+            DepthLevel.LEVEL2
+    );
+
+    //================================================================================
+    // Ripple properties
+    //================================================================================
+    /**
+     * Specifies the appearance of this control. According to material design there are two types of buttons:
+     * <p>
+     * - {@code FLAT}
+     * <p>
+     * - {@code RAISED}
+     */
+    private final StyleableObjectProperty<ButtonType> buttonType = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.BUTTON_TYPE,
+            this,
+            "buttonType",
+            ButtonType.FLAT
+    );
 
     //================================================================================
     // Constructors
@@ -59,6 +109,10 @@ public class MFXButton extends Button {
         initialize();
     }
 
+    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
+        return StyleableProperties.cssMetaDataList;
+    }
+
     //================================================================================
     // Methods
     //================================================================================
@@ -70,33 +124,6 @@ public class MFXButton extends Button {
         setRippleRadius(25);
         setRippleColor(Color.rgb(190, 190, 190));
     }
-
-    //================================================================================
-    // Ripple properties
-    //================================================================================
-
-    /**
-     * Specifies the ripples color of this control.
-     * @see Color
-     */
-    private final ObjectProperty<Paint> rippleColor = new SimpleObjectProperty<>();
-
-    /**
-     * Specifies the ripples radius of this control.
-     */
-    private final DoubleProperty rippleRadius = new SimpleDoubleProperty();
-
-    /**
-     * Specifies the ripples in animation duration of this control.
-     * @see Duration
-     */
-    private final ObjectProperty<Duration> rippleInDuration = new SimpleObjectProperty<>();
-
-    /**
-     * Specifies the ripples out animation duration of this control.
-     * @see Duration
-     */
-    private final ObjectProperty<Duration> rippleOutDuration = new SimpleObjectProperty<>();
 
     public final ObjectProperty<Paint> rippleColorProperty() {
         return this.rippleColor;
@@ -114,37 +141,40 @@ public class MFXButton extends Button {
         return rippleRadius.get();
     }
 
-    public DoubleProperty rippleRadiusProperty() {
-        return rippleRadius;
-    }
-
     public void setRippleRadius(double rippleRadius) {
         rippleGenerator.setRippleRadius(rippleRadius);
+    }
+
+    public DoubleProperty rippleRadiusProperty() {
+        return rippleRadius;
     }
 
     public Duration getRippleInDuration() {
         return rippleInDuration.get();
     }
 
-    public ObjectProperty<Duration> rippleInDurationProperty() {
-        return rippleInDuration;
-    }
-
     public void setRippleInDuration(Duration rippleInDuration) {
         rippleGenerator.setInDuration(rippleInDuration);
+    }
+
+    public ObjectProperty<Duration> rippleInDurationProperty() {
+        return rippleInDuration;
     }
 
     public Duration getRippleOutDuration() {
         return rippleOutDuration.get();
     }
 
-    public ObjectProperty<Duration> rippleOutDurationProperty() {
-        return rippleOutDuration;
-    }
-
     public void setRippleOutDuration(Duration rippleOutDuration) {
         rippleGenerator.setOutDuration(rippleOutDuration);
     }
+
+    public ObjectProperty<Duration> rippleOutDurationProperty() {
+        return rippleOutDuration;
+    }
+//================================================================================
+    // Styleable Properties
+    //================================================================================
 
     public RippleGenerator getRippleGenerator() {
         return rippleGenerator;
@@ -165,58 +195,49 @@ public class MFXButton extends Button {
         rippleInDuration.bind(rippleGenerator.inDurationProperty());
         rippleOutDuration.bind(rippleGenerator.outDurationProperty());
     }
-//================================================================================
-    // Styleable Properties
-    //================================================================================
-
-    /**
-     * Specifies how intense is the {@code DropShadow} effect applied to this control.
-     * <p>
-     * The {@code DropShadow} effect is used to make the control appear {@code RAISED}.
-     */
-    private final StyleableObjectProperty<DepthLevel> depthLevel = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.DEPTH_LEVEL,
-            this,
-            "depthLevel",
-            DepthLevel.LEVEL2
-    );
-
-    /**
-     * Specifies the appearance of this control. According to material design there are two types of buttons:
-     * <p>
-     * - {@code FLAT}
-     * <p>
-     * - {@code RAISED}
-     */
-    private final StyleableObjectProperty<ButtonType> buttonType = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.BUTTON_TYPE,
-            this,
-            "buttonType",
-            ButtonType.FLAT
-    );
 
     public DepthLevel getDepthLevel() {
         return depthLevel.get();
-    }
-
-    public StyleableObjectProperty<DepthLevel> depthLevelProperty() {
-        return depthLevel;
     }
 
     public void setDepthLevel(DepthLevel depthLevel) {
         this.depthLevel.set(depthLevel);
     }
 
+    public StyleableObjectProperty<DepthLevel> depthLevelProperty() {
+        return depthLevel;
+    }
+
     public ButtonType getButtonType() {
         return buttonType.get();
+    }
+
+    public void setButtonType(ButtonType buttonType) {
+        this.buttonType.set(buttonType);
     }
 
     public StyleableObjectProperty<ButtonType> buttonTypeProperty() {
         return buttonType;
     }
 
-    public void setButtonType(ButtonType buttonType) {
-        this.buttonType.set(buttonType);
+    //================================================================================
+    // Override Methods
+    //================================================================================
+    @Override
+    protected Skin<?> createDefaultSkin() {
+        MFXButtonSkin skin = new MFXButtonSkin(this);
+        setupRippleGenerator();
+        return skin;
+    }
+
+    @Override
+    public String getUserAgentStylesheet() {
+        return STYLESHEET;
+    }
+
+    @Override
+    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+        return MFXButton.getControlCssMetaDataList();
     }
 
     //================================================================================
@@ -244,29 +265,5 @@ public class MFXButton extends Button {
             cssMetaDataList = List.of(DEPTH_LEVEL, BUTTON_TYPE);
         }
 
-    }
-
-    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
-        return StyleableProperties.cssMetaDataList;
-    }
-
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        MFXButtonSkin skin = new MFXButtonSkin(this);
-        setupRippleGenerator();
-        return skin;
-    }
-
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
-
-    @Override
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return MFXButton.getControlCssMetaDataList();
     }
 }

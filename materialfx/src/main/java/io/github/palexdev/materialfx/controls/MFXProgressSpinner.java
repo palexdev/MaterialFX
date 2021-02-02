@@ -21,30 +21,6 @@ public class MFXProgressSpinner extends ProgressIndicator {
     private static final StyleablePropertyFactory<MFXProgressSpinner> FACTORY = new StyleablePropertyFactory<>(ProgressIndicator.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-spinner";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-spinner.css").toString();
-
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXProgressSpinner() {
-        this(-1);
-    }
-
-    public MFXProgressSpinner(double progress) {
-        super(progress);
-        initialize();
-    }
-
-    //================================================================================
-    // Methods
-    //================================================================================
-    private void initialize() {
-        getStyleClass().add(STYLE_CLASS);
-    }
-
-    //================================================================================
-    // Styleable Properties
-    //================================================================================
-
     /**
      * Specifies the radius of the spinner.
      */
@@ -54,7 +30,6 @@ public class MFXProgressSpinner extends ProgressIndicator {
             "radius",
             Region.USE_COMPUTED_SIZE
     );
-
     /**
      * Specifies the starting angle of the animation.
      */
@@ -65,28 +40,73 @@ public class MFXProgressSpinner extends ProgressIndicator {
             360 - Math.random() * 720
     );
 
-    public double getRadius() {
-        return radius.get();
+    //================================================================================
+    // Constructors
+    //================================================================================
+    public MFXProgressSpinner() {
+        this(-1);
     }
 
-    public StyleableDoubleProperty radiusProperty() {
-        return radius;
+    //================================================================================
+    // Styleable Properties
+    //================================================================================
+
+    public MFXProgressSpinner(double progress) {
+        super(progress);
+        initialize();
+    }
+
+    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
+        return StyleableProperties.cssMetaDataList;
+    }
+
+    //================================================================================
+    // Methods
+    //================================================================================
+    private void initialize() {
+        getStyleClass().add(STYLE_CLASS);
+    }
+
+    public double getRadius() {
+        return radius.get();
     }
 
     public void setRadius(double radius) {
         this.radius.set(radius);
     }
 
+    public StyleableDoubleProperty radiusProperty() {
+        return radius;
+    }
+
     public double getStartingAngle() {
         return startingAngle.get();
+    }
+
+    public void setStartingAngle(double startingAngle) {
+        this.startingAngle.set(startingAngle);
     }
 
     public StyleableDoubleProperty startingAngleProperty() {
         return startingAngle;
     }
 
-    public void setStartingAngle(double startingAngle) {
-        this.startingAngle.set(startingAngle);
+    //================================================================================
+    // Override Methods
+    //================================================================================
+    @Override
+    protected Skin<?> createDefaultSkin() {
+        return new MFXProgressSpinnerSkin(this);
+    }
+
+    @Override
+    public String getUserAgentStylesheet() {
+        return STYLESHEET;
+    }
+
+    @Override
+    protected List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+        return MFXProgressSpinner.getControlCssMetaDataList();
     }
 
     //================================================================================
@@ -112,27 +132,5 @@ public class MFXProgressSpinner extends ProgressIndicator {
         static {
             cssMetaDataList = List.of(RADIUS, STARTING_ANGLE);
         }
-    }
-
-    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
-        return StyleableProperties.cssMetaDataList;
-    }
-
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        return new MFXProgressSpinnerSkin(this);
-    }
-
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
-
-    @Override
-    protected List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return MFXProgressSpinner.getControlCssMetaDataList();
     }
 }

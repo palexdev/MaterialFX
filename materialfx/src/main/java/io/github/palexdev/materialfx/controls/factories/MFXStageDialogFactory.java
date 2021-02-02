@@ -19,8 +19,9 @@ public class MFXStageDialogFactory {
 
     /**
      * Builds a MFXStageDialog from type, title and content.
-     * @param type The dialog type
-     * @param title The dialog's title
+     *
+     * @param type    The dialog type
+     * @param title   The dialog's title
      * @param content The dialog's content
      * @return The MFXStageDialog's stage
      * @see DialogType
@@ -46,6 +47,7 @@ public class MFXStageDialogFactory {
 
     /**
      * Builds a MFXStageDialog from an AbstractMFXDialog or subclasses.
+     *
      * @param dialog The dialog
      * @return The MFXStageDialog's stage
      */
@@ -65,6 +67,7 @@ public class MFXStageDialogFactory {
 
     /**
      * Creates a TRANSPARENT {@code Scene}.
+     *
      * @param pane The dialog
      * @return The MFXStageDialog scene
      */
@@ -73,5 +76,5 @@ public class MFXStageDialogFactory {
         scene.setFill(Color.TRANSPARENT);
         return scene;
     }
-    
+
 }

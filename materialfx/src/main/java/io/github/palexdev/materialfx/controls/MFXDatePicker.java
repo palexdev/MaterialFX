@@ -53,7 +53,51 @@ public class MFXDatePicker extends VBox {
 
     private final DatePicker datePicker;
     private final ObjectProperty<DateTimeFormatter> dateFormatter = new SimpleObjectProperty<>(DateTimeFormatter.ofPattern("dd/M/yyyy"));
-
+    /**
+     * Specifies the main color of the date picker and its content.
+     */
+    private final StyleableObjectProperty<Paint> pickerColor = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.PICKER_COLOR,
+            this,
+            "pickerColor",
+            Color.rgb(98, 0, 238)
+    );
+    /**
+     * Specifies the line color of the date picker
+     */
+    private final StyleableObjectProperty<Paint> lineColor = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.LINE_COLOR,
+            this,
+            "lineColor",
+            Color.rgb(98, 0, 238, 0.7)
+    );
+    /**
+     * Specifies if the date picker text should be colored too.
+     */
+    private final StyleableBooleanProperty colorText = new SimpleStyleableBooleanProperty(
+            StyleableProperties.COLOR_TEXT,
+            this,
+            "colorText",
+            false
+    );
+    /**
+     * Specifies if the date picker popup should close on day selected.
+     */
+    private final StyleableBooleanProperty closeOnDaySelected = new SimpleStyleableBooleanProperty(
+            StyleableProperties.CLOSE_ON_DAY_SELECTED,
+            this,
+            "closeOnDaySelected",
+            true
+    );
+    /**
+     * Specifies if the month change should be animated.
+     */
+    private final StyleableBooleanProperty animateCalendar = new SimpleStyleableBooleanProperty(
+            StyleableProperties.ANIMATE_CALENDAR,
+            this,
+            "animateCalendar",
+            true
+    );
     private Label value;
     private MFXFontIcon calendar;
     private Line line;
@@ -72,6 +116,14 @@ public class MFXDatePicker extends VBox {
         this.datePicker = new DatePicker(localDate);
         initialize();
     }
+
+    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
+        return StyleableProperties.cssMetaDataList;
+    }
+
+    //================================================================================
+    // Styleable Properties
+    //================================================================================
 
     //================================================================================
     // Methods
@@ -206,74 +258,16 @@ public class MFXDatePicker extends VBox {
         return dateFormatter.get();
     }
 
-    public ObjectProperty<DateTimeFormatter> dateFormatterProperty() {
-        return dateFormatter;
-    }
-
     public void setDateFormatter(DateTimeFormatter dateFormatter) {
         this.dateFormatter.set(dateFormatter);
     }
 
-    //================================================================================
-    // Styleable Properties
-    //================================================================================
-
-    /**
-     * Specifies the main color of the date picker and its content.
-     */
-    private final StyleableObjectProperty<Paint> pickerColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.PICKER_COLOR,
-            this,
-            "pickerColor",
-            Color.rgb(98, 0, 238)
-    );
-
-    /**
-     * Specifies the line color of the date picker
-     */
-    private final StyleableObjectProperty<Paint> lineColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.LINE_COLOR,
-            this,
-            "lineColor",
-            Color.rgb(98, 0, 238, 0.7)
-    );
-
-    /**
-     * Specifies if the date picker text should be colored too.
-     */
-    private final StyleableBooleanProperty colorText = new SimpleStyleableBooleanProperty(
-            StyleableProperties.COLOR_TEXT,
-            this,
-            "colorText",
-            false
-    );
-
-    /**
-     * Specifies if the date picker popup should close on day selected.
-     */
-    private final StyleableBooleanProperty closeOnDaySelected = new SimpleStyleableBooleanProperty(
-            StyleableProperties.CLOSE_ON_DAY_SELECTED,
-            this,
-            "closeOnDaySelected",
-            true
-    );
-
-    /**
-     * Specifies if the month change should be animated.
-     */
-    private final StyleableBooleanProperty animateCalendar = new SimpleStyleableBooleanProperty(
-            StyleableProperties.ANIMATE_CALENDAR,
-            this,
-            "animateCalendar",
-            true
-    );
-
-    public Paint getPickerColor() {
-            return pickerColor.get();
+    public ObjectProperty<DateTimeFormatter> dateFormatterProperty() {
+        return dateFormatter;
     }
 
-    public StyleableObjectProperty<Paint> pickerColorProperty() {
-        return pickerColor;
+    public Paint getPickerColor() {
+        return pickerColor.get();
     }
 
     public void setPickerColor(Paint pickerColor) {
@@ -286,52 +280,80 @@ public class MFXDatePicker extends VBox {
         this.pickerColor.set(pickerColor);
     }
 
-    public Paint getLineColor() {
-        return lineColor.get();
+    public StyleableObjectProperty<Paint> pickerColorProperty() {
+        return pickerColor;
     }
 
-    public StyleableObjectProperty<Paint> lineColorProperty() {
-        return lineColor;
+    public Paint getLineColor() {
+        return lineColor.get();
     }
 
     public void setLineColor(Paint lineColor) {
         this.lineColor.set(lineColor);
     }
 
-    public boolean isColorText() {
-        return colorText.get();
+    public StyleableObjectProperty<Paint> lineColorProperty() {
+        return lineColor;
     }
 
-    public StyleableBooleanProperty colorTextProperty() {
-        return colorText;
+    public boolean isColorText() {
+        return colorText.get();
     }
 
     public void setColorText(boolean colorText) {
         this.colorText.set(colorText);
     }
 
-    public boolean isCloseOnDaySelected() {
-        return closeOnDaySelected.get();
+    public StyleableBooleanProperty colorTextProperty() {
+        return colorText;
     }
 
-    public StyleableBooleanProperty closeOnDaySelectedProperty() {
-        return closeOnDaySelected;
+    public boolean isCloseOnDaySelected() {
+        return closeOnDaySelected.get();
     }
 
     public void setCloseOnDaySelected(boolean closeOnDaySelected) {
         this.closeOnDaySelected.set(closeOnDaySelected);
     }
 
+    public StyleableBooleanProperty closeOnDaySelectedProperty() {
+        return closeOnDaySelected;
+    }
+
     public boolean isAnimateCalendar() {
         return animateCalendar.get();
+    }
+
+    public void setAnimateCalendar(boolean animateCalendar) {
+        this.animateCalendar.set(animateCalendar);
     }
 
     public StyleableBooleanProperty animateCalendarProperty() {
         return animateCalendar;
     }
 
-    public void setAnimateCalendar(boolean animateCalendar) {
-        this.animateCalendar.set(animateCalendar);
+    //================================================================================
+    // Override Methods
+    //================================================================================
+    @Override
+    public String getUserAgentStylesheet() {
+        return STYLESHEET;
+    }
+
+    @Override
+    public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
+        return MFXDatePicker.getControlCssMetaDataList();
+    }
+
+    //================================================================================
+    // Wrapper Methods
+    //================================================================================
+    public DatePicker getDatePicker() {
+        return datePicker;
+    }
+
+    public LocalDate getDate() {
+        return datePicker.getValue();
     }
 
     //================================================================================
@@ -379,33 +401,5 @@ public class MFXDatePicker extends VBox {
             cssMetaDataList = List.of(PICKER_COLOR, LINE_COLOR, COLOR_TEXT, CLOSE_ON_DAY_SELECTED, ANIMATE_CALENDAR);
         }
 
-    }
-
-    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
-        return StyleableProperties.cssMetaDataList;
-    }
-
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
-
-    @Override
-    public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
-        return MFXDatePicker.getControlCssMetaDataList();
-    }
-
-    //================================================================================
-    // Wrapper Methods
-    //================================================================================
-    public DatePicker getDatePicker() {
-        return datePicker;
-    }
-
-    public LocalDate getDate() {
-        return datePicker.getValue();
     }
 }

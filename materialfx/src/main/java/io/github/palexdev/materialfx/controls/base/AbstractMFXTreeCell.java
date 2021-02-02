@@ -26,16 +26,16 @@ import javafx.scene.layout.HBox;
  * <p>
  * Also, note that to build a cell the height must be fixed for layout reasons, by default it's 27.
  * When the cell is created the {@link #render(T)} method is called.
+ *
  * @param <T> The type of the data within TreeItem.
  */
 public abstract class AbstractMFXTreeCell<T> extends HBox {
+    private static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
     //================================================================================
     // Properties
     //================================================================================
     protected final ObjectProperty<? super Node> disclosureNode = new SimpleObjectProperty<>();
     private final DoubleProperty fixedCellSize = new SimpleDoubleProperty();
-
-    private static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
     private final BooleanProperty selected = new SimpleBooleanProperty(false);
 
     //================================================================================
@@ -84,12 +84,12 @@ public abstract class AbstractMFXTreeCell<T> extends HBox {
         return fixedCellSize.get();
     }
 
-    public DoubleProperty fixedCellSizeProperty() {
-        return fixedCellSize;
-    }
-
     public void setFixedCellSize(double fixedCellSize) {
         this.fixedCellSize.set(fixedCellSize);
+    }
+
+    public DoubleProperty fixedCellSizeProperty() {
+        return fixedCellSize;
     }
 
     public boolean isSelected() {
@@ -117,6 +117,7 @@ public abstract class AbstractMFXTreeCell<T> extends HBox {
 
     /**
      * Sets the cell's disclosure node to the specified node.
+     *
      * @param <N> the specified parameter N should be a subclass of Node
      */
     public abstract <N extends Node> void setDisclosureNode(N node);
@@ -124,6 +125,7 @@ public abstract class AbstractMFXTreeCell<T> extends HBox {
     /**
      * Specifies how the cell should represent the item's data, whether it is a node,
      * a primitive type or something else.
+     *
      * @param data the item's data
      */
     protected abstract void render(T data);

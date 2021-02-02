@@ -1,5 +1,5 @@
 plugins {
-    id 'biz.aQute.bnd.builder' version '5.1.2'
+    id 'biz.aQute.bnd.builder' version '5.2.0'
     id 'com.vanniktech.maven.publish' version '0.13.0'
 }
 
@@ -8,15 +8,14 @@ repositories {
     jcenter()
 }
 
-
-compileJava   {
+compileJava {
     // This is necessary since Gluon devs are assholes :)
-    sourceCompatibility = '11'
-    targetCompatibility = '11'
+    sourceCompatibility = '15'
+    targetCompatibility = '15'
 }
 
 dependencies {
-    testImplementation('junit:junit:4.13')
+    testImplementation('junit:junit:4.13.1')
     implementation 'com.vanniktech:gradle-maven-publish-plugin:0.13.0'
     implementation 'org.apache.logging.log4j:log4j-api:2.14.0'
     implementation 'org.apache.logging.log4j:log4j-core:2.14.0'
@@ -32,8 +31,8 @@ javadoc {
     options.version = true
     options.windowTitle = "$project.name $project.version API"
     options.docTitle = "$project.name $project.version API"
-    options.links = ['https://docs.oracle.com/en/java/javase/11/docs/api',
-                     'https://openjfx.io/javadoc/14']
+    options.links = ['https://docs.oracle.com/en/java/javase/15/docs/api',
+                     'https://openjfx.io/javadoc/15']
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
@@ -65,7 +64,7 @@ jar {
 
 task copyJar(type: Copy) {
     from jar
-    into 'C:/Users/thund/AppData/Roaming/Scene Builder/Library'
+    into 'C:/Users/SoarT/AppData/Roaming/Scene Builder/Library'
 }
 
 task removeBnd(type: Delete) {

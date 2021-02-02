@@ -17,52 +17,6 @@ import java.util.ResourceBundle;
 
 public class DialogsController implements Initializable {
     private final Pane pane;
-
-    @FXML
-    private MFXButton pError;
-
-    @FXML
-    private MFXButton pWarning;
-
-    @FXML
-    private MFXButton pInfo;
-
-    @FXML
-    private MFXButton pGeneric;
-
-    @FXML
-    private MFXButton pFade;
-
-    @FXML
-    private MFXButton pSlideLR;
-
-    @FXML
-    private MFXButton pSlideTB;
-
-    @FXML
-    private MFXButton pMix;
-
-    @FXML
-    private MFXButton sError;
-
-    @FXML
-    private MFXButton sWarning;
-
-    @FXML
-    private MFXButton sInfo;
-
-    @FXML
-    private MFXButton sGeneric;
-
-    @FXML
-    private MFXButton pDraggable;
-
-    @FXML
-    private MFXButton pOverlayClose;
-
-    @FXML
-    private MFXButton sModal;
-
     private final AbstractMFXDialog dialog;
     private final AbstractMFXDialog animateDialog;
     private final String text =
@@ -72,6 +26,36 @@ public class DialogsController implements Initializable {
                     "It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. " +
                     "It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, " +
                     "and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
+    @FXML
+    private MFXButton pError;
+    @FXML
+    private MFXButton pWarning;
+    @FXML
+    private MFXButton pInfo;
+    @FXML
+    private MFXButton pGeneric;
+    @FXML
+    private MFXButton pFade;
+    @FXML
+    private MFXButton pSlideLR;
+    @FXML
+    private MFXButton pSlideTB;
+    @FXML
+    private MFXButton pMix;
+    @FXML
+    private MFXButton sError;
+    @FXML
+    private MFXButton sWarning;
+    @FXML
+    private MFXButton sInfo;
+    @FXML
+    private MFXButton sGeneric;
+    @FXML
+    private MFXButton pDraggable;
+    @FXML
+    private MFXButton pOverlayClose;
+    @FXML
+    private MFXButton sModal;
 
     public DialogsController(Pane pane) {
         this.pane = pane;

@@ -7,7 +7,7 @@ import io.github.palexdev.materialfx.effects.MFXDepthManager;
 import javafx.scene.control.skin.ButtonSkin;
 
 /**
- *  This is the implementation of the {@code Skin} associated with every {@code MFXButton}.
+ * This is the implementation of the {@code Skin} associated with every {@code MFXButton}.
  */
 public class MFXButtonSkin extends ButtonSkin {
     //================================================================================

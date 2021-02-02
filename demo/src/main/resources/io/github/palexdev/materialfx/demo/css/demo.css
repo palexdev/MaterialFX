@@ -89,7 +89,7 @@
 }
 
 #vLoader .mfx-toggle-node:hover,
-#vLoader .mfx-toggle-node:hover .text{
+#vLoader .mfx-toggle-node:hover .text {
     -fx-opacity: 1.0;
 }
 

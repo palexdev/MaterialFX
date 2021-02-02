@@ -72,6 +72,7 @@ public class MFXDialogValidator extends AbstractMFXValidator {
 
     /**
      * Shows this validator's dialog. The dialog is modal and scrims the background.
+     *
      * @param owner The dialog's owner.
      */
     public void showModal(Window owner) {
@@ -92,8 +93,9 @@ public class MFXDialogValidator extends AbstractMFXValidator {
 
     /**
      * Adds a new boolean condition to the list with the corresponding message in case it is false.
+     *
      * @param property The new boolean condition
-     * @param message The message to show in case it is false
+     * @param message  The message to show in case it is false
      */
     public void add(BooleanProperty property, String message) {
         super.conditions.add(property);
@@ -126,12 +128,12 @@ public class MFXDialogValidator extends AbstractMFXValidator {
         return dialogType.get();
     }
 
-    public ObjectProperty<DialogType> dialogTypeProperty() {
-        return dialogType;
-    }
-
     public void setDialogType(DialogType dialogType) {
         this.dialogType.set(dialogType);
+    }
+
+    public ObjectProperty<DialogType> dialogTypeProperty() {
+        return dialogType;
     }
 
     public String getTitle() {

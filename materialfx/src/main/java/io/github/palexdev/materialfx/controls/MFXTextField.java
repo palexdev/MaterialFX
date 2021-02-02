@@ -26,7 +26,61 @@ public class MFXTextField extends TextField {
     private static final StyleablePropertyFactory<MFXTextField> FACTORY = new StyleablePropertyFactory<>(TextField.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-text-field";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-textfield.css").toString();
+    private final StyleableIntegerProperty textLimit = new SimpleStyleableIntegerProperty(
+            StyleableProperties.TEXT_LIMIT,
+            this,
+            "maxLength",
+            -1
+    );
+    /**
+     * Specifies the line's color when the control is focused.
+     */
+    private final StyleableObjectProperty<Paint> lineColor = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.LINE_COLOR,
+            this,
+            "lineColor",
+            Color.rgb(50, 120, 220)
+    );
+    /**
+     * Specifies the line's color when the control is not focused.
+     */
+    private final StyleableObjectProperty<Paint> unfocusedLineColor = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.UNFOCUSED_LINE_COLOR,
+            this,
+            "unfocusedLineColor",
+            Color.rgb(77, 77, 77)
+    );
+    /**
+     * Specifies the lines' width.
+     */
+    private final StyleableDoubleProperty lineStrokeWidth = new SimpleStyleableDoubleProperty(
+            StyleableProperties.LINE_STROKE_WIDTH,
+            this,
+            "lineStrokeWidth",
+            1.5
+    );
+    /**
+     * Specifies if the lines switch between focus/un-focus should be animated.
+     */
+    private final StyleableBooleanProperty animateLines = new SimpleStyleableBooleanProperty(
+            StyleableProperties.ANIMATE_LINES,
+            this,
+            "animateLines",
+            true
+    );
+    /**
+     * Specifies if validation is required for the control.
+     */
+    private final StyleableBooleanProperty validated = new SimpleStyleableBooleanProperty(
+            StyleableProperties.IS_VALIDATED,
+            this,
+            "isValidated",
+            false
+    );
 
+    //================================================================================
+    // Styleable Properties
+    //================================================================================
     private MFXDialogValidator validator;
 
     //================================================================================
@@ -39,6 +93,10 @@ public class MFXTextField extends TextField {
     public MFXTextField(String text) {
         super(text);
         initialize();
+    }
+
+    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
+        return StyleableProperties.cssMetaDataList;
     }
 
     //================================================================================
@@ -76,125 +134,64 @@ public class MFXTextField extends TextField {
         return validator;
     }
 
-    //================================================================================
-    // Styleable Properties
-    //================================================================================
-
-    private final StyleableIntegerProperty textLimit = new SimpleStyleableIntegerProperty(
-            StyleableProperties.TEXT_LIMIT,
-            this,
-            "maxLength",
-            -1
-    );
-
-    /**
-     * Specifies the line's color when the control is focused.
-     */
-    private final StyleableObjectProperty<Paint> lineColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.LINE_COLOR,
-            this,
-            "lineColor",
-            Color.rgb(50, 120, 220)
-    );
-
-    /**
-     * Specifies the line's color when the control is not focused.
-     */
-    private final StyleableObjectProperty<Paint> unfocusedLineColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.UNFOCUSED_LINE_COLOR,
-            this,
-            "unfocusedLineColor",
-            Color.rgb(77, 77, 77)
-    );
-
-    /**
-     * Specifies the lines' width.
-     */
-    private final StyleableDoubleProperty lineStrokeWidth = new SimpleStyleableDoubleProperty(
-            StyleableProperties.LINE_STROKE_WIDTH,
-            this,
-            "lineStrokeWidth",
-            1.5
-    );
-
-    /**
-     * Specifies if the lines switch between focus/un-focus should be animated.
-     */
-    private final StyleableBooleanProperty animateLines = new SimpleStyleableBooleanProperty(
-            StyleableProperties.ANIMATE_LINES,
-            this,
-            "animateLines",
-            true
-    );
-
-    /**
-     * Specifies if validation is required for the control.
-     */
-    private final StyleableBooleanProperty validated = new SimpleStyleableBooleanProperty(
-            StyleableProperties.IS_VALIDATED,
-            this,
-            "isValidated",
-            false
-    );
-
     public int getTextLimit() {
         return textLimit.get();
-    }
-
-    public StyleableIntegerProperty textLimitProperty() {
-        return textLimit;
     }
 
     public void setTextLimit(int textLimit) {
         this.textLimit.set(textLimit);
     }
 
-    public Paint getLineColor() {
-        return lineColor.get();
+    public StyleableIntegerProperty textLimitProperty() {
+        return textLimit;
     }
 
-    public StyleableObjectProperty<Paint> lineColorProperty() {
-        return lineColor;
+    public Paint getLineColor() {
+        return lineColor.get();
     }
 
     public void setLineColor(Paint lineColor) {
         this.lineColor.set(lineColor);
     }
 
-    public Paint getUnfocusedLineColor() {
-        return unfocusedLineColor.get();
+    public StyleableObjectProperty<Paint> lineColorProperty() {
+        return lineColor;
     }
 
-    public StyleableObjectProperty<Paint> unfocusedLineColorProperty() {
-        return unfocusedLineColor;
+    public Paint getUnfocusedLineColor() {
+        return unfocusedLineColor.get();
     }
 
     public void setUnfocusedLineColor(Paint unfocusedLineColor) {
         this.unfocusedLineColor.set(unfocusedLineColor);
     }
 
-    public double getLineStrokeWidth() {
-        return lineStrokeWidth.get();
+    public StyleableObjectProperty<Paint> unfocusedLineColorProperty() {
+        return unfocusedLineColor;
     }
 
-    public StyleableDoubleProperty lineStrokeWidthProperty() {
-        return lineStrokeWidth;
+    public double getLineStrokeWidth() {
+        return lineStrokeWidth.get();
     }
 
     public void setLineStrokeWidth(double lineStrokeWidth) {
         this.lineStrokeWidth.set(lineStrokeWidth);
     }
 
+    public StyleableDoubleProperty lineStrokeWidthProperty() {
+        return lineStrokeWidth;
+    }
+
     public boolean isAnimateLines() {
         return animateLines.get();
     }
 
-    public StyleableBooleanProperty animateLinesProperty() {
-        return animateLines;
-    }
-
     public void setAnimateLines(boolean animateLines) {
         this.animateLines.set(animateLines);
+    }
+
+    public StyleableBooleanProperty animateLinesProperty() {
+        return animateLines;
     }
 
     public boolean isValidated() {
@@ -207,6 +204,24 @@ public class MFXTextField extends TextField {
 
     public void setIsValidated(boolean isValidated) {
         this.validated.set(isValidated);
+    }
+
+    //================================================================================
+    // Override Methods
+    //================================================================================
+    @Override
+    protected Skin<?> createDefaultSkin() {
+        return new MFXTextFieldSkin(this);
+    }
+
+    @Override
+    public String getUserAgentStylesheet() {
+        return STYLESHEET;
+    }
+
+    @Override
+    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+        return MFXTextField.getControlCssMetaDataList();
     }
 
     //================================================================================
@@ -261,27 +276,5 @@ public class MFXTextField extends TextField {
             cssMetaDataList = List.of(TEXT_LIMIT, LINE_COLOR, UNFOCUSED_LINE_COLOR, LINE_STROKE_WIDTH, IS_VALIDATED);
         }
 
-    }
-
-    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
-        return StyleableProperties.cssMetaDataList;
-    }
-
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        return new MFXTextFieldSkin(this);
-    }
-
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
-
-    @Override
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return MFXTextField.getControlCssMetaDataList();
     }
 }

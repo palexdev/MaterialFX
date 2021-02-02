@@ -1,4 +1,3 @@
 rootProject.name = 'MaterialFX'
 include 'materialfx'
 include 'demo'
-

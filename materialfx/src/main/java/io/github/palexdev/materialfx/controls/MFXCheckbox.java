@@ -23,6 +23,52 @@ public class MFXCheckbox extends CheckBox {
     private static final StyleablePropertyFactory<MFXCheckbox> FACTORY = new StyleablePropertyFactory<>(CheckBox.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-checkbox";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-checkbox.css").toString();
+    /**
+     * Specifies the color of the box when it's checked.
+     *
+     * @see Color
+     */
+    private final StyleableObjectProperty<Paint> checkedColor = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.CHECKED_COLOR,
+            this,
+            "checkedColor",
+            Color.rgb(15, 157, 88)
+    );
+    /**
+     * Specifies the color of the box when it's unchecked.
+     *
+     * @see Color
+     */
+    private final StyleableObjectProperty<Paint> uncheckedColor = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.UNCHECKED_COLOR,
+            this,
+            "uncheckedColor",
+            Color.rgb(90, 90, 90)
+    );
+    /**
+     * Specifies the shape of the mark from a predefined set.
+     *
+     * @see javafx.scene.shape.SVGPath
+     */
+    private final StyleableStringProperty markType = new SimpleStyleableStringProperty(
+            StyleableProperties.MARK_TYPE,
+            this,
+            "markType",
+            "mfx-modena-mark"
+    );
+
+    //================================================================================
+    // Stylesheet properties
+    //================================================================================
+    /**
+     * Specifies the size of the mark.
+     */
+    private final StyleableDoubleProperty markSize = new SimpleStyleableDoubleProperty(
+            StyleableProperties.MARK_SIZE,
+            this,
+            "markSize",
+            12.0
+    );
 
     //================================================================================
     // Constructors
@@ -37,6 +83,10 @@ public class MFXCheckbox extends CheckBox {
         init();
     }
 
+    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
+        return StyleableProperties.cssMetaDataList;
+    }
+
     //================================================================================
     // Methods
     //================================================================================
@@ -44,99 +94,71 @@ public class MFXCheckbox extends CheckBox {
         getStyleClass().add(STYLE_CLASS);
     }
 
-    //================================================================================
-    // Stylesheet properties
-    //================================================================================
-
-    /**
-     * Specifies the color of the box when it's checked.
-     * @see Color
-     */
-    private final StyleableObjectProperty<Paint> checkedColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.CHECKED_COLOR,
-            this,
-            "checkedColor",
-            Color.rgb(15, 157, 88)
-    );
-
-    /**
-     * Specifies the color of the box when it's unchecked.
-     * @see Color
-     */
-    private final StyleableObjectProperty<Paint> uncheckedColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.UNCHECKED_COLOR,
-            this,
-            "uncheckedColor",
-            Color.rgb(90, 90, 90)
-    );
-
-    /**
-     * Specifies the shape of the mark from a predefined set.
-     * @see javafx.scene.shape.SVGPath
-     */
-    private final StyleableStringProperty markType = new SimpleStyleableStringProperty(
-            StyleableProperties.MARK_TYPE,
-            this,
-            "markType",
-            "mfx-modena-mark"
-    );
-
-    /**
-     * Specifies the size of the mark.
-     */
-    private final StyleableDoubleProperty markSize = new SimpleStyleableDoubleProperty(
-            StyleableProperties.MARK_SIZE,
-            this,
-            "markSize",
-            12.0
-    );
-
     public Paint getCheckedColor() {
         return checkedColor.get();
-    }
-
-    public StyleableObjectProperty<Paint> checkedColorProperty() {
-        return checkedColor;
     }
 
     public void setCheckedColor(Paint checkedColor) {
         this.checkedColor.set(checkedColor);
     }
 
-    public Paint getUncheckedColor() {
-        return uncheckedColor.get();
+    public StyleableObjectProperty<Paint> checkedColorProperty() {
+        return checkedColor;
     }
 
-    public StyleableObjectProperty<Paint> uncheckedColorProperty() {
-        return uncheckedColor;
+    public Paint getUncheckedColor() {
+        return uncheckedColor.get();
     }
 
     public void setUncheckedColor(Paint uncheckedColor) {
         this.uncheckedColor.set(uncheckedColor);
     }
 
-    public String getMarkType() {
-        return markType.get();
+    public StyleableObjectProperty<Paint> uncheckedColorProperty() {
+        return uncheckedColor;
     }
 
-    public StyleableStringProperty markTypeProperty() {
-        return markType;
+    public String getMarkType() {
+        return markType.get();
     }
 
     public void setMarkType(String markType) {
         this.markType.set(markType);
     }
 
+    public StyleableStringProperty markTypeProperty() {
+        return markType;
+    }
+
     public double getMarkSize() {
         return markSize.get();
+    }
+
+    public void setMarkSize(double markSize) {
+        this.markSize.set(markSize);
     }
 
     public StyleableDoubleProperty markSizeProperty() {
         return markSize;
     }
 
-    public void setMarkSize(double markSize) {
-        this.markSize.set(markSize);
+    @Override
+    protected Skin<?> createDefaultSkin() {
+        return new MFXCheckboxSkin(this);
+    }
+
+    //================================================================================
+    // Override Methods
+    //================================================================================
+
+    @Override
+    public String getUserAgentStylesheet() {
+        return STYLESHEET;
+    }
+
+    @Override
+    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+        return MFXCheckbox.getControlCssMetaDataList();
     }
 
     //================================================================================
@@ -176,28 +198,5 @@ public class MFXCheckbox extends CheckBox {
         static {
             cssMetaDataList = List.of(CHECKED_COLOR, UNCHECKED_COLOR, MARK_TYPE, MARK_SIZE);
         }
-    }
-
-    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
-        return StyleableProperties.cssMetaDataList;
-    }
-
-    //================================================================================
-    // Override Methods
-    //================================================================================
-
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        return new MFXCheckboxSkin(this);
-    }
-
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
-
-    @Override
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return MFXCheckbox.getControlCssMetaDataList();
     }
 }

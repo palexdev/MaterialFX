@@ -12,11 +12,11 @@ import javafx.util.Duration;
  * in on the Tooltip's node.
  */
 public class MFXTooltip extends Tooltip {
+    private final BooleanProperty isHoveringPrimary = new SimpleBooleanProperty(false);
     //================================================================================
     // Properties
     //================================================================================
     private double duration = 3600000;
-    private final BooleanProperty isHoveringPrimary = new SimpleBooleanProperty(false);
 
     //================================================================================
     // Constructors
@@ -48,6 +48,7 @@ public class MFXTooltip extends Tooltip {
 
     /**
      * Registers the MouseEntered and MouseExited handlers on the given node.
+     *
      * @param node The Tooltip's node
      */
     public void isHoveringTargetPrimary(Node node) {

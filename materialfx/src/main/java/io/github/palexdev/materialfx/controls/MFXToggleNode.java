@@ -36,6 +36,46 @@ public class MFXToggleNode extends ToggleButton {
     private final String STYLECLASS = "mfx-toggle-node";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-togglenode.css").toString();
     private final RippleGenerator rippleGenerator = new RippleGenerator(this);
+    /**
+     * Specifies the size (both width and height) of the control.
+     */
+    private final StyleableDoubleProperty size = new SimpleStyleableDoubleProperty(
+            StyleableProperties.SIZE,
+            this,
+            "size",
+            40.0
+    );
+    /**
+     * Specifies the shape of the control
+     */
+    private final StyleableObjectProperty<ToggleNodeShape> toggleShape = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.SHAPE,
+            this,
+            "toggleShape",
+            ToggleNodeShape.CIRCLE
+    );
+    /**
+     * Specifies the background color when selected.
+     *
+     * @see Color
+     */
+    private final StyleableObjectProperty<Paint> selectedColor = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.SELECTED_COLOR,
+            this,
+            "selectedColor",
+            Color.rgb(190, 190, 190, 0.5)
+    );
+    /**
+     * Specifies the background color when unselected.
+     *
+     * @see Color
+     */
+    private final StyleableObjectProperty<Paint> unSelectedColor = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.UNSELECTED_COLOR,
+            this,
+            "unSelectedColor",
+            Color.TRANSPARENT
+    );
 
     //================================================================================
     // Constructors
@@ -55,9 +95,17 @@ public class MFXToggleNode extends ToggleButton {
         initialize();
     }
 
+    //================================================================================
+    // Styleable Properties
+    //================================================================================
+
     public MFXToggleNode(String text, Node graphic) {
         super("", graphic);
         initialize();
+    }
+
+    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
+        return StyleableProperties.cssMetaDataList;
     }
 
     //================================================================================
@@ -119,100 +167,77 @@ public class MFXToggleNode extends ToggleButton {
         NodeUtils.makeRegionCircular(this);
     }
 
-    //================================================================================
-    // Styleable Properties
-    //================================================================================
-
-    /**
-     * Specifies the size (both width and height) of the control.
-     */
-    private final StyleableDoubleProperty size = new SimpleStyleableDoubleProperty(
-            StyleableProperties.SIZE,
-            this,
-            "size",
-            40.0
-    );
-
-    /**
-     * Specifies the shape of the control
-     */
-    private final StyleableObjectProperty<ToggleNodeShape> toggleShape = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.SHAPE,
-            this,
-            "toggleShape",
-            ToggleNodeShape.CIRCLE
-    );
-
-    /**
-     * Specifies the background color when selected.
-     *
-     * @see Color
-     */
-    private final StyleableObjectProperty<Paint> selectedColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.SELECTED_COLOR,
-            this,
-            "selectedColor",
-            Color.rgb(190, 190, 190, 0.5)
-    );
-
-    /**
-     * Specifies the background color when unselected.
-     *
-     * @see Color
-     */
-    private final StyleableObjectProperty<Paint> unSelectedColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.UNSELECTED_COLOR,
-            this,
-            "unSelectedColor",
-            Color.TRANSPARENT
-    );
-
     public double getSize() {
         return size.get();
-    }
-
-    public StyleableDoubleProperty sizeProperty() {
-        return size;
     }
 
     public void setSize(double size) {
         this.size.set(size);
     }
 
-    public ToggleNodeShape getToggleShape() {
-        return toggleShape.get();
+    public StyleableDoubleProperty sizeProperty() {
+        return size;
     }
 
-    public StyleableObjectProperty<ToggleNodeShape> toggleShapeProperty() {
-        return toggleShape;
+    public ToggleNodeShape getToggleShape() {
+        return toggleShape.get();
     }
 
     public void setToggleShape(ToggleNodeShape toggleShape) {
         this.toggleShape.set(toggleShape);
     }
 
-    public Paint getSelectedColor() {
-        return selectedColor.get();
+    public StyleableObjectProperty<ToggleNodeShape> toggleShapeProperty() {
+        return toggleShape;
     }
 
-    public StyleableObjectProperty<Paint> selectedColorProperty() {
-        return selectedColor;
+    public Paint getSelectedColor() {
+        return selectedColor.get();
     }
 
     public void setSelectedColor(Paint selectedColor) {
         this.selectedColor.set(selectedColor);
     }
 
+    public StyleableObjectProperty<Paint> selectedColorProperty() {
+        return selectedColor;
+    }
+
     public Paint getUnSelectedColor() {
         return unSelectedColor.get();
+    }
+
+    public void setUnSelectedColor(Paint unSelectedColor) {
+        this.unSelectedColor.set(unSelectedColor);
     }
 
     public StyleableObjectProperty<Paint> unSelectedColorProperty() {
         return unSelectedColor;
     }
 
-    public void setUnSelectedColor(Paint unSelectedColor) {
-        this.unSelectedColor.set(unSelectedColor);
+    //================================================================================
+    // Override Methods
+    //================================================================================
+    @Override
+    protected Skin<?> createDefaultSkin() {
+        ToggleButtonSkin skin = new ToggleButtonSkin(this);
+        this.getChildren().add(0, rippleGenerator);
+        this.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            rippleGenerator.setGeneratorCenterX(event.getX());
+            rippleGenerator.setGeneratorCenterY(event.getY());
+            rippleGenerator.createRipple();
+        });
+        return skin;
+    }
+
+    @Override
+    public String getUserAgentStylesheet() {
+        return STYLESHEET;
+    }
+
+    @Override
+    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+        return MFXToggleNode.getControlCssMetaDataList();
     }
 
     //================================================================================
@@ -222,11 +247,11 @@ public class MFXToggleNode extends ToggleButton {
         private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
         private static final CssMetaData<MFXToggleNode, Number> SIZE =
-        FACTORY.createSizeCssMetaData(
-                "-mfx-size",
-                MFXToggleNode::sizeProperty,
-                40
-        );
+                FACTORY.createSizeCssMetaData(
+                        "-mfx-size",
+                        MFXToggleNode::sizeProperty,
+                        40
+                );
 
         private static final CssMetaData<MFXToggleNode, ToggleNodeShape> SHAPE =
                 FACTORY.createEnumCssMetaData(
@@ -253,34 +278,5 @@ public class MFXToggleNode extends ToggleButton {
         static {
             cssMetaDataList = List.of(SIZE, SHAPE, SELECTED_COLOR, UNSELECTED_COLOR);
         }
-    }
-
-    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
-        return StyleableProperties.cssMetaDataList;
-    }
-
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        ToggleButtonSkin skin = new ToggleButtonSkin(this);
-        this.getChildren().add(0, rippleGenerator);
-        this.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            rippleGenerator.setGeneratorCenterX(event.getX());
-            rippleGenerator.setGeneratorCenterY(event.getY());
-            rippleGenerator.createRipple();
-        });
-        return skin;
-    }
-
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
-
-    @Override
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return MFXToggleNode.getControlCssMetaDataList();
     }
 }

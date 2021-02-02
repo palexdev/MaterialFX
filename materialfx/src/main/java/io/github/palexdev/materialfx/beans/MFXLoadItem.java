@@ -18,11 +18,10 @@ public class MFXLoadItem {
     // Properties
     //================================================================================
     private final int index;
-
-    private Node root;
     private final Callback<Class<?>, Object> controllerFactory;
     private final ToggleButton button;
     private final URL fxmlURL;
+    private Node root;
 
     //================================================================================
     // Constructors
@@ -49,12 +48,12 @@ public class MFXLoadItem {
         return root;
     }
 
-    public Callback<Class<?>, Object> getControllerFactory() {
-        return controllerFactory;
-    }
-
     public void setRoot(Node root) {
         this.root = root;
+    }
+
+    public Callback<Class<?>, Object> getControllerFactory() {
+        return controllerFactory;
     }
 
     public ToggleButton getButton() {

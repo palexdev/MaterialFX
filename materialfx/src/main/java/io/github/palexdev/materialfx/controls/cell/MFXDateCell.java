@@ -17,14 +17,12 @@ import javafx.scene.shape.Circle;
  * current dates. Includes ripple effects.
  */
 public class MFXDateCell extends DateCell {
+    private static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selectedDate");
+    private static final PseudoClass CURRENT_DAY_PSEUDO_CLASS = PseudoClass.getPseudoClass("current");
     //================================================================================
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-date-cell";
-
-    private static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selectedDate");
-    private static final PseudoClass CURRENT_DAY_PSEUDO_CLASS = PseudoClass.getPseudoClass("current");
-
     private final BooleanProperty selectedDate = new SimpleBooleanProperty(false);
     private final BooleanProperty current = new SimpleBooleanProperty(false);
 
@@ -96,24 +94,24 @@ public class MFXDateCell extends DateCell {
         return selectedDate.get();
     }
 
-    public BooleanProperty selectedDateProperty() {
-        return selectedDate;
-    }
-
     public void setSelectedDate(boolean selectedDate) {
         this.selectedDate.set(selectedDate);
+    }
+
+    public BooleanProperty selectedDateProperty() {
+        return selectedDate;
     }
 
     public boolean isCurrent() {
         return current.get();
     }
 
-    public BooleanProperty currentProperty() {
-        return current;
-    }
-
     public void setCurrent(boolean current) {
         this.current.set(current);
+    }
+
+    public BooleanProperty currentProperty() {
+        return current;
     }
 
     //================================================================================

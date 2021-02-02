@@ -174,19 +174,20 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
      * <p>
      * - ADD_REMOVE_ITEM_EVENT: when one or more items are added/removed we fire an event and adjust
      * the container height accordingly. <p></p>
-     *
+     * <p>
      * - EXPAND_EVENT: when the item is asked to expand itself we fire an event, build the expand animation, and
      * if the event is on the item on which is fired build a fade in animation for each of its items.
      * The event then "travels" up to the root and if the item's parent is null (so the item is the root) the event is consumed. <p></p>
-     *
+     * <p>
      * - COLLAPSE_EVENT: when the item is asked to collapse itself we fire an event, build the expand animation, and
      * if the event is on the item on which is fired build a fade out animation for each of its items. <p></p>
-     *
+     * <p>
      * - MOUSE_PRESSED: when the mouse is pressed on the item we check if the button was the primary button and if
      * it was a double click. If that is the case than we fire a dummy MOUSE_PRESSED event on the cell's disclosure node because
      * the behavior is to expand/collapse the item only if the mouse was pressed on the disclosure node.
      * <p>
      * If that is not the case then we trigger the selection, retrieve the selection model and select the item.
+     *
      * @see io.github.palexdev.materialfx.controls.SelectionModel
      */
     private void setListeners() {
@@ -274,6 +275,7 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
      * <p>
      * Last but not least so N.B! the item's {@link MFXTreeItem#animationRunningProperty()} is bound to this animation
      * status property and used in {@link #animationIsRunning()} method.
+     *
      * @param fHeight the final height of the container. The value is usually calculated by {@link #computeExpandCollapse()}
      */
     protected void buildAnimation(double fHeight) {
@@ -311,6 +313,7 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
     /**
      * This method is responsible for calculating the final height the item should have after
      * an expand/collapse event. It's also used in the constructor in case the start expanded property is set to true.
+     *
      * @return the computed height as the sum of all items height
      */
     protected double computeExpandCollapse() {
@@ -333,8 +336,9 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
      * At the end if all is ok, we update the {@link MFXTreeItem#expandedProperty()} thus calling updateDisplay and firing the proper events.
      * <p></p>
      * We also update the cell.
-     * @see io.github.palexdev.materialfx.controls.cell.MFXSimpleTreeCell
+     *
      * @return the created cell
+     * @see io.github.palexdev.materialfx.controls.cell.MFXSimpleTreeCell
      */
     protected AbstractMFXTreeCell<T> createCell() {
         MFXTreeItem<T> item = getSkinnable();

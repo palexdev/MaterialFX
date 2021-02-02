@@ -16,6 +16,10 @@ public class Demo extends Application {
     private double xOffset;
     private double yOffset;
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         CSSFX.start();
@@ -39,10 +43,6 @@ public class Demo extends Application {
         scene.setFill(Color.TRANSPARENT);
         primaryStage.setScene(scene);
         primaryStage.show();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 
 }

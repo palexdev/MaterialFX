@@ -68,8 +68,9 @@ public class CheckModel<T> extends SelectionModel<T> implements ICheckModel<T> {
      *         i2.setChecked(true);
      *     }
      * </pre>
-     * @see MFXCheckTreeItem
+     *
      * @param item the item to check
+     * @see MFXCheckTreeItem
      */
     private void check(MFXCheckTreeItem<T> item) {
         if (item.isChecked()) {
@@ -168,7 +169,7 @@ public class CheckModel<T> extends SelectionModel<T> implements ICheckModel<T> {
         } else if (indeterminateChildren(item) != 0) {
             checkedItems.remove(item);
             item.setIndeterminate(true);
-        } else if (checkedChildren(item) == 0){
+        } else if (checkedChildren(item) == 0) {
             checkedItems.remove(item);
             item.setIndeterminate(false);
         } else {

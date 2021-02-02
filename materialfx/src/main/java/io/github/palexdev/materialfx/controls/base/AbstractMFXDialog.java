@@ -22,72 +22,58 @@ import javafx.scene.layout.Region;
  * use {@code setVisible(false)}</b>
  */
 public abstract class AbstractMFXDialog extends BorderPane {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private DialogType type;
-
     protected final StringProperty title = new SimpleStringProperty("");
     protected final StringProperty content = new SimpleStringProperty("");
-    protected MFXButton closeButton;
-    protected boolean centerBeforeShow = true;
-
     protected final MFXScrimEffect scrimEffect = new MFXScrimEffect();
-
     /**
      * Specifies the opacity/strength of the scrim effect.
      */
     protected final DoubleProperty scrimOpacity = new SimpleDoubleProperty(0.15);
-
     /**
      * Specifies whether to apply scrim effect to dialog's parent when shown or not.
      */
     protected final BooleanProperty scrimBackground = new SimpleBooleanProperty(true);
-
     /**
      * Specifies whether the dialog should close when clicking outside of it or not.
      */
     protected final BooleanProperty overlayClose = new SimpleBooleanProperty(false);
-
     /**
      * Specifies whether the dialog is draggable or not.
      */
     protected final BooleanProperty isDraggable = new SimpleBooleanProperty(false);
-
-    private double mouseAnchorX;
-    private double mouseAnchorY;
-
-    protected MFXAnimationFactory inAnimationType = MFXAnimationFactory.FADE_IN;
-    protected MFXAnimationFactory outAnimationType = MFXAnimationFactory.FADE_OUT;
     protected final ParallelTransition inAnimation = new ParallelTransition();
     protected final ParallelTransition outAnimation = new ParallelTransition();
-
     /**
      * Specifies whether to play the inAnimation when {@code show()} is called or not.
      */
     protected final BooleanProperty animateIn = new SimpleBooleanProperty(false);
-
     /**
      * Specifies whether to play the outAnimation when {@code close()} is called or not.
      */
     protected final BooleanProperty animateOut = new SimpleBooleanProperty(false);
-
     /**
      * Specifies the duration of in and out animations.
      */
     protected final DoubleProperty animationMillis = new SimpleDoubleProperty(300);
-
-    //================================================================================
-    // Event Handlers
-    //================================================================================
-    protected EventHandler<MouseEvent> closeHandler = event -> close();
-
     private final EventHandler<MouseEvent> overlayCloseHandler = mouseEvent -> {
         if (!NodeUtils.inHierarchy(mouseEvent.getPickResult().getIntersectedNode(), AbstractMFXDialog.this)) {
             close();
         }
     };
-
+    protected MFXButton closeButton;
+    protected boolean centerBeforeShow = true;
+    protected MFXAnimationFactory inAnimationType = MFXAnimationFactory.FADE_IN;
+    protected MFXAnimationFactory outAnimationType = MFXAnimationFactory.FADE_OUT;
+    //================================================================================
+    // Event Handlers
+    //================================================================================
+    protected EventHandler<MouseEvent> closeHandler = event -> close();
+    //================================================================================
+    // Properties
+    //================================================================================
+    private DialogType type;
+    private double mouseAnchorX;
+    private double mouseAnchorY;
     private final EventHandler<MouseEvent> pressHandler = new EventHandler<>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
@@ -161,7 +147,9 @@ public abstract class AbstractMFXDialog extends BorderPane {
     // Abstract Methods
     //================================================================================
     public abstract void show();
+
     public abstract void close();
+
     public abstract void computeCenter();
 
     //================================================================================
@@ -179,24 +167,24 @@ public abstract class AbstractMFXDialog extends BorderPane {
         return title.get();
     }
 
-    public StringProperty titleProperty() {
-        return title;
-    }
-
     public void setTitle(String title) {
         this.title.set(title);
+    }
+
+    public StringProperty titleProperty() {
+        return title;
     }
 
     public String getContent() {
         return content.get();
     }
 
-    public StringProperty contentProperty() {
-        return content;
-    }
-
     public void setContent(String content) {
         this.content.set(content);
+    }
+
+    public StringProperty contentProperty() {
+        return content;
     }
 
     public void setCenterBeforeShow(boolean centerBeforeShow) {
@@ -213,6 +201,7 @@ public abstract class AbstractMFXDialog extends BorderPane {
 
     /**
      * Replaces the dialog's default close button with a new one and adds the close handler to it.
+     *
      * @param closeButton The new close button
      */
     public void setCloseButton(MFXButton closeButton) {
@@ -224,6 +213,7 @@ public abstract class AbstractMFXDialog extends BorderPane {
      * Replaces the dialog's default close handler with a new one,
      * removes the old one from the button, replaces the handler and then
      * re-adds the handler to the button.
+     *
      * @param newHandler The new close handler
      */
     public void setCloseHandler(EventHandler<MouseEvent> newHandler) {
@@ -236,48 +226,48 @@ public abstract class AbstractMFXDialog extends BorderPane {
         return scrimOpacity.get();
     }
 
-    public DoubleProperty scrimOpacityProperty() {
-        return scrimOpacity;
-    }
-
     public void setScrimOpacity(double scrimOpacity) {
         this.scrimOpacity.set(scrimOpacity);
+    }
+
+    public DoubleProperty scrimOpacityProperty() {
+        return scrimOpacity;
     }
 
     public boolean isScrimBackground() {
         return scrimBackground.get();
     }
 
-    public BooleanProperty scrimBackgroundProperty() {
-        return scrimBackground;
-    }
-
     public void setScrimBackground(boolean scrimBackground) {
         this.scrimBackground.set(scrimBackground);
+    }
+
+    public BooleanProperty scrimBackgroundProperty() {
+        return scrimBackground;
     }
 
     public boolean isOverlayClose() {
         return overlayClose.get();
     }
 
-    public BooleanProperty overlayCloseProperty() {
-        return overlayClose;
-    }
-
     public void setOverlayClose(boolean overlayClose) {
         this.overlayClose.set(overlayClose);
+    }
+
+    public BooleanProperty overlayCloseProperty() {
+        return overlayClose;
     }
 
     public boolean isIsDraggable() {
         return isDraggable.get();
     }
 
-    public BooleanProperty isDraggableProperty() {
-        return isDraggable;
-    }
-
     public void setIsDraggable(boolean isDraggable) {
         this.isDraggable.set(isDraggable);
+    }
+
+    public BooleanProperty isDraggableProperty() {
+        return isDraggable;
     }
 
     public void setInAnimationType(MFXAnimationFactory inAnimationType) {
@@ -300,38 +290,37 @@ public abstract class AbstractMFXDialog extends BorderPane {
         return animateIn.get();
     }
 
-    public BooleanProperty animateInProperty() {
-        return animateIn;
-    }
-
     public void setAnimateIn(boolean animateIn) {
         this.animateIn.set(animateIn);
+    }
+
+    public BooleanProperty animateInProperty() {
+        return animateIn;
     }
 
     public boolean isAnimateOut() {
         return animateOut.get();
     }
 
-    public BooleanProperty animateOutProperty() {
-        return animateOut;
-    }
-
     public void setAnimateOut(boolean animateOut) {
         this.animateOut.set(animateOut);
+    }
+
+    public BooleanProperty animateOutProperty() {
+        return animateOut;
     }
 
     public double getAnimationMillis() {
         return animationMillis.get();
     }
 
-    public DoubleProperty animationMillisProperty() {
-        return animationMillis;
-    }
-
     public void setAnimationMillis(double animationMillis) {
         this.animationMillis.set(animationMillis);
     }
 
+    public DoubleProperty animationMillisProperty() {
+        return animationMillis;
+    }
 
     /**
      * When the {@code overlayClose} property is set to true, adds the {@code EventHandler} for the close.

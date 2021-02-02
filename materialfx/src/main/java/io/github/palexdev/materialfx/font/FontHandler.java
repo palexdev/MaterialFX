@@ -9,11 +9,11 @@ import javafx.scene.text.Font;
 public class FontHandler {
     private static final Font resources;
 
-    private FontHandler() {
-    }
-
     static {
         resources = Font.loadFont(MFXResourcesLoader.loadStream("fonts/materialfx-resources.ttf"), 10);
+    }
+
+    private FontHandler() {
     }
 
     public static Font getResources() {

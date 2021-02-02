@@ -37,10 +37,9 @@ public class PositionManager {
     private final Window owner;
 
     private final List<MFXNotification> notifications = new ArrayList<>();
+    private final NotificationPos pos;
     private double spacing = 15;
     private int limit = 3;
-
-    private final NotificationPos pos;
     private double anchorX;
     private double anchorY;
 
@@ -139,6 +138,7 @@ public class PositionManager {
      * <p>
      * The new anchorY is calculated using the current value and the new notification's content prefHeight.
      * <b>Note: this works only if the notification's content has it's pref height set</b>
+     *
      * @param newNotification The new notification
      * @param oldNotification The already showing notification
      * @return The animation

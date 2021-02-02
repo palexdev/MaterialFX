@@ -8,10 +8,16 @@ import javafx.scene.input.MouseEvent;
  */
 public interface ISelectionModel<T> {
     void scanTree(AbstractMFXTreeItem<T> item);
+
     void select(AbstractMFXTreeItem<T> item, MouseEvent mouseEvent);
+
     void clearSelection();
+
     AbstractMFXTreeItem<T> getSelectedItem();
+
     ListProperty<AbstractMFXTreeItem<T>> getSelectedItems();
+
     boolean allowsMultipleSelection();
+
     void setAllowsMultipleSelection(boolean multipleSelection);
 }

@@ -5,6 +5,7 @@ package io.github.palexdev.materialfx.controls;
  * <p>
  * Note: this could also work with other item classes since the CheckModel extends SelectionModel,
  * but of course it is not recommended to do so.
+ *
  * @param <T> The type of the data within the items.
  */
 public class MFXCheckTreeView<T> extends MFXTreeView<T> {

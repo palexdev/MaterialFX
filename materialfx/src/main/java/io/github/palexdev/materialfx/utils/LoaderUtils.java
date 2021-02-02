@@ -22,6 +22,7 @@ public class LoaderUtils {
     /**
      * If no key is specified when calling 'addItem' then a default key is generated,
      * corresponds to the fxml file name without the extension.
+     *
      * @param fxmlFile The given fxml file
      * @return The generated key
      */

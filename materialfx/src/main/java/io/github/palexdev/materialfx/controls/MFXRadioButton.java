@@ -23,6 +23,39 @@ public class MFXRadioButton extends RadioButton {
     private static final StyleablePropertyFactory<MFXRadioButton> FACTORY = new StyleablePropertyFactory<>(RadioButton.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-radio-button";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-radiobutton.css").toString();
+    //================================================================================
+    // Styleable Properties
+    //================================================================================
+    private final StyleableObjectProperty<Paint> selectedColor = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.SELECTED_COLOR,
+            this,
+            "selectedColor",
+            Color.rgb(15, 157, 88)
+    );
+    private final StyleableObjectProperty<Paint> unSelectedColor = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.UNSELECTED_COLOR,
+            this,
+            "unSelectedColor",
+            Color.rgb(90, 90, 90)
+    );
+    private final StyleableObjectProperty<Paint> selectedTextColor = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.SELECTED_TEXT_COLOR,
+            this,
+            "selectedTextColor",
+            Color.rgb(15, 157, 88)
+    );
+    private final StyleableObjectProperty<Paint> unSelectedTextColor = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.UNSELECTED_TEXT_COLOR,
+            this,
+            "unSelectedTextColor",
+            Color.rgb(0, 0, 0)
+    );
+    private final StyleableBooleanProperty changeTextColor = new SimpleStyleableBooleanProperty(
+            StyleableProperties.CHANGE_TEXT_COLOR,
+            this,
+            "changeTextColor",
+            true
+    );
 
     //================================================================================
     // Constructors
@@ -37,6 +70,10 @@ public class MFXRadioButton extends RadioButton {
         initialize();
     }
 
+    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
+        return StyleableProperties.cssMetaDataList;
+    }
+
     //================================================================================
     // Methods
     //================================================================================
@@ -44,102 +81,82 @@ public class MFXRadioButton extends RadioButton {
         getStyleClass().add(STYLE_CLASS);
     }
 
-    //================================================================================
-    // Styleable Properties
-    //================================================================================
-    private final StyleableObjectProperty<Paint> selectedColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.SELECTED_COLOR,
-            this,
-            "selectedColor",
-            Color.rgb(15, 157, 88)
-    );
-
-    private final StyleableObjectProperty<Paint> unSelectedColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.UNSELECTED_COLOR,
-            this,
-            "unSelectedColor",
-            Color.rgb(90, 90, 90)
-    );
-
-    private final StyleableObjectProperty<Paint> selectedTextColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.SELECTED_TEXT_COLOR,
-            this,
-            "selectedTextColor",
-            Color.rgb(15, 157, 88)
-    );
-
-    private final StyleableObjectProperty<Paint> unSelectedTextColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.UNSELECTED_TEXT_COLOR,
-            this,
-            "unSelectedTextColor",
-            Color.rgb(0, 0, 0)
-    );
-
-    private final StyleableBooleanProperty changeTextColor = new SimpleStyleableBooleanProperty(
-            StyleableProperties.CHANGE_TEXT_COLOR,
-            this,
-            "changeTextColor",
-            true
-    );
-
     public Paint getSelectedColor() {
         return selectedColor.get();
-    }
-
-    public StyleableObjectProperty<Paint> selectedColorProperty() {
-        return selectedColor;
     }
 
     public void setSelectedColor(Paint selectedColor) {
         this.selectedColor.set(selectedColor);
     }
 
-    public Paint getUnSelectedColor() {
-        return unSelectedColor.get();
+    public StyleableObjectProperty<Paint> selectedColorProperty() {
+        return selectedColor;
     }
 
-    public StyleableObjectProperty<Paint> unSelectedColorProperty() {
-        return unSelectedColor;
+    public Paint getUnSelectedColor() {
+        return unSelectedColor.get();
     }
 
     public void setUnSelectedColor(Paint unSelectedColor) {
         this.unSelectedColor.set(unSelectedColor);
     }
 
-    public Paint getSelectedTextColor() {
-        return selectedTextColor.get();
+    public StyleableObjectProperty<Paint> unSelectedColorProperty() {
+        return unSelectedColor;
     }
 
-    public StyleableObjectProperty<Paint> selectedTextColorProperty() {
-        return selectedTextColor;
+    public Paint getSelectedTextColor() {
+        return selectedTextColor.get();
     }
 
     public void setSelectedTextColor(Paint selectedTextColor) {
         this.selectedTextColor.set(selectedTextColor);
     }
 
-    public Paint getUnSelectedTextColor() {
-        return unSelectedTextColor.get();
+    public StyleableObjectProperty<Paint> selectedTextColorProperty() {
+        return selectedTextColor;
     }
 
-    public StyleableObjectProperty<Paint> unSelectedTextColorProperty() {
-        return unSelectedTextColor;
+    public Paint getUnSelectedTextColor() {
+        return unSelectedTextColor.get();
     }
 
     public void setUnSelectedTextColor(Paint unSelectedTextColor) {
         this.unSelectedTextColor.set(unSelectedTextColor);
     }
 
+    public StyleableObjectProperty<Paint> unSelectedTextColorProperty() {
+        return unSelectedTextColor;
+    }
+
     public boolean isChangeTextColor() {
         return changeTextColor.get();
+    }
+
+    public void setChangeTextColor(boolean changeTextColor) {
+        this.changeTextColor.set(changeTextColor);
     }
 
     public StyleableBooleanProperty changeTextColorProperty() {
         return changeTextColor;
     }
 
-    public void setChangeTextColor(boolean changeTextColor) {
-        this.changeTextColor.set(changeTextColor);
+    //================================================================================
+    // Override Methods
+    //================================================================================
+    @Override
+    protected Skin<?> createDefaultSkin() {
+        return new MFXRadioButtonSkin(this);
+    }
+
+    @Override
+    public String getUserAgentStylesheet() {
+        return STYLESHEET;
+    }
+
+    @Override
+    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+        return MFXRadioButton.getControlCssMetaDataList();
     }
 
     //================================================================================
@@ -191,27 +208,5 @@ public class MFXRadioButton extends RadioButton {
             );
         }
 
-    }
-
-    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
-        return StyleableProperties.cssMetaDataList;
-    }
-
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        return new MFXRadioButtonSkin(this);
-    }
-
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
-
-    @Override
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return MFXRadioButton.getControlCssMetaDataList();
     }
 }

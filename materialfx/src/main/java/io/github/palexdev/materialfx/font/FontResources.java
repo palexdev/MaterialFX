@@ -37,6 +37,13 @@ public enum FontResources {
     X_CIRCLE_LIGHT("mfx-x-circle-light", '\uE900'),
     ;
 
+    private final String description;
+    private final char code;
+    FontResources(String description, char code) {
+        this.description = description;
+        this.code = code;
+    }
+
     public static FontResources findByDescription(String description) {
         for (FontResources font : values()) {
             if (font.getDescription().equals(description)) {
@@ -44,14 +51,6 @@ public enum FontResources {
             }
         }
         throw new IllegalArgumentException("Icon description '" + description + "' is invalid!");
-    }
-
-    private final String description;
-    private final char code;
-
-    FontResources(String description, char code) {
-        this.description = description;
-        this.code = code;
     }
 
     public String getDescription() {

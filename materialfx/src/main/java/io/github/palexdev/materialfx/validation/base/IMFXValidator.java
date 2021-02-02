@@ -10,8 +10,12 @@ import javafx.beans.value.ChangeListener;
  */
 public interface IMFXValidator {
     boolean isValid();
+
     void addInvalidationListener(InvalidationListener invalidationListener);
+
     void addChangeListener(ChangeListener<? super Boolean> changeListener);
+
     void removeInvalidationListener(InvalidationListener invalidationListener);
+
     void removeChangeListener(ChangeListener<? super Boolean> changeListener);
 }

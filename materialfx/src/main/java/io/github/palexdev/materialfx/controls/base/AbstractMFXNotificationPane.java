@@ -28,36 +28,36 @@ public abstract class AbstractMFXNotificationPane extends VBox {
         return headerProperty.get();
     }
 
-    public StringProperty headerPropertyProperty() {
-        return headerProperty;
-    }
-
     public void setHeaderProperty(String headerProperty) {
         this.headerProperty.set(headerProperty);
+    }
+
+    public StringProperty headerPropertyProperty() {
+        return headerProperty;
     }
 
     public String getTitleProperty() {
         return titleProperty.get();
     }
 
-    public StringProperty titlePropertyProperty() {
-        return titleProperty;
-    }
-
     public void setTitleProperty(String titleProperty) {
         this.titleProperty.set(titleProperty);
+    }
+
+    public StringProperty titlePropertyProperty() {
+        return titleProperty;
     }
 
     public String getContentProperty() {
         return contentProperty.get();
     }
 
-    public StringProperty contentPropertyProperty() {
-        return contentProperty;
-    }
-
     public void setContentProperty(String contentProperty) {
         this.contentProperty.set(contentProperty);
+    }
+
+    public StringProperty contentPropertyProperty() {
+        return contentProperty;
     }
 
     //================================================================================

@@ -28,26 +28,23 @@ public class MFXStageDialog {
     private final BooleanProperty centerInOwner = new SimpleBooleanProperty(false);
 
     private final MFXScrimEffect scrimEffect = new MFXScrimEffect();
-    private double scrimOpacity = 0.15;
-    private boolean scrimBackground = false;
-
-    private boolean animate = true;
-    private double animationMillis = 400;
     private final ParallelTransition inAnimation = new ParallelTransition();
     private final ParallelTransition outAnimation = new ParallelTransition();
-
-    private double xOffset;
-    private double yOffset;
-
     private final EventHandler<WindowEvent> centerHandler = new EventHandler<>() {
         @Override
         public void handle(WindowEvent event) {
-            double centerXPosition = dialogStage.getOwner().getX() + dialogStage.getOwner().getWidth()/2d;
-            double centerYPosition = dialogStage.getOwner().getY() + dialogStage.getOwner().getHeight()/2d;
-            dialogStage.setX(centerXPosition - dialogStage.getWidth()/2d);
-            dialogStage.setY(centerYPosition - dialogStage.getHeight()/2d);
+            double centerXPosition = dialogStage.getOwner().getX() + dialogStage.getOwner().getWidth() / 2d;
+            double centerYPosition = dialogStage.getOwner().getY() + dialogStage.getOwner().getHeight() / 2d;
+            dialogStage.setX(centerXPosition - dialogStage.getWidth() / 2d);
+            dialogStage.setY(centerYPosition - dialogStage.getHeight() / 2d);
         }
     };
+    private double scrimOpacity = 0.15;
+    private boolean scrimBackground = false;
+    private boolean animate = true;
+    private double animationMillis = 400;
+    private double xOffset;
+    private double yOffset;
 
     //================================================================================
     // Constructors
@@ -148,6 +145,7 @@ public class MFXStageDialog {
 
     /**
      * Sets the stage's owner
+     *
      * @see Stage
      */
     public void setOwner(Window owner) {
@@ -159,6 +157,7 @@ public class MFXStageDialog {
 
     /**
      * Sets the stage modality
+     *
      * @see Stage
      */
     public void setModality(Modality modality) {
@@ -191,12 +190,12 @@ public class MFXStageDialog {
         return centerInOwner.get();
     }
 
-    public BooleanProperty centerInOwnerProperty() {
-        return centerInOwner;
-    }
-
     public void setCenterInOwner(boolean centerInOwner) {
         this.centerInOwner.set(centerInOwner);
+    }
+
+    public BooleanProperty centerInOwnerProperty() {
+        return centerInOwner;
     }
 
     public void setScrimOpacity(double scrimOpacity) {

@@ -9,6 +9,7 @@ import javafx.geometry.Insets;
 
 /**
  * This is the container for a tree made of AbstractMFXTreeItems.
+ *
  * @param <T> The type of the data within the items.
  */
 public class MFXTreeView<T> extends MFXScrollPane {
@@ -66,24 +67,24 @@ public class MFXTreeView<T> extends MFXScrollPane {
         return root.get();
     }
 
-    public ObjectProperty<AbstractMFXTreeItem<T>> rootProperty() {
-        return root;
-    }
-
     public void setRoot(AbstractMFXTreeItem<T> root) {
         this.root.set(root);
+    }
+
+    public ObjectProperty<AbstractMFXTreeItem<T>> rootProperty() {
+        return root;
     }
 
     public ISelectionModel<T> getSelectionModel() {
         return selectionModel.get();
     }
 
-    public ObjectProperty<ISelectionModel<T>> selectionModelProperty() {
-        return selectionModel;
-    }
-
     public void setSelectionModel(ISelectionModel<T> selectionModel) {
         this.selectionModel.set(selectionModel);
+    }
+
+    public ObjectProperty<ISelectionModel<T>> selectionModelProperty() {
+        return selectionModel;
     }
 
     //================================================================================

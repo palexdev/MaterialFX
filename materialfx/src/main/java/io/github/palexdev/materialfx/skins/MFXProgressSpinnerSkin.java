@@ -23,27 +23,24 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- *  This is the implementation of the {@code Skin} associated with every {@code MFXProgressSpinner}.
+ * This is the implementation of the {@code Skin} associated with every {@code MFXProgressSpinner}.
  */
 public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
+    private final Color greenColor;
+    private final Color redColor;
+    private final Color yellowColor;
+    private final Color blueColor;
+    private final Arc arc;
+    private final Arc track;
+    private final StackPane arcPane;
+    private final Rectangle fillRect;
+    private final Text text;
     //================================================================================
     // Properties
     //================================================================================
     private boolean isValid = false;
     private boolean wasIndeterminate = false;
     private double arcLength = -1;
-
-    private final Color greenColor;
-    private final Color redColor;
-    private final Color yellowColor;
-    private final Color blueColor;
-
-    private final Arc arc;
-    private final Arc track;
-    private final StackPane arcPane;
-    private final Rectangle fillRect;
-    private final Text text;
-
     private Timeline timeline;
 
     //================================================================================

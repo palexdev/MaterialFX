@@ -16,7 +16,7 @@
 }
 
 .list-cell .text {
-    -fx-fill: -fx-text-background-color ;
+    -fx-fill: -fx-text-background-color;
 }
 
 .list-cell:selected .text {

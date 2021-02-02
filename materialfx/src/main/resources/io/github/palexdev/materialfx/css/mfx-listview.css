@@ -2,7 +2,7 @@
 .mfx-list-view {
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
-/*    -fx-background-insets: 1;*/
+    /*    -fx-background-insets: 1;*/
     -fx-border-color: transparent;
 }
 
@@ -23,7 +23,7 @@
 
 /* Remove JavaFX crap */
 .mfx-list-view > .virtual-flow > .corner {
-    -fx-background-color: transparent ;
+    -fx-background-color: transparent;
 }
 
 .mfx-list-view > .virtual-flow > .scroll-bar,

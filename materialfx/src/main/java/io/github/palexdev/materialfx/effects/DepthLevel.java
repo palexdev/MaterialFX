@@ -13,12 +13,12 @@ public enum DepthLevel {
     LEVEL4(Color.rgb(0, 0, 0, 0.20), 25, 0.25, 0, 8),
     LEVEL5(Color.rgb(0, 0, 0, 0.20), 30, 0.30, 0, 10);
 
+    private static final DepthLevel[] valuesArr = values();
     private final Color color;
     private final double radius;
     private final double spread;
     private final double offsetX;
     private final double offsetY;
-    private static final DepthLevel[] valuesArr = values();
 
     DepthLevel(Color color, double radius, double spread, double offsetX, double offsetY) {
         this.color = color;
@@ -50,9 +50,10 @@ public enum DepthLevel {
 
     /**
      * Retrieves the next {@code DepthLevel} associated with {@code this} enumerator.
+     *
      * @return The next {@code DepthLevel}
      */
     public DepthLevel next() {
-        return valuesArr[(this.ordinal()+1) % valuesArr.length];
+        return valuesArr[(this.ordinal() + 1) % valuesArr.length];
     }
 }

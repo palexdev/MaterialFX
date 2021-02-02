@@ -4,54 +4,68 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@css/textfields_demo.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.TextfieldsDemoController">
-    <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="TextFields" StackPane.alignment="TOP_CENTER">
+<StackPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+           prefHeight="400.0" prefWidth="600.0" stylesheets="@css/textfields_demo.css"
+           xmlns="http://javafx.com/javafx/11.0.1"
+           fx:controller="io.github.palexdev.materialfx.demo.controllers.TextfieldsDemoController">
+    <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="TextFields"
+           StackPane.alignment="TOP_CENTER">
         <StackPane.margin>
-          <Insets top="20.0" />
+            <Insets top="20.0"/>
         </StackPane.margin>
     </Label>
-   <MFXTextField alignment="CENTER" maxWidth="-Infinity" prefWidth="120.0" text="MFXTextField" StackPane.alignment="TOP_CENTER">
-      <StackPane.margin>
-         <Insets right="300.0" top="70.0" />
-      </StackPane.margin></MFXTextField>
-   <MFXTextField alignment="CENTER" maxWidth="-Infinity" prefWidth="120.0" promptText="Text Limit" textLimit="5" StackPane.alignment="TOP_CENTER">
-      <StackPane.margin>
-         <Insets top="70.0" />
-      </StackPane.margin>
-   </MFXTextField>
-   <MFXTextField alignment="CENTER" disable="true" maxWidth="-Infinity" prefWidth="120.0" text="Disabled" StackPane.alignment="TOP_CENTER">
-      <StackPane.margin>
-         <Insets left="300.0" top="70.0" />
-      </StackPane.margin>
-   </MFXTextField>
-   <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Customization" StackPane.alignment="TOP_CENTER">
-      <StackPane.margin>
-         <Insets top="130.0" />
-      </StackPane.margin>
-   </Label>
-   <MFXTextField id="colors" alignment="CENTER" lineColor="#52db32" maxWidth="-Infinity" prefWidth="120.0" promptText="Colors" StackPane.alignment="TOP_CENTER">
-      <StackPane.margin>
-         <Insets right="150.0" top="180.0" />
-      </StackPane.margin>
-   </MFXTextField>
-   <MFXTextField fx:id="validated" alignment="CENTER" maxWidth="-Infinity" prefWidth="120.0" text="Validation" StackPane.alignment="TOP_CENTER">
-      <StackPane.margin>
-         <Insets left="150.0" top="180.0" />
-      </StackPane.margin>
-   </MFXTextField>
-   <MFXCheckbox fx:id="checkbox" checkedColor="#00e240" markType="mfx-variant9-mark" text="CheckBox Validation" StackPane.alignment="BOTTOM_LEFT">
-      <StackPane.margin>
-         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-      </StackPane.margin>
-   </MFXCheckbox>
-   <MFXDatePicker fx:id="picker" colorText="true" lineColor="#00c133b2" pickerColor="#00c133" StackPane.alignment="BOTTOM_CENTER">
-      <StackPane.margin>
-         <Insets bottom="30.0" />
-      </StackPane.margin>
-   </MFXDatePicker>
-   <Label fx:id="label" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="100.0" text="VALID" textFill="#00c133" visible="false" StackPane.alignment="BOTTOM_RIGHT">
-      <StackPane.margin>
-         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-      </StackPane.margin>
-   </Label>
+    <MFXTextField alignment="CENTER" maxWidth="-Infinity" prefWidth="120.0" text="MFXTextField"
+                  StackPane.alignment="TOP_CENTER">
+        <StackPane.margin>
+            <Insets right="300.0" top="70.0"/>
+        </StackPane.margin>
+    </MFXTextField>
+    <MFXTextField alignment="CENTER" maxWidth="-Infinity" prefWidth="120.0" promptText="Text Limit" textLimit="5"
+                  StackPane.alignment="TOP_CENTER">
+        <StackPane.margin>
+            <Insets top="70.0"/>
+        </StackPane.margin>
+    </MFXTextField>
+    <MFXTextField alignment="CENTER" disable="true" maxWidth="-Infinity" prefWidth="120.0" text="Disabled"
+                  StackPane.alignment="TOP_CENTER">
+        <StackPane.margin>
+            <Insets left="300.0" top="70.0"/>
+        </StackPane.margin>
+    </MFXTextField>
+    <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Customization"
+           StackPane.alignment="TOP_CENTER">
+        <StackPane.margin>
+            <Insets top="130.0"/>
+        </StackPane.margin>
+    </Label>
+    <MFXTextField id="colors" alignment="CENTER" lineColor="#52db32" maxWidth="-Infinity" prefWidth="120.0"
+                  promptText="Colors" StackPane.alignment="TOP_CENTER">
+        <StackPane.margin>
+            <Insets right="150.0" top="180.0"/>
+        </StackPane.margin>
+    </MFXTextField>
+    <MFXTextField fx:id="validated" alignment="CENTER" maxWidth="-Infinity" prefWidth="120.0" text="Validation"
+                  StackPane.alignment="TOP_CENTER">
+        <StackPane.margin>
+            <Insets left="150.0" top="180.0"/>
+        </StackPane.margin>
+    </MFXTextField>
+    <MFXCheckbox fx:id="checkbox" checkedColor="#00e240" markType="mfx-variant9-mark" text="CheckBox Validation"
+                 StackPane.alignment="BOTTOM_LEFT">
+        <StackPane.margin>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        </StackPane.margin>
+    </MFXCheckbox>
+    <MFXDatePicker fx:id="picker" colorText="true" lineColor="#00c133b2" pickerColor="#00c133"
+                   StackPane.alignment="BOTTOM_CENTER">
+        <StackPane.margin>
+            <Insets bottom="30.0"/>
+        </StackPane.margin>
+    </MFXDatePicker>
+    <Label fx:id="label" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0"
+           prefWidth="100.0" text="VALID" textFill="#00c133" visible="false" StackPane.alignment="BOTTOM_RIGHT">
+        <StackPane.margin>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        </StackPane.margin>
+    </Label>
 </StackPane>

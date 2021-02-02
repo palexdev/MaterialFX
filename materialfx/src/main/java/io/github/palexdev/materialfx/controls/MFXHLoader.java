@@ -50,15 +50,13 @@ public class MFXHLoader extends HBox {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-hloader";
-    private Pane contentPane;
     private final ToggleGroup toggleGroup;
-
     private final BooleanProperty isAnimated = new SimpleBooleanProperty(false);
     private final DoubleProperty animationMillis = new SimpleDoubleProperty(800);
-    private MFXAnimationFactory animationType = MFXAnimationFactory.FADE_IN;
-
     private final ObservableMap<String, MFXLoadItem> bindMap;
     private final ThreadPoolExecutor executor;
+    private Pane contentPane;
+    private MFXAnimationFactory animationType = MFXAnimationFactory.FADE_IN;
 
     //================================================================================
     // Constructors
@@ -248,24 +246,24 @@ public class MFXHLoader extends HBox {
         return isAnimated.get();
     }
 
-    public BooleanProperty isAnimatedProperty() {
-        return isAnimated;
-    }
-
     public void setIsAnimated(boolean isAnimated) {
         this.isAnimated.set(isAnimated);
+    }
+
+    public BooleanProperty isAnimatedProperty() {
+        return isAnimated;
     }
 
     public double getAnimationMillis() {
         return animationMillis.get();
     }
 
-    public DoubleProperty animationMillisProperty() {
-        return animationMillis;
-    }
-
     public void setAnimationMillis(double animationMillis) {
         this.animationMillis.set(animationMillis);
+    }
+
+    public DoubleProperty animationMillisProperty() {
+        return animationMillis;
     }
 
     public MFXAnimationFactory getAnimationType() {

@@ -27,6 +27,7 @@ public class ToggleButtonsUtil {
     /**
      * Adds a handler to the given {@code ToggleGroup} to make sure there's always at least
      * one {@code ToggleButton} selected.
+     *
      * @param toggleGroup The given ToggleGroup
      */
     public static void addAlwaysOneSelectedSupport(final ToggleGroup toggleGroup) {

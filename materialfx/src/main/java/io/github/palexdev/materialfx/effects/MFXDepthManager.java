@@ -12,6 +12,7 @@ public class MFXDepthManager {
 
     /**
      * Retrieves the {@code DropShadow} associated with the specified {@code DepthLevel}.
+     *
      * @param level The desired {@code DepthLevel} between 1 and 5
      * @return The desired {@code DropShadow} effect
      */
@@ -34,6 +35,7 @@ public class MFXDepthManager {
      * <p></p>
      * Example 2: for a depth level equal to 5 and a delta equal to whatever integer, the returned {@code DropShadow} effect is
      * the effected associated to a depth level of 5.
+     *
      * @param level The desired {@code DepthLevel} between 1 and 5
      * @param delta The number of levels to shift
      * @return The final {@code DropShadow} effect}
@@ -50,6 +52,7 @@ public class MFXDepthManager {
 
     /**
      * From a starting {@code DepthLevel} retrieves the {@code DropShadow} effect associated to the next {@code DepthLevel}.
+     *
      * @param startLevel The starting {@code DepthLevel}
      * @return The {@code DropShadow} effect associated to the next {@code DepthLevel}
      * @see DepthLevel

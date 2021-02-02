@@ -30,6 +30,24 @@ public class MFXListCell<T> extends ListCell<T> {
     private final String STYLE_CLASS = "mfx-list-cell";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-listcell.css").toString();
     private final RippleGenerator rippleGenerator;
+    /**
+     * Specifies the background color of the cell when it is selected.
+     */
+    private final StyleableObjectProperty<Paint> selectedColor = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.SELECTED_COLOR,
+            this,
+            "selectedColor",
+            Color.rgb(180, 180, 255)
+    );
+    /**
+     * Specifies the background color of the cell when the mouse is hover.
+     */
+    private final StyleableObjectProperty<Paint> hoverColor = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.HOVER_COLOR,
+            this,
+            "hoverColor",
+            Color.rgb(50, 150, 255, 0.2)
+    );
 
     //================================================================================
     // Constructors
@@ -40,6 +58,14 @@ public class MFXListCell<T> extends ListCell<T> {
         rippleGenerator.setInDuration(Duration.millis(400));
 
         initialize();
+    }
+
+    //================================================================================
+    // Styleable Properties
+    //================================================================================
+
+    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
+        return StyleableProperties.cssMetaDataList;
     }
 
     //================================================================================
@@ -99,82 +125,28 @@ public class MFXListCell<T> extends ListCell<T> {
         });
     }
 
-    //================================================================================
-    // Styleable Properties
-    //================================================================================
-
-    /**
-     * Specifies the background color of the cell when it is selected.
-     */
-    private final StyleableObjectProperty<Paint> selectedColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.SELECTED_COLOR,
-            this,
-            "selectedColor",
-            Color.rgb(180, 180, 255)
-    );
-
-    /**
-     * Specifies the background color of the cell when the mouse is hover.
-     */
-    private final StyleableObjectProperty<Paint> hoverColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.HOVER_COLOR,
-            this,
-            "hoverColor",
-            Color.rgb(50, 150, 255, 0.2)
-    );
-
     public Paint getSelectedColor() {
         return selectedColor.get();
-    }
-
-    public StyleableObjectProperty<Paint> selectedColorProperty() {
-        return selectedColor;
     }
 
     public void setSelectedColor(Paint selectedColor) {
         this.selectedColor.set(selectedColor);
     }
 
-    public Paint getHoverColor() {
-        return hoverColor.get();
+    public StyleableObjectProperty<Paint> selectedColorProperty() {
+        return selectedColor;
     }
 
-    public StyleableObjectProperty<Paint> hoverColorProperty() {
-        return hoverColor;
+    public Paint getHoverColor() {
+        return hoverColor.get();
     }
 
     public void setHoverColor(Paint hoverColor) {
         this.hoverColor.set(hoverColor);
     }
 
-    //================================================================================
-    // CssMetaData
-    //================================================================================
-    private static class StyleableProperties {
-        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
-
-        private static final CssMetaData<MFXListCell<?>, Paint> SELECTED_COLOR =
-                FACTORY.createPaintCssMetaData(
-                        "-mfx-selected-color",
-                        MFXListCell::selectedColorProperty,
-                        Color.rgb(180, 180, 255)
-                );
-
-        private static final CssMetaData<MFXListCell<?>, Paint> HOVER_COLOR =
-                FACTORY.createPaintCssMetaData(
-                        "-mfx-hover-color",
-                        MFXListCell::hoverColorProperty,
-                        Color.rgb(50, 150, 255, 0.2)
-                );
-
-        static {
-            cssMetaDataList = List.of(SELECTED_COLOR, HOVER_COLOR);
-        }
-
-    }
-
-    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
-        return StyleableProperties.cssMetaDataList;
+    public StyleableObjectProperty<Paint> hoverColorProperty() {
+        return hoverColor;
     }
 
     //================================================================================
@@ -220,5 +192,31 @@ public class MFXListCell<T> extends ListCell<T> {
                 rippleGenerator.createRipple();
             });
         }
+    }
+
+    //================================================================================
+    // CssMetaData
+    //================================================================================
+    private static class StyleableProperties {
+        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+
+        private static final CssMetaData<MFXListCell<?>, Paint> SELECTED_COLOR =
+                FACTORY.createPaintCssMetaData(
+                        "-mfx-selected-color",
+                        MFXListCell::selectedColorProperty,
+                        Color.rgb(180, 180, 255)
+                );
+
+        private static final CssMetaData<MFXListCell<?>, Paint> HOVER_COLOR =
+                FACTORY.createPaintCssMetaData(
+                        "-mfx-hover-color",
+                        MFXListCell::hoverColorProperty,
+                        Color.rgb(50, 150, 255, 0.2)
+                );
+
+        static {
+            cssMetaDataList = List.of(SELECTED_COLOR, HOVER_COLOR);
+        }
+
     }
 }

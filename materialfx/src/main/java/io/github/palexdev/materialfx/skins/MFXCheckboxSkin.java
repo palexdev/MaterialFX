@@ -17,7 +17,7 @@ import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 /**
- *  This is the implementation of the {@code Skin} associated with every {@code MFXCheckbox}.
+ * This is the implementation of the {@code Skin} associated with every {@code MFXCheckbox}.
  */
 public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
     //================================================================================
@@ -147,6 +147,7 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
     /**
      * This method is called whenever one of the following properties changes:
      * {@code selectedProperty}, {@code indeterminateProperty}, {@code checkedColor} and {@code uncheckedColor} properties
+     *
      * @see NodeUtils
      */
     private void updateColors() {

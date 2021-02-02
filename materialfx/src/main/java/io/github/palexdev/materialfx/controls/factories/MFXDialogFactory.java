@@ -38,7 +38,7 @@ public class MFXDialogFactory {
     /**
      * Sets the header node of the given dialog to the given type.
      *
-     * @param type The desired type
+     * @param type   The desired type
      * @param dialog The dialog reference
      */
     public static void setHeaderNode(DialogType type, AbstractMFXDialog dialog) {
@@ -70,18 +70,20 @@ public class MFXDialogFactory {
 
     /**
      * Sets the content node of the given dialog with a new one.
-     * @param dialog The dialog reference
-     * @param title The dialog's title
+     *
+     * @param dialog  The dialog reference
+     * @param title   The dialog's title
      * @param content The dialog's content
      */
-    public static void setContentNode(AbstractMFXDialog dialog, String title, String content)  {
+    public static void setContentNode(AbstractMFXDialog dialog, String title, String content) {
         dialog.setCenter(buildContent(dialog, title, content));
     }
 
     /**
      * Builds an MFXDialog
-     * @param type The dialog's type
-     * @param title The dialog's title
+     *
+     * @param type    The dialog's type
+     * @param title   The dialog's title
      * @param content The dialog's content
      * @return A new MFXDialog
      */
@@ -95,7 +97,8 @@ public class MFXDialogFactory {
 
     /**
      * Builds a generic MFXDialog
-     * @param title The dialog's title
+     *
+     * @param title   The dialog's title
      * @param content The dialog's content
      * @return A new generic MFXDialog
      */
@@ -117,7 +120,8 @@ public class MFXDialogFactory {
 
     /**
      * Converts a given dialog to the desired type.
-     * @param type The desired type
+     *
+     * @param type   The desired type
      * @param dialog The dialog reference
      */
     public static void convertToSpecific(DialogType type, AbstractMFXDialog dialog) {
@@ -132,9 +136,10 @@ public class MFXDialogFactory {
 
     /**
      * Common code for building specific dialog's header node.
+     *
      * @param dialog The dialog reference
-     * @param color The header color
-     * @param icon The header icon
+     * @param color  The header color
+     * @param icon   The header icon
      * @return A new header node
      */
     private static StackPane buildHeader(AbstractMFXDialog dialog, String color, MFXFontIcon icon) {
@@ -169,8 +174,9 @@ public class MFXDialogFactory {
 
     /**
      * Common code for building specific dialog's content node.
-     * @param dialog The dialog reference
-     * @param title The dialog's title
+     *
+     * @param dialog  The dialog reference
+     * @param title   The dialog's title
      * @param content The dialog's content
      * @return A new header node
      */
@@ -200,8 +206,9 @@ public class MFXDialogFactory {
 
     /**
      * Builds an header node for generic dialogs.
+     *
      * @param dialog The dialog reference
-     * @param title The dialog's title.
+     * @param title  The dialog's title.
      * @return A new generic header node
      */
     private static StackPane buildGenericHeader(AbstractMFXDialog dialog, String title) {
@@ -220,7 +227,8 @@ public class MFXDialogFactory {
 
     /**
      * Builds a content node for generic dialogs.
-     * @param dialog The dialog reference
+     *
+     * @param dialog  The dialog reference
      * @param content The dialog's content
      * @return A new generic content node
      */
@@ -243,6 +251,7 @@ public class MFXDialogFactory {
 
     /**
      * Builds a button box for generic dialogs.
+     *
      * @param dialog The dialog instance
      * @return A new button box
      */

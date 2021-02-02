@@ -30,6 +30,44 @@ public class MFXListView<T> extends ListView<T> {
     private static final StyleablePropertyFactory<MFXListView<?>> FACTORY = new StyleablePropertyFactory<>(ListView.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-list-view";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-listview.css").toString();
+    /**
+     * Specifies the color of the scrollbars' track.
+     */
+    private final ObjectProperty<Paint> trackColor = new SimpleObjectProperty<>(Color.rgb(132, 132, 132));
+    /**
+     * Specifies the color of the scrollbars' thumb.
+     */
+    private final ObjectProperty<Paint> thumbColor = new SimpleObjectProperty<>(Color.rgb(137, 137, 137));
+    /**
+     * Specifies the color of the scrollbars' thumb when mouse hover.
+     */
+    private final ObjectProperty<Paint> thumbHoverColor = new SimpleObjectProperty<>(Color.rgb(89, 88, 91));
+    /**
+     * Specifies the time after which the scrollbars are hidden.
+     */
+    private final ObjectProperty<Duration> hideAfter = new SimpleObjectProperty<>(Duration.seconds(1));
+    /**
+     * Specifies if the scrollbars should be hidden when the mouse is not on the list.
+     */
+    private final StyleableBooleanProperty hideScrollBars = new SimpleStyleableBooleanProperty(
+            StyleableProperties.HIDE_SCROLLBARS,
+            this,
+            "hideScrollBars",
+            false
+    );
+
+    //================================================================================
+    // ScrollBars Properties
+    //================================================================================
+    /**
+     * Specifies the shadow strength around the control.
+     */
+    private final StyleableObjectProperty<DepthLevel> depthLevel = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.DEPTH_LEVEL,
+            this,
+            "depthLevel",
+            DepthLevel.LEVEL2
+    );
 
     //================================================================================
     // Constructors
@@ -42,6 +80,14 @@ public class MFXListView<T> extends ListView<T> {
         super(observableList);
         initialize();
     }
+
+    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
+        return StyleableProperties.cssMetaDataList;
+    }
+
+    //================================================================================
+    // Styleable Properties
+    //================================================================================
 
     //================================================================================
     // Methods
@@ -76,7 +122,7 @@ public class MFXListView<T> extends ListView<T> {
     }
 
     /**
-     *  Sets the CSS looked-up colors
+     * Sets the CSS looked-up colors
      */
     private void setColors() {
         StringBuilder sb = new StringBuilder();
@@ -87,124 +133,94 @@ public class MFXListView<T> extends ListView<T> {
         setStyle(sb.toString());
     }
 
-    //================================================================================
-    // ScrollBars Properties
-    //================================================================================
-
-    /**
-     * Specifies the color of the scrollbars' track.
-     */
-    private final ObjectProperty<Paint> trackColor = new SimpleObjectProperty<>(Color.rgb(132, 132, 132));
-
-    /**
-     * Specifies the color of the scrollbars' thumb.
-     */
-    private final ObjectProperty<Paint> thumbColor = new SimpleObjectProperty<>(Color.rgb(137, 137, 137));
-
-    /**
-     * Specifies the color of the scrollbars' thumb when mouse hover.
-     */
-    private final ObjectProperty<Paint> thumbHoverColor = new SimpleObjectProperty<>(Color.rgb(89, 88, 91));
-
-    /**
-     * Specifies the time after which the scrollbars are hidden.
-     */
-    private final ObjectProperty<Duration> hideAfter = new SimpleObjectProperty<>(Duration.seconds(1));
-
-    //================================================================================
-    // Styleable Properties
-    //================================================================================
-
-    /**
-     * Specifies if the scrollbars should be hidden when the mouse is not on the list.
-     */
-    private final StyleableBooleanProperty hideScrollBars = new SimpleStyleableBooleanProperty(
-            StyleableProperties.HIDE_SCROLLBARS,
-            this,
-            "hideScrollBars",
-            false
-    );
-
-    /**
-     * Specifies the shadow strength around the control.
-     */
-    private final StyleableObjectProperty<DepthLevel> depthLevel = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.DEPTH_LEVEL,
-            this,
-            "depthLevel",
-            DepthLevel.LEVEL2
-    );
-
     public Paint getTrackColor() {
         return trackColor.get();
-    }
-
-    public ObjectProperty<Paint> trackColorProperty() {
-        return trackColor;
     }
 
     public void setTrackColor(Paint trackColor) {
         this.trackColor.set(trackColor);
     }
 
-    public Paint getThumbColor() {
-        return thumbColor.get();
+    public ObjectProperty<Paint> trackColorProperty() {
+        return trackColor;
     }
 
-    public ObjectProperty<Paint> thumbColorProperty() {
-        return thumbColor;
+    public Paint getThumbColor() {
+        return thumbColor.get();
     }
 
     public void setThumbColor(Paint thumbColor) {
         this.thumbColor.set(thumbColor);
     }
 
-    public Paint getThumbHoverColor() {
-        return thumbHoverColor.get();
+    public ObjectProperty<Paint> thumbColorProperty() {
+        return thumbColor;
     }
 
-    public ObjectProperty<Paint> thumbHoverColorProperty() {
-        return thumbHoverColor;
+    public Paint getThumbHoverColor() {
+        return thumbHoverColor.get();
     }
 
     public void setThumbHoverColor(Paint thumbHoverColor) {
         this.thumbHoverColor.set(thumbHoverColor);
     }
 
-    public Duration getHideAfter() {
-        return hideAfter.get();
+    public ObjectProperty<Paint> thumbHoverColorProperty() {
+        return thumbHoverColor;
     }
 
-    public ObjectProperty<Duration> hideAfterProperty() {
-        return hideAfter;
+    public Duration getHideAfter() {
+        return hideAfter.get();
     }
 
     public void setHideAfter(Duration hideAfter) {
         this.hideAfter.set(hideAfter);
     }
 
-    public boolean isHideScrollBars() {
-        return hideScrollBars.get();
+    public ObjectProperty<Duration> hideAfterProperty() {
+        return hideAfter;
     }
 
-    public StyleableBooleanProperty hideScrollBarsProperty() {
-        return hideScrollBars;
+    public boolean isHideScrollBars() {
+        return hideScrollBars.get();
     }
 
     public void setHideScrollBars(boolean hideScrollBars) {
         this.hideScrollBars.set(hideScrollBars);
     }
 
+    public StyleableBooleanProperty hideScrollBarsProperty() {
+        return hideScrollBars;
+    }
+
     public DepthLevel getDepthLevel() {
         return depthLevel.get();
+    }
+
+    public void setDepthLevel(DepthLevel depthLevel) {
+        this.depthLevel.set(depthLevel);
     }
 
     public StyleableObjectProperty<DepthLevel> depthLevelProperty() {
         return depthLevel;
     }
 
-    public void setDepthLevel(DepthLevel depthLevel) {
-        this.depthLevel.set(depthLevel);
+    //================================================================================
+    // Override Methods
+    //================================================================================
+    @Override
+    protected Skin<?> createDefaultSkin() {
+        return new MFXListViewSkin<>(this);
+    }
+
+    @Override
+    public String getUserAgentStylesheet() {
+        return STYLESHEET;
+    }
+
+    @Override
+    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+        return MFXListView.getControlCssMetaDataList();
     }
 
     //================================================================================
@@ -232,27 +248,5 @@ public class MFXListView<T> extends ListView<T> {
             cssMetaDataList = List.of(HIDE_SCROLLBARS, DEPTH_LEVEL);
         }
 
-    }
-
-    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
-        return StyleableProperties.cssMetaDataList;
-    }
-
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        return new MFXListViewSkin<>(this);
-    }
-
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
-
-    @Override
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return MFXListView.getControlCssMetaDataList();
     }
 }

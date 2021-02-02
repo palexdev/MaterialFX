@@ -9,18 +9,18 @@ import javafx.css.PseudoClass;
 
 /**
  * Implementation of a MFXSimpleTreeCell with a checkbox for usage in MFXCheckTreeViews.
+ *
  * @param <T>
  */
 public class MFXCheckTreeCell<T> extends MFXSimpleTreeCell<T> {
+    private static final PseudoClass CHECKED_PSEUDO_CLASS = PseudoClass.getPseudoClass("checked");
+    private static final PseudoClass INDETERMINATE_PSEUDO_CLASS = PseudoClass.getPseudoClass("indeterminate");
     //================================================================================
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-check-tree-cell";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-checktreecell.css").toString();
     private final MFXCheckbox checkbox;
-
-    private static final PseudoClass CHECKED_PSEUDO_CLASS = PseudoClass.getPseudoClass("checked");
-    private static final PseudoClass INDETERMINATE_PSEUDO_CLASS = PseudoClass.getPseudoClass("indeterminate");
     private final BooleanProperty checked = new SimpleBooleanProperty(false);
     private final BooleanProperty indeterminate = new SimpleBooleanProperty(false);
 

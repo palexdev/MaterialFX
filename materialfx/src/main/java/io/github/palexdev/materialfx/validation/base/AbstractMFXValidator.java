@@ -12,16 +12,17 @@ import javafx.collections.ObservableList;
 
 /**
  * Base class for all validators.
+ *
  * @see IMFXValidator
  * @see BooleanListBinding
  */
 public abstract class AbstractMFXValidator implements IMFXValidator {
+    private final StringProperty validatorMessage = new SimpleStringProperty("Validation failed!");
     //================================================================================
     // Properties
     //================================================================================
     protected ObservableList<BooleanProperty> conditions = FXCollections.observableArrayList();
     protected BooleanListBinding validation = new BooleanListBinding(conditions);
-    private final StringProperty validatorMessage = new SimpleStringProperty("Validation failed!");
 
     //================================================================================
     // Methods
@@ -30,12 +31,12 @@ public abstract class AbstractMFXValidator implements IMFXValidator {
         return validatorMessage.get();
     }
 
-    public StringProperty validatorMessageProperty() {
-        return validatorMessage;
-    }
-
     public void setValidatorMessage(String validatorMessage) {
         this.validatorMessage.set(validatorMessage);
+    }
+
+    public StringProperty validatorMessageProperty() {
+        return validatorMessage;
     }
 
     public BooleanListBinding validationProperty() {

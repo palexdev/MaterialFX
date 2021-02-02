@@ -83,13 +83,17 @@ public class MFXDatePickerContent extends VBox {
     private final VBox header;
     private final StackPane yearMonthPane;
     private final Separator separator;
-
+    private final StackPane holder;
+    private final ObjectProperty<MFXDateCell> lastSelectedDayCell = new SimpleObjectProperty<>(null);
+    private final BooleanProperty validInput = new SimpleBooleanProperty(true);
+    // Date formatters
+    private final ObjectProperty<DateTimeFormatter> dateFormatter = new SimpleObjectProperty<>(DateTimeFormatter.ofPattern("d/M/yyyy"));
+    private final DateTimeFormatter weekDayNameFormatter = DateTimeFormatter.ofPattern("ccc");
+    private final BooleanProperty animateCalendar = new SimpleBooleanProperty();
     private Label label;
     private Label selectedDate;
     private Label month;
     private Label year;
-
-    private final StackPane holder;
     private GridPane calendar;
     private GridPane years;
     private MFXScrollPane yearsScroll;
@@ -97,24 +101,13 @@ public class MFXDatePickerContent extends VBox {
     private MFXIconWrapper monthBackButton;
     private MFXIconWrapper monthForwardButton;
     private MFXIconWrapper inputButton;
-
     private Timeline yearsOpen;
     private Timeline yearsClose;
     private Timeline calendarTransition;
-
-    private final ObjectProperty<MFXDateCell> lastSelectedDayCell = new SimpleObjectProperty<>(null);
     private MFXDateCell lastSelectedYearCell = null;
     private MFXDateCell currYearCell = null;
-
-    private final BooleanProperty validInput = new SimpleBooleanProperty(true);
     private MFXTextField inputField;
     private boolean keyInput = false;
-
-    // Date formatters
-    private final ObjectProperty<DateTimeFormatter> dateFormatter = new SimpleObjectProperty<>(DateTimeFormatter.ofPattern("d/M/yyyy"));
-    private final DateTimeFormatter weekDayNameFormatter = DateTimeFormatter.ofPattern("ccc");
-
-    private final BooleanProperty animateCalendar = new SimpleBooleanProperty();
 
     //================================================================================
     // Constructors
@@ -272,7 +265,6 @@ public class MFXDatePickerContent extends VBox {
      * Each cell has its text set by default to "null" then starting from the
      * first day index calculated with {@link #firstDayIndex()} the text is set from 1 to monthLength.
      * The cells which still contains "null" are not visible, that's how the grid is built.
-     *
      */
     private void createDayCells() {
         days.clear();
@@ -858,24 +850,24 @@ public class MFXDatePickerContent extends VBox {
         return currentDate.get();
     }
 
-    public ObjectProperty<LocalDate> currentDateProperty() {
-        return currentDate;
-    }
-
     public void setCurrentDate(LocalDate currentDate) {
         this.currentDate.set(currentDate);
+    }
+
+    public ObjectProperty<LocalDate> currentDateProperty() {
+        return currentDate;
     }
 
     public YearMonth getYearMonth() {
         return yearMonth.get();
     }
 
-    public ObjectProperty<YearMonth> yearMonthProperty() {
-        return yearMonth;
-    }
-
     public void setYearMonth(YearMonth yearMonth) {
         this.yearMonth.set(yearMonth);
+    }
+
+    public ObjectProperty<YearMonth> yearMonthProperty() {
+        return yearMonth;
     }
 
     public MFXDateCell getLastSelectedDayCell() {
@@ -890,12 +882,12 @@ public class MFXDatePickerContent extends VBox {
         return dateFormatter.get();
     }
 
-    public ObjectProperty<DateTimeFormatter> dateFormatterProperty() {
-        return dateFormatter;
-    }
-
     public void setDateFormatter(DateTimeFormatter dateFormatter) {
         this.dateFormatter.set(dateFormatter);
+    }
+
+    public ObjectProperty<DateTimeFormatter> dateFormatterProperty() {
+        return dateFormatter;
     }
 
     public BooleanProperty animateCalendarProperty() {

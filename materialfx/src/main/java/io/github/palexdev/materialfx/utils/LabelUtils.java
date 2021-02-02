@@ -16,6 +16,7 @@ public class LabelUtils {
 
     /**
      * Checks if the text of the specified {@code Label} is truncated.
+     *
      * @param label The specified label
      */
     public static boolean isLabelTruncated(Label label) {
@@ -33,8 +34,9 @@ public class LabelUtils {
     /**
      * Registers a listener to the specified {@code Label} which checks if the text
      * is truncated and updates the specified boolean property accordingly.
+     *
      * @param isTruncated The boolean property to change
-     * @param label The specified label
+     * @param label       The specified label
      */
     public static void registerTruncatedLabelListener(BooleanProperty isTruncated, Label label) {
         label.needsLayoutProperty().addListener((observable, oldValue, newValue) -> {

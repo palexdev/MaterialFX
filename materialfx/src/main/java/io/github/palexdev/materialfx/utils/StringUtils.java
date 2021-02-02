@@ -55,8 +55,9 @@ public class StringUtils {
 
     /**
      * Replaces the last occurrence of the given string with a new string.
-     * @param string The string to modify
-     * @param substring The last occurrence to find
+     *
+     * @param string      The string to modify
+     * @param substring   The last occurrence to find
      * @param replacement The replacement
      * @return The modified string
      */
@@ -72,7 +73,7 @@ public class StringUtils {
         if (str.length() > 0) {
             int firstChar = str.codePointAt(0);
             if (!Character.isTitleCase(firstChar)) {
-                str = new String(new int[] { Character.toTitleCase(firstChar) }, 0, 1) +
+                str = new String(new int[]{Character.toTitleCase(firstChar)}, 0, 1) +
                         str.substring(Character.offsetByCodePoints(str, 0, 1));
             }
         }

@@ -10,7 +10,10 @@ import static io.github.palexdev.materialfx.controls.MFXCheckTreeItem.CheckTreeI
  */
 public interface ICheckModel<T> extends ISelectionModel<T> {
     void scanTree(MFXCheckTreeItem<T> item);
+
     void check(MFXCheckTreeItem<T> item, CheckTreeItemEvent<?> event);
+
     void clearChecked();
+
     ListProperty<MFXCheckTreeItem<T>> getCheckedItems();
 }

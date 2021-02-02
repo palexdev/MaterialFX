@@ -19,7 +19,7 @@ public class BooleanListBinding extends BooleanBinding {
 
     @Override
     protected boolean computeValue() {
-        for (BooleanProperty bp: observedProperties) {
+        for (BooleanProperty bp : observedProperties) {
             if (!bp.get()) {
                 return false;
             }
