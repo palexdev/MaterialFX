@@ -2,7 +2,7 @@ package io.github.palexdev.materialfx.demo.controllers;
 
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
-import io.github.palexdev.materialfx.demo.MFXResourcesLoader;
+import io.github.palexdev.materialfx.demo.ResourcesLoader;
 import io.github.palexdev.materialfx.effects.RippleGenerator;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.NodeUtils;
@@ -32,7 +32,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class DemoController implements Initializable {
+public class Demo implements Initializable {
     private final Stage primaryStage;
     private final HostServices hostServices;
 
@@ -60,7 +60,7 @@ public class DemoController implements Initializable {
     @FXML
     private StackPane contentPane;
 
-    public DemoController(Stage primaryStage, HostServices hostServices) {
+    public Demo(Stage primaryStage, HostServices hostServices) {
         this.primaryStage = primaryStage;
         this.hostServices = hostServices;
     }
@@ -125,17 +125,17 @@ public class DemoController implements Initializable {
 
         // VLoader
         vLoader.setContentPane(contentPane);
-        vLoader.addItem(0, "BUTTONS", new MFXToggleNode("BUTTONS"), MFXResourcesLoader.load("buttons_demo.fxml"));
-        vLoader.addItem(1, "CHECKBOXES", new MFXToggleNode("CHECKBOXES"), MFXResourcesLoader.load("checkboxes_demo.fxml"));
-        vLoader.addItem(2, "COMBOBOXES", new MFXToggleNode("COMBOBOXES"), MFXResourcesLoader.load("combo_boxes_demo.fxml"));
-        vLoader.addItem(3, "DATEPICKERS", new MFXToggleNode("DATEPICKERS"), MFXResourcesLoader.load("datepickers_demo.fxml"));
-        vLoader.addItem(4, "DIALOGS", new MFXToggleNode("DIALOGS"), MFXResourcesLoader.load("dialogs_demo.fxml"), controller -> new DialogsController(demoPane));
-        vLoader.addItem(5, "LISTVIEWS", new MFXToggleNode("LISTVIEWS"), MFXResourcesLoader.load("listviews_demo.fxml"));
-        vLoader.addItem(6, "NOTIFICATIONS", new MFXToggleNode("NOTIFICATIONS"), MFXResourcesLoader.load("notifications_demo.fxml"));
-        vLoader.addItem(7, "RADIOBUTTONS", new MFXToggleNode("RADIOBUTTONS"), MFXResourcesLoader.load("radio_buttons_demo.fxml"));
-        vLoader.addItem(8, "SCROLLPANES", new MFXToggleNode("SCROLLPANES"), MFXResourcesLoader.load("scrollpanes_demo.fxml"));
-        vLoader.addItem(9, "TEXTFIELDS", new MFXToggleNode("TEXTFIELDS"), MFXResourcesLoader.load("textfields_demo.fxml"));
-        vLoader.addItem(10, "TOGGLES", new MFXToggleNode("TOGGLES"), MFXResourcesLoader.load("toggle_buttons_demo.fxml"));
+        vLoader.addItem(0, "BUTTONS", new MFXToggleNode("BUTTONS"), ResourcesLoader.load("buttons_demo.fxml"));
+        vLoader.addItem(1, "CHECKBOXES", new MFXToggleNode("CHECKBOXES"), ResourcesLoader.load("checkboxes_demo.fxml"));
+        vLoader.addItem(2, "COMBOBOXES", new MFXToggleNode("COMBOBOXES"), ResourcesLoader.load("combo_boxes_demo.fxml"));
+        vLoader.addItem(3, "DATEPICKERS", new MFXToggleNode("DATEPICKERS"), ResourcesLoader.load("datepickers_demo.fxml"));
+        vLoader.addItem(4, "DIALOGS", new MFXToggleNode("DIALOGS"), ResourcesLoader.load("dialogs_demo.fxml"), controller -> new Dialogs(demoPane));
+        vLoader.addItem(5, "LISTVIEWS", new MFXToggleNode("LISTVIEWS"), ResourcesLoader.load("listviews_demo.fxml"));
+        vLoader.addItem(6, "NOTIFICATIONS", new MFXToggleNode("NOTIFICATIONS"), ResourcesLoader.load("notifications_demo.fxml"));
+        vLoader.addItem(7, "RADIOBUTTONS", new MFXToggleNode("RADIOBUTTONS"), ResourcesLoader.load("radio_buttons_demo.fxml"));
+        vLoader.addItem(8, "SCROLLPANES", new MFXToggleNode("SCROLLPANES"), ResourcesLoader.load("scrollpanes_demo.fxml"));
+        vLoader.addItem(9, "TEXTFIELDS", new MFXToggleNode("TEXTFIELDS"), ResourcesLoader.load("textfields_demo.fxml"));
+        vLoader.addItem(10, "TOGGLES", new MFXToggleNode("TOGGLES"), ResourcesLoader.load("toggle_buttons_demo.fxml"));
         vLoader.setDefault("BUTTONS");
 
         // Others
@@ -195,8 +195,8 @@ public class DemoController implements Initializable {
         MFXDialog infoDialog;
         MFXStageDialog stageDialog;
         try {
-            FXMLLoader loader = new FXMLLoader(MFXResourcesLoader.load("info_dialog.fxml"));
-            loader.setControllerFactory(controller -> new InfoController(hostServices));
+            FXMLLoader loader = new FXMLLoader(ResourcesLoader.load("info_dialog.fxml"));
+            loader.setControllerFactory(controller -> new Info(hostServices));
             infoDialog = loader.load();
         } catch (IOException e) {
             e.printStackTrace();

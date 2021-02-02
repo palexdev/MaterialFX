@@ -8,7 +8,7 @@
 <MFXDialog xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
            prefHeight="400.0" prefWidth="600.0" stylesheets="@css/info_dialog.css"
            xmlns="http://javafx.com/javafx/11.0.1"
-           fx:controller="io.github.palexdev.materialfx.demo.controllers.InfoController">
+           fx:controller="io.github.palexdev.materialfx.demo.controllers.Info">
     <top>
         <StackPane id="headerNode" prefHeight="80.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <Label id="materialfxLabel" alignment="CENTER" maxHeight="1.7976931348623157E308"

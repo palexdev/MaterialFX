@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ResourceBundle;
 
-public class TextfieldsDemoController implements Initializable {
+public class TextFields implements Initializable {
 
     @FXML
     private MFXTextField validated;

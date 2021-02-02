@@ -15,7 +15,7 @@ import javafx.stage.Modality;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class DialogsController implements Initializable {
+public class Dialogs implements Initializable {
     private final Pane pane;
     private final AbstractMFXDialog dialog;
     private final AbstractMFXDialog animateDialog;
@@ -57,7 +57,7 @@ public class DialogsController implements Initializable {
     @FXML
     private MFXButton sModal;
 
-    public DialogsController(Pane pane) {
+    public Dialogs(Pane pane) {
         this.pane = pane;
         this.dialog = MFXDialogFactory.buildDialog(DialogType.INFO, "MFXDialog - Generic Dialog", text);
         this.animateDialog = MFXDialogFactory.buildDialog(DialogType.INFO, "", text);
@@ -96,7 +96,7 @@ public class DialogsController implements Initializable {
             AbstractMFXDialog genericDialog = MFXDialogFactory.buildGenericDialog("MFXDialog - Generic Dialog", text);
             genericDialog.setCloseHandler(c -> {
                 genericDialog.close();
-                DialogsController.this.pane.getChildren().remove(genericDialog);
+                Dialogs.this.pane.getChildren().remove(genericDialog);
             });
             genericDialog.setVisible(false);
             this.pane.getChildren().add(genericDialog);

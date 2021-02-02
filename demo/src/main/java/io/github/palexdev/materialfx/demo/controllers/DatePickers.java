@@ -1,7 +1,7 @@
 package io.github.palexdev.materialfx.demo.controllers;
 
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
-import io.github.palexdev.materialfx.demo.MFXResourcesLoader;
+import io.github.palexdev.materialfx.demo.ResourcesLoader;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -11,7 +11,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-public class DatePickersDemoController implements Initializable {
+public class DatePickers implements Initializable {
 
     @FXML
     private MFXDatePicker customPicker;
@@ -21,7 +21,7 @@ public class DatePickersDemoController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        String css = MFXResourcesLoader.load("customcss/custom-datepicker.css").toString();
+        String css = ResourcesLoader.load("customcss/custom-datepicker.css").toString();
         customPicker.getContent().getStylesheets().add(css);
 
         MFXDatePicker initialized = new MFXDatePicker(LocalDate.now());

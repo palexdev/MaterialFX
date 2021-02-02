@@ -9,7 +9,7 @@ import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ScrollPaneDemoController implements Initializable {
+public class ScrollPane implements Initializable {
 
     @FXML
     private MFXScrollPane scrollPaneV;

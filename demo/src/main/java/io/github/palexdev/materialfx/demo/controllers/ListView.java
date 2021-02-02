@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
 
-public class ListViewDemoController implements Initializable {
+public class ListView implements Initializable {
     private final Random random = new Random(System.currentTimeMillis());
 
     @FXML

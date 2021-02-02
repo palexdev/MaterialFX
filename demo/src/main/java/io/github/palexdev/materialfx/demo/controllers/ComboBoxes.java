@@ -14,7 +14,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ComboBoxesDemoController implements Initializable {
+public class ComboBoxes implements Initializable {
 
     @FXML
     private MFXComboBox<String> standard;

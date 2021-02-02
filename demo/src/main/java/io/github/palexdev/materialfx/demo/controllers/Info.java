@@ -9,7 +9,7 @@ import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class InfoController implements Initializable {
+public class Info implements Initializable {
     private final HostServices hostServices;
 
     @FXML
@@ -42,7 +42,7 @@ public class InfoController implements Initializable {
     @FXML
     private Hyperlink paypalH;
 
-    public InfoController(HostServices hostServices) {
+    public Info(HostServices hostServices) {
         this.hostServices = hostServices;
     }
 

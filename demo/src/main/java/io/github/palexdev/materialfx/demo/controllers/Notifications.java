@@ -16,7 +16,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.util.Random;
 
-public class NotificationsController {
+public class Notifications {
     private final Random random = new Random(System.currentTimeMillis());
 
     private final String title = "MaterialFX Notification System";
