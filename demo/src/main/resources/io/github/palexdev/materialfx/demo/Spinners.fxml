@@ -1,9 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
-<StackPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+<StackPane xmlns:fx="http://javafx.com/fxml/1"
            prefHeight="400.0" prefWidth="600.0" stylesheets="@css/Spinners.css"
            xmlns="http://javafx.com/javafx/11.0.1"
            fx:controller="io.github.palexdev.materialfx.demo.controllers.Spinners">
 
+    <HBox maxHeight="330" spacing="10" alignment="TOP_CENTER">
+        <MFXProgressSpinner styleClass="blue-spinner" startingAngle="0" radius="13"/>
+        <MFXProgressSpinner styleClass="red-spinner" startingAngle="0" radius="13"/>
+        <MFXProgressSpinner styleClass="yellow-spinner" startingAngle="0" radius="13"/>
+        <MFXProgressSpinner styleClass="green-spinner" startingAngle="0" radius="13"/>
+        <MFXProgressSpinner startingAngle="0" radius="13"/>
+        <MFXProgressSpinner fx:id="greenSpinner" styleClass="mfx-spinner-green" progress="0"
+                            radius="15"/>
+        <MFXProgressSpinner fx:id="blueSpinner" styleClass="mfx-spinner-blue" progress="0" radius="16"/>
+    </HBox>
+
+    <StackPane>
+        <MFXProgressSpinner styleClass="mfx-spinner-purple, first-spinner" startingAngle="-40"/>
+        <MFXProgressSpinner styleClass="mfx-spinner-blue, second-spinner" startingAngle="-90"/>
+        <MFXProgressSpinner styleClass="mfx-spinner-cyan, third-spinner" startingAngle="-120"/>
+        <MFXProgressSpinner styleClass="mfx-spinner-green, fourth-spinner" startingAngle="-150"/>
+        <MFXProgressSpinner styleClass="mfx-spinner-yellow, fifth-spinner" startingAngle="-180"/>
+        <MFXProgressSpinner styleClass="mfx-spinner-orange, sixth-spinner" startingAngle="-210"/>
+        <MFXProgressSpinner styleClass="mfx-spinner-red, seventh-spinner" startingAngle="-240"/>
+    </StackPane>
 </StackPane>

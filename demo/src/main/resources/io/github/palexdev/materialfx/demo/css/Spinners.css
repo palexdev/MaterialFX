@@ -1,0 +1,111 @@
+.first-spinner {
+    -mfx-radius: 20;
+}
+
+.first-spinner .arc {
+    -fx-stroke-width: 5.0;
+}
+
+.second-spinner {
+    -mfx-radius: 30;
+}
+
+.second-spinner .arc {
+    -fx-stroke-width: 5.0;
+}
+
+.third-spinner {
+    -mfx-radius: 40;
+}
+
+.third-spinner .arc {
+    -fx-stroke-width: 5.0;
+}
+
+.fourth-spinner {
+    -mfx-radius: 50;
+}
+
+.fourth-spinner .arc {
+    -fx-stroke-width: 5.0;
+}
+
+.fifth-spinner {
+    -mfx-radius: 60;
+}
+
+.fifth-spinner .arc {
+    -fx-stroke-width: 5.0;
+}
+
+.sixth-spinner {
+    -mfx-radius: 70;
+}
+
+.sixth-spinner .arc {
+    -fx-stroke-width: 5.0;
+}
+
+.seventh-spinner {
+    -mfx-radius: 80;
+}
+
+.seventh-spinner .arc {
+    -fx-stroke-width: 5.0;
+}
+
+.blue-spinner .arc {
+    -fx-stroke: #4285f4;
+}
+
+.blue-spinner .track {
+    -fx-stroke: #d0d0d0;
+}
+
+.red-spinner .arc {
+    -fx-stroke: #db4437;
+}
+
+.green-spinner .arc {
+    -fx-stroke: #0F9D58;
+}
+
+.yellow-spinner .arc {
+    -fx-stroke: #f4b400;
+}
+
+.mfx-spinner-purple:indeterminate .arc {
+    -fx-stroke: #ab47bc;
+}
+
+.mfx-spinner-blue .arc {
+    -fx-stroke: #2962ff;
+}
+
+.mfx-spinner-blue .percentage {
+    -fx-fill: #ab47bc;
+}
+
+.mfx-spinner-cyan .arc {
+    -fx-stroke: #00b8d4;
+}
+
+.mfx-spinner-green .arc {
+    -fx-stroke: #00c853;
+}
+
+.mfx-spinner-green .text {
+    visibility: false;
+}
+
+.mfx-spinner-yellow .arc {
+    -fx-stroke: #ffd600;
+}
+
+.mfx-spinner-orange .arc {
+    -fx-stroke: #ff6d00;
+}
+
+.mfx-spinner-red .arc {
+    -fx-stroke: #d50000;
+}

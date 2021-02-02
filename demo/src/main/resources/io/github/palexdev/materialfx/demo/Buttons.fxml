@@ -29,7 +29,7 @@
             <Insets top="65.0"/>
         </StackPane.margin>
     </MFXButton>
-    <MFXButton id="colored-raised" prefHeight="26.0" prefWidth="55.0" rippleColor="#d5d5d5" rippleRadius="40.0"
+    <MFXButton id="colored-raised" prefHeight="24.0" rippleColor="#d5d5d5" rippleRadius="40.0"
                styleClass="raised-button" StackPane.alignment="TOP_CENTER">
         <StackPane.margin>
             <Insets top="165.0"/>
