@@ -1,8 +1,30 @@
+/*
+ *     Copyright (C) 2021 Parisi Alessandro
+ *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ *     MaterialFX is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     MaterialFX is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package io.github.palexdev.materialfx.utils;
 
+import javafx.event.Event;
 import javafx.geometry.*;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
@@ -131,6 +153,57 @@ public class NodeUtils {
         } catch (IllegalArgumentException ex) {
             LoggingUtils.logException("Could not set region's clip to make it circular", ex);
         }
+    }
+
+    /**
+     * Retrieves the region width if it isn't still laid out.
+     * @param region the Region of which to know the width
+     * @return the calculated width
+     */
+    public static double getNodeWidth(Region region) {
+        Group group = new Group(region);
+        Scene scene = new Scene(group);
+        group.applyCss();
+        group.layout();
+        return region.getWidth();
+    }
+
+    /**
+     * Retrieves the region height if it isn't still laid out.
+     * @param region the Region of which to know the height
+     * @return the calculated height
+     */
+    public static double getNodeHeight(Region region) {
+        Group group = new Group(region);
+        Scene scene = new Scene(group);
+        group.applyCss();
+        group.layout();
+        return region.getHeight();
+    }
+
+    /**
+     * Convenience method for adding the desired value to the region's prefWidth
+     */
+    public static void addPrefWidth(Region region, double value) {
+        double prefW = region.getPrefWidth();
+        region.setPrefWidth(prefW + value);
+    }
+
+    /**
+     * Convenience method for adding the desired value to the region's prefHeight
+     */
+    public static void addPrefHeight(Region region, double value) {
+        double prefH = region.getPrefHeight();
+        region.setPrefHeight(prefH + value);
+    }
+
+    /**
+     * Convenience method for programmatically fire a dummy MOUSE_PRESSED event on the desired node.
+     */
+    public static void fireDummyEvent(Node node) {
+        Event.fireEvent(node, new MouseEvent(MouseEvent.MOUSE_PRESSED,
+               0, 0, 0, 0, MouseButton.PRIMARY, 1,
+                false, false, false, false, true, false, false, false, false, false, null));
     }
 
     /* The following methods are copied from com.sun.javafx.scene.control.skin.Utils class

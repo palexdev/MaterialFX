@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.palexdev'
-version '11.5.6'
+version '11.6.0'
 
 repositories {
     mavenCentral()
@@ -15,7 +15,7 @@ subprojects {
     apply plugin: 'org.openjfx.javafxplugin'
 
     javafx {
-        version = "14.0.2.1"
+        version = "15.0.1"
         modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.web' ]
     }
 }

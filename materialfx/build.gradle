@@ -1,5 +1,5 @@
 plugins {
-    id 'biz.aQute.bnd.builder' version '5.1.2'
+    id 'biz.aQute.bnd.builder' version '5.2.0'
     id 'com.vanniktech.maven.publish' version '0.13.0'
 }
 

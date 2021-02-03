@@ -1,17 +1,34 @@
+/*
+ *     Copyright (C) 2021 Parisi Alessandro
+ *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ *     MaterialFX is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     MaterialFX is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package io.github.palexdev.materialfx.skins;
 
-import io.github.palexdev.materialfx.MFXResourcesManager;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
+import io.github.palexdev.materialfx.controls.MFXIconWrapper;
+import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
+import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
-import javafx.animation.FadeTransition;
+import javafx.animation.ScaleTransition;
 import javafx.scene.control.Label;
 import javafx.scene.control.skin.ComboBoxListViewSkin;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
@@ -45,25 +62,19 @@ public class MFXComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
         focusLine.setStroke(comboBox.getLineColor());
         focusLine.setStrokeWidth(comboBox.getLineStrokeWidth());
         focusLine.setSmooth(true);
-        focusLine.setOpacity(0.0);
+        focusLine.setScaleX(0.0);
 
         line.endXProperty().bind(comboBox.widthProperty());
         focusLine.endXProperty().bind(comboBox.widthProperty());
 
-        StackPane stackPane = new StackPane();
-        stackPane.setPrefSize(1, 1);
-        stackPane.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-        SVGPath warn = MFXResourcesManager.SVGResources.EXCLAMATION_TRIANGLE.getSvgPath();
-        warn.setScaleX((padding - 1) / 100);
-        warn.setScaleY((padding  - 1) / 100);
-        warn.setFill(Color.RED);
-        stackPane.getChildren().add(warn);
+        MFXFontIcon warnIcon = new MFXFontIcon("mfx-exclamation-triangle", Color.RED);
+        MFXIconWrapper warnWrapper = new MFXIconWrapper(warnIcon, 10);
 
-        validate = new Label("", stackPane);
+        validate = new Label("", warnWrapper);
         validate.getStyleClass().add("validate-label");
         validate.textProperty().bind(comboBox.getValidator().validatorMessageProperty());
         validate.setFont(Font.font(padding));
-        validate.setGraphicTextGap(padding);
+        validate.setGraphicTextGap(padding / 2);
         validate.setVisible(false);
 
         getChildren().addAll(line, focusLine, validate);
@@ -120,9 +131,9 @@ public class MFXComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
             }
 
             if (newValue) {
-                focusLine.setOpacity(1.0);
+                focusLine.setScaleX(1.0);
             } else {
-                focusLine.setOpacity(0.0);
+                focusLine.setScaleX(0.0);
             }
         });
 
@@ -150,15 +161,16 @@ public class MFXComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
      * Builds and play the lines animation if {@code animateLines} is true.
      */
     private void buildAndPlayAnimation(boolean focused) {
-        FadeTransition fadeTransition = new FadeTransition(Duration.millis(200), focusLine);
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(400), focusLine);
         if (focused) {
-            fadeTransition.setFromValue(0.0);
-            fadeTransition.setToValue(1.0);
+            scaleTransition.setFromX(0.0);
+            scaleTransition.setToX(1.0);
         } else {
-            fadeTransition.setFromValue(1.0);
-            fadeTransition.setToValue(0.0);
+            scaleTransition.setFromX(1.0);
+            scaleTransition.setToX(0.0);
         }
-        fadeTransition.play();
+        scaleTransition.setInterpolator(MFXAnimationFactory.getInterpolator());
+        scaleTransition.play();
     }
 
     //================================================================================
@@ -169,10 +181,12 @@ public class MFXComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
         super.layoutChildren(x, y, w, h);
 
         final double size = padding / 2.5;
+        final double tx = -((w - line.getEndX()) / 2);
 
         focusLine.setTranslateY(h);
         line.setTranslateY(h);
         validate.resize(w * 1.5, h - size);
         validate.setTranslateY(focusLine.getTranslateY() + size);
+        validate.setTranslateX(tx);
     }
 }

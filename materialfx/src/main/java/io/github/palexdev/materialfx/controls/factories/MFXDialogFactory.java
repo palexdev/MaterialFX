@@ -1,11 +1,29 @@
+/*
+ *     Copyright (C) 2021 Parisi Alessandro
+ *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ *     MaterialFX is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     MaterialFX is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package io.github.palexdev.materialfx.controls.factories;
 
-import io.github.palexdev.materialfx.MFXResourcesManager.SVGResources;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXDialog;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXDialog;
 import io.github.palexdev.materialfx.controls.enums.ButtonType;
 import io.github.palexdev.materialfx.controls.enums.DialogType;
+import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -14,7 +32,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.SVGPath;
 import javafx.util.Duration;
 
 /**
@@ -44,26 +61,27 @@ public class MFXDialogFactory {
      */
     public static void setHeaderNode(DialogType type, AbstractMFXDialog dialog) {
         String color;
-        SVGPath icon;
+        MFXFontIcon icon;
 
         switch (type) {
             case ERROR:
-                icon = SVGResources.CROSS.getSvgPath();
+                icon = new MFXFontIcon("mfx-x-circle-light");
                 color = "#ff9e9e";
                 break;
             case WARNING:
-                icon = SVGResources.EXCLAMATION_TRIANGLE.getSvgPath();
+                icon = new MFXFontIcon("mfx-exclamation-triangle");
                 color = "#ffa57f";
                 break;
             case INFO:
-                icon = SVGResources.INFO.getSvgPath();
+                icon = new MFXFontIcon("mfx-info-circle");
                 color = "#61caff";
                 break;
             default:
                 return;
         }
 
-        icon.setFill(Color.WHITE);
+        icon.setColor(Color.WHITE);
+        icon.setSize(96);
         dialog.setTop(buildHeader(dialog, color, icon));
         dialog.setType(type);
     }
@@ -137,16 +155,13 @@ public class MFXDialogFactory {
      * @param icon The header icon
      * @return A new header node
      */
-    private static StackPane buildHeader(AbstractMFXDialog dialog, String color, SVGPath icon) {
+    private static StackPane buildHeader(AbstractMFXDialog dialog, String color, MFXFontIcon icon) {
         StackPane headerNode = new StackPane();
         headerNode.setPrefSize(dialog.getPrefWidth(), dialog.getPrefHeight() * 0.45);
         headerNode.getStyleClass().add("header-node");
         headerNode.setStyle("-fx-background-color: " + color + ";\n");
 
-        SVGPath closeSvg = SVGResources.X.getSvgPath();
-        closeSvg.setScaleX(0.17);
-        closeSvg.setScaleY(0.17);
-        closeSvg.setFill(Color.WHITE);
+        MFXFontIcon closeIcon = new MFXFontIcon("mfx-x", Color.WHITE);
 
         if (dialog.getType() != null && dialog.getType().equals(DialogType.GENERIC)) {
             dialog.setCloseButton(new MFXButton(""));
@@ -155,7 +170,7 @@ public class MFXDialogFactory {
         MFXButton closeButton = dialog.getCloseButton();
         closeButton.setPrefSize(20, 20);
         closeButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-        closeButton.setGraphic(closeSvg);
+        closeButton.setGraphic(closeIcon);
         closeButton.setRippleRadius(15);
         closeButton.setRippleColor(Color.rgb(255, 0, 0, 0.1));
         closeButton.setRippleInDuration(Duration.millis(500));

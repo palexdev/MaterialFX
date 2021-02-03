@@ -1,9 +1,10 @@
 package io.github.palexdev.materialfx.demo.controllers;
 
-import io.github.palexdev.materialfx.MFXResourcesManager.SVGResources;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.demo.MFXResourcesLoader;
+import io.github.palexdev.materialfx.effects.RippleGenerator;
+import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -19,14 +20,13 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.SVGPath;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
 import java.net.URL;
@@ -42,6 +42,9 @@ public class DemoController implements Initializable {
 
     @FXML
     private StackPane demoPane;
+
+    @FXML
+    private HBox windowButtons;
 
     @FXML
     private StackPane navBar;
@@ -64,47 +67,36 @@ public class DemoController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Resources
-        SVGPath x = SVGResources.X.getSvgPath();
-        x.setScaleX(0.14);
-        x.setScaleY(0.14);
-        SVGPath minus = SVGResources.MINUS.getSvgPath();
-        minus.setScaleX(0.03);
-        minus.setScaleY(0.05);
-        SVGPath expand = SVGResources.EXPAND.getSvgPath();
-        expand.setScaleX(0.5);
-        expand.setScaleY(0.5);
-        SVGPath info = SVGResources.INFO.getSvgPath();
-        info.setScaleX(0.4);
-        info.setScaleY(0.4);
-        info.setFill(Color.rgb(75, 181, 255));
-        FontIcon angle = new FontIcon("fas-angle-right");
-        angle.setIconSize(20);
+        // Icons
+        MFXFontIcon xIcon = new MFXFontIcon("mfx-x-circle", 16);
+        MFXFontIcon minusIcon = new MFXFontIcon("mfx-minus-circle", 16);
+        MFXFontIcon expandIcon = new MFXFontIcon("mfx-expand", 12.5);
+        MFXFontIcon infoIcon = new MFXFontIcon("mfx-info-circle", 30, Color.rgb(75, 181, 255));
+        MFXFontIcon angleIcon = new MFXFontIcon("mfx-angle-right", 20);
 
         // Buttons
-        MFXButton closeButton = new MFXButton("");
+        MFXIconWrapper closeButton = new MFXIconWrapper(xIcon, 22);
         closeButton.setId("closeButton");
-        closeButton.setPrefSize(25, 25);
-        closeButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         closeButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> primaryStage.close());
 
-        MFXButton minimizeButton = new MFXButton("");
+        MFXIconWrapper minimizeButton = new MFXIconWrapper(minusIcon, 22);
         minimizeButton.setId("minimizeButton");
-        minimizeButton.setPrefSize(22, 22);
-        minimizeButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         minimizeButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> primaryStage.setIconified(true));
 
-        MFXButton expandButton = new MFXButton("");
+        MFXIconWrapper expandButton = new MFXIconWrapper(expandIcon, 22);
         expandButton.setId("expandButton");
-        expandButton.setPrefSize(22, 22);
-        expandButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         expandButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> primaryStage.setFullScreen(!primaryStage.isFullScreen()));
 
-        MFXButton infoButton = new MFXButton("");
+        MFXIconWrapper infoButton = new MFXIconWrapper(infoIcon, 30).addRippleGenerator();
+        RippleGenerator rippleGenerator = infoButton.getRippleGenerator();
         infoButton.setId("infoButton");
-        infoButton.setPrefSize(30, 30);
-        infoButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-        infoButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> showInfo());
+        infoButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            rippleGenerator.setGeneratorCenterX(event.getX());
+            rippleGenerator.setGeneratorCenterY(event.getY());
+            rippleGenerator.createRipple();
+
+            showInfo();
+        });
 
         opNavButton = new MFXButton("");
         opNavButton.setId("navButton");
@@ -112,21 +104,10 @@ public class DemoController implements Initializable {
         opNavButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         opNavButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> animate());
 
-
         // Graphics
-        closeButton.setGraphic(x);
-        minimizeButton.setGraphic(minus);
-        expandButton.setGraphic(expand);
-        infoButton.setGraphic(info);
-        opNavButton.setGraphic(angle);
+        opNavButton.setGraphic(angleIcon);
 
         // Layout and Utils
-        StackPane.setAlignment(closeButton, Pos.TOP_RIGHT);
-        StackPane.setMargin(closeButton, new Insets(8, 8, 0, 0));
-        StackPane.setAlignment(minimizeButton, Pos.TOP_RIGHT);
-        StackPane.setMargin(minimizeButton, new Insets(10, 34, 0, 0));
-        StackPane.setAlignment(expandButton, Pos.TOP_RIGHT);
-        StackPane.setMargin(expandButton, new Insets(10, 60, 0, 0));
         StackPane.setAlignment(infoButton, Pos.BOTTOM_RIGHT);
         StackPane.setMargin(infoButton, new Insets(0, 8, 8, 0));
         StackPane.setAlignment(opNavButton, Pos.CENTER_LEFT);
@@ -139,7 +120,8 @@ public class DemoController implements Initializable {
         NodeUtils.makeRegionCircular(opNavButton);
 
         // Add all
-        demoPane.getChildren().addAll(closeButton, minimizeButton, expandButton, infoButton, opNavButton);
+        windowButtons.getChildren().addAll(expandButton, minimizeButton, closeButton);
+        demoPane.getChildren().addAll(infoButton, opNavButton);
 
         // VLoader
         vLoader.setContentPane(contentPane);
@@ -150,10 +132,12 @@ public class DemoController implements Initializable {
         vLoader.addItem(4, "DIALOGS", new MFXToggleNode("DIALOGS"), MFXResourcesLoader.load("dialogs_demo.fxml"), controller -> new DialogsController(demoPane));
         vLoader.addItem(5, "LISTVIEWS", new MFXToggleNode("LISTVIEWS"), MFXResourcesLoader.load("listviews_demo.fxml"));
         vLoader.addItem(6, "NOTIFICATIONS", new MFXToggleNode("NOTIFICATIONS"), MFXResourcesLoader.load("notifications_demo.fxml"));
-        vLoader.addItem(7, "RADIOBUTTONS", new MFXToggleNode("RADIOBUTTONS"), MFXResourcesLoader.load("radio_buttons_demo.fxml"));
-        vLoader.addItem(8, "SCROLLPANES", new MFXToggleNode("SCROLLPANES"), MFXResourcesLoader.load("scrollpanes_demo.fxml"));
-        vLoader.addItem(9, "TEXTFIELDS", new MFXToggleNode("TEXTFIELDS"), MFXResourcesLoader.load("textfields_demo.fxml"));
-        vLoader.addItem(10, "TOGGLES", new MFXToggleNode("TOGGLES"), MFXResourcesLoader.load("toggle_buttons_demo.fxml"));
+        vLoader.addItem(7, "PROGRESS_SPINNERS", new MFXToggleNode("PROGRESS_SPINNERS"), MFXResourcesLoader.load("progress_spinners_demo.fxml"));
+        vLoader.addItem(8, "RADIOBUTTONS", new MFXToggleNode("RADIOBUTTONS"), MFXResourcesLoader.load("radio_buttons_demo.fxml"));
+        vLoader.addItem(9, "SCROLLPANES", new MFXToggleNode("SCROLLPANES"), MFXResourcesLoader.load("scrollpanes_demo.fxml"));
+        vLoader.addItem(10, "TEXTFIELDS", new MFXToggleNode("TEXTFIELDS"), MFXResourcesLoader.load("textfields_demo.fxml"));
+        vLoader.addItem(11, "TOGGLES", new MFXToggleNode("TOGGLES"), MFXResourcesLoader.load("toggle_buttons_demo.fxml"));
+        vLoader.addItem(12, "TREEVIEWS", new MFXToggleNode("TREEVIEWS"), MFXResourcesLoader.load("treeviews_demo.fxml"));
         vLoader.setDefault("BUTTONS");
 
         // Others
@@ -224,15 +208,15 @@ public class DemoController implements Initializable {
         // Close Button
         StackPane header = (StackPane) infoDialog.lookup("#headerNode");
 
-        SVGPath x = SVGResources.X.getSvgPath();
-        x.setScaleX(0.14);
-        x.setScaleY(0.14);
-
-        MFXButton closeButton = new MFXButton("");
+        MFXFontIcon xIcon = new MFXFontIcon("mfx-x", 8);
+        MFXIconWrapper closeButton = new MFXIconWrapper(xIcon, 22).addRippleGenerator();
+        RippleGenerator rippleGenerator = closeButton.getRippleGenerator();
         closeButton.setId("closeButton");
-        closeButton.setPrefSize(25, 25);
-        closeButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-        closeButton.setGraphic(x);
+        closeButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            rippleGenerator.setGeneratorCenterX(event.getX());
+            rippleGenerator.setGeneratorCenterY(event.getY());
+            rippleGenerator.createRipple();
+        });
         StackPane.setAlignment(closeButton, Pos.TOP_RIGHT);
         StackPane.setMargin(closeButton, new Insets(4, 4, 0, 0));
         NodeUtils.makeRegionCircular(closeButton);

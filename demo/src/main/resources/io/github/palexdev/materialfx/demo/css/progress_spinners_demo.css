@@ -1,0 +1,27 @@
+.progress1 .text {
+    -fx-fill: green;
+}
+
+.progress1 .arc {
+    -fx-stroke: purple;
+}
+
+.progress2 .text {
+    visibility: false;
+}
+
+.progress2 .arc {
+    -fx-stroke: orange;
+}
+
+#cssSpinner1 {
+    -fx-stroke: #4285f4;
+}
+
+#cssSpinner1 .track {
+    -fx-stroke: #d0d0d0;
+}
+
+#cssSpinner2 .track {
+    -fx-stroke: #ffccc5;
+}

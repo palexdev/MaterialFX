@@ -1,7 +1,24 @@
+/*
+ *     Copyright (C) 2021 Parisi Alessandro
+ *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ *     MaterialFX is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     MaterialFX is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.MFXResourcesManager.MarkType;
 import io.github.palexdev.materialfx.skins.MFXCheckboxSkin;
 import javafx.css.*;
 import javafx.scene.control.CheckBox;
@@ -72,14 +89,24 @@ public class MFXCheckbox extends CheckBox {
     );
 
     /**
-     * Specifies the SVG path(shape) of the mark from a predefined set.
+     * Specifies the shape of the mark from a predefined set.
      * @see javafx.scene.shape.SVGPath
      */
-    private final StyleableObjectProperty<MarkType> markType = new SimpleStyleableObjectProperty<>(
+    private final StyleableStringProperty markType = new SimpleStyleableStringProperty(
             StyleableProperties.MARK_TYPE,
             this,
             "markType",
-            MarkType.MODENA
+            "mfx-modena-mark"
+    );
+
+    /**
+     * Specifies the size of the mark.
+     */
+    private final StyleableDoubleProperty markSize = new SimpleStyleableDoubleProperty(
+            StyleableProperties.MARK_SIZE,
+            this,
+            "markSize",
+            12.0
     );
 
     public Paint getCheckedColor() {
@@ -106,16 +133,28 @@ public class MFXCheckbox extends CheckBox {
         this.uncheckedColor.set(uncheckedColor);
     }
 
-    public MarkType getMarkType() {
+    public String getMarkType() {
         return markType.get();
     }
 
-    public StyleableObjectProperty<MarkType> markTypeProperty() {
+    public StyleableStringProperty markTypeProperty() {
         return markType;
     }
 
-    public void setMarkType(MarkType markType) {
+    public void setMarkType(String markType) {
         this.markType.set(markType);
+    }
+
+    public double getMarkSize() {
+        return markSize.get();
+    }
+
+    public StyleableDoubleProperty markSizeProperty() {
+        return markSize;
+    }
+
+    public void setMarkSize(double markSize) {
+        this.markSize.set(markSize);
     }
 
     //================================================================================
@@ -138,16 +177,22 @@ public class MFXCheckbox extends CheckBox {
                         Color.rgb(90, 90, 90)
                 );
 
-        private static final CssMetaData<MFXCheckbox, MarkType> MARK_TYPE =
-                FACTORY.createEnumCssMetaData(
-                        MarkType.class,
+        private static final CssMetaData<MFXCheckbox, String> MARK_TYPE =
+                FACTORY.createStringCssMetaData(
                         "-mfx-mark-type",
                         MFXCheckbox::markTypeProperty,
-                        MarkType.MODENA
+                        "mfx-modena-mark"
+                );
+
+        private static final CssMetaData<MFXCheckbox, Number> MARK_SIZE =
+                FACTORY.createSizeCssMetaData(
+                        "-mfx-mark-size",
+                        MFXCheckbox::markSizeProperty,
+                        12
                 );
 
         static {
-            cssMetaDataList = List.of(CHECKED_COLOR, UNCHECKED_COLOR, MARK_TYPE);
+            cssMetaDataList = List.of(CHECKED_COLOR, UNCHECKED_COLOR, MARK_TYPE, MARK_SIZE);
         }
     }
 
@@ -173,5 +218,4 @@ public class MFXCheckbox extends CheckBox {
     public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
         return MFXCheckbox.getControlCssMetaDataList();
     }
-
 }

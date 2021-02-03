@@ -1,7 +1,25 @@
+/*
+ *     Copyright (C) 2021 Parisi Alessandro
+ *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ *     MaterialFX is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     MaterialFX is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesManager.SVGResources;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXNotificationPane;
+import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.LoggingUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.event.EventHandler;
@@ -16,7 +34,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.SVGPath;
 
 /**
  * This class extends {@code AbstractMFXNotificationPane} and it serves as an
@@ -59,10 +76,8 @@ public class SimpleMFXNotificationPane extends AbstractMFXNotificationPane {
         closeButton = new MFXButton("");
         closeButton.setPrefSize(18, 18);
         closeButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-        SVGPath x = SVGResources.X.getSvgPath();
-        x.setScaleX(0.14);
-        x.setScaleY(0.14);
-        closeButton.setGraphic(x);
+        MFXFontIcon xIcon = new MFXFontIcon("mfx-x-circle", 14);
+        closeButton.setGraphic(xIcon);
         closeButton.setRippleRadius(12);
         closeButton.setRippleColor(Color.rgb(255, 0, 0, 0.1));
 
