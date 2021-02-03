@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import io.github.palexdev.materialfx.controls.MFXCheckTreeView?>
+<?import io.github.palexdev.materialfx.controls.MFXTreeView?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<StackPane prefHeight="520.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/15.0.1"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="io.github.palexdev.materialfx.demo.controllers.TreeviewsDemoController">
+   <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Tree Views"
+          StackPane.alignment="TOP_CENTER">
+      <StackPane.margin>
+         <Insets top="20.0"/>
+      </StackPane.margin>
+   </Label>
+   <MFXTreeView fx:id="treeView" prefHeight="300.0" prefWidth="200.0" StackPane.alignment="TOP_CENTER">
+      <StackPane.margin>
+         <Insets right="500.0" top="60.0"/>
+      </StackPane.margin>
+   </MFXTreeView>
+   <MFXTreeView fx:id="treeViewHide" prefHeight="300.0" prefWidth="200.0" StackPane.alignment="TOP_CENTER">
+      <StackPane.margin>
+         <Insets top="60.0"/>
+      </StackPane.margin>
+   </MFXTreeView>
+   <MFXCheckTreeView fx:id="checkTreeView" prefHeight="300.0" prefWidth="200.0" StackPane.alignment="TOP_CENTER">
+      <StackPane.margin>
+         <Insets left="500.0" top="60.0"/>
+      </StackPane.margin>
+   </MFXCheckTreeView>
+   <Text fx:id="text1" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="200.0"
+         StackPane.alignment="BOTTOM_CENTER">
+      <StackPane.margin>
+         <Insets bottom="20.0" right="500.0" top="250.0"/>
+      </StackPane.margin>
+   </Text>
+   <Text fx:id="text2" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="200.0"
+         StackPane.alignment="BOTTOM_CENTER">
+      <StackPane.margin>
+         <Insets bottom="20.0" top="250.0"/>
+      </StackPane.margin>
+   </Text>
+   <Text fx:id="text3" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="200.0"
+         StackPane.alignment="BOTTOM_CENTER">
+      <StackPane.margin>
+         <Insets bottom="20.0" left="500.0" top="250.0"/>
+      </StackPane.margin>
+   </Text>
+</StackPane>

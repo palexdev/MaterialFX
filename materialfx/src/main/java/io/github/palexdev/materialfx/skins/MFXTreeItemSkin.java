@@ -9,10 +9,7 @@ import javafx.animation.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
-import javafx.geometry.Side;
 import javafx.scene.Node;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.SkinBase;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -73,7 +70,7 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
     // Properties
     //================================================================================
     private final VBox box;
-    private final ContextMenu menu;
+    //private final ContextMenu menu;
     private final AbstractMFXTreeCell<T> cell;
     private final ListChangeListener<AbstractMFXTreeItem<T>> itemsListener;
 
@@ -103,7 +100,7 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
         clip.heightProperty().bind(box.heightProperty());
         box.setClip(clip);
 
-        // TODO refactor, testing purpose
+/*        // TODO refactor, testing purpose
         menu = new ContextMenu();
         MenuItem mItemAdd = new MenuItem("ADD ITEM");
         MenuItem mItemRemove = new MenuItem("REMOVE ITEM");
@@ -122,7 +119,7 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
             if (item.getItemParent() != null) {
                 item.getItemParent().getItems().remove(item);
             }
-        });
+        });*/
 
         interpolator = Interpolator.SPLINE(0.0825D, 0.3025D, 0.0875D, 0.9975D);
 

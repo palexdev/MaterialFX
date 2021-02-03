@@ -11,6 +11,10 @@ public class MFXCheckTreeView<T> extends MFXTreeView<T> {
     //================================================================================
     // Constructors
     //================================================================================
+    public MFXCheckTreeView() {
+        super();
+    }
+
     public MFXCheckTreeView(MFXTreeItem<T> root) {
         super(root);
     }

@@ -33,6 +33,12 @@ public class MFXTreeView<T> extends MFXScrollPane {
     //================================================================================
     // Constructors
     //================================================================================
+    public MFXTreeView() {
+        installSelectionModel();
+
+        initialize();
+    }
+
     public MFXTreeView(MFXTreeItem<T> root) {
         installSelectionModel();
 
@@ -54,8 +60,6 @@ public class MFXTreeView<T> extends MFXScrollPane {
         getStyleClass().add(STYLE_CLASS);
         setMaxSize(USE_PREF_SIZE, USE_PREF_SIZE);
         setPrefSize(250, 500);
-        setPadding(new Insets(3));
-        MFXScrollPane.smoothVScrolling(this);
 
         AbstractMFXTreeItem<T> root = getRoot();
         rootProperty().addListener((observable, oldRoot, newRoot) -> {
@@ -63,9 +67,15 @@ public class MFXTreeView<T> extends MFXScrollPane {
             setContent(newRoot);
             setupRoot();
         });
-        setupRoot();
+        if (root != null) {
+            setupRoot();
+        }
 
-        showRoot.addListener((observable, oldValue, newValue) -> root.fireEvent(new TreeViewEvent(TreeViewEvent.HIDE_ROOT_EVENT, newValue)));
+        showRoot.addListener((observable, oldValue, newValue) -> {
+            if (root != null) {
+                root.fireEvent(new TreeViewEvent(TreeViewEvent.HIDE_ROOT_EVENT, newValue));
+            }
+        });
     }
 
     /**
@@ -74,6 +84,7 @@ public class MFXTreeView<T> extends MFXScrollPane {
     public void setupRoot() {
         AbstractMFXTreeItem<T> root = getRoot();
         root.prefWidthProperty().bind(widthProperty().subtract(10));
+        root.setPadding(new Insets(0, 0, 5, 0));
         root.skinProperty().addListener(new ChangeListener<>() {
             @Override
             public void changed(ObservableValue<? extends Skin<?>> observable, Skin<?> oldValue, Skin<?> newValue) {

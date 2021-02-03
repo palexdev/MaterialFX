@@ -1,6 +1,6 @@
 plugins {
     id 'application'
-    id 'org.beryx.jlink' version '2.21.3'
+    id 'org.beryx.jlink' version '2.23.3'
 }
 
 repositories {
@@ -10,13 +10,13 @@ repositories {
 
 dependencies {
     testCompile "org.testfx:testfx-core:4.0.16-alpha"
-    testCompile "junit:junit:4.13-beta-3"
+    testCompile "junit:junit:4.13.1"
     testCompile "org.testfx:testfx-junit:4.0.16-alpha"
 
     implementation "fr.brouillard.oss:cssfx:11.4.0"
-    implementation 'org.kordamp.ikonli:ikonli-core:11.5.0'
-    implementation 'org.kordamp.ikonli:ikonli-javafx:11.5.0'
-    implementation 'org.kordamp.ikonli:ikonli-fontawesome5-pack:11.5.0'
+    implementation 'org.kordamp.ikonli:ikonli-core:12.2.0'
+    implementation 'org.kordamp.ikonli:ikonli-javafx:12.2.0'
+    implementation 'org.kordamp.ikonli:ikonli-fontawesome5-pack:12.2.0'
     implementation project(':materialfx')
 }
 

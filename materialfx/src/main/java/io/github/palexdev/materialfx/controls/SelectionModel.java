@@ -94,7 +94,9 @@ public class SelectionModel<T> implements ISelectionModel<T> {
     @Override
     public void scanTree(AbstractMFXTreeItem<T> item) {
         TreeItemStream.flattenTree(item).forEach(treeItem -> {
-            if (treeItem.isSelected()) select(treeItem);
+            if (treeItem.isSelected() && !selectedItems.contains(treeItem)) {
+                select(treeItem);
+            }
         });
     }
 

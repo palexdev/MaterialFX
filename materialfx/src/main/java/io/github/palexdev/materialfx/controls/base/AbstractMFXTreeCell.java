@@ -7,7 +7,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 
-// TODO implement StringConverter
+// TODO implement StringConverter (low priority)
 
 /**
  * Base class for every cell used by {@code MFXTreeItem}s.
