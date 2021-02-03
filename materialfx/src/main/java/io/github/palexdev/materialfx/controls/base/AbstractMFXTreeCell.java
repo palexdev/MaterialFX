@@ -25,7 +25,7 @@ import javafx.scene.layout.HBox;
  * The same concept applies to {@code MFXCheckTreeCell}s.
  * <p>
  * Also, note that to build a cell the height must be fixed for layout reasons, by default it's 27.
- * When the cell is created the {@link #render(T)} method is called.
+ * When the cell is created the {@link #render(Object)} method is called.
  * @param <T> The type of the data within TreeItem.
  */
 public abstract class AbstractMFXTreeCell<T> extends HBox {

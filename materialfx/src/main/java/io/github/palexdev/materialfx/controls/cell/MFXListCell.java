@@ -7,6 +7,7 @@ import javafx.css.*;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.ListCell;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -77,7 +78,7 @@ public class MFXListCell<T> extends ListCell<T> {
         });
 
         hoverProperty().addListener((observable, oldValue, newValue) -> {
-            if (isSelected()) {
+            if (isSelected() || isEmpty()) {
                 return;
             }
 
@@ -214,7 +215,7 @@ public class MFXListCell<T> extends ListCell<T> {
                 getChildren().add(0, rippleGenerator);
             }
 
-            setOnMousePressed(mouseEvent -> {
+            addEventHandler(MouseEvent.MOUSE_PRESSED, mouseEvent -> {
                 rippleGenerator.setGeneratorCenterX(mouseEvent.getX());
                 rippleGenerator.setGeneratorCenterY(mouseEvent.getY());
                 rippleGenerator.createRipple();

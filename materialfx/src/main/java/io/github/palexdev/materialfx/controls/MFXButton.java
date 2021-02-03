@@ -14,6 +14,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Skin;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.util.Duration;
@@ -152,7 +153,7 @@ public class MFXButton extends Button {
 
     protected void setupRippleGenerator() {
         this.getChildren().add(0, rippleGenerator);
-        this.setOnMousePressed(event -> {
+        this.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             rippleGenerator.setGeneratorCenterX(event.getX());
             rippleGenerator.setGeneratorCenterY(event.getY());
             rippleGenerator.createRipple();
