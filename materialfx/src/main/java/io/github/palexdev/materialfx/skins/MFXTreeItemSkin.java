@@ -8,6 +8,7 @@ import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.geometry.Insets;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
@@ -25,6 +26,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static io.github.palexdev.materialfx.controls.MFXTreeItem.TreeItemEvent;
+import static io.github.palexdev.materialfx.controls.MFXTreeView.TreeViewEvent;
 
 /**
  * This is the implementation of the {@code Skin} associated with every {@link MFXTreeItem}.
@@ -149,14 +151,7 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
         setListeners();
 
         if (item.isStartExpanded()) {
-            forcedUpdate = true;
-            box.getChildren().addAll(item.getItems());
-            box.applyCss();
-            box.layout();
-            box.setPrefHeight(item.getInitialHeight() + computeExpandCollapse());
-            cell.updateCell(item);
-            item.setExpanded(true);
-            forcedUpdate = false;
+            forceUpdate();
         }
     }
 
@@ -181,6 +176,9 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
      *
      * - COLLAPSE_EVENT: when the item is asked to collapse itself we fire an event, build the expand animation, and
      * if the event is on the item on which is fired build a fade out animation for each of its items. <p></p>
+     *
+     * - HIDE_ROOT_EVENT: if the tree view is set to hide the root node then we need force update the root and expand it, hide its cell
+     * and reposition its children by setting its top and left padding. Otherwise the cell is set to be visible and the padding is reset.
      *
      * - MOUSE_PRESSED: when the mouse is pressed on the item we check if the button was the primary button and if
      * it was a double click. If that is the case than we fire a dummy MOUSE_PRESSED event on the cell's disclosure node because
@@ -227,6 +225,19 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
             animation.play();
         });
 
+        item.addEventHandler(TreeViewEvent.HIDE_ROOT_EVENT, hideRootEvent -> {
+            if (!hideRootEvent.isShow()) {
+                if (!item.isExpanded()) {
+                    forceUpdate();
+                }
+                cell.setVisible(false);
+                item.setPadding(new Insets(-(item.getInitialHeight() * 2), 0, 0, -item.getChildrenMargin()));
+            } else {
+                cell.setVisible(true);
+                item.setPadding(Insets.EMPTY);
+            }
+        });
+
         item.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (event.getButton() == MouseButton.PRIMARY &&
                     event.getClickCount() == 2
@@ -239,11 +250,6 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
                 item.getSelectionModel().select(item, event);
             }
         });
-
-        //================================================================================
-        // DEBUG
-        //================================================================================
-        //debugListeners(); // TODO remove
     }
 
     /**
@@ -324,6 +330,22 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
     }
 
     /**
+     * Contains common code for forcing an item to expand.
+     */
+    private void forceUpdate() {
+        MFXTreeItem<T> item = getSkinnable();
+
+        forcedUpdate = true;
+        box.getChildren().addAll(item.getItems());
+        box.applyCss();
+        box.layout();
+        box.setPrefHeight(item.getInitialHeight() + computeExpandCollapse());
+        cell.updateCell(item);
+        item.setExpanded(true);
+        forcedUpdate = false;
+    }
+
+    /**
      * This method is responsible for calling the MFXTreeItem's {@link MFXTreeItem#cellFactoryProperty()} thus creating the cell
      * and adding an event handler for MOUSE_PRESSED on its disclosure node. If the items list is empty we consume the event and return.
      * If the {@link #animationIsRunning()} method returns true we return too and the {@link MFXTreeItem#expandedProperty()} is not updated.
@@ -356,21 +378,6 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
         cell.updateCell(item);
 
         return cell;
-    }
-
-    //================================================================================
-    // DEBUG
-    //================================================================================
-    private void debugListeners() {
-        MFXTreeItem<T> item = getSkinnable();
-        item.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            System.out.println("\n-------------------------------------------");
-            System.out.println("DATA:" + item.getData());
-            System.out.println("CELL:" + cell.getHeight());
-            System.out.println("ITEM:" + item.getHeight() + ", " + snapSizeY(item.getHeight()));
-            System.out.println("BOX:" + box.getHeight());
-            System.out.println("-------------------------------------------\n");
-        });
     }
 }
 

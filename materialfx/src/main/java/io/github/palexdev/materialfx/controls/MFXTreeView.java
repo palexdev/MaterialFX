@@ -3,12 +3,20 @@ package io.github.palexdev.materialfx.controls;
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
 import io.github.palexdev.materialfx.controls.base.ISelectionModel;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.geometry.Insets;
+import javafx.scene.control.Skin;
 
 /**
  * This is the container for a tree made of AbstractMFXTreeItems.
+ *
  * @param <T> The type of the data within the items.
  */
 public class MFXTreeView<T> extends MFXScrollPane {
@@ -20,6 +28,7 @@ public class MFXTreeView<T> extends MFXScrollPane {
 
     private final ObjectProperty<AbstractMFXTreeItem<T>> root = new SimpleObjectProperty<>(null);
     private final ObjectProperty<ISelectionModel<T>> selectionModel = new SimpleObjectProperty<>(null);
+    private final BooleanProperty showRoot = new SimpleBooleanProperty(true);
 
     //================================================================================
     // Constructors
@@ -48,7 +57,32 @@ public class MFXTreeView<T> extends MFXScrollPane {
         setPadding(new Insets(3));
         MFXScrollPane.smoothVScrolling(this);
 
-        getRoot().prefWidthProperty().bind(widthProperty().subtract(10));
+        AbstractMFXTreeItem<T> root = getRoot();
+        rootProperty().addListener((observable, oldRoot, newRoot) -> {
+            newRoot.setTreeView(this);
+            setContent(newRoot);
+            setupRoot();
+        });
+        setupRoot();
+
+        showRoot.addListener((observable, oldValue, newValue) -> root.fireEvent(new TreeViewEvent(TreeViewEvent.HIDE_ROOT_EVENT, newValue)));
+    }
+
+    /**
+     * Contains common code for when the root is set the first time and when it changes.
+     */
+    public void setupRoot() {
+        AbstractMFXTreeItem<T> root = getRoot();
+        root.prefWidthProperty().bind(widthProperty().subtract(10));
+        root.skinProperty().addListener(new ChangeListener<>() {
+            @Override
+            public void changed(ObservableValue<? extends Skin<?>> observable, Skin<?> oldValue, Skin<?> newValue) {
+                if (newValue != null && !isShowRoot()) {
+                    root.fireEvent(new TreeViewEvent(TreeViewEvent.HIDE_ROOT_EVENT, isShowRoot()));
+                }
+                root.skinProperty().removeListener(this);
+            }
+        });
     }
 
     /**
@@ -86,6 +120,14 @@ public class MFXTreeView<T> extends MFXScrollPane {
         this.selectionModel.set(selectionModel);
     }
 
+    public boolean isShowRoot() {
+        return showRoot.get();
+    }
+
+    public void setShowRoot(boolean showRoot) {
+        this.showRoot.set(showRoot);
+    }
+
     //================================================================================
     // Override Methods
     //================================================================================
@@ -94,4 +136,28 @@ public class MFXTreeView<T> extends MFXScrollPane {
         return STYLESHEET;
     }
 
+    /**
+     * Events class for tree views.
+     * <p>
+     * Defines a new EventType:
+     * <p>
+     * - HIDE_ROOT_EVENT: when the tree view's root is set to be hidden/visible we need to fire this event
+     * because we need to communicate with the root's skin.
+     * <p>
+     * Of course these events are for internal use only so they should not be used by users.
+     */
+    public static class TreeViewEvent extends Event {
+        private final boolean show;
+
+        public static final EventType<TreeViewEvent> HIDE_ROOT_EVENT = new EventType<>(ANY, "HIDE_ROOT_EVENT");
+
+        public TreeViewEvent(EventType<? extends Event> eventType, boolean show) {
+            super(eventType);
+            this.show = show;
+        }
+
+        public boolean isShow() {
+            return show;
+        }
+    }
 }

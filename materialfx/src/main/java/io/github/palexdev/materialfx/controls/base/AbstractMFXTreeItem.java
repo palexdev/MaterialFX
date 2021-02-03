@@ -2,10 +2,7 @@ package io.github.palexdev.materialfx.controls.base;
 
 import io.github.palexdev.materialfx.controls.MFXTreeView;
 import io.github.palexdev.materialfx.utils.TreeItemStream;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Control;
@@ -44,6 +41,7 @@ public abstract class AbstractMFXTreeItem<T> extends Control {
     private final ObjectProperty<MFXTreeView<T>> treeView = new SimpleObjectProperty<>(null);
 
     protected final ObjectProperty<Callback<AbstractMFXTreeItem<T>, AbstractMFXTreeCell<T>>> cellFactory = new SimpleObjectProperty<>();
+    private final DoubleProperty childrenMargin = new SimpleDoubleProperty(20);
     private final BooleanProperty startExpanded =  new SimpleBooleanProperty(false);
     private final BooleanProperty selected = new SimpleBooleanProperty(false);
 
@@ -230,6 +228,27 @@ public abstract class AbstractMFXTreeItem<T> extends Control {
      */
     public void setItemParent(AbstractMFXTreeItem<T> parent) {
         this.parent = parent;
+    }
+
+    /**
+     * @return the children left margin to be used in layout.
+     */
+    public double getChildrenMargin() {
+        return childrenMargin.get();
+    }
+
+    /**
+     * Specifies the left margin of each children.
+     */
+    public DoubleProperty childrenMarginProperty() {
+        return childrenMargin;
+    }
+
+    /**
+     * Sets the children left margin.
+     */
+    public void setChildrenMargin(double childrenMargin) {
+        this.childrenMargin.set(childrenMargin);
     }
 
     /**

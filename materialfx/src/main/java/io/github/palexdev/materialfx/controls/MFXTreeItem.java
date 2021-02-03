@@ -72,6 +72,8 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
      * <p>
      * Adds a listener to {@link #selectedProperty()} and the {@link #treeViewProperty()} allowing item selection before the Scene is shown
      * by calling the SelectionModel {@link SelectionModel#scanTree(AbstractMFXTreeItem)} method.
+     * <p>
+     * Adds a listener to {@link #childrenMarginProperty()} to request layout in case it changes.
      */
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
@@ -99,6 +101,8 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
                 getSelectionModel().scanTree(this);
             }
         });
+
+        childrenMarginProperty().addListener((observable, oldValue, newValue) -> requestLayout());
     }
 
     /**
@@ -272,14 +276,14 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
     }
 
     /**
-     * Simple layout strategy. Each item in the {@link #items} list has a left margin set to 20 by default.
+     * Simple layout strategy. Each item in the {@link #items} list has a left margin defined by {@link #childrenMarginProperty()}.
      */
     @Override
     protected void layoutChildren() {
         super.layoutChildren();
 
         items.forEach(
-                item -> VBox.setMargin(item, new Insets(0, 0, 0, 20))
+                item -> VBox.setMargin(item, new Insets(0, 0, 0, getChildrenMargin()))
         );
     }
 
