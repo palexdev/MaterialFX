@@ -120,7 +120,7 @@ public class MFXComboBox<T> extends ComboBox<T> {
      * If the item is instanceof {@code Labeled} makes a "screenshot" of the graphic if not null,
      * and gets item's text. Otherwise calls {@code toString()} on the item.
      */
-    private void updateComboItem(ListCell<T> cell, T item, boolean empty) {
+    protected void updateComboItem(ListCell<T> cell, T item, boolean empty) {
 
         if (empty || item == null) {
             cell.setGraphic(null);

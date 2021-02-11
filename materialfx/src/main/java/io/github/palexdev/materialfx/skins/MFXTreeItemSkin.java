@@ -394,5 +394,12 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
 
         return cell;
     }
+
+    @Override
+    public void dispose() {
+        if (getSkinnable() == null) return;
+        getSkinnable().getItems().removeListener(itemsListener);
+        super.dispose();
+    }
 }
 

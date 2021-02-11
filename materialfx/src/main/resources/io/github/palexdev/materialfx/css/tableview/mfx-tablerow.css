@@ -1,0 +1,25 @@
+.mfx-table-row {
+    -fx-background-insets: 0.0;
+    -fx-text-fill: black;
+    -fx-padding: 0 -3 0 3;
+
+    -mfx-hover-color: rgba(50, 150, 255, 0.15);
+}
+
+.mfx-table-row:odd,
+.mfx-table-row:even {
+    -fx-background-color: white;
+}
+
+.mfx-table-row:filled:hover,
+.mfx-table-row:selected .label {
+    -fx-text-fill: black;
+}
+
+.table-row-cell .text {
+    -fx-fill: -fx-text-background-color;
+}
+
+.table-row-cell:selected .text {
+    -fx-fill: black;
+}

@@ -91,6 +91,11 @@ public class MFXListViewSkin<T> extends ListViewSkin<T> {
                         new KeyValue(hBar.opacityProperty(), 1.0, MFXAnimationFactory.getInterpolator()))
         );
 
+        if (listView.isHideScrollBars()) {
+            vBar.setOpacity(0.0);
+            hBar.setOpacity(0.0);
+        }
+
         setListeners();
     }
 
