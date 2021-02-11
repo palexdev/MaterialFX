@@ -18,7 +18,11 @@ subprojects {
         version = "15.0.1"
         modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.web' ]
     }
+
+    // Workaround for newer Gradle versions (see https://github.com/java9-modularity/gradle-modules-plugin/issues/165)
+    modularity.disableEffectiveArgumentsAdjustment()
 }
+
 
 
 

@@ -33,7 +33,7 @@ public class MFXCheckTreeView<T> extends MFXTreeView<T> {
         super();
     }
 
-    public MFXCheckTreeView(MFXTreeItem<T> root) {
+    public MFXCheckTreeView(MFXCheckTreeItem<T> root) {
         super(root);
     }
 

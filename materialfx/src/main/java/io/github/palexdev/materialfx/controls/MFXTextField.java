@@ -98,6 +98,9 @@ public class MFXTextField extends TextField {
     // Styleable Properties
     //================================================================================
 
+    /**
+     * Specifies the maximum text length.
+     */
     private final StyleableIntegerProperty textLimit = new SimpleStyleableIntegerProperty(
             StyleableProperties.TEXT_LIMIT,
             this,
@@ -126,7 +129,7 @@ public class MFXTextField extends TextField {
     );
 
     /**
-     * Specifies the lines' width.
+     * Specifies the lines' stroke width.
      */
     private final StyleableDoubleProperty lineStrokeWidth = new SimpleStyleableDoubleProperty(
             StyleableProperties.LINE_STROKE_WIDTH,
