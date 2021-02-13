@@ -16,7 +16,7 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.skins.tableview;
+package io.github.palexdev.materialfx.skins.legacy;
 
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import javafx.animation.KeyFrame;
@@ -36,7 +36,7 @@ import javafx.util.Duration;
 
 import java.util.Set;
 
-public class MFXTableViewSkin<T> extends TableViewSkin<T> {
+public class MFXLegacyTableViewSkin<T> extends TableViewSkin<T> {
     //================================================================================
     // Properties
     //================================================================================
@@ -49,7 +49,7 @@ public class MFXTableViewSkin<T> extends TableViewSkin<T> {
     private final Timeline hideBars;
     private final Timeline showBars;
 
-    public MFXTableViewSkin(TableView<T> tableView) {
+    public MFXLegacyTableViewSkin(TableView<T> tableView) {
         super(tableView);
 
         virtualFlow = (VirtualFlow<?>) tableView.lookup(".virtual-flow");

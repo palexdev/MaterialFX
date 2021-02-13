@@ -16,37 +16,36 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.controls.tableview;
+package io.github.palexdev.materialfx.controls.legacy;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.controls.cell.tableview.MFXTableRow;
-import io.github.palexdev.materialfx.skins.tableview.MFXTableViewSkin;
+import io.github.palexdev.materialfx.skins.legacy.MFXLegacyTableViewSkin;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Skin;
 import javafx.scene.control.TableView;
 
-public class MFXTableView<S> extends TableView<S> {
+public class MFXLegacyTableView<S> extends TableView<S> {
     private final String STYLE_CLASS = "mfx-table-view";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/tableview/mfx-tableview.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/mfx-tableview.css").toString();
 
-    public MFXTableView() {
+    public MFXLegacyTableView() {
         initialize();
     }
 
-    public MFXTableView(ObservableList<S> items) {
+    public MFXLegacyTableView(ObservableList<S> items) {
         super(items);
         initialize();
     }
 
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
-        setRowFactory(row -> new MFXTableRow<>());
+        setRowFactory(row -> new MFXLegacyTableRow<>());
         setFixedCellSize(27);
     }
 
     @Override
     protected Skin<?> createDefaultSkin() {
-        return new MFXTableViewSkin<>(this);
+        return new MFXLegacyTableViewSkin<>(this);
     }
 
     @Override

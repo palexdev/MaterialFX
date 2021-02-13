@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.beans;
 
-import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.ImageView;
@@ -26,9 +25,9 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
 /**
- * Class used in {@link MFXComboBox}, workaround for showing the item graphic if is is a node.
+ * Class used in various controls as a workaround for showing a node two or more times on the scene graph.
  * <p>
- * Makes a screenshot of the graphic node with transparent background.
+ * Makes a screenshot of a node with transparent background.
  * Then {@link #getGraphic()} should be used to get an ImageView node which contains the screenshot.
  * <p></p>
  * A little side note: since it is a screenshot the image may appear a little blurry compared to the real

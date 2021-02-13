@@ -399,6 +399,11 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
     public void dispose() {
         if (getSkinnable() == null) return;
         getSkinnable().getItems().removeListener(itemsListener);
+
+        if (animation != null) {
+            animation.getChildren().clear();
+            animation = null;
+        }
         super.dispose();
     }
 }

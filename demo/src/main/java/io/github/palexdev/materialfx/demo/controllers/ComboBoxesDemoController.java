@@ -1,7 +1,7 @@
 package io.github.palexdev.materialfx.demo.controllers;
 
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
-import io.github.palexdev.materialfx.controls.MFXComboBox;
+import io.github.palexdev.materialfx.controls.legacy.MFXLegacyComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -17,22 +17,22 @@ import java.util.ResourceBundle;
 public class ComboBoxesDemoController implements Initializable {
 
     @FXML
-    private MFXComboBox<String> standard;
+    private MFXLegacyComboBox<String> standard;
 
     @FXML
-    private MFXComboBox<String> lineColors;
+    private MFXLegacyComboBox<String> lineColors;
 
     @FXML
-    private MFXComboBox<String> editable;
+    private MFXLegacyComboBox<String> editable;
 
     @FXML
-    private MFXComboBox<Label> labels;
+    private MFXLegacyComboBox<Label> labels;
 
     @FXML
-    private MFXComboBox<String> validated;
+    private MFXLegacyComboBox<String> validated;
 
     @FXML
-    private MFXComboBox<String> customized;
+    private MFXLegacyComboBox<String> customized;
 
     @FXML
     private MFXCheckbox checkbox;

@@ -86,6 +86,20 @@ public class NodeUtils {
         region.setBackground(new Background(fills.toArray(BackgroundFill[]::new)));
     }
 
+    public static void updateBackground(Region region, Paint fill, CornerRadii cornerRadii, Insets backgroundInsets) {
+        final Background background = region.getBackground();
+        if (background == null || background.getFills().isEmpty()) {
+            return;
+        }
+
+        final List<BackgroundFill> fills = new ArrayList<>();
+        for (BackgroundFill bf : background.getFills()) {
+            fills.add(new BackgroundFill(fill, cornerRadii, backgroundInsets));
+        }
+
+        region.setBackground(new Background(fills.toArray(BackgroundFill[]::new)));
+    }
+
     /**
      * Sets the background of the given region to the given color.
      */

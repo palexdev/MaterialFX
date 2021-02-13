@@ -89,9 +89,9 @@ public class MFXListCell<T> extends ListCell<T> {
 
         selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
-                NodeUtils.updateBackground(MFXListCell.this, getSelectedColor());
+                NodeUtils.updateBackground(MFXListCell.this, getSelectedColor(), new CornerRadii(getCornerRadius()), new Insets(getBackgroundInsets()));
             } else {
-                NodeUtils.updateBackground(MFXListCell.this, Color.WHITE);
+                NodeUtils.updateBackground(MFXListCell.this, Color.WHITE, new CornerRadii(getCornerRadius()), new Insets(getBackgroundInsets()));
             }
         });
 
@@ -104,10 +104,10 @@ public class MFXListCell<T> extends ListCell<T> {
                 if (getIndex() == 0) {
                     setBackground(new Background(new BackgroundFill(getHoverColor(), CornerRadii.EMPTY, Insets.EMPTY)));
                 } else {
-                    NodeUtils.updateBackground(MFXListCell.this, getHoverColor());
+                    NodeUtils.updateBackground(MFXListCell.this, getHoverColor(), new CornerRadii(getCornerRadius()), new Insets(getBackgroundInsets()));
                 }
             } else {
-                NodeUtils.updateBackground(MFXListCell.this, Color.WHITE);
+                NodeUtils.updateBackground(MFXListCell.this, Color.WHITE, new CornerRadii(getCornerRadius()), new Insets(getBackgroundInsets()));
             }
         });
 
@@ -151,6 +151,20 @@ public class MFXListCell<T> extends ListCell<T> {
             Color.rgb(50, 150, 255, 0.2)
     );
 
+    private final StyleableDoubleProperty cornerRadius = new SimpleStyleableDoubleProperty(
+            StyleableProperties.CORNER_RADIUS,
+            this,
+            "cornerRadius",
+            0.0
+    );
+
+    private final StyleableDoubleProperty backgroundInsets = new SimpleStyleableDoubleProperty(
+            StyleableProperties.BACKGROUND_INSETS,
+            this,
+            "backgroundInsets",
+            0.0
+    );
+
     public Paint getSelectedColor() {
         return selectedColor.get();
     }
@@ -175,6 +189,30 @@ public class MFXListCell<T> extends ListCell<T> {
         this.hoverColor.set(hoverColor);
     }
 
+    public double getCornerRadius() {
+        return cornerRadius.get();
+    }
+
+    public StyleableDoubleProperty cornerRadiusProperty() {
+        return cornerRadius;
+    }
+
+    public void setCornerRadius(double cornerRadius) {
+        this.cornerRadius.set(cornerRadius);
+    }
+
+    public double getBackgroundInsets() {
+        return backgroundInsets.get();
+    }
+
+    public StyleableDoubleProperty backgroundInsetsProperty() {
+        return backgroundInsets;
+    }
+
+    public void setBackgroundInsets(double backgroundInsets) {
+        this.backgroundInsets.set(backgroundInsets);
+    }
+
     //================================================================================
     // CssMetaData
     //================================================================================
@@ -195,8 +233,22 @@ public class MFXListCell<T> extends ListCell<T> {
                         Color.rgb(50, 150, 255, 0.2)
                 );
 
+        private static final CssMetaData<MFXListCell<?>, Number> CORNER_RADIUS =
+                FACTORY.createSizeCssMetaData(
+                        "-mfx-corner-radius",
+                        MFXListCell::cornerRadiusProperty,
+                        0
+                );
+
+        private static final CssMetaData<MFXListCell<?>, Number> BACKGROUND_INSETS =
+                FACTORY.createSizeCssMetaData(
+                        "-mfx-background-insets",
+                        MFXListCell::backgroundInsetsProperty,
+                        0
+                );
+
         static {
-            cssMetaDataList = List.of(SELECTED_COLOR, HOVER_COLOR);
+            cssMetaDataList = List.of(SELECTED_COLOR, HOVER_COLOR, CORNER_RADIUS, BACKGROUND_INSETS);
         }
 
     }

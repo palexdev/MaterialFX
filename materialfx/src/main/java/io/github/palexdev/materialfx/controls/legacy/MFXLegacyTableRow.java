@@ -16,7 +16,7 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.controls.cell.tableview;
+package io.github.palexdev.materialfx.controls.legacy;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.effects.RippleGenerator;
@@ -34,13 +34,13 @@ import javafx.util.Duration;
 
 import java.util.List;
 
-public class MFXTableRow<T> extends TableRow<T> {
-    private static final StyleablePropertyFactory<MFXTableRow<?>> FACTORY = new StyleablePropertyFactory<>(TableRow.getClassCssMetaData());
+public class MFXLegacyTableRow<T> extends TableRow<T> {
+    private static final StyleablePropertyFactory<MFXLegacyTableRow<?>> FACTORY = new StyleablePropertyFactory<>(TableRow.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-table-row";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/tableview/mfx-tablerow.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/mfx-tablerow.css").toString();
     private final RippleGenerator rippleGenerator;
 
-    public MFXTableRow() {
+    public MFXLegacyTableRow() {
         rippleGenerator = new RippleGenerator(this);
         rippleGenerator.setRippleColor(Color.rgb(50, 150, 255));
         rippleGenerator.setInDuration(Duration.millis(400));
@@ -69,9 +69,9 @@ public class MFXTableRow<T> extends TableRow<T> {
 
         selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
-                NodeUtils.updateBackground(MFXTableRow.this, getSelectedColor());
+                NodeUtils.updateBackground(MFXLegacyTableRow.this, getSelectedColor());
             } else {
-                NodeUtils.updateBackground(MFXTableRow.this, Color.WHITE);
+                NodeUtils.updateBackground(MFXLegacyTableRow.this, Color.WHITE);
             }
         });
 
@@ -84,16 +84,16 @@ public class MFXTableRow<T> extends TableRow<T> {
                 if (getIndex() == 0) {
                     setBackground(new Background(new BackgroundFill(getHoverColor(), CornerRadii.EMPTY, Insets.EMPTY)));
                 } else {
-                    NodeUtils.updateBackground(MFXTableRow.this, getHoverColor());
+                    NodeUtils.updateBackground(MFXLegacyTableRow.this, getHoverColor());
                 }
             } else {
-                NodeUtils.updateBackground(MFXTableRow.this, Color.WHITE);
+                NodeUtils.updateBackground(MFXLegacyTableRow.this, Color.WHITE);
             }
         });
 
         selectedColor.addListener((observableValue, oldValue, newValue) -> {
             if (!newValue.equals(oldValue) && isSelected()) {
-                NodeUtils.updateBackground(MFXTableRow.this, newValue);
+                NodeUtils.updateBackground(MFXLegacyTableRow.this, newValue);
             }
         });
     }
@@ -152,17 +152,17 @@ public class MFXTableRow<T> extends TableRow<T> {
     private static class StyleableProperties {
         private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
-        private static final CssMetaData<MFXTableRow<?>, Paint> SELECTED_COLOR =
+        private static final CssMetaData<MFXLegacyTableRow<?>, Paint> SELECTED_COLOR =
                 FACTORY.createPaintCssMetaData(
                         "-mfx-selected-color",
-                        MFXTableRow::selectedColorProperty,
+                        MFXLegacyTableRow::selectedColorProperty,
                         Color.rgb(180, 180, 255)
                 );
 
-        private static final CssMetaData<MFXTableRow<?>, Paint> HOVER_COLOR =
+        private static final CssMetaData<MFXLegacyTableRow<?>, Paint> HOVER_COLOR =
                 FACTORY.createPaintCssMetaData(
                         "-mfx-hover-color",
-                        MFXTableRow::hoverColorProperty,
+                        MFXLegacyTableRow::hoverColorProperty,
                         Color.rgb(50, 150, 255, 0.15)
                 );
 

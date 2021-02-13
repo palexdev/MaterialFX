@@ -20,173 +20,152 @@ package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
-import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
+import io.github.palexdev.materialfx.controls.MFXListView;
+import io.github.palexdev.materialfx.effects.RippleGenerator;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
-import io.github.palexdev.materialfx.validation.MFXDialogValidator;
-import javafx.animation.ScaleTransition;
+import io.github.palexdev.materialfx.utils.NodeUtils;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.event.EventHandler;
+import javafx.geometry.HPos;
+import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.control.Label;
-import javafx.scene.control.skin.ComboBoxListViewSkin;
+import javafx.scene.control.PopupControl;
+import javafx.scene.control.SkinBase;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
-import javafx.scene.text.Font;
+import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 
-/**
- * This is the implementation of the {@code Skin} associated with every {@code MFXComboBox}.
- */
-public class MFXComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final double padding = 11;
+public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
+    private final HBox container;
+    private final Label valueLabel;
+    private final MFXIconWrapper icon;
+    private final PopupControl popup;
+    private final MFXListView<T> listView;
+    private final EventHandler<MouseEvent> popupHandler;
 
-    private final Line line;
-    private final Line focusLine;
-    private final Label validate;
+    private Timeline arrowAnimation;
 
-    //================================================================================
-    // Constructors
-    //================================================================================
     public MFXComboBoxSkin(MFXComboBox<T> comboBox) {
         super(comboBox);
 
-        line = new Line();
-        line.getStyleClass().add("unfocused-line");
-        line.setStroke(comboBox.getUnfocusedLineColor());
-        line.setStrokeWidth(comboBox.getLineStrokeWidth());
-        line.setSmooth(true);
+        valueLabel = new Label();
 
-        focusLine = new Line();
-        focusLine.getStyleClass().add("focused-line");
-        focusLine.setStroke(comboBox.getLineColor());
-        focusLine.setStrokeWidth(comboBox.getLineStrokeWidth());
-        focusLine.setSmooth(true);
-        focusLine.setScaleX(0.0);
+        MFXFontIcon fontIcon = new MFXFontIcon("mfx-caret-down", 12);
+        icon = new MFXIconWrapper(fontIcon, 24).addRippleGenerator();
+        icon.getStylesheets().addAll(comboBox.getUserAgentStylesheet());
+        NodeUtils.makeRegionCircular(icon, 10);
 
-        line.endXProperty().bind(comboBox.widthProperty());
-        focusLine.endXProperty().bind(comboBox.widthProperty());
+        container = new HBox(20, valueLabel, icon);
+        container.setAlignment(Pos.CENTER_LEFT);
 
-        MFXFontIcon warnIcon = new MFXFontIcon("mfx-exclamation-triangle", Color.RED);
-        MFXIconWrapper warnWrapper = new MFXIconWrapper(warnIcon, 10);
+        listView = new MFXListView<>();
+        listView.getStylesheets().add(comboBox.getUserAgentStylesheet());
+        popup = new PopupControl();
+        buildPopup();
 
-        validate = new Label("", warnWrapper);
-        validate.getStyleClass().add("validate-label");
-        validate.textProperty().bind(comboBox.getValidator().validatorMessageProperty());
-        validate.setFont(Font.font(padding));
-        validate.setGraphicTextGap(padding / 2);
-        validate.setVisible(false);
+        popupHandler = event -> {
+            if (popup.isShowing() && !NodeUtils.inHierarchy(event.getPickResult().getIntersectedNode(), comboBox)) {
+                popup.hide();
+            }
+        };
 
-        getChildren().addAll(line, focusLine, validate);
-
+        getChildren().add(container);
         setListeners();
     }
 
-    //================================================================================
-    // Methods
-    //================================================================================
-
-    /**
-     * Adds listeners for: line, focus, disabled and validator properties.
-     * <p>
-     * Validator: when the control is not focused, and of course if {@code isValidated} is true,
-     * all the conditions in the validator are evaluated and if one is false the {@code validate} label is shown.
-     * The label text is bound to the {@code validatorMessage} property so if you want to change it you can do it
-     * by getting the instance with {@code getValidator()}.
-     * <p>
-     * There's also another listener to keep track of validator changes and an event handler to show a dialog if you click
-     * on the warning label.
-     */
     private void setListeners() {
-        MFXComboBox<T> comboBox = (MFXComboBox<T>) getSkinnable();
-        MFXDialogValidator validator = comboBox.getValidator();
+        MFXComboBox<T> comboBox = getSkinnable();
+        RippleGenerator rg = icon.getRippleGenerator();
+        rg.setRippleRadius(8);
 
-        comboBox.lineColorProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.equals(oldValue)) {
-                focusLine.setStroke(newValue);
-            }
+        comboBox.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> comboBox.requestFocus());
+
+        icon.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            rg.setGeneratorCenterX(icon.getWidth() / 2);
+            rg.setGeneratorCenterY(icon.getHeight() / 2);
+            rg.createRipple();
         });
 
-        comboBox.unfocusedLineColorProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.equals(oldValue)) {
-                line.setStroke(newValue);
-            }
-        });
-
-        comboBox.lineStrokeWidthProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.doubleValue() != oldValue.doubleValue()) {
-                line.setStrokeWidth(newValue.doubleValue());
-                focusLine.setStrokeWidth(newValue.doubleValue() * 1.3);
-            }
-        });
-
-        comboBox.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue && comboBox.isValidated()) {
-                validate.setVisible(!validator.isValid());
-            }
-
-            if (comboBox.isAnimateLines()) {
-                buildAndPlayAnimation(newValue);
-                return;
-            }
-
-            if (newValue) {
-                focusLine.setScaleX(1.0);
+        icon.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            if (!popup.isShowing()) {
+                Point2D point = NodeUtils.pointRelativeTo(comboBox, listView, HPos.CENTER, VPos.BOTTOM, 0, 2, false);
+                popup.show(comboBox, snapPositionX(point.getX()), snapPositionY(point.getY()));
             } else {
-                focusLine.setScaleX(0.0);
+                popup.hide();
             }
         });
 
-        comboBox.isValidatedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) {
-                validate.setVisible(false);
+        comboBox.selectedValueProperty().bind(listView.getSelectionModel().selectedItemProperty());
+        comboBox.selectedValueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                valueLabel.setText(newValue.toString());
+            } else {
+                valueLabel.setText("");
             }
         });
 
-        comboBox.disabledProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                validate.setVisible(false);
+        listView.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            if (popup.isShowing()) {
+                popup.hide();
             }
         });
+        listView.maxHeightProperty().bind(comboBox.maxPopupHeightProperty());
 
-        validator.addChangeListener((observable, oldValue, newValue) -> {
-            if (comboBox.isValidated()) {
-                validate.setVisible(!newValue);
+        comboBox.getScene().addEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
+        comboBox.sceneProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != oldValue) {
+                oldValue.removeEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
+                if (newValue != null) {
+                    newValue.addEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
+                }
             }
         });
-        validate.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> validator.showModal(comboBox.getScene().getWindow()));
     }
 
-    /**
-     * Builds and play the lines animation if {@code animateLines} is true.
-     */
-    private void buildAndPlayAnimation(boolean focused) {
-        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(400), focusLine);
-        if (focused) {
-            scaleTransition.setFromX(0.0);
-            scaleTransition.setToX(1.0);
-        } else {
-            scaleTransition.setFromX(1.0);
-            scaleTransition.setToX(0.0);
-        }
-        scaleTransition.setInterpolator(MFXAnimationFactory.getInterpolator());
-        scaleTransition.play();
+    protected void buildPopup() {
+        MFXComboBox<T> comboBox = getSkinnable();
+
+        listView.itemsProperty().bind(comboBox.itemsProperty());
+        popup.getScene().setRoot(listView);
+        popup.setOnShowing(event -> buildAnimation(true).play());
+        popup.setOnHiding(event -> buildAnimation(false).play());
     }
 
-    //================================================================================
-    // Override Methods
-    //================================================================================
+    private Timeline buildAnimation(boolean isShowing) {
+        KeyFrame kf0 = new KeyFrame(Duration.millis(150),
+                new KeyValue(icon.rotateProperty(), (isShowing ? 180 : 0))
+        );
+        arrowAnimation = new Timeline(kf0);
+        return arrowAnimation;
+    }
+
     @Override
-    protected void layoutChildren(double x, double y, double w, double h) {
-        super.layoutChildren(x, y, w, h);
+    protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+        double value = leftInset + 50 + rightInset;
+        valueLabel.setMinWidth(value);
+        return value;
+    }
 
-        final double size = padding / 2.5;
-        final double tx = -((w - line.getEndX()) / 2);
+    @Override
+    protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return computePrefWidth(height, topInset, rightInset, bottomInset, leftInset);
+    }
 
-        focusLine.setTranslateY(h);
-        line.setTranslateY(h);
-        validate.resize(w * 1.5, h - size);
-        validate.setTranslateY(focusLine.getTranslateY() + size);
-        validate.setTranslateX(tx);
+    @Override
+    protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return computePrefHeight(width, topInset, rightInset, bottomInset, leftInset);
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        if (arrowAnimation != null) {
+            arrowAnimation = null;
+        }
     }
 }

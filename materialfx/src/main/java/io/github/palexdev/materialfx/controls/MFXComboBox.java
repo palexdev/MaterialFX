@@ -19,312 +19,85 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
-import io.github.palexdev.materialfx.controls.cell.MFXListCell;
+import io.github.palexdev.materialfx.controls.enums.ComboBoxStyles;
 import io.github.palexdev.materialfx.skins.MFXComboBoxSkin;
-import io.github.palexdev.materialfx.validation.MFXDialogValidator;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.css.*;
-import javafx.scene.SnapshotParameters;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Labeled;
-import javafx.scene.control.ListCell;
+import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
-import javafx.scene.image.WritableImage;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
-import java.util.List;
-
-/**
- * This is the implementation of a combo box following Google's material design guidelines in JavaFX.
- * <p>
- * Extends {@code ComboBox}, redefines the style class to "mfx-combo-box" for usage in CSS and
- * includes a {@link MFXDialogValidator}.
- * <p></p>
- * A few notes on features and usage:
- * <p>
- * If you check {@link ComboBox} documentation you will see a big warning about using nodes as content
- * because the scenegraph only allows for Nodes to be in one place at a time.
- * I found a workaround to this issue using {@link #snapshot(SnapshotParameters, WritableImage)}.
- * Basically I make a "screenshot" of the graphic and then I use an {@code ImageView} to show it.
- * <p>
- * So let's say you have a combo box of labels with icons as graphic, when you select an item, it won't disappear anymore
- * from the list because what you are seeing it's not the real graphic but a screenshot of it.
- * <p>
- * I recommend to use only nodes which are instances of {@code Labeled} since the {@code toString()} method is overridden
- * to return the control's text.
- * @see MFXSnapshotWrapper
- */
-public class MFXComboBox<T> extends ComboBox<T> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private static final StyleablePropertyFactory<MFXComboBox<?>> FACTORY = new StyleablePropertyFactory<>(ComboBox.getClassCssMetaData());
+public class MFXComboBox<T> extends Control {
     private final String STYLE_CLASS = "mfx-combo-box";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-combobox.css").toString();
+    private final String STYLESHEET;
 
-    private MFXDialogValidator validator;
+    private final ObjectProperty<T> selectedValue = new SimpleObjectProperty<>();
+    private final ObjectProperty<ObservableList<T>> items = new SimpleObjectProperty<>(FXCollections.observableArrayList());
 
-    //================================================================================
-    // Constructors
-    //================================================================================
+    private final DoubleProperty maxPopupHeight = new SimpleDoubleProperty(200);
+
     public MFXComboBox() {
+        this(FXCollections.observableArrayList());
+    }
+
+    public MFXComboBox(ComboBoxStyles style) {
+        this(FXCollections.observableArrayList(), style);
+    }
+
+    public MFXComboBox(ObservableList<T> items) {
+        this(items, ComboBoxStyles.STYLE1);
+    }
+
+    public MFXComboBox(ObservableList<T> items, ComboBoxStyles style) {
+        this.STYLESHEET = MFXResourcesLoader.load(style.getStyleSheetPath()).toString();
+        this.items.set(items);
+
         initialize();
     }
 
-    public MFXComboBox(ObservableList<T> observableList) {
-        super(observableList);
-        initialize();
-    }
-
-    //================================================================================
-    // Methods
-    //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
-        setCellFactory(listCell -> new MFXListCell<>() {
-            @Override
-            protected void updateItem(T item, boolean empty) {
-                super.updateItem(item, empty);
-
-                getChildren().remove(lookup(".ripple-generator"));
-            }
-        });
-
-        setButtonCell(new ListCell<>() {
-            {
-                valueProperty().addListener(observable -> {
-                    if (getValue() == null) {
-                        updateItem(null, true);
-                    }
-                });
-            }
-
-            @Override
-            protected void updateItem(T item, boolean empty) {
-                updateComboItem(this, item, empty);
-            }
-        });
-
-        setupValidator();
     }
 
-    /**
-     * Defines the behavior of the button cell.
-     * <p>
-     * If it's empty or the item is null, shows the prompt text.
-     * <p>
-     * If the item is instanceof {@code Labeled} makes a "screenshot" of the graphic if not null,
-     * and gets item's text. Otherwise calls {@code toString()} on the item.
-     */
-    protected void updateComboItem(ListCell<T> cell, T item, boolean empty) {
-
-        if (empty || item == null) {
-            cell.setGraphic(null);
-            cell.setText(getPromptText());
-            return;
-        }
-
-        if (item instanceof Labeled) {
-            Labeled nodeItem = (Labeled) item;
-            if (nodeItem.getGraphic() != null) {
-                cell.setGraphic(new MFXSnapshotWrapper(nodeItem.getGraphic()).getGraphic());
-            }
-            cell.setText(nodeItem.getText());
-        } else {
-            cell.setText(item.toString());
-        }
+    public T getSelectedValue() {
+        return selectedValue.get();
     }
 
-    /**
-     * Configures the validator. If {@link #isValidated()} is true, by default shows a warning
-     * if no item is selected. The warning is showed as soon as the control is out of focus.
-     */
-    private void setupValidator() {
-        BooleanProperty validIndex = new SimpleBooleanProperty(false);
-        validIndex.bind(getSelectionModel().selectedIndexProperty().isNotEqualTo(-1));
-        validator = new MFXDialogValidator("Warning");
-        validator.add(validIndex, "Selected index is not valid");
+    public ObjectProperty<T> selectedValueProperty() {
+        return selectedValue;
     }
 
-    /**
-     * Returns the validator instance of this control.
-     */
-    public MFXDialogValidator getValidator() {
-        return validator;
+    public void setSelectedValue(T selectedValue) {
+        this.selectedValue.set(selectedValue);
     }
 
-    //================================================================================
-    // Styleable Properties
-    //================================================================================
-
-    /**
-     * Specifies the line's color when the control is focused.
-     */
-    private final StyleableObjectProperty<Paint> lineColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.LINE_COLOR,
-            this,
-            "lineColor",
-            Color.rgb(50, 120, 220)
-    );
-
-    /**
-     * Specifies the line's color when the control is not focused.
-     */
-    private final StyleableObjectProperty<Paint> unfocusedLineColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.UNFOCUSED_LINE_COLOR,
-            this,
-            "unfocusedLineColor",
-            Color.rgb(77, 77, 77)
-    );
-
-    /**
-     * Specifies the lines' width.
-     */
-    private final StyleableDoubleProperty lineStrokeWidth = new SimpleStyleableDoubleProperty(
-            StyleableProperties.LINE_STROKE_WIDTH,
-            this,
-            "lineStrokeWidth",
-            1.5
-    );
-
-    /**
-     * Specifies if the lines switch between focus/un-focus should be animated.
-     */
-    private final StyleableBooleanProperty animateLines = new SimpleStyleableBooleanProperty(
-            StyleableProperties.ANIMATE_LINES,
-            this,
-            "animateLines",
-            true
-    );
-
-    /**
-     * Specifies if validation is required for the control.
-     */
-    private final StyleableBooleanProperty isValidated = new SimpleStyleableBooleanProperty(
-            StyleableProperties.IS_VALIDATED,
-            this,
-            "isValidated",
-            false
-    );
-
-    public Paint getLineColor() {
-        return lineColor.get();
+    public ObservableList<T> getItems() {
+        return items.get();
     }
 
-    public StyleableObjectProperty<Paint> lineColorProperty() {
-        return lineColor;
+    public ObjectProperty<ObservableList<T>> itemsProperty() {
+        return items;
     }
 
-    public void setLineColor(Paint lineColor) {
-        this.lineColor.set(lineColor);
+    public void setItems(ObservableList<T> items) {
+        this.items.set(items);
     }
 
-    public Paint getUnfocusedLineColor() {
-        return unfocusedLineColor.get();
+    public double getMaxPopupHeight() {
+        return maxPopupHeight.get();
     }
 
-    public StyleableObjectProperty<Paint> unfocusedLineColorProperty() {
-        return unfocusedLineColor;
+    public DoubleProperty maxPopupHeightProperty() {
+        return maxPopupHeight;
     }
 
-    public void setUnfocusedLineColor(Paint unfocusedLineColor) {
-        this.unfocusedLineColor.set(unfocusedLineColor);
+    public void setMaxPopupHeight(double maxPopupHeight) {
+        this.maxPopupHeight.set(maxPopupHeight);
     }
 
-    public double getLineStrokeWidth() {
-        return lineStrokeWidth.get();
-    }
-
-    public StyleableDoubleProperty lineStrokeWidthProperty() {
-        return lineStrokeWidth;
-    }
-
-    public void setLineStrokeWidth(double lineStrokeWidth) {
-        this.lineStrokeWidth.set(lineStrokeWidth);
-    }
-
-    public boolean isAnimateLines() {
-        return animateLines.get();
-    }
-
-    public StyleableBooleanProperty animateLinesProperty() {
-        return animateLines;
-    }
-
-    public void setAnimateLines(boolean animateLines) {
-        this.animateLines.set(animateLines);
-    }
-
-    public boolean isValidated() {
-        return isValidated.get();
-    }
-
-    public StyleableBooleanProperty isValidatedProperty() {
-        return isValidated;
-    }
-
-    public void setValidated(boolean isValidated) {
-        this.isValidated.set(isValidated);
-    }
-
-    //================================================================================
-    // CssMetaData
-    //================================================================================
-    private static class StyleableProperties {
-        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
-
-        private static final CssMetaData<MFXComboBox<?>, Paint> LINE_COLOR =
-                FACTORY.createPaintCssMetaData(
-                        "-mfx-line-color",
-                        MFXComboBox::lineColorProperty,
-                        Color.rgb(50, 150, 205)
-                );
-
-        private static final CssMetaData<MFXComboBox<?>, Paint> UNFOCUSED_LINE_COLOR =
-                FACTORY.createPaintCssMetaData(
-                        "-mfx-unfocused-line-color",
-                        MFXComboBox::unfocusedLineColorProperty,
-                        Color.rgb(77, 77, 77)
-                );
-
-        private final static CssMetaData<MFXComboBox<?>, Number> LINE_STROKE_WIDTH =
-                FACTORY.createSizeCssMetaData(
-                        "-mfx-line-stroke-width",
-                        MFXComboBox::lineStrokeWidthProperty,
-                        1.5
-                );
-
-        private static final CssMetaData<MFXComboBox<?>, Boolean> ANIMATE_LINES =
-                FACTORY.createBooleanCssMetaData(
-                        "-mfx-animate-lines",
-                        MFXComboBox::animateLinesProperty,
-                        true
-                );
-
-        private static final CssMetaData<MFXComboBox<?>, Boolean> IS_VALIDATED =
-                FACTORY.createBooleanCssMetaData(
-                        "-mfx-validate",
-                        MFXComboBox::isValidatedProperty,
-                        false
-                );
-
-        static {
-            cssMetaDataList = List.of(LINE_COLOR, UNFOCUSED_LINE_COLOR, LINE_STROKE_WIDTH, IS_VALIDATED);
-        }
-
-    }
-
-    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
-        return StyleableProperties.cssMetaDataList;
-    }
-
-    //================================================================================
-    // Override Methods
-    //================================================================================
     @Override
     protected Skin<?> createDefaultSkin() {
         return new MFXComboBoxSkin<>(this);
@@ -333,10 +106,5 @@ public class MFXComboBox<T> extends ComboBox<T> {
     @Override
     public String getUserAgentStylesheet() {
         return STYLESHEET;
-    }
-
-    @Override
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return MFXComboBox.getControlCssMetaDataList();
     }
 }
