@@ -20,6 +20,7 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.enums.ComboBoxStyles;
+import io.github.palexdev.materialfx.selection.ComboSelectionModelMock;
 import io.github.palexdev.materialfx.skins.MFXComboBoxSkin;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
@@ -37,7 +38,12 @@ public class MFXComboBox<T> extends Control {
     private final ObjectProperty<T> selectedValue = new SimpleObjectProperty<>();
     private final ObjectProperty<ObservableList<T>> items = new SimpleObjectProperty<>(FXCollections.observableArrayList());
 
+    private final DoubleProperty maxPopupWidth = new SimpleDoubleProperty(150);
     private final DoubleProperty maxPopupHeight = new SimpleDoubleProperty(200);
+    private final DoubleProperty popupXOffset = new SimpleDoubleProperty(0);
+    private final DoubleProperty popupYOffset = new SimpleDoubleProperty(1);
+
+    private final ComboSelectionModelMock<T> mockSelection;
 
     public MFXComboBox() {
         this(FXCollections.observableArrayList());
@@ -54,6 +60,7 @@ public class MFXComboBox<T> extends Control {
     public MFXComboBox(ObservableList<T> items, ComboBoxStyles style) {
         this.STYLESHEET = MFXResourcesLoader.load(style.getStyleSheetPath()).toString();
         this.items.set(items);
+        this.mockSelection = new ComboSelectionModelMock<>(this);
 
         initialize();
     }
@@ -86,6 +93,18 @@ public class MFXComboBox<T> extends Control {
         this.items.set(items);
     }
 
+    public double getMaxPopupWidth() {
+        return maxPopupWidth.get();
+    }
+
+    public DoubleProperty maxPopupWidthProperty() {
+        return maxPopupWidth;
+    }
+
+    public void setMaxPopupWidth(double maxPopupWidth) {
+        this.maxPopupWidth.set(maxPopupWidth);
+    }
+
     public double getMaxPopupHeight() {
         return maxPopupHeight.get();
     }
@@ -96,6 +115,34 @@ public class MFXComboBox<T> extends Control {
 
     public void setMaxPopupHeight(double maxPopupHeight) {
         this.maxPopupHeight.set(maxPopupHeight);
+    }
+
+    public double getPopupXOffset() {
+        return popupXOffset.get();
+    }
+
+    public DoubleProperty popupXOffsetProperty() {
+        return popupXOffset;
+    }
+
+    public void setPopupXOffset(double popupXOffset) {
+        this.popupXOffset.set(popupXOffset);
+    }
+
+    public double getPopupYOffset() {
+        return popupYOffset.get();
+    }
+
+    public DoubleProperty popupYOffsetProperty() {
+        return popupYOffset;
+    }
+
+    public void setPopupYOffset(double popupYOffset) {
+        this.popupYOffset.set(popupYOffset);
+    }
+
+    public ComboSelectionModelMock<T> getSelectionModel() {
+        return mockSelection;
     }
 
     @Override

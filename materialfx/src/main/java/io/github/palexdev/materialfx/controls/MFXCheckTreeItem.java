@@ -21,8 +21,9 @@ package io.github.palexdev.materialfx.controls;
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeCell;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
-import io.github.palexdev.materialfx.controls.base.ICheckModel;
 import io.github.palexdev.materialfx.controls.cell.MFXCheckTreeCell;
+import io.github.palexdev.materialfx.selection.ITreeCheckModel;
+import io.github.palexdev.materialfx.selection.TreeCheckModelTree;
 import io.github.palexdev.materialfx.skins.MFXCheckTreeItemSkin;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -38,7 +39,7 @@ import java.lang.ref.WeakReference;
  * <p>
  * The default associated {@link Skin} is {@link MFXCheckTreeItemSkin<T>}.
  * @see MFXCheckTreeView
- * @see ICheckModel
+ * @see ITreeCheckModel
  * @param <T> The type of the data within TreeItem.
  */
 public class MFXCheckTreeItem<T> extends MFXTreeItem<T> {
@@ -72,15 +73,15 @@ public class MFXCheckTreeItem<T> extends MFXTreeItem<T> {
      * Sets the style class to "mfx-tree-view".
      * <p>
      * Adds a listener to {@link #treeViewProperty()} allowing item check before the Scene is shown
-     * by calling the CheckModel {@link CheckModel#scanTree(MFXCheckTreeItem)} )} method.
+     * by calling the TreeCheckModelTree {@link TreeCheckModelTree#scanTree(MFXCheckTreeItem)} )} method.
      */
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
 
         treeViewProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && isRoot()) {
-                CheckModel<T> checkModel = (CheckModel<T>) getSelectionModel();
-                checkModel.scanTree((MFXCheckTreeItem<T>) getRoot());
+                TreeCheckModelTree<T> treeCheckModel = (TreeCheckModelTree<T>) getSelectionModel();
+                treeCheckModel.scanTree((MFXCheckTreeItem<T>) getRoot());
             }
         });
     }
@@ -114,11 +115,11 @@ public class MFXCheckTreeItem<T> extends MFXTreeItem<T> {
     //================================================================================
 
     /**
-     * Overridden to return the ICheckModel instance of the MFXCheckTreeView.
+     * Overridden to return the ITreeCheckModel instance of the MFXCheckTreeView.
      */
     @Override
-    public ICheckModel<T> getSelectionModel() {
-        return (ICheckModel<T>) super.getSelectionModel();
+    public ITreeCheckModel<T> getSelectionModel() {
+        return (ITreeCheckModel<T>) super.getSelectionModel();
     }
 
     /**

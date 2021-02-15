@@ -18,6 +18,7 @@ module MaterialFX.materialfx.main {
     exports io.github.palexdev.materialfx.effects;
     exports io.github.palexdev.materialfx.font;
     exports io.github.palexdev.materialfx.notifications;
+    exports io.github.palexdev.materialfx.selection;
     exports io.github.palexdev.materialfx.skins;
     exports io.github.palexdev.materialfx.skins.legacy;
     exports io.github.palexdev.materialfx.utils;

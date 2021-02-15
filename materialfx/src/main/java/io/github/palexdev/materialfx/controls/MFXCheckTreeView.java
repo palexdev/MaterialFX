@@ -18,10 +18,12 @@
 
 package io.github.palexdev.materialfx.controls;
 
+import io.github.palexdev.materialfx.selection.TreeCheckModelTree;
+
 /**
  * This is the container for a tree made of MFXCheckTreeItems.
  * <p>
- * Note: this could also work with other item classes since the CheckModel extends SelectionModel,
+ * Note: this could also work with other item classes since the TreeCheckModelTree extends TreeTreeSelectionModel,
  * but of course it is not recommended to do so.
  * @param <T> The type of the data within the items.
  */
@@ -40,8 +42,8 @@ public class MFXCheckTreeView<T> extends MFXTreeView<T> {
     //================================================================================
     // Methods
     //================================================================================
-    public CheckModel<T> getCheckModel() {
-        return (CheckModel<T>) super.getSelectionModel();
+    public TreeCheckModelTree<T> getCheckModel() {
+        return (TreeCheckModelTree<T>) super.getSelectionModel();
     }
 
     //================================================================================
@@ -49,14 +51,14 @@ public class MFXCheckTreeView<T> extends MFXTreeView<T> {
     //================================================================================
 
     /**
-     * Overridden method to install a CheckModel.
+     * Overridden method to install a TreeCheckModelTree.
      * <p>
      * By default it is set to allow multiple selection.
      */
     @Override
     protected void installSelectionModel() {
-        CheckModel<T> checkModel = new CheckModel<>();
-        checkModel.setAllowsMultipleSelection(true);
-        setSelectionModel(checkModel);
+        TreeCheckModelTree<T> treeCheckModel = new TreeCheckModelTree<>();
+        treeCheckModel.setAllowsMultipleSelection(true);
+        setSelectionModel(treeCheckModel);
     }
 }

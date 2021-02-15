@@ -20,7 +20,8 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
-import io.github.palexdev.materialfx.controls.base.ISelectionModel;
+import io.github.palexdev.materialfx.selection.ITreeSelectionModel;
+import io.github.palexdev.materialfx.selection.TreeTreeSelectionModel;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -45,7 +46,7 @@ public class MFXTreeView<T> extends MFXScrollPane {
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-treeview.css").toString();
 
     private final ObjectProperty<AbstractMFXTreeItem<T>> root = new SimpleObjectProperty<>(null);
-    private final ObjectProperty<ISelectionModel<T>> selectionModel = new SimpleObjectProperty<>(null);
+    private final ObjectProperty<ITreeSelectionModel<T>> selectionModel = new SimpleObjectProperty<>(null);
     private final BooleanProperty showRoot = new SimpleBooleanProperty(true);
 
     //================================================================================
@@ -120,7 +121,7 @@ public class MFXTreeView<T> extends MFXScrollPane {
      * By default it is set to allow multiple selection.
      */
     protected void installSelectionModel() {
-        ISelectionModel<T> selectionModel = new SelectionModel<>();
+        ITreeSelectionModel<T> selectionModel = new TreeTreeSelectionModel<>();
         selectionModel.setAllowsMultipleSelection(true);
         setSelectionModel(selectionModel);
     }
@@ -137,15 +138,15 @@ public class MFXTreeView<T> extends MFXScrollPane {
         this.root.set(root);
     }
 
-    public ISelectionModel<T> getSelectionModel() {
+    public ITreeSelectionModel<T> getSelectionModel() {
         return selectionModel.get();
     }
 
-    public ObjectProperty<ISelectionModel<T>> selectionModelProperty() {
+    public ObjectProperty<ITreeSelectionModel<T>> selectionModelProperty() {
         return selectionModel;
     }
 
-    public void setSelectionModel(ISelectionModel<T> selectionModel) {
+    public void setSelectionModel(ITreeSelectionModel<T> selectionModel) {
         this.selectionModel.set(selectionModel);
     }
 

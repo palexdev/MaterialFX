@@ -92,7 +92,15 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
 
         icon.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (!popup.isShowing()) {
-                Point2D point = NodeUtils.pointRelativeTo(comboBox, listView, HPos.CENTER, VPos.BOTTOM, 0, 2, false);
+                Point2D point = NodeUtils.pointRelativeTo(
+                        comboBox,
+                        listView,
+                        HPos.CENTER,
+                        VPos.BOTTOM,
+                        comboBox.getPopupXOffset(),
+                        comboBox.getPopupYOffset(),
+                        false
+                );
                 popup.show(comboBox, snapPositionX(point.getX()), snapPositionY(point.getY()));
             } else {
                 popup.hide();
@@ -114,6 +122,28 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
             }
         });
         listView.maxHeightProperty().bind(comboBox.maxPopupHeightProperty());
+        listView.maxWidthProperty().bind(comboBox.maxPopupWidthProperty());
+
+        listView.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> comboBox.getSelectionModel().selectedIndexProperty().set(newValue.intValue()));
+        listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> comboBox.getSelectionModel().selectedItemProperty().set(newValue));
+        comboBox.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.intValue() != oldValue.intValue()) {
+                if (newValue.intValue() == -1) {
+                    listView.getSelectionModel().clearSelection();
+                } else {
+                    listView.getSelectionModel().select(newValue.intValue());
+                }
+            }
+        });
+        comboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != oldValue) {
+                if (newValue == null) {
+                    listView.getSelectionModel().clearSelection();
+                } else {
+                    listView.getSelectionModel().select(newValue);
+                }
+            }
+        });
 
         comboBox.getScene().addEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
         comboBox.sceneProperty().addListener((observable, oldValue, newValue) -> {

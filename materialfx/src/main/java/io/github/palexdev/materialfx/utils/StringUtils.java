@@ -86,6 +86,12 @@ public class StringUtils {
                 + string.substring(index + substring.length());
     }
 
+    public static String replaceIndex(String string, int startIndex, int endIndex, String replacement) {
+        StringBuilder sb = new StringBuilder(string);
+        sb.replace(startIndex, endIndex, replacement);
+        return sb.toString();
+    }
+
     public static String titleCaseWord(String str) {
         if (str.length() > 0) {
             int firstChar = str.codePointAt(0);

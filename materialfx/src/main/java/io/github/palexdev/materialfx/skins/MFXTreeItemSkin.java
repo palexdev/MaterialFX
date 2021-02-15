@@ -22,6 +22,7 @@ import io.github.palexdev.materialfx.controls.MFXTreeItem;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeCell;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
+import io.github.palexdev.materialfx.selection.TreeTreeSelectionModel;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.*;
 import javafx.collections.FXCollections;
@@ -200,7 +201,7 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
      * the behavior is to expand/collapse the item only if the mouse was pressed on the disclosure node.
      * <p>
      * If that is not the case then we trigger the selection, retrieve the selection model and select the item.
-     * @see io.github.palexdev.materialfx.controls.SelectionModel
+     * @see TreeTreeSelectionModel
      */
     private void setListeners() {
         MFXTreeItem<T> item = getSkinnable();
