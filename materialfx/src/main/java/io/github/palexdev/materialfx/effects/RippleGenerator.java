@@ -18,6 +18,7 @@
 
 package io.github.palexdev.materialfx.effects;
 
+import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.controls.factories.RippleClipTypeFactory;
 import javafx.animation.*;
 import javafx.beans.property.ObjectProperty;
@@ -52,7 +53,6 @@ public class RippleGenerator extends Group {
 
     private RippleClipTypeFactory rippleClipTypeFactory = new RippleClipTypeFactory(RippleClipType.RECTANGLE);
     private DepthLevel level = null;
-    private final Interpolator rippleInterpolator = Interpolator.SPLINE(0.0825, 0.3025, 0.0875, 0.9975);
     //private final Interpolator rippleInterpolator = Interpolator.SPLINE(0.1, 0.50, 0.3, 0.85);
     private final StyleableObjectProperty<Color> rippleColor = new SimpleStyleableObjectProperty<>(
             StyleableProperties.RIPPLE_COLOR,
@@ -285,7 +285,7 @@ public class RippleGenerator extends Group {
             }
 
             sequentialTransition.getChildren().addAll(inAnimation, outAnimation);
-            parallelTransition.setInterpolator(rippleInterpolator);
+            parallelTransition.setInterpolator(MFXAnimationFactory.getInterpolatorV2());
             parallelTransition.getChildren().add(sequentialTransition);
         }
     }

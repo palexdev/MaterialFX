@@ -42,6 +42,8 @@ import javafx.util.Duration;
 public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
     private final HBox container;
     private final Label valueLabel;
+    private final double minWidth = 100;
+
     private final MFXIconWrapper icon;
     private final PopupControl popup;
     private final MFXListView<T> listView;
@@ -53,13 +55,15 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         super(comboBox);
 
         valueLabel = new Label();
+        valueLabel.setMinWidth(snappedLeftInset() + minWidth + snappedRightInset());
 
         MFXFontIcon fontIcon = new MFXFontIcon("mfx-caret-down", 12);
         icon = new MFXIconWrapper(fontIcon, 24).addRippleGenerator();
+        icon.setManaged(false);
         icon.getStylesheets().addAll(comboBox.getUserAgentStylesheet());
         NodeUtils.makeRegionCircular(icon, 10);
 
-        container = new HBox(20, valueLabel, icon);
+        container = new HBox(20, valueLabel);
         container.setAlignment(Pos.CENTER_LEFT);
 
         listView = new MFXListView<>();
@@ -73,7 +77,7 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
             }
         };
 
-        getChildren().add(container);
+        getChildren().addAll(container, icon);
         setListeners();
     }
 
@@ -82,7 +86,13 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         RippleGenerator rg = icon.getRippleGenerator();
         rg.setRippleRadius(8);
 
-        comboBox.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> comboBox.requestFocus());
+        comboBox.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            comboBox.requestFocus();
+
+            if (event.getClickCount() >= 2) {
+                NodeUtils.fireDummyEvent(icon);
+            }
+        });
 
         icon.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             rg.setGeneratorCenterX(icon.getWidth() / 2);
@@ -145,10 +155,11 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
             }
         });
 
-        comboBox.getScene().addEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
-        comboBox.sceneProperty().addListener((observable, oldValue, newValue) -> {
+        comboBox.parentProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != oldValue) {
-                oldValue.removeEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
+                if (oldValue != null) {
+                    oldValue.removeEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
+                }
                 if (newValue != null) {
                     newValue.addEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
                 }
@@ -175,19 +186,22 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
 
     @Override
     protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        double value = leftInset + 50 + rightInset;
-        valueLabel.setMinWidth(value);
-        return value;
+        return leftInset + minWidth + rightInset;
+    }
+
+    @Override
+    protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return Math.max(super.computeMinHeight(width, topInset, rightInset, bottomInset, leftInset), topInset + icon.getHeight() + bottomInset);
     }
 
     @Override
     protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return computePrefWidth(height, topInset, rightInset, bottomInset, leftInset);
+        return super.computePrefWidth(height, topInset, rightInset, bottomInset, leftInset);
     }
 
     @Override
     protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return computePrefHeight(width, topInset, rightInset, bottomInset, leftInset);
+        return super.computePrefHeight(width, topInset, rightInset, bottomInset, leftInset);
     }
 
     @Override
@@ -197,5 +211,16 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         if (arrowAnimation != null) {
             arrowAnimation = null;
         }
+    }
+
+    @Override
+    protected void layoutChildren(double contentX, double contentY, double contentWidth, double contentHeight) {
+        super.layoutChildren(contentX, contentY, contentWidth, contentHeight);
+
+        double iconWidth = icon.getPrefWidth();
+        double iconHeight = icon.getPrefHeight();
+        double center = ((snappedTopInset() + snappedBottomInset()) / 2.0) + ((contentHeight - iconHeight) / 2.0);
+        System.out.println(center);
+        icon.resizeRelocate(contentWidth - iconWidth, center, iconWidth, iconHeight);
     }
 }

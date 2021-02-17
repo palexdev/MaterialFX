@@ -120,6 +120,11 @@ public class MFXIconWrapper extends StackPane {
         return rippleGenerator;
      }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
+
+
     /**
      * @return an unmodifiable list of the StackPane children
      */

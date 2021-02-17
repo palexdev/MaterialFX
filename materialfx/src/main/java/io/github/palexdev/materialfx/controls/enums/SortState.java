@@ -18,17 +18,9 @@
 
 package io.github.palexdev.materialfx.controls.enums;
 
-public enum ComboBoxStyles {
-    STYLE1("css/mfx-combobox-style1.css"),
-    STYLE2("css/mfx-combobox-style2.css");
-
-    private final String styleSheetPath;
-
-    ComboBoxStyles(String styleSheetPath) {
-        this.styleSheetPath = styleSheetPath;
-    }
-
-    public String getStyleSheetPath() {
-        return styleSheetPath;
-    }
+public enum SortState {
+    ASCENDING,
+    DESCENDING,
+    UNSORTED
 }
+

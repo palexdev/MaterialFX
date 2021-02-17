@@ -39,7 +39,7 @@ public enum FontResources {
     CHEVRON_DOWN("mfx-chevron-down", '\uE902'),
     CHEVRON_LEFT("mfx-chevron-left", '\uE903'),
     CHEVRON_RIGHT("mfx-chevron-right", '\uE907'),
-    CHEVRON_UP("mfx-chevron-right", '\uE908'),
+    CHEVRON_UP("mfx-chevron-up", '\uE908'),
     CIRCLE("mfx-circle", '\uE909'),
     EXCLAMATION_CIRCLE("mfx-exclamation-circle", '\uE917'),
     EXCLAMATION_TRIANGLE("mfx-exclamation-triangle", '\uE918'),

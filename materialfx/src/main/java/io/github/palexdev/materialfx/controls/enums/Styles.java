@@ -16,28 +16,36 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-.mfx-legacy-table-row {
-    -fx-background-insets: 0.0;
-    -fx-text-fill: black;
-    -fx-padding: 0 -3 0 3;
+package io.github.palexdev.materialfx.controls.enums;
 
-    -mfx-hover-color: rgba(50, 150, 255, 0.15);
-}
+public class Styles {
+    public enum ComboBoxStyles {
+        STYLE1("css/mfx-combobox-style1.css"),
+        STYLE2("css/mfx-combobox-style2.css");
 
-.mfx-legacy-table-row:odd,
-.mfx-legacy-table-row:even {
-    -fx-background-color: white;
-}
+        private final String styleSheetPath;
 
-.mfx-legacy-table-row:filled:hover,
-.mfx-legacy-table-row:selected .label {
-    -fx-text-fill: black;
-}
+        ComboBoxStyles(String styleSheetPath) {
+            this.styleSheetPath = styleSheetPath;
+        }
 
-.table-row-cell .text {
-    -fx-fill: -fx-text-background-color;
-}
+        public String getStyleSheetPath() {
+            return styleSheetPath;
+        }
+    }
 
-.table-row-cell:selected .text {
-    -fx-fill: black;
+    public enum LabelStyles {
+        STYLE1("css/mfx-label-style1.css"),
+        STYLE2("css/mfx-label-style2.css");
+
+        private final String styleSheetPath;
+
+        LabelStyles(String styleSheetPath) {
+            this.styleSheetPath = styleSheetPath;
+        }
+
+        public String getStyleSheetPath() {
+            return styleSheetPath;
+        }
+    }
 }

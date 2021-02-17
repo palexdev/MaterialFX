@@ -19,7 +19,6 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.controls.enums.ComboBoxStyles;
 import io.github.palexdev.materialfx.selection.ComboSelectionModelMock;
 import io.github.palexdev.materialfx.skins.MFXComboBoxSkin;
 import javafx.beans.property.DoubleProperty;
@@ -28,12 +27,18 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.css.*;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 
+import java.util.List;
+
+import static io.github.palexdev.materialfx.controls.enums.Styles.ComboBoxStyles;
+
 public class MFXComboBox<T> extends Control {
+    private static final StyleablePropertyFactory<MFXComboBox<?>> FACTORY = new StyleablePropertyFactory<>(Control.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-combo-box";
-    private final String STYLESHEET;
+    private String STYLESHEET;
 
     private final ObjectProperty<T> selectedValue = new SimpleObjectProperty<>();
     private final ObjectProperty<ObservableList<T>> items = new SimpleObjectProperty<>(FXCollections.observableArrayList());
@@ -49,16 +54,8 @@ public class MFXComboBox<T> extends Control {
         this(FXCollections.observableArrayList());
     }
 
-    public MFXComboBox(ComboBoxStyles style) {
-        this(FXCollections.observableArrayList(), style);
-    }
-
     public MFXComboBox(ObservableList<T> items) {
-        this(items, ComboBoxStyles.STYLE1);
-    }
-
-    public MFXComboBox(ObservableList<T> items, ComboBoxStyles style) {
-        this.STYLESHEET = MFXResourcesLoader.load(style.getStyleSheetPath()).toString();
+        this.STYLESHEET = MFXResourcesLoader.load(getComboStyle().getStyleSheetPath()).toString();
         this.items.set(items);
         this.mockSelection = new ComboSelectionModelMock<>(this);
 
@@ -67,6 +64,17 @@ public class MFXComboBox<T> extends Control {
 
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
+
+        /* Makes possible to choose the control style without depending on the constructor,
+         *  it seems to work well but to be honest it would be way better if JavaFX would give us
+         * the possibility to change the user agent stylesheet at runtime (I mean by re-calling getUserAgentStylesheet)
+         */
+        comboStyle.addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && newValue != oldValue) {
+                STYLESHEET = MFXResourcesLoader.load(newValue.getStyleSheetPath()).toString();
+                getStylesheets().setAll(STYLESHEET);
+            }
+        });
     }
 
     public T getSelectedValue() {
@@ -145,6 +153,45 @@ public class MFXComboBox<T> extends Control {
         return mockSelection;
     }
 
+    private final StyleableObjectProperty<ComboBoxStyles> comboStyle = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.STYLE,
+            this,
+            "comboStyle",
+            ComboBoxStyles.STYLE1
+    );
+
+    public ComboBoxStyles getComboStyle() {
+        return comboStyle.get();
+    }
+
+    public StyleableObjectProperty<ComboBoxStyles> comboStyleProperty() {
+        return comboStyle;
+    }
+
+    public void setComboStyle(ComboBoxStyles comboStyle) {
+        this.comboStyle.set(comboStyle);
+    }
+
+    private static class StyleableProperties {
+        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+
+        private static final CssMetaData<MFXComboBox<?>, ComboBoxStyles> STYLE =
+                FACTORY.createEnumCssMetaData(
+                        ComboBoxStyles.class,
+                        "-mfx-style",
+                        MFXComboBox::comboStyleProperty,
+                        ComboBoxStyles.STYLE1
+                );
+
+        static {
+            cssMetaDataList = List.of(STYLE);
+        }
+    }
+
+    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
+        return StyleableProperties.cssMetaDataList;
+    }
+
     @Override
     protected Skin<?> createDefaultSkin() {
         return new MFXComboBoxSkin<>(this);
@@ -153,5 +200,10 @@ public class MFXComboBox<T> extends Control {
     @Override
     public String getUserAgentStylesheet() {
         return STYLESHEET;
+    }
+
+    @Override
+    protected List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+        return MFXComboBox.getControlCssMetaDataList();
     }
 }

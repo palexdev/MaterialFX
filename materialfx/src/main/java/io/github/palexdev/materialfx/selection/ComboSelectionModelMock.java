@@ -29,9 +29,6 @@ public class ComboSelectionModelMock<T> {
 
     public ComboSelectionModelMock(MFXComboBox<T> comboBox) {
         this.comboBox = comboBox;
-
-        selectedItem.addListener((observable, oldValue, newValue) -> System.out.println(newValue));
-        selectedIndex.addListener((observable, oldValue, newValue) -> System.out.println(newValue));
     }
 
     public void clearSelection() {

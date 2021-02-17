@@ -16,28 +16,24 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-.mfx-legacy-table-row {
-    -fx-background-insets: 0.0;
-    -fx-text-fill: black;
-    -fx-padding: 0 -3 0 3;
+@import "fonts.css";
 
-    -mfx-hover-color: rgba(50, 150, 255, 0.15);
-}
+.mfx-label {
+    -mfx-line-color: transparent;
+    -mfx-unfocused-line-color: transparent;
 
-.mfx-legacy-table-row:odd,
-.mfx-legacy-table-row:even {
     -fx-background-color: white;
+    -fx-background-radius: 4;
+
+    -fx-border-color: rgb(159, 159, 159);
+    -fx-border-radius: 4;
+
+    -fx-font-family: "Open Sans Regular";
+    -fx-font-smoothing-type: grey;
+    -fx-text-fill: rgb(85, 85, 85);
 }
 
-.mfx-legacy-table-row:filled:hover,
-.mfx-legacy-table-row:selected .label {
-    -fx-text-fill: black;
+.mfx-label:focused {
+    -fx-border-color: rgb(82, 0, 237);
 }
 
-.table-row-cell .text {
-    -fx-fill: -fx-text-background-color;
-}
-
-.table-row-cell:selected .text {
-    -fx-fill: black;
-}

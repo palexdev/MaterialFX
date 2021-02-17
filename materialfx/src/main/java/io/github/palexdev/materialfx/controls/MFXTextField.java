@@ -135,7 +135,7 @@ public class MFXTextField extends TextField {
             StyleableProperties.LINE_STROKE_WIDTH,
             this,
             "lineStrokeWidth",
-            1.5
+            1.0
     );
 
     /**
@@ -261,7 +261,7 @@ public class MFXTextField extends TextField {
                 FACTORY.createSizeCssMetaData(
                         "-mfx-line-stroke-width",
                         MFXTextField::lineStrokeWidthProperty,
-                        1.5
+                        1.0
                 );
 
         private static final CssMetaData<MFXTextField, Boolean> ANIMATE_LINES =

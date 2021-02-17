@@ -35,10 +35,10 @@ public enum MFXAnimationFactory {
         @Override
         public Timeline build(Node node, double durationMillis) {
             MFXAnimationFactory.resetNode(node);
-            KeyValue keyValue1 = new KeyValue(node.opacityProperty(), 0, interpolator);
+            KeyValue keyValue1 = new KeyValue(node.opacityProperty(), 0, interpolator_v1);
             KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-            KeyValue keyValue2 = new KeyValue(node.opacityProperty(), 1.0, interpolator);
+            KeyValue keyValue2 = new KeyValue(node.opacityProperty(), 1.0, interpolator_v1);
             KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
             return new Timeline(keyFrame1, keyFrame2);
@@ -48,10 +48,10 @@ public enum MFXAnimationFactory {
         @Override
         public Timeline build(Node node, double durationMillis) {
             MFXAnimationFactory.resetNode(node);
-            KeyValue keyValue1 = new KeyValue(node.opacityProperty(), 1.0, interpolator);
+            KeyValue keyValue1 = new KeyValue(node.opacityProperty(), 1.0, interpolator_v1);
             KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-            KeyValue keyValue2 = new KeyValue(node.opacityProperty(), 0, interpolator);
+            KeyValue keyValue2 = new KeyValue(node.opacityProperty(), 0, interpolator_v1);
             KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
             return new Timeline(keyFrame1, keyFrame2);
@@ -61,10 +61,10 @@ public enum MFXAnimationFactory {
         @Override
         public Timeline build(Node node, double durationMillis) {
             MFXAnimationFactory.resetNode(node);
-            KeyValue keyValue1 = new KeyValue(node.translateYProperty(), -node.getBoundsInParent().getHeight() * 2, interpolator);
+            KeyValue keyValue1 = new KeyValue(node.translateYProperty(), -node.getBoundsInParent().getHeight() * 2, interpolator_v1);
             KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-            KeyValue keyValue2 = new KeyValue(node.translateYProperty(), 0, interpolator);
+            KeyValue keyValue2 = new KeyValue(node.translateYProperty(), 0, interpolator_v1);
             KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
             return new Timeline(keyFrame1, keyFrame2);
@@ -74,10 +74,10 @@ public enum MFXAnimationFactory {
         @Override
         public Timeline build(Node node, double durationMillis) {
             MFXAnimationFactory.resetNode(node);
-            KeyValue keyValue1 = new KeyValue(node.translateYProperty(), 0, interpolator);
+            KeyValue keyValue1 = new KeyValue(node.translateYProperty(), 0, interpolator_v1);
             KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-            KeyValue keyValue2 = new KeyValue(node.translateYProperty(), node.getBoundsInParent().getHeight() * 2, interpolator);
+            KeyValue keyValue2 = new KeyValue(node.translateYProperty(), node.getBoundsInParent().getHeight() * 2, interpolator_v1);
             KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
             return new Timeline(keyFrame1, keyFrame2);
@@ -87,10 +87,10 @@ public enum MFXAnimationFactory {
         @Override
         public Timeline build(Node node, double durationMillis) {
             MFXAnimationFactory.resetNode(node);
-            KeyValue keyValue1 = new KeyValue(node.translateXProperty(), -node.getBoundsInParent().getWidth() * 2, interpolator);
+            KeyValue keyValue1 = new KeyValue(node.translateXProperty(), -node.getBoundsInParent().getWidth() * 2, interpolator_v1);
             KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-            KeyValue keyValue2 = new KeyValue(node.translateXProperty(), 0, interpolator);
+            KeyValue keyValue2 = new KeyValue(node.translateXProperty(), 0, interpolator_v1);
             KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
             return new Timeline(keyFrame1, keyFrame2);
@@ -100,10 +100,10 @@ public enum MFXAnimationFactory {
         @Override
         public Timeline build(Node node, double durationMillis) {
             MFXAnimationFactory.resetNode(node);
-            KeyValue keyValue1 = new KeyValue(node.translateXProperty(), 0, interpolator);
+            KeyValue keyValue1 = new KeyValue(node.translateXProperty(), 0, interpolator_v1);
             KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-            KeyValue keyValue2 = new KeyValue(node.translateXProperty(), -node.getBoundsInParent().getWidth() * 2, interpolator);
+            KeyValue keyValue2 = new KeyValue(node.translateXProperty(), -node.getBoundsInParent().getWidth() * 2, interpolator_v1);
             KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
             return new Timeline(keyFrame1, keyFrame2);
@@ -113,10 +113,10 @@ public enum MFXAnimationFactory {
         @Override
         public Timeline build(Node node, double durationMillis) {
             MFXAnimationFactory.resetNode(node);
-            KeyValue keyValue1 = new KeyValue(node.translateXProperty(), node.getBoundsInParent().getWidth() * 2, interpolator);
+            KeyValue keyValue1 = new KeyValue(node.translateXProperty(), node.getBoundsInParent().getWidth() * 2, interpolator_v1);
             KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-            KeyValue keyValue2 = new KeyValue(node.translateXProperty(), 0, interpolator);
+            KeyValue keyValue2 = new KeyValue(node.translateXProperty(), 0, interpolator_v1);
             KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
             return new Timeline(keyFrame1, keyFrame2);
@@ -126,10 +126,10 @@ public enum MFXAnimationFactory {
         @Override
         public Timeline build(Node node, double durationMillis) {
             MFXAnimationFactory.resetNode(node);
-            KeyValue keyValue1 = new KeyValue(node.translateXProperty(), 0, interpolator);
+            KeyValue keyValue1 = new KeyValue(node.translateXProperty(), 0, interpolator_v1);
             KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-            KeyValue keyValue2 = new KeyValue(node.translateXProperty(), node.getBoundsInParent().getWidth() * 2, interpolator);
+            KeyValue keyValue2 = new KeyValue(node.translateXProperty(), node.getBoundsInParent().getWidth() * 2, interpolator_v1);
             KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
             return new Timeline(keyFrame1, keyFrame2);
@@ -139,10 +139,10 @@ public enum MFXAnimationFactory {
         @Override
         public Timeline build(Node node, double durationMillis) {
             MFXAnimationFactory.resetNode(node);
-            KeyValue keyValue1 = new KeyValue(node.translateYProperty(), node.getBoundsInParent().getHeight() * 2, interpolator);
+            KeyValue keyValue1 = new KeyValue(node.translateYProperty(), node.getBoundsInParent().getHeight() * 2, interpolator_v1);
             KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-            KeyValue keyValue2 = new KeyValue(node.translateYProperty(), 0, interpolator);
+            KeyValue keyValue2 = new KeyValue(node.translateYProperty(), 0, interpolator_v1);
             KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
             return new Timeline(keyFrame1, keyFrame2);
@@ -152,20 +152,25 @@ public enum MFXAnimationFactory {
         @Override
         public Timeline build(Node node, double durationMillis) {
             MFXAnimationFactory.resetNode(node);
-            KeyValue keyValue1 = new KeyValue(node.translateYProperty(), 0, interpolator);
+            KeyValue keyValue1 = new KeyValue(node.translateYProperty(), 0, interpolator_v1);
             KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-            KeyValue keyValue2 = new KeyValue(node.translateYProperty(), -node.getBoundsInParent().getHeight() * 2, interpolator);
+            KeyValue keyValue2 = new KeyValue(node.translateYProperty(), -node.getBoundsInParent().getHeight() * 2, interpolator_v1);
             KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
             return new Timeline(keyFrame1, keyFrame2);
         }
     };
 
-    private static final Interpolator interpolator = Interpolator.SPLINE(0.25, 0.1, 0.25, 1);
+    private static final Interpolator interpolator_v1 = Interpolator.SPLINE(0.25, 0.1, 0.25, 1);
+    private static final Interpolator interpolator_v2 = Interpolator.SPLINE(0.0825D, 0.3025D, 0.0875D, 0.9975D);
 
-    public static Interpolator getInterpolator() {
-        return interpolator;
+    public static Interpolator getInterpolatorV1() {
+        return interpolator_v1;
+    }
+
+    public static Interpolator getInterpolatorV2() {
+        return interpolator_v2;
     }
 
     private static void resetNode(Node node) {

@@ -93,7 +93,6 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
     private final AbstractMFXTreeCell<T> cell;
     private final ListChangeListener<AbstractMFXTreeItem<T>> itemsListener;
 
-    private final Interpolator interpolator;
     private ParallelTransition animation;
 
     private boolean forcedUpdate = false;
@@ -139,8 +138,6 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
                 item.getItemParent().getItems().remove(item);
             }
         });*/
-
-        interpolator = Interpolator.SPLINE(0.0825D, 0.3025D, 0.0875D, 0.9975D);
 
         itemsListener = change -> {
             List<AbstractMFXTreeItem<T>> tmpRemoved = new ArrayList<>();
@@ -301,9 +298,9 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
     protected void buildAnimation(double fHeight) {
         MFXTreeItem<T> item = getSkinnable();
 
-        KeyValue expCollValue = new KeyValue(box.prefHeightProperty(), fHeight, interpolator);
+        KeyValue expCollValue = new KeyValue(box.prefHeightProperty(), fHeight, MFXAnimationFactory.getInterpolatorV2());
         KeyFrame expCollFrame = new KeyFrame(Duration.millis(item.getAnimationDuration()), expCollValue);
-        KeyValue disclosureValue = new KeyValue(cell.getDisclosureNode().rotateProperty(), (item.isExpanded() ? 90 : 0), interpolator);
+        KeyValue disclosureValue = new KeyValue(cell.getDisclosureNode().rotateProperty(), (item.isExpanded() ? 90 : 0), MFXAnimationFactory.getInterpolatorV2());
         KeyFrame disclosureFrame = new KeyFrame(Duration.millis(250), disclosureValue);
         animation = new ParallelTransition(new Timeline(expCollFrame, disclosureFrame));
 

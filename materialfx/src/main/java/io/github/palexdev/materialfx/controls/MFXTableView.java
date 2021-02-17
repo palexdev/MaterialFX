@@ -16,36 +16,55 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.controls.legacy;
+package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.skins.legacy.MFXLegacyTableViewSkin;
+import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
+import io.github.palexdev.materialfx.skins.MFXTableViewSkin;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
-import javafx.scene.control.TableView;
 
-public class MFXLegacyTableView<S> extends TableView<S> {
-    private final String STYLE_CLASS = "mfx-legacy-table-view";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/mfx-tableview.css").toString();
+public class MFXTableView<T> extends Control {
+    private final String STYLE_CLASS = "mfx-table-view";
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-tableview.css").toString();
 
-    public MFXLegacyTableView() {
-        initialize();
-    }
+    private final ObservableList<T> items = FXCollections.observableArrayList();
+    // SELECTION MODEL
 
-    public MFXLegacyTableView(ObservableList<S> items) {
-        super(items);
+    private final ObservableList<MFXTableColumn<T>> columns = FXCollections.observableArrayList();
+    private final IntegerProperty maxRows = new SimpleIntegerProperty(10);
+
+    public MFXTableView() {
         initialize();
     }
 
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
-        setRowFactory(row -> new MFXLegacyTableRow<>());
-        setFixedCellSize(27);
+    }
+
+    public ObservableList<T> getItems() {
+        return items;
+    }
+
+    public ObservableList<MFXTableColumn<T>> getColumns() {
+        return columns;
+    }
+
+    public int getMaxRows() {
+        return maxRows.get();
+    }
+
+    public IntegerProperty maxRowsProperty() {
+        return maxRows;
     }
 
     @Override
     protected Skin<?> createDefaultSkin() {
-        return new MFXLegacyTableViewSkin<>(this);
+        return new MFXTableViewSkin<>(this);
     }
 
     @Override

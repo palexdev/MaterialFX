@@ -169,7 +169,7 @@ public class MFXLegacyComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
             scaleTransition.setFromX(1.0);
             scaleTransition.setToX(0.0);
         }
-        scaleTransition.setInterpolator(MFXAnimationFactory.getInterpolator());
+        scaleTransition.setInterpolator(MFXAnimationFactory.getInterpolatorV1());
         scaleTransition.play();
     }
 
