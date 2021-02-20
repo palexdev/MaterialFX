@@ -79,12 +79,25 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
 
         getChildren().addAll(container, icon);
         setListeners();
+
+        if (comboBox.getMaxPopupHeight() == -1) {
+            listView.maxHeightProperty().unbind();
+        }
+        if (comboBox.getMaxPopupWidth() == -1) {
+            listView.maxWidthProperty().unbind();
+        }
     }
 
     private void setListeners() {
         MFXComboBox<T> comboBox = getSkinnable();
         RippleGenerator rg = icon.getRippleGenerator();
         rg.setRippleRadius(8);
+
+        comboBox.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue && popup.isShowing()) {
+                popup.hide();
+            }
+        });
 
         comboBox.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             comboBox.requestFocus();
@@ -129,6 +142,21 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         listView.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (popup.isShowing()) {
                 popup.hide();
+            }
+        });
+
+        comboBox.maxPopupHeightProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.doubleValue() == -1) {
+                listView.maxHeightProperty().unbind();
+            } else {
+                listView.maxHeightProperty().bind(comboBox.maxPopupHeightProperty());
+            }
+        });
+        comboBox.maxPopupWidthProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.doubleValue() == -1) {
+                listView.maxWidthProperty().unbind();
+            } else {
+                listView.maxWidthProperty().bind(comboBox.maxPopupWidthProperty());
             }
         });
         listView.maxHeightProperty().bind(comboBox.maxPopupHeightProperty());

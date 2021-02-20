@@ -23,7 +23,7 @@ import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeCell;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
 import io.github.palexdev.materialfx.controls.cell.MFXCheckTreeCell;
 import io.github.palexdev.materialfx.selection.ITreeCheckModel;
-import io.github.palexdev.materialfx.selection.TreeCheckModelTree;
+import io.github.palexdev.materialfx.selection.TreeCheckModel;
 import io.github.palexdev.materialfx.skins.MFXCheckTreeItemSkin;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -73,14 +73,14 @@ public class MFXCheckTreeItem<T> extends MFXTreeItem<T> {
      * Sets the style class to "mfx-tree-view".
      * <p>
      * Adds a listener to {@link #treeViewProperty()} allowing item check before the Scene is shown
-     * by calling the TreeCheckModelTree {@link TreeCheckModelTree#scanTree(MFXCheckTreeItem)} )} method.
+     * by calling the TreeCheckModel {@link TreeCheckModel#scanTree(MFXCheckTreeItem)} )} method.
      */
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
 
         treeViewProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && isRoot()) {
-                TreeCheckModelTree<T> treeCheckModel = (TreeCheckModelTree<T>) getSelectionModel();
+                TreeCheckModel<T> treeCheckModel = (TreeCheckModel<T>) getSelectionModel();
                 treeCheckModel.scanTree((MFXCheckTreeItem<T>) getRoot());
             }
         });

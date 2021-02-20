@@ -18,36 +18,36 @@
 
 package io.github.palexdev.materialfx.controls.cell;
 
+import io.github.palexdev.materialfx.MFXResourcesLoader;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.StringProperty;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 
 public class MFXTableRowCell extends Label {
+    private final String STYLE_CLASS = "mfx-table-row-cell";
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-table-row-cell.css").toString();
 
     public MFXTableRowCell(String text) {
         super(text);
+        initialize();
     }
 
     public MFXTableRowCell(StringProperty stringProperty) {
         textProperty().bind(stringProperty);
-    }
-
-    public MFXTableRowCell(String text, Node graphic) {
-        super(text, graphic);
-    }
-
-    public MFXTableRowCell(StringProperty stringProperty, Node graphic) {
-        textProperty().bind(stringProperty);
-        setGraphic(graphic);
+        initialize();
     }
 
     public MFXTableRowCell(StringBinding stringBinding) {
         textProperty().bind(stringBinding);
+        initialize();
     }
 
-    public MFXTableRowCell(StringBinding stringBinding, Node graphic) {
-        textProperty().bind(stringBinding);
-        setGraphic(graphic);
+    private void initialize() {
+        getStyleClass().add(STYLE_CLASS);
+    }
+
+    @Override
+    public String getUserAgentStylesheet() {
+        return STYLESHEET;
     }
 }

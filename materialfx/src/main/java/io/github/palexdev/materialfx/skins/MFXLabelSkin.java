@@ -22,7 +22,9 @@ import io.github.palexdev.materialfx.controls.MFXLabel;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.enums.Styles;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
+import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.ScaleTransition;
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -39,7 +41,6 @@ import javafx.util.Duration;
 public class MFXLabelSkin extends SkinBase<MFXLabel> {
     private final HBox container;
     private final Label text;
-    private final double minWidth = 120;
 
     private final Line unfocusedLine;
     private final Line focusedLine;
@@ -67,7 +68,9 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
         text.setText(label.getText().isEmpty() ? label.getPromptText() : label.getText());
         text.fontProperty().bind(label.fontProperty());
         text.alignmentProperty().bind(label.labelAlignmentProperty());
-        text.setMinWidth(snappedLeftInset() + minWidth + snappedRightInset());
+        text.minWidthProperty().bind(Bindings.createDoubleBinding(() -> NodeUtils.computeTextWidth(text.getFont(), text.getText()),
+                label.textProperty(), label.fontProperty())
+        );
 
         container = new HBox(text);
         container.alignmentProperty().bind(label.alignmentProperty());
@@ -208,16 +211,6 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
                 .findFirst()
                 .orElse(null);
         return editor != null;
-    }
-
-    @Override
-    protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        MFXLabel label = getSkinnable();
-
-        double leading = label.getLeadingIcon() != null ? label.getLeadingIcon().getLayoutBounds().getWidth()  : 0;
-        double trailing = label.getTrailingIcon() != null ? label.getTrailingIcon().getLayoutBounds().getWidth() : 0;
-
-        return leftInset + leading + minWidth + trailing + rightInset;
     }
 
     @Override

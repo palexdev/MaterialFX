@@ -35,7 +35,7 @@ import static io.github.palexdev.materialfx.controls.MFXCheckTreeItem.CheckTreeI
 /**
  * Concrete implementation of the {@code ITreeCheckModel} class.
  * <p>
- * This provides common methods for items check. Also, since it extends TreeTreeSelectionModel it also provides
+ * This provides common methods for items check. Also, since it extends TreeSelectionModel it also provides
  * all the methods for items selection.
  * <p>
  * The check should be handled internally only. This is because the mechanism is kind of tricky.
@@ -43,7 +43,7 @@ import static io.github.palexdev.materialfx.controls.MFXCheckTreeItem.CheckTreeI
  * you can see that when the checkbox is fired, a CHECK_EVENT is fired and "travels" up to the root. Each item then calls
  * {@link #check(MFXCheckTreeItem, CheckTreeItemEvent)}.
  */
-public class TreeCheckModelTree<T> extends TreeTreeSelectionModel<T> implements ITreeCheckModel<T> {
+public class TreeCheckModel<T> extends TreeSelectionModel<T> implements ITreeCheckModel<T> {
     //================================================================================
     // Properties
     //================================================================================
@@ -52,7 +52,7 @@ public class TreeCheckModelTree<T> extends TreeTreeSelectionModel<T> implements 
     //================================================================================
     // Constructors
     //================================================================================
-    public TreeCheckModelTree() {
+    public TreeCheckModel() {
         super();
         checkedItems.addListener((ListChangeListener<MFXCheckTreeItem<T>>) change -> {
             List<MFXCheckTreeItem<T>> tmpRemoved = new ArrayList<>();

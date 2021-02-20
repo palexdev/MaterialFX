@@ -24,6 +24,10 @@
     -fx-background-color: white;
 }
 
+.mfx-scroll-pane .viewport {
+    -fx-background-color: white;
+}
+
 .mfx-scroll-pane * {
     -fx-background-color: white;
 }

@@ -31,6 +31,23 @@
     -fx-border-color:  transparent transparent -fx-table-borders transparent;
 }
 
+.mfx-table-view .container .rows-container {
+    -fx-border-color:  transparent;
+}
+
+.mfx-table-view .pagination {
+    -fx-border-color: -fx-table-borders transparent transparent transparent;
+}
+
+.mfx-table-view .pagination .mfx-icon-wrapper:disabled .mfx-font-icon {
+    -mfx-color: rgba(46, 52, 64, 0.3);
+
+}
+
+.mfx-table-view .pagination * .ripple-generator {
+    -mfx-ripple-color: rgba(127, 15, 255, 0.6);
+}
+
 /* END */
 
 #rowLoading .track {
@@ -40,32 +57,4 @@
 
 #rowLoading .bar {
     -fx-background-color: rgba(127, 15, 255, 0.8);
-}
-
-#paginationControls {
-    -fx-border-color: -fx-table-borders transparent transparent transparent;
-}
-
-#paginationControls * .ripple-generator {
-    -mfx-ripple-color: rgba(127, 15, 255, 0.6);
-}
-
-.row:hover {
-    -fx-background-color: rgb(245, 245, 245);
-}
-
-.row:selected {
-    -fx-background-color: lightgreen;
-}
-
-.row .row-cell {
-    -fx-label-padding: 0 0 0 18; /* Icon size (12) + graphic gap (6) */
-}
-
-.mfx-scroll-pane {
-    -fx-background-color: transparent;
-}
-
-.mfx-scroll-pane * {
-    -fx-background-color: transparent;
 }

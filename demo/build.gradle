@@ -6,6 +6,10 @@ plugins {
 repositories {
     mavenCentral()
     jcenter()
+
+    flatDir {
+        dirs "${project(':demo').projectDir}/libs"
+    }
 }
 
 dependencies {
@@ -13,6 +17,7 @@ dependencies {
     testImplementation "junit:junit:4.13.1"
     testImplementation "org.testfx:testfx-junit:4.0.16-alpha"
 
+    implementation name: 'scenicview'
     implementation "fr.brouillard.oss:cssfx:11.4.0"
     implementation 'org.kordamp.ikonli:ikonli-core:12.2.0'
     implementation 'org.kordamp.ikonli:ikonli-javafx:12.2.0'

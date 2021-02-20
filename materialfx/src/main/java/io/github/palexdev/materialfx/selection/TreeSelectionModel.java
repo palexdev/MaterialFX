@@ -35,12 +35,12 @@ import java.util.List;
  * <p>
  * This provides common methods for items selection.
  * <p>
- * To select an item it should call the TreeTreeSelectionModel associated with the tree which contains the item
+ * To select an item it should call the TreeSelectionModel associated with the tree which contains the item
  * with {@link AbstractMFXTreeItem#getSelectionModel()} and call the {@link #select(AbstractMFXTreeItem, MouseEvent)} method.
  * In the constructor a listener is added to the ListProperty of this class, which contains all the selected items, and
  * its role is to change the selected property of the item.
  */
-public class TreeTreeSelectionModel<T> implements ITreeSelectionModel<T> {
+public class TreeSelectionModel<T> implements ITreeSelectionModel<T> {
     //================================================================================
     // Properties
     //================================================================================
@@ -50,7 +50,7 @@ public class TreeTreeSelectionModel<T> implements ITreeSelectionModel<T> {
     //================================================================================
     // Constructors
     //================================================================================
-    public TreeTreeSelectionModel() {
+    public TreeSelectionModel() {
         selectedItems.addListener((ListChangeListener<AbstractMFXTreeItem<T>>) change -> {
             List<AbstractMFXTreeItem<T>> tmpRemoved = new ArrayList<>();
             List<AbstractMFXTreeItem<T>> tmpAdded = new ArrayList<>();

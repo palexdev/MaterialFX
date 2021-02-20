@@ -21,7 +21,7 @@ package io.github.palexdev.materialfx.controls;
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
 import io.github.palexdev.materialfx.selection.ITreeSelectionModel;
-import io.github.palexdev.materialfx.selection.TreeTreeSelectionModel;
+import io.github.palexdev.materialfx.selection.TreeSelectionModel;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -121,7 +121,7 @@ public class MFXTreeView<T> extends MFXScrollPane {
      * By default it is set to allow multiple selection.
      */
     protected void installSelectionModel() {
-        ITreeSelectionModel<T> selectionModel = new TreeTreeSelectionModel<>();
+        ITreeSelectionModel<T> selectionModel = new TreeSelectionModel<>();
         selectionModel.setAllowsMultipleSelection(true);
         setSelectionModel(selectionModel);
     }

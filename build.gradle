@@ -16,7 +16,7 @@ subprojects {
 
     javafx {
         version = "15.0.1"
-        modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.web' ]
+        modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.swing', 'javafx.web' ]
     }
 
     // Workaround for newer Gradle versions (see https://github.com/java9-modularity/gradle-modules-plugin/issues/165)

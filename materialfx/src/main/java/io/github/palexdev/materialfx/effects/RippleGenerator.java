@@ -125,21 +125,21 @@ public class RippleGenerator extends Group {
         final Ripple ripple = new Ripple(generatorCenterX, generatorCenterY);
         getChildren().add(ripple);
 
+        Shape shape = rippleClipTypeFactory.build(region);
         if (animateBackground.get()) {
-            Shape fillRect = rippleClipTypeFactory.build(region);
-            fillRect.setFill(rippleColor.get());
-            fillRect.setOpacity(0);
-            getChildren().add(0, fillRect);
+            shape.setFill(rippleColor.get());
+            shape.setOpacity(0);
+            getChildren().add(0, shape);
 
-            KeyValue keyValueIn = new KeyValue(fillRect.opacityProperty(), 0.3);
-            KeyValue keyValueOut = new KeyValue(fillRect.opacityProperty(), 0);
+            KeyValue keyValueIn = new KeyValue(shape.opacityProperty(), 0.3);
+            KeyValue keyValueOut = new KeyValue(shape.opacityProperty(), 0);
             KeyFrame keyFrameIn = new KeyFrame(inDuration.get(), keyValueIn);
             KeyFrame keyFrameOut = new KeyFrame(outDuration.get(), keyValueOut);
             ripple.inAnimation.getKeyFrames().add(keyFrameIn);
             ripple.outAnimation.getKeyFrames().add(keyFrameOut);
         }
 
-        ripple.parallelTransition.setOnFinished(event -> getChildren().remove(ripple));
+        ripple.parallelTransition.setOnFinished(event -> getChildren().removeAll(ripple, shape));
         ripple.parallelTransition.play();
     }
 
