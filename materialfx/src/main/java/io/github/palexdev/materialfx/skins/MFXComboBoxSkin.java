@@ -18,6 +18,7 @@
 
 package io.github.palexdev.materialfx.skins;
 
+import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXListView;
@@ -33,6 +34,7 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.PopupControl;
 import javafx.scene.control.SkinBase;
 import javafx.scene.input.MouseEvent;
@@ -154,9 +156,10 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         comboBox.selectedValueProperty().bind(listView.getSelectionModel().selectedItemProperty());
         comboBox.selectedValueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                valueLabel.setText(newValue.toString());
+                setValueLabel(newValue);
             } else {
                 valueLabel.setText("");
+                valueLabel.setGraphic(null);
             }
         });
 
@@ -237,6 +240,18 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         );
         arrowAnimation = new Timeline(kf0);
         return arrowAnimation;
+    }
+
+    private void setValueLabel(T item) {
+        if (item instanceof Labeled) {
+            Labeled nodeItem = (Labeled) item;
+            if (nodeItem.getGraphic() != null) {
+                valueLabel.setGraphic(new MFXSnapshotWrapper(nodeItem.getGraphic()).getGraphic());
+            }
+            valueLabel.setText(nodeItem.getText());
+        } else {
+            valueLabel.setText(item.toString());
+        }
     }
 
     //================================================================================

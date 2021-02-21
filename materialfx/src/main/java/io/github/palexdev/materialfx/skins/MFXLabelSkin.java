@@ -22,7 +22,7 @@ import io.github.palexdev.materialfx.controls.MFXLabel;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.enums.Styles;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
-import io.github.palexdev.materialfx.utils.LabelUtils;
+import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.ScaleTransition;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
@@ -38,15 +38,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
-/**
- * This is the implementation of the Skin associated with every {@code MFXLabel}.
- */
 public class MFXLabelSkin extends SkinBase<MFXLabel> {
     //================================================================================
     // Properties
     //================================================================================
     private final HBox container;
-    private final Label text;
+    private final Label textNode;
 
     private final Line unfocusedLine;
     private final Line focusedLine;
@@ -72,20 +69,19 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
         focusedLine.endXProperty().bind(label.widthProperty().subtract(1));
         focusedLine.setScaleX(0.0);
 
-        text = new Label();
-        text.getStyleClass().add("text-node");
-        text.setText(label.getText().isEmpty() ? label.getPromptText() : label.getText());
-        text.fontProperty().bind(label.fontProperty());
-        text.alignmentProperty().bind(label.labelAlignmentProperty());
-        text.minWidthProperty().bind(Bindings.createDoubleBinding(() -> LabelUtils.computeTextWidth(text.getFont(), text.getText()),
-                label.textProperty(), label.fontProperty())
-        );
+        textNode = new Label();
+        textNode.getStyleClass().add("text-node");
+        textNode.textProperty().bind(Bindings.createStringBinding(() -> {
+            if (label.getText().isEmpty()) {
+                return label.getPromptText();
+            }
+            return label.getText();
+        }, label.textProperty(), label.promptTextProperty()));
+        textNode.fontProperty().bind(label.fontProperty());
+        textNode.alignmentProperty().bind(label.labelAlignmentProperty());
 
-        container = new HBox(text);
+        container = new HBox(textNode);
         container.alignmentProperty().bind(label.alignmentProperty());
-        container.prefWidthProperty().bind(label.widthProperty());
-        container.prefHeightProperty().bind(label.heightProperty());
-        container.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         container.spacingProperty().bind(label.graphicTextGapProperty());
         container.setPadding(new Insets(0, 10, 0, 10));
 
@@ -95,7 +91,6 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
         if (label.getTrailingIcon() != null) {
             container.getChildren().add(label.getTrailingIcon());
         }
-        setListeners();
 
         if (label.getLabelStyle() == Styles.LabelStyles.STYLE1) {
             getChildren().addAll(container, unfocusedLine, focusedLine);
@@ -103,7 +98,7 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
             getChildren().add(container);
         }
 
-        label.setPadding(new Insets(0, 10, 0, 10));
+        setListeners();
     }
 
     //================================================================================
@@ -111,13 +106,12 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
     //================================================================================
 
     /**
-     * Adds listeners for: label style, text property, leading and trailing icons, focus.
+     * Adds listeners for: label style, leading and trailing icons, focus.
      * <p>
      * Adds handlers for: focus, show editor.
      */
     private void setListeners() {
         MFXLabel label = getSkinnable();
-
 
         label.labelStyleProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == Styles.LabelStyles.STYLE2) {
@@ -127,24 +121,23 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
             }
         });
 
-        label.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.isEmpty()) {
-                text.setText(label.getPromptText());
-            } else {
-                text.setText(label.getText());
-            }
-        });
-
         label.leadingIconProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                container.getChildren().remove(oldValue);
+                return;
+            }
             if (oldValue != null) {
-                int index = container.getChildren().indexOf(oldValue);
-                container.getChildren().set(index, newValue);
+                container.getChildren().set(0, newValue);
             } else {
                 container.getChildren().add(0, newValue);
             }
         });
 
         label.trailingIconProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                container.getChildren().remove(oldValue);
+                return;
+            }
             if (oldValue != null) {
                 int index = container.getChildren().indexOf(oldValue);
                 container.getChildren().set(index, newValue);
@@ -177,13 +170,14 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
 
         label.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             label.requestFocus();
-            if (event.getClickCount() >= 2 && label.isEditable() && !containsEditor()) {
+            if (event.getClickCount() >= 2 && label.isEditable() && !containsEditor() &&
+                    NodeUtils.inHierarchy(event.getPickResult().getIntersectedNode(), textNode)) {
                 showEditor();
             }
             event.consume();
         });
-
     }
+
 
     /**
      * Builds the focus animation.
@@ -207,24 +201,28 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
      * the changes.
      */
     private void showEditor() {
-        text.setVisible(false);
-        MFXTextField textField = new MFXTextField(text.getText());
+        MFXLabel label = getSkinnable();
+
+        textNode.setVisible(false);
+        MFXTextField textField = new MFXTextField(textNode.getText());
         textField.setId("editor-node");
         textField.setUnfocusedLineColor(Color.TRANSPARENT);
         textField.setLineColor(Color.TRANSPARENT);
         textField.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         textField.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-        textField.prefWidthProperty().bind(text.widthProperty());
-        textField.prefHeightProperty().bind(text.heightProperty());
+        textField.prefWidthProperty().bind(textNode.widthProperty());
+        textField.prefHeightProperty().bind(textNode.heightProperty());
 
         textField.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 getSkinnable().setText(textField.getText());
                 getChildren().remove(textField);
-                text.setVisible(true);
+                textNode.setVisible(true);
+                label.requestFocus();
             } else if (event.getCode() == KeyCode.ESCAPE) {
                 getChildren().remove(textField);
-                text.setVisible(true);
+                textNode.setVisible(true);
+                label.requestFocus();
             }
         });
 
@@ -247,7 +245,12 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
     //================================================================================
     @Override
     protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return 30;
+        return Math.max(27, super.computeMinHeight(width, topInset, rightInset, bottomInset, leftInset));
+    }
+
+    @Override
+    protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return Math.max(100, super.computeMinWidth(height, topInset, rightInset, bottomInset, leftInset));
     }
 
     @Override

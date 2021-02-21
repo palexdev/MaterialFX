@@ -58,11 +58,11 @@ public class MFXLabel extends Control {
     private final StringProperty text = new SimpleStringProperty();
     private final StringProperty promptText = new SimpleStringProperty("Label");
     private final ObjectProperty<Font> font = new SimpleObjectProperty<>(Font.getDefault());
-    private final ObjectProperty<Pos> labelAlignment = new SimpleObjectProperty<>(Pos.CENTER_LEFT);
+    private final ObjectProperty<Pos> labelAlignment = new SimpleObjectProperty<>(Pos.CENTER);
     private final ObjectProperty<Node> leadingIcon = new SimpleObjectProperty<>();
     private final ObjectProperty<Node> trailingIcon = new SimpleObjectProperty<>();
 
-    private final ObjectProperty<Pos> alignment = new SimpleObjectProperty<>(Pos.CENTER_LEFT);
+    private final ObjectProperty<Pos> alignment = new SimpleObjectProperty<>(Pos.CENTER);
 
     //================================================================================
     // Constructors
