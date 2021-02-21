@@ -82,14 +82,19 @@ public class MFXListViewSkin<T> extends ListViewSkin<T> {
 
         hideBars = new Timeline(
                 new KeyFrame(Duration.millis(400),
-                        new KeyValue(vBar.opacityProperty(), 0.0, MFXAnimationFactory.getInterpolator()),
-                        new KeyValue(hBar.opacityProperty(), 0.0, MFXAnimationFactory.getInterpolator()))
+                        new KeyValue(vBar.opacityProperty(), 0.0, MFXAnimationFactory.getInterpolatorV1()),
+                        new KeyValue(hBar.opacityProperty(), 0.0, MFXAnimationFactory.getInterpolatorV1()))
         );
         showBars = new Timeline(
                 new KeyFrame(Duration.millis(400),
-                        new KeyValue(vBar.opacityProperty(), 1.0, MFXAnimationFactory.getInterpolator()),
-                        new KeyValue(hBar.opacityProperty(), 1.0, MFXAnimationFactory.getInterpolator()))
+                        new KeyValue(vBar.opacityProperty(), 1.0, MFXAnimationFactory.getInterpolatorV1()),
+                        new KeyValue(hBar.opacityProperty(), 1.0, MFXAnimationFactory.getInterpolatorV1()))
         );
+
+        if (listView.isHideScrollBars()) {
+            vBar.setOpacity(0.0);
+            hBar.setOpacity(0.0);
+        }
 
         setListeners();
     }

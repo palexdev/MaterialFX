@@ -20,6 +20,8 @@ package io.github.palexdev.materialfx.utils;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Region;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -62,5 +64,18 @@ public class LabelUtils {
 
             isTruncated.set(!actualString.isEmpty() && !originalString.equals(actualString));
         });
+    }
+
+    /**
+     * Computes the min width of a label to show all the text. Uses {@link NodeUtils#getNodeWidth(Region)}.
+     * @param font the label font
+     * @param text the label text
+     */
+    public static double computeTextWidth(Font font, String text) {
+        Label helper = new Label(text);
+        helper.setMaxWidth(Double.MAX_VALUE);
+        helper.setFont(font);
+
+        return NodeUtils.getNodeWidth(helper);
     }
 }

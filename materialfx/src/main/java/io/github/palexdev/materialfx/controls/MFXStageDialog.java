@@ -44,6 +44,7 @@ public class MFXStageDialog {
     //================================================================================
     private final Stage dialogStage;
     private final BooleanProperty centerInOwner = new SimpleBooleanProperty(false);
+    private boolean allowDrag = true;
 
     private final MFXScrimEffect scrimEffect = new MFXScrimEffect();
     private double scrimOpacity = 0.15;
@@ -56,6 +57,10 @@ public class MFXStageDialog {
 
     private double xOffset;
     private double yOffset;
+
+    private boolean manualPosition;
+    private double manualX;
+    private double manualY;
 
     private final EventHandler<WindowEvent> centerHandler = new EventHandler<>() {
         @Override
@@ -86,8 +91,10 @@ public class MFXStageDialog {
             yOffset = dialogStage.getY() - event.getScreenY();
         });
         this.dialogStage.getScene().getRoot().setOnMouseDragged(event -> {
-            dialogStage.setX(event.getScreenX() + xOffset);
-            dialogStage.setY(event.getScreenY() + yOffset);
+            if (allowDrag) {
+                dialogStage.setX(event.getScreenX() + xOffset);
+                dialogStage.setY(event.getScreenY() + yOffset);
+            }
         });
         this.centerInOwner.addListener((observable, oldValue, newValue) -> {
             if (newValue) {
@@ -135,6 +142,12 @@ public class MFXStageDialog {
                 throw new NullPointerException("Center in owner is set to true but dialog stage owner is null!!");
             }
         }
+
+        if (!centerInOwner.get() && manualPosition) {
+            dialogStage.setX(manualX);
+            dialogStage.setY(manualY);
+        }
+
         this.dialogStage.show();
     }
 
@@ -217,6 +230,14 @@ public class MFXStageDialog {
         this.centerInOwner.set(centerInOwner);
     }
 
+    public boolean isAllowDrag() {
+        return allowDrag;
+    }
+
+    public void setAllowDrag(boolean allowDrag) {
+        this.allowDrag = allowDrag;
+    }
+
     public void setScrimOpacity(double scrimOpacity) {
         this.scrimOpacity = scrimOpacity;
     }
@@ -231,5 +252,29 @@ public class MFXStageDialog {
 
     public void setAnimationMillis(double animationMillis) {
         this.animationMillis = animationMillis;
+    }
+
+    public boolean isManualPosition() {
+        return manualPosition;
+    }
+
+    public void setManualPosition(boolean manualPosition) {
+        this.manualPosition = manualPosition;
+    }
+
+    public double getManualX() {
+        return manualX;
+    }
+
+    public void setManualX(double manualX) {
+        this.manualX = manualX;
+    }
+
+    public double getManualY() {
+        return manualY;
+    }
+
+    public void setManualY(double manualY) {
+        this.manualY = manualY;
     }
 }

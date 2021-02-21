@@ -1,58 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.*?>
+<?import io.github.palexdev.materialfx.controls.legacy.*?>
+<?import io.github.palexdev.materialfx.controls.MFXCheckbox?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@css/combo_boxes_demo.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.ComboBoxesDemoController">
-   <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Combo Boxes" StackPane.alignment="TOP_CENTER">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@css/combo_boxes_demo.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.ComboBoxesDemoController">
+   <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Legacy Combo Boxes" StackPane.alignment="TOP_CENTER">
       <StackPane.margin>
          <Insets top="20.0" />
       </StackPane.margin>
    </Label>
-   <MFXComboBox fx:id="standard" animateLines="false" prefHeight="23.0" prefWidth="90.0" promptText="Standard" StackPane.alignment="TOP_CENTER">
+   <MFXLegacyComboBox fx:id="standard" animateLines="false" prefHeight="23.0" prefWidth="90.0" promptText="Standard" StackPane.alignment="TOP_CENTER">
       <StackPane.margin>
          <Insets right="280.0" top="60.0" />
       </StackPane.margin>
-   </MFXComboBox>
-   <MFXComboBox fx:id="lineColors" animateLines="false" lineColor="#58d726" prefHeight="23.0" prefWidth="90.0" promptText="Lines Colors" unfocusedLineColor="#b91212" StackPane.alignment="TOP_CENTER">
+   </MFXLegacyComboBox>
+   <MFXLegacyComboBox fx:id="lineColors" animateLines="false" lineColor="#58d726" prefHeight="23.0" prefWidth="90.0" promptText="Lines Colors" unfocusedLineColor="#b91212" StackPane.alignment="TOP_CENTER">
       <StackPane.margin>
          <Insets top="60.0" />
       </StackPane.margin>
-   </MFXComboBox>
-   <MFXComboBox disable="true" prefHeight="23.0" prefWidth="90.0" promptText="Disabled" StackPane.alignment="TOP_CENTER">
+   </MFXLegacyComboBox>
+   <MFXLegacyComboBox disable="true" prefHeight="23.0" prefWidth="90.0" promptText="Disabled" StackPane.alignment="TOP_CENTER">
       <StackPane.margin>
          <Insets left="280.0" top="60.0" />
       </StackPane.margin>
-   </MFXComboBox>
+   </MFXLegacyComboBox>
    <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Customization" StackPane.alignment="TOP_CENTER">
       <StackPane.margin>
          <Insets top="125.0" />
       </StackPane.margin>
    </Label>
-   <MFXComboBox fx:id="editable" prefHeight="23.0" prefWidth="90.0" promptText="Editable" StackPane.alignment="TOP_CENTER">
+   <MFXLegacyComboBox fx:id="editable" prefHeight="23.0" prefWidth="90.0" promptText="Editable" StackPane.alignment="TOP_CENTER">
       <StackPane.margin>
          <Insets right="120.0" top="170.0" />
       </StackPane.margin>
-   </MFXComboBox>
-   <MFXComboBox fx:id="labels" prefHeight="23.0" prefWidth="90.0" promptText="Labels" StackPane.alignment="TOP_CENTER">
+   </MFXLegacyComboBox>
+   <MFXLegacyComboBox fx:id="labels" prefHeight="23.0" prefWidth="90.0" promptText="Labels" StackPane.alignment="TOP_CENTER">
       <StackPane.margin>
          <Insets right="350.0" top="170.0" />
       </StackPane.margin>
-   </MFXComboBox>
-   <MFXComboBox fx:id="validated" lineColor="#ffdc00" prefHeight="23.0" prefWidth="90.0" promptText="Validated" validated="true" StackPane.alignment="TOP_CENTER">
+   </MFXLegacyComboBox>
+   <MFXLegacyComboBox fx:id="validated" lineColor="#ffdc00" prefHeight="23.0" prefWidth="90.0" promptText="Validated" validated="true" StackPane.alignment="TOP_CENTER">
       <StackPane.margin>
          <Insets left="120.0" top="170.0" />
       </StackPane.margin>
-   </MFXComboBox>
-   <MFXComboBox id="custom" fx:id="customized" prefHeight="23.0" prefWidth="90.0" promptText="CSS" StackPane.alignment="TOP_CENTER">
+   </MFXLegacyComboBox>
+   <MFXLegacyComboBox id="custom" fx:id="customized" prefHeight="23.0" prefWidth="90.0" promptText="CSS" StackPane.alignment="TOP_CENTER">
       <StackPane.margin>
          <Insets left="350.0" top="170.0" />
       </StackPane.margin>
-   </MFXComboBox>
-   <MFXCheckbox fx:id="checkbox" text="Validation!" StackPane.alignment="BOTTOM_LEFT">
+   </MFXLegacyComboBox>
+   <MFXCheckbox fx:id="checkbox" text="Validation!" StackPane.alignment="BOTTOM_RIGHT">
       <StackPane.margin>
-         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         <Insets bottom="160.0" left="10.0" right="10.0" top="10.0" />
       </StackPane.margin>
    </MFXCheckbox>
+   <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="New Combo Boxes">
+      <StackPane.margin>
+         <Insets top="105.0" />
+      </StackPane.margin>
+   </Label>
+   <MFXComboBox fx:id="style1">
+      <StackPane.margin>
+         <Insets right="250.0" top="185.0" />
+      </StackPane.margin>
+   </MFXComboBox>
+   <MFXComboBox fx:id="style2" comboStyle="STYLE2">
+      <StackPane.margin>
+         <Insets top="185.0" />
+      </StackPane.margin>
+   </MFXComboBox>
+   <MFXComboBox fx:id="newCustomized">
+      <StackPane.margin>
+         <Insets left="250.0" top="185.0" />
+      </StackPane.margin>
+   </MFXComboBox>
 </StackPane>

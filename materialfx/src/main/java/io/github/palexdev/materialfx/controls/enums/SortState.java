@@ -16,20 +16,11 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.controls.base;
+package io.github.palexdev.materialfx.controls.enums;
 
-import javafx.beans.property.ListProperty;
-import javafx.scene.input.MouseEvent;
-
-/**
- * Public API used by any MFXTreeView.
- */
-public interface ISelectionModel<T> {
-    void scanTree(AbstractMFXTreeItem<T> item);
-    void select(AbstractMFXTreeItem<T> item, MouseEvent mouseEvent);
-    void clearSelection();
-    AbstractMFXTreeItem<T> getSelectedItem();
-    ListProperty<AbstractMFXTreeItem<T>> getSelectedItems();
-    boolean allowsMultipleSelection();
-    void setAllowsMultipleSelection(boolean multipleSelection);
+public enum SortState {
+    ASCENDING,
+    DESCENDING,
+    UNSORTED
 }
+

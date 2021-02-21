@@ -21,8 +21,9 @@ package io.github.palexdev.materialfx.controls;
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeCell;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
-import io.github.palexdev.materialfx.controls.base.ISelectionModel;
 import io.github.palexdev.materialfx.controls.cell.MFXSimpleTreeCell;
+import io.github.palexdev.materialfx.selection.ITreeSelectionModel;
+import io.github.palexdev.materialfx.selection.TreeSelectionModel;
 import io.github.palexdev.materialfx.skins.MFXTreeItemSkin;
 import javafx.beans.property.*;
 import javafx.collections.ListChangeListener;
@@ -49,7 +50,7 @@ import java.util.List;
  * To change it you have to override the method inline or by extending this class.
  * @see AbstractMFXTreeCell
  * @see MFXTreeView
- * @see ISelectionModel
+ * @see ITreeSelectionModel
  * @param <T> The type of the data within TreeItem.
  */
 public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
@@ -89,7 +90,7 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
      * Adds a listener to the items list to update the added/removed item parent accordingly.
      * <p>
      * Adds a listener to {@link #selectedProperty()} and the {@link #treeViewProperty()} allowing item selection before the Scene is shown
-     * by calling the SelectionModel {@link SelectionModel#scanTree(AbstractMFXTreeItem)} method.
+     * by calling the TreeSelectionModel {@link TreeSelectionModel#scanTree(AbstractMFXTreeItem)} method.
      * <p>
      * Adds a listener to {@link #childrenMarginProperty()} to request layout in case it changes.
      */
@@ -249,7 +250,7 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
      * Retrieves the selection model instance from the TreeView which contains the tree.
      */
     @Override
-    public ISelectionModel<T> getSelectionModel() {
+    public ITreeSelectionModel<T> getSelectionModel() {
         if (getTreeView() != null) {
             return getTreeView().getSelectionModel();
         }
@@ -308,7 +309,7 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
     @Override
     public String toString() {
         String className = getClass().getName();
-        String simpleName = className.substring(className.lastIndexOf('.')+1);
+        String simpleName = className.substring(className.lastIndexOf('.') + 1);
         StringBuilder sb = new StringBuilder();
         sb.append("[").append(simpleName);
         sb.append('@');

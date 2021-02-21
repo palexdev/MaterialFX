@@ -247,7 +247,7 @@ public class MFXDatePicker extends VBox {
     );
 
     /**
-     * Specifies the line color of the date picker
+     * Specifies the line color of the date picker.
      */
     private final StyleableObjectProperty<Paint> lineColor = new SimpleStyleableObjectProperty<>(
             StyleableProperties.LINE_COLOR,

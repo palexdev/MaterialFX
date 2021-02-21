@@ -19,6 +19,7 @@
 package io.github.palexdev.materialfx.controls.base;
 
 import io.github.palexdev.materialfx.controls.MFXTreeView;
+import io.github.palexdev.materialfx.selection.ITreeSelectionModel;
 import io.github.palexdev.materialfx.utils.TreeItemStream;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -46,7 +47,7 @@ import java.util.List;
  * <p></p>
  * @see AbstractMFXTreeCell
  * @see MFXTreeView
- * @see ISelectionModel
+ * @see ITreeSelectionModel
  * @param <T> The type of the data within TreeItem.
  */
 public abstract class AbstractMFXTreeItem<T> extends Control {
@@ -73,7 +74,7 @@ public abstract class AbstractMFXTreeItem<T> extends Control {
     //================================================================================
     // Abstract Methods
     //================================================================================
-    public abstract ISelectionModel<T> getSelectionModel();
+    public abstract ITreeSelectionModel<T> getSelectionModel();
     protected abstract void defaultCellFactory();
     protected abstract void updateChildrenParent(List<? extends AbstractMFXTreeItem<T>> treeItems, final AbstractMFXTreeItem<T> newParent);
 

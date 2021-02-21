@@ -73,8 +73,9 @@ public class StringUtils {
 
     /**
      * Replaces the last occurrence of the given string with a new string.
-     * @param string The string to modify
-     * @param substring The last occurrence to find
+     *
+     * @param string      The string to modify
+     * @param substring   The last occurrence to find
      * @param replacement The replacement
      * @return The modified string
      */
@@ -86,14 +87,83 @@ public class StringUtils {
                 + string.substring(index + substring.length());
     }
 
+    public static String replaceIndex(String string, int startIndex, int endIndex, String replacement) {
+        StringBuilder sb = new StringBuilder(string);
+        sb.replace(startIndex, endIndex, replacement);
+        return sb.toString();
+    }
+
     public static String titleCaseWord(String str) {
         if (str.length() > 0) {
             int firstChar = str.codePointAt(0);
             if (!Character.isTitleCase(firstChar)) {
-                str = new String(new int[] { Character.toTitleCase(firstChar) }, 0, 1) +
+                str = new String(new int[]{Character.toTitleCase(firstChar)}, 0, 1) +
                         str.substring(Character.offsetByCodePoints(str, 0, 1));
             }
         }
         return str;
+    }
+
+    /**
+     * <p>Checks if a CharSequence contains a search CharSequence irrespective of case,
+     * handling {@code null}. Case-insensitivity is defined as by
+     * {@link String#equalsIgnoreCase(String)}.
+     *
+     * <p>A {@code null} CharSequence will return {@code false}.</p>
+     */
+    public static boolean containsIgnoreCase(final CharSequence str, final CharSequence searchStr) {
+        if (str == null || searchStr == null) {
+            return false;
+        }
+        final int len = searchStr.length();
+        final int max = str.length() - len;
+        for (int i = 0; i <= max; i++) {
+            if (regionMatches(str, i, searchStr, len)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean regionMatches(final CharSequence cs, final int thisStart,
+                                         final CharSequence substring, final int length) {
+        if (cs instanceof String && substring instanceof String) {
+            return ((String) cs).regionMatches(true, thisStart, (String) substring, 0, length);
+        }
+        int index1 = thisStart;
+        int index2 = 0;
+        int tmpLen = length;
+
+        // Extract these first so we detect NPEs the same as the java.lang.String version
+        final int srcLen = cs.length() - thisStart;
+        final int otherLen = substring.length();
+
+        // Check for invalid parameters
+        if (thisStart < 0 || length < 0) {
+            return false;
+        }
+
+        // Check that the regions are long enough
+        if (srcLen < length || otherLen < length) {
+            return false;
+        }
+
+        while (tmpLen-- > 0) {
+            final char c1 = cs.charAt(index1++);
+            final char c2 = substring.charAt(index2++);
+
+            if (c1 == c2) {
+                continue;
+            }
+
+            // The real same check as in String.regionMatches():
+            final char u1 = Character.toUpperCase(c1);
+            final char u2 = Character.toUpperCase(c2);
+            if (u1 != u2 && Character.toLowerCase(u1) != Character.toLowerCase(u2)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

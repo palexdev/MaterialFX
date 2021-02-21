@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.palexdev'
-version '11.6.0'
+version '11.7.0'
 
 repositories {
     mavenCentral()
@@ -16,9 +16,13 @@ subprojects {
 
     javafx {
         version = "15.0.1"
-        modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.web' ]
+        modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.swing', 'javafx.web' ]
     }
+
+    // Workaround for newer Gradle versions (see https://github.com/java9-modularity/gradle-modules-plugin/issues/165)
+    modularity.disableEffectiveArgumentsAdjustment()
 }
+
 
 
 

@@ -16,10 +16,10 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.controls;
+package io.github.palexdev.materialfx.selection;
 
+import io.github.palexdev.materialfx.controls.MFXTreeItem;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
-import io.github.palexdev.materialfx.controls.base.ISelectionModel;
 import io.github.palexdev.materialfx.utils.TreeItemStream;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -31,16 +31,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Concrete implementation of the {@code ISelectionModel} class.
+ * Concrete implementation of the {@code ITreeSelectionModel} interface.
  * <p>
  * This provides common methods for items selection.
  * <p>
- * To select an item it should call the SelectionModel associated with the tree which contains the item
+ * To select an item it should call the TreeSelectionModel associated with the tree which contains the item
  * with {@link AbstractMFXTreeItem#getSelectionModel()} and call the {@link #select(AbstractMFXTreeItem, MouseEvent)} method.
  * In the constructor a listener is added to the ListProperty of this class, which contains all the selected items, and
  * its role is to change the selected property of the item.
  */
-public class SelectionModel<T> implements ISelectionModel<T> {
+public class TreeSelectionModel<T> implements ITreeSelectionModel<T> {
     //================================================================================
     // Properties
     //================================================================================
@@ -50,7 +50,7 @@ public class SelectionModel<T> implements ISelectionModel<T> {
     //================================================================================
     // Constructors
     //================================================================================
-    public SelectionModel() {
+    public TreeSelectionModel() {
         selectedItems.addListener((ListChangeListener<AbstractMFXTreeItem<T>>) change -> {
             List<AbstractMFXTreeItem<T>> tmpRemoved = new ArrayList<>();
             List<AbstractMFXTreeItem<T>> tmpAdded = new ArrayList<>();

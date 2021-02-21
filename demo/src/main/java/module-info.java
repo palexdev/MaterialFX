@@ -1,6 +1,7 @@
 module MaterialFX.demo.main {
     requires MaterialFX.materialfx.main;
 
+    requires org.scenicview.scenicview;
     requires fr.brouillard.oss.cssfx;
     requires org.kordamp.ikonli.core;
     requires org.kordamp.ikonli.javafx;

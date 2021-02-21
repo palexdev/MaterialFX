@@ -40,8 +40,8 @@ public class MFXTextFieldSkin extends TextFieldSkin {
     //================================================================================
     private final double padding = 11;
 
-    private final Line line;
-    private final Line focusLine;
+    private final Line unfocusedLine;
+    private final Line focusedLine;
     private final Label validate;
 
     //================================================================================
@@ -50,23 +50,23 @@ public class MFXTextFieldSkin extends TextFieldSkin {
     public MFXTextFieldSkin(MFXTextField textField) {
         super(textField);
 
-        line = new Line();
-        line.getStyleClass().add("unfocused-line");
-        line.setStroke(textField.getUnfocusedLineColor());
-        line.setStrokeWidth(textField.getLineStrokeWidth());
-        line.setSmooth(true);
+        unfocusedLine = new Line();
+        unfocusedLine.getStyleClass().add("unfocused-line");
+        unfocusedLine.setStroke(textField.getUnfocusedLineColor());
+        unfocusedLine.setStrokeWidth(textField.getLineStrokeWidth());
+        unfocusedLine.setSmooth(true);
 
-        focusLine = new Line();
-        focusLine.getStyleClass().add("focused-line");
-        focusLine.setStroke(textField.getLineColor());
-        focusLine.setStrokeWidth(textField.getLineStrokeWidth());
-        focusLine.setSmooth(true);
-        focusLine.setScaleX(0.0);
+        focusedLine = new Line();
+        focusedLine.getStyleClass().add("focused-line");
+        focusedLine.setStroke(textField.getLineColor());
+        focusedLine.setStrokeWidth(textField.getLineStrokeWidth());
+        focusedLine.setSmooth(true);
+        focusedLine.setScaleX(0.0);
 
-        line.endXProperty().bind(textField.widthProperty());
-        focusLine.endXProperty().bind(textField.widthProperty());
-        line.setManaged(false);
-        focusLine.setManaged(false);
+        unfocusedLine.endXProperty().bind(textField.widthProperty());
+        focusedLine.endXProperty().bind(textField.widthProperty());
+        unfocusedLine.setManaged(false);
+        focusedLine.setManaged(false);
 
         MFXFontIcon warnIcon = new MFXFontIcon("mfx-exclamation-triangle", Color.RED);
         MFXIconWrapper warnWrapper = new MFXIconWrapper(warnIcon, 10);
@@ -77,7 +77,7 @@ public class MFXTextFieldSkin extends TextFieldSkin {
         validate.setGraphicTextGap(padding);
         validate.setVisible(false);
 
-        getChildren().addAll(line, focusLine, validate);
+        getChildren().addAll(unfocusedLine, focusedLine, validate);
 
         setListeners();
     }
@@ -102,20 +102,20 @@ public class MFXTextFieldSkin extends TextFieldSkin {
 
         textField.lineColorProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.equals(oldValue)) {
-                focusLine.setStroke(newValue);
+                focusedLine.setStroke(newValue);
             }
         });
 
         textField.unfocusedLineColorProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.equals(oldValue)) {
-                line.setStroke(newValue);
+                unfocusedLine.setStroke(newValue);
             }
         });
 
         textField.lineStrokeWidthProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.doubleValue() != oldValue.doubleValue()) {
-                line.setStrokeWidth(newValue.doubleValue());
-                focusLine.setStrokeWidth(newValue.doubleValue() * 1.3);
+                unfocusedLine.setStrokeWidth(newValue.doubleValue());
+                focusedLine.setStrokeWidth(newValue.doubleValue() * 1.3);
             }
         });
 
@@ -130,19 +130,19 @@ public class MFXTextFieldSkin extends TextFieldSkin {
             }
 
             if (newValue) {
-                focusLine.setScaleX(1.0);
+                focusedLine.setScaleX(1.0);
             } else {
-                focusLine.setScaleX(0.0);
+                focusedLine.setScaleX(0.0);
             }
         });
 
         textField.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            if (textField.isAnimateLines() && focusLine.getScaleX() != 1.0) {
+            if (textField.isAnimateLines() && focusedLine.getScaleX() != 1.0) {
                 buildAndPlayAnimation(true);
                 return;
             }
 
-            focusLine.setScaleX(1.0);
+            focusedLine.setScaleX(1.0);
         });
 
         textField.isValidatedProperty().addListener((observable, oldValue, newValue) -> {
@@ -170,7 +170,7 @@ public class MFXTextFieldSkin extends TextFieldSkin {
      * Builds and play the lines animation if {@code animateLines} is true.
      */
     private void buildAndPlayAnimation(boolean focused) {
-        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(400), focusLine);
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(350), focusedLine);
         if (focused) {
             scaleTransition.setFromX(0.0);
             scaleTransition.setToX(1.0);
@@ -178,7 +178,7 @@ public class MFXTextFieldSkin extends TextFieldSkin {
             scaleTransition.setFromX(1.0);
             scaleTransition.setToX(0.0);
         }
-        scaleTransition.setInterpolator(MFXAnimationFactory.getInterpolator());
+        scaleTransition.setInterpolator(MFXAnimationFactory.getInterpolatorV2());
         scaleTransition.play();
     }
 
@@ -191,9 +191,9 @@ public class MFXTextFieldSkin extends TextFieldSkin {
 
         final double size = padding / 2.5;
 
-        focusLine.setTranslateY(h + padding * 0.7);
-        line.setTranslateY(h + padding * 0.7);
+        focusedLine.setTranslateY(h + padding * 0.7);
+        unfocusedLine.setTranslateY(h + padding * 0.7);
         validate.resize(w * 1.5, h - size);
-        validate.setTranslateY(focusLine.getTranslateY() + size);
+        validate.setTranslateY(focusedLine.getTranslateY() + size);
     }
 }

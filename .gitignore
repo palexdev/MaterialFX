@@ -12,3 +12,4 @@ out/
 # Others
 demo/src/main/java/io/github/palexdev/materialfx/demo/TestDemo.java
 materialfx/src/test
+demo/scenicView.properties

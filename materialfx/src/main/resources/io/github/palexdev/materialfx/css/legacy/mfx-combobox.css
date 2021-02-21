@@ -16,45 +16,45 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-.mfx-combo-box {
+.mfx-legacy-combo-box {
     -fx-prompt-text-fill: #4d4d4d;
 
     -fx-padding: -1 -1 -1 -5;
 }
 
-.mfx-combo-box:editable > .arrow-button,
-.mfx-combo-box > .arrow-button {
+.mfx-legacy-combo-box:editable > .arrow-button,
+.mfx-legacy-combo-box > .arrow-button {
     -fx-padding: 2;
 }
 
-.mfx-combo-box,
-.mfx-combo-box:focused,
-.mfx-combo-box:editable,
-.mfx-combo-box:editable:focused {
+.mfx-legacy-combo-box,
+.mfx-legacy-combo-box:focused,
+.mfx-legacy-combo-box:editable,
+.mfx-legacy-combo-box:editable:focused {
     -fx-background-color: transparent, transparent, transparent, transparent;
     -fx-background-radius: 3px;
     -fx-background-insets: 0px;
 }
 
-.mfx-combo-box .text-field,
-.mfx-combo-box:focused .text-field,
-.mfx-combo-box:editable .text-field,
-.mfx-combo-box:editable:focused .text-field {
+.mfx-legacy-combo-box .text-field,
+.mfx-legacy-combo-box:focused .text-field,
+.mfx-legacy-combo-box:editable .text-field,
+.mfx-legacy-combo-box:editable:focused .text-field {
     -fx-background-color: transparent, transparent, transparent, transparent;
     -fx-background-radius: 3px;
     -fx-background-insets: 0px;
 }
 
-.mfx-combo-box .combo-box-button-container {
+.mfx-legacy-combo-box .combo-box-button-container {
     -fx-background-color: transparent;
 }
 
-.mfx-combo-box > .arrow-button,
-.mfx-combo-box:editable > .arrow-button,
-.mfx-combo-box:editable:focused > .arrow-button {
+.mfx-legacy-combo-box > .arrow-button,
+.mfx-legacy-combo-box:editable > .arrow-button,
+.mfx-legacy-combo-box:editable:focused > .arrow-button {
     -fx-background-color: transparent;
 }
 
-.mfx-combo-box .validate-label {
+.mfx-legacy-combo-box .validate-label {
     -fx-text-fill: #D34336;
 }

@@ -16,10 +16,10 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.controls;
+package io.github.palexdev.materialfx.selection;
 
+import io.github.palexdev.materialfx.controls.MFXCheckTreeItem;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
-import io.github.palexdev.materialfx.controls.base.ICheckModel;
 import io.github.palexdev.materialfx.utils.TreeItemStream;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -33,9 +33,9 @@ import java.util.stream.Collectors;
 import static io.github.palexdev.materialfx.controls.MFXCheckTreeItem.CheckTreeItemEvent;
 
 /**
- * Concrete implementation of the {@code ICheckModel} class.
+ * Concrete implementation of the {@code ITreeCheckModel} interface.
  * <p>
- * This provides common methods for items check. Also, since it extends SelectionModel it also provides
+ * This provides common methods for items check. Also, since it extends TreeSelectionModel it also provides
  * all the methods for items selection.
  * <p>
  * The check should be handled internally only. This is because the mechanism is kind of tricky.
@@ -43,7 +43,7 @@ import static io.github.palexdev.materialfx.controls.MFXCheckTreeItem.CheckTreeI
  * you can see that when the checkbox is fired, a CHECK_EVENT is fired and "travels" up to the root. Each item then calls
  * {@link #check(MFXCheckTreeItem, CheckTreeItemEvent)}.
  */
-public class CheckModel<T> extends SelectionModel<T> implements ICheckModel<T> {
+public class TreeCheckModel<T> extends TreeSelectionModel<T> implements ITreeCheckModel<T> {
     //================================================================================
     // Properties
     //================================================================================
@@ -52,7 +52,7 @@ public class CheckModel<T> extends SelectionModel<T> implements ICheckModel<T> {
     //================================================================================
     // Constructors
     //================================================================================
-    public CheckModel() {
+    public TreeCheckModel() {
         super();
         checkedItems.addListener((ListChangeListener<MFXCheckTreeItem<T>>) change -> {
             List<MFXCheckTreeItem<T>> tmpRemoved = new ArrayList<>();

@@ -37,8 +37,8 @@ public class MFXProgressSpinner extends ProgressIndicator {
     // Properties
     //================================================================================
     private static final StyleablePropertyFactory<MFXProgressSpinner> FACTORY = new StyleablePropertyFactory<>(ProgressIndicator.getClassCssMetaData());
-    private final String STYLE_CLASS = "mfx-spinner";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-spinner.css").toString();
+    private final String STYLE_CLASS = "mfx-progress-spinner";
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-progress-spinner.css").toString();
 
     //================================================================================
     // Constructors

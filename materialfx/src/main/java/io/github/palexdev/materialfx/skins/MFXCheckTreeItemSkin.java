@@ -21,6 +21,7 @@ package io.github.palexdev.materialfx.skins;
 import io.github.palexdev.materialfx.controls.MFXCheckTreeItem;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeCell;
 import io.github.palexdev.materialfx.controls.cell.MFXCheckTreeCell;
+import io.github.palexdev.materialfx.selection.TreeCheckModel;
 import javafx.scene.control.CheckBox;
 
 import static io.github.palexdev.materialfx.controls.MFXCheckTreeItem.CheckTreeItemEvent;
@@ -28,7 +29,7 @@ import static io.github.palexdev.materialfx.controls.MFXCheckTreeItem.CheckTreeI
 /**
  * This is the implementation of the {@code Skin} associated with every {@link MFXCheckTreeItemSkin}.
  * @see MFXCheckTreeItem
- * @see io.github.palexdev.materialfx.controls.CheckModel
+ * @see TreeCheckModel
  */
 public class MFXCheckTreeItemSkin<T> extends MFXTreeItemSkin<T> {
     //================================================================================
@@ -45,7 +46,7 @@ public class MFXCheckTreeItemSkin<T> extends MFXTreeItemSkin<T> {
     //================================================================================
 
     /**
-     * Adds a listener for handling CHECK_EVENTs and call {@link io.github.palexdev.materialfx.controls.CheckModel#check(MFXCheckTreeItem, CheckTreeItemEvent)}.
+     * Adds a listener for handling CHECK_EVENTs and call {@link TreeCheckModel#check(MFXCheckTreeItem, CheckTreeItemEvent)}.
      */
     private void setListeners() {
         MFXCheckTreeItem<T> item = (MFXCheckTreeItem<T>) getSkinnable();

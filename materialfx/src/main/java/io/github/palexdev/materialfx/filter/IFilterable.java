@@ -16,15 +16,13 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-.mfx-spinner:determinate .arc {
-    -fx-stroke: #0F9D58;
-}
+package io.github.palexdev.materialfx.filter;
 
-.mfx-spinner .percentage {
-    -fx-font-family: "Comfortaa Medium";
-    -fx-font-smoothing-type: gray;
-}
-
-.mfx-spinner:determinate .percentage {
-    -fx-fill: #4d4d4d;
+/**
+ * This interface allows filtering a {@link io.github.palexdev.materialfx.controls.MFXTableView} without
+ * using an object {@code toString()} method but rather using a specific method.
+ *
+ */
+public interface IFilterable {
+    String toFilterString();
 }

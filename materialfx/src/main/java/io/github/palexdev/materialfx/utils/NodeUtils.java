@@ -86,6 +86,20 @@ public class NodeUtils {
         region.setBackground(new Background(fills.toArray(BackgroundFill[]::new)));
     }
 
+    public static void updateBackground(Region region, Paint fill, CornerRadii cornerRadii, Insets backgroundInsets) {
+        final Background background = region.getBackground();
+        if (background == null || background.getFills().isEmpty()) {
+            return;
+        }
+
+        final List<BackgroundFill> fills = new ArrayList<>();
+        for (BackgroundFill bf : background.getFills()) {
+            fills.add(new BackgroundFill(fill, cornerRadii, backgroundInsets));
+        }
+
+        region.setBackground(new Background(fills.toArray(BackgroundFill[]::new)));
+    }
+
     /**
      * Sets the background of the given region to the given color.
      */
@@ -204,6 +218,14 @@ public class NodeUtils {
         Event.fireEvent(node, new MouseEvent(MouseEvent.MOUSE_PRESSED,
                0, 0, 0, 0, MouseButton.PRIMARY, 1,
                 false, false, false, false, true, false, false, false, false, false, null));
+    }
+
+    /**
+     * Checks if the given alignment is set to RIGHT(any).
+     */
+    public static boolean isRightAlignment(Pos alignment) {
+        return alignment == Pos.BASELINE_RIGHT || alignment == Pos.BOTTOM_RIGHT ||
+                alignment == Pos.CENTER_RIGHT || alignment == Pos.TOP_RIGHT;
     }
 
     /* The following methods are copied from com.sun.javafx.scene.control.skin.Utils class

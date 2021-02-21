@@ -98,6 +98,9 @@ public class MFXTextField extends TextField {
     // Styleable Properties
     //================================================================================
 
+    /**
+     * Specifies the maximum text length.
+     */
     private final StyleableIntegerProperty textLimit = new SimpleStyleableIntegerProperty(
             StyleableProperties.TEXT_LIMIT,
             this,
@@ -126,13 +129,13 @@ public class MFXTextField extends TextField {
     );
 
     /**
-     * Specifies the lines' width.
+     * Specifies the lines' stroke width.
      */
     private final StyleableDoubleProperty lineStrokeWidth = new SimpleStyleableDoubleProperty(
             StyleableProperties.LINE_STROKE_WIDTH,
             this,
             "lineStrokeWidth",
-            1.5
+            1.0
     );
 
     /**
@@ -258,7 +261,7 @@ public class MFXTextField extends TextField {
                 FACTORY.createSizeCssMetaData(
                         "-mfx-line-stroke-width",
                         MFXTextField::lineStrokeWidthProperty,
-                        1.5
+                        1.0
                 );
 
         private static final CssMetaData<MFXTextField, Boolean> ANIMATE_LINES =

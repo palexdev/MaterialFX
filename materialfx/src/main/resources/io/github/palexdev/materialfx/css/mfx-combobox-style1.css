@@ -1,0 +1,65 @@
+/*
+ *     Copyright (C) 2021 Parisi Alessandro
+ *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ *     MaterialFX is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     MaterialFX is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import "fonts.css";
+
+.mfx-combo-box {
+    -fx-background-color: rgb(232, 232, 232);
+    -fx-background-radius: 3 3 0 0;
+    -fx-border-color: transparent transparent rgb(159, 159, 159) transparent;
+    -fx-border-width: 1.5;
+}
+
+.mfx-combo-box:focused {
+    -fx-border-color: transparent transparent rgb(76, 0, 225) transparent;
+}
+
+.mfx-combo-box .label {
+    -fx-padding: 0 0 0 5;
+    -fx-font-family: "Open Sans Regular";
+    -fx-font-smoothing-type: grey;
+}
+
+.mfx-combo-box .mfx-icon-wrapper .ripple-generator {
+    -mfx-ripple-color: rgba(76, 0, 225, 0.3);
+}
+
+.mfx-combo-box .mfx-icon-wrapper .mfx-font-icon {
+    -mfx-color: black;
+}
+
+.mfx-combo-box:focused .mfx-icon-wrapper .mfx-font-icon {
+    -mfx-color: rgb(76, 0, 225);
+}
+
+.mfx-list-view {
+    -fx-background-color: white;
+    -fx-background-insets: 2;
+    -fx-background-radius: 2px;
+
+    -mfx-track-color: transparent;
+    -mfx-thumb-color: rgba(76, 0, 225, 0.1);
+    -mfx-thumb-hover-color: rgb(158, 107, 255);
+}
+
+.mfx-list-view .mfx-list-cell {
+    -mfx-hover-color: rgb(242, 242, 242);
+    -mfx-selected-color: rgb(185, 152, 255);
+
+    -mfx-corner-radius: 2px;
+}

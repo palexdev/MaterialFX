@@ -16,19 +16,16 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.controls.base;
+@import "mfx-label-style2.css";
 
-import io.github.palexdev.materialfx.controls.MFXCheckTreeItem;
-import javafx.beans.property.ListProperty;
+.mfx-table-row-cell {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-border-width: 0.5;
+}
 
-import static io.github.palexdev.materialfx.controls.MFXCheckTreeItem.CheckTreeItemEvent;
-
-/**
- * Public API used by any MFXCheckTreeView.
- */
-public interface ICheckModel<T> extends ISelectionModel<T> {
-    void scanTree(MFXCheckTreeItem<T> item);
-    void check(MFXCheckTreeItem<T> item, CheckTreeItemEvent<?> event);
-    void clearChecked();
-    ListProperty<MFXCheckTreeItem<T>> getCheckedItems();
+.mfx-table-row-cell,
+.mfx-table-row-cell:focused {
+    -fx-border-color: transparent;
 }
