@@ -39,7 +39,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 
+/**
+ * This is the implementation of the Skin associated with every {@code MFXComboBox}.
+ */
 public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final HBox container;
     private final Label valueLabel;
     private final double minWidth = 100;
@@ -51,6 +57,9 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
 
     private Timeline arrowAnimation;
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXComboBoxSkin(MFXComboBox<T> comboBox) {
         super(comboBox);
 
@@ -87,7 +96,19 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
             listView.maxWidthProperty().unbind();
         }
     }
+    //================================================================================
+    // Methods
+    //================================================================================
 
+    /**
+     * Adds listeners for: focus, selected value, maxPopupHeight and maxPopupWidth,
+     * selectedIndex and selectedItem properties, parent property.
+     * <p>
+     * Adds bindings for: selected value, maxPopupHeight and maxPopupWidth,
+     * <p>
+     * Adds handlers for: focus, show/hide the popup.
+     *
+     */
     private void setListeners() {
         MFXComboBox<T> comboBox = getSkinnable();
         RippleGenerator rg = icon.getRippleGenerator();
@@ -195,6 +216,9 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         });
     }
 
+    /**
+     * Builds the popup content.
+     */
     protected void buildPopup() {
         MFXComboBox<T> comboBox = getSkinnable();
 
@@ -204,6 +228,9 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         popup.setOnHiding(event -> buildAnimation(false).play());
     }
 
+    /**
+     * Builds the animation for the combo box arrow.
+     */
     private Timeline buildAnimation(boolean isShowing) {
         KeyFrame kf0 = new KeyFrame(Duration.millis(150),
                 new KeyValue(icon.rotateProperty(), (isShowing ? 180 : 0))
@@ -212,6 +239,9 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         return arrowAnimation;
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
     @Override
     protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
         return leftInset + minWidth + rightInset;
@@ -248,7 +278,6 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         double iconWidth = icon.getPrefWidth();
         double iconHeight = icon.getPrefHeight();
         double center = ((snappedTopInset() + snappedBottomInset()) / 2.0) + ((contentHeight - iconHeight) / 2.0);
-        System.out.println(center);
         icon.resizeRelocate(contentWidth - iconWidth, center, iconWidth, iconHeight);
     }
 }

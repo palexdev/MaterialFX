@@ -34,12 +34,23 @@ import javafx.util.Duration;
 
 import java.util.List;
 
+/**
+ * This is a restyle of JavaFX's {@link TableRow} control.
+ * <p>
+ * For a table view which more closely follows the guidelines of material design see {@link io.github.palexdev.materialfx.controls.MFXTableView}.
+ */
 public class MFXLegacyTableRow<T> extends TableRow<T> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private static final StyleablePropertyFactory<MFXLegacyTableRow<?>> FACTORY = new StyleablePropertyFactory<>(TableRow.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-legacy-table-row";
     private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/mfx-tablerow.css").toString();
     private final RippleGenerator rippleGenerator;
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXLegacyTableRow() {
         rippleGenerator = new RippleGenerator(this);
         rippleGenerator.setRippleColor(Color.rgb(50, 150, 255));
@@ -48,6 +59,9 @@ public class MFXLegacyTableRow<T> extends TableRow<T> {
         initialize();
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
 

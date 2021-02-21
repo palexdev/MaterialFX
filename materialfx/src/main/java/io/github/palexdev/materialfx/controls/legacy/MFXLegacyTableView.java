@@ -24,10 +24,21 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Skin;
 import javafx.scene.control.TableView;
 
+/**
+ * This is a restyle of JavaFX's {@link TableView} control.
+ * For a table view which more closely follows the guidelines of material design see {@link io.github.palexdev.materialfx.controls.MFXTableView}.
+ * @param <S>
+ */
 public class MFXLegacyTableView<S> extends TableView<S> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final String STYLE_CLASS = "mfx-legacy-table-view";
     private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/mfx-tableview.css").toString();
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXLegacyTableView() {
         initialize();
     }
@@ -37,12 +48,18 @@ public class MFXLegacyTableView<S> extends TableView<S> {
         initialize();
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
         setRowFactory(row -> new MFXLegacyTableRow<>());
         setFixedCellSize(27);
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
     @Override
     protected Skin<?> createDefaultSkin() {
         return new MFXLegacyTableViewSkin<>(this);

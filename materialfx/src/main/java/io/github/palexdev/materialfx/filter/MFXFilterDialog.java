@@ -52,7 +52,31 @@ import java.util.Map;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
+/**
+ * This dialog allows implements a filtering mechanism based on boolean
+ * expressions on strings.
+ * <p>
+ * Since {@link MFXStageDialog} can't be extended in this case because the constructors need
+ * a {@code MFXDialog}, it extends {@link MFXDialog}, builds the stage dialog passing itself as reference
+ * and overrides the open() and close() methods to use the {@link MFXStageDialog} ones.
+ * <p></p>
+ * <b>Structure</b>
+ * <p>
+ * A label allows to add a new HBox which contains: an icon to remove itself if not needed anymore,
+ * two toggles to specify if the expression should an "AND" or an "OR" condition, a combo box to choose
+ * the function to apply on the passed string and the given string, one or more text fields
+ * which contain the text used in the evaluations, and a button, {@link #getFilterButton()}.
+ * <p>
+ * <b>Functioning</b>
+ * <p>
+ * The main method is {@link #filter(String)}. It takes a string and evaluates all the given conditions
+ * on that string, returning the computed boolean result.
+ *
+ */
 public class MFXFilterDialog extends MFXDialog {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final String STYLE_CLASS = "mfx-filter-dialog";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-filter-dialog.css").toString();
 
@@ -63,6 +87,9 @@ public class MFXFilterDialog extends MFXDialog {
     private final MFXStageDialog stage;
     private final MFXIconWrapper closeIcon;
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXFilterDialog() {
         setTitle("Filter Dialog");
         setPrefWidth(550);
@@ -128,10 +155,16 @@ public class MFXFilterDialog extends MFXDialog {
         getChildren().add(closeIcon);
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
     }
 
+    /**
+     * Adds a new {@code FilterField} to the dialog.
+     */
     protected void addTextField() {
         FilterField filterField = new FilterField();
         filterField.getRemoveIcon().addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
@@ -143,6 +176,11 @@ public class MFXFilterDialog extends MFXDialog {
         textFieldsContainer.getChildren().add(filterField);
     }
 
+    /**
+     * Evaluates all the conditions specified by the dialog's {@code FilterFields} on
+     * the given item and returns if it meets the specified conditions or not.
+     * @param item the string on which evaluate the conditions
+     */
     public boolean filter(String item) {
         List<FilterField> filterFields = textFieldsContainer.getChildren().stream()
                 .filter(node -> node instanceof FilterField)
@@ -168,14 +206,26 @@ public class MFXFilterDialog extends MFXDialog {
         return expression != null ? expression : false;
     }
 
+    /**
+     * Returns the dialog's button reference.
+     * <p>
+     * In {@link io.github.palexdev.materialfx.skins.MFXTableViewSkin} for example, it is used
+     * to add an event handler to the button which starts the filtering and closes the dialog.
+     */
     public MFXButton getFilterButton() {
         return filterButton;
     }
 
+    /**
+     * @return the stage dialog reference.
+     */
     public MFXStageDialog getStage() {
         return stage;
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
     @Override
     public String getUserAgentStylesheet() {
         return STYLESHEET;
@@ -188,17 +238,34 @@ public class MFXFilterDialog extends MFXDialog {
         closeIcon.relocate(getWidth() - 17, 17);
     }
 
+    /**
+     * Shows the stage dialog.
+     */
     @Override
     public void show() {
         stage.show();
     }
 
+    /**
+     * Closes the stage dialog.
+     */
     @Override
     public void close() {
         stage.close();
     }
 
+    /**
+     * This is the class used in the filter dialog for the filter boxes.
+     * <p>
+     * It's this node which contains the remove icon, the toggles, the combo box and the text field.
+     * <p>
+     * It uses a {@code Map<String, BiPredicate<String, String>>} to map the combo box choice to the function
+     * which will we applied on the given strings, {@link MFXFilterDialog#filter(String)}.
+     */
     private class FilterField extends HBox {
+        //================================================================================
+        // Properties
+        //================================================================================
         private final Map<String, BiPredicate<String, String>> evaluators = new LinkedHashMap<>();
 
         private final MFXIconWrapper icon;
@@ -207,6 +274,9 @@ public class MFXFilterDialog extends MFXDialog {
 
         private final BooleanProperty isAnd = new SimpleBooleanProperty(true);
 
+        //================================================================================
+        // Constructors
+        //================================================================================
         public FilterField() {
             populateMap();
             getStylesheets().addAll(STYLESHEET);
@@ -239,6 +309,9 @@ public class MFXFilterDialog extends MFXDialog {
             getChildren().addAll(icon, buildOptions(), textField);
         }
 
+        //================================================================================
+        // Methods
+        //================================================================================
         private Node buildOptions() {
             HBox box = new HBox(5);
 
@@ -278,6 +351,17 @@ public class MFXFilterDialog extends MFXDialog {
             return box;
         }
 
+        /**
+         * Populates the map with:
+         * <p>
+         * - Contains -> String::contains <p>
+         * - Contains Ignore Case -> StringUtils::containsIgnoreCase <p>
+         * - Starts With -> String::startsWith <p>
+         * - Ends With -> String::endsWith <p>
+         * - Equals -> String::equals <p>
+         * - Equals Ignore Case -> String::equalsIgnoreCase <p>
+         * @see StringUtils
+         */
         private void populateMap() {
             evaluators.put("Contains", String::contains);
             evaluators.put("Contains Ignore Case", StringUtils::containsIgnoreCase);
@@ -291,16 +375,21 @@ public class MFXFilterDialog extends MFXDialog {
             return icon;
         }
 
+        /**
+         * Retrieves the BiPredicate from the map with the combo box selected value as key and
+         * applies the function to the given string.
+         */
         public Boolean callEvaluation(String item) {
             return evaluators.get(evaluationCombo.getSelectedValue()).test(item, textField.getText());
         }
 
+        /**
+         * Returns whether the selected toggle is the "And" toggle,
+         * if it is false then the selected toggle is the "Or" toggle because
+         * the toggles are in a group which uses {@link ToggleButtonsUtil#addAlwaysOneSelectedSupport(ToggleGroup)}
+         */
         public boolean isAnd() {
             return isAnd.get();
-        }
-
-        public boolean isOr() {
-            return !isAnd();
         }
     }
 }

@@ -23,14 +23,19 @@ import io.github.palexdev.materialfx.controls.cell.MFXTableColumnCell;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.skin.LabelSkin;
 import javafx.scene.layout.Region;
 
+/**
+ * This is the implementation of the Skin associated with every {@code MFXTableColumnCell}.
+ */
 public class MFXTableColumnCellSkin<T> extends LabelSkin {
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXTableColumnCellSkin(MFXTableColumnCell<T> column) {
         super(column);
 
@@ -38,12 +43,15 @@ public class MFXTableColumnCellSkin<T> extends LabelSkin {
         column.setMaxWidth(Region.USE_PREF_SIZE);
 
         column.setPadding(new Insets(0, 5, 0, 5));
-        column.setGraphic(createLeadingIcon());
+        column.setGraphic(createSortIcon());
         column.setGraphicTextGap(5);
-        addIcons();
+        addIcon();
     }
 
-    protected Node createLeadingIcon() {
+    /**
+     * Creates the sort icon.
+     */
+    protected Node createSortIcon() {
         MFXFontIcon caret = new MFXFontIcon("mfx-caret-up", 12);
         caret.setMouseTransparent(true);
         MFXIconWrapper icon = new MFXIconWrapper(caret, 18);
@@ -52,11 +60,14 @@ public class MFXTableColumnCellSkin<T> extends LabelSkin {
         return icon;
     }
 
-    private void addIcons() {
+    /**
+     * Adds the sort icon according to the column alignment.
+     */
+    private void addIcon() {
         Label column = getSkinnable();
         Node leading = column.getGraphic();
 
-        if (isRightAlignment(column.getAlignment())) {
+        if (NodeUtils.isRightAlignment(column.getAlignment())) {
             if (leading != null) {
                 column.setContentDisplay(ContentDisplay.LEFT);
             }
@@ -65,10 +76,5 @@ public class MFXTableColumnCellSkin<T> extends LabelSkin {
                 column.setContentDisplay(ContentDisplay.RIGHT);
             }
         }
-    }
-
-    private boolean isRightAlignment(Pos alignment) {
-        return alignment == Pos.BASELINE_RIGHT || alignment == Pos.BOTTOM_RIGHT ||
-                alignment == Pos.CENTER_RIGHT || alignment == Pos.TOP_RIGHT;
     }
 }

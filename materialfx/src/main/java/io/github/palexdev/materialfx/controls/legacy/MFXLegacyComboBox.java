@@ -39,9 +39,11 @@ import javafx.scene.paint.Paint;
 import java.util.List;
 
 /**
- * This is the implementation of a combo box following Google's material design guidelines in JavaFX.
+ * This is a restyle of the JavaFX's combo box.
  * <p>
- * Extends {@code ComboBox}, redefines the style class to "mfx-combo-box" for usage in CSS and
+ * For a combo box which more closely follows the guidelines of material design see {@link io.github.palexdev.materialfx.controls.MFXComboBox}.
+ * <p>
+ * Extends {@code ComboBox}, redefines the style class to "mfx-legacy-combo-box" for usage in CSS and
  * includes a {@link MFXDialogValidator}.
  * <p></p>
  * A few notes on features and usage:

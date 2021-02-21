@@ -59,7 +59,41 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static io.github.palexdev.materialfx.controls.MFXTableView.TableViewEvent;
+
+/**
+ * This is the implementation of the Skin associated with every {@code MFXTableView}.
+ * <p>
+ * It's the main class since it handles the graphic of the control and its functionalities.
+ * <p>
+ * Builds the column header adding a column cell for each column added in the {@link MFXTableView#getColumns()} list.
+ * Each column can sort the table view using its own comparator specified by the user.
+ * <p>
+ * Then builds a certain number of rows specified by {@link MFXTableView#maxRowsProperty()}, in each row and for each column
+ * adds a row cell.
+ * <p>
+ * At the bottom of the table view there are pagination controls which include a combo box to set {@link MFXTableView#maxRowsProperty()},
+ * a label that indicates the shown rows and the total amount, change page controls. There are also filter controls.
+ * The filter feature is implemented using {@link MFXFilterDialog}.
+ * <p></p>
+ * Note: for the sort and the filter two sorted lists are used, the original items list {@link MFXTableView#getItems()} is untouched.
+ * Why two sorted lists and not a filtered list? Because when the list is filtered it's desirable to keep the sort state. For this reason
+ * it is much easier to manage two sorted lists instead of a filtered list.
+ * <p>
+ * For consistency when the table is filtered the filter icon is disabled, to filter the table again it must be reset before.
+ * <p></p>
+ * Note: another feature is about selection. It is desirable when changing pages that if there were selected rows in the previous page
+ * they should still be highlighted when switching back to that page. For this reason when re-building rows we check if in the page there are
+ * rows previously added in the selection model list, {@link io.github.palexdev.materialfx.selection.TableSelectionModel}.
+ * <p></p>
+ * <b>Warn:</b> note that the layout is way less elaborated than the JavaFX's one. Although unlikely, it's good to know that the alignment between
+ * the column cells and the row cells can be imperfect since it is very delicate. This warn is important especially when extending this class, creating
+ * your own table view layout. But as I said it is unlikely to happen.
+ */
 public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final VBox container;
     private final HBox columnsContainer;
     private final VBox rowsContainer;
@@ -78,6 +112,9 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
     private final MFXFilterDialog filterDialog;
     private final BooleanProperty tableFiltered = new SimpleBooleanProperty(false);
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXTableViewSkin(MFXTableView<T> tableView) {
         super(tableView);
 
@@ -148,11 +185,43 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         setListeners();
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
+
+    /**
+     * Adds listeners for:
+     * <p>
+     * - table view's items list: when invalidated the selection is cleared, the filter is cleared, the sort state is maintained and the rows are re-built.<p>
+     * - combo box' selected value: when the maxRows property is changes, resets the index and re-builds the rows from the first page.<p>
+     * - combo box' skin property: to select the item 10 of the combo box's list view.<p>
+     * <p>
+     * Adds bindings to:
+     * <p>
+     * - filter icon disable property, bound to tableFiltered property.<p>
+     * - clear filter icon disable property, bound to tableFiltered.not() property.<p>
+     * <p>
+     * Adds event handlers for:
+     * <p>
+     * - table view MOUSE_PRESSED for requesting focus.<p>
+     * - table view FORCE_UPDATE_EVENT for requesting a forced update, the selection is cleared, the filter is cleared, the sort state is maintained and the rows are re-built.<p>
+     * - filter icon MOUSE_PRESSED for showing the filter dialog.<p>
+     * - clear filter icon MOUSE_PRESSED for removing the applied filter.<p>
+     */
     private void setListeners() {
         MFXTableView<T> tableView = getSkinnable();
 
         tableView.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> tableView.requestFocus());
         tableView.getItems().addListener((InvalidationListener) invalidated -> {
+            tableView.getSelectionModel().clearSelection();
+            if (tableFiltered.get()) {
+                tableFiltered.set(false);
+            }
+            Comparator<? super T> prevComp = sortedList.getComparator();
+            sortedList = new SortedList<>(tableView.getItems(), prevComp);
+            buildRows();
+        });
+        tableView.addEventHandler(TableViewEvent.FORCE_UPDATE_EVENT, event -> {
             tableView.getSelectionModel().clearSelection();
             if (tableFiltered.get()) {
                 tableFiltered.set(false);
@@ -197,6 +266,9 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         clearFilterIcon.disableProperty().bind(tableFiltered.not());
     }
 
+    /**
+     * Builds the columns, make them resizable on the right border and adds them to the columns header.
+     */
     protected void buildColumns() {
         MFXTableView<T> tableView = getSkinnable();
 
@@ -204,10 +276,19 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
             column.setMaxHeight(Double.MAX_VALUE);
             DragResizer.makeResizable(column, DragResizer.RIGHT);
             column.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> sortColumn(column));
+            column.rowCellFactoryProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != oldValue) {
+                    buildRows();
+                }
+            });
             columnsContainer.getChildren().add(column);
         }
     }
 
+    /**
+     * Builds a row HBox which will contain all the required cells to represent the model object
+     * and allows selection.
+     */
     protected MFXTableRow<T> buildRowBox(T item) {
         MFXTableView<T> tableView = getSkinnable();
 
@@ -218,6 +299,14 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         return row;
     }
 
+    /**
+     * Builds the rows, from the given list, from the current index up to the max rows displayable and the list size.
+     * <p>
+     * First it calls {@link #buildRowBox(T item)} then for each column in {@link MFXTableView#getColumns()} it calls the
+     * column row cell factory to build the rows cells which are added to the row box.
+     * <p>
+     * At the end the rows are added to the rows container, the showRows label's text is updated and {@link #updateSelection()} is called.
+     */
     protected void buildRows(List<T> items) {
         MFXTableView<T> tableView = getSkinnable();
 
@@ -231,7 +320,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
 
             for (MFXTableColumnCell<T> column : tableView.getColumns()) {
                 MFXTableRowCell rowCell = column.getRowCellFactory().call(item);
-                if (isRightAlignment(column.getAlignment())) {
+                if (NodeUtils.isRightAlignment(column.getAlignment())) {
                     rowCell.setPadding(new Insets(0, 5, 0, 0));
                     rowCell.setAlignment(Pos.CENTER_RIGHT);
                 } else {
@@ -249,6 +338,14 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         updateSelection();
     }
 
+    /**
+     * Checks if the table view is filtered or not. If it is then buildRows is called with the filteredList as argument
+     * otherwise the sortedList is passed instead.
+     * <p>
+     * Keep in mind as I said earlier that the original table view's items list is untouched. The sortedList is
+     * basically a wrapper for the original list and when its comparator is set to null, then the list is exactly the same
+     * as the original one.
+     */
     protected void buildRows() {
         if (tableFiltered.get()) {
             buildRows(filteredList);
@@ -257,6 +354,9 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         }
     }
 
+    /**
+     * Utils method to build a {@link MFXIconWrapper} from the given icon description and size.
+     */
     protected MFXIconWrapper buildIcon(String description, double size) {
         MFXIconWrapper icon = new MFXIconWrapper(new MFXFontIcon(description, size), 22).addRippleGenerator();
         RippleGenerator rippleGenerator = icon.getRippleGenerator();
@@ -268,6 +368,9 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         return icon;
     }
 
+    /**
+     * Utils method to build the filter icon.
+     */
     protected MFXIconWrapper buildFilterIcon() {
         MFXIconWrapper icon = new MFXIconWrapper(new MFXFontIcon("mfx-filter", 16), 22).addRippleGenerator();
         icon.getStylesheets().addAll(getSkinnable().getUserAgentStylesheet());
@@ -282,6 +385,9 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         return icon;
     }
 
+    /**
+     * Utils method to build the clear filter icon.
+     */
     protected MFXIconWrapper buildClearFilterIcon() {
         MFXIconWrapper icon = new MFXIconWrapper(new MFXFontIcon("mfx-filter-clear", 16), 22).addRippleGenerator();
         icon.getStylesheets().addAll(getSkinnable().getUserAgentStylesheet());
@@ -296,6 +402,9 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         return icon;
     }
 
+    /**
+     * Setups the pagination controls and adds the initialized controls to the container.
+     */
     private void setupPaginationControls() {
         MFXIconWrapper firstIcon = buildIcon("mfx-first-page", 18);
         MFXIconWrapper previousIcon = buildIcon("mfx-arrow-back", 10);
@@ -323,6 +432,12 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         );
     }
 
+    /**
+     * Changes the table view page according to the given offset. -1 -> previous page, 1 --> next page.
+     * <p>
+     * Also checks if the table view is filtered or not, setting the index from which to build the next/previous page rows
+     * accordingly.
+     */
     private void changePage(int offset) {
         MFXTableView<T> tableView = getSkinnable();
 
@@ -352,6 +467,9 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         buildRows();
     }
 
+    /**
+     * Shows the first page of the table view. The index is set to 0 and rows are re-built.
+     */
     private void goFirstPage() {
         MFXTableView<T> tableView = getSkinnable();
 
@@ -362,6 +480,11 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         buildRows();
     }
 
+    /**
+     * Shows the last page of the table view. Checks if the table view is filtered and retrieves
+     * the correct list size. Then the index is set by adding the {@link MFXTableView#maxRowsProperty()} value
+     * to it until (index + tableView.getMaxRows() < size).
+     */
     private void goLastPage() {
         MFXTableView<T> tableView = getSkinnable();
 
@@ -377,13 +500,18 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         }
 
         int tmp = index;
-        while (tmp + tableView.getMaxRows() < sortedList.size()) {
+        while (tmp + tableView.getMaxRows() < size) {
             tmp += tableView.getMaxRows();
         }
         index = tmp;
         buildRows();
     }
 
+    /**
+     * Gets the selected rows from the selection model, gets the selected items from that list,
+     * gets the row nodes in the rowsContainer, if the selected items contains the row item
+     * them the reference in the model is updated.
+     */
     @SuppressWarnings("unchecked")
     private void updateSelection() {
         MFXTableView<T> tableView = getSkinnable();
@@ -400,11 +528,15 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         }
         for (MFXTableRow<T> row : shownRows) {
             if (selectedItems.contains(row.getItem())) {
-                tableView.getSelectionModel().select(row, null);
+                int index = selectedItems.indexOf(row.getItem());
+                tableView.getSelectionModel().getSelectedRows().set(index, row);
             }
         }
     }
 
+    /**
+     * Resets the sort state of the table view to UNSORTED.
+     */
     private void clearSort(MFXTableColumnCell<T> currColumn) {
         MFXTableView<T> tableView = getSkinnable();
 
@@ -421,6 +553,9 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         buildRows();
     }
 
+    /**
+     * Animates the sort icon of the column cell.
+     */
     private void animateSortIcon(Node node, SortState sortState) {
         Timeline animation = new Timeline();
         switch (sortState) {
@@ -449,6 +584,10 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         animation.play();
     }
 
+    /**
+     * Sorts the table view using the comparator specified in the clicked column.
+     * The state flow is: ASCENDING -> DESCENDING -> UNSORTED
+     */
     protected void sortColumn(MFXTableColumnCell<T> column) {
         if (column.getComparator() == null) {
             throw new NullPointerException("Comparator has not been set for column: " + column.getColumnName());
@@ -482,6 +621,16 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         buildRows();
     }
 
+    /**
+     * Filters the table view. For each item in the sorted list a new temp list is created.
+     * For each item it checks if it is instance of {@link IFilterable} thus deciding to call
+     * {@code toFilterString()} or {@code toString()}, the returned String is used by the filter dialog
+     * in the {@link MFXFilterDialog#filter(String)} method to check if the item string meets the specified
+     * conditions. If it meets the specified conditions the item is added to the temp list. Then filteredList is
+     * set to a new FilteredList with the temp list as argument, the comparator is bound to the sortedList one.
+     * <p>
+     * Builds the rows and closes the dialog.
+     */
     private void filterTable() {
         tableFiltered.set(true);
 
@@ -507,6 +656,9 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         filterDialog.close();
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
     @Override
     protected double computePrefHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
         List<Node> rows = rowsContainer.getChildren();
@@ -515,11 +667,6 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
                 + columnsContainer.getHeight()
                 + paginationControls.getHeight()
                 + bottomInset;
-    }
-
-    private boolean isRightAlignment(Pos alignment) {
-        return alignment == Pos.BASELINE_RIGHT || alignment == Pos.BOTTOM_RIGHT ||
-                alignment == Pos.CENTER_RIGHT || alignment == Pos.TOP_RIGHT;
     }
 
     @Override

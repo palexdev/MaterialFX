@@ -18,6 +18,12 @@
 
 package io.github.palexdev.materialfx.controls.enums;
 
+/**
+ * This class contains various enumerators used in MaterialFX controls which
+ * support two or more styles that can be changed at runtime.
+ * <p>
+ * These emulators basically are just helpers that store the path to the right css file.
+ */
 public class Styles {
     public enum ComboBoxStyles {
         STYLE1("css/mfx-combobox-style1.css"),

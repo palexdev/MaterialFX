@@ -25,7 +25,13 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
+/**
+ * This is the implementation of the Skin associated with every {@code MFXProgressBar}.
+ */
 public class MFXProgressBarSkin extends SkinBase<MFXProgressBar> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final StackPane track;
     private final StackPane bar1;
     private final StackPane bar2;
@@ -34,6 +40,9 @@ public class MFXProgressBarSkin extends SkinBase<MFXProgressBar> {
     private double barWidth = 0;
     private ParallelTransition indeterminateTransition;
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXProgressBarSkin(MFXProgressBar progressBar) {
         super(progressBar);
 
@@ -49,6 +58,9 @@ public class MFXProgressBarSkin extends SkinBase<MFXProgressBar> {
         getChildren().setAll(track, bar1, bar2);
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
     private Rectangle buildClip() {
         MFXProgressBar progressBar = getSkinnable();
 
@@ -58,6 +70,9 @@ public class MFXProgressBarSkin extends SkinBase<MFXProgressBar> {
         return clip;
     }
 
+    /**
+     * Adds listeners for: width, visible, parent and scene properties.
+     */
     private void setListeners() {
         MFXProgressBar progressBar = getSkinnable();
 
@@ -67,6 +82,9 @@ public class MFXProgressBarSkin extends SkinBase<MFXProgressBar> {
         progressBar.sceneProperty().addListener((observable, oldValue, newValue) -> updateAnimation());
     }
 
+    /**
+     * Resets the animation.
+     */
     private void clearAnimation() {
         if (indeterminateTransition != null) {
             indeterminateTransition.stop();
@@ -75,6 +93,9 @@ public class MFXProgressBarSkin extends SkinBase<MFXProgressBar> {
         }
     }
 
+    /**
+     * Creates the animation for the indeterminate bar.
+     */
     private void createIndeterminateTimeline() {
         MFXProgressBar progressBar =  getSkinnable();
 
@@ -111,7 +132,10 @@ public class MFXProgressBarSkin extends SkinBase<MFXProgressBar> {
         indeterminateTransition.setCycleCount(Timeline.INDEFINITE);
     }
 
-    private void pauseTimeline(boolean pause) {
+    /**
+     * Pauses/Resumes the animation.
+     */
+    private void updateTimeline(boolean pause) {
         MFXProgressBar progressBar = getSkinnable();
 
         if (progressBar.isIndeterminate()) {
@@ -129,12 +153,15 @@ public class MFXProgressBarSkin extends SkinBase<MFXProgressBar> {
     private void updateAnimation() {
         final boolean isTreeVisible = isTreeVisible();
         if (indeterminateTransition != null) {
-            pauseTimeline(!isTreeVisible);
+            updateTimeline(!isTreeVisible);
         } else if (isTreeVisible) {
             createIndeterminateTimeline();
         }
     }
 
+    /**
+     * Updates the bar progress.
+     */
     private void updateProgress() {
         MFXProgressBar progressBar = getSkinnable();
 
@@ -152,6 +179,9 @@ public class MFXProgressBarSkin extends SkinBase<MFXProgressBar> {
         return progressBar.isVisible() && progressBar.getParent() != null && progressBar.getScene() != null;
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
     @Override
     protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
         return Math.max(100, leftInset + bar1.prefWidth(getSkinnable().getWidth()) + rightInset);

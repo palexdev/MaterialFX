@@ -26,7 +26,16 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 
+/**
+ * This is the implementation of the rows used in every {@link MFXTableView}.
+ * <p>
+ * This class contains the reference to the represented item and allows the selection of
+ * the row and the item.
+ */
 public class MFXTableRow<T> extends HBox {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final String STYLE_CLASS = "mfx-table-row";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-table-row.css").toString();
     private final T item;
@@ -34,6 +43,9 @@ public class MFXTableRow<T> extends HBox {
     private static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
     private final BooleanProperty selected = new SimpleBooleanProperty(false);
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXTableRow(T item) {
         this.item = item;
         initialize();
@@ -64,6 +76,9 @@ public class MFXTableRow<T> extends HBox {
         initialize();
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
         addListeners();
@@ -89,6 +104,9 @@ public class MFXTableRow<T> extends HBox {
         this.selected.set(selected);
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
     @Override
     public String getUserAgentStylesheet() {
         return STYLESHEET;

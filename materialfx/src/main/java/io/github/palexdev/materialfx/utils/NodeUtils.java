@@ -23,13 +23,11 @@ import javafx.geometry.*;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -222,12 +220,12 @@ public class NodeUtils {
                 false, false, false, false, true, false, false, false, false, false, null));
     }
 
-    public static double computeTextWidth(Font font, String text) {
-        Label helper = new Label(text);
-        helper.setMaxWidth(Double.MAX_VALUE);
-        helper.setFont(font);
-
-        return getNodeWidth(helper);
+    /**
+     * Checks if the given alignment is set to RIGHT(any).
+     */
+    public static boolean isRightAlignment(Pos alignment) {
+        return alignment == Pos.BASELINE_RIGHT || alignment == Pos.BOTTOM_RIGHT ||
+                alignment == Pos.CENTER_RIGHT || alignment == Pos.TOP_RIGHT;
     }
 
     /* The following methods are copied from com.sun.javafx.scene.control.skin.Utils class

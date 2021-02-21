@@ -29,10 +29,21 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 
+/**
+ * This is the implementation of a table view following Google's material design guidelines in JavaFX.
+ * <p>
+ * Extends {@code Control} and provides a new skin since it is built from scratch.
+ * @param <T> The type of the data within the table.
+ */
 public class MFXTableView<T> extends Control {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final String STYLE_CLASS = "mfx-table-view";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-tableview.css").toString();
 
@@ -44,6 +55,9 @@ public class MFXTableView<T> extends Control {
     private final IntegerProperty maxRowsCombo = new SimpleIntegerProperty(20);
     private final double fixedRowsHeight;
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXTableView() {
         installSelectionModel();
 
@@ -58,10 +72,16 @@ public class MFXTableView<T> extends Control {
         initialize();
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
     }
 
+    /**
+     * Installs the default selection model in this table view.
+     */
     protected void installSelectionModel() {
         ITableSelectionModel<T> selectionModel = new TableSelectionModel<>();
         selectionModel.setAllowsMultipleSelection(true);
@@ -92,6 +112,9 @@ public class MFXTableView<T> extends Control {
         return maxRows.get();
     }
 
+    /**
+     * Specifies the max rows per page.
+     */
     public IntegerProperty maxRowsProperty() {
         return maxRows;
     }
@@ -100,6 +123,9 @@ public class MFXTableView<T> extends Control {
         return maxRowsCombo.get();
     }
 
+    /**
+     * Specifies the max value in the combo box.
+     */
     public IntegerProperty maxRowsComboProperty() {
         return maxRowsCombo;
     }
@@ -112,6 +138,9 @@ public class MFXTableView<T> extends Control {
         return fixedRowsHeight;
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
     @Override
     protected Skin<?> createDefaultSkin() {
         return new MFXTableViewSkin<>(this);
@@ -120,5 +149,27 @@ public class MFXTableView<T> extends Control {
     @Override
     public String getUserAgentStylesheet() {
         return STYLESHEET;
+    }
+
+    //================================================================================
+    // Events Class
+    //================================================================================
+
+    /**
+     * Events class for the table view.
+     * <p>
+     * Defines a new EventType:
+     * <p>
+     * - FORCE_UPDATE_EVENT: this event is captures by the table view's skin to force an update
+     * of the rows. This is useful when the model is not based on JavaFX's properties because when
+     * some item changes the data is not updated automatically, so it must be done manually.
+     * <p>
+     */
+    public static class TableViewEvent extends Event {
+        public static final EventType<TableViewEvent> FORCE_UPDATE_EVENT = new EventType<>(ANY, "FORCE_UPDATE_EVENT");
+
+        public TableViewEvent(EventType<? extends Event> eventType) {
+            super(eventType);
+        }
     }
 }

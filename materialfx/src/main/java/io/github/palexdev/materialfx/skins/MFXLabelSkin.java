@@ -22,7 +22,7 @@ import io.github.palexdev.materialfx.controls.MFXLabel;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.enums.Styles;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
-import io.github.palexdev.materialfx.utils.NodeUtils;
+import io.github.palexdev.materialfx.utils.LabelUtils;
 import javafx.animation.ScaleTransition;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
@@ -38,13 +38,22 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
+/**
+ * This is the implementation of the Skin associated with every {@code MFXLabel}.
+ */
 public class MFXLabelSkin extends SkinBase<MFXLabel> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final HBox container;
     private final Label text;
 
     private final Line unfocusedLine;
     private final Line focusedLine;
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXLabelSkin(MFXLabel label) {
         super(label);
 
@@ -68,7 +77,7 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
         text.setText(label.getText().isEmpty() ? label.getPromptText() : label.getText());
         text.fontProperty().bind(label.fontProperty());
         text.alignmentProperty().bind(label.labelAlignmentProperty());
-        text.minWidthProperty().bind(Bindings.createDoubleBinding(() -> NodeUtils.computeTextWidth(text.getFont(), text.getText()),
+        text.minWidthProperty().bind(Bindings.createDoubleBinding(() -> LabelUtils.computeTextWidth(text.getFont(), text.getText()),
                 label.textProperty(), label.fontProperty())
         );
 
@@ -97,6 +106,15 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
         label.setPadding(new Insets(0, 10, 0, 10));
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
+
+    /**
+     * Adds listeners for: label style, text property, leading and trailing icons, focus.
+     * <p>
+     * Adds handlers for: focus, show editor.
+     */
     private void setListeners() {
         MFXLabel label = getSkinnable();
 
@@ -167,6 +185,9 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
 
     }
 
+    /**
+     * Builds the focus animation.
+     */
     private void buildAndPlayAnimation(boolean focused) {
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(350), focusedLine);
         if (focused) {
@@ -180,6 +201,11 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
         scaleTransition.play();
     }
 
+    /**
+     * If {@link MFXLabel#editableProperty()} is set to true shows the editor,
+     * ESCAPE hides the editor canceling any change, ENTER hides the editor and confirms
+     * the changes.
+     */
     private void showEditor() {
         text.setVisible(false);
         MFXTextField textField = new MFXTextField(text.getText());
@@ -205,6 +231,9 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
         getChildren().add(textField);
     }
 
+    /**
+     * Checks if the editor is already shown.
+     */
     private boolean containsEditor() {
         Node editor = getChildren().stream()
                 .filter(node -> node.getId() != null && node.getId().equals("editor-node"))
@@ -213,6 +242,9 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
         return editor != null;
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
     @Override
     protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
         return 30;

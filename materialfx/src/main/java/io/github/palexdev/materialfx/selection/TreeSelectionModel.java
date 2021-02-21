@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Concrete implementation of the {@code ITreeSelectionModel} class.
+ * Concrete implementation of the {@code ITreeSelectionModel} interface.
  * <p>
  * This provides common methods for items selection.
  * <p>

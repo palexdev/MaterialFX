@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 import static io.github.palexdev.materialfx.controls.MFXCheckTreeItem.CheckTreeItemEvent;
 
 /**
- * Concrete implementation of the {@code ITreeCheckModel} class.
+ * Concrete implementation of the {@code ITreeCheckModel} interface.
  * <p>
  * This provides common methods for items check. Also, since it extends TreeSelectionModel it also provides
  * all the methods for items selection.

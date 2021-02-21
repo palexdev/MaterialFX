@@ -4,6 +4,9 @@ import io.github.palexdev.materialfx.controls.MFXTableRow;
 import javafx.beans.property.ListProperty;
 import javafx.scene.input.MouseEvent;
 
+/**
+ * Public API used by any {@code MFXTableView}.
+ */
 public interface ITableSelectionModel<T> {
     void select(MFXTableRow<T> row, MouseEvent mouseEvent);
     void clearSelection();

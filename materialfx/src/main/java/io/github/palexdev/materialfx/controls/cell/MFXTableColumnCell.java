@@ -31,7 +31,19 @@ import javafx.util.Callback;
 
 import java.util.Comparator;
 
+/**
+ * This is the implementation of the column cells used in the {@link io.github.palexdev.materialfx.controls.MFXTableView} columns header.
+ * <p>
+ * Each column cell is a {@code Label}, has a name and has the following responsibilities:
+ * - Has a row cell factory because each column knows how to build the corresponding row cell in each table row<p>
+ * - Has a sort state and a comparator because each column knows how to sort the rows based on the given comparator, also
+ *      retains its sort state thus allowing switching between ASCENDING, DESCENDING, UNSORTED<p>
+ *
+ */
 public class MFXTableColumnCell<T> extends Label {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final String STYLE_CLASS = "mfx-table-column-cell";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-table-column-cell.css").toString();
 
@@ -41,6 +53,9 @@ public class MFXTableColumnCell<T> extends Label {
     private SortState sortState = SortState.UNSORTED;
     private Comparator<T> comparator;
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXTableColumnCell(String columnName) {
         textProperty().bind(columnNameProperty());
         setColumnName(columnName);
@@ -54,6 +69,9 @@ public class MFXTableColumnCell<T> extends Label {
         initialize();
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
     }
@@ -98,6 +116,9 @@ public class MFXTableColumnCell<T> extends Label {
         this.comparator = comparator;
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
     @Override
     protected Skin<?> createDefaultSkin() {
         return new MFXTableColumnCellSkin<>(this);

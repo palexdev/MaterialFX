@@ -38,7 +38,19 @@ import java.util.List;
 
 import static io.github.palexdev.materialfx.controls.enums.Styles.LabelStyles;
 
+/**
+ * This is the implementation of a label following Google's material design guidelines in JavaFX.
+ * <p>
+ * Extends {@code Control} and provides a new skin since it is built from scratch.
+ * <p>
+ * Side note: lacks some features like text wrapping, overrun and ellipsis but there are also
+ * new features like leading and trailing icons support, prompt text, changeable styles at runtime
+ * and it can also be set to editable like a text field (double click on the label to edit).
+ */
 public class MFXLabel extends Control {
+    //================================================================================
+    // Properties
+    //================================================================================
     private static final StyleablePropertyFactory<MFXLabel> FACTORY = new StyleablePropertyFactory<>(Control.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-label";
     private String STYLESHEET;
@@ -52,6 +64,9 @@ public class MFXLabel extends Control {
 
     private final ObjectProperty<Pos> alignment = new SimpleObjectProperty<>(Pos.CENTER_LEFT);
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXLabel() {
         this("");
     }
@@ -62,6 +77,9 @@ public class MFXLabel extends Control {
         initialize();
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
 
@@ -77,6 +95,9 @@ public class MFXLabel extends Control {
         });
     }
 
+    /**
+     * @return the Label node wrapped by MFXLabel which has the text
+     */
     public Label getTextNode() {
         return (Label) lookup(".text-node");
     }
@@ -85,6 +106,9 @@ public class MFXLabel extends Control {
         return text.get();
     }
 
+    /**
+     * The text to display in the label.
+     */
     public StringProperty textProperty() {
         return text;
     }
@@ -97,6 +121,9 @@ public class MFXLabel extends Control {
         return promptText.get();
     }
 
+    /**
+     * The prompt text to display in case the {@link #textProperty()} is empty.
+     */
     public StringProperty promptTextProperty() {
         return promptText;
     }
@@ -109,6 +136,9 @@ public class MFXLabel extends Control {
         return font.get();
     }
 
+    /**
+     * The font to use for the text.
+     */
     public ObjectProperty<Font> fontProperty() {
         return font;
     }
@@ -121,6 +151,9 @@ public class MFXLabel extends Control {
         return labelAlignment.get();
     }
 
+    /**
+     * The alignment of the label's text.
+     */
     public ObjectProperty<Pos> labelAlignmentProperty() {
         return labelAlignment;
     }
@@ -133,6 +166,9 @@ public class MFXLabel extends Control {
         return leadingIcon.get();
     }
 
+    /**
+     * The leading icon node.
+     */
     public ObjectProperty<Node> leadingIconProperty() {
         return leadingIcon;
     }
@@ -145,6 +181,9 @@ public class MFXLabel extends Control {
         return trailingIcon.get();
     }
 
+    /**
+     * The trailing icon node.
+     */
     public ObjectProperty<Node> trailingIconProperty() {
         return trailingIcon;
     }
@@ -153,6 +192,9 @@ public class MFXLabel extends Control {
         return alignment.get();
     }
 
+    /**
+     * The alignment of the container.
+     */
     public ObjectProperty<Pos> alignmentProperty() {
         return alignment;
     }
@@ -165,6 +207,13 @@ public class MFXLabel extends Control {
         this.trailingIcon.set(trailingIcon);
     }
 
+    //================================================================================
+    // Styleable Properties
+    //================================================================================
+
+    /**
+     * Specifies the style of the MFXLabel.
+     */
     private final StyleableObjectProperty<LabelStyles> labelStyle = new SimpleStyleableObjectProperty<>(
             StyleableProperties.STYLE,
             this,
@@ -172,6 +221,9 @@ public class MFXLabel extends Control {
             LabelStyles.STYLE1
     );
 
+    /**
+     * Specifies the space between the icons and the text.
+     */
     private final StyleableDoubleProperty graphicTextGap = new SimpleStyleableDoubleProperty(
             StyleableProperties.GRAPHIC_TEXT_GAP,
             this,
@@ -179,6 +231,9 @@ public class MFXLabel extends Control {
             5.0
     );
 
+    /**
+     * Specifies whether the label can be edited or not.
+     */
     private final StyleableBooleanProperty editable = new SimpleStyleableBooleanProperty(
             StyleableProperties.EDITABLE,
             this,
@@ -186,6 +241,9 @@ public class MFXLabel extends Control {
             false
     );
 
+    /**
+     * Specifies if focus lines should be animated.
+     */
     private final StyleableBooleanProperty animateLines = new SimpleStyleableBooleanProperty(
             StyleableProperties.ANIMATE_LINES,
             this,
@@ -193,6 +251,9 @@ public class MFXLabel extends Control {
             true
     );
 
+    /**
+     * Specifies the focusedLine color.
+     */
     private final StyleableObjectProperty<Paint> lineColor = new SimpleStyleableObjectProperty<>(
             StyleableProperties.LINE_COLOR,
             this,
@@ -200,6 +261,9 @@ public class MFXLabel extends Control {
             Color.rgb(82, 0, 237)
     );
 
+    /**
+     * Specifies the unfocusedLine color.
+     */
     private final StyleableObjectProperty<Paint> unfocusedLineColor = new SimpleStyleableObjectProperty<>(
             StyleableProperties.UNFOCUSED_LINE_COLOR,
             this,
@@ -279,6 +343,9 @@ public class MFXLabel extends Control {
         this.unfocusedLineColor.set(unfocusedLineColor);
     }
 
+    //================================================================================
+    // CssMetaData
+    //================================================================================
     private static class StyleableProperties {
         private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
@@ -333,10 +400,14 @@ public class MFXLabel extends Control {
         }
     }
 
+
     public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
         return StyleableProperties.cssMetaDataList;
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
     @Override
     protected Skin<?> createDefaultSkin() {
         return new MFXLabelSkin(this);

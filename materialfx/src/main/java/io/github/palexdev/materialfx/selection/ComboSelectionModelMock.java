@@ -22,15 +22,32 @@ import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 
+/**
+ * Rather than recreating and adapting the entire JavaFX's selection model for usage
+ * in {@link MFXComboBox} we "mock" it. The combo box listview selection model is bound to this one
+ * and vice versa.
+ * <p></p>
+ * <b>Note: if the select methods do not work try adding a listener to the skin property
+ * of the control and using the methods there.</b>
+ */
 public class ComboSelectionModelMock<T> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final MFXComboBox<T> comboBox;
     private final ReadOnlyObjectWrapper<T> selectedItem = new ReadOnlyObjectWrapper<>(null);
     private final ReadOnlyIntegerWrapper selectedIndex = new ReadOnlyIntegerWrapper(-1);
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public ComboSelectionModelMock(MFXComboBox<T> comboBox) {
         this.comboBox = comboBox;
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
     public void clearSelection() {
         selectedItem.set(null);
         selectedIndex.set(-1);

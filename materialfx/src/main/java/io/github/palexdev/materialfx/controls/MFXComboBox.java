@@ -35,7 +35,19 @@ import java.util.List;
 
 import static io.github.palexdev.materialfx.controls.enums.Styles.ComboBoxStyles;
 
+/**
+ * This is the implementation of a combo box following Google's material design guidelines in JavaFX.
+ * <p>
+ * Extends {@code Control} and provides a new skin since it is built from scratch.
+ * <p>
+ * Side note: unlike JavaFX's one this is NOT editable.
+ * @param <T> The type of the value that has been selected
+ * @see ComboSelectionModelMock
+ */
 public class MFXComboBox<T> extends Control {
+    //================================================================================
+    // Properties
+    //================================================================================
     private static final StyleablePropertyFactory<MFXComboBox<?>> FACTORY = new StyleablePropertyFactory<>(Control.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-combo-box";
     private String STYLESHEET;
@@ -50,6 +62,9 @@ public class MFXComboBox<T> extends Control {
 
     private final ComboSelectionModelMock<T> mockSelection;
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXComboBox() {
         this(FXCollections.observableArrayList());
     }
@@ -62,6 +77,9 @@ public class MFXComboBox<T> extends Control {
         initialize();
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
 
@@ -81,6 +99,9 @@ public class MFXComboBox<T> extends Control {
         return selectedValue.get();
     }
 
+    /**
+     * The currently selected item.
+     */
     public ObjectProperty<T> selectedValueProperty() {
         return selectedValue;
     }
@@ -93,6 +114,9 @@ public class MFXComboBox<T> extends Control {
         return items.get();
     }
 
+    /**
+     * The list of items to show within the ComboBox popup.
+     */
     public ObjectProperty<ObservableList<T>> itemsProperty() {
         return items;
     }
@@ -105,6 +129,9 @@ public class MFXComboBox<T> extends Control {
         return maxPopupWidth.get();
     }
 
+    /**
+     * Specifies the max popup width. Set to -1 to autosize.
+     */
     public DoubleProperty maxPopupWidthProperty() {
         return maxPopupWidth;
     }
@@ -117,6 +144,9 @@ public class MFXComboBox<T> extends Control {
         return maxPopupHeight.get();
     }
 
+    /**
+     * Specifies the max popup height. Set to -1 to autosize.
+     */
     public DoubleProperty maxPopupHeightProperty() {
         return maxPopupHeight;
     }
@@ -129,6 +159,9 @@ public class MFXComboBox<T> extends Control {
         return popupXOffset.get();
     }
 
+    /**
+     * Specifies the x offset.
+     */
     public DoubleProperty popupXOffsetProperty() {
         return popupXOffset;
     }
@@ -141,6 +174,9 @@ public class MFXComboBox<T> extends Control {
         return popupYOffset.get();
     }
 
+    /**
+     * Specifies the y offset.
+     */
     public DoubleProperty popupYOffsetProperty() {
         return popupYOffset;
     }
@@ -149,10 +185,20 @@ public class MFXComboBox<T> extends Control {
         this.popupYOffset.set(popupYOffset);
     }
 
+    /**
+     * @return the selection model associated to this combo box
+     */
     public ComboSelectionModelMock<T> getSelectionModel() {
         return mockSelection;
     }
 
+    //================================================================================
+    // Styleable Properties
+    //================================================================================
+
+    /**
+     * Specifies the style of the MFXComboBox.
+     */
     private final StyleableObjectProperty<ComboBoxStyles> comboStyle = new SimpleStyleableObjectProperty<>(
             StyleableProperties.STYLE,
             this,
@@ -164,6 +210,9 @@ public class MFXComboBox<T> extends Control {
         return comboStyle.get();
     }
 
+    /**
+     * Specifies the style used by the combo box.
+     */
     public StyleableObjectProperty<ComboBoxStyles> comboStyleProperty() {
         return comboStyle;
     }
@@ -171,6 +220,10 @@ public class MFXComboBox<T> extends Control {
     public void setComboStyle(ComboBoxStyles comboStyle) {
         this.comboStyle.set(comboStyle);
     }
+
+    //================================================================================
+    // CssMetaData
+    //================================================================================
 
     private static class StyleableProperties {
         private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
@@ -192,6 +245,9 @@ public class MFXComboBox<T> extends Control {
         return StyleableProperties.cssMetaDataList;
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
     @Override
     protected Skin<?> createDefaultSkin() {
         return new MFXComboBoxSkin<>(this);

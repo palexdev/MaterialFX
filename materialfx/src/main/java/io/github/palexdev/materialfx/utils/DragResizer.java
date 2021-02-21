@@ -23,6 +23,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 
 public class DragResizer {
+    //================================================================================
+    // Properties
+    //================================================================================
 
     /**
      * The margin around the control that a user can click in to start resizing
@@ -43,11 +46,17 @@ public class DragResizer {
     public static final short LEFT = 8;
     public static final short ALL_DIRECTIONS = 15;
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     private DragResizer(Region region, int allowedDirection) {
         this.region = region;
         this.allowedDirection = allowedDirection;
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
     public static void makeResizable(Region region, int allowedDirection) {
         final DragResizer resizer = new DragResizer(region, allowedDirection);
 

@@ -23,10 +23,21 @@ import io.github.palexdev.materialfx.skins.MFXProgressBarSkin;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Skin;
 
+/**
+ * This is the implementation of a progress bar following Google's material design guidelines.
+ * <p>
+ * Extends {@code ProgressBar} and redefines the style class to "mfx-progress-bar" for usage in CSS.
+ */
 public class MFXProgressBar extends ProgressBar {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final String STYLE_CLASS = "mfx-progress-bar";
     private final String STYLESHEETS = MFXResourcesLoader.load("css/mfx-progressbar.css").toString();
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXProgressBar() {
         initialize();
     }
@@ -36,11 +47,17 @@ public class MFXProgressBar extends ProgressBar {
         initialize();
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
         setPrefWidth(200);
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
     @Override
     protected Skin<?> createDefaultSkin() {
         return new MFXProgressBarSkin(this);
