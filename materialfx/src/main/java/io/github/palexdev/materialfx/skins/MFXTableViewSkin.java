@@ -41,7 +41,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
-import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -146,8 +145,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         clearFilterIcon = buildClearFilterIcon();
         filterDialog = new MFXFilterDialog();
         filterDialog.setTitle("Filter TableView");
-        filterDialog.getStage().setCenterInOwner(false);
-        filterDialog.getStage().setManualPosition(true);
+        filterDialog.getStage().setCenterInOwner(true);
         filterDialog.getStage().setOwner(tableView.getScene().getWindow());
         filterDialog.getStage().setModality(Modality.WINDOW_MODAL);
         filterDialog.getFilterButton().setOnAction(event -> filterTable());
@@ -247,15 +245,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
             }
         });
 
-        filterIcon.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            Bounds bounds = tableView.getBoundsInLocal();
-            Bounds screenBounds = tableView.localToScreen(bounds);
-            double x = screenBounds.getMinX() - Math.abs((tableView.getWidth() - filterDialog.getPrefWidth()) / 2.0);
-            double y = screenBounds.getMinY() + Math.abs((tableView.getHeight() - filterDialog.getPrefHeight()) / 2.0);
-            filterDialog.getStage().setManualX(x);
-            filterDialog.getStage().setManualY(y);
-            filterDialog.show();
-        });
+        filterIcon.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> filterDialog.show());
         clearFilterIcon.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (tableFiltered.get()) {
                 tableFiltered.set(false);
@@ -302,7 +292,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
     /**
      * Builds the rows, from the given list, from the current index up to the max rows displayable and the list size.
      * <p>
-     * First it calls {@link #buildRowBox(T item)} then for each column in {@link MFXTableView#getColumns()} it calls the
+     * First it calls {@link #buildRowBox(Object)} then for each column in {@link MFXTableView#getColumns()} it calls the
      * column row cell factory to build the rows cells which are added to the row box.
      * <p>
      * At the end the rows are added to the rows container, the showRows label's text is updated and {@link #updateSelection()} is called.
@@ -586,7 +576,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
 
     /**
      * Sorts the table view using the comparator specified in the clicked column.
-     * The state flow is: ASCENDING -> DESCENDING -> UNSORTED
+     * The state flow is: ASCENDING - DESCENDING - UNSORTED
      */
     protected void sortColumn(MFXTableColumnCell<T> column) {
         if (column.getComparator() == null) {

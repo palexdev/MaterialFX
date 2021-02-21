@@ -1,6 +1,7 @@
 package io.github.palexdev.materialfx.demo.controllers;
 
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
+import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -37,6 +38,15 @@ public class ComboBoxesDemoController implements Initializable {
     @FXML
     private MFXCheckbox checkbox;
 
+    @FXML
+    private MFXComboBox<String> style1;
+
+    @FXML
+    private MFXComboBox<String> style2;
+
+    @FXML
+    private MFXComboBox<Label> newCustomized;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ObservableList<String> stringList = FXCollections.observableArrayList(List.of(
@@ -70,6 +80,10 @@ public class ComboBoxesDemoController implements Initializable {
 
         editable.setEditable(true);
         validated.getValidator().add(checkbox.selectedProperty(), "Checkbox is not selected!");
+
+        style1.setItems(stringList);
+        style2.setItems(stringList);
+        newCustomized.setItems(labelsList);
     }
 
     private FontIcon createIcon(String s) {

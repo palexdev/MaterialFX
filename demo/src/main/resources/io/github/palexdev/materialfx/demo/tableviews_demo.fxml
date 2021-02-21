@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.legacy.MFXLegacyTableView?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXTableView?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<StackPane prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.TableViewsDemoController">
+    <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Table Views" StackPane.alignment="TOP_CENTER">
+        <StackPane.margin>
+          <Insets top="20.0" />
+        </StackPane.margin>
+    </Label>
+    <StackPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" prefHeight="430.0" prefWidth="570.0" StackPane.alignment="BOTTOM_CENTER">
+        <StackPane.margin>
+            <Insets bottom="15.0" left="15.0" right="15.0" />
+        </StackPane.margin>
+        <padding>
+            <Insets top="20.0" />
+        </padding>
+        <MFXButton fx:id="switchButton" buttonType="RAISED" depthLevel="LEVEL1" text="Switch Table View" StackPane.alignment="TOP_CENTER">
+         <StackPane.margin>
+            <Insets />
+         </StackPane.margin></MFXButton>
+        <MFXLegacyTableView fx:id="legacyTable" maxHeight="-Infinity" prefHeight="400.0">
+            <StackPane.margin>
+                <Insets left="5.0" right="5.0" top="35.0" />
+            </StackPane.margin>
+        </MFXLegacyTableView>
+        <MFXTableView fx:id="table" visible="false" StackPane.alignment="BOTTOM_CENTER">
+            <StackPane.margin>
+                <Insets left="5.0" right="5.0" />
+            </StackPane.margin>
+        </MFXTableView>
+    </StackPane>
+</StackPane>

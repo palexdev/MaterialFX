@@ -47,7 +47,7 @@ public class MFXTableView<T> extends Control {
     private final String STYLE_CLASS = "mfx-table-view";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-tableview.css").toString();
 
-    private final ObservableList<T> items = FXCollections.observableArrayList();
+    private final ObjectProperty<ObservableList<T>> items = new SimpleObjectProperty<>(FXCollections.observableArrayList());
     private final ObjectProperty<ITableSelectionModel<T>> selectionModel = new SimpleObjectProperty<>(null);
 
     private final ObservableList<MFXTableColumnCell<T>> columns = FXCollections.observableArrayList();
@@ -89,7 +89,15 @@ public class MFXTableView<T> extends Control {
     }
 
     public ObservableList<T> getItems() {
+        return items.get();
+    }
+
+    public ObjectProperty<ObservableList<T>> itemsProperty() {
         return items;
+    }
+
+    public void setItems(ObservableList<T> items) {
+        this.items.set(items);
     }
 
     public ITableSelectionModel<T> getSelectionModel() {

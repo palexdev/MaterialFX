@@ -130,14 +130,16 @@ public class DemoController implements Initializable {
         vLoader.addItem(2, "COMBOBOXES", new MFXToggleNode("COMBOBOXES"), MFXResourcesLoader.load("combo_boxes_demo.fxml"));
         vLoader.addItem(3, "DATEPICKERS", new MFXToggleNode("DATEPICKERS"), MFXResourcesLoader.load("datepickers_demo.fxml"));
         vLoader.addItem(4, "DIALOGS", new MFXToggleNode("DIALOGS"), MFXResourcesLoader.load("dialogs_demo.fxml"), controller -> new DialogsController(demoPane));
-        vLoader.addItem(5, "LISTVIEWS", new MFXToggleNode("LISTVIEWS"), MFXResourcesLoader.load("listviews_demo.fxml"));
-        vLoader.addItem(6, "NOTIFICATIONS", new MFXToggleNode("NOTIFICATIONS"), MFXResourcesLoader.load("notifications_demo.fxml"));
-        vLoader.addItem(7, "PROGRESS_SPINNERS", new MFXToggleNode("PROGRESS_SPINNERS"), MFXResourcesLoader.load("progress_spinners_demo.fxml"));
-        vLoader.addItem(8, "RADIOBUTTONS", new MFXToggleNode("RADIOBUTTONS"), MFXResourcesLoader.load("radio_buttons_demo.fxml"));
-        vLoader.addItem(9, "SCROLLPANES", new MFXToggleNode("SCROLLPANES"), MFXResourcesLoader.load("scrollpanes_demo.fxml"));
-        vLoader.addItem(10, "TEXTFIELDS", new MFXToggleNode("TEXTFIELDS"), MFXResourcesLoader.load("textfields_demo.fxml"));
-        vLoader.addItem(11, "TOGGLES", new MFXToggleNode("TOGGLES"), MFXResourcesLoader.load("toggle_buttons_demo.fxml"));
-        vLoader.addItem(12, "TREEVIEWS", new MFXToggleNode("TREEVIEWS"), MFXResourcesLoader.load("treeviews_demo.fxml"));
+        vLoader.addItem(5, "LABELS", new MFXToggleNode("LABELS"), MFXResourcesLoader.load("labels_demo.fxml"));
+        vLoader.addItem(6, "LISTVIEWS", new MFXToggleNode("LISTVIEWS"), MFXResourcesLoader.load("listviews_demo.fxml"));
+        vLoader.addItem(7, "NOTIFICATIONS", new MFXToggleNode("NOTIFICATIONS"), MFXResourcesLoader.load("notifications_demo.fxml"));
+        vLoader.addItem(8, "PROGRESS_SPINNERS", new MFXToggleNode("PROGRESS_SPINNERS"), MFXResourcesLoader.load("progress_spinners_demo.fxml"));
+        vLoader.addItem(9, "RADIOBUTTONS", new MFXToggleNode("RADIOBUTTONS"), MFXResourcesLoader.load("radio_buttons_demo.fxml"));
+        vLoader.addItem(10, "SCROLLPANES", new MFXToggleNode("SCROLLPANES"), MFXResourcesLoader.load("scrollpanes_demo.fxml"));
+        vLoader.addItem(11, "TABLEVIEWS", new MFXToggleNode("TABLEVIEWS"), MFXResourcesLoader.load("tableviews_demo.fxml"));
+        vLoader.addItem(12, "TEXTFIELDS", new MFXToggleNode("TEXTFIELDS"), MFXResourcesLoader.load("textfields_demo.fxml"));
+        vLoader.addItem(13, "TOGGLES", new MFXToggleNode("TOGGLES"), MFXResourcesLoader.load("toggle_buttons_demo.fxml"));
+        vLoader.addItem(14, "TREEVIEWS", new MFXToggleNode("TREEVIEWS"), MFXResourcesLoader.load("treeviews_demo.fxml"));
         vLoader.setDefault("BUTTONS");
 
         // Others
