@@ -56,6 +56,8 @@ public enum FontResources {
     SEARCH_PLUS("mfx-search-plus", '\uE92a'),
     STEP_BACKWARD("mfx-step-backward", '\uE923'),
     STEP_FORWARD("mfx-step-forward", '\uE924'),
+    USER("mfx-user", '\uE92c'),
+    USERS("mfx-users", '\uE92d'),
     VARIANT3_MARK("mfx-variant3-mark", '\uE90e'),
     VARIANT4_MARK("mfx-variant4-mark", '\uE90f'),
     VARIANT5_MARK("mfx-variant5-mark", '\uE910'),

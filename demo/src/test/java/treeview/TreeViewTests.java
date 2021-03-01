@@ -4,10 +4,12 @@ import io.github.palexdev.materialfx.controls.MFXTreeItem;
 import io.github.palexdev.materialfx.controls.MFXTreeView;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
 import io.github.palexdev.materialfx.utils.TreeItemStream;
+import javafx.collections.FXCollections;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.junit.Test;
+import org.testfx.api.FxRobot;
 import org.testfx.framework.junit.ApplicationTest;
 
 import java.io.File;
@@ -21,6 +23,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 public class TreeViewTests extends ApplicationTest {
+    private final FxRobot robot = new FxRobot();
     private final String desktopPath = System.getProperty("user.home") + "/Desktop";
     private MFXTreeView<String> treeView;
     private MFXTreeView<String> expandedTreeView;
@@ -265,6 +268,22 @@ public class TreeViewTests extends ApplicationTest {
         i3.setSelected(true);
 
         assertEquals(5, treeView.getSelectionModel().getSelectedItems().size());
+        long end = System.nanoTime();
+        System.out.println("TimeSelectedMultiple:" + ((double) (end - start) / 1000000) + "ms");
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Test
+    public void testSetItems() {
+        long start = System.nanoTime();
+        MFXTreeItem<String> root = (MFXTreeItem<String>) treeView.getRoot();
+        MFXTreeItem<String> i1 = (MFXTreeItem<String>) TreeItemStream.stream(root)
+                .filter(i -> i.getData().equals("I1"))
+                .findFirst().orElse(null);
+
+        robot.interact(() -> i1.setItems(FXCollections.observableArrayList()));
+
+        assertEquals(9, root.getItemsCount());
         long end = System.nanoTime();
         System.out.println("TimeSelectedMultiple:" + ((double) (end - start) / 1000000) + "ms");
     }

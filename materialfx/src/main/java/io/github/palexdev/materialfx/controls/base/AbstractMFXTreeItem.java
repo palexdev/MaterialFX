@@ -233,6 +233,10 @@ public abstract class AbstractMFXTreeItem<T> extends Control {
         return items;
     }
 
+    public void setItems(ObservableList<AbstractMFXTreeItem<T>> items) {
+        this.items.setAll(items);
+    }
+
     /**
      * @return this item's parent item
      */

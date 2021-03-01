@@ -164,10 +164,10 @@ public class MFXDialogFactory {
         MFXFontIcon closeIcon = new MFXFontIcon("mfx-x", Color.WHITE);
 
         if (dialog.getType() != null && dialog.getType().equals(DialogType.GENERIC)) {
-            dialog.setCloseButton(new MFXButton(""));
+            dialog.setCloseButtons(new MFXButton(""));
         }
 
-        MFXButton closeButton = dialog.getCloseButton();
+        MFXButton closeButton = new MFXButton("");
         closeButton.setPrefSize(20, 20);
         closeButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         closeButton.setGraphic(closeIcon);
@@ -175,6 +175,7 @@ public class MFXDialogFactory {
         closeButton.setRippleColor(Color.rgb(255, 0, 0, 0.1));
         closeButton.setRippleInDuration(Duration.millis(500));
         closeButton.setButtonType(ButtonType.FLAT);
+        dialog.setCloseButtons(closeButton);
 
         NodeUtils.makeRegionCircular(closeButton);
 
@@ -271,13 +272,14 @@ public class MFXDialogFactory {
         buttonsBox.setPadding(new Insets(0, 15, 10, 0));
         buttonsBox.getStyleClass().add("buttons-box");
 
-        MFXButton closeButton = dialog.getCloseButton();
+        MFXButton closeButton = new MFXButton("");
         closeButton.setText("OK");
         closeButton.setPrefSize(55, 20);
         closeButton.setTextFill(Color.rgb(120, 66, 245));
         closeButton.setRippleRadius(30);
         closeButton.setRippleInDuration(Duration.millis(500));
         closeButton.setRippleColor(Color.rgb(120, 66, 245, 0.3));
+        dialog.setCloseButtons(closeButton);
 
         HBox.setMargin(closeButton, new Insets(5, 10, 0, 0));
         buttonsBox.getChildren().add(closeButton);

@@ -58,6 +58,7 @@ public class MFXLabel extends Control {
     private final StringProperty text = new SimpleStringProperty();
     private final StringProperty promptText = new SimpleStringProperty("Label");
     private final ObjectProperty<Font> font = new SimpleObjectProperty<>(Font.getDefault());
+    private final ObjectProperty<Color> textFill = new SimpleObjectProperty<>(Color.BLACK);
     private final ObjectProperty<Pos> labelAlignment = new SimpleObjectProperty<>(Pos.CENTER);
     private final ObjectProperty<Node> leadingIcon = new SimpleObjectProperty<>();
     private final ObjectProperty<Node> trailingIcon = new SimpleObjectProperty<>();
@@ -145,6 +146,21 @@ public class MFXLabel extends Control {
 
     public void setFont(Font font) {
         this.font.set(font);
+    }
+
+    public Color getTextFill() {
+        return textFill.get();
+    }
+
+    /**
+     * Specifies the color of the text.
+     */
+    public ObjectProperty<Color> textFillProperty() {
+        return textFill;
+    }
+
+    public void setTextFill(Color textFill) {
+        this.textFill.set(textFill);
     }
 
     public Pos getLabelAlignment() {

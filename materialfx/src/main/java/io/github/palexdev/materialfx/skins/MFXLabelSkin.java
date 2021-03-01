@@ -22,9 +22,9 @@ import io.github.palexdev.materialfx.controls.MFXLabel;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.enums.Styles;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
-import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.ScaleTransition;
 import javafx.beans.binding.Bindings;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -44,9 +44,16 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
     //================================================================================
     private final HBox container;
     private final Label textNode;
+    private final double lrInsets = 10;
 
     private final Line unfocusedLine;
     private final Line focusedLine;
+
+    private EventHandler<MouseEvent> iconEditorHandler = event -> {
+        if (event.getClickCount() > 1) {
+            event.consume();
+        }
+    };
 
     //================================================================================
     // Constructors
@@ -78,18 +85,21 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
             return label.getText();
         }, label.textProperty(), label.promptTextProperty()));
         textNode.fontProperty().bind(label.fontProperty());
+        textNode.textFillProperty().bind(label.textFillProperty());
         textNode.alignmentProperty().bind(label.labelAlignmentProperty());
 
         container = new HBox(textNode);
         container.alignmentProperty().bind(label.alignmentProperty());
         container.spacingProperty().bind(label.graphicTextGapProperty());
-        container.setPadding(new Insets(0, 10, 0, 10));
+        container.setPadding(new Insets(0, lrInsets, 0, lrInsets));
 
         if (label.getLeadingIcon() != null) {
             container.getChildren().add(0, label.getLeadingIcon());
+            label.getLeadingIcon().addEventFilter(MouseEvent.MOUSE_PRESSED, iconEditorHandler);
         }
         if (label.getTrailingIcon() != null) {
             container.getChildren().add(label.getTrailingIcon());
+            label.getTrailingIcon().addEventFilter(MouseEvent.MOUSE_PRESSED, iconEditorHandler);
         }
 
         if (label.getLabelStyle() == Styles.LabelStyles.STYLE1) {
@@ -127,10 +137,13 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
                 return;
             }
             if (oldValue != null) {
+                oldValue.removeEventFilter(MouseEvent.MOUSE_PRESSED, iconEditorHandler);
                 container.getChildren().set(0, newValue);
             } else {
                 container.getChildren().add(0, newValue);
             }
+
+            newValue.addEventFilter(MouseEvent.MOUSE_PRESSED, iconEditorHandler);
         });
 
         label.trailingIconProperty().addListener((observable, oldValue, newValue) -> {
@@ -139,11 +152,14 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
                 return;
             }
             if (oldValue != null) {
+                oldValue.removeEventFilter(MouseEvent.MOUSE_PRESSED, iconEditorHandler);
                 int index = container.getChildren().indexOf(oldValue);
                 container.getChildren().set(index, newValue);
             } else {
                 container.getChildren().add(newValue);
             }
+
+            newValue.addEventFilter(MouseEvent.MOUSE_PRESSED, iconEditorHandler);
         });
 
         label.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -168,10 +184,9 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
             focusedLine.setScaleX(1.0);
         });
 
-        label.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+        container.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             label.requestFocus();
-            if (event.getClickCount() >= 2 && label.isEditable() && !containsEditor() &&
-                    NodeUtils.inHierarchy(event.getPickResult().getIntersectedNode(), textNode)) {
+            if (event.getClickCount() >= 2 && label.isEditable() && !containsEditor()) {
                 showEditor();
             }
             event.consume();
@@ -198,7 +213,8 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
     /**
      * If {@link MFXLabel#editableProperty()} is set to true shows the editor,
      * ESCAPE hides the editor canceling any change, ENTER hides the editor and confirms
-     * the changes.
+     * the changes, if the editor looses focus (for example by clicking on another component that requests the focus)
+     * the editor is hidden and any changes are confirmed.
      */
     private void showEditor() {
         MFXLabel label = getSkinnable();
@@ -206,27 +222,58 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
         textNode.setVisible(false);
         MFXTextField textField = new MFXTextField(textNode.getText());
         textField.setId("editor-node");
+        textField.setManaged(false);
         textField.setUnfocusedLineColor(Color.TRANSPARENT);
         textField.setLineColor(Color.TRANSPARENT);
-        textField.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-        textField.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-        textField.prefWidthProperty().bind(textNode.widthProperty());
-        textField.prefHeightProperty().bind(textNode.heightProperty());
 
         textField.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                getSkinnable().setText(textField.getText());
-                getChildren().remove(textField);
+                label.setText(textField.getText());
+                container.getChildren().remove(textField);
                 textNode.setVisible(true);
+                textNode.setPrefWidth(Region.USE_COMPUTED_SIZE);
                 label.requestFocus();
             } else if (event.getCode() == KeyCode.ESCAPE) {
-                getChildren().remove(textField);
+                container.getChildren().remove(textField);
                 textNode.setVisible(true);
+                textNode.setPrefWidth(Region.USE_COMPUTED_SIZE);
                 label.requestFocus();
             }
         });
 
-        getChildren().add(textField);
+        textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                label.setText(textField.getText());
+                container.getChildren().remove(textField);
+                textNode.setVisible(true);
+                textNode.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                label.requestFocus();
+            }
+        });
+
+        container.getChildren().add(textField);
+        computeEditorPosition(textField);
+        textField.requestFocus();
+    }
+
+    /**
+     * Responsible for showing the editor correctly, handles its size and location.
+     * <p>
+     * Note that when the editor with is computed we set that same width as the textNode's prefWidth as well,
+     * this is done so the trailing icon position is automatically managed by the container. When the editor is removed
+     * the textNode's prefWidth is set to USE_COMPUTED_SIZE.
+     */
+    private void computeEditorPosition(MFXTextField textField) {
+        MFXLabel label = getSkinnable();
+
+        double posX = textNode.getBoundsInParent().getMinX();
+        double containerWidth = container.getWidth();
+        double containerHeight = container.getHeight();
+        double leadingWidth = label.getLeadingIcon() != null ? label.getLeadingIcon().getLayoutBounds().getWidth() : 0;
+        double trailingWidth = label.getTrailingIcon() != null ? label.getTrailingIcon().getLayoutBounds().getWidth() : 0;
+        double editorWidth = containerWidth - (lrInsets + leadingWidth + label.getGraphicTextGap() + trailingWidth + label.getGraphicTextGap() + lrInsets);
+        textNode.setPrefWidth(editorWidth);
+        textField.resizeRelocate(posX, 0, editorWidth, containerHeight);
     }
 
     /**
@@ -261,6 +308,12 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
     @Override
     protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
         return super.computePrefHeight(width, topInset, rightInset, bottomInset, leftInset);
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        iconEditorHandler = null;
     }
 
     @Override

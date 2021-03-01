@@ -21,10 +21,7 @@ package io.github.palexdev.materialfx.controls.cell;
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.enums.SortState;
 import io.github.palexdev.materialfx.skins.MFXTableColumnCellSkin;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.Skin;
 import javafx.util.Callback;
@@ -49,6 +46,8 @@ public class MFXTableColumnCell<T> extends Label {
 
     private final ObjectProperty<Callback<T, ? extends MFXTableRowCell>> rowCellFactory = new SimpleObjectProperty<>();
     private final StringProperty columnName = new SimpleStringProperty("");
+    private final BooleanProperty hasTooltip = new SimpleBooleanProperty(true);
+    private final StringProperty tooltipText = new SimpleStringProperty();
 
     private SortState sortState = SortState.UNSORTED;
     private Comparator<T> comparator;
@@ -74,6 +73,7 @@ public class MFXTableColumnCell<T> extends Label {
     //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
+        setTooltipText(getColumnName());
     }
 
     public Callback<T, ? extends MFXTableRowCell> getRowCellFactory() {
@@ -92,12 +92,47 @@ public class MFXTableColumnCell<T> extends Label {
         return columnName.get();
     }
 
+    /**
+     * Specifies the name of the column.
+     */
     public StringProperty columnNameProperty() {
         return columnName;
     }
 
     public void setColumnName(String columnName) {
         this.columnName.set(columnName);
+    }
+
+    public boolean hasTooltip() {
+        return hasTooltip.get();
+    }
+
+    /**
+     * Specifies if the column cell should show a tooltip or not.
+     * <p>
+     * By default the tooltip is initialized with the column's name.
+     */
+    public BooleanProperty hasTooltipProperty() {
+        return hasTooltip;
+    }
+
+    public void setHasTooltip(boolean hasTooltip) {
+        this.hasTooltip.set(hasTooltip);
+    }
+
+    public String getTooltipText() {
+        return tooltipText.get();
+    }
+
+    /**
+     * Specifies the text shown by the tooltip.
+     */
+    public StringProperty tooltipTextProperty() {
+        return tooltipText;
+    }
+
+    public void setTooltipText(String tooltipText) {
+        this.tooltipText.set(tooltipText);
     }
 
     public SortState getSortState() {
