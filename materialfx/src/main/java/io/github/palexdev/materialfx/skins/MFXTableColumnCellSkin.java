@@ -26,6 +26,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.skin.LabelSkin;
 import javafx.scene.layout.Region;
 
@@ -46,6 +47,24 @@ public class MFXTableColumnCellSkin<T> extends LabelSkin {
         column.setGraphic(createSortIcon());
         column.setGraphicTextGap(5);
         addIcon();
+
+        if (column.hasTooltip()) {
+            column.setTooltip(buildTooltip());
+        }
+        setListeners();
+    }
+
+    @SuppressWarnings("unchecked")
+    private void setListeners() {
+        MFXTableColumnCell<T> column = (MFXTableColumnCell<T>) getSkinnable();
+
+        column.hasTooltipProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                column.setTooltip(null);
+            } else {
+                column.setTooltip(buildTooltip());
+            }
+        });
     }
 
     /**
@@ -76,5 +95,14 @@ public class MFXTableColumnCellSkin<T> extends LabelSkin {
                 column.setContentDisplay(ContentDisplay.RIGHT);
             }
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private Tooltip buildTooltip() {
+        MFXTableColumnCell<T> column = (MFXTableColumnCell<T>) getSkinnable();
+
+        Tooltip tooltip = new Tooltip();
+        tooltip.textProperty().bind(column.tooltipTextProperty());
+        return tooltip;
     }
 }

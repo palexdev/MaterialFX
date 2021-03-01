@@ -30,13 +30,15 @@
 }
 
 .mfx-dialog .title-label {
-    -fx-font-family: "Open Sans Bold";
-    -fx-font-size: 14;
+    -fx-font-family: "Open Sans SemiBold";
+    -fx-font-size: 15;
+    -fx-font-smoothing-type: grey;
 }
 
 .mfx-dialog .content-label {
     -fx-font-family: "Open Sans Regular";
     -fx-font-size: 11.5;
+    -fx-font-smoothing-type: grey;
 }
 
 .mfx-dialog .buttons-box .mfx-button {

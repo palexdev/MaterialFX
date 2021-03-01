@@ -199,6 +199,18 @@ public class MFXStageDialog {
         }
     }
 
+    public void toFront() {
+        this.dialogStage.toFront();
+    }
+
+    public void toBack() {
+        this.dialogStage.toBack();
+    }
+
+    public void setAlwaysOnTop(boolean alwaysOnTop) {
+        this.dialogStage.setAlwaysOnTop(alwaysOnTop);
+    }
+
     /**
      * Returns the AbstractMFXDialog associated with this MFXStageDialog
      * You can only change title and content as other properties are ignored

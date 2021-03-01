@@ -26,10 +26,14 @@ import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.ParallelTransition;
 import javafx.beans.property.*;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Base class for a material dialog.
@@ -47,7 +51,7 @@ public abstract class AbstractMFXDialog extends BorderPane {
 
     protected final StringProperty title = new SimpleStringProperty("");
     protected final StringProperty content = new SimpleStringProperty("");
-    protected MFXButton closeButton;
+    protected final List<Node> closeButtons = new ArrayList<>();
     protected boolean centerBeforeShow = true;
 
     protected final MFXScrimEffect scrimEffect = new MFXScrimEffect();
@@ -171,8 +175,9 @@ public abstract class AbstractMFXDialog extends BorderPane {
         setPrefSize(400, 300);
         setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
-        this.closeButton = new MFXButton("");
-        this.closeButton.addEventHandler(MouseEvent.MOUSE_PRESSED, closeHandler);
+        MFXButton button = new MFXButton("");
+        button.addEventHandler(MouseEvent.MOUSE_PRESSED, closeHandler);
+        closeButtons.add(button);
     }
 
     //================================================================================
@@ -225,17 +230,32 @@ public abstract class AbstractMFXDialog extends BorderPane {
         return scrimEffect;
     }
 
-    public MFXButton getCloseButton() {
-        return closeButton;
+    public void addCloseButton(Node button) {
+        button.addEventHandler(MouseEvent.MOUSE_PRESSED, closeHandler);
+        closeButtons.add(button);
+    }
+
+    public List<Node> getCloseButtons() {
+        return closeButtons;
     }
 
     /**
      * Replaces the dialog's default close button with a new one and adds the close handler to it.
-     * @param closeButton The new close button
+     * @param buttons The new close button
      */
-    public void setCloseButton(MFXButton closeButton) {
-        this.closeButton = closeButton;
-        this.closeButton.addEventHandler(MouseEvent.MOUSE_PRESSED, closeHandler);
+    public void setCloseButtons(Node... buttons) {
+        for (Node closeButton : closeButtons) {
+            closeButton.removeEventHandler(MouseEvent.MOUSE_PRESSED, closeHandler);
+        }
+        closeButtons.clear();
+        closeButtons.addAll(List.of(buttons));
+        for (Node closeButton : closeButtons) {
+            closeButton.addEventHandler(MouseEvent.MOUSE_PRESSED, closeHandler);
+        }
+    }
+
+    public EventHandler<MouseEvent> getCloseHandler() {
+        return this.closeHandler;
     }
 
     /**
@@ -245,9 +265,11 @@ public abstract class AbstractMFXDialog extends BorderPane {
      * @param newHandler The new close handler
      */
     public void setCloseHandler(EventHandler<MouseEvent> newHandler) {
-        this.closeButton.removeEventHandler(MouseEvent.MOUSE_PRESSED, closeHandler);
+        for (Node closeButton : closeButtons) {
+            closeButton.removeEventHandler(MouseEvent.MOUSE_PRESSED, closeHandler);
+            closeButton.addEventHandler(MouseEvent.MOUSE_PRESSED, newHandler);
+        }
         this.closeHandler = newHandler;
-        this.closeButton.addEventHandler(MouseEvent.MOUSE_PRESSED, closeHandler);
     }
 
     public double getScrimOpacity() {
