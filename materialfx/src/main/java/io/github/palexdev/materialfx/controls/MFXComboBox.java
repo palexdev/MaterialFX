@@ -30,6 +30,8 @@ import javafx.collections.ObservableList;
 import javafx.css.*;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 import java.util.List;
 
@@ -206,6 +208,46 @@ public class MFXComboBox<T> extends Control {
             ComboBoxStyles.STYLE1
     );
 
+    /**
+     * Specifies if focus lines should be animated.
+     */
+    private final StyleableBooleanProperty animateLines = new SimpleStyleableBooleanProperty(
+            StyleableProperties.ANIMATE_LINES,
+            this,
+            "animateLines",
+            true
+    );
+
+    /**
+     * Specifies the focusedLine color.
+     */
+    private final StyleableObjectProperty<Paint> lineColor = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.LINE_COLOR,
+            this,
+            "lineColor",
+            Color.rgb(82, 0, 237)
+    );
+
+    /**
+     * Specifies the unfocusedLine color.
+     */
+    private final StyleableObjectProperty<Paint> unfocusedLineColor = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.UNFOCUSED_LINE_COLOR,
+            this,
+            "unfocusedLineColor",
+            Color.rgb(159, 159, 159)
+    );
+
+    /**
+     * Specifies the lines' stroke width.
+     */
+    private final StyleableDoubleProperty lineStrokeWidth = new SimpleStyleableDoubleProperty(
+            StyleableProperties.LINE_STROKE_WIDTH,
+            this,
+            "lineStrokeWidth",
+            1.0
+    );
+
     public ComboBoxStyles getComboStyle() {
         return comboStyle.get();
     }
@@ -221,7 +263,54 @@ public class MFXComboBox<T> extends Control {
         this.comboStyle.set(comboStyle);
     }
 
-    //================================================================================
+    public boolean isAnimateLines() {
+        return animateLines.get();
+    }
+
+    public StyleableBooleanProperty animateLinesProperty() {
+        return animateLines;
+    }
+
+    public void setAnimateLines(boolean animateLines) {
+        this.animateLines.set(animateLines);
+    }
+
+    public Paint getLineColor() {
+        return lineColor.get();
+    }
+
+    public StyleableObjectProperty<Paint> lineColorProperty() {
+        return lineColor;
+    }
+
+    public void setLineColor(Paint lineColor) {
+        this.lineColor.set(lineColor);
+    }
+
+    public Paint getUnfocusedLineColor() {
+        return unfocusedLineColor.get();
+    }
+
+    public StyleableObjectProperty<Paint> unfocusedLineColorProperty() {
+        return unfocusedLineColor;
+    }
+
+    public void setUnfocusedLineColor(Paint unfocusedLineColor) {
+        this.unfocusedLineColor.set(unfocusedLineColor);
+    }
+
+    public double getLineStrokeWidth() {
+        return lineStrokeWidth.get();
+    }
+
+    public StyleableDoubleProperty lineStrokeWidthProperty() {
+        return lineStrokeWidth;
+    }
+
+    public void setLineStrokeWidth(double lineStrokeWidth) {
+        this.lineStrokeWidth.set(lineStrokeWidth);
+    }
+//================================================================================
     // CssMetaData
     //================================================================================
 
@@ -236,8 +325,39 @@ public class MFXComboBox<T> extends Control {
                         ComboBoxStyles.STYLE1
                 );
 
+        private static final CssMetaData<MFXComboBox<?>, Boolean> ANIMATE_LINES =
+                FACTORY.createBooleanCssMetaData(
+                        "-mfx-animate-lines",
+                        MFXComboBox::animateLinesProperty,
+                        true
+                );
+
+        private static final CssMetaData<MFXComboBox<?>, Paint> LINE_COLOR =
+                FACTORY.createPaintCssMetaData(
+                        "-mfx-line-color",
+                        MFXComboBox::lineColorProperty,
+                        Color.rgb(82, 0, 237)
+                );
+
+        private static final CssMetaData<MFXComboBox<?>, Paint> UNFOCUSED_LINE_COLOR =
+                FACTORY.createPaintCssMetaData(
+                        "-mfx-unfocused-line-color",
+                        MFXComboBox::unfocusedLineColorProperty,
+                        Color.rgb(159, 159, 159)
+                );
+
+        private static final CssMetaData<MFXComboBox<?>, Number> LINE_STROKE_WIDTH =
+                FACTORY.createSizeCssMetaData(
+                        "-mfx-line-stroke-width",
+                        MFXComboBox::lineStrokeWidthProperty,
+                        1.0
+                );
+
         static {
-            cssMetaDataList = List.of(STYLE);
+            cssMetaDataList = List.of(
+                    STYLE,
+                    ANIMATE_LINES, LINE_COLOR, UNFOCUSED_LINE_COLOR, LINE_STROKE_WIDTH
+            );
         }
     }
 

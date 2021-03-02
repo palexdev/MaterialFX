@@ -37,6 +37,7 @@ public class ComboSelectionModelMock<T> {
     private final MFXComboBox<T> comboBox;
     private final ReadOnlyObjectWrapper<T> selectedItem = new ReadOnlyObjectWrapper<>(null);
     private final ReadOnlyIntegerWrapper selectedIndex = new ReadOnlyIntegerWrapper(-1);
+    private boolean isClearRequested = false;
 
     //================================================================================
     // Constructors
@@ -49,8 +50,10 @@ public class ComboSelectionModelMock<T> {
     // Methods
     //================================================================================
     public void clearSelection() {
+        isClearRequested = true;
         selectedItem.set(null);
         selectedIndex.set(-1);
+        isClearRequested = false;
     }
 
     public void selectItem(T item) {
@@ -96,5 +99,9 @@ public class ComboSelectionModelMock<T> {
 
     public ReadOnlyObjectWrapper<T> selectedItemProperty() {
         return selectedItem;
+    }
+
+    public boolean isClearRequested() {
+        return isClearRequested;
     }
 }

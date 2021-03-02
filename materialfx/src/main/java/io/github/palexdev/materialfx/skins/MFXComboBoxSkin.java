@@ -22,11 +22,14 @@ import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXListView;
+import io.github.palexdev.materialfx.controls.enums.Styles;
+import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.effects.RippleGenerator;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
+import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -39,6 +42,7 @@ import javafx.scene.control.PopupControl;
 import javafx.scene.control.SkinBase;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
 /**
@@ -57,6 +61,9 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
     private final MFXListView<T> listView;
     private final EventHandler<MouseEvent> popupHandler;
 
+    private final Line unfocusedLine;
+    private final Line focusedLine;
+
     private Timeline arrowAnimation;
 
     //================================================================================
@@ -65,8 +72,25 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
     public MFXComboBoxSkin(MFXComboBox<T> comboBox) {
         super(comboBox);
 
-        valueLabel = new Label();
-        valueLabel.setMinWidth(snappedLeftInset() + minWidth + snappedRightInset());
+        unfocusedLine = new Line();
+        unfocusedLine.getStyleClass().add("unfocused-line");
+        unfocusedLine.setManaged(false);
+        unfocusedLine.strokeWidthProperty().bind(comboBox.lineStrokeWidthProperty());
+        unfocusedLine.strokeProperty().bind(comboBox.unfocusedLineColorProperty());
+        unfocusedLine.setSmooth(true);
+        unfocusedLine.endXProperty().bind(comboBox.widthProperty().subtract(1));
+
+        focusedLine = new Line();
+        focusedLine.getStyleClass().add("focused-line");
+        focusedLine.setManaged(false);
+        focusedLine.strokeWidthProperty().bind(comboBox.lineStrokeWidthProperty());
+        focusedLine.strokeProperty().bind(comboBox.lineColorProperty());
+        focusedLine.setSmooth(true);
+        focusedLine.endXProperty().bind(comboBox.widthProperty().subtract(1));
+        focusedLine.setScaleX(0.0);
+
+
+        valueLabel = buildLabel();
 
         MFXFontIcon fontIcon = new MFXFontIcon("mfx-caret-down", 12);
         icon = new MFXIconWrapper(fontIcon, 24).addRippleGenerator();
@@ -79,8 +103,8 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
 
         listView = new MFXListView<>();
         listView.getStylesheets().add(comboBox.getUserAgentStylesheet());
-        popup = new PopupControl();
-        buildPopup();
+        popup = buildPopup();
+
 
         popupHandler = event -> {
             if (popup.isShowing() && !NodeUtils.inHierarchy(event.getPickResult().getIntersectedNode(), comboBox)) {
@@ -88,8 +112,11 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
             }
         };
 
-        getChildren().addAll(container, icon);
-        setListeners();
+        if (comboBox.getComboStyle() == Styles.ComboBoxStyles.STYLE1) {
+            getChildren().addAll(container, icon, unfocusedLine, focusedLine);
+        } else {
+            getChildren().addAll(container, icon);
+        }
 
         if (comboBox.getMaxPopupHeight() == -1) {
             listView.maxHeightProperty().unbind();
@@ -97,6 +124,8 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         if (comboBox.getMaxPopupWidth() == -1) {
             listView.maxWidthProperty().unbind();
         }
+
+        setListeners();
     }
     //================================================================================
     // Methods
@@ -116,9 +145,28 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         RippleGenerator rg = icon.getRippleGenerator();
         rg.setRippleRadius(8);
 
+        comboBox.comboStyleProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == Styles.ComboBoxStyles.STYLE2) {
+                getChildren().removeAll(unfocusedLine, focusedLine);
+            } else {
+                getChildren().addAll(unfocusedLine, focusedLine);
+            }
+        });
+
         comboBox.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue && popup.isShowing()) {
                 popup.hide();
+            }
+
+            if (comboBox.isAnimateLines()) {
+                buildAndPlayLinesAnimation(newValue);
+                return;
+            }
+
+            if (newValue) {
+                focusedLine.setScaleX(1.0);
+            } else {
+                focusedLine.setScaleX(0.0);
             }
         });
 
@@ -219,16 +267,28 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         });
     }
 
+    private Label buildLabel() {
+        Label label = new Label("");
+        label.setMinWidth(snappedLeftInset() + minWidth + snappedRightInset());
+        label.setMouseTransparent(true);
+
+        return label;
+    }
+
     /**
      * Builds the popup content.
      */
-    protected void buildPopup() {
+    protected PopupControl buildPopup() {
         MFXComboBox<T> comboBox = getSkinnable();
 
+        PopupControl popupControl = new PopupControl();
+
         listView.itemsProperty().bind(comboBox.itemsProperty());
-        popup.getScene().setRoot(listView);
-        popup.setOnShowing(event -> buildAnimation(true).play());
-        popup.setOnHiding(event -> buildAnimation(false).play());
+        popupControl.getScene().setRoot(listView);
+        popupControl.setOnShowing(event -> buildAnimation(true).play());
+        popupControl.setOnHiding(event -> buildAnimation(false).play());
+
+        return popupControl;
     }
 
     /**
@@ -240,6 +300,22 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         );
         arrowAnimation = new Timeline(kf0);
         return arrowAnimation;
+    }
+
+    /**
+     * Builds the focus animation.
+     */
+    private void buildAndPlayLinesAnimation(boolean focused) {
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(350), focusedLine);
+        if (focused) {
+            scaleTransition.setFromX(0.0);
+            scaleTransition.setToX(1.0);
+        } else {
+            scaleTransition.setFromX(1.0);
+            scaleTransition.setToX(0.0);
+        }
+        scaleTransition.setInterpolator(MFXAnimationFactory.getInterpolatorV2());
+        scaleTransition.play();
     }
 
     private void setValueLabel(T item) {
@@ -294,5 +370,7 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         double iconHeight = icon.getPrefHeight();
         double center = ((snappedTopInset() + snappedBottomInset()) / 2.0) + ((contentHeight - iconHeight) / 2.0);
         icon.resizeRelocate(contentWidth - iconWidth, center, iconWidth, iconHeight);
+        focusedLine.relocate(0, contentHeight);
+        unfocusedLine.relocate(0, contentHeight);
     }
 }

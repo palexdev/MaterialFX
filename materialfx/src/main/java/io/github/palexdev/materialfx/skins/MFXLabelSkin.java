@@ -64,6 +64,7 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
         unfocusedLine = new Line();
         unfocusedLine.getStyleClass().add("unfocused-line");
         unfocusedLine.setManaged(false);
+        unfocusedLine.strokeWidthProperty().bind(label.lineStrokeWidthProperty());
         unfocusedLine.strokeProperty().bind(label.unfocusedLineColorProperty());
         unfocusedLine.setSmooth(true);
         unfocusedLine.endXProperty().bind(label.widthProperty().subtract(1));
@@ -71,6 +72,7 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
         focusedLine = new Line();
         focusedLine.getStyleClass().add("focused-line");
         focusedLine.setManaged(false);
+        focusedLine.strokeWidthProperty().bind(label.lineStrokeWidthProperty());
         focusedLine.strokeProperty().bind(label.lineColorProperty());
         focusedLine.setSmooth(true);
         focusedLine.endXProperty().bind(label.widthProperty().subtract(1));

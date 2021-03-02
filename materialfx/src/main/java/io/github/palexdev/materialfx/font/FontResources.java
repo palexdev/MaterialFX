@@ -53,6 +53,7 @@ public enum FontResources {
     MINUS("mfx-minus", '\uE901'),
     MINUS_CIRCLE("mfx-minus-circle", '\uE90c'),
     MODENA_MARK("mfx-modena-mark", '\uE90d'),
+    SEARCH("mfx-search", '\uE92e'),
     SEARCH_PLUS("mfx-search-plus", '\uE92a'),
     STEP_BACKWARD("mfx-step-backward", '\uE923'),
     STEP_FORWARD("mfx-step-forward", '\uE924'),

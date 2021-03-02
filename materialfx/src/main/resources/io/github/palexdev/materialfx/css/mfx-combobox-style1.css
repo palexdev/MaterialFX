@@ -21,12 +21,7 @@
 .mfx-combo-box {
     -fx-background-color: rgb(232, 232, 232);
     -fx-background-radius: 3 3 0 0;
-    -fx-border-color: transparent transparent rgb(159, 159, 159) transparent;
     -fx-border-width: 1.5;
-}
-
-.mfx-combo-box:focused {
-    -fx-border-color: transparent transparent rgb(76, 0, 225) transparent;
 }
 
 .mfx-combo-box .label {
