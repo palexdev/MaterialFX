@@ -125,7 +125,10 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         comboBox.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             comboBox.requestFocus();
 
-            if (event.getClickCount() >= 2) {
+            if(event.getTarget().equals(icon.getIcon())) {
+                return;
+            }
+            if (event.getClickCount() >= 2 && event.getClickCount() % 2 == 0) {
                 NodeUtils.fireDummyEvent(icon);
             }
         });
