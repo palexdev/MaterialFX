@@ -1,7 +1,10 @@
 package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
-import io.github.palexdev.materialfx.controls.*;
+import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
+import io.github.palexdev.materialfx.controls.MFXIconWrapper;
+import io.github.palexdev.materialfx.controls.MFXListView;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.enums.Styles;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.effects.RippleGenerator;
@@ -28,10 +31,17 @@ import javafx.util.Duration;
 import java.util.Arrays;
 import java.util.function.Predicate;
 
+// TODO implement StringConverter (low priority)
+/**
+ * This is the implementation of the Skin associated with every MFXFilterComboBox.
+ */
 public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final HBox container;
     private final Label valueLabel;
-    private final double minWidth = 100;
+    private final double minWidth = 120;
 
     private final MFXIconWrapper icon;
     private final PopupControl popup;
@@ -48,6 +58,11 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
 
     private Timeline arrowAnimation;
 
+    private int retryCount;
+
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXFilterComboBoxSkin(MFXFilterComboBox<T> comboBox) {
         super(comboBox);
 
@@ -92,6 +107,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         popup = buildPopup();
         popupHandler = event -> {
             if (popup.isShowing() && !NodeUtils.inHierarchy(event.getPickResult().getIntersectedNode(), comboBox)) {
+                buildAndPlayLinesAnimation(false);
                 reset();
             }
         };
@@ -102,10 +118,17 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
             getChildren().addAll(container, icon);
         }
 
-        setListeners();
+        setBehavior();
     }
 
-    private void setListeners() {
+    //================================================================================
+    // Methods
+    //================================================================================
+
+    /**
+     * Calls the methods which define the control behavior.
+     */
+    private void setBehavior() {
         comboBehavior();
         selectionBehavior();
         popupBehavior();
@@ -113,6 +136,13 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         iconBehavior();
     }
 
+    //================================================================================
+    // Behavior
+    //================================================================================
+
+    /**
+     * Specifies the behavior for comboStyleProperty change, mouse pressed events and focus change.
+     */
     private void comboBehavior() {
         MFXFilterComboBox<T> comboBox = getSkinnable();
 
@@ -129,25 +159,34 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         comboBox.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             comboBox.requestFocus();
 
-            if (event.getClickCount() >= 2) {
+            if (event.getTarget().equals(icon.getIcon())) {
+                return;
+            }
+
+            if (event.getClickCount() >= 2 && event.getClickCount() % 2 == 0) {
                 if (!containsEditor() && !popup.isShowing()) {
-                    show();
+                    NodeUtils.fireDummyEvent(icon);
                 }
             }
         });
 
         // FOCUS
         comboBox.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!(newValue || searchField.isFocused()) && popup.isShowing()) {
-                popup.hide();
-            }
-
-            if (comboBox.isAnimateLines() && !(focusedLine.getScaleX() != 1)) {
-                buildAndPlayLinesAnimation(newValue || searchField.isFocused());
+            boolean fieldCondition = searchField != null && searchField.isFocused();
+            if (fieldCondition) {
                 return;
             }
 
-            if (newValue || searchField.isFocused()) {
+            if (!newValue && popup.isShowing()) {
+                popup.hide();
+            }
+
+            if (comboBox.isAnimateLines()) {
+                buildAndPlayLinesAnimation(newValue);
+                return;
+            }
+
+            if (newValue) {
                 focusedLine.setScaleX(1.0);
             } else {
                 focusedLine.setScaleX(0.0);
@@ -155,6 +194,9 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         });
     }
 
+    /**
+     * Specifies the behavior for selectedValue, listview selection, combo box selection and filtered list change.
+     */
     private void selectionBehavior() {
         MFXFilterComboBox<T> comboBox = getSkinnable();
         ComboSelectionModelMock<T> selectionModel = comboBox.getSelectionModel();
@@ -189,6 +231,11 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
             }
         });
 
+       /*
+        * This is a workaround to make selection work. For some reason when the focus changes the selection
+        * is reset. To prevent that we store the last selected item in a temp variable, when the selection is reset
+        * we force the selection to that temp variable. To clear the selection use ComboSelectionModelMock#clearSelection.
+        */
         filteredList.addListener((InvalidationListener) invalidated -> {
             if (selectionModel.getSelectedItem() != null) {
                 previousSelected = selectionModel.getSelectedItem();
@@ -203,6 +250,11 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         });
     }
 
+    /**
+     * Specifies the behavior for maxPopupHeight and maxPopupWidth properties, also adds the
+     * {@link #popupHandler} to the scene to close the popup in case it is open and the mouse is not
+     * pressed on the combo box.
+     */
     private void popupBehavior() {
         MFXFilterComboBox<T> comboBox = getSkinnable();
 
@@ -221,18 +273,22 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
             }
         });
 
+        comboBox.skinProperty().addListener((observable, oldValue, newValue) -> comboBox.getScene().addEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler));
         comboBox.sceneProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != oldValue) {
-                if (oldValue != null) {
-                    oldValue.removeEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
-                }
-                if (newValue != null) {
-                    newValue.addEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
-                }
+                oldValue.removeEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
+            }
+            if (newValue != null) {
+                newValue.addEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
             }
         });
     }
 
+    /**
+     * Specifies the be behavior for the listview, binds its sizes to maxPopupHeight and maxPopupWidth
+     * properties and resets the control when the mouse is pressed.
+     * @see #reset()
+     */
     private void listBehavior() {
         MFXFilterComboBox<T> comboBox = getSkinnable();
 
@@ -245,6 +301,10 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         });
     }
 
+    /**
+     * Specifies the behavior of the caret icon, sets up the ripple generator and
+     * the popup handling when the mouse is pressed.
+     */
     private void iconBehavior() {
         RippleGenerator rg = icon.getRippleGenerator();
         rg.setRippleRadius(8);
@@ -264,7 +324,10 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         });
     }
 
-    private Label buildLabel() {
+    /**
+     * This method builds the label used to display the selected value of the combo box.
+     */
+    protected Label buildLabel() {
         Label label = new Label("");
         label.setMinWidth(snappedLeftInset() + minWidth + snappedRightInset());
         label.setMouseTransparent(true);
@@ -272,7 +335,10 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         return label;
     }
 
-    private PopupControl buildPopup() {
+    /**
+     * This method build the combo box popup and initializes the listview.
+     */
+    protected PopupControl buildPopup() {
         PopupControl popupControl = new PopupControl();
 
         listView.setItems(filteredList);
@@ -288,6 +354,9 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         return popupControl;
     }
 
+    /**
+     * Shows the popup.
+     */
     private void show() {
         MFXFilterComboBox<T> comboBox = getSkinnable();
 
@@ -304,26 +373,47 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         popup.show(comboBox, snapPositionX(point.getX()), snapPositionY(point.getY()));
     }
 
+    /**
+     * Closes the popup and resets the control.
+     * <p>
+     * Removes the filter text field, clears the predicate of the filteredList,
+     * sets the value label to visible and requests the focus.
+     */
     private void reset() {
+        MFXFilterComboBox<T> comboBox = getSkinnable();
+
         popup.hide();
         container.getChildren().remove(searchContainer);
         filteredList.setPredicate(null);
         valueLabel.setVisible(true);
+        comboBox.requestFocus();
     }
 
     /**
-     * If {@link MFXLabel#editableProperty()} is set to true shows the editor,
-     * ESCAPE hides the editor canceling any change, ENTER hides the editor and confirms
-     * the changes, if the editor looses focus (for example by clicking on another component that requests the focus)
-     * the editor is hidden and any changes are confirmed.
+     * This method is quite similar to the one used in MFXLabel.
+     * <p>
+     * This method build the text field used to filter the listview. When text changes
+     * the filteredList is updated with a new predicate.
+     * <p>
+     * By default when the text field loses the focus the control is reset.
+     * <p>
+     * The text field is unmanaged so its position is calculated by {@link #computeEditorPosition()}
+     * <p>
+     * When the popup is shown and the text field is added to the scene the text field is not focused,
+     * to change this behavior and force it to be focused you can use {@link MFXFilterComboBox#setForceFieldFocusOnShow(boolean)}
+     * and set it to true.
+     * @see #reset()
      */
     private void showEditor() {
-        MFXFontIcon searchIcon = new MFXFontIcon("mfx-search", 14);
+        MFXFilterComboBox<T> comboBox = getSkinnable();
+
+        MFXFontIcon searchIcon = new MFXFontIcon("mfx-search", 16);
 
         valueLabel.setVisible(false);
         searchField = new MFXTextField("");
         searchField.setPromptText("Search...");
         searchField.setId("search-field");
+        searchField.getStylesheets().setAll(comboBox.getUserAgentStylesheet());
         searchField.setUnfocusedLineColor(Color.TRANSPARENT);
         searchField.setLineColor(Color.TRANSPARENT);
         searchField.setFocusTraversable(false);
@@ -338,15 +428,13 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         searchContainer.getChildren().setAll(searchIcon, searchField);
         container.getChildren().add(searchContainer);
         computeEditorPosition();
-        forceFieldFocus();
+        if (comboBox.isForceFieldFocusOnShow()) {
+            forceFieldFocus();
+        }
     }
 
     /*
      * Responsible for showing the editor correctly, handles its size and location.
-     * <p>
-     * Note that when the editor with is computed we set that same width as the textNode's prefWidth as well,
-     * this is done so the trailing icon position is automatically managed by the container. When the editor is removed
-     * the textNode's prefWidth is set to USE_COMPUTED_SIZE.
      */
     private void computeEditorPosition() {
         double posX = container.getBoundsInParent().getMinX();
@@ -355,10 +443,19 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         searchContainer.resizeRelocate(posX, 0, containerWidth, containerHeight);
     }
 
-    private void forceFieldFocus() {
-        PauseTransition transition = new PauseTransition(Duration.millis(200));
+    /**
+     * The only way to force the focus on the text field is to poll its state by running
+     * a PauseTransition every n milliseconds (by default 100). If at the end of the transition the text field
+     * is not focused yet the transition is played again.
+     * <p>
+     * Since this may produce an unexpected behavior by running indefinitely for example I set a max
+     * retry count of 10.
+     */
+    protected void forceFieldFocus() {
+        PauseTransition transition = new PauseTransition(Duration.millis(100));
         transition.setOnFinished(event -> {
-            if (searchField != null && !searchField.isFocused()) {
+            if (searchField != null && !searchField.isFocused() && retryCount < 10) {
+                retryCount++;
                 searchField.requestFocus();
                 transition.playFromStart();
             }
@@ -400,6 +497,12 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         };
     }
 
+    /**
+     * Sets the label text according to the combo box selected item.
+     * <p>
+     * If the item is instance of {@code Labeled} then whe check if the item has a graphic != null
+     * and use the item text. If that's not the case then we call toString on the item.
+     */
     private void setValueLabel(T item) {
         if (item instanceof Labeled) {
             Labeled nodeItem = (Labeled) item;
@@ -449,7 +552,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
 
     @Override
     protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return Math.max(super.computeMinHeight(width, topInset, rightInset, bottomInset, leftInset), topInset + icon.getHeight() + bottomInset);
+        return Math.max(super.computeMinHeight(width, topInset, rightInset, bottomInset, leftInset), 30);
     }
 
     @Override

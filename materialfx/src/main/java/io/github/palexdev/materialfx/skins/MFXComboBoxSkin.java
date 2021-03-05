@@ -26,6 +26,7 @@ import io.github.palexdev.materialfx.controls.enums.Styles;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.effects.RippleGenerator;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.materialfx.selection.ComboSelectionModelMock;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -125,8 +126,9 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
             listView.maxWidthProperty().unbind();
         }
 
-        setListeners();
+        setBehavior();
     }
+
     //================================================================================
     // Methods
     //================================================================================
@@ -140,11 +142,25 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
      * Adds handlers for: focus, show/hide the popup.
      *
      */
-    private void setListeners() {
-        MFXComboBox<T> comboBox = getSkinnable();
-        RippleGenerator rg = icon.getRippleGenerator();
-        rg.setRippleRadius(8);
+    private void setBehavior() {
+        comboBehavior();
+        selectionBehavior();
+        popupBehavior();
+        listBehavior();
+        iconBehavior();
+    }
 
+    //================================================================================
+    // Behavior
+    //================================================================================
+
+    /**
+     * Specifies the behavior for comboStyleProperty change, mouse pressed events and focus change.
+     */
+    private void comboBehavior() {
+        MFXComboBox<T> comboBox = getSkinnable();
+
+        // STYLE
         comboBox.comboStyleProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == Styles.ComboBoxStyles.STYLE2) {
                 getChildren().removeAll(unfocusedLine, focusedLine);
@@ -153,6 +169,16 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
             }
         });
 
+        // MOUSE PRESSED
+        comboBox.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            comboBox.requestFocus();
+
+            if (event.getClickCount() >= 2) {
+                NodeUtils.fireDummyEvent(icon);
+            }
+        });
+
+        // FOCUS
         comboBox.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue && popup.isShowing()) {
                 popup.hide();
@@ -169,15 +195,106 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
                 focusedLine.setScaleX(0.0);
             }
         });
+    }
 
-        comboBox.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            comboBox.requestFocus();
+    /**
+     * Specifies the behavior for selectedValue, listview selection, combo box selection and filtered list change.
+     */
+    private void selectionBehavior() {
+        MFXComboBox<T> comboBox = getSkinnable();
+        ComboSelectionModelMock<T> selectionModel = comboBox.getSelectionModel();
 
-            if (event.getClickCount() >= 2) {
-                NodeUtils.fireDummyEvent(icon);
+        comboBox.selectedValueProperty().bind(listView.getSelectionModel().selectedItemProperty());
+        comboBox.selectedValueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                setValueLabel(newValue);
+            } else {
+                valueLabel.setText("");
+                valueLabel.setGraphic(null);
             }
         });
 
+        listView.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> selectionModel.selectedIndexProperty().set(newValue.intValue()));
+        listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> selectionModel.selectedItemProperty().set(newValue));
+        selectionModel.selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.intValue() != oldValue.intValue()) {
+                if (newValue.intValue() == -1) {
+                    listView.getSelectionModel().clearSelection();
+                } else {
+                    listView.getSelectionModel().select(newValue.intValue());
+                }
+            }
+        });
+        selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != oldValue) {
+                if (newValue == null) {
+                    listView.getSelectionModel().clearSelection();
+                } else {
+                    listView.getSelectionModel().select(newValue);
+                }
+            }
+        });
+    }
+
+    /**
+     * Specifies the behavior for maxPopupHeight and maxPopupWidth properties, also adds the
+     * {@link #popupHandler} to the scene to close the popup in case it is open and the mouse is not
+     * pressed on the combo box.
+     */
+    private void popupBehavior() {
+        MFXComboBox<T> comboBox = getSkinnable();
+
+        comboBox.maxPopupHeightProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.doubleValue() == -1) {
+                listView.maxHeightProperty().unbind();
+            } else {
+                listView.maxHeightProperty().bind(comboBox.maxPopupHeightProperty());
+            }
+        });
+        comboBox.maxPopupWidthProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.doubleValue() == -1) {
+                listView.maxWidthProperty().unbind();
+            } else {
+                listView.maxWidthProperty().bind(comboBox.maxPopupWidthProperty());
+            }
+        });
+
+        comboBox.skinProperty().addListener((observable, oldValue, newValue) -> comboBox.getScene().addEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler));
+        comboBox.sceneProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != oldValue) {
+                oldValue.removeEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
+            }
+            if (newValue != null) {
+                newValue.addEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
+            }
+        });
+    }
+
+    /**
+     * Specifies the be behavior for the listview, binds its sizes to maxPopupHeight and maxPopupWidth
+     * properties and closes the popup when the mouse is pressed.
+     */
+    private void listBehavior() {
+        MFXComboBox<T> comboBox = getSkinnable();
+
+        listView.maxHeightProperty().bind(comboBox.maxPopupHeightProperty());
+        listView.maxWidthProperty().bind(comboBox.maxPopupWidthProperty());
+        listView.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            if (popup.isShowing()) {
+                popup.hide();
+            }
+        });
+    }
+
+    /**
+     * Specifies the behavior of the caret icon, sets up the ripple generator and
+     * the popup handling when the mouse is pressed.
+     */
+    private void iconBehavior() {
+        MFXComboBox<T> comboBox = getSkinnable();
+
+        RippleGenerator rg = icon.getRippleGenerator();
+        rg.setRippleRadius(8);
         icon.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             rg.setGeneratorCenterX(icon.getWidth() / 2);
             rg.setGeneratorCenterY(icon.getHeight() / 2);
@@ -200,74 +317,12 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
                 popup.hide();
             }
         });
-
-        comboBox.selectedValueProperty().bind(listView.getSelectionModel().selectedItemProperty());
-        comboBox.selectedValueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                setValueLabel(newValue);
-            } else {
-                valueLabel.setText("");
-                valueLabel.setGraphic(null);
-            }
-        });
-
-        listView.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            if (popup.isShowing()) {
-                popup.hide();
-            }
-        });
-
-        comboBox.maxPopupHeightProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.doubleValue() == -1) {
-                listView.maxHeightProperty().unbind();
-            } else {
-                listView.maxHeightProperty().bind(comboBox.maxPopupHeightProperty());
-            }
-        });
-        comboBox.maxPopupWidthProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.doubleValue() == -1) {
-                listView.maxWidthProperty().unbind();
-            } else {
-                listView.maxWidthProperty().bind(comboBox.maxPopupWidthProperty());
-            }
-        });
-        listView.maxHeightProperty().bind(comboBox.maxPopupHeightProperty());
-        listView.maxWidthProperty().bind(comboBox.maxPopupWidthProperty());
-
-        listView.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> comboBox.getSelectionModel().selectedIndexProperty().set(newValue.intValue()));
-        listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> comboBox.getSelectionModel().selectedItemProperty().set(newValue));
-        comboBox.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.intValue() != oldValue.intValue()) {
-                if (newValue.intValue() == -1) {
-                    listView.getSelectionModel().clearSelection();
-                } else {
-                    listView.getSelectionModel().select(newValue.intValue());
-                }
-            }
-        });
-        comboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != oldValue) {
-                if (newValue == null) {
-                    listView.getSelectionModel().clearSelection();
-                } else {
-                    listView.getSelectionModel().select(newValue);
-                }
-            }
-        });
-
-        comboBox.parentProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != oldValue) {
-                if (oldValue != null) {
-                    oldValue.removeEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
-                }
-                if (newValue != null) {
-                    newValue.addEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
-                }
-            }
-        });
     }
 
-    private Label buildLabel() {
+    /**
+     * This method builds the label used to display the selected value of the combo box.
+     */
+    protected Label buildLabel() {
         Label label = new Label("");
         label.setMinWidth(snappedLeftInset() + minWidth + snappedRightInset());
         label.setMouseTransparent(true);
@@ -276,7 +331,7 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
     }
 
     /**
-     * Builds the popup content.
+     * This method build the combo box popup and initializes the listview.
      */
     protected PopupControl buildPopup() {
         MFXComboBox<T> comboBox = getSkinnable();
@@ -318,6 +373,12 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         scaleTransition.play();
     }
 
+    /**
+     * Sets the label text according to the combo box selected item.
+     * <p>
+     * If the item is instance of {@code Labeled} then whe check if the item has a graphic != null
+     * and use the item text. If that's not the case then we call toString on the item.
+     */
     private void setValueLabel(T item) {
         if (item instanceof Labeled) {
             Labeled nodeItem = (Labeled) item;

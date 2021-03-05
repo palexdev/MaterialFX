@@ -22,6 +22,7 @@ import javafx.css.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
 
 import java.util.List;
@@ -71,6 +72,7 @@ public class MFXFontIcon extends Text {
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
         setFont(FontHandler.getResources());
+        setFontSmoothingType(FontSmoothingType.GRAY);
 
         sizeProperty().addListener((observable, oldValue, newValue) -> {
             Font font = getFont();

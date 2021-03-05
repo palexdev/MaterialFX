@@ -310,7 +310,8 @@ public class MFXComboBox<T> extends Control {
     public void setLineStrokeWidth(double lineStrokeWidth) {
         this.lineStrokeWidth.set(lineStrokeWidth);
     }
-//================================================================================
+
+    //================================================================================
     // CssMetaData
     //================================================================================
 
