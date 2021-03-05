@@ -287,6 +287,16 @@ public class MFXLabel extends Control {
             Color.rgb(159, 159, 159)
     );
 
+    /**
+     * Specifies the lines' stroke width.
+     */
+    private final StyleableDoubleProperty lineStrokeWidth = new SimpleStyleableDoubleProperty(
+            StyleableProperties.LINE_STROKE_WIDTH,
+            this,
+            "lineStrokeWidth",
+            1.0
+    );
+
     public LabelStyles getLabelStyle() {
         return labelStyle.get();
     }
@@ -359,6 +369,18 @@ public class MFXLabel extends Control {
         this.unfocusedLineColor.set(unfocusedLineColor);
     }
 
+    public double getLineStrokeWidth() {
+        return lineStrokeWidth.get();
+    }
+
+    public StyleableDoubleProperty lineStrokeWidthProperty() {
+        return lineStrokeWidth;
+    }
+
+    public void setLineStrokeWidth(double lineStrokeWidth) {
+        this.lineStrokeWidth.set(lineStrokeWidth);
+    }
+
     //================================================================================
     // CssMetaData
     //================================================================================
@@ -408,10 +430,17 @@ public class MFXLabel extends Control {
                         Color.rgb(159, 159, 159)
                 );
 
+        private static final CssMetaData<MFXLabel, Number> LINE_STROKE_WIDTH =
+                FACTORY.createSizeCssMetaData(
+                        "-mfx-line-stroke-width",
+                        MFXLabel::lineStrokeWidthProperty,
+                        1.0
+                );
+
         static {
             cssMetaDataList = List.of(
                     STYLE, GRAPHIC_TEXT_GAP, EDITABLE,
-                    ANIMATE_LINES, LINE_COLOR, UNFOCUSED_LINE_COLOR
+                    ANIMATE_LINES, LINE_COLOR, UNFOCUSED_LINE_COLOR, LINE_STROKE_WIDTH
             );
         }
     }
