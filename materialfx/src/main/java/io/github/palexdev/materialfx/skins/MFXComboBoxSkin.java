@@ -90,7 +90,6 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         focusedLine.endXProperty().bind(comboBox.widthProperty().subtract(1));
         focusedLine.setScaleX(0.0);
 
-
         valueLabel = buildLabel();
 
         MFXFontIcon fontIcon = new MFXFontIcon("mfx-caret-down", 12);
@@ -105,7 +104,6 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         listView = new MFXListView<>();
         listView.getStylesheets().add(comboBox.getUserAgentStylesheet());
         popup = buildPopup();
-
 
         popupHandler = event -> {
             if (popup.isShowing() && !NodeUtils.inHierarchy(event.getPickResult().getIntersectedNode(), comboBox)) {
@@ -173,7 +171,10 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         comboBox.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             comboBox.requestFocus();
 
-            if (event.getClickCount() >= 2) {
+            if(event.getTarget().equals(icon.getIcon())) {
+                return;
+            }
+            if (event.getClickCount() >= 2 && event.getClickCount() % 2 == 0) {
                 NodeUtils.fireDummyEvent(icon);
             }
         });
