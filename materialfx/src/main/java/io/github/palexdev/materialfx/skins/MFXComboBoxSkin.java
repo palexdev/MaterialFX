@@ -175,6 +175,11 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
                 return;
             }
             if (event.getClickCount() >= 2 && event.getClickCount() % 2 == 0) {
+                if (popup.isShowing()) {
+                    icon.getRippleGenerator().createRipple();
+                    popup.hide();
+                    return;
+                }
                 NodeUtils.fireDummyEvent(icon);
             }
         });

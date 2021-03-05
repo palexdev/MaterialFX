@@ -55,7 +55,6 @@ public class TableSelectionModel<T> implements ITableSelectionModel<T> {
     @SuppressWarnings("unchecked")
     protected void select(MFXTableRow<T> item) {
         if (!allowsMultipleSelection) {
-            clearSelection();
             selectedItems.setAll(item);
         } else {
             selectedItems.add(item);
