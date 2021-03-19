@@ -34,6 +34,7 @@ import javafx.scene.paint.Paint;
 import javafx.util.Duration;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This is the implementation of a ListCell restyled to comply with modern standards.
@@ -95,6 +96,12 @@ public class MFXListCell<T> extends ListCell<T> {
             }
         });
 
+        backgroundProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && isSelected() && !containsFill(newValue.getFills(), getSelectedColor())) {
+                NodeUtils.updateBackground(this, getSelectedColor(), new CornerRadii(getCornerRadius()), new Insets(getBackgroundInsets()));
+            }
+        });
+
         hoverProperty().addListener((observable, oldValue, newValue) -> {
             if (isSelected() || isEmpty()) {
                 return;
@@ -127,6 +134,15 @@ public class MFXListCell<T> extends ListCell<T> {
             rippleGenerator.createRipple();
         });
     }
+
+    private boolean containsFill(List<BackgroundFill> backgroundFills, Paint fill) {
+        List<Paint> paints = backgroundFills.stream()
+                .map(BackgroundFill::getFill)
+                .collect(Collectors.toList());
+
+        return paints.contains(fill);
+    }
+
     //================================================================================
     // Styleable Properties
     //================================================================================
