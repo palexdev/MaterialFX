@@ -2,7 +2,9 @@ package io.github.palexdev.materialfx.demo.controllers;
 
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
+import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyComboBox;
+import io.github.palexdev.materialfx.demo.model.SimplePerson;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -47,6 +49,12 @@ public class ComboBoxesDemoController implements Initializable {
     @FXML
     private MFXComboBox<Label> newCustomized;
 
+    @FXML
+    private MFXFilterComboBox<SimplePerson> filters1;
+
+    @FXML
+    private MFXFilterComboBox<SimplePerson> filters2;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ObservableList<String> stringList = FXCollections.observableArrayList(List.of(
@@ -59,6 +67,34 @@ public class ComboBoxesDemoController implements Initializable {
                 "String 6",
                 "String 7"
         ));
+
+        ObservableList<SimplePerson> personList = FXCollections.observableArrayList(
+                new SimplePerson("Jack Nicholson"),
+                new SimplePerson("Marlon Brando"),
+                new SimplePerson("Robert De Niro"),
+                new SimplePerson("Al Pacino"),
+                new SimplePerson("Daniel Day-Lewis"),
+                new SimplePerson("Dustin Hoffman"),
+                new SimplePerson("Tom Hanks"),
+                new SimplePerson("Anthony Hopkins"),
+                new SimplePerson("Paul Newman"),
+                new SimplePerson("Denzel Washington"),
+                new SimplePerson("Spencer Tracy"),
+                new SimplePerson("Laurence Olivier"),
+                new SimplePerson("Jack Lemmon"),
+                new SimplePerson("Jeff Bridges"),
+                new SimplePerson("James Stewart"),
+                new SimplePerson("Sean Penn"),
+                new SimplePerson("Michael Caine"),
+                new SimplePerson("Morgan Freeman"),
+                new SimplePerson("Robert Duvall"),
+                new SimplePerson("Gene Hackman"),
+                new SimplePerson("Clint Eastwood"),
+                new SimplePerson("Gregory Peck"),
+                new SimplePerson("Robin Williams"),
+                new SimplePerson("Ben Kingsley"),
+                new SimplePerson("Philip Seymour Hoffman")
+        );
 
         ObservableList<Label> labelsList = FXCollections.observableArrayList(List.of(
                 new Label("Label 0", createIcon("fas-home")),
@@ -77,6 +113,8 @@ public class ComboBoxesDemoController implements Initializable {
         editable.setItems(stringList);
         validated.setItems(stringList);
         customized.setItems(stringList);
+        filters1.setItems(personList);
+        filters2.setItems(personList);
 
         editable.setEditable(true);
         validated.getValidator().add(checkbox.selectedProperty(), "Checkbox is not selected!");
