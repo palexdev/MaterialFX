@@ -19,6 +19,10 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.effects.RippleGenerator;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -34,6 +38,9 @@ public class MFXIconWrapper extends StackPane {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-icon-wrapper";
+
+    private final ObjectProperty<Node> icon = new SimpleObjectProperty<>();
+    private final DoubleProperty size = new SimpleDoubleProperty();
     private final RippleGenerator rippleGenerator = new RippleGenerator(this);
 
     //================================================================================
@@ -43,10 +50,11 @@ public class MFXIconWrapper extends StackPane {
         initialize();
     }
 
-    public MFXIconWrapper(Node node, double size) {
-        super.getChildren().setAll(node);
-        setPrefSize(size, size);
+    public MFXIconWrapper(Node icon, double size) {
         initialize();
+
+        setIcon(icon);
+        setSize(size);
     }
 
     //================================================================================
@@ -60,73 +68,94 @@ public class MFXIconWrapper extends StackPane {
         if (!getChildren().contains(rippleGenerator)) {
             super.getChildren().add(0, rippleGenerator);
         }
+
         return this;
     }
 
-    protected void initialize() {
+    private void initialize() {
         getStyleClass().add(STYLE_CLASS);
+
         setMinSize(USE_PREF_SIZE, USE_PREF_SIZE);
         setMaxSize(USE_PREF_SIZE, USE_PREF_SIZE);
+
+        icon.addListener((observable, oldValue, newValue) -> {
+            super.getChildren().remove(oldValue);
+            manageIcon(newValue);
+        });
+        size.addListener((observable, oldValue, newValue) -> setPrefSize(newValue.doubleValue(), newValue.doubleValue()));
     }
 
     /**
-     * Returns the icon node instance.
+     * This method handles the positioning of the icon in the children list.
      */
-    public Node getIcon() {
-        try {
-            if (getChildren().size() > 1) {
-                return getChildren().get(1);
-            } else {
-                return getChildren().get(0);
-            }
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
-    /**
-     * Sets the icon node.
-     */
-    public void setIcon(Node node) {
-        if (getChildren().isEmpty()) {
-            super.getChildren().add(node);
+    private void manageIcon(Node icon) {
+        if (icon == null) {
             return;
         }
 
-        if (getChildren().size() > 1) {
-            super.getChildren().set(1, node);
-        } else {
-            super.getChildren().add(node);
+        ObservableList<Node> children = super.getChildren();
+
+        if (children.isEmpty()) {
+            children.add(icon);
+            return;
         }
+
+        if (children.contains(rippleGenerator)) {
+            if (children.size() == 1) {
+                children.add(icon);
+            } else {
+                children.set(1, icon);
+            }
+        }
+    }
+
+    /**
+     * @return the RippleGenerator instance.
+     */
+    public RippleGenerator getRippleGenerator() {
+        return rippleGenerator;
+    }
+
+    public Node getIcon() {
+        return icon.get();
+    }
+
+    /**
+     * Contains the reference to the icon.
+     */
+    public ObjectProperty<Node> iconProperty() {
+        return icon;
+    }
+
+    public void setIcon(Node icon) {
+        this.icon.set(icon);
     }
 
     /**
      * Removes the icon node.
      */
     public void removeIcon() {
-        if (getChildren().size() > 1) {
-            super.getChildren().remove(1);
-        }
+        setIcon(null);
+    }
+
+    public double getSize() {
+        return size.get();
     }
 
     /**
-     * Sets the size of the container.
+     * Specifies the size of the container.
      */
+    public DoubleProperty sizeProperty() {
+        return size;
+    }
+
     public void setSize(double size) {
-        setPrefSize(size, size);
+        this.size.set(size);
     }
-
-    /**
-     * @return the RippleGenerator instance.
-     */
-     public RippleGenerator getRippleGenerator() {
-        return rippleGenerator;
-     }
 
     //================================================================================
     // Override Methods
     //================================================================================
-
 
     /**
      * @return an unmodifiable list of the StackPane children

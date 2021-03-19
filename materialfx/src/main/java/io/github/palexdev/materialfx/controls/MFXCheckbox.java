@@ -68,6 +68,7 @@ public class MFXCheckbox extends CheckBox {
 
     /**
      * Specifies the color of the box when it's checked.
+     *
      * @see Color
      */
     private final StyleableObjectProperty<Paint> checkedColor = new SimpleStyleableObjectProperty<>(
@@ -79,6 +80,7 @@ public class MFXCheckbox extends CheckBox {
 
     /**
      * Specifies the color of the box when it's unchecked.
+     *
      * @see Color
      */
     private final StyleableObjectProperty<Paint> uncheckedColor = new SimpleStyleableObjectProperty<>(
@@ -90,6 +92,7 @@ public class MFXCheckbox extends CheckBox {
 
     /**
      * Specifies the shape of the mark from a predefined set.
+     *
      * @see javafx.scene.shape.SVGPath
      */
     private final StyleableStringProperty markType = new SimpleStyleableStringProperty(

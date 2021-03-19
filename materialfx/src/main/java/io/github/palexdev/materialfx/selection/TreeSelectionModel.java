@@ -84,12 +84,12 @@ public class TreeSelectionModel<T> implements ITreeSelectionModel<T> {
      *         i2.setSelected(true);
      *     }
      * </pre>
-     *
+     * <p>
      * If the model is set to not allow multiple selection then we clear the list
      * and then add the item to it.
-     * @see MFXTreeItem
      *
      * @param item the item to select
+     * @see MFXTreeItem
      */
     @SuppressWarnings("unchecked")
     protected void select(AbstractMFXTreeItem<T> item) {
@@ -176,6 +176,7 @@ public class TreeSelectionModel<T> implements ITreeSelectionModel<T> {
     /**
      * Gets the selected item. If the selection is multiple {@link #getSelectedItems()} should be
      * called instead, as this method will only return the first item of the list.
+     *
      * @return the first selected item of the list
      */
     @Override

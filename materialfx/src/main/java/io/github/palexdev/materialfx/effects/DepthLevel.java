@@ -68,9 +68,11 @@ public enum DepthLevel {
 
     /**
      * Retrieves the next {@code DepthLevel} associated with {@code this} enumerator.
+     *
      * @return The next {@code DepthLevel}
      */
     public DepthLevel next() {
-        return valuesArr[(this.ordinal()+1) % valuesArr.length];
+        return valuesArr[(this.ordinal() + 1) % valuesArr.length];
     }
+
 }

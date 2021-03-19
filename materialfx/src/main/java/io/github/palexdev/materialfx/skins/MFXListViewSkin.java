@@ -38,6 +38,7 @@ import javafx.scene.layout.Region;
 import javafx.util.Duration;
 
 import java.util.Set;
+
 /**
  * This is the implementation of the {@code Skin} associated with every {@code MFXListView}.
  * <p>

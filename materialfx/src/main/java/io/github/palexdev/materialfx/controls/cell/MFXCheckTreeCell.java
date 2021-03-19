@@ -27,6 +27,7 @@ import javafx.css.PseudoClass;
 
 /**
  * Implementation of a MFXSimpleTreeCell with a checkbox for usage in MFXCheckTreeViews.
+ *
  * @param <T>
  */
 public class MFXCheckTreeCell<T> extends MFXSimpleTreeCell<T> {

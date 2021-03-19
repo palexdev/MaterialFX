@@ -32,7 +32,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Skin;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.util.Duration;
@@ -52,7 +51,6 @@ public class MFXButton extends Button {
     private static final StyleablePropertyFactory<MFXButton> FACTORY = new StyleablePropertyFactory<>(Button.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-button";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-button.css").toString();
-    private final RippleGenerator rippleGenerator = new RippleGenerator(this);
 
     //================================================================================
     // Constructors
@@ -84,10 +82,6 @@ public class MFXButton extends Button {
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
         setAlignment(Pos.CENTER);
-        setBindings();
-
-        setRippleRadius(25);
-        setRippleColor(Color.rgb(190, 190, 190));
     }
 
     //================================================================================
@@ -96,6 +90,7 @@ public class MFXButton extends Button {
 
     /**
      * Specifies the ripples color of this control.
+     *
      * @see Color
      */
     private final ObjectProperty<Paint> rippleColor = new SimpleObjectProperty<>();
@@ -107,26 +102,28 @@ public class MFXButton extends Button {
 
     /**
      * Specifies the ripples in animation duration of this control.
+     *
      * @see Duration
      */
     private final ObjectProperty<Duration> rippleInDuration = new SimpleObjectProperty<>();
 
     /**
      * Specifies the ripples out animation duration of this control.
+     *
      * @see Duration
      */
     private final ObjectProperty<Duration> rippleOutDuration = new SimpleObjectProperty<>();
 
-    public final ObjectProperty<Paint> rippleColorProperty() {
-        return this.rippleColor;
-    }
-
-    public final Paint getRippleColor() {
+    public Paint getRippleColor() {
         return rippleColor.get();
     }
 
-    public final void setRippleColor(Paint rippleColor) {
-        rippleGenerator.setRippleColor((Color) rippleColor);
+    public ObjectProperty<Paint> rippleColorProperty() {
+        return rippleColor;
+    }
+
+    public void setRippleColor(Paint rippleColor) {
+        this.rippleColor.set(rippleColor);
     }
 
     public double getRippleRadius() {
@@ -138,7 +135,7 @@ public class MFXButton extends Button {
     }
 
     public void setRippleRadius(double rippleRadius) {
-        rippleGenerator.setRippleRadius(rippleRadius);
+        this.rippleRadius.set(rippleRadius);
     }
 
     public Duration getRippleInDuration() {
@@ -150,7 +147,7 @@ public class MFXButton extends Button {
     }
 
     public void setRippleInDuration(Duration rippleInDuration) {
-        rippleGenerator.setInDuration(rippleInDuration);
+        this.rippleInDuration.set(rippleInDuration);
     }
 
     public Duration getRippleOutDuration() {
@@ -162,29 +159,18 @@ public class MFXButton extends Button {
     }
 
     public void setRippleOutDuration(Duration rippleOutDuration) {
-        rippleGenerator.setOutDuration(rippleOutDuration);
+        this.rippleOutDuration.set(rippleOutDuration);
     }
 
     public RippleGenerator getRippleGenerator() {
-        return rippleGenerator;
+        try {
+            return (RippleGenerator) lookup(".ripple-generator");
+        } catch (ClassCastException ex) {
+            return null;
+        }
     }
 
-    protected void setupRippleGenerator() {
-        this.getChildren().add(0, rippleGenerator);
-        this.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            rippleGenerator.setGeneratorCenterX(event.getX());
-            rippleGenerator.setGeneratorCenterY(event.getY());
-            rippleGenerator.createRipple();
-        });
-    }
-
-    private void setBindings() {
-        rippleColor.bind(rippleGenerator.rippleColorProperty());
-        rippleRadius.bind(rippleGenerator.rippleRadiusProperty());
-        rippleInDuration.bind(rippleGenerator.inDurationProperty());
-        rippleOutDuration.bind(rippleGenerator.outDurationProperty());
-    }
-//================================================================================
+    //================================================================================
     // Styleable Properties
     //================================================================================
 
@@ -274,9 +260,7 @@ public class MFXButton extends Button {
     //================================================================================
     @Override
     protected Skin<?> createDefaultSkin() {
-        MFXButtonSkin skin = new MFXButtonSkin(this);
-        setupRippleGenerator();
-        return skin;
+        return new MFXButtonSkin(this);
     }
 
     @Override

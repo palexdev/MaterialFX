@@ -55,7 +55,6 @@ public class TableSelectionModel<T> implements ITableSelectionModel<T> {
     @SuppressWarnings("unchecked")
     protected void select(MFXTableRow<T> item) {
         if (!allowsMultipleSelection) {
-            clearSelection();
             selectedItems.setAll(item);
         } else {
             selectedItems.add(item);
@@ -124,6 +123,7 @@ public class TableSelectionModel<T> implements ITableSelectionModel<T> {
     /**
      * Gets the selected row. If the selection is multiple {@link #getSelectedRows()} ()} should be
      * called instead, as this method will only return the first item of the list.
+     *
      * @return the first selected item of the list
      */
     @Override

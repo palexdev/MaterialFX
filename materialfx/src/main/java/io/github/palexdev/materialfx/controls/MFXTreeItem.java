@@ -48,10 +48,11 @@ import java.util.List;
  * <p>
  * Overrides the layoutChildren method to set the {@link #items} margin to 20 by default.
  * To change it you have to override the method inline or by extending this class.
+ *
+ * @param <T> The type of the data within TreeItem.
  * @see AbstractMFXTreeCell
  * @see MFXTreeView
  * @see ITreeSelectionModel
- * @param <T> The type of the data within TreeItem.
  */
 public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
     //================================================================================
@@ -186,6 +187,7 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
 
     /**
      * Property to check if an animation is running on the control. It is bound into the Skin class.
+     *
      * @see MFXTreeItemSkin
      */
     public ReadOnlyBooleanWrapper animationRunningProperty() {
@@ -271,6 +273,7 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
      * Used in the items listener added by the {@link #initialize()} method.
      * <p>
      * When an item is added/removed its parent should be updated accordingly.
+     *
      * @param treeItems the items for which to update the parent
      * @param newParent the parent to set (or null in case of removed items)
      */

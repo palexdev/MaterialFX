@@ -37,7 +37,7 @@
 }
 
 .mfx-scroll-pane > .corner {
-    -fx-background-color: transparent ;
+    -fx-background-color: transparent;
 }
 
 .mfx-scroll-pane .scroll-bar {

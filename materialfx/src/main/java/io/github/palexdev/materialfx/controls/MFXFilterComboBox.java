@@ -9,6 +9,7 @@ import javafx.scene.control.Skin;
  * This combo box allows to filter the items shown in the popup's listview.
  * <p>
  * Extends {@code MFXComboBox} and redefines the style class to "mfx-filter-combo-box".
+ *
  * @param <T> The type of the value that has been selected
  * @see MFXComboBox
  */

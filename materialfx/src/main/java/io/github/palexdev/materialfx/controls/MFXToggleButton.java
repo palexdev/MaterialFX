@@ -83,6 +83,7 @@ public class MFXToggleButton extends ToggleButton {
 
     /**
      * Specifies the color of the "circle" when toggled.
+     *
      * @see Color
      */
     private final StyleableObjectProperty<Paint> toggleColor = new SimpleStyleableObjectProperty<>(
@@ -94,6 +95,7 @@ public class MFXToggleButton extends ToggleButton {
 
     /**
      * Specifies the color of the "circle" when untoggled.
+     *
      * @see Color
      */
     private final StyleableObjectProperty<Paint> unToggleColor = new SimpleStyleableObjectProperty<>(
@@ -105,6 +107,7 @@ public class MFXToggleButton extends ToggleButton {
 
     /**
      * Specifies the color of the "line" when toggled.
+     *
      * @see Color
      */
     private final StyleableObjectProperty<Paint> toggleLineColor = new SimpleStyleableObjectProperty<>(
@@ -116,6 +119,7 @@ public class MFXToggleButton extends ToggleButton {
 
     /**
      * Specifies the color of the line when untoggled.
+     *
      * @see Color
      */
     private final StyleableObjectProperty<Paint> unToggleLineColor = new SimpleStyleableObjectProperty<>(

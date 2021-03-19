@@ -71,7 +71,6 @@ import java.util.stream.Collectors;
  * <p>
  * The main method is {@link #filter(String)}. It takes a string and evaluates all the given conditions
  * on that string, returning the computed boolean result.
- *
  */
 public class MFXFilterDialog extends MFXDialog {
     //================================================================================
@@ -179,6 +178,7 @@ public class MFXFilterDialog extends MFXDialog {
     /**
      * Evaluates all the conditions specified by the dialog's {@code FilterFields} on
      * the given item and returns if it meets the specified conditions or not.
+     *
      * @param item the string on which evaluate the conditions
      */
     public boolean filter(String item) {
@@ -360,6 +360,7 @@ public class MFXFilterDialog extends MFXDialog {
          * - Ends With -> String::endsWith <p>
          * - Equals -> String::equals <p>
          * - Equals Ignore Case -> String::equalsIgnoreCase <p>
+         *
          * @see StringUtils
          */
         private void populateMap() {

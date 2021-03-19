@@ -287,7 +287,7 @@ public class MFXDatePicker extends VBox {
     );
 
     public Paint getPickerColor() {
-            return pickerColor.get();
+        return pickerColor.get();
     }
 
     public StyleableObjectProperty<Paint> pickerColorProperty() {

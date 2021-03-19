@@ -16,12 +16,17 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.filter;
+package io.github.palexdev.materialfx.demo.model;
 
-/**
- * This interface allows filtering a {@link io.github.palexdev.materialfx.controls.MFXTableView} without
- * using an object {@code toString()} method but rather using a specific method.
- */
-public interface IFilterable {
-    String toFilterString();
+public class SimplePerson {
+    private final String name;
+
+    public SimplePerson(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

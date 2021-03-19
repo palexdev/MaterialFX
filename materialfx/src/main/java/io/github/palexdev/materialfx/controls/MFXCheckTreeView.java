@@ -25,6 +25,7 @@ import io.github.palexdev.materialfx.selection.TreeCheckModel;
  * <p>
  * Note: this could also work with other item classes since the TreeCheckModel extends TreeSelectionModel,
  * but of course it is not recommended to do so.
+ *
  * @param <T> The type of the data within the items.
  */
 public class MFXCheckTreeView<T> extends MFXTreeView<T> {

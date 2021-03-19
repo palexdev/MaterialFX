@@ -35,7 +35,7 @@ import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 /**
- *  This is the implementation of the {@code Skin} associated with every {@code MFXCheckbox}.
+ * This is the implementation of the {@code Skin} associated with every {@code MFXCheckbox}.
  */
 public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
     //================================================================================
@@ -155,7 +155,7 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
          * play the animation.
          */
         checkBox.skinProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && (checkBox.isSelected() || checkBox.isIndeterminate())) {
+            if (newValue != null) {
                 updateColors();
             }
         });
@@ -165,6 +165,7 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
     /**
      * This method is called whenever one of the following properties changes:
      * {@code selectedProperty}, {@code indeterminateProperty}, {@code checkedColor} and {@code uncheckedColor} properties
+     *
      * @see NodeUtils
      */
     private void updateColors() {
@@ -173,10 +174,10 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
         final BorderStroke borderStroke = box.getBorder().getStrokes().get(0);
         if (checkbox.isIndeterminate()) {
             NodeUtils.updateBackground(box, checkbox.getCheckedColor(), new Insets(3.2));
-            ((MFXFontIcon) box.getIcon()).setFill(Color.TRANSPARENT);
+            box.getIcon().setVisible(false);
         } else if (checkbox.isSelected()) {
             NodeUtils.updateBackground(box, checkbox.getCheckedColor(), Insets.EMPTY);
-            ((MFXFontIcon) box.getIcon()).setFill(Color.WHITE);
+            box.getIcon().setVisible(true);
             box.setBorder(new Border(new BorderStroke(
                     checkbox.getCheckedColor(),
                     borderStroke.getTopStyle(),
@@ -185,7 +186,7 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
             )));
         } else {
             NodeUtils.updateBackground(box, Color.TRANSPARENT);
-            ((MFXFontIcon) box.getIcon()).setFill(Color.TRANSPARENT);
+            box.getIcon().setVisible(false);
             box.setBorder(new Border(new BorderStroke(
                     checkbox.getUncheckedColor(),
                     borderStroke.getTopStyle(),
@@ -201,7 +202,7 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
     private void updateMarkType() {
         MFXCheckbox checkbox = getSkinnable();
 
-        MFXFontIcon icon = new MFXFontIcon(checkbox.getMarkType(), checkbox.getMarkSize(), Color.TRANSPARENT);
+        MFXFontIcon icon = new MFXFontIcon(checkbox.getMarkType(), checkbox.getMarkSize(), Color.WHITE);
         box.setIcon(icon);
     }
 

@@ -86,8 +86,9 @@ public class TreeCheckModel<T> extends TreeSelectionModel<T> implements ITreeChe
      *         i2.setChecked(true);
      *     }
      * </pre>
-     * @see MFXCheckTreeItem
+     *
      * @param item the item to check
+     * @see MFXCheckTreeItem
      */
     private void check(MFXCheckTreeItem<T> item) {
         if (item.isChecked()) {
@@ -186,7 +187,7 @@ public class TreeCheckModel<T> extends TreeSelectionModel<T> implements ITreeChe
         } else if (indeterminateChildren(item) != 0) {
             checkedItems.remove(item);
             item.setIndeterminate(true);
-        } else if (checkedChildren(item) == 0){
+        } else if (checkedChildren(item) == 0) {
             checkedItems.remove(item);
             item.setIndeterminate(false);
         } else {

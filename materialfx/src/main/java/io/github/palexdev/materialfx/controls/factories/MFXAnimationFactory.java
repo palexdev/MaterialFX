@@ -179,5 +179,6 @@ public enum MFXAnimationFactory {
             node.setTranslateY(0);
         }
     }
+
     public abstract Timeline build(Node node, double durationMillis);
 }

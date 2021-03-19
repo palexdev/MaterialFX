@@ -30,6 +30,7 @@ import javafx.collections.ObservableList;
 
 /**
  * Base class for all validators.
+ *
  * @see IMFXValidator
  * @see BooleanListBinding
  */

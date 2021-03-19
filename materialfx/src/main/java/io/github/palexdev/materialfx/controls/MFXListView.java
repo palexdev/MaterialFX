@@ -94,7 +94,7 @@ public class MFXListView<T> extends ListView<T> {
     }
 
     /**
-     *  Sets the CSS looked-up colors
+     * Sets the CSS looked-up colors
      */
     private void setColors() {
         StringBuilder sb = new StringBuilder();

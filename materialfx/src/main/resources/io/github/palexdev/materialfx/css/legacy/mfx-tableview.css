@@ -42,6 +42,7 @@
     -mfx-thumb-color: rgb(157, 157, 157);
     -mfx-thumb-hover-color: rgb(88, 88, 88);
 }
+
 .mfx-legacy-table-view .column-header,
 .mfx-legacy-table-view .column-header-background,
 .mfx-legacy-table-view .column-header-background .filler {
@@ -84,8 +85,9 @@
 
 /* Remove JavaFX crap */
 .mfx-legacy-table-view > .virtual-flow > .corner {
-    -fx-background-color: transparent ;
+    -fx-background-color: transparent;
 }
+
 .mfx-legacy-table-view > .virtual-flow > .scroll-bar,
 .mfx-legacy-table-view > .virtual-flow > .scroll-bar .decrement-arrow,
 .mfx-legacy-table-view > .virtual-flow > .scroll-bar .increment-arrow,
@@ -138,6 +140,7 @@
     -fx-border-radius: 2.0em;
     -fx-background-insets: 3;
 }
+
 .mfx-legacy-table-view .mfx-scroll-bar:vertical .track {
     -fx-background-color: -mfx-track-color;
     -fx-border-color: transparent;

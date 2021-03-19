@@ -28,6 +28,7 @@ import io.github.palexdev.materialfx.effects.RippleGenerator;
 import io.github.palexdev.materialfx.filter.IFilterable;
 import io.github.palexdev.materialfx.filter.MFXFilterDialog;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.materialfx.selection.ITableSelectionModel;
 import io.github.palexdev.materialfx.utils.DragResizer;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.KeyFrame;
@@ -412,7 +413,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         lastIcon.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> goLastPage());
 
         int i;
-        for (i = 5; i <= getSkinnable().getMaxRowsCombo(); i+=5) {
+        for (i = 5; i <= getSkinnable().getMaxRowsCombo(); i += 5) {
             rowsPerPageCombo.getItems().add(i);
         }
 
@@ -498,28 +499,34 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
     }
 
     /**
-     * Gets the selected rows from the selection model, gets the selected items from that list,
-     * gets the row nodes in the rowsContainer, if the selected items contains the row item
+     * Gets the selected items from that list, gets the row nodes in the rowsContainer,
+     * if the selected items contains the row item
      * them the reference in the model is updated.
      */
     @SuppressWarnings("unchecked")
     private void updateSelection() {
         MFXTableView<T> tableView = getSkinnable();
+        ITableSelectionModel<T> selectionModel = tableView.getSelectionModel();
 
-        List<MFXTableRow<T>> selectedRows = tableView.getSelectionModel().getSelectedRows();
-        List<T> selectedItems = selectedRows.stream().map(MFXTableRow::getItem).collect(Collectors.toList());
-        List<MFXTableRow<T>> shownRows = rowsContainer.getChildren().stream()
-                .filter(node -> node instanceof MFXTableRow)
-                .map(node -> (MFXTableRow<T>) node)
+        List<T> selectedItems = selectionModel.getSelectedRows().stream()
+                .map(MFXTableRow::getItem)
                 .collect(Collectors.toList());
 
         if (selectedItems.isEmpty()) {
             return;
         }
+
+        List<MFXTableRow<T>> shownRows = rowsContainer.getChildren().stream()
+                .filter(node -> node instanceof MFXTableRow)
+                .map(node -> (MFXTableRow<T>) node)
+                .collect(Collectors.toList());
+
         for (MFXTableRow<T> row : shownRows) {
             if (selectedItems.contains(row.getItem())) {
-                int index = selectedItems.indexOf(row.getItem());
-                tableView.getSelectionModel().getSelectedRows().set(index, row);
+                selectionModel.getSelectedRows().set(
+                        selectedItems.indexOf(row.getItem()),
+                        row
+                );
             }
         }
     }
@@ -601,7 +608,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
                 break;
             }
             // Goes DESCENDING
-            case ASCENDING:  {
+            case ASCENDING: {
                 sortedList.setComparator(column.getComparator().reversed());
                 animateSortIcon(icon, SortState.ASCENDING);
                 column.setSortState(SortState.DESCENDING);

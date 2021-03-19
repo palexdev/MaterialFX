@@ -27,7 +27,7 @@
 }
 
 #infoButton .ripple-generator {
-    -mfx-ripple-radius: 15;
+    -mfx-ripple-radius: 15px;
     -mfx-ripple-color: #d3d8ff;
 }
 
@@ -89,7 +89,7 @@
 }
 
 #vLoader .mfx-toggle-node:hover,
-#vLoader .mfx-toggle-node:hover .text{
+#vLoader .mfx-toggle-node:hover .text {
     -fx-opacity: 1.0;
 }
 

@@ -43,6 +43,7 @@ import static io.github.palexdev.materialfx.controls.enums.Styles.ComboBoxStyles
  * Extends {@code Control} and provides a new skin since it is built from scratch.
  * <p>
  * Side note: unlike JavaFX's one this is NOT editable.
+ *
  * @param <T> The type of the value that has been selected
  * @see ComboSelectionModelMock
  */

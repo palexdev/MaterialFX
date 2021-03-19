@@ -28,6 +28,7 @@ import static io.github.palexdev.materialfx.controls.MFXCheckTreeItem.CheckTreeI
 
 /**
  * This is the implementation of the {@code Skin} associated with every {@link MFXCheckTreeItemSkin}.
+ *
  * @see MFXCheckTreeItem
  * @see TreeCheckModel
  */

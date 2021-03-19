@@ -27,6 +27,7 @@ import javafx.scene.control.TableView;
 /**
  * This is a restyle of JavaFX's {@link TableView} control.
  * For a table view which more closely follows the guidelines of material design see {@link io.github.palexdev.materialfx.controls.MFXTableView}.
+ *
  * @param <S>
  */
 public class MFXLegacyTableView<S> extends TableView<S> {

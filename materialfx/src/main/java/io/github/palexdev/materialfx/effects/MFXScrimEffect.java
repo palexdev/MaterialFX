@@ -52,7 +52,7 @@ public class MFXScrimEffect {
     /**
      * Adds a scrim effect to the specified pane with specified opacity.
      *
-     * @param pane The pane to which add the effect
+     * @param pane    The pane to which add the effect
      * @param opacity The effect opacity/strength
      */
     public void scrim(Pane pane, double opacity) {
@@ -69,8 +69,8 @@ public class MFXScrimEffect {
      * It also simulates the modal behavior of {@code Stage}s, leaving only the specified
      * {@code Node} interactable.
      *
-     * @param parent The pane to which add the effect
-     * @param child The node to leave interactable
+     * @param parent  The pane to which add the effect
+     * @param child   The node to leave interactable
      * @param opacity The effect opacity/strength
      */
     public void modalScrim(Pane parent, Node child, double opacity) {
@@ -100,13 +100,13 @@ public class MFXScrimEffect {
                     }
                 });
 
-        parent.getChildren().add(children.size() - 1 , scrim);
+        parent.getChildren().add(children.size() - 1, scrim);
     }
 
     /**
      * Adds a scrim effect to the specified {@code Window}'s root pane with the specified opacity.
      *
-     * @param window The desired window
+     * @param window  The desired window
      * @param opacity The desired opacity
      */
     public void scrimWindow(Window window, double opacity) {
@@ -122,6 +122,7 @@ public class MFXScrimEffect {
 
     /**
      * Removes the scrim effect from the specified pane.
+     *
      * @param pane The pane to which remove the effect.
      */
     public void removeEffect(Pane pane) {
@@ -130,6 +131,7 @@ public class MFXScrimEffect {
 
     /**
      * Removes the scrim effect from the specified window.
+     *
      * @param window The window to which remove the effect.
      */
     public void removeEffect(Window window) {
