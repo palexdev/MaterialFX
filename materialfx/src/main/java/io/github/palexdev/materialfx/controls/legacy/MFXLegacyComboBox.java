@@ -58,6 +58,7 @@ import java.util.List;
  * <p>
  * I recommend to use only nodes which are instances of {@code Labeled} since the {@code toString()} method is overridden
  * to return the control's text.
+ *
  * @see MFXSnapshotWrapper
  */
 public class MFXLegacyComboBox<T> extends ComboBox<T> {

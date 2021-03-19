@@ -44,6 +44,7 @@ import javafx.scene.layout.HBox;
  * <p>
  * Also, note that to build a cell the height must be fixed for layout reasons, by default it's 27.
  * When the cell is created the {@link #render(Object)} method is called.
+ *
  * @param <T> The type of the data within TreeItem.
  */
 public abstract class AbstractMFXTreeCell<T> extends HBox {
@@ -135,6 +136,7 @@ public abstract class AbstractMFXTreeCell<T> extends HBox {
 
     /**
      * Sets the cell's disclosure node to the specified node.
+     *
      * @param <N> the specified parameter N should be a subclass of Node
      */
     public abstract <N extends Node> void setDisclosureNode(N node);
@@ -142,6 +144,7 @@ public abstract class AbstractMFXTreeCell<T> extends HBox {
     /**
      * Specifies how the cell should represent the item's data, whether it is a node,
      * a primitive type or something else.
+     *
      * @param data the item's data
      */
     protected abstract void render(T data);

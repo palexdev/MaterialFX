@@ -21,7 +21,7 @@
 .mfx-toggle-node:hover,
 .mfx-toggle-node:focused,
 .mfx-toggle-node:selected,
-.mfx-toggle-node:focused:selected{
+.mfx-toggle-node:focused:selected {
     -fx-background-color: TRANSPARENT, TRANSPARENT, TRANSPARENT, TRANSPARENT;
     -fx-background-radius: 3px;
     -fx-background-insets: 0px;

@@ -290,7 +290,6 @@ public class MFXDatePickerContent extends VBox {
      * Each cell has its text set by default to "null" then starting from the
      * first day index calculated with {@link #firstDayIndex()} the text is set from 1 to monthLength.
      * The cells which still contains "null" are not visible, that's how the grid is built.
-     *
      */
     private void createDayCells() {
         days.clear();

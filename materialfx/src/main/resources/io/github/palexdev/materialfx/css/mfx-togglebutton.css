@@ -37,14 +37,15 @@
 .mfx-toggle-button Line {
     -fx-stroke: -mfx-untoggle-line-color;
 }
-.mfx-toggle-button:selected Line{
+
+.mfx-toggle-button:selected Line {
     -fx-stroke: -mfx-toggle-line-color;
 }
 
-.mfx-toggle-button Circle{
+.mfx-toggle-button Circle {
     -fx-fill: -mfx-untoggle-color;
 }
 
-.mfx-toggle-button:selected Circle{
+.mfx-toggle-button:selected Circle {
     -fx-fill: -mfx-toggle-color;
 }

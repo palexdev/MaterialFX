@@ -38,9 +38,10 @@ import java.lang.ref.WeakReference;
  * Simple implementation of a tree item with a checkbox.
  * <p>
  * The default associated {@link Skin} is {@link MFXCheckTreeItemSkin<T>}.
+ *
+ * @param <T> The type of the data within TreeItem.
  * @see MFXCheckTreeView
  * @see ITreeCheckModel
- * @param <T> The type of the data within TreeItem.
  */
 public class MFXCheckTreeItem<T> extends MFXTreeItem<T> {
     //================================================================================

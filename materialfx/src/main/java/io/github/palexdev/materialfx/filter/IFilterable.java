@@ -21,7 +21,6 @@ package io.github.palexdev.materialfx.filter;
 /**
  * This interface allows filtering a {@link io.github.palexdev.materialfx.controls.MFXTableView} without
  * using an object {@code toString()} method but rather using a specific method.
- *
  */
 public interface IFilterable {
     String toFilterString();

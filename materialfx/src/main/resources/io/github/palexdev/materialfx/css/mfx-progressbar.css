@@ -16,12 +16,12 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-.mfx-progress-bar > .track{
+.mfx-progress-bar > .track {
     -fx-background-color: #E0E0E0;
 }
 
 .mfx-progress-bar > .bar,
-.mfx-progress-bar:indeterminate > .bar{
+.mfx-progress-bar:indeterminate > .bar {
     -fx-background-color: #0F9D58;
     -fx-padding: 2.0;
 }

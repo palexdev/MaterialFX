@@ -157,6 +157,7 @@ public class PositionManager {
      * <p>
      * The new anchorY is calculated using the current value and the new notification's content prefHeight.
      * <b>Note: this works only if the notification's content has it's pref height set</b>
+     *
      * @param newNotification The new notification
      * @param oldNotification The already showing notification
      * @return The animation

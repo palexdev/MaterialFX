@@ -34,8 +34,7 @@ import java.util.Comparator;
  * Each column cell is a {@code Label}, has a name and has the following responsibilities:
  * - Has a row cell factory because each column knows how to build the corresponding row cell in each table row<p>
  * - Has a sort state and a comparator because each column knows how to sort the rows based on the given comparator, also
- *      retains its sort state thus allowing switching between ASCENDING, DESCENDING, UNSORTED<p>
- *
+ * retains its sort state thus allowing switching between ASCENDING, DESCENDING, UNSORTED<p>
  */
 public class MFXTableColumnCell<T> extends Label {
     //================================================================================

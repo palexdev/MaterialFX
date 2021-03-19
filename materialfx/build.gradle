@@ -9,7 +9,7 @@ repositories {
 }
 
 
-compileJava   {
+compileJava {
     // This is necessary since Gluon devs are assholes :)
     sourceCompatibility = '11'
     targetCompatibility = '11'

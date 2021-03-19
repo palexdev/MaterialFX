@@ -33,6 +33,7 @@ public class ColorUtils {
 
     /**
      * Converts a JavaFX's {@code Color} to CSS corresponding rgb function.
+     *
      * @return the rgb function as a string
      */
     public static String rgb(Color color) {
@@ -44,6 +45,7 @@ public class ColorUtils {
 
     /**
      * Converts a JavaFX's {@code Color} to CSS corresponding rgba function.
+     *
      * @return the rgba function as a string
      */
     public static String rgba(Color color) {

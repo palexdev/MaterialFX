@@ -28,11 +28,11 @@
 }
 
 .mfx-table-view .container .columns-container {
-    -fx-border-color:  transparent transparent -fx-table-borders transparent;
+    -fx-border-color: transparent transparent -fx-table-borders transparent;
 }
 
 .mfx-table-view .container .rows-container {
-    -fx-border-color:  transparent;
+    -fx-border-color: transparent;
 }
 
 .mfx-table-view .pagination {

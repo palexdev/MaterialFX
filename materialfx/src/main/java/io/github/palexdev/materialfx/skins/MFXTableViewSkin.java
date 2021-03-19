@@ -413,7 +413,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         lastIcon.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> goLastPage());
 
         int i;
-        for (i = 5; i <= getSkinnable().getMaxRowsCombo(); i+=5) {
+        for (i = 5; i <= getSkinnable().getMaxRowsCombo(); i += 5) {
             rowsPerPageCombo.getItems().add(i);
         }
 
@@ -608,7 +608,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
                 break;
             }
             // Goes DESCENDING
-            case ASCENDING:  {
+            case ASCENDING: {
                 sortedList.setComparator(column.getComparator().reversed());
                 animateSortIcon(icon, SortState.ASCENDING);
                 column.setSortState(SortState.DESCENDING);

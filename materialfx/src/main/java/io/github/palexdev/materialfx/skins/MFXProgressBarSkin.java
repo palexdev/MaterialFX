@@ -97,7 +97,7 @@ public class MFXProgressBarSkin extends SkinBase<MFXProgressBar> {
      * Creates the animation for the indeterminate bar.
      */
     private void createIndeterminateTimeline() {
-        MFXProgressBar progressBar =  getSkinnable();
+        MFXProgressBar progressBar = getSkinnable();
 
         if (indeterminateTransition != null) {
             clearAnimation();

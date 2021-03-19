@@ -151,7 +151,7 @@ public class MFXScrollPane extends ScrollPane {
     }
 
     /**
-     *  Sets the CSS looked-up colors
+     * Sets the CSS looked-up colors
      */
     private void setColors() {
         StringBuilder sb = new StringBuilder();
@@ -188,14 +188,14 @@ public class MFXScrollPane extends ScrollPane {
             scrollPane.getContent().getParent().addEventHandler(MouseEvent.DRAG_DETECTED, dragHandler);
             scrollPane.getContent().getParent().addEventHandler(ScrollEvent.ANY, scrollHandler);
         }
-        scrollPane.getContent().parentProperty().addListener((o,oldVal, newVal)->{
-            if (oldVal != null) {
-                oldVal.removeEventHandler(MouseEvent.DRAG_DETECTED, dragHandler);
-                oldVal.removeEventHandler(ScrollEvent.ANY, scrollHandler);
+        scrollPane.getContent().parentProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue != null) {
+                oldValue.removeEventHandler(MouseEvent.DRAG_DETECTED, dragHandler);
+                oldValue.removeEventHandler(ScrollEvent.ANY, scrollHandler);
             }
-            if (newVal != null) {
-                newVal.addEventHandler(MouseEvent.DRAG_DETECTED, dragHandler);
-                newVal.addEventHandler(ScrollEvent.ANY, scrollHandler);
+            if (newValue != null) {
+                newValue.addEventHandler(MouseEvent.DRAG_DETECTED, dragHandler);
+                newValue.addEventHandler(ScrollEvent.ANY, scrollHandler);
             }
         });
         timeline.getKeyFrames().add(new KeyFrame(Duration.millis(3), (event) -> {

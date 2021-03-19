@@ -38,6 +38,7 @@ public class LoggingUtils {
 
     /**
      * Gets the stacktrace of a {@code Throwable} as a String.
+     *
      * @param ex The throwable/exception
      * @return the stacktrace as a String
      */
@@ -49,6 +50,7 @@ public class LoggingUtils {
 
     /**
      * Logs the given {@code Throwable}'s stacktrace to the console.
+     *
      * @param ex The throwable/exception
      */
     public static void logException(Throwable ex) {
@@ -57,8 +59,9 @@ public class LoggingUtils {
 
     /**
      * Logs the given {@code Throwable}'s exception to the console and adds the given String at the beginning.
+     *
      * @param msg The extra message you want to log
-     * @param ex The throwable/exception
+     * @param ex  The throwable/exception
      */
     public static void logException(String msg, Throwable ex) {
         logger.log(EXCEPTION, msg + "\n" + getStackTraceString(ex));

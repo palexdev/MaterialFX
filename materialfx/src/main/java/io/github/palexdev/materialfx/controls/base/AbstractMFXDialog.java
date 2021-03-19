@@ -241,6 +241,7 @@ public abstract class AbstractMFXDialog extends BorderPane {
 
     /**
      * Replaces the dialog's default close button with a new one and adds the close handler to it.
+     *
      * @param buttons The new close button
      */
     public void setCloseButtons(Node... buttons) {
@@ -262,6 +263,7 @@ public abstract class AbstractMFXDialog extends BorderPane {
      * Replaces the dialog's default close handler with a new one,
      * removes the old one from the button, replaces the handler and then
      * re-adds the handler to the button.
+     *
      * @param newHandler The new close handler
      */
     public void setCloseHandler(EventHandler<MouseEvent> newHandler) {

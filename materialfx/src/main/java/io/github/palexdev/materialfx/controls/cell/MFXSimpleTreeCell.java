@@ -34,6 +34,7 @@ import javafx.scene.input.MouseEvent;
  * Simple implementation of a MFXTreeItem cell.
  * <p>
  * Concrete implementation of {@link AbstractMFXTreeCell<T>}.
+ *
  * @param <T>
  */
 public class MFXSimpleTreeCell<T> extends AbstractMFXTreeCell<T> {
@@ -99,6 +100,7 @@ public class MFXSimpleTreeCell<T> extends AbstractMFXTreeCell<T> {
     /**
      * {@inheritDoc}
      * Overrides the return type of the super class according to {@link MFXSimpleTreeCell#defaultDisclosureNode()}
+     *
      * @return this cell's disclosure node instance
      */
     @Override
@@ -121,6 +123,7 @@ public class MFXSimpleTreeCell<T> extends AbstractMFXTreeCell<T> {
      * <p>
      * If it is not a Node than a label is created, the label has style class: "data-label",
      * sets its text to the calling toString on the data and then adds the label to the box.
+     *
      * @param data the item's data
      */
     @Override

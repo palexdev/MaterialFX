@@ -38,6 +38,7 @@ import javafx.scene.control.Skin;
  * This is the implementation of a table view following Google's material design guidelines in JavaFX.
  * <p>
  * Extends {@code Control} and provides a new skin since it is built from scratch.
+ *
  * @param <T> The type of the data within the table.
  */
 public class MFXTableView<T> extends Control {

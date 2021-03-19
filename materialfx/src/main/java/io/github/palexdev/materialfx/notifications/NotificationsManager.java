@@ -55,7 +55,8 @@ public class NotificationsManager {
 
     /**
      * Sends a {@code MFXNotification} to the designated {@code PositionManager}
-     * @param pos The notifications' position on screen
+     *
+     * @param pos          The notifications' position on screen
      * @param notification The notification
      */
     public static void send(NotificationPos pos, MFXNotification notification) {
@@ -66,9 +67,10 @@ public class NotificationsManager {
 
     /**
      * Sends a {@code MFXNotification} to the designated {@code PositionManager} with the specified spacing.
-     * @param pos The notifications' position on screen
+     *
+     * @param pos          The notifications' position on screen
      * @param notification The notification
-     * @param spacing The number of pixels between each shown notification and from screen's left and right borders
+     * @param spacing      The number of pixels between each shown notification and from screen's left and right borders
      */
     public static void send(NotificationPos pos, MFXNotification notification, double spacing) {
         notifications.computeIfAbsent(pos, notificationPos -> new PositionManager(screenBounds, window, notificationPos));
@@ -78,9 +80,10 @@ public class NotificationsManager {
 
     /**
      * Sends a {@code MFXNotification} to the designated {@code PositionManager} with the specified limit.
-     * @param pos The notifications' position on screen
+     *
+     * @param pos          The notifications' position on screen
      * @param notification The notification
-     * @param limit The maximum number of notifications to show, if limit is exceeded they will be queued
+     * @param limit        The maximum number of notifications to show, if limit is exceeded they will be queued
      */
     public static void send(NotificationPos pos, MFXNotification notification, int limit) {
         notifications.computeIfAbsent(pos, notificationPos -> new PositionManager(screenBounds, window, notificationPos));
@@ -90,10 +93,11 @@ public class NotificationsManager {
 
     /**
      * Sends a {@code MFXNotification} to the designated {@code PositionManager} with the specified spacing and limit.
-     * @param pos The notifications' position on screen
+     *
+     * @param pos          The notifications' position on screen
      * @param notification The notification
-     * @param spacing The number of pixels between each shown notification and from screen's left and right borders
-     * @param limit The maximum number of notifications to show, if limit is exceeded they will be queued
+     * @param spacing      The number of pixels between each shown notification and from screen's left and right borders
+     * @param limit        The maximum number of notifications to show, if limit is exceeded they will be queued
      */
     public static void send(NotificationPos pos, MFXNotification notification, double spacing, int limit) {
         notifications.computeIfAbsent(pos, notificationPos -> new PositionManager(screenBounds, window, notificationPos));

@@ -62,7 +62,7 @@ public class DragResizer {
 
         region.addEventFilter(MouseEvent.MOUSE_PRESSED, resizer::mousePressed);
         region.addEventFilter(MouseEvent.MOUSE_DRAGGED, resizer::mouseDragged);
-        region.addEventFilter(MouseEvent.MOUSE_MOVED,resizer::mouseOver);
+        region.addEventFilter(MouseEvent.MOUSE_MOVED, resizer::mouseOver);
         region.addEventFilter(MouseEvent.MOUSE_RELEASED, resizer::mouseReleased);
     }
 

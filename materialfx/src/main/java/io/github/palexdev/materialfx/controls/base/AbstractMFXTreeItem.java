@@ -45,10 +45,11 @@ import java.util.List;
  * </pre>
  * The root is defined as the element which parent is null.
  * <p></p>
+ *
+ * @param <T> The type of the data within TreeItem.
  * @see AbstractMFXTreeCell
  * @see MFXTreeView
  * @see ITreeSelectionModel
- * @param <T> The type of the data within TreeItem.
  */
 public abstract class AbstractMFXTreeItem<T> extends Control {
     //================================================================================
@@ -61,7 +62,7 @@ public abstract class AbstractMFXTreeItem<T> extends Control {
 
     protected final ObjectProperty<Callback<AbstractMFXTreeItem<T>, AbstractMFXTreeCell<T>>> cellFactory = new SimpleObjectProperty<>();
     private final DoubleProperty childrenMargin = new SimpleDoubleProperty(20);
-    private final BooleanProperty startExpanded =  new SimpleBooleanProperty(false);
+    private final BooleanProperty startExpanded = new SimpleBooleanProperty(false);
     private final BooleanProperty selected = new SimpleBooleanProperty(false);
 
     //================================================================================
@@ -75,7 +76,9 @@ public abstract class AbstractMFXTreeItem<T> extends Control {
     // Abstract Methods
     //================================================================================
     public abstract ITreeSelectionModel<T> getSelectionModel();
+
     protected abstract void defaultCellFactory();
+
     protected abstract void updateChildrenParent(List<? extends AbstractMFXTreeItem<T>> treeItems, final AbstractMFXTreeItem<T> newParent);
 
     //================================================================================
@@ -84,6 +87,7 @@ public abstract class AbstractMFXTreeItem<T> extends Control {
 
     /**
      * Checks if the parent item is null.
+     *
      * @return true if parent is null otherwise returns false
      */
     public boolean isRoot() {
@@ -92,6 +96,7 @@ public abstract class AbstractMFXTreeItem<T> extends Control {
 
     /**
      * Retrieves the tree's root.
+     *
      * @return the root item
      */
     public AbstractMFXTreeItem<T> getRoot() {
@@ -110,11 +115,12 @@ public abstract class AbstractMFXTreeItem<T> extends Control {
 
     /**
      * Calculates the item's index in the tree structure.
+     *
      * @return the item's index
      * @see TreeItemStream
      */
     public long getIndex() {
-        if (isRoot()){
+        if (isRoot()) {
             return 0;
         }
 
@@ -151,6 +157,7 @@ public abstract class AbstractMFXTreeItem<T> extends Control {
 
     /**
      * Retrieves the next item at the same level in the tree.
+     *
      * @return the item's next sibling. Null if is root or there is no other item next
      */
     public AbstractMFXTreeItem<T> getNextSibling() {
@@ -168,6 +175,7 @@ public abstract class AbstractMFXTreeItem<T> extends Control {
 
     /**
      * Retrieves the previous item at the same level in the tree.
+     *
      * @return the item's previous sibling. Null if is root or there is no other item before
      */
     public AbstractMFXTreeItem<T> getPreviousSibling() {
@@ -195,6 +203,7 @@ public abstract class AbstractMFXTreeItem<T> extends Control {
      * <p>
      * The reference is stored only in the root item so this method retrieves the root first
      * and then returns the tree view instance.
+     *
      * @return the TreeView instance
      */
     public MFXTreeView<T> getTreeView() {
@@ -213,6 +222,7 @@ public abstract class AbstractMFXTreeItem<T> extends Control {
      * Sets this item's TreeView reference to the given one.
      * <p>
      * <b>WARNING: THIS METHOD IS INTENDED FOR INTERNAL USE ONLY</b>
+     *
      * @see MFXTreeView
      */
     public void setTreeView(MFXTreeView<T> treeView) {

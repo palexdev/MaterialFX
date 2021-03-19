@@ -66,6 +66,7 @@ public class MFXTooltip extends Tooltip {
 
     /**
      * Registers the MouseEntered and MouseExited handlers on the given node.
+     *
      * @param node The Tooltip's node
      */
     public void isHoveringTargetPrimary(Node node) {

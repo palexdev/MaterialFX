@@ -49,8 +49,9 @@ public class NodeUtils {
 
     /**
      * Changes the background color of a {@code Region} to the desired one.
+     *
      * @param region The region to change the background color to
-     * @param fill The desired color
+     * @param fill   The desired color
      */
     public static void updateBackground(Region region, Paint fill) {
         final Background background = region.getBackground();
@@ -68,8 +69,9 @@ public class NodeUtils {
 
     /**
      * Changes the background color of a {@code Region} to the desired one and lets specify the background insets.
-     * @param region The region to change the background color to
-     * @param fill The desired color
+     *
+     * @param region           The region to change the background color to
+     * @param fill             The desired color
      * @param backgroundInsets The background insets to use
      */
     public static void updateBackground(Region region, Paint fill, Insets backgroundInsets) {
@@ -137,6 +139,7 @@ public class NodeUtils {
      * Makes the given region circular.
      * <p>
      * <b>Notice: the region's pref width and height must be set and be equals</b>
+     *
      * @param region The given region
      */
     public static void makeRegionCircular(Region region) {
@@ -155,6 +158,7 @@ public class NodeUtils {
      * Makes the given region circular with the specified radius.
      * <p>
      * <b>Notice: the region's pref width and height must be set and be equals</b>
+     *
      * @param region The given region
      * @param radius The wanted radius
      */
@@ -171,6 +175,7 @@ public class NodeUtils {
 
     /**
      * Retrieves the region width if it isn't still laid out.
+     *
      * @param region the Region of which to know the width
      * @return the calculated width
      */
@@ -184,6 +189,7 @@ public class NodeUtils {
 
     /**
      * Retrieves the region height if it isn't still laid out.
+     *
      * @param region the Region of which to know the height
      * @return the calculated height
      */
@@ -216,7 +222,7 @@ public class NodeUtils {
      */
     public static void fireDummyEvent(Node node) {
         Event.fireEvent(node, new MouseEvent(MouseEvent.MOUSE_PRESSED,
-               0, 0, 0, 0, MouseButton.PRIMARY, 1,
+                0, 0, 0, 0, MouseButton.PRIMARY, 1,
                 false, false, false, false, true, false, false, false, false, false, null));
     }
 
@@ -258,8 +264,7 @@ public class NodeUtils {
     }
 
     public static Point2D pointRelativeTo(Node parent, Node node, HPos hpos,
-                                          VPos vpos, double dx, double dy, boolean reposition)
-    {
+                                          VPos vpos, double dx, double dy, boolean reposition) {
         final double nodeWidth = node.getLayoutBounds().getWidth();
         final double nodeHeight = node.getLayoutBounds().getHeight();
         return pointRelativeTo(parent, nodeWidth, nodeHeight, hpos, vpos, dx, dy, reposition);
@@ -267,8 +272,7 @@ public class NodeUtils {
 
     public static Point2D pointRelativeTo(Node parent, double anchorWidth,
                                           double anchorHeight, HPos hpos, VPos vpos, double dx, double dy,
-                                          boolean reposition)
-    {
+                                          boolean reposition) {
         final Bounds parentBounds = getBounds(parent);
         Scene scene = parent.getScene();
         NodeOrientation orientation = parent.getEffectiveNodeOrientation();
@@ -304,18 +308,17 @@ public class NodeUtils {
      * This is the fallthrough function that most other functions fall into. It takes
      * care specifically of the repositioning of the item such that it remains onscreen
      * as best it can, given it's unique qualities.
-     *
+     * <p>
      * As will all other functions, this one returns a Point2D that represents an x,y
      * location that should safely position the item onscreen as best as possible.
-     *
+     * <p>
      * Note that <code>width</code> and <height> refer to the width and height of the
      * node/popup that is needing to be repositioned, not of the parent.
-     *
+     * <p>
      * Don't use the BASELINE vpos, it doesn't make sense and would produce wrong result.
      */
     public static Point2D pointRelativeTo(Object parent, double width,
-                                          double height, double screenX, double screenY, HPos hpos, VPos vpos)
-    {
+                                          double height, double screenX, double screenY, HPos hpos, VPos vpos) {
         double finalScreenX = screenX;
         double finalScreenY = screenY;
         final Bounds parentBounds = getBounds(parent);
@@ -346,12 +349,12 @@ public class NodeUtils {
         if (vpos != null) {
             // don't let the node go off the bottom of the current screen
             if ((finalScreenY + height) > screenBounds.getMaxY()) {
-                finalScreenY = positionY(parentBounds, height, getVPosOpposite(hpos,vpos));
+                finalScreenY = positionY(parentBounds, height, getVPosOpposite(hpos, vpos));
             }
 
             // don't let the node out of the top of the current screen
             if (finalScreenY < screenBounds.getMinY()) {
-                finalScreenY = positionY(parentBounds, height, getVPosOpposite(hpos,vpos));
+                finalScreenY = positionY(parentBounds, height, getVPosOpposite(hpos, vpos));
             }
         }
 
@@ -392,7 +395,7 @@ public class NodeUtils {
      * Utility function that returns the y-axis position that an object should be positioned at,
      * given the parents screen bounds, the height of the object, and
      * the required VPos.
-     *
+     * <p>
      * The BASELINE vpos doesn't make sense here, 0 is returned for it.
      */
     private static double positionY(Bounds parentBounds, double height, VPos vpos) {
@@ -414,11 +417,11 @@ public class NodeUtils {
      */
     private static Bounds getBounds(Object obj) {
         if (obj instanceof Node) {
-            final Node n = (Node)obj;
+            final Node n = (Node) obj;
             Bounds b = n.localToScreen(n.getLayoutBounds());
             return b != null ? b : new BoundingBox(0, 0, 0, 0);
         } else if (obj instanceof Window) {
-            final Window window = (Window)obj;
+            final Window window = (Window) obj;
             return new BoundingBox(window.getX(), window.getY(), window.getWidth(), window.getHeight());
         } else {
             return new BoundingBox(0, 0, 0, 0);
@@ -431,11 +434,11 @@ public class NodeUtils {
      */
     private static HPos getHPosOpposite(HPos hpos, VPos vpos) {
         if (vpos == VPos.CENTER) {
-            if (hpos == HPos.LEFT){
+            if (hpos == HPos.LEFT) {
                 return HPos.RIGHT;
-            } else if (hpos == HPos.RIGHT){
+            } else if (hpos == HPos.RIGHT) {
                 return HPos.LEFT;
-            } else if (hpos == HPos.CENTER){
+            } else if (hpos == HPos.CENTER) {
                 return HPos.CENTER;
             } else {
                 // by default center for now
@@ -452,13 +455,13 @@ public class NodeUtils {
      */
     private static VPos getVPosOpposite(HPos hpos, VPos vpos) {
         if (hpos == HPos.CENTER) {
-            if (vpos == VPos.BASELINE){
+            if (vpos == VPos.BASELINE) {
                 return VPos.BASELINE;
-            } else if (vpos == VPos.BOTTOM){
+            } else if (vpos == VPos.BOTTOM) {
                 return VPos.TOP;
-            } else if (vpos == VPos.CENTER){
+            } else if (vpos == VPos.CENTER) {
                 return VPos.CENTER;
-            } else if (vpos == VPos.TOP){
+            } else if (vpos == VPos.TOP) {
                 return VPos.BOTTOM;
             } else {
                 // by default center for now
@@ -510,7 +513,7 @@ public class NodeUtils {
 
         selectedScreen = null;
         double maxIntersection = 0;
-        for (final Screen screen: screens) {
+        for (final Screen screen : screens) {
             final Rectangle2D screenBounds = screen.getBounds();
             final double intersection =
                     getIntersectionLength(rectX0, rectX1,
@@ -532,7 +535,7 @@ public class NodeUtils {
 
         selectedScreen = Screen.getPrimary();
         double minDistance = Double.MAX_VALUE;
-        for (final Screen screen: screens) {
+        for (final Screen screen : screens) {
             final Rectangle2D screenBounds = screen.getBounds();
             final double dx = getOuterDistance(rectX0, rectX1,
                     screenBounds.getMinX(),
