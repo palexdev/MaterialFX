@@ -20,16 +20,36 @@ package io.github.palexdev.materialfx.effects;
 
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.paint.Color;
 
 /**
- * Utility class which manages a preset number of {@code DropShadow} effects ordered by {@code DepthLevel}.
+ * Utility class which manages a preset number of {@code DropShadow} effects ordered by {@code DepthLevel}, but
+ * it also allows to create custom {@code DropShadow} effects with {@link #shadowOf(Color, double, double, double, double)}.
  * <p></p>
  * {@link DepthLevel}
  */
 public class MFXDepthManager {
 
     /**
+     * Returns a new instance of {@code DropShadow} with the specified characteristics.
+     *
+     * @return The desired custom {@code DropShadow} effect
+     * @see DropShadow
+     */
+    public static DropShadow shadowOf(Color color, double radius, double spread, double offsetX, double offsetY) {
+        return new DropShadow(
+                BlurType.GAUSSIAN,
+                color,
+                radius,
+                spread,
+                offsetX,
+                offsetY
+        );
+    }
+
+    /**
      * Retrieves the {@code DropShadow} associated with the specified {@code DepthLevel}.
+     *
      * @param level The desired {@code DepthLevel} between 1 and 5
      * @return The desired {@code DropShadow} effect
      */
@@ -52,6 +72,7 @@ public class MFXDepthManager {
      * <p></p>
      * Example 2: for a depth level equal to 5 and a delta equal to whatever integer, the returned {@code DropShadow} effect is
      * the effected associated to a depth level of 5.
+     *
      * @param level The desired {@code DepthLevel} between 1 and 5
      * @param delta The number of levels to shift
      * @return The final {@code DropShadow} effect}
@@ -68,6 +89,7 @@ public class MFXDepthManager {
 
     /**
      * From a starting {@code DepthLevel} retrieves the {@code DropShadow} effect associated to the next {@code DepthLevel}.
+     *
      * @param startLevel The starting {@code DepthLevel}
      * @return The {@code DropShadow} effect associated to the next {@code DepthLevel}
      * @see DepthLevel

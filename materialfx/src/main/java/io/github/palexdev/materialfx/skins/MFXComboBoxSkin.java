@@ -137,8 +137,7 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
      * <p>
      * Adds bindings for: selected value, maxPopupHeight and maxPopupWidth,
      * <p>
-     * Adds handlers for: focus, show/hide the popup.
-     *
+     * Adds handlers for: focus, managePopup/hide the popup.
      */
     private void setBehavior() {
         comboBehavior();
@@ -171,16 +170,9 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         comboBox.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             comboBox.requestFocus();
 
-            if(event.getTarget().equals(icon.getIcon())) {
-                return;
-            }
             if (event.getClickCount() >= 2 && event.getClickCount() % 2 == 0) {
-                if (popup.isShowing()) {
-                    icon.getRippleGenerator().createRipple();
-                    popup.hide();
-                    return;
-                }
-                NodeUtils.fireDummyEvent(icon);
+                forceRipple();
+                managePopup();
             }
         });
 
@@ -297,30 +289,21 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
      * the popup handling when the mouse is pressed.
      */
     private void iconBehavior() {
-        MFXComboBox<T> comboBox = getSkinnable();
-
         RippleGenerator rg = icon.getRippleGenerator();
         rg.setRippleRadius(8);
+        rg.setInDuration(Duration.millis(350));
+
         icon.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             rg.setGeneratorCenterX(icon.getWidth() / 2);
             rg.setGeneratorCenterY(icon.getHeight() / 2);
             rg.createRipple();
         });
 
-        icon.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            if (!popup.isShowing()) {
-                Point2D point = NodeUtils.pointRelativeTo(
-                        comboBox,
-                        listView,
-                        HPos.CENTER,
-                        VPos.BOTTOM,
-                        comboBox.getPopupXOffset(),
-                        comboBox.getPopupYOffset(),
-                        false
-                );
-                popup.show(comboBox, snapPositionX(point.getX()), snapPositionY(point.getY()));
-            } else {
+        icon.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> managePopup());
+        icon.getIcon().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            if (popup.isShowing()) {
                 popup.hide();
+                event.consume();
             }
         });
     }
@@ -350,6 +333,32 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         popupControl.setOnHiding(event -> buildAnimation(false).play());
 
         return popupControl;
+    }
+
+    private void managePopup() {
+        MFXComboBox<T> comboBox = getSkinnable();
+
+        if (!popup.isShowing()) {
+            Point2D point = NodeUtils.pointRelativeTo(
+                    comboBox,
+                    listView,
+                    HPos.CENTER,
+                    VPos.BOTTOM,
+                    comboBox.getPopupXOffset(),
+                    comboBox.getPopupYOffset(),
+                    false
+            );
+            popup.show(comboBox, snapPositionX(point.getX()), snapPositionY(point.getY()));
+        } else {
+            popup.hide();
+        }
+    }
+
+    private void forceRipple() {
+        RippleGenerator rg = icon.getRippleGenerator();
+        rg.setGeneratorCenterX(icon.getWidth() / 2);
+        rg.setGeneratorCenterY(icon.getHeight() / 2);
+        rg.createRipple();
     }
 
     /**

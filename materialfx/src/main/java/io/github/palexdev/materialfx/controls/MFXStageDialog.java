@@ -29,6 +29,7 @@ import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -65,10 +66,10 @@ public class MFXStageDialog {
     private final EventHandler<WindowEvent> centerHandler = new EventHandler<>() {
         @Override
         public void handle(WindowEvent event) {
-            double centerXPosition = dialogStage.getOwner().getX() + dialogStage.getOwner().getWidth()/2d;
-            double centerYPosition = dialogStage.getOwner().getY() + dialogStage.getOwner().getHeight()/2d;
-            dialogStage.setX(centerXPosition - dialogStage.getWidth()/2d);
-            dialogStage.setY(centerYPosition - dialogStage.getHeight()/2d);
+            double centerXPosition = dialogStage.getOwner().getX() + dialogStage.getOwner().getWidth() / 2d;
+            double centerYPosition = dialogStage.getOwner().getY() + dialogStage.getOwner().getHeight() / 2d;
+            dialogStage.setX(centerXPosition - dialogStage.getWidth() / 2d);
+            dialogStage.setY(centerYPosition - dialogStage.getHeight() / 2d);
         }
     };
 
@@ -179,6 +180,7 @@ public class MFXStageDialog {
 
     /**
      * Sets the stage's owner
+     *
      * @see Stage
      */
     public void setOwner(Window owner) {
@@ -190,6 +192,7 @@ public class MFXStageDialog {
 
     /**
      * Sets the stage modality
+     *
      * @see Stage
      */
     public void setModality(Modality modality) {
@@ -209,6 +212,22 @@ public class MFXStageDialog {
 
     public void setAlwaysOnTop(boolean alwaysOnTop) {
         this.dialogStage.setAlwaysOnTop(alwaysOnTop);
+    }
+
+    public void addEventHandler(EventType<WindowEvent> eventType, EventHandler<WindowEvent> eventHandler) {
+        dialogStage.addEventHandler(eventType, eventHandler);
+    }
+
+    public void addEventFilter(EventType<WindowEvent> eventType, EventHandler<WindowEvent> eventHandler) {
+        dialogStage.addEventFilter(eventType, eventHandler);
+    }
+
+    public void removeEventHandler(EventType<WindowEvent> eventType, EventHandler<WindowEvent> eventHandler) {
+        dialogStage.removeEventHandler(eventType, eventHandler);
+    }
+
+    public void removeEventFilter(EventType<WindowEvent> eventType, EventHandler<WindowEvent> eventHandler) {
+        dialogStage.removeEventFilter(eventType, eventHandler);
     }
 
     /**

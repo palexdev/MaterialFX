@@ -53,7 +53,7 @@ public class MFXToggleNode extends ToggleButton {
     private static final StyleablePropertyFactory<MFXToggleNode> FACTORY = new StyleablePropertyFactory<>(ToggleButton.getClassCssMetaData());
     private final String STYLECLASS = "mfx-toggle-node";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-togglenode.css").toString();
-    private final RippleGenerator rippleGenerator = new RippleGenerator(this);
+    protected final RippleGenerator rippleGenerator = new RippleGenerator(this);
 
     //================================================================================
     // Constructors
@@ -74,7 +74,7 @@ public class MFXToggleNode extends ToggleButton {
     }
 
     public MFXToggleNode(String text, Node graphic) {
-        super("", graphic);
+        super(text, graphic);
         initialize();
     }
 
@@ -86,9 +86,7 @@ public class MFXToggleNode extends ToggleButton {
         setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
-        rippleGenerator.setAnimateBackground(false);
-        rippleGenerator.setRippleColor(Color.GRAY);
-        rippleGenerator.setInDuration(Duration.millis(350));
+        setupRippleGenerator();
 
         prefWidthProperty().bind(size);
         prefHeightProperty().bind(size);
@@ -135,6 +133,18 @@ public class MFXToggleNode extends ToggleButton {
     private void clip() {
         setClip(null);
         NodeUtils.makeRegionCircular(this);
+    }
+
+    protected void setupRippleGenerator() {
+        rippleGenerator.setAnimateBackground(false);
+        rippleGenerator.setRippleColor(Color.GRAY);
+        rippleGenerator.setInDuration(Duration.millis(350));
+
+        addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            rippleGenerator.setGeneratorCenterX(event.getX());
+            rippleGenerator.setGeneratorCenterY(event.getY());
+            rippleGenerator.createRipple();
+        });
     }
 
     //================================================================================
@@ -240,11 +250,11 @@ public class MFXToggleNode extends ToggleButton {
         private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
         private static final CssMetaData<MFXToggleNode, Number> SIZE =
-        FACTORY.createSizeCssMetaData(
-                "-mfx-size",
-                MFXToggleNode::sizeProperty,
-                40
-        );
+                FACTORY.createSizeCssMetaData(
+                        "-mfx-size",
+                        MFXToggleNode::sizeProperty,
+                        40
+                );
 
         private static final CssMetaData<MFXToggleNode, ToggleNodeShape> SHAPE =
                 FACTORY.createEnumCssMetaData(
@@ -283,12 +293,7 @@ public class MFXToggleNode extends ToggleButton {
     @Override
     protected Skin<?> createDefaultSkin() {
         ToggleButtonSkin skin = new ToggleButtonSkin(this);
-        this.getChildren().add(0, rippleGenerator);
-        this.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            rippleGenerator.setGeneratorCenterX(event.getX());
-            rippleGenerator.setGeneratorCenterY(event.getY());
-            rippleGenerator.createRipple();
-        });
+        getChildren().add(0, rippleGenerator);
         return skin;
     }
 

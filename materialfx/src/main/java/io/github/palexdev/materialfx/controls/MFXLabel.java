@@ -57,8 +57,7 @@ public class MFXLabel extends Control {
 
     private final StringProperty text = new SimpleStringProperty();
     private final StringProperty promptText = new SimpleStringProperty("Label");
-    private final ObjectProperty<Font> font = new SimpleObjectProperty<>(Font.getDefault());
-    private final ObjectProperty<Color> textFill = new SimpleObjectProperty<>(Color.BLACK);
+
     private final ObjectProperty<Pos> labelAlignment = new SimpleObjectProperty<>(Pos.CENTER);
     private final ObjectProperty<Node> leadingIcon = new SimpleObjectProperty<>();
     private final ObjectProperty<Node> trailingIcon = new SimpleObjectProperty<>();
@@ -85,9 +84,9 @@ public class MFXLabel extends Control {
         getStyleClass().add(STYLE_CLASS);
 
         /* Makes possible to choose the control style without depending on the constructor,
-        *  it seems to work well but to be honest it would be way better if JavaFX would give us
-        * the possibility to change the user agent stylesheet at runtime (I mean by re-calling getUserAgentStylesheet)
-        */
+         *  it seems to work well but to be honest it would be way better if JavaFX would give us
+         * the possibility to change the user agent stylesheet at runtime (I mean by re-calling getUserAgentStylesheet)
+         */
         labelStyle.addListener((observable, oldValue, newValue) -> {
             if (newValue != null && newValue != oldValue) {
                 STYLESHEET = MFXResourcesLoader.load(newValue.getStyleSheetPath()).toString();
@@ -131,36 +130,6 @@ public class MFXLabel extends Control {
 
     public void setPromptText(String promptText) {
         this.promptText.set(promptText);
-    }
-
-    public Font getFont() {
-        return font.get();
-    }
-
-    /**
-     * The font to use for the text.
-     */
-    public ObjectProperty<Font> fontProperty() {
-        return font;
-    }
-
-    public void setFont(Font font) {
-        this.font.set(font);
-    }
-
-    public Color getTextFill() {
-        return textFill.get();
-    }
-
-    /**
-     * Specifies the color of the text.
-     */
-    public ObjectProperty<Color> textFillProperty() {
-        return textFill;
-    }
-
-    public void setTextFill(Color textFill) {
-        this.textFill.set(textFill);
     }
 
     public Pos getLabelAlignment() {
@@ -226,6 +195,20 @@ public class MFXLabel extends Control {
     //================================================================================
     // Styleable Properties
     //================================================================================
+
+    private final StyleableObjectProperty<Font> font = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.FONT,
+            this,
+            "font",
+            Font.getDefault()
+    );
+
+    private final StyleableObjectProperty<Color> textFill = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.TEXT_FILL,
+            this,
+            "textFill",
+            Color.BLACK
+    );
 
     /**
      * Specifies the style of the MFXLabel.
@@ -296,6 +279,36 @@ public class MFXLabel extends Control {
             "lineStrokeWidth",
             1.0
     );
+
+    public Font getFont() {
+        return font.get();
+    }
+
+    /**
+     * The font to use for the text.
+     */
+    public StyleableObjectProperty<Font> fontProperty() {
+        return font;
+    }
+
+    public void setFont(Font font) {
+        this.font.set(font);
+    }
+
+    public Color getTextFill() {
+        return textFill.get();
+    }
+
+    /**
+     * Specifies the color of the text.
+     */
+    public StyleableObjectProperty<Color> textFillProperty() {
+        return textFill;
+    }
+
+    public void setTextFill(Color textFill) {
+        this.textFill.set(textFill);
+    }
 
     public LabelStyles getLabelStyle() {
         return labelStyle.get();
@@ -387,6 +400,20 @@ public class MFXLabel extends Control {
     private static class StyleableProperties {
         private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
+        private static final CssMetaData<MFXLabel, Font> FONT =
+                FACTORY.createFontCssMetaData(
+                        "-mfx-font",
+                        MFXLabel::fontProperty,
+                        Font.getDefault()
+                );
+
+        private static final CssMetaData<MFXLabel, Color> TEXT_FILL =
+                FACTORY.createColorCssMetaData(
+                        "-mfx-text-fill",
+                        MFXLabel::textFillProperty,
+                        Color.BLACK
+                );
+
         private static final CssMetaData<MFXLabel, LabelStyles> STYLE =
                 FACTORY.createEnumCssMetaData(
                         LabelStyles.class,
@@ -439,7 +466,7 @@ public class MFXLabel extends Control {
 
         static {
             cssMetaDataList = List.of(
-                    STYLE, GRAPHIC_TEXT_GAP, EDITABLE,
+                    FONT, TEXT_FILL, STYLE, GRAPHIC_TEXT_GAP, EDITABLE,
                     ANIMATE_LINES, LINE_COLOR, UNFOCUSED_LINE_COLOR, LINE_STROKE_WIDTH
             );
         }

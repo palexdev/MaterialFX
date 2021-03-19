@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.function.Predicate;
 
 // TODO implement StringConverter (low priority)
+
 /**
  * This is the implementation of the Skin associated with every MFXFilterComboBox.
  */
@@ -159,14 +160,9 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         comboBox.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             comboBox.requestFocus();
 
-            if (event.getTarget().equals(icon.getIcon())) {
-                return;
-            }
-
             if (event.getClickCount() >= 2 && event.getClickCount() % 2 == 0) {
-                if (!containsEditor() && !popup.isShowing()) {
-                    NodeUtils.fireDummyEvent(icon);
-                }
+                forceRipple();
+                show();
             }
         });
 
@@ -221,7 +217,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
                 }
             }
         });
-       selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != oldValue) {
                 if (newValue == null) {
                     listView.getSelectionModel().clearSelection();
@@ -231,11 +227,11 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
             }
         });
 
-       /*
-        * This is a workaround to make selection work. For some reason when the focus changes the selection
-        * is reset. To prevent that we store the last selected item in a temp variable, when the selection is reset
-        * we force the selection to that temp variable. To clear the selection use ComboSelectionModelMock#clearSelection.
-        */
+        /*
+         * This is a workaround to make selection work. For some reason when the focus changes the selection
+         * is reset. To prevent that we store the last selected item in a temp variable, when the selection is reset
+         * we force the selection to that temp variable. To clear the selection use ComboSelectionModelMock#clearSelection.
+         */
         filteredList.addListener((InvalidationListener) invalidated -> {
             if (selectionModel.getSelectedItem() != null) {
                 previousSelected = selectionModel.getSelectedItem();
@@ -287,6 +283,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
     /**
      * Specifies the be behavior for the listview, binds its sizes to maxPopupHeight and maxPopupWidth
      * properties and resets the control when the mouse is pressed.
+     *
      * @see #reset()
      */
     private void listBehavior() {
@@ -308,19 +305,28 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
     private void iconBehavior() {
         RippleGenerator rg = icon.getRippleGenerator();
         rg.setRippleRadius(8);
+        rg.setInDuration(Duration.millis(350));
 
-        icon.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+        icon.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
             rg.setGeneratorCenterX(icon.getWidth() / 2);
             rg.setGeneratorCenterY(icon.getHeight() / 2);
             rg.createRipple();
         });
 
         icon.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            if (!containsEditor() && !popup.isShowing()) {
+            if (!popup.isShowing()) {
                 show();
             } else {
                 reset();
             }
+        });
+        icon.getIcon().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            if (popup.isShowing()) {
+                reset();
+            } else {
+                show();
+            }
+            event.consume();
         });
     }
 
@@ -360,7 +366,9 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
     private void show() {
         MFXFilterComboBox<T> comboBox = getSkinnable();
 
-        showEditor();
+        if (!containsEditor()) {
+            showEditor();
+        }
         Point2D point = NodeUtils.pointRelativeTo(
                 comboBox,
                 listView,
@@ -402,6 +410,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
      * When the popup is shown and the text field is added to the scene the text field is not focused,
      * to change this behavior and force it to be focused you can use {@link MFXFilterComboBox#setForceFieldFocusOnShow(boolean)}
      * and set it to true.
+     *
      * @see #reset()
      */
     private void showEditor() {
@@ -461,6 +470,13 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
             }
         });
         transition.play();
+    }
+
+    private void forceRipple() {
+        RippleGenerator rg = icon.getRippleGenerator();
+        rg.setGeneratorCenterX(icon.getWidth() / 2);
+        rg.setGeneratorCenterY(icon.getHeight() / 2);
+        rg.createRipple();
     }
 
     /**
