@@ -16,12 +16,12 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.controls;
+package io.github.palexdev.materialfx.controls.legacy;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.controls.cell.MFXListCell;
+import io.github.palexdev.materialfx.controls.cell.legacy.MFXLegacyListCell;
 import io.github.palexdev.materialfx.effects.DepthLevel;
-import io.github.palexdev.materialfx.skins.MFXListViewSkin;
+import io.github.palexdev.materialfx.skins.legacy.MFXLegacyListViewSkin;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -39,24 +39,24 @@ import java.util.List;
  * This is the implementation of a ListView restyled to comply with modern standards.
  * <p>
  * Extends {@code ListView}, redefines the style class to "mfx-list-view for usage in CSS,
- * for cells it uses {@link MFXListCell} by default.
+ * for cells it uses {@link MFXLegacyListCell} by default.
  */
-public class MFXListView<T> extends ListView<T> {
+public class MFXLegacyListView<T> extends ListView<T> {
     //================================================================================
     // Properties
     //================================================================================
-    private static final StyleablePropertyFactory<MFXListView<?>> FACTORY = new StyleablePropertyFactory<>(ListView.getClassCssMetaData());
-    private final String STYLE_CLASS = "mfx-list-view";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-listview.css").toString();
+    private static final StyleablePropertyFactory<MFXLegacyListView<?>> FACTORY = new StyleablePropertyFactory<>(ListView.getClassCssMetaData());
+    private final String STYLE_CLASS = "mfx-legacy-list-view";
+    private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/mfx-listview.css").toString();
 
     //================================================================================
     // Constructors
     //================================================================================
-    public MFXListView() {
+    public MFXLegacyListView() {
         initialize();
     }
 
-    public MFXListView(ObservableList<T> observableList) {
+    public MFXLegacyListView(ObservableList<T> observableList) {
         super(observableList);
         initialize();
     }
@@ -66,7 +66,7 @@ public class MFXListView<T> extends ListView<T> {
     //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
-        setCellFactory(cell -> new MFXListCell<>());
+        setCellFactory(cell -> new MFXLegacyListCell<>());
         addListeners();
     }
 
@@ -231,18 +231,18 @@ public class MFXListView<T> extends ListView<T> {
     private static class StyleableProperties {
         private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
-        private static final CssMetaData<MFXListView<?>, Boolean> HIDE_SCROLLBARS =
+        private static final CssMetaData<MFXLegacyListView<?>, Boolean> HIDE_SCROLLBARS =
                 FACTORY.createBooleanCssMetaData(
                         "-mfx-hide-scrollbars",
-                        MFXListView::hideScrollBarsProperty,
+                        MFXLegacyListView::hideScrollBarsProperty,
                         false
                 );
 
-        private static final CssMetaData<MFXListView<?>, DepthLevel> DEPTH_LEVEL =
+        private static final CssMetaData<MFXLegacyListView<?>, DepthLevel> DEPTH_LEVEL =
                 FACTORY.createEnumCssMetaData(
                         DepthLevel.class,
                         "-mfx-depth-level",
-                        MFXListView::depthLevelProperty,
+                        MFXLegacyListView::depthLevelProperty,
                         DepthLevel.LEVEL2
                 );
 
@@ -261,7 +261,7 @@ public class MFXListView<T> extends ListView<T> {
     //================================================================================
     @Override
     protected Skin<?> createDefaultSkin() {
-        return new MFXListViewSkin<>(this);
+        return new MFXLegacyListViewSkin<>(this);
     }
 
     @Override
@@ -271,6 +271,6 @@ public class MFXListView<T> extends ListView<T> {
 
     @Override
     public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return MFXListView.getControlCssMetaDataList();
+        return MFXLegacyListView.getControlCssMetaDataList();
     }
 }

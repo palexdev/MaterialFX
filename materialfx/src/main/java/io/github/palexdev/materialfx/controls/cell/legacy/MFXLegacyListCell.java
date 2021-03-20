@@ -16,7 +16,7 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.controls.cell;
+package io.github.palexdev.materialfx.controls.cell.legacy;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.effects.RippleGenerator;
@@ -42,19 +42,19 @@ import java.util.stream.Collectors;
  * Extends {@code ListCell}, redefines the style class to "mfx-list-cell" for usage in CSS,
  * each cell has a {@code RippleGenerator} to generate ripple effects on click.
  */
-public class MFXListCell<T> extends ListCell<T> {
+public class MFXLegacyListCell<T> extends ListCell<T> {
     //================================================================================
     // Properties
     //================================================================================
-    private static final StyleablePropertyFactory<MFXListCell<?>> FACTORY = new StyleablePropertyFactory<>(ListCell.getClassCssMetaData());
+    private static final StyleablePropertyFactory<MFXLegacyListCell<?>> FACTORY = new StyleablePropertyFactory<>(ListCell.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-list-cell";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-listcell.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/mfx-listcell.css").toString();
     private final RippleGenerator rippleGenerator;
 
     //================================================================================
     // Constructors
     //================================================================================
-    public MFXListCell() {
+    public MFXLegacyListCell() {
         rippleGenerator = new RippleGenerator(this);
         rippleGenerator.setRippleColor(Color.rgb(50, 150, 255));
         rippleGenerator.setInDuration(Duration.millis(400));
@@ -90,9 +90,9 @@ public class MFXListCell<T> extends ListCell<T> {
 
         selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
-                NodeUtils.updateBackground(MFXListCell.this, getSelectedColor(), new CornerRadii(getCornerRadius()), new Insets(getBackgroundInsets()));
+                NodeUtils.updateBackground(MFXLegacyListCell.this, getSelectedColor(), new CornerRadii(getCornerRadius()), new Insets(getBackgroundInsets()));
             } else {
-                NodeUtils.updateBackground(MFXListCell.this, Color.WHITE, new CornerRadii(getCornerRadius()), new Insets(getBackgroundInsets()));
+                NodeUtils.updateBackground(MFXLegacyListCell.this, Color.WHITE, new CornerRadii(getCornerRadius()), new Insets(getBackgroundInsets()));
             }
         });
 
@@ -111,16 +111,16 @@ public class MFXListCell<T> extends ListCell<T> {
                 if (getIndex() == 0) {
                     setBackground(new Background(new BackgroundFill(getHoverColor(), CornerRadii.EMPTY, Insets.EMPTY)));
                 } else {
-                    NodeUtils.updateBackground(MFXListCell.this, getHoverColor(), new CornerRadii(getCornerRadius()), new Insets(getBackgroundInsets()));
+                    NodeUtils.updateBackground(MFXLegacyListCell.this, getHoverColor(), new CornerRadii(getCornerRadius()), new Insets(getBackgroundInsets()));
                 }
             } else {
-                NodeUtils.updateBackground(MFXListCell.this, Color.WHITE, new CornerRadii(getCornerRadius()), new Insets(getBackgroundInsets()));
+                NodeUtils.updateBackground(MFXLegacyListCell.this, Color.WHITE, new CornerRadii(getCornerRadius()), new Insets(getBackgroundInsets()));
             }
         });
 
         selectedColor.addListener((observableValue, oldValue, newValue) -> {
             if (!newValue.equals(oldValue) && isSelected()) {
-                NodeUtils.updateBackground(MFXListCell.this, newValue);
+                NodeUtils.updateBackground(MFXLegacyListCell.this, newValue);
             }
         });
 
@@ -235,31 +235,31 @@ public class MFXListCell<T> extends ListCell<T> {
     private static class StyleableProperties {
         private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
-        private static final CssMetaData<MFXListCell<?>, Paint> SELECTED_COLOR =
+        private static final CssMetaData<MFXLegacyListCell<?>, Paint> SELECTED_COLOR =
                 FACTORY.createPaintCssMetaData(
                         "-mfx-selected-color",
-                        MFXListCell::selectedColorProperty,
+                        MFXLegacyListCell::selectedColorProperty,
                         Color.rgb(180, 180, 255)
                 );
 
-        private static final CssMetaData<MFXListCell<?>, Paint> HOVER_COLOR =
+        private static final CssMetaData<MFXLegacyListCell<?>, Paint> HOVER_COLOR =
                 FACTORY.createPaintCssMetaData(
                         "-mfx-hover-color",
-                        MFXListCell::hoverColorProperty,
+                        MFXLegacyListCell::hoverColorProperty,
                         Color.rgb(50, 150, 255, 0.2)
                 );
 
-        private static final CssMetaData<MFXListCell<?>, Number> CORNER_RADIUS =
+        private static final CssMetaData<MFXLegacyListCell<?>, Number> CORNER_RADIUS =
                 FACTORY.createSizeCssMetaData(
                         "-mfx-corner-radius",
-                        MFXListCell::cornerRadiusProperty,
+                        MFXLegacyListCell::cornerRadiusProperty,
                         0
                 );
 
-        private static final CssMetaData<MFXListCell<?>, Number> BACKGROUND_INSETS =
+        private static final CssMetaData<MFXLegacyListCell<?>, Number> BACKGROUND_INSETS =
                 FACTORY.createSizeCssMetaData(
                         "-mfx-background-insets",
-                        MFXListCell::backgroundInsetsProperty,
+                        MFXLegacyListCell::backgroundInsetsProperty,
                         0
                 );
 
@@ -283,7 +283,7 @@ public class MFXListCell<T> extends ListCell<T> {
 
     @Override
     public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return MFXListCell.getControlCssMetaDataList();
+        return MFXLegacyListCell.getControlCssMetaDataList();
     }
 
     /**

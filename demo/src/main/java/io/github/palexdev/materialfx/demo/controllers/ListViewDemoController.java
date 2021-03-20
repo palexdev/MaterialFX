@@ -1,7 +1,7 @@
 package io.github.palexdev.materialfx.demo.controllers;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXListView;
+import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import javafx.collections.FXCollections;
@@ -24,16 +24,16 @@ public class ListViewDemoController implements Initializable {
     private final Random random = new Random(System.currentTimeMillis());
 
     @FXML
-    private MFXListView<String> stringView;
+    private MFXLegacyListView<String> stringView;
 
     @FXML
-    private MFXListView<Label> labelView;
+    private MFXLegacyListView<Label> labelView;
 
     @FXML
-    private MFXListView<HBox> hBoxView;
+    private MFXLegacyListView<HBox> hBoxView;
 
     @FXML
-    private MFXListView<String> cssView;
+    private MFXLegacyListView<String> cssView;
 
     @FXML
     private MFXButton depthButton;

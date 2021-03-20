@@ -16,10 +16,10 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.skins;
+package io.github.palexdev.materialfx.skins.legacy;
 
-import io.github.palexdev.materialfx.controls.MFXListView;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
+import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
 import io.github.palexdev.materialfx.effects.MFXDepthManager;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -40,12 +40,12 @@ import javafx.util.Duration;
 import java.util.Set;
 
 /**
- * This is the implementation of the {@code Skin} associated with every {@code MFXListView}.
+ * This is the implementation of the {@code Skin} associated with every {@code MFXLegacyListView}.
  * <p>
  * The most important thing this skin does is replacing the default scrollbars with new ones,
  * this makes styling them a lot more easy.
  */
-public class MFXListViewSkin<T> extends ListViewSkin<T> {
+public class MFXLegacyListViewSkin<T> extends ListViewSkin<T> {
     //================================================================================
     // Properties
     //================================================================================
@@ -60,7 +60,7 @@ public class MFXListViewSkin<T> extends ListViewSkin<T> {
     //================================================================================
     // Constructors
     //================================================================================
-    public MFXListViewSkin(final MFXListView<T> listView) {
+    public MFXLegacyListViewSkin(final MFXLegacyListView<T> listView) {
         super(listView);
 
         virtualFlow = (VirtualFlow<?>) listView.lookup(".virtual-flow");
@@ -108,7 +108,7 @@ public class MFXListViewSkin<T> extends ListViewSkin<T> {
      * Adds listeners for: mouseExited, mouseEntered, hideScrollBars, and depthLevel properties.
      */
     private void setListeners() {
-        MFXListView<T> listView = (MFXListView<T>) getSkinnable();
+        MFXLegacyListView<T> listView = (MFXLegacyListView<T>) getSkinnable();
 
         listView.setOnMouseExited(event -> {
             if (listView.isHideScrollBars()) {
@@ -174,7 +174,7 @@ public class MFXListViewSkin<T> extends ListViewSkin<T> {
         });
     }
 
-    private void bindScrollBars(MFXListView<?> listView) {
+    private void bindScrollBars(MFXLegacyListView<?> listView) {
         final Set<Node> nodes = listView.lookupAll("VirtualScrollBar");
         for (Node node : nodes) {
             if (node instanceof ScrollBar) {

@@ -17,7 +17,7 @@
  */
 
 /* Base */
-.mfx-list-view {
+.mfx-legacy-list-view {
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
 /*    -fx-background-insets: 1;*/
@@ -25,7 +25,7 @@
 }
 
 /* Look up colors */
-.mfx-list-view {
+.mfx-legacy-list-view {
     -mfx-selection-bar: transparent;
     -mfx-selection-bar-non-focused: transparent;
     -mfx-box-border: transparent;
@@ -40,90 +40,90 @@
 }
 
 /* Remove JavaFX crap */
-.mfx-list-view > .virtual-flow > .corner {
+.mfx-legacy-list-view > .virtual-flow > .corner {
     -fx-background-color: transparent;
 }
 
-.mfx-list-view > .virtual-flow > .scroll-bar,
-.mfx-list-view > .virtual-flow > .scroll-bar .decrement-arrow,
-.mfx-list-view > .virtual-flow > .scroll-bar .increment-arrow,
-.mfx-list-view > .virtual-flow > .scroll-bar .decrement-button,
-.mfx-list-view > .virtual-flow > .scroll-bar .increment-button {
+.mfx-legacy-list-view > .virtual-flow > .scroll-bar,
+.mfx-legacy-list-view > .virtual-flow > .scroll-bar .decrement-arrow,
+.mfx-legacy-list-view > .virtual-flow > .scroll-bar .increment-arrow,
+.mfx-legacy-list-view > .virtual-flow > .scroll-bar .decrement-button,
+.mfx-legacy-list-view > .virtual-flow > .scroll-bar .increment-button {
     -fx-pref-width: 0;
     -fx-pref-height: 0;
 }
 
 
-.mfx-list-view .scroll-bar:horizontal .increment-button,
-.mfx-list-view .scroll-bar:horizontal .decrement-button {
+.mfx-legacy-list-view .scroll-bar:horizontal .increment-button,
+.mfx-legacy-list-view .scroll-bar:horizontal .decrement-button {
     -fx-background-color: transparent;
     -fx-background-radius: 0.0em;
     -fx-padding: 0.0 0.0 10.0 0.0;
 }
 
-.mfx-list-view .scroll-bar:vertical .increment-button,
-.mfx-list-view .scroll-bar:vertical .decrement-button {
+.mfx-legacy-list-view .scroll-bar:vertical .increment-button,
+.mfx-legacy-list-view .scroll-bar:vertical .decrement-button {
     -fx-background-color: transparent;
     -fx-background-radius: 0.0em;
     -fx-padding: 0.0 10.0 0.0 0.0;
 
 }
 
-.mfx-list-view .scroll-bar .increment-arrow,
-.mfx-list-view .scroll-bar .decrement-arrow {
+.mfx-legacy-list-view .scroll-bar .increment-arrow,
+.mfx-legacy-list-view .scroll-bar .decrement-arrow {
     -fx-shape: " ";
     -fx-padding: 0.15em 0.0;
 }
 
-.mfx-list-view .scroll-bar:horizontal .increment-arrow,
-.mfx-list-view .scroll-bar:horizontal .decrement-arrow {
+.mfx-legacy-list-view .scroll-bar:horizontal .increment-arrow,
+.mfx-legacy-list-view .scroll-bar:horizontal .decrement-arrow {
     -fx-shape: " ";
     -fx-padding: 0.0 0.05em;
 }
 
-.mfx-list-view .scroll-bar:vertical .increment-arrow,
-.mfx-list-view .scroll-bar:vertical .decrement-arrow {
+.mfx-legacy-list-view .scroll-bar:vertical .increment-arrow,
+.mfx-legacy-list-view .scroll-bar:vertical .decrement-arrow {
     -fx-shape: " ";
     -fx-padding: 0.0 0.05em;
 }
 
 /* Customize ScrollBars */
-.mfx-list-view .mfx-scroll-bar:horizontal .track {
+.mfx-legacy-list-view .mfx-scroll-bar:horizontal .track {
     -fx-background-color: -mfx-track-color;
     -fx-border-color: transparent;
     -fx-background-radius: 2.0em;
     -fx-border-radius: 2.0em;
 }
 
-.mfx-list-view .mfx-scroll-bar:vertical .track {
+.mfx-legacy-list-view .mfx-scroll-bar:vertical .track {
     -fx-background-color: -mfx-track-color;
     -fx-border-color: transparent;
     -fx-background-radius: 2.0em;
     -fx-border-radius: 2.0em;
 }
 
-.mfx-list-view .mfx-scroll-bar .decrement-arrow,
-.mfx-list-view .mfx-scroll-bar .increment-arrow {
+.mfx-legacy-list-view .mfx-scroll-bar .decrement-arrow,
+.mfx-legacy-list-view .mfx-scroll-bar .increment-arrow {
     -fx-pref-width: 0;
     -fx-pref-height: 0;
 }
 
-.mfx-list-view .mfx-scroll-bar {
+.mfx-legacy-list-view .mfx-scroll-bar {
     -fx-background-color: transparent;
     -fx-pref-width: 12;
     -fx-pref-height: 12;
     -fx-padding: 5 0.5 5 0.5;
 }
 
-.mfx-list-view .mfx-scroll-bar:horizontal .thumb,
-.mfx-list-view .mfx-scroll-bar:vertical .thumb {
+.mfx-legacy-list-view .mfx-scroll-bar:horizontal .thumb,
+.mfx-legacy-list-view .mfx-scroll-bar:vertical .thumb {
     -fx-background-color: -mfx-thumb-color;
     -fx-background-insets: 2.0, 0.0, 0.0;
     -fx-background-radius: 2.0em;
 }
 
-.mfx-list-view .mfx-scroll-bar:horizontal .thumb:hover,
-.mfx-list-view .mfx-scroll-bar:vertical .thumb:hover {
+.mfx-legacy-list-view .mfx-scroll-bar:horizontal .thumb:hover,
+.mfx-legacy-list-view .mfx-scroll-bar:vertical .thumb:hover {
     -fx-background-color: -mfx-thumb-hover-color;
     -fx-background-insets: 1.5, 0.0, 0.0;
     -fx-background-radius: 2.0em;
