@@ -56,7 +56,7 @@ public class MFXComboBox<T> extends Control {
     private String STYLESHEET;
 
     private final ObjectProperty<T> selectedValue = new SimpleObjectProperty<>();
-    private final ObjectProperty<ObservableList<T>> items = new SimpleObjectProperty<>(FXCollections.observableArrayList());
+    private final ObjectProperty<ObservableList<T>> items = new SimpleObjectProperty<>();
 
     private final DoubleProperty maxPopupWidth = new SimpleDoubleProperty(150);
     private final DoubleProperty maxPopupHeight = new SimpleDoubleProperty(200);

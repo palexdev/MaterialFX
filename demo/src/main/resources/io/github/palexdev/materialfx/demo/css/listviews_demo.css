@@ -15,12 +15,35 @@
     -mfx-ripple-color: derive(red, 10%);
 }
 
+#customViewNew {
+    -mfx-hide-scrollbars: true;
+
+    -mfx-track-color: transparent;
+    -mfx-thumb-color: derive(salmon, 30%);
+    -mfx-thumb-hover-color: red;
+}
+
+#customViewNew .mfx-list-cell:hover {
+    -fx-background-color: derive(salmon, 70%);
+    -fx-border-color: derive(salmon, 70%);
+}
+
+#customViewNew .mfx-list-cell:selected {
+    -fx-background-color: salmon;
+    -fx-border-color: salmon;
+}
+
+#customViewNew .mfx-list-cell .ripple-generator {
+    -mfx-ripple-color: derive(red, 10%);
+}
+
 #label {
     -fx-background-color: linear-gradient(to bottom right, #C01ADD 0%, #6A6AF8 100%);
     -fx-background-radius: 7;
     -fx-border-color: #7F0FFF;
     -fx-border-radius: 5;
     -fx-border-width: 2;
+    -fx-min-height: 32;
 }
 
 #label .text {

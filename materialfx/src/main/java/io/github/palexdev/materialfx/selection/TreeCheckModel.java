@@ -20,6 +20,7 @@ package io.github.palexdev.materialfx.selection;
 
 import io.github.palexdev.materialfx.controls.MFXCheckTreeItem;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
+import io.github.palexdev.materialfx.selection.base.ITreeCheckModel;
 import io.github.palexdev.materialfx.utils.TreeItemStream;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
