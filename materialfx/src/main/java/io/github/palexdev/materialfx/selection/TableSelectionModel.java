@@ -1,6 +1,7 @@
 package io.github.palexdev.materialfx.selection;
 
 import io.github.palexdev.materialfx.controls.MFXTableRow;
+import io.github.palexdev.materialfx.selection.base.ITableSelectionModel;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;

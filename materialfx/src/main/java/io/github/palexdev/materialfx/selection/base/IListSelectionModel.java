@@ -16,21 +16,17 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.selection;
+package io.github.palexdev.materialfx.selection.base;
 
-import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
+import io.github.palexdev.materialfx.controls.base.AbstractMFXFlowlessListCell;
 import javafx.beans.property.ListProperty;
 import javafx.scene.input.MouseEvent;
 
-/**
- * Public API used by any MFXTreeView.
- */
-public interface ITreeSelectionModel<T> {
-    void scanTree(AbstractMFXTreeItem<T> item);
-    void select(AbstractMFXTreeItem<T> item, MouseEvent mouseEvent);
+public interface IListSelectionModel<T> {
+    void select(AbstractMFXFlowlessListCell<T> item, MouseEvent mouseEvent);
     void clearSelection();
-    AbstractMFXTreeItem<T> getSelectedItem();
-    ListProperty<AbstractMFXTreeItem<T>> getSelectedItems();
+    AbstractMFXFlowlessListCell<T> getSelectedItem();
+    ListProperty<AbstractMFXFlowlessListCell<T>> getSelectedItems();
     boolean allowsMultipleSelection();
     void setAllowsMultipleSelection(boolean multipleSelection);
 }

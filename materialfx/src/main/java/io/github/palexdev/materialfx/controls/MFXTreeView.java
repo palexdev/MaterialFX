@@ -20,8 +20,8 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
-import io.github.palexdev.materialfx.selection.ITreeSelectionModel;
 import io.github.palexdev.materialfx.selection.TreeSelectionModel;
+import io.github.palexdev.materialfx.selection.base.ITreeSelectionModel;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;

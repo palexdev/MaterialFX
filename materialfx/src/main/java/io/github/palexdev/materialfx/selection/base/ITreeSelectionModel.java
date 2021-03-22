@@ -16,19 +16,21 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.selection;
+package io.github.palexdev.materialfx.selection.base;
 
-import io.github.palexdev.materialfx.controls.MFXCheckTreeItem;
+import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
 import javafx.beans.property.ListProperty;
-
-import static io.github.palexdev.materialfx.controls.MFXCheckTreeItem.CheckTreeItemEvent;
+import javafx.scene.input.MouseEvent;
 
 /**
- * Public API used by any MFXCheckTreeView.
+ * Public API used by any MFXTreeView.
  */
-public interface ITreeCheckModel<T> extends ITreeSelectionModel<T> {
-    void scanTree(MFXCheckTreeItem<T> item);
-    void check(MFXCheckTreeItem<T> item, CheckTreeItemEvent<?> event);
-    void clearChecked();
-    ListProperty<MFXCheckTreeItem<T>> getCheckedItems();
+public interface ITreeSelectionModel<T> {
+    void scanTree(AbstractMFXTreeItem<T> item);
+    void select(AbstractMFXTreeItem<T> item, MouseEvent mouseEvent);
+    void clearSelection();
+    AbstractMFXTreeItem<T> getSelectedItem();
+    ListProperty<AbstractMFXTreeItem<T>> getSelectedItems();
+    boolean allowsMultipleSelection();
+    void setAllowsMultipleSelection(boolean multipleSelection);
 }

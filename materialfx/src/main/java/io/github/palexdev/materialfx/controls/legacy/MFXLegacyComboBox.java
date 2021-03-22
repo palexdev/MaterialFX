@@ -20,7 +20,7 @@ package io.github.palexdev.materialfx.controls.legacy;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
-import io.github.palexdev.materialfx.controls.cell.legacy.MFXLegacyListCell;
+import io.github.palexdev.materialfx.controls.cell.MFXListCell;
 import io.github.palexdev.materialfx.skins.legacy.MFXLegacyComboBoxSkin;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
 import javafx.beans.property.BooleanProperty;
@@ -88,7 +88,7 @@ public class MFXLegacyComboBox<T> extends ComboBox<T> {
     //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
-        setCellFactory(listCell -> new MFXLegacyListCell<>() {
+        setCellFactory(listCell -> new MFXListCell<>() {
             @Override
             protected void updateItem(T item, boolean empty) {
                 super.updateItem(item, empty);

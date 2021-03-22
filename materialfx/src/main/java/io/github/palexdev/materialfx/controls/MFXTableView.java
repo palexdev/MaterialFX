@@ -20,8 +20,8 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.cell.MFXTableColumnCell;
-import io.github.palexdev.materialfx.selection.ITableSelectionModel;
 import io.github.palexdev.materialfx.selection.TableSelectionModel;
+import io.github.palexdev.materialfx.selection.base.ITableSelectionModel;
 import io.github.palexdev.materialfx.skins.MFXTableViewSkin;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;

@@ -21,6 +21,7 @@
     -fx-border-color: #7F0FFF;
     -fx-border-radius: 5;
     -fx-border-width: 2;
+    -fx-min-height: 32;
 }
 
 #label .text {

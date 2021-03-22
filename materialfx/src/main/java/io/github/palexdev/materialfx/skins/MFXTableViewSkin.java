@@ -28,7 +28,7 @@ import io.github.palexdev.materialfx.effects.RippleGenerator;
 import io.github.palexdev.materialfx.filter.IFilterable;
 import io.github.palexdev.materialfx.filter.MFXFilterDialog;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
-import io.github.palexdev.materialfx.selection.ITableSelectionModel;
+import io.github.palexdev.materialfx.selection.base.ITableSelectionModel;
 import io.github.palexdev.materialfx.utils.DragResizer;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.KeyFrame;

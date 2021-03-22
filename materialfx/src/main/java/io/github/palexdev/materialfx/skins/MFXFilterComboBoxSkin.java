@@ -3,10 +3,10 @@ package io.github.palexdev.materialfx.skins;
 import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
+import io.github.palexdev.materialfx.controls.MFXListView;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.enums.Styles;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
-import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
 import io.github.palexdev.materialfx.effects.RippleGenerator;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.selection.ComboSelectionModelMock;
@@ -46,7 +46,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
 
     private final MFXIconWrapper icon;
     private final PopupControl popup;
-    private final MFXLegacyListView<T> listView;
+    private final MFXListView<T> listView;
     private final EventHandler<MouseEvent> popupHandler;
 
     private final Line unfocusedLine;
@@ -103,7 +103,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         searchContainer.setAlignment(Pos.CENTER_LEFT);
         searchContainer.setManaged(false);
 
-        listView = new MFXLegacyListView<>();
+        listView = new MFXListView<>();
         listView.getStylesheets().add(comboBox.getUserAgentStylesheet());
         popup = buildPopup();
         popupHandler = event -> {

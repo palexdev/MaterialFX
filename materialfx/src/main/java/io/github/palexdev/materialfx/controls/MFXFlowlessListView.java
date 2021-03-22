@@ -16,58 +16,60 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.controls.legacy;
+package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.controls.cell.legacy.MFXLegacyListCell;
+import io.github.palexdev.materialfx.controls.base.AbstractMFXFlowlessListCell;
+import io.github.palexdev.materialfx.controls.cell.MFXFlowlessListCell;
 import io.github.palexdev.materialfx.effects.DepthLevel;
-import io.github.palexdev.materialfx.skins.legacy.MFXLegacyListViewSkin;
+import io.github.palexdev.materialfx.selection.ListSelectionModel;
+import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
+import io.github.palexdev.materialfx.skins.MFXFlowlessListViewSkin;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.css.*;
-import javafx.scene.control.ListView;
+import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.util.Callback;
 import javafx.util.Duration;
 
 import java.util.List;
 
-/**
- * This is the implementation of a ListView restyled to comply with modern standards.
- * <p>
- * Extends {@code ListView}, redefines the style class to "mfx-list-view for usage in CSS,
- * for cells it uses {@link MFXLegacyListCell} by default.
- */
-public class MFXLegacyListView<T> extends ListView<T> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private static final StyleablePropertyFactory<MFXLegacyListView<?>> FACTORY = new StyleablePropertyFactory<>(ListView.getClassCssMetaData());
-    private final String STYLE_CLASS = "mfx-legacy-list-view";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/mfx-listview.css").toString();
+public class MFXFlowlessListView<T> extends Control {
+    private static final StyleablePropertyFactory<MFXFlowlessListView<?>> FACTORY = new StyleablePropertyFactory<>(Control.getClassCssMetaData());
+    private final String STYLE_CLASS = "mfx-list-view";
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-flowless-listview.css").toString();
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXLegacyListView() {
+    private final ObjectProperty<ObservableList<T>> items = new SimpleObjectProperty<>();
+    private final ObjectProperty<Callback<T, AbstractMFXFlowlessListCell<T>>> cellFactory = new SimpleObjectProperty<>();
+    private final ObjectProperty<IListSelectionModel<T>> selectionModel = new SimpleObjectProperty<>();
+
+    public MFXFlowlessListView() {
+        this(FXCollections.observableArrayList());
+    }
+
+    public MFXFlowlessListView(ObservableList<T> items) {
+        setItems(items);
         initialize();
     }
 
-    public MFXLegacyListView(ObservableList<T> observableList) {
-        super(observableList);
-        initialize();
-    }
-
-    //================================================================================
-    // Methods
-    //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
-        setCellFactory(cell -> new MFXLegacyListCell<>());
+
+        setCellFactory(MFXFlowlessListCell::new);
+        setupSelectionModel();
         addListeners();
+    }
+
+    protected void setupSelectionModel() {
+        IListSelectionModel<T> selectionModel = new ListSelectionModel<>();
+        selectionModel.setAllowsMultipleSelection(true);
+        setSelectionModel(selectionModel);
     }
 
     /**
@@ -103,6 +105,42 @@ public class MFXLegacyListView<T> extends ListView<T> {
                 .append(";\n-mfx-thumb-hover-color: ").append(ColorUtils.rgb((Color) thumbHoverColor.get()))
                 .append(";");
         setStyle(sb.toString());
+    }
+
+    public ObservableList<T> getItems() {
+        return items.get();
+    }
+
+    public ObjectProperty<ObservableList<T>> itemsProperty() {
+        return items;
+    }
+
+    public void setItems(ObservableList<T> items) {
+        this.items.set(items);
+    }
+
+    public Callback<T, AbstractMFXFlowlessListCell<T>> getCellFactory() {
+        return cellFactory.get();
+    }
+
+    public ObjectProperty<Callback<T, AbstractMFXFlowlessListCell<T>>> cellFactoryProperty() {
+        return cellFactory;
+    }
+
+    public void setCellFactory(Callback<T, AbstractMFXFlowlessListCell<T>> cellFactory) {
+        this.cellFactory.set(cellFactory);
+    }
+
+    public IListSelectionModel<T> getSelectionModel() {
+        return selectionModel.get();
+    }
+
+    public ObjectProperty<IListSelectionModel<T>> selectionModelProperty() {
+        return selectionModel;
+    }
+
+    public void setSelectionModel(IListSelectionModel<T> selectionModel) {
+        this.selectionModel.set(selectionModel);
     }
 
     //================================================================================
@@ -225,43 +263,37 @@ public class MFXLegacyListView<T> extends ListView<T> {
         this.depthLevel.set(depthLevel);
     }
 
-    //================================================================================
-    // CssMetaData
-    //================================================================================
     private static class StyleableProperties {
         private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
-        private static final CssMetaData<MFXLegacyListView<?>, Boolean> HIDE_SCROLLBARS =
+        private static final CssMetaData<MFXFlowlessListView<?>, Boolean> HIDE_SCROLLBARS =
                 FACTORY.createBooleanCssMetaData(
                         "-mfx-hide-scrollbars",
-                        MFXLegacyListView::hideScrollBarsProperty,
+                        MFXFlowlessListView::hideScrollBarsProperty,
                         false
                 );
 
-        private static final CssMetaData<MFXLegacyListView<?>, DepthLevel> DEPTH_LEVEL =
+        private static final CssMetaData<MFXFlowlessListView<?>, DepthLevel> DEPTH_LEVEL =
                 FACTORY.createEnumCssMetaData(
                         DepthLevel.class,
                         "-mfx-depth-level",
-                        MFXLegacyListView::depthLevelProperty,
+                        MFXFlowlessListView::depthLevelProperty,
                         DepthLevel.LEVEL2
                 );
+
 
         static {
             cssMetaDataList = List.of(HIDE_SCROLLBARS, DEPTH_LEVEL);
         }
-
     }
 
     public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
         return StyleableProperties.cssMetaDataList;
     }
 
-    //================================================================================
-    // Override Methods
-    //================================================================================
     @Override
     protected Skin<?> createDefaultSkin() {
-        return new MFXLegacyListViewSkin<>(this);
+        return new MFXFlowlessListViewSkin<>(this);
     }
 
     @Override
@@ -270,7 +302,7 @@ public class MFXLegacyListView<T> extends ListView<T> {
     }
 
     @Override
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return MFXLegacyListView.getControlCssMetaDataList();
+    protected List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+        return MFXFlowlessListView.getControlCssMetaDataList();
     }
 }

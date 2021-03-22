@@ -19,7 +19,7 @@
 package io.github.palexdev.materialfx.controls.base;
 
 import io.github.palexdev.materialfx.controls.MFXTreeView;
-import io.github.palexdev.materialfx.selection.ITreeSelectionModel;
+import io.github.palexdev.materialfx.selection.base.ITreeSelectionModel;
 import io.github.palexdev.materialfx.utils.TreeItemStream;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;

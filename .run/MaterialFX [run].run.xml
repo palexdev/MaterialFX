@@ -1,23 +1,23 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration default="false" name="MaterialFX [run]" type="GradleRunConfiguration" factoryName="Gradle">
-        <ExternalSystemSettings>
-            <option name="executionName"/>
-            <option name="externalProjectPath" value="$PROJECT_DIR$"/>
-            <option name="externalSystemIdString" value="GRADLE"/>
-            <option name="scriptParameters" value="-PchooseMain=io.github.palexdev.materialfx.demo.Demo"/>
-            <option name="taskDescriptions">
-                <list/>
-            </option>
-            <option name="taskNames">
-                <list>
-                    <option value="run"/>
-                </list>
-            </option>
-            <option name="vmOptions" value=""/>
-        </ExternalSystemSettings>
-        <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-        <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-        <DebugAllEnabled>false</DebugAllEnabled>
-        <method v="2"/>
-    </configuration>
+  <configuration default="false" name="MaterialFX [run]" type="GradleRunConfiguration" factoryName="Gradle">
+    <ExternalSystemSettings>
+      <option name="executionName" />
+      <option name="externalProjectPath" value="$PROJECT_DIR$" />
+      <option name="externalSystemIdString" value="GRADLE" />
+      <option name="scriptParameters" value="-PchooseMain=io.github.palexdev.materialfx.demo.Demo --stacktrace" />
+      <option name="taskDescriptions">
+        <list />
+      </option>
+      <option name="taskNames">
+        <list>
+          <option value="run" />
+        </list>
+      </option>
+      <option name="vmOptions" value="" />
+    </ExternalSystemSettings>
+    <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+    <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+    <DebugAllEnabled>false</DebugAllEnabled>
+    <method v="2" />
+  </configuration>
 </component>
