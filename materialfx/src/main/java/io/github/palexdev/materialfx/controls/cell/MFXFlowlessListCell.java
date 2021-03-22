@@ -24,6 +24,7 @@ import io.github.palexdev.materialfx.effects.RippleGenerator;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Duration;
 
 public class MFXFlowlessListCell<T> extends AbstractMFXFlowlessListCell<T> {
     private final String STYLE_CLASS = "mfx-list-cell";
@@ -48,6 +49,7 @@ public class MFXFlowlessListCell<T> extends AbstractMFXFlowlessListCell<T> {
     protected void setupRippleGenerator() {
         rippleGenerator.setManaged(false);
         rippleGenerator.rippleRadiusProperty().bind(widthProperty().divide(2.0));
+        rippleGenerator.setInDuration(Duration.millis(400));
 
         addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
             rippleGenerator.setGeneratorCenterX(event.getX());

@@ -4,7 +4,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="730.0" stylesheets="@css/listviews_demo.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.ListViewDemoController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="730.0" stylesheets="@css/listviews_demo.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.ListViewDemoController">
     <padding>
         <Insets left="20.0" right="20.0" />
     </padding>
@@ -34,30 +34,25 @@
             <MFXListView id="customView" fx:id="cssView" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="110.0" stylesheets="@css/listviews_demo.css" />
         </VBox>
     </HBox>
-    <HBox fx:id="newBox" alignment="TOP_CENTER" maxHeight="-Infinity" prefHeight="250.0" prefWidth="680.0"
-          spacing="20.0">
+    <HBox fx:id="newBox" alignment="TOP_CENTER" maxHeight="-Infinity" prefHeight="250.0" prefWidth="680.0" spacing="20.0">
         <StackPane.margin>
-            <Insets top="40.0"/>
+            <Insets top="40.0" />
         </StackPane.margin>
-        <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="250.0" prefWidth="130.0"
-              spacing="10.0">
-            <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="Standard"/>
-            <MFXFlowlessListView fx:id="stringViewNew"/>
+        <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="250.0" prefWidth="130.0" spacing="10.0">
+            <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="Standard" />
+            <MFXFlowlessListView fx:id="stringViewNew" />
         </VBox>
-        <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="250.0" prefWidth="160.0"
-              spacing="10.0">
-            <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="Labels"/>
-            <MFXFlowlessListView fx:id="labelViewNew"/>
+        <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="250.0" prefWidth="160.0" spacing="10.0">
+            <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="Labels" />
+            <MFXFlowlessListView fx:id="labelViewNew" />
         </VBox>
-        <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="250.0" prefWidth="265.0"
-              spacing="10.0">
-            <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="HBoxes"/>
-            <MFXFlowlessListView fx:id="hBoxViewNew"/>
+        <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="250.0" prefWidth="265.0" spacing="10.0">
+            <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="HBoxes" />
+            <MFXFlowlessListView fx:id="hBoxViewNew" />
         </VBox>
-        <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="250.0" prefWidth="135.0"
-              spacing="10.0">
-            <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="125.0" text="Customized and CSS"/>
-            <MFXFlowlessListView fx:id="cssViewNew"/>
+        <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="250.0" prefWidth="135.0" spacing="10.0">
+            <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="125.0" text="Customized and CSS" />
+            <MFXFlowlessListView id="customViewNew" fx:id="cssViewNew" />
         </VBox>
     </HBox>
     <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="90.0" prefWidth="128.0" spacing="10.0" StackPane.alignment="BOTTOM_RIGHT">
