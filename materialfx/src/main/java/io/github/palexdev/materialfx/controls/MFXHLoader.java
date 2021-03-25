@@ -18,19 +18,12 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.beans.MFXLoadItem;
+import io.github.palexdev.materialfx.beans.MFXLoaderBean;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.utils.LoaderUtils;
 import io.github.palexdev.materialfx.utils.ToggleButtonsUtil;
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.MapChangeListener;
-import javafx.collections.ObservableMap;
-import javafx.concurrent.Task;
+import javafx.beans.property.*;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -39,13 +32,16 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
-import javafx.util.Callback;
 
 import java.net.URL;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Convenience class for creating dashboards, no more hassle on managing multiple views.
@@ -75,8 +71,9 @@ public class MFXHLoader extends HBox {
     private final DoubleProperty animationMillis = new SimpleDoubleProperty(800);
     private MFXAnimationFactory animationType = MFXAnimationFactory.FADE_IN;
 
-    private final ObservableMap<String, MFXLoadItem> bindMap;
-    private final ThreadPoolExecutor executor;
+    private final IntegerProperty loadedItems = new SimpleIntegerProperty(0);
+    private final Map<String, MFXLoaderBean> idViewMap;
+    private Supplier<FXMLLoader> fxmlLoaderSupplier;
 
     //================================================================================
     // Constructors
@@ -86,37 +83,22 @@ public class MFXHLoader extends HBox {
     }
 
     public MFXHLoader(Pane contentPane) {
-        initialize();
-        this.contentPane = contentPane;
+        this(contentPane, null);
+    }
+
+    public MFXHLoader(Pane contentPane, Supplier<FXMLLoader> fxmlLoaderSupplier) {
         this.setPrefSize(Region.USE_COMPUTED_SIZE, 60);
         this.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         this.setSpacing(20);
         this.setAlignment(Pos.CENTER);
 
+        this.contentPane = contentPane;
         this.toggleGroup = new ToggleGroup();
 
-        this.bindMap = FXCollections.observableHashMap();
-        this.executor = new ThreadPoolExecutor(
-                2,
-                4,
-                10,
-                TimeUnit.SECONDS,
-                new LinkedBlockingDeque<>(),
-                runnable -> {
-                    Thread t = Executors.defaultThreadFactory().newThread(runnable);
-                    t.setName("MFXHLoaderThread");
-                    t.setDaemon(true);
-                    return t;
-                }
-        );
-        this.executor.allowCoreThreadTimeOut(true);
+        this.idViewMap = new LinkedHashMap<>();
 
-        this.bindMap.addListener((MapChangeListener<String, MFXLoadItem>) change -> {
-            if (change.wasAdded()) {
-                MFXLoadItem item = change.getValueAdded();
-                load(item);
-            }
-        });
+        this.fxmlLoaderSupplier = fxmlLoaderSupplier;
+        initialize();
     }
 
     //================================================================================
@@ -124,142 +106,105 @@ public class MFXHLoader extends HBox {
     //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
+        addListeners();
     }
 
-    /**
-     * After calling 'addItem' a new task is created and submitted to the executor
-     * to load the given {@code MFXItem}.
-     *
-     * @param item The given item
-     */
-    private void load(MFXLoadItem item) {
-        Task<Void> task = new Task<>() {
-            @Override
-            protected Void call() {
-                try {
-                    FXMLLoader loader = new FXMLLoader(item.getFxmlURL());
-                    if (item.getControllerFactory() != null) {
-                        loader.setControllerFactory(item.getControllerFactory());
-                    }
-                    Node root = loader.load();
-                    item.setRoot(root);
+    private void addListeners() {
+        loadedItems.addListener((observable, oldValue, newValue) -> {
+            if (newValue.intValue() == idViewMap.size()) {
+                ToggleButtonsUtil.addAlwaysOneSelectedSupport(toggleGroup);
+                getChildren().setAll(idViewMap.values().stream()
+                        .map(MFXLoaderBean::getButton)
+                        .collect(Collectors.toList())
+                );
+                setDefault();
+            }
+        });
+    }
 
-                    item.getButton().selectedProperty().addListener((observable, oldValue, newValue) -> {
-                        if (isAnimated.get()) {
-                            animationType.build(item.getRoot(), animationMillis.doubleValue()).play();
-                        }
-                        if (newValue) {
-                            try {
-                                contentPane.getChildren().set(0, item.getRoot());
-                            } catch (IndexOutOfBoundsException ex) {
-                                contentPane.getChildren().add(0, item.getRoot());
-                            }
-                        }
-                    });
-                    Platform.runLater(() -> MFXHLoader.this.getChildren().set(item.getIndex(), item.getButton()));
-                } catch (Exception ex) {
+    public void addItem(ToggleButton button, URL fxmlFile) {
+        addItem(LoaderUtils.generateKey(fxmlFile), button, fxmlFile, false);
+    }
+
+    public void addItem(ToggleButton button, URL fxmlFile, boolean defaultRoot) {
+        addItem(LoaderUtils.generateKey(fxmlFile), button, fxmlFile, defaultRoot);
+    }
+
+    public void addItem(String key, ToggleButton button, URL fxmlFile, boolean defaultRoot) {
+        LoaderUtils.checkFxmlFile(fxmlFile);
+        MFXLoaderBean loaderBean = new MFXLoaderBean(button, fxmlFile, defaultRoot);
+        loaderBean.getButton().setToggleGroup(toggleGroup);
+        idViewMap.put(key, loaderBean);
+    }
+
+    private void setDefault() {
+        idViewMap.values().stream()
+                .filter(MFXLoaderBean::isDefault)
+                .findFirst().ifPresent(loaderBean -> Platform.runLater(() -> loaderBean.getButton().setSelected(true)));
+    }
+
+    public void start() {
+        List<MFXLoaderBean> loaderBeans = new ArrayList<>(idViewMap.values());
+        for (MFXLoaderBean loaderBean : loaderBeans) {
+            if (loaderBean.getRoot() == null){
+                try {
+                    LoaderUtils.submit(buildLoadCallable(loaderBean)).get();
+                } catch (InterruptedException | ExecutionException ex) {
                     ex.printStackTrace();
                 }
-                return null;
+                loadedItems.set(loadedItems.get() + 1);
             }
+        }
+    }
+
+    private Callable<Node> buildLoadCallable(MFXLoaderBean loaderBean) {
+        return () -> {
+            Node root;
+            if (fxmlLoaderSupplier != null) {
+                root = LoaderUtils.fxmlLoad(fxmlLoaderSupplier.get(), loaderBean);
+            } else {
+                root = LoaderUtils.fxmlLoad(loaderBean);
+            }
+            loaderBean.setRoot(root);
+
+            loaderBean.getButton().selectedProperty().addListener((observable, oldValue, newValue) -> {
+                if (isAnimated.get()) {
+                    animationType.build(loaderBean.getRoot(), animationMillis.doubleValue()).play();
+                }
+                if (newValue) {
+                    try {
+                        contentPane.getChildren().set(0, loaderBean.getRoot());
+                    } catch (IndexOutOfBoundsException ex) {
+                        contentPane.getChildren().add(0, loaderBean.getRoot());
+                    }
+                }
+            });
+            return root;
         };
-        this.executor.submit(task);
     }
 
-    /**
-     * Checks if the given fxml file is valid,
-     * then adds a new {@code MFXItem} to the map with a default key.
-     *
-     * @param index    The position of the button in the {@code HBox}
-     * @param button   The given button
-     * @param fxmlFile The given fxml file
-     */
-    public void addItem(int index, ToggleButton button, URL fxmlFile) {
-        LoaderUtils.checkFxmlFile(fxmlFile);
-        addItem(index, LoaderUtils.generateKey(fxmlFile), button, fxmlFile);
+    public MFXLoaderBean getLoadItem(String key) {
+        return this.idViewMap.get(key);
     }
 
-    /**
-     * Checks if the given fxml file is valid,
-     * then adds a new {@code MFXItem} to the map with the given key.
-     *
-     * @param index    The position of the button in the {@code HBox}
-     * @param key      The given key
-     * @param button   The given button
-     * @param fxmlFile The given fxml file
-     */
-    public void addItem(int index, String key, ToggleButton button, URL fxmlFile) {
-        LoaderUtils.checkFxmlFile(fxmlFile);
-        this.getChildren().add(button);
-        button.setToggleGroup(toggleGroup);
-        ToggleButtonsUtil.addAlwaysOneSelectedSupport(toggleGroup);
-        this.bindMap.putIfAbsent(key, new MFXLoadItem(index, button, fxmlFile));
+    public Pane getContentPane() {
+        return contentPane;
     }
 
-    /**
-     * Checks if the given fxml file is valid,
-     * then adds a new {@code MFXItem} to the map with a default key.
-     *
-     * @param index             The position of the button in the {@code HBox}
-     * @param button            The given button
-     * @param fxmlFile          The given fxml file
-     * @param controllerFactory The given controller factory
-     */
-    public void addItem(int index, ToggleButton button, URL fxmlFile, Callback<Class<?>, Object> controllerFactory) {
-        LoaderUtils.checkFxmlFile(fxmlFile);
-        addItem(index, LoaderUtils.generateKey(fxmlFile), button, fxmlFile, controllerFactory);
-    }
-
-    /**
-     * Checks if the given fxml file is valid,
-     * then adds a new {@code MFXItem} to the map with the given key.
-     *
-     * @param index             The position of the button in the {@code HBox}
-     * @param key               The given key
-     * @param button            The given button
-     * @param fxmlFile          The given fxml file
-     * @param controllerFactory The given controller factory
-     */
-    public void addItem(int index, String key, ToggleButton button, URL fxmlFile, Callback<Class<?>, Object> controllerFactory) {
-        LoaderUtils.checkFxmlFile(fxmlFile);
-        this.getChildren().add(button);
-        button.setToggleGroup(toggleGroup);
-        ToggleButtonsUtil.addAlwaysOneSelectedSupport(toggleGroup);
-        this.bindMap.putIfAbsent(key, new MFXLoadItem(index, button, fxmlFile, controllerFactory));
-    }
-
-    /**
-     * Sets the pane in which switching views.
-     * This method MUST be called before loading any item.
-     */
     public void setContentPane(Pane contentPane) {
         this.contentPane = contentPane;
     }
 
     /**
-     * Sets the default view to set on show.
-     * This method should be called after adding any item.
-     *
-     * @param key The key of the wanted item
+     * Sets the fxmlLoaderSupplier to the given parameter.
+     * <p>
+     * <b>NOTICE: this method won't do anything if the fxmlLoaderSupplier is not null.
+     * This method is intended to be used when the loader is used in SceneBuilder which requires a no-arg constructor.</b>
      */
-    public void setDefault(String key) {
-        MFXLoadItem item = getLoadItem(key);
-        Task<Void> nullCheckTask = new Task<>() {
-            @Override
-            protected Void call() {
-                if (item.getRoot() == null) {
-                    this.runAndReset();
-                } else {
-                    Platform.runLater(() -> item.getButton().setSelected(true));
-                }
-                return null;
-            }
-        };
-        this.executor.submit(nullCheckTask);
-    }
-
-    public MFXLoadItem getLoadItem(String key) {
-        return this.bindMap.get(key);
+    public void setFxmlLoaderSupplier(Supplier<FXMLLoader> fxmlLoaderSupplier) {
+        if (this.fxmlLoaderSupplier == null) {
+            this.fxmlLoaderSupplier = fxmlLoaderSupplier;
+        }
     }
 
     public boolean isIsAnimated() {

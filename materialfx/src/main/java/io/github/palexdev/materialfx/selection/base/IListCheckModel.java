@@ -19,20 +19,15 @@
 package io.github.palexdev.materialfx.selection.base;
 
 import javafx.beans.property.MapProperty;
-import javafx.scene.input.MouseEvent;
 
 import java.util.List;
 
-public interface IListSelectionModel<T> {
-    void select(int index, T data, MouseEvent mouseEvent);
-    void updateIndex(T data, int index);
-    void clearSelectedItem(int index);
-    void clearSelectedItem(T item);
-    void clearSelection();
-    T getSelectedItem();
-    T getSelectedItem(int index);
-    List<T> getSelectedItems();
-    MapProperty<Integer, T> selectedItemsProperty();
-    boolean allowsMultipleSelection();
-    void setAllowsMultipleSelection(boolean multipleSelection);
+public interface IListCheckModel<T> extends IListSelectionModel<T> {
+    void check(int index, T data);
+    void clearCheckedItem(int index);
+    void clearCheckedItem(T data);
+    void clearChecked();
+    T getCheckedItem(int index);
+    List<T> getCheckedItems();
+    MapProperty<Integer, T> checkedItemsProperty();
 }

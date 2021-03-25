@@ -16,23 +16,28 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.selection.base;
-
-import javafx.beans.property.MapProperty;
-import javafx.scene.input.MouseEvent;
-
-import java.util.List;
-
-public interface IListSelectionModel<T> {
-    void select(int index, T data, MouseEvent mouseEvent);
-    void updateIndex(T data, int index);
-    void clearSelectedItem(int index);
-    void clearSelectedItem(T item);
-    void clearSelection();
-    T getSelectedItem();
-    T getSelectedItem(int index);
-    List<T> getSelectedItems();
-    MapProperty<Integer, T> selectedItemsProperty();
-    boolean allowsMultipleSelection();
-    void setAllowsMultipleSelection(boolean multipleSelection);
+.mfx-check-list-cell {
+    -fx-background-color: white;
+    -fx-border-color: white;
+    -fx-padding: 5;
 }
+
+.mfx-check-list-cell:hover {
+    -fx-background-color: rgb(222, 255, 214);
+    -fx-border-color: rgb(222, 255, 214);
+}
+
+.mfx-check-list-cell:selected {
+    -fx-background-color: rgb(173, 255, 153);
+    -fx-border-color: rgb(173, 255, 153);
+}
+
+.mfx-check-list-cell:checked {
+    -fx-background-color: rgb(173, 255, 153);
+    -fx-border-color: rgb(173, 255, 153);
+}
+
+.mfx-check-list-cell .ripple-generator {
+    -mfx-ripple-color: rgb(141, 255, 112);
+}
+

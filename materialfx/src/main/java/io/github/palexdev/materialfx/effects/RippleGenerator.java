@@ -29,6 +29,7 @@ import javafx.scene.control.Control;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
@@ -54,7 +55,7 @@ public class RippleGenerator extends Group {
     private RippleClipTypeFactory rippleClipTypeFactory = new RippleClipTypeFactory(RippleClipType.RECTANGLE);
     private DepthLevel level = null;
     //private final Interpolator rippleInterpolator = Interpolator.SPLINE(0.1, 0.50, 0.3, 0.85);
-    private final StyleableObjectProperty<Color> rippleColor = new SimpleStyleableObjectProperty<>(
+    private final StyleableObjectProperty<Paint> rippleColor = new SimpleStyleableObjectProperty<>(
             StyleableProperties.RIPPLE_COLOR,
             this,
             "rippleColor",
@@ -155,15 +156,15 @@ public class RippleGenerator extends Group {
         this.rippleClipTypeFactory = rippleClipTypeFactory;
     }
 
-    public Color getRippleColor() {
+    public Paint getRippleColor() {
         return rippleColor.get();
     }
 
-    public final StyleableObjectProperty<Color> rippleColorProperty() {
+    public final StyleableObjectProperty<Paint> rippleColorProperty() {
         return rippleColor;
     }
 
-    public void setRippleColor(Color rippleColor) {
+    public void setRippleColor(Paint rippleColor) {
         this.rippleColor.set(rippleColor);
     }
 
@@ -296,8 +297,8 @@ public class RippleGenerator extends Group {
     private static class StyleableProperties {
         private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
-        private static final CssMetaData<RippleGenerator, Color> RIPPLE_COLOR =
-                FACTORY.createColorCssMetaData(
+        private static final CssMetaData<RippleGenerator, Paint> RIPPLE_COLOR =
+                FACTORY.createPaintCssMetaData(
                         "-mfx-ripple-color",
                         RippleGenerator::rippleColorProperty
                 );

@@ -18,89 +18,104 @@
 
 package io.github.palexdev.materialfx.selection;
 
-import io.github.palexdev.materialfx.controls.base.AbstractMFXFlowlessListCell;
 import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.MapProperty;
+import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableMap;
 import javafx.scene.input.MouseEvent;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class ListSelectionModel<T> implements IListSelectionModel<T> {
-    private final ListProperty<AbstractMFXFlowlessListCell<T>> selectedItems = new SimpleListProperty<>(FXCollections.observableArrayList());
+    private final MapProperty<Integer, T> selectedItems = new SimpleMapProperty<>(getObservableTreeMap());
     private boolean allowsMultipleSelection = false;
 
-    public ListSelectionModel() {
-        selectedItems.addListener((ListChangeListener<AbstractMFXFlowlessListCell<T>>) change -> {
-            List<AbstractMFXFlowlessListCell<T>> tmpRemoved = new ArrayList<>();
-            List<AbstractMFXFlowlessListCell<T>> tmpAdded = new ArrayList<>();
-
-            while (change.next()) {
-                tmpRemoved.addAll(change.getRemoved());
-                tmpAdded.addAll(change.getAddedSubList());
-            }
-            tmpRemoved.forEach(item -> item.setSelected(false));
-            tmpAdded.forEach(item -> item.setSelected(true));
-        });
-    }
-
-    @SuppressWarnings("unchecked")
-    protected void select(AbstractMFXFlowlessListCell<T> item) {
-        if (!allowsMultipleSelection) {
-            clearSelection();
-            selectedItems.setAll(item);
+    protected void select(int index, T data) {
+        if (allowsMultipleSelection) {
+            selectedItems.put(index, data);
         } else {
-            selectedItems.add(item);
+            ObservableMap<Integer, T> tmpMap = getObservableTreeMap();
+            tmpMap.put(index, data);
+            selectedItems.set(tmpMap);
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public void select(AbstractMFXFlowlessListCell<T> item, MouseEvent mouseEvent) {
+    public void select(int index, T data, MouseEvent mouseEvent) {
         if (mouseEvent == null) {
-            select(item);
-            return;
-        }
-
-        if (!allowsMultipleSelection && !selectedItems.contains(item)) {
-            selectedItems.setAll(item);
+            select(index, data);
             return;
         }
 
         if (mouseEvent.isShiftDown() || mouseEvent.isControlDown()) {
-            if (item.isSelected()) {
-                selectedItems.remove(item);
-            } else {
-                selectedItems.add(item);
-            }
-        } else if (!selectedItems.contains(item)) {
-            selectedItems.setAll(item);
+            selectedItems.put(index, data);
+        } else {
+            ObservableMap<Integer, T> tmpMap = getObservableTreeMap();
+            tmpMap.put(index, data);
+            selectedItems.set(tmpMap);
         }
+    }
+
+    @Override
+    public void updateIndex(T data, int index) {
+        int mapIndex = selectedItems.entrySet()
+                .stream()
+                .filter(entry -> data.equals(entry.getValue()))
+                .findFirst()
+                .map(Map.Entry::getKey)
+                .orElse(-1);
+        if (mapIndex != -1) {
+            selectedItems.put(mapIndex, data);
+        }
+    }
+
+    @Override
+    public void clearSelectedItem(int index) {
+        selectedItems.remove(index);
+    }
+
+    @Override
+    public void clearSelectedItem(T data) {
+        selectedItems.entrySet().stream()
+                .filter(entry -> entry.getValue().equals(data))
+                .findFirst()
+                .ifPresent(entry -> selectedItems.remove(entry.getKey()));
     }
 
     @Override
     public void clearSelection() {
-        if (selectedItems.isEmpty()) {
-            return;
-        }
-
-        selectedItems.forEach(item -> item.setSelected(false));
         selectedItems.clear();
     }
 
     @Override
-    public AbstractMFXFlowlessListCell<T> getSelectedItem() {
-        if (selectedItems.isEmpty()) {
-            return null;
-        }
-        return selectedItems.get(0);
+    public T getSelectedItem() {
+        return getSelectedItem(0);
     }
 
     @Override
-    public ListProperty<AbstractMFXFlowlessListCell<T>> getSelectedItems() {
+    public T getSelectedItem(int index) {
+        if (selectedItems.isEmpty()) {
+            return null;
+        }
+
+        try {
+            return selectedItems.get(index);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<T> getSelectedItems() {
+        return List.copyOf(selectedItems.values());
+    }
+
+    @Override
+    public MapProperty<Integer, T> selectedItemsProperty() {
         return this.selectedItems;
     }
 
@@ -112,5 +127,9 @@ public class ListSelectionModel<T> implements IListSelectionModel<T> {
     @Override
     public void setAllowsMultipleSelection(boolean multipleSelection) {
         this.allowsMultipleSelection = multipleSelection;
+    }
+
+    protected ObservableMap<Integer, T> getObservableTreeMap() {
+        return FXCollections.observableMap(new TreeMap<>());
     }
 }

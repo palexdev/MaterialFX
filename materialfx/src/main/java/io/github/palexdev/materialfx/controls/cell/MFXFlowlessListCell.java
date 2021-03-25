@@ -19,6 +19,7 @@
 package io.github.palexdev.materialfx.controls.cell;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.controls.base.AbstractFlowlessListView;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXFlowlessListCell;
 import io.github.palexdev.materialfx.effects.RippleGenerator;
 import javafx.scene.Node;
@@ -31,13 +32,13 @@ public class MFXFlowlessListCell<T> extends AbstractMFXFlowlessListCell<T> {
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-flowless-listcell.css").toString();
     protected final RippleGenerator rippleGenerator = new RippleGenerator(this);
 
-    public MFXFlowlessListCell(T data) {
-        super(data);
+    public MFXFlowlessListCell(AbstractFlowlessListView<T, ?, ?> listView, T  data) {
+        super(listView, data);
         initialize();
     }
 
-    public MFXFlowlessListCell(T data, double fixedHeight) {
-        super(data, fixedHeight);
+    public MFXFlowlessListCell(AbstractFlowlessListView<T, ?, ?> listView, T data, double fixedHeight) {
+        super(listView, data, fixedHeight);
         initialize();
     }
 
@@ -56,7 +57,6 @@ public class MFXFlowlessListCell<T> extends AbstractMFXFlowlessListCell<T> {
             rippleGenerator.setGeneratorCenterY(event.getY());
             rippleGenerator.createRipple();
         });
-        getChildren().add(0, rippleGenerator);
     }
 
     @Override
@@ -68,6 +68,7 @@ public class MFXFlowlessListCell<T> extends AbstractMFXFlowlessListCell<T> {
             label.getStyleClass().add("data-label");
             getChildren().setAll(label);
         }
+        getChildren().add(0, rippleGenerator);
     }
 
     @Override

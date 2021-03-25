@@ -18,7 +18,7 @@
 
 package io.github.palexdev.materialfx.skins;
 
-import io.github.palexdev.materialfx.controls.MFXFlowlessListView;
+import io.github.palexdev.materialfx.controls.base.AbstractFlowlessListView;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXFlowlessListCell;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.controls.flowless.MFXVirtualizedScrollPane;
@@ -32,15 +32,14 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.SkinBase;
-import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 
-public class MFXFlowlessListViewSkin<T> extends SkinBase<MFXFlowlessListView<T>> {
+public class MFXFlowlessListViewSkin<T> extends SkinBase<AbstractFlowlessListView<T, ?, ?>> {
     private final ScrollBar vBar;
     private Timeline hideBars;
     private Timeline showBars;
 
-    public MFXFlowlessListViewSkin(MFXFlowlessListView<T> listView) {
+    public MFXFlowlessListViewSkin(AbstractFlowlessListView<T, ?, ?> listView) {
         super(listView);
 
         VirtualFlow<T, AbstractMFXFlowlessListCell<T>> flow = VirtualFlow.createVertical(listView.getItems(), this::createCell);
@@ -74,7 +73,7 @@ public class MFXFlowlessListViewSkin<T> extends SkinBase<MFXFlowlessListView<T>>
     }
 
     private void setListeners() {
-        MFXFlowlessListView<T> listView = getSkinnable();
+        AbstractFlowlessListView<T, ?, ?> listView = getSkinnable();
 
         setScrollBarHandlers();
         listView.depthLevelProperty().addListener((observable, oldValue, newValue) -> {
@@ -86,7 +85,7 @@ public class MFXFlowlessListViewSkin<T> extends SkinBase<MFXFlowlessListView<T>>
 
     private void setScrollBarHandlers() {
         if (vBar != null) {
-            MFXFlowlessListView<T> listView = getSkinnable();
+            AbstractFlowlessListView<T, ?, ?> listView = getSkinnable();
 
             listView.setOnMouseExited(event -> {
                 if (listView.isHideScrollBars()) {
@@ -133,17 +132,8 @@ public class MFXFlowlessListViewSkin<T> extends SkinBase<MFXFlowlessListView<T>>
     }
 
     protected AbstractMFXFlowlessListCell<T> createCell(T item) {
-        MFXFlowlessListView<T> listView = getSkinnable();
-
-        AbstractMFXFlowlessListCell<T> cell = listView.getCellFactory().call(item);
-        setCellBehavior(cell);
-        return cell;
-    }
-
-    protected void setCellBehavior(AbstractMFXFlowlessListCell<T> cell) {
-        MFXFlowlessListView<T> listView = getSkinnable();
-
-        cell.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> listView.getSelectionModel().select(cell, event));
+        AbstractFlowlessListView<T, ?, ?> listView = getSkinnable();
+        return listView.getCellFactory().call(item);
     }
 
     @Override

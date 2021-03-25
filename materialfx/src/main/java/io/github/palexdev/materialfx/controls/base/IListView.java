@@ -16,23 +16,24 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.selection.base;
+package io.github.palexdev.materialfx.controls.base;
 
-import javafx.beans.property.MapProperty;
-import javafx.scene.input.MouseEvent;
+import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.collections.ObservableList;
+import javafx.util.Callback;
 
-import java.util.List;
+public interface IListView<T, C extends AbstractMFXFlowlessListCell<T>, S extends IListSelectionModel<T>> {
+    ObservableList<T> getItems();
+    ReadOnlyObjectProperty<ObservableList<T>> itemsProperty();
+    void setItems(ObservableList<T> items);
 
-public interface IListSelectionModel<T> {
-    void select(int index, T data, MouseEvent mouseEvent);
-    void updateIndex(T data, int index);
-    void clearSelectedItem(int index);
-    void clearSelectedItem(T item);
-    void clearSelection();
-    T getSelectedItem();
-    T getSelectedItem(int index);
-    List<T> getSelectedItems();
-    MapProperty<Integer, T> selectedItemsProperty();
-    boolean allowsMultipleSelection();
-    void setAllowsMultipleSelection(boolean multipleSelection);
+    Callback<T, C> getCellFactory();
+    ObjectProperty<Callback<T, C>> cellFactoryProperty();
+    void setCellFactory(Callback<T, C> cellFactory);
+
+    S getSelectionModel();
+    ObjectProperty<S> selectionModelProperty();
+    void setSelectionModel(S selectionModel);
 }

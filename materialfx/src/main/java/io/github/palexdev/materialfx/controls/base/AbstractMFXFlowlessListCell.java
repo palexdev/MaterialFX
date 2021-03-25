@@ -19,23 +19,32 @@
 package io.github.palexdev.materialfx.controls.base;
 
 import io.github.palexdev.materialfx.controls.flowless.Cell;
+import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 public abstract class AbstractMFXFlowlessListCell<T> extends HBox implements Cell<T, HBox> {
-    private final ReadOnlyObjectProperty<T> data;
+    protected final AbstractFlowlessListView<T, ?, ?> listView;
+    private final ReadOnlyObjectWrapper<T> data;
+    private final ReadOnlyIntegerWrapper index = new ReadOnlyIntegerWrapper(-1);
     private final DoubleProperty fixedCellSize = new SimpleDoubleProperty();
 
     private static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
     private final BooleanProperty selected = new SimpleBooleanProperty(false);
 
-    public AbstractMFXFlowlessListCell(T data) {
-        this(data, 32);
+    public AbstractMFXFlowlessListCell(AbstractFlowlessListView<T, ?, ?> listView, T data) {
+        this(listView, data, 32);
     }
 
-    public AbstractMFXFlowlessListCell(T data, double fixedHeight) {
+    public AbstractMFXFlowlessListCell(AbstractFlowlessListView<T, ?, ?> listView, T data, double fixedHeight) {
+        this.listView = listView;
         this.data = new ReadOnlyObjectWrapper<>(data);
         this.fixedCellSize.set(fixedHeight);
 
@@ -44,7 +53,6 @@ public abstract class AbstractMFXFlowlessListCell<T> extends HBox implements Cel
         prefHeightProperty().bind(fixedCellSize);
 
         initialize();
-        render(data);
     }
 
     private void initialize() {
@@ -56,6 +64,23 @@ public abstract class AbstractMFXFlowlessListCell<T> extends HBox implements Cel
 
     private void addListeners() {
         selected.addListener(invalidate -> pseudoClassStateChanged(SELECTED_PSEUDO_CLASS, selected.get()));
+
+        sceneProperty().addListener(new ChangeListener<>() {
+            @Override
+            public void changed(ObservableValue<? extends Scene> observable, Scene oldValue, Scene newValue) {
+                if (newValue != null) {
+                    render(getData());
+                    sceneProperty().removeListener(this);
+                }
+            }
+        });
+
+        addEventHandler(MouseEvent.MOUSE_PRESSED, this::updateModel);
+        listView.getSelectionModel().selectedItemsProperty().addListener((InvalidationListener) invalidated -> {
+            if (!containsEqualsBoth() && isSelected()) {
+                setSelected(false);
+            }
+        });
     }
 
     public T getData() {
@@ -63,7 +88,23 @@ public abstract class AbstractMFXFlowlessListCell<T> extends HBox implements Cel
     }
 
     public ReadOnlyObjectProperty<T> dataProperty() {
-        return data;
+        return data.getReadOnlyProperty();
+    }
+
+    protected void setData(T data) {
+        this.data.set(data);
+    }
+
+    public int getIndex() {
+        return index.get();
+    }
+
+    public ReadOnlyIntegerProperty indexProperty() {
+        return index.getReadOnlyProperty();
+    }
+
+    protected void setIndex(int index) {
+        this.index.set(index);
     }
 
     public DoubleProperty fixedCellSizeProperty() {
@@ -93,18 +134,49 @@ public abstract class AbstractMFXFlowlessListCell<T> extends HBox implements Cel
         return this;
     }
 
-    @Override
-    public boolean isReusable() {
-        return true;
+    public void updateModel(MouseEvent event) {
+        setSelected(!isSelected());
+        if (isSelected()) {
+            listView.getSelectionModel().select(getIndex(), getData(), event);
+        } else {
+            listView.getSelectionModel().clearSelectedItem(getIndex());
+        }
     }
 
     @Override
-    public void reset() {
-        getChildren().clear();
+    public void updateIndex(int index) {
+        setIndex(index);
+        if (containsEqualsBoth() && !isSelected()) {
+            setSelected(true);
+            return;
+        }
+        if (containsNotEqualsIndex()) {
+            listView.getSelectionModel().updateIndex(getData(), index);
+            setSelected(true);
+            return;
+        }
+        if (containsNotEqualsData()) {
+            listView.getSelectionModel().clearSelectedItem(index);
+        }
     }
 
-    @Override
-    public void updateItem(T data) {
-        render(data);
+    protected boolean containsEqualsBoth() {
+        IListSelectionModel<T> selectionModel = listView.getSelectionModel();
+        return selectionModel.selectedItemsProperty().containsKey(getIndex()) &&
+                selectionModel.selectedItemsProperty().get(getIndex()).equals(getData());
+    }
+
+    protected boolean containsNotEqualsIndex() {
+        IListSelectionModel<T> selectionModel = listView.getSelectionModel();
+        return selectionModel.selectedItemsProperty().containsValue(getData()) &&
+                selectionModel.selectedItemsProperty().entrySet()
+                        .stream()
+                        .anyMatch(entry -> entry.getKey() != getIndex() && entry.getValue().equals(getData()));
+    }
+
+    protected boolean containsNotEqualsData() {
+        IListSelectionModel<T> selectionModel = listView.getSelectionModel();
+        return selectionModel.selectedItemsProperty().containsKey(getIndex()) &&
+                !selectionModel.selectedItemsProperty().get(getIndex()).equals(getData());
     }
 }

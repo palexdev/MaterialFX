@@ -93,26 +93,26 @@ public class MFXButton extends Button {
      *
      * @see Color
      */
-    private final ObjectProperty<Paint> rippleColor = new SimpleObjectProperty<>();
+    private final ObjectProperty<Paint> rippleColor = new SimpleObjectProperty<>(Color.rgb(190, 190, 190));
 
     /**
      * Specifies the ripples radius of this control.
      */
-    private final DoubleProperty rippleRadius = new SimpleDoubleProperty();
+    private final DoubleProperty rippleRadius = new SimpleDoubleProperty(25);
 
     /**
      * Specifies the ripples in animation duration of this control.
      *
      * @see Duration
      */
-    private final ObjectProperty<Duration> rippleInDuration = new SimpleObjectProperty<>();
+    private final ObjectProperty<Duration> rippleInDuration = new SimpleObjectProperty<>(Duration.millis(700));
 
     /**
      * Specifies the ripples out animation duration of this control.
      *
      * @see Duration
      */
-    private final ObjectProperty<Duration> rippleOutDuration = new SimpleObjectProperty<>();
+    private final ObjectProperty<Duration> rippleOutDuration = new SimpleObjectProperty<>(getRippleInDuration().divide(2.0));
 
     public Paint getRippleColor() {
         return rippleColor.get();

@@ -1,14 +1,12 @@
 module MaterialFX.demo.main {
     requires MaterialFX.materialfx.main;
 
-    requires org.scenicview.scenicview;
-    requires fr.brouillard.oss.cssfx;
-    requires org.kordamp.ikonli.core;
-    requires org.kordamp.ikonli.javafx;
-    requires org.kordamp.ikonli.fontawesome5;
+    requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
-    requires javafx.controls;
+
+    requires fr.brouillard.oss.cssfx;
+    requires org.kordamp.ikonli.javafx;
 
     opens io.github.palexdev.materialfx.demo;
     opens io.github.palexdev.materialfx.demo.controllers;

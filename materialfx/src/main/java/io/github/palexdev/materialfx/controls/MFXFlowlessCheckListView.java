@@ -20,24 +20,23 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.AbstractFlowlessListView;
-import io.github.palexdev.materialfx.controls.base.AbstractMFXFlowlessListCell;
-import io.github.palexdev.materialfx.controls.cell.MFXFlowlessListCell;
-import io.github.palexdev.materialfx.selection.ListSelectionModel;
-import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
+import io.github.palexdev.materialfx.controls.cell.MFXFlowlessCheckListCell;
+import io.github.palexdev.materialfx.selection.ListCheckModel;
+import io.github.palexdev.materialfx.selection.base.IListCheckModel;
 import io.github.palexdev.materialfx.skins.MFXFlowlessListViewSkin;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Skin;
 
-public class MFXFlowlessListView<T> extends AbstractFlowlessListView<T, AbstractMFXFlowlessListCell<T>, IListSelectionModel<T>> {
-    private final String STYLE_CLASS = "mfx-list-view";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-flowless-listview.css").toString();
+public class MFXFlowlessCheckListView<T> extends AbstractFlowlessListView<T, MFXFlowlessCheckListCell<T>, IListCheckModel<T>> {
+    private final String STYLE_CLASS = "mfx-check-list-view";
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-flowless-check-listview.css").toString();
 
-    public MFXFlowlessListView() {
+    public MFXFlowlessCheckListView() {
         this(FXCollections.observableArrayList());
     }
 
-    public MFXFlowlessListView(ObservableList<T> items) {
+    public MFXFlowlessCheckListView(ObservableList<T> items) {
         super(items);
         initialize();
     }
@@ -48,12 +47,12 @@ public class MFXFlowlessListView<T> extends AbstractFlowlessListView<T, Abstract
 
     @Override
     protected void setDefaultCellFactory() {
-        setCellFactory(item -> new MFXFlowlessListCell<>(this, item));
+        setCellFactory(item -> new MFXFlowlessCheckListCell<>(this, item));
     }
 
     @Override
     protected void setDefaultSelectionModel() {
-        IListSelectionModel<T> selectionModel = new ListSelectionModel<>();
+        IListCheckModel<T> selectionModel = new ListCheckModel<>();
         selectionModel.setAllowsMultipleSelection(true);
         setSelectionModel(selectionModel);
     }

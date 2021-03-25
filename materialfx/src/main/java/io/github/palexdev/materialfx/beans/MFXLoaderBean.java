@@ -31,13 +31,12 @@ import java.net.URL;
  * which is responsible for the views switching, the {@code URL} of the fxml file,
  * and an index which represents the toggle button position in the children list of the loader.
  */
-public class MFXLoadItem {
+public class MFXLoaderBean {
     //================================================================================
     // Properties
     //================================================================================
-    private final int index;
-
     private Node root;
+    private final boolean defaultRoot;
     private final Callback<Class<?>, Object> controllerFactory;
     private final ToggleButton button;
     private final URL fxmlURL;
@@ -45,26 +44,26 @@ public class MFXLoadItem {
     //================================================================================
     // Constructors
     //================================================================================
-    public MFXLoadItem(int index, ToggleButton button, URL fxmlURL) {
-        this(index, button, fxmlURL, null);
+    public MFXLoaderBean(ToggleButton button, URL fxmlURL, boolean defaultRoot) {
+        this(button, fxmlURL, defaultRoot, null);
     }
 
-    public MFXLoadItem(int index, ToggleButton button, URL fxmlURL, Callback<Class<?>, Object> controllerFactory) {
-        this.index = index;
+    public MFXLoaderBean(ToggleButton button, URL fxmlURL, boolean defaultRoot, Callback<Class<?>, Object> controllerFactory) {
         this.button = button;
         this.fxmlURL = fxmlURL;
+        this.defaultRoot = defaultRoot;
         this.controllerFactory = controllerFactory;
     }
 
     //================================================================================
     // Methods
     //================================================================================
-    public int getIndex() {
-        return index;
-    }
-
     public Node getRoot() {
         return root;
+    }
+
+    public boolean isDefault() {
+        return defaultRoot;
     }
 
     public Callback<Class<?>, Object> getControllerFactory() {
@@ -81,5 +80,35 @@ public class MFXLoadItem {
 
     public URL getFxmlURL() {
         return fxmlURL;
+    }
+
+    public static class Builder {
+        private final URL fxmlURL;
+        private final ToggleButton button;
+        private boolean defaultRoot;
+        private Callback<Class<?>, Object> controllerFactory;
+
+        private Builder(ToggleButton button, URL fxmlURL) {
+            this.fxmlURL = fxmlURL;
+            this.button = button;
+        }
+
+        public static Builder build(ToggleButton button, URL fxmlURL) {
+            return new Builder(button, fxmlURL);
+        }
+
+        public Builder setDefaultRoot(boolean defaultRoot) {
+            this.defaultRoot = defaultRoot;
+            return this;
+        }
+
+        public Builder setControllerFactory(Callback<Class<?>, Object> controllerFactory) {
+            this.controllerFactory = controllerFactory;
+            return this;
+        }
+
+        public MFXLoaderBean get() {
+            return new MFXLoaderBean(button, fxmlURL, defaultRoot, controllerFactory);
+        }
     }
 }

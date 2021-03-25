@@ -23,10 +23,9 @@ import io.github.palexdev.materialfx.controls.enums.ButtonType;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.effects.MFXDepthManager;
 import io.github.palexdev.materialfx.effects.RippleGenerator;
+import javafx.beans.binding.Bindings;
 import javafx.scene.control.skin.ButtonSkin;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.util.Duration;
 
 /**
  * This is the implementation of the {@code Skin} associated with every {@code MFXButton}.
@@ -59,31 +58,13 @@ public class MFXButtonSkin extends ButtonSkin {
     protected void setupRippleGenerator() {
         MFXButton button = (MFXButton) getSkinnable();
 
-        button.rippleColorProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && !newValue.equals(oldValue)) {
-                rippleGenerator.setRippleColor((Color) newValue);
-            }
-        });
-        button.rippleRadiusProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && !newValue.equals(oldValue)) {
-                rippleGenerator.setRippleRadius(newValue.doubleValue());
-            }
-        });
-        button.rippleInDurationProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && !newValue.equals(oldValue)) {
-                rippleGenerator.setInDuration(newValue);
-            }
-        });
-        button.rippleOutDurationProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && !newValue.equals(oldValue)) {
-                rippleGenerator.setOutDuration(newValue);
-            }
-        });
-
-        button.setRippleRadius(25);
-        button.setRippleColor(Color.rgb(190, 190, 190));
-        button.setRippleInDuration(Duration.millis(700));
-        button.setRippleOutDuration(button.getRippleInDuration().divide(2));
+        rippleGenerator.rippleColorProperty().bind(button.rippleColorProperty());
+        rippleGenerator.rippleRadiusProperty().bind(button.rippleRadiusProperty());
+        rippleGenerator.inDurationProperty().bind(button.rippleInDurationProperty());
+        rippleGenerator.outDurationProperty().bind(Bindings.createObjectBinding(
+                () -> button.getRippleInDuration().divide(2.0),
+                button.rippleInDurationProperty())
+        );
     }
 
     /**
