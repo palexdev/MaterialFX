@@ -48,7 +48,7 @@ public class MFXCheckTreeItem<T> extends MFXTreeItem<T> {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-check-tree-item";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-treeitem.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-treeitem.css");
 
     private final BooleanProperty checked = new SimpleBooleanProperty(false);
     private final BooleanProperty indeterminate = new SimpleBooleanProperty(false);

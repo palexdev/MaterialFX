@@ -18,6 +18,7 @@
 
 package io.github.palexdev.materialfx.skins;
 
+import io.github.palexdev.materialfx.beans.MFXContextMenuItem;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableColumnCell;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
@@ -30,11 +31,14 @@ import io.github.palexdev.materialfx.filter.MFXFilterDialog;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.selection.base.ITableSelectionModel;
 import io.github.palexdev.materialfx.utils.DragResizer;
+import io.github.palexdev.materialfx.utils.LabelUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.InvalidationListener;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -47,8 +51,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Skin;
 import javafx.scene.control.SkinBase;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -60,6 +66,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static io.github.palexdev.materialfx.controls.MFXTableView.TableViewEvent;
+import static javafx.scene.layout.Region.USE_PREF_SIZE;
 
 /**
  * This is the implementation of the Skin associated with every {@code MFXTableView}.
@@ -131,15 +138,17 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
 
         rowsContainer = new VBox();
         rowsContainer.getStyleClass().setAll("rows-container");
-        rowsContainer.setPadding(new Insets(3, 5, 3, 5));
+        rowsContainer.setMinHeight(USE_PREF_SIZE);
+        rowsContainer.setPadding(new Insets(-1, 5, -1, 4));
         rowsContainer.prefWidthProperty().bind(columnsContainer.widthProperty());
+        VBox.setVgrow(rowsContainer, Priority.ALWAYS);
 
         paginationControls = new HBox(10);
         paginationControls.getStyleClass().setAll("pagination");
         paginationControls.prefWidthProperty().bind(container.widthProperty());
         paginationControls.setPrefHeight(40);
         paginationControls.setMaxHeight(Region.USE_PREF_SIZE);
-        paginationControls.setAlignment(Pos.CENTER_RIGHT);
+        paginationControls.setAlignment(Pos.CENTER_LEFT);
         paginationControls.setPadding(new Insets(8, 5, 5, 5));
 
         filterIcon = buildFilterIcon();
@@ -155,7 +164,6 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         rowsPerPageLabel.setLabelStyle(Styles.LabelStyles.STYLE2);
         rowsPerPageLabel.setStyle("-fx-border-color: transparent");
         rowsPerPageLabel.setLabelAlignment(Pos.CENTER);
-        rowsPerPageLabel.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> System.out.println(rowsPerPageLabel.getWidth()));
         HBox.setMargin(rowsPerPageLabel, new Insets(0, -10, 0, 0));
 
         rowsPerPageCombo = new MFXComboBox<>();
@@ -253,8 +261,13 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
                 buildRows();
             }
         });
-        filterIcon.disableProperty().bind(tableFiltered);
-        clearFilterIcon.disableProperty().bind(tableFiltered.not());
+
+        BooleanBinding listEmpty = Bindings.createBooleanBinding(
+                () -> tableView.getItems().isEmpty(),
+                tableView.getItems()
+        );
+        filterIcon.disableProperty().bind(tableFiltered.or(listEmpty));
+        clearFilterIcon.disableProperty().bind(tableFiltered.not().or(listEmpty));
     }
 
     /**
@@ -264,9 +277,14 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         MFXTableView<T> tableView = getSkinnable();
 
         for (MFXTableColumnCell<T> column : tableView.getColumns()) {
+            addContextMenu(column);
             column.setMaxHeight(Double.MAX_VALUE);
             DragResizer.makeResizable(column, DragResizer.RIGHT);
-            column.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> sortColumn(column));
+            column.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+                if (event.getButton() == MouseButton.PRIMARY) {
+                    sortColumn(column);
+                }
+            });
             column.rowCellFactoryProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue != oldValue) {
                     buildRows();
@@ -274,6 +292,77 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
             });
             columnsContainer.getChildren().add(column);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    protected void addContextMenu(MFXTableColumnCell<T> column) {
+        MFXContextMenuItem restoreWidthThis = new MFXContextMenuItem(
+                "Restore this column width",
+                event -> column.setMinWidth(column.getInitialWidth())
+        );
+
+        MFXContextMenuItem restoreWidthAll = new MFXContextMenuItem(
+                "Restore all columns width",
+                event -> columnsContainer.getChildren().stream()
+                        .filter(node -> node instanceof MFXTableColumnCell)
+                        .map(node -> (MFXTableColumnCell<T>) node)
+                        .forEach(c -> c.setMinWidth(c.getInitialWidth()))
+        );
+
+        MFXContextMenuItem autoSizeThis = new MFXContextMenuItem(
+                "Autosize this column",
+                event -> autoSizeColumn(column)
+        );
+
+        MFXContextMenuItem autoSizeAll = new MFXContextMenuItem(
+                "Autosize all columns",
+                event -> columnsContainer.getChildren().stream()
+                        .filter(node -> node instanceof MFXTableColumnCell)
+                        .map(node -> (MFXTableColumnCell<T>) node)
+                        .forEach(this::autoSizeColumn)
+        );
+
+        new MFXContextMenu.Builder()
+                .addMenuItem(autoSizeAll)
+                .addMenuItem(autoSizeThis)
+                .addSeparator()
+                .addMenuItem(restoreWidthAll)
+                .addMenuItem(restoreWidthThis)
+                .install(column);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected void autoSizeColumn(MFXTableColumnCell<T> column) {
+        int index = columnsContainer.getChildren().indexOf(column);
+        if (index > -1) {
+            List<MFXTableRow<T>> tableRows = rowsContainer.getChildren().stream()
+                    .filter(node -> node instanceof MFXTableRow)
+                    .map(node -> (MFXTableRow<T>) node)
+                    .collect(Collectors.toList());
+            List<MFXTableRowCell> rowCells = new ArrayList<>();
+            tableRows.forEach(row -> {
+                MFXTableRowCell rowCell = (MFXTableRowCell) row.getChildren().get(index);
+                if (LabelUtils.isLabelTruncated(rowCell)) {
+                    rowCells.add((MFXTableRowCell) row.getChildren().get(index));
+                }
+            });
+            double max = getMaxCellWidth(rowCells);
+            if (max != -1) {
+                column.setMinWidth(max);
+            }
+        }
+    }
+
+    protected double getMaxCellWidth(List<MFXTableRowCell> rowCells) {
+        double max = -1;
+        for (MFXTableRowCell rowCell : rowCells) {
+            double computed = LabelUtils.computeTextWidth(rowCell.getFont(), rowCell.getText());
+            computed += rowCell.snappedRightInset() + rowCell.snappedLeftInset();
+            if (computed > max) {
+                max = computed;
+            }
+        }
+        return max;
     }
 
     /**
@@ -285,7 +374,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
 
         MFXTableRow<T> row = new MFXTableRow<>(10, Pos.CENTER_LEFT, item);
         row.prefWidthProperty().bind(container.widthProperty());
-        row.setMinHeight(tableView.getFixedRowsHeight());
+        row.minHeightProperty().bind(tableView.fixedRowsHeightProperty());
         row.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> tableView.getSelectionModel().select(row, event));
         return row;
     }
@@ -304,7 +393,10 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         List<MFXTableRow<T>> rows = new ArrayList<>();
         int i;
         int size = items.size();
-        for (i = index; i < (tableView.getMaxRows() + index) && size > 0 && i < size; i++) {
+        int pageIndex = tableView.getMaxRows() + index;
+        computeRowsContainerHeight(items.size() - index);
+
+        for (i = index; i < pageIndex && size > 0 && i < size; i++) {
             T item = items.get(i);
             MFXTableRow<T> row = buildRowBox(item);
             rows.add(row);
@@ -653,6 +745,20 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         filterDialog.close();
     }
 
+    private void computeRowsContainerHeight(int index) {
+        MFXTableView<T> tableView = getSkinnable();
+
+        int nrows = rowsPerPageCombo.getSelectedValue() != null ? rowsPerPageCombo.getSelectedValue() : 5;
+        double value = -1;
+        if (tableView.getItems().isEmpty() || index < nrows) {
+            value = (rowsContainer.snappedTopInset() +
+                    tableView.getFixedRowsHeight() +
+                    rowsContainer.snappedBottomInset()) * nrows;
+        }
+        double finalValue = value == -1 ? value : snapSpaceY(value + ((rowsPerPageCombo.getSelectionModel().getSelectedIndex() + 1)));
+        rowsContainer.setMinHeight(finalValue);
+    }
+
     //================================================================================
     // Override Methods
     //================================================================================
@@ -669,5 +775,15 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
     @Override
     protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
         return computePrefHeight(width, topInset, leftInset, bottomInset, rightInset);
+    }
+
+    @Override
+    protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return 600;
+    }
+
+    @Override
+    protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return computePrefWidth(height, topInset, rightInset, bottomInset, leftInset);
     }
 }

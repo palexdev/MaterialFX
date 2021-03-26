@@ -29,7 +29,7 @@ import javafx.util.Duration;
 
 public class MFXFlowlessListCell<T> extends AbstractMFXFlowlessListCell<T> {
     private final String STYLE_CLASS = "mfx-list-cell";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-flowless-listcell.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-flowless-listcell.css");
     protected final RippleGenerator rippleGenerator = new RippleGenerator(this);
 
     public MFXFlowlessListCell(AbstractFlowlessListView<T, ?, ?> listView, T  data) {

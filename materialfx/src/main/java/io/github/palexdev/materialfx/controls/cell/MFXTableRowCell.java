@@ -50,7 +50,7 @@ public class MFXTableRowCell extends Label {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-table-row-cell";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-table-row-cell.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-table-row-cell.css");
 
     //================================================================================
     // Constructors

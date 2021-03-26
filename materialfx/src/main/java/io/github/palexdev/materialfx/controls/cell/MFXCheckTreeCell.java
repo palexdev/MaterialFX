@@ -35,7 +35,7 @@ public class MFXCheckTreeCell<T> extends MFXSimpleTreeCell<T> {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-check-tree-cell";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-checktreecell.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-checktreecell.css");
     private final MFXCheckbox checkbox;
 
     private static final PseudoClass CHECKED_PSEUDO_CLASS = PseudoClass.getPseudoClass("checked");

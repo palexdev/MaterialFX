@@ -31,7 +31,7 @@ import javafx.scene.control.Skin;
 
 public class MFXFlowlessListView<T> extends AbstractFlowlessListView<T, AbstractMFXFlowlessListCell<T>, IListSelectionModel<T>> {
     private final String STYLE_CLASS = "mfx-list-view";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-flowless-listview.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-flowless-listview.css");
 
     public MFXFlowlessListView() {
         this(FXCollections.observableArrayList());

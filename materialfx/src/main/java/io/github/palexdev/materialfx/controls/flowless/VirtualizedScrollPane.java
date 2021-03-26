@@ -42,9 +42,9 @@ public class VirtualizedScrollPane<V extends Node & Virtualized> extends Region 
 
     private static final PseudoClass CONTENT_FOCUSED = PseudoClass.getPseudoClass("content-focused");
 
-    private final ScrollBar hBar;
-    private final ScrollBar vBar;
-    private final V content;
+    protected final ScrollBar hBar;
+    protected final ScrollBar vBar;
+    protected final V content;
     private final ChangeListener<Boolean> contentFocusedListener;
 
     private final Var<Double> hBarValue;

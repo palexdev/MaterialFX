@@ -37,7 +37,7 @@ public class MFXTableRow<T> extends HBox {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-table-row";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-table-row.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-table-row.css");
     private final T item;
 
     private static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");

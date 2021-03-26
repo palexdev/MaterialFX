@@ -75,7 +75,7 @@ public abstract class AbstractMFXFlowlessListCell<T> extends HBox implements Cel
             }
         });
 
-        addEventHandler(MouseEvent.MOUSE_PRESSED, this::updateModel);
+        addEventFilter(MouseEvent.MOUSE_PRESSED, this::updateModel);
         listView.getSelectionModel().selectedItemsProperty().addListener((InvalidationListener) invalidated -> {
             if (!containsEqualsBoth() && isSelected()) {
                 setSelected(false);

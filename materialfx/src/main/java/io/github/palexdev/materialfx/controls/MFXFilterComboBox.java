@@ -18,7 +18,7 @@ public class MFXFilterComboBox<T> extends MFXComboBox<T> {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-filter-combo-box";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-filter-combobox.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-filter-combobox.css");
 
     /**
      * When the popup is shown and the text field is added to the scene the text field is not focused,

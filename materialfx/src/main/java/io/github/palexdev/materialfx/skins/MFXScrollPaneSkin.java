@@ -35,5 +35,4 @@ public class MFXScrollPaneSkin extends ScrollPaneSkin {
         StackPane viewPort = (StackPane) scrollPane.lookup(".viewport");
         viewPort.setCache(false);
     }
-
 }

@@ -50,7 +50,8 @@ public class MFXButton extends Button {
     //================================================================================
     private static final StyleablePropertyFactory<MFXButton> FACTORY = new StyleablePropertyFactory<>(Button.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-button";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-button.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-button.css");
+    private final RippleGenerator rippleGenerator = new RippleGenerator(this);
 
     //================================================================================
     // Constructors
@@ -82,6 +83,13 @@ public class MFXButton extends Button {
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
         setAlignment(Pos.CENTER);
+
+        setRippleRadius(25);
+        setRippleColor(Color.rgb(190, 190, 190));
+    }
+
+    public RippleGenerator getRippleGenerator() {
+        return this.rippleGenerator;
     }
 
     //================================================================================
@@ -93,37 +101,37 @@ public class MFXButton extends Button {
      *
      * @see Color
      */
-    private final ObjectProperty<Paint> rippleColor = new SimpleObjectProperty<>(Color.rgb(190, 190, 190));
+    private final ObjectProperty<Paint> rippleColor = new SimpleObjectProperty<>();
 
     /**
      * Specifies the ripples radius of this control.
      */
-    private final DoubleProperty rippleRadius = new SimpleDoubleProperty(25);
+    private final DoubleProperty rippleRadius = new SimpleDoubleProperty();
 
     /**
      * Specifies the ripples in animation duration of this control.
      *
      * @see Duration
      */
-    private final ObjectProperty<Duration> rippleInDuration = new SimpleObjectProperty<>(Duration.millis(700));
+    private final ObjectProperty<Duration> rippleInDuration = new SimpleObjectProperty<>();
 
     /**
      * Specifies the ripples out animation duration of this control.
      *
      * @see Duration
      */
-    private final ObjectProperty<Duration> rippleOutDuration = new SimpleObjectProperty<>(getRippleInDuration().divide(2.0));
+    private final ObjectProperty<Duration> rippleOutDuration = new SimpleObjectProperty<>();
 
-    public Paint getRippleColor() {
+    public final Paint getRippleColor() {
         return rippleColor.get();
     }
 
-    public ObjectProperty<Paint> rippleColorProperty() {
-        return rippleColor;
+    public final ObjectProperty<Paint> rippleColorProperty() {
+        return this.rippleColor;
     }
 
-    public void setRippleColor(Paint rippleColor) {
-        this.rippleColor.set(rippleColor);
+    public final void setRippleColor(Paint rippleColor) {
+        rippleGenerator.setRippleColor(rippleColor);
     }
 
     public double getRippleRadius() {
@@ -135,7 +143,7 @@ public class MFXButton extends Button {
     }
 
     public void setRippleRadius(double rippleRadius) {
-        this.rippleRadius.set(rippleRadius);
+        rippleGenerator.setRippleRadius(rippleRadius);
     }
 
     public Duration getRippleInDuration() {
@@ -147,7 +155,7 @@ public class MFXButton extends Button {
     }
 
     public void setRippleInDuration(Duration rippleInDuration) {
-        this.rippleInDuration.set(rippleInDuration);
+        rippleGenerator.setInDuration(rippleInDuration);
     }
 
     public Duration getRippleOutDuration() {
@@ -159,15 +167,7 @@ public class MFXButton extends Button {
     }
 
     public void setRippleOutDuration(Duration rippleOutDuration) {
-        this.rippleOutDuration.set(rippleOutDuration);
-    }
-
-    public RippleGenerator getRippleGenerator() {
-        try {
-            return (RippleGenerator) lookup(".ripple-generator");
-        } catch (ClassCastException ex) {
-            return null;
-        }
+        rippleGenerator.setOutDuration(rippleOutDuration);
     }
 
     //================================================================================

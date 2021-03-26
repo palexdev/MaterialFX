@@ -67,7 +67,7 @@ public class MFXLegacyComboBox<T> extends ComboBox<T> {
     //================================================================================
     private static final StyleablePropertyFactory<MFXLegacyComboBox<?>> FACTORY = new StyleablePropertyFactory<>(ComboBox.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-legacy-combo-box";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/mfx-combobox.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/mfx-combobox.css");
 
     private MFXDialogValidator validator;
 

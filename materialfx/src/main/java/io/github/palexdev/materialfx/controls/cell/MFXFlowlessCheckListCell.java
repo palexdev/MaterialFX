@@ -35,7 +35,7 @@ import javafx.util.Duration;
 
 public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> {
     private final String STYLE_CLASS = "mfx-check-list-cell";
-    private final String STYLESHHET = MFXResourcesLoader.load("css/mfx-flowless-check-listcell.css").toString();
+    private final String STYLESHHET = MFXResourcesLoader.load("css/mfx-flowless-check-listcell.css");
     protected final RippleGenerator rippleGenerator = new RippleGenerator(this);
 
     protected final MFXCheckbox checkbox;

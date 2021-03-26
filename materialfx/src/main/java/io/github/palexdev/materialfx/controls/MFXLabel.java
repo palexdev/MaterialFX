@@ -73,7 +73,7 @@ public class MFXLabel extends Control {
 
     public MFXLabel(String text) {
         setText(text);
-        this.STYLESHEET = MFXResourcesLoader.load(getLabelStyle().getStyleSheetPath()).toString();
+        this.STYLESHEET = MFXResourcesLoader.load(getLabelStyle().getStyleSheetPath());
         initialize();
     }
 
@@ -89,7 +89,7 @@ public class MFXLabel extends Control {
          */
         labelStyle.addListener((observable, oldValue, newValue) -> {
             if (newValue != null && newValue != oldValue) {
-                STYLESHEET = MFXResourcesLoader.load(newValue.getStyleSheetPath()).toString();
+                STYLESHEET = MFXResourcesLoader.load(newValue.getStyleSheetPath());
                 getStylesheets().setAll(STYLESHEET);
             }
         });

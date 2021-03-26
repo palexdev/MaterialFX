@@ -50,12 +50,18 @@ public class ListSelectionModel<T> implements IListSelectionModel<T> {
             return;
         }
 
-        if (mouseEvent.isShiftDown() || mouseEvent.isControlDown()) {
-            selectedItems.put(index, data);
-        } else {
+        if (!allowsMultipleSelection) {
             ObservableMap<Integer, T> tmpMap = getObservableTreeMap();
             tmpMap.put(index, data);
             selectedItems.set(tmpMap);
+        } else {
+            if (mouseEvent.isShiftDown() || mouseEvent.isControlDown()) {
+                selectedItems.put(index, data);
+            } else {
+                ObservableMap<Integer, T> tmpMap = getObservableTreeMap();
+                tmpMap.put(index, data);
+                selectedItems.set(tmpMap);
+            }
         }
     }
 

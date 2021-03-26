@@ -50,17 +50,21 @@
 
 .mfx-list-view {
     -fx-background-color: white;
-    -fx-background-insets: 2;
-    -fx-background-radius: 2px;
+    -fx-border-color: #A4B1B6;
+    -fx-background-insets: 0 -1 0 -1;
+    -fx-border-insets: 0 -1 0 -1;
 
     -mfx-track-color: transparent;
     -mfx-thumb-color: rgba(76, 0, 225, 0.1);
     -mfx-thumb-hover-color: rgb(158, 107, 255);
 }
 
-.mfx-list-view .mfx-list-cell {
-    -mfx-hover-color: rgb(242, 242, 242);
-    -mfx-selected-color: rgb(185, 152, 255);
+.mfx-list-view .mfx-list-cell:hover {
+    -fx-background-color: rgb(242, 242, 242);
+    -fx-border-color: rgb(242, 242, 242);
+}
 
-    -mfx-corner-radius: 2px;
+.mfx-list-view .mfx-list-cell:selected {
+    -fx-background-color: rgb(185, 152, 255);
+    -fx-border-color: rgb(185, 152, 255);
 }

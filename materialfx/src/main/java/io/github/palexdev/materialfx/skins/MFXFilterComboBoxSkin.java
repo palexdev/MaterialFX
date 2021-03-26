@@ -2,18 +2,20 @@ package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
+import io.github.palexdev.materialfx.controls.MFXFlowlessListView;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
-import io.github.palexdev.materialfx.controls.MFXListView;
 import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.cell.MFXFlowlessListCell;
 import io.github.palexdev.materialfx.controls.enums.Styles;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.effects.RippleGenerator;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.selection.ComboSelectionModelMock;
+import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.StringUtils;
 import javafx.animation.*;
-import javafx.beans.InvalidationListener;
+import javafx.collections.MapChangeListener;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
@@ -26,6 +28,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
 import java.util.Arrays;
@@ -46,7 +49,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
 
     private final MFXIconWrapper icon;
     private final PopupControl popup;
-    private final MFXListView<T> listView;
+    private final MFXFlowlessListView<T> listView;
     private final EventHandler<MouseEvent> popupHandler;
 
     private final Line unfocusedLine;
@@ -55,7 +58,6 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
     private final HBox searchContainer;
     private final FilteredList<T> filteredList;
     private MFXTextField searchField;
-    private T previousSelected;
 
     private Timeline arrowAnimation;
 
@@ -103,7 +105,24 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         searchContainer.setAlignment(Pos.CENTER_LEFT);
         searchContainer.setManaged(false);
 
-        listView = new MFXListView<>();
+        listView = new MFXFlowlessListView<>() {
+            {
+                setCellFactory(item -> new MFXFlowlessListCell<>(this, item) {
+                    @Override
+                    public void updateIndex(int index) {
+                        setIndex(index);
+                        if (containsEqualsBoth() && !isSelected()) {
+                            setSelected(true);
+                            return;
+                        }
+                        if (containsNotEqualsIndex()) {
+                            listView.getSelectionModel().updateIndex(getData(), index);
+                            setSelected(true);
+                        }
+                    }
+                });
+            }
+        };
         listView.getStylesheets().add(comboBox.getUserAgentStylesheet());
         popup = buildPopup();
         popupHandler = event -> {
@@ -197,51 +216,25 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         MFXFilterComboBox<T> comboBox = getSkinnable();
         ComboSelectionModelMock<T> selectionModel = comboBox.getSelectionModel();
 
-        comboBox.selectedValueProperty().bind(listView.getSelectionModel().selectedItemProperty());
+        selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue != newValue) {
+                comboBox.setSelectedValue(newValue);
+            }
+        });
+
+        listView.getSelectionModel().selectedItemsProperty().addListener((MapChangeListener<? super Integer, ? super T>) change -> {
+            T item = change.getValueAdded();
+            if (item != null) {
+                selectionModel.selectItem(item);
+            }
+        });
+
         comboBox.selectedValueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 setValueLabel(newValue);
             } else {
                 valueLabel.setText("");
                 valueLabel.setGraphic(null);
-            }
-        });
-        listView.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> selectionModel.selectedIndexProperty().set(newValue.intValue()));
-        listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> selectionModel.selectedItemProperty().set(newValue));
-        selectionModel.selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.intValue() != oldValue.intValue()) {
-                if (newValue.intValue() == -1) {
-                    listView.getSelectionModel().clearSelection();
-                } else {
-                    listView.getSelectionModel().select(newValue.intValue());
-                }
-            }
-        });
-        selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != oldValue) {
-                if (newValue == null) {
-                    listView.getSelectionModel().clearSelection();
-                } else {
-                    listView.getSelectionModel().select(newValue);
-                }
-            }
-        });
-
-        /*
-         * This is a workaround to make selection work. For some reason when the focus changes the selection
-         * is reset. To prevent that we store the last selected item in a temp variable, when the selection is reset
-         * we force the selection to that temp variable. To clear the selection use ComboSelectionModelMock#clearSelection.
-         */
-        filteredList.addListener((InvalidationListener) invalidated -> {
-            if (selectionModel.getSelectedItem() != null) {
-                previousSelected = selectionModel.getSelectedItem();
-            }
-            listView.setItems(filteredList);
-            selectionModel.selectItem(previousSelected);
-        });
-        selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null && !selectionModel.isClearRequested()) {
-                selectionModel.selectItem(previousSelected);
             }
         });
     }
@@ -276,6 +269,14 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
             }
             if (newValue != null) {
                 newValue.addEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
+            }
+        });
+
+        popup.addEventHandler(WindowEvent.WINDOW_SHOWN, event -> {
+            ComboSelectionModelMock<T> selectionModelMock = comboBox.getSelectionModel();
+            IListSelectionModel<T> listSelectionModel = listView.getSelectionModel();
+            if (selectionModelMock.getSelectedItem() != null) {
+                listSelectionModel.select(selectionModelMock.getSelectedIndex(), selectionModelMock.getSelectedItem(), null);
             }
         });
     }
@@ -394,6 +395,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         container.getChildren().remove(searchContainer);
         filteredList.setPredicate(null);
         valueLabel.setVisible(true);
+        listView.setItems(filteredList);
         comboBox.requestFocus();
     }
 
@@ -427,7 +429,10 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         searchField.setLineColor(Color.TRANSPARENT);
         searchField.setFocusTraversable(false);
 
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> filteredList.setPredicate(getPredicate(searchField)));
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredList.setPredicate(getPredicate(searchField));
+            listView.setItems(filteredList);
+        });
         searchField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue && popup.isShowing()) {
                 reset();

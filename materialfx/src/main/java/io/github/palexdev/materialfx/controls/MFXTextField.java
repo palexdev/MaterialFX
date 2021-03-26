@@ -43,7 +43,7 @@ public class MFXTextField extends TextField {
     //================================================================================
     private static final StyleablePropertyFactory<MFXTextField> FACTORY = new StyleablePropertyFactory<>(TextField.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-text-field";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-textfield.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-textfield.css");
 
     private MFXDialogValidator validator;
 

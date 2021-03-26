@@ -30,7 +30,7 @@ import javafx.scene.control.Skin;
 
 public class MFXFlowlessCheckListView<T> extends AbstractFlowlessListView<T, MFXFlowlessCheckListCell<T>, IListCheckModel<T>> {
     private final String STYLE_CLASS = "mfx-check-list-view";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-flowless-check-listview.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-flowless-check-listview.css");
 
     public MFXFlowlessCheckListView() {
         this(FXCollections.observableArrayList());

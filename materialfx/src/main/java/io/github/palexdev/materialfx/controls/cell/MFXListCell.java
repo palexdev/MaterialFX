@@ -48,7 +48,7 @@ public class MFXListCell<T> extends ListCell<T> {
     //================================================================================
     private static final StyleablePropertyFactory<MFXListCell<?>> FACTORY = new StyleablePropertyFactory<>(ListCell.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-list-cell";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-listcell.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-listcell.css");
     private final RippleGenerator rippleGenerator;
 
     //================================================================================

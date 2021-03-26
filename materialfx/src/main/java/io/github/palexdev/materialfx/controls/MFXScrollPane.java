@@ -50,7 +50,7 @@ public class MFXScrollPane extends ScrollPane {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-scroll-pane";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-scrollpane.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-scrollpane.css");
 
     //================================================================================
     // Constructors

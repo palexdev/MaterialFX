@@ -52,7 +52,7 @@ public class MFXToggleNode extends ToggleButton {
     //================================================================================
     private static final StyleablePropertyFactory<MFXToggleNode> FACTORY = new StyleablePropertyFactory<>(ToggleButton.getClassCssMetaData());
     private final String STYLECLASS = "mfx-toggle-node";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-togglenode.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-togglenode.css");
     protected final RippleGenerator rippleGenerator = new RippleGenerator(this);
 
     //================================================================================

@@ -7,6 +7,7 @@ module MaterialFX.demo.main {
 
     requires fr.brouillard.oss.cssfx;
     requires org.kordamp.ikonli.javafx;
+    requires org.scenicview.scenicview;
 
     opens io.github.palexdev.materialfx.demo;
     opens io.github.palexdev.materialfx.demo.controllers;

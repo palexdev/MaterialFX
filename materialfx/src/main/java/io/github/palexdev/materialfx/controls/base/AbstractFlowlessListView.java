@@ -102,9 +102,6 @@ public abstract class AbstractFlowlessListView<T, C extends AbstractMFXFlowlessL
 
     @Override
     public void setItems(ObservableList<T> items) {
-        if (getSelectionModel() != null) {
-            getSelectionModel().clearSelection();
-        }
         getItems().setAll(items);
     }
 

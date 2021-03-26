@@ -23,10 +23,7 @@ import io.github.palexdev.materialfx.controls.cell.MFXTableColumnCell;
 import io.github.palexdev.materialfx.selection.TableSelectionModel;
 import io.github.palexdev.materialfx.selection.base.ITableSelectionModel;
 import io.github.palexdev.materialfx.skins.MFXTableViewSkin;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -46,30 +43,28 @@ public class MFXTableView<T> extends Control {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-table-view";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-tableview.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-tableview.css");
 
-    private final ObjectProperty<ObservableList<T>> items = new SimpleObjectProperty<>(FXCollections.observableArrayList());
+    private final ObservableList<T> items = FXCollections.observableArrayList();
     private final ObjectProperty<ITableSelectionModel<T>> selectionModel = new SimpleObjectProperty<>(null);
 
     private final ObservableList<MFXTableColumnCell<T>> columns = FXCollections.observableArrayList();
     private final IntegerProperty maxRows = new SimpleIntegerProperty(10);
     private final IntegerProperty maxRowsCombo = new SimpleIntegerProperty(20);
-    private final double fixedRowsHeight;
+    private final DoubleProperty fixedRowsHeight = new SimpleDoubleProperty(27);
 
     //================================================================================
     // Constructors
     //================================================================================
     public MFXTableView() {
         installSelectionModel();
-
-        fixedRowsHeight = 27;
         initialize();
     }
 
     public MFXTableView(double fixedRowsHeight) {
         installSelectionModel();
 
-        this.fixedRowsHeight = fixedRowsHeight;
+        setFixedRowsHeight(fixedRowsHeight);
         initialize();
     }
 
@@ -90,15 +85,11 @@ public class MFXTableView<T> extends Control {
     }
 
     public ObservableList<T> getItems() {
-        return items.get();
-    }
-
-    public ObjectProperty<ObservableList<T>> itemsProperty() {
         return items;
     }
 
     public void setItems(ObservableList<T> items) {
-        this.items.set(items);
+        this.items.setAll(items);
     }
 
     public ITableSelectionModel<T> getSelectionModel() {
@@ -144,7 +135,15 @@ public class MFXTableView<T> extends Control {
     }
 
     public double getFixedRowsHeight() {
+        return fixedRowsHeight.get();
+    }
+
+    public DoubleProperty fixedRowsHeightProperty() {
         return fixedRowsHeight;
+    }
+
+    public void setFixedRowsHeight(double fixedRowsHeight) {
+        this.fixedRowsHeight.set(fixedRowsHeight);
     }
 
     //================================================================================
