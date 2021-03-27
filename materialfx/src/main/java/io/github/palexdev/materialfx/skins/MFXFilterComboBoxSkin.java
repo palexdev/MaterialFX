@@ -192,10 +192,6 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
                 return;
             }
 
-            if (!newValue && popup.isShowing()) {
-                popup.hide();
-            }
-
             if (comboBox.isAnimateLines()) {
                 buildAndPlayLinesAnimation(newValue);
                 return;
@@ -323,11 +319,11 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         });
         icon.getIcon().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
             if (popup.isShowing()) {
-                reset();
-            } else {
-                show();
+                popup.hide();
+                forceRipple();
+                getSkinnable().requestFocus();
+                event.consume();
             }
-            event.consume();
         });
     }
 
@@ -422,6 +418,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
 
         valueLabel.setVisible(false);
         searchField = new MFXTextField("");
+        comboBox.editorFocusedProperty().bind(searchField.focusedProperty());
         searchField.setPromptText("Search...");
         searchField.setId("search-field");
         searchField.getStylesheets().setAll(comboBox.getUserAgentStylesheet());

@@ -20,10 +20,7 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.skins.MFXLabelSkin;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.css.*;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -64,6 +61,9 @@ public class MFXLabel extends Control {
 
     private final ObjectProperty<Pos> alignment = new SimpleObjectProperty<>(Pos.CENTER);
 
+    private static final PseudoClass EDITOR_FOCUSED_PSEUDO_CLASS = PseudoClass.getPseudoClass("editor");
+    private final BooleanProperty editorFocused = new SimpleBooleanProperty();
+
     //================================================================================
     // Constructors
     //================================================================================
@@ -82,6 +82,8 @@ public class MFXLabel extends Control {
     //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
+
+        editorFocused.addListener(invalidated ->pseudoClassStateChanged(EDITOR_FOCUSED_PSEUDO_CLASS, editorFocused.get()));
 
         /* Makes possible to choose the control style without depending on the constructor,
          *  it seems to work well but to be honest it would be way better if JavaFX would give us
@@ -173,6 +175,10 @@ public class MFXLabel extends Control {
         return trailingIcon;
     }
 
+    public void setTrailingIcon(Node trailingIcon) {
+        this.trailingIcon.set(trailingIcon);
+    }
+
     public Pos getAlignment() {
         return alignment.get();
     }
@@ -188,11 +194,15 @@ public class MFXLabel extends Control {
         this.alignment.set(alignment);
     }
 
-    public void setTrailingIcon(Node trailingIcon) {
-        this.trailingIcon.set(trailingIcon);
+    public boolean isEditorFocused() {
+        return editorFocused.get();
     }
 
-    //================================================================================
+    public BooleanProperty editorFocusedProperty() {
+        return editorFocused;
+    }
+
+//================================================================================
     // Styleable Properties
     //================================================================================
 

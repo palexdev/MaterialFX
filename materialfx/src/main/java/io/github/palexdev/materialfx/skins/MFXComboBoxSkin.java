@@ -180,10 +180,6 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
 
         // FOCUS
         comboBox.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue && popup.isShowing()) {
-                popup.hide();
-            }
-
             if (comboBox.isAnimateLines()) {
                 buildAndPlayLinesAnimation(newValue);
                 return;
@@ -296,6 +292,8 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         icon.getIcon().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
             if (popup.isShowing()) {
                 popup.hide();
+                forceRipple();
+                getSkinnable().requestFocus();
                 event.consume();
             }
         });

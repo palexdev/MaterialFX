@@ -42,6 +42,10 @@
     -mfx-color: rgb(76, 0, 225);
 }
 
+.mfx-combo-box:editor .mfx-icon-wrapper .mfx-font-icon {
+    -mfx-color: rgb(76, 0, 225);
+}
+
 .mfx-list-view {
     -fx-background-color: white;
     -fx-border-color: #A4B1B6;

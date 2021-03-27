@@ -2,7 +2,10 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.skins.MFXFilterComboBoxSkin;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
+import javafx.css.PseudoClass;
 import javafx.scene.control.Skin;
 
 /**
@@ -19,6 +22,9 @@ public class MFXFilterComboBox<T> extends MFXComboBox<T> {
     //================================================================================
     private final String STYLE_CLASS = "mfx-filter-combo-box";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-filter-combobox.css");
+
+    private static final PseudoClass EDITOR_FOCUSED_PSEUDO_CLASS = PseudoClass.getPseudoClass("editor");
+    private final BooleanProperty editorFocused = new SimpleBooleanProperty();
 
     /**
      * When the popup is shown and the text field is added to the scene the text field is not focused,
@@ -45,6 +51,7 @@ public class MFXFilterComboBox<T> extends MFXComboBox<T> {
     //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
+        editorFocused.addListener(invalidated -> pseudoClassStateChanged(EDITOR_FOCUSED_PSEUDO_CLASS, editorFocused.get()));
     }
 
     public boolean isForceFieldFocusOnShow() {
@@ -53,6 +60,14 @@ public class MFXFilterComboBox<T> extends MFXComboBox<T> {
 
     public void setForceFieldFocusOnShow(boolean forceFieldFocusOnShow) {
         this.forceFieldFocusOnShow = forceFieldFocusOnShow;
+    }
+
+    public boolean isEditorFocused() {
+        return editorFocused.get();
+    }
+
+    public BooleanProperty editorFocusedProperty() {
+        return editorFocused;
     }
 
     //================================================================================

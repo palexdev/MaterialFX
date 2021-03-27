@@ -26,7 +26,8 @@
     -fx-border-width: 1.2;
 }
 
-.mfx-combo-box:focused {
+.mfx-combo-box:focused,
+.mfx-combo-box:editor {
     -fx-border-color: rgb(76, 0, 225);
 }
 
@@ -45,6 +46,10 @@
 }
 
 .mfx-combo-box:focused .mfx-icon-wrapper .mfx-font-icon {
+    -mfx-color: rgb(76, 0, 225);
+}
+
+.mfx-combo-box:editor .mfx-icon-wrapper .mfx-font-icon {
     -mfx-color: rgb(76, 0, 225);
 }
 

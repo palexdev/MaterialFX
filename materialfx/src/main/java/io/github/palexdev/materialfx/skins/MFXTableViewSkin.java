@@ -168,7 +168,6 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
 
         rowsPerPageCombo = new MFXComboBox<>();
         rowsPerPageCombo.setComboStyle(Styles.ComboBoxStyles.STYLE2);
-        rowsPerPageCombo.setMaxPopupWidth(100);
         rowsPerPageCombo.setMaxPopupHeight(100);
         HBox.setMargin(rowsPerPageCombo, new Insets(0, -5, 0, 0));
         tableView.maxRowsProperty().bind(rowsPerPageCombo.selectedValueProperty());
