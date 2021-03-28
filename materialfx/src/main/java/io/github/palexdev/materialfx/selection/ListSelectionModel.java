@@ -29,10 +29,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Concrete implementation of the {@code IListSelectionModel} interface.
+ */
 public class ListSelectionModel<T> implements IListSelectionModel<T> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final MapProperty<Integer, T> selectedItems = new SimpleMapProperty<>(getObservableTreeMap());
     private boolean allowsMultipleSelection = false;
 
+    //================================================================================
+    // Methods
+    //================================================================================
+
+    /**
+     * This method is called when the mouse event passed to {@link #select(int, Object, MouseEvent)}
+     * is null. Since it's null there's no check for isShiftDown() or isControlDown(), so in case
+     * of multiple selection enabled the passed index and data will always be added to the map.
+     */
     protected void select(int index, T data) {
         if (allowsMultipleSelection) {
             selectedItems.put(index, data);
@@ -43,6 +58,33 @@ public class ListSelectionModel<T> implements IListSelectionModel<T> {
         }
     }
 
+    /**
+     * Builds a new observable map backed by a TreeMap.
+     */
+    protected ObservableMap<Integer, T> getObservableTreeMap() {
+        return FXCollections.observableMap(new TreeMap<>());
+    }
+
+    //================================================================================
+    // Override Methods
+    //================================================================================
+
+    /**
+     * Called by the list cells when the mouse is pressed.
+     * The mouse event is needed in case of multiple selection allowed because
+     * we check if the Shift key or Ctrl key were pressed.
+     * <p>
+     * If the mouseEvent is null we call the other {@link #select(int, T)} method.
+     * <p>
+     * If the selection is multiple and Shift or Ctrl are pressed the new entry
+     * is put in the map.
+     * <p>
+     * If the selection is single the map is replaced by a new one that contains only the
+     * passed entry.
+     * <p>
+     * Note that if the item is already selected it is removed from the map, this behavior though is
+     * managed by the cells.
+     */
     @Override
     public void select(int index, T data, MouseEvent mouseEvent) {
         if (mouseEvent == null) {
@@ -50,21 +92,19 @@ public class ListSelectionModel<T> implements IListSelectionModel<T> {
             return;
         }
 
-        if (!allowsMultipleSelection) {
+        if (allowsMultipleSelection && (mouseEvent.isShiftDown() || mouseEvent.isControlDown())) {
+            selectedItems.put(index, data);
+        } else {
             ObservableMap<Integer, T> tmpMap = getObservableTreeMap();
             tmpMap.put(index, data);
             selectedItems.set(tmpMap);
-        } else {
-            if (mouseEvent.isShiftDown() || mouseEvent.isControlDown()) {
-                selectedItems.put(index, data);
-            } else {
-                ObservableMap<Integer, T> tmpMap = getObservableTreeMap();
-                tmpMap.put(index, data);
-                selectedItems.set(tmpMap);
-            }
         }
     }
 
+    /**
+     * This method is called when the cell finds the data in the selection model
+     * but the index changed so it needs to be updated.
+     */
     @Override
     public void updateIndex(T data, int index) {
         int mapIndex = selectedItems.entrySet()
@@ -78,11 +118,18 @@ public class ListSelectionModel<T> implements IListSelectionModel<T> {
         }
     }
 
+    /**
+     * Removes the mapping for the given index.
+     */
     @Override
     public void clearSelectedItem(int index) {
         selectedItems.remove(index);
     }
 
+    /**
+     * Retrieves the index for the given data, if preset
+     * removes the mapping for that index.
+     */
     @Override
     public void clearSelectedItem(T data) {
         selectedItems.entrySet().stream()
@@ -91,16 +138,26 @@ public class ListSelectionModel<T> implements IListSelectionModel<T> {
                 .ifPresent(entry -> selectedItems.remove(entry.getKey()));
     }
 
+    /**
+     * Removes all the entries from the map.
+     */
     @Override
     public void clearSelection() {
         selectedItems.clear();
     }
 
+    /**
+     * @return the first selected item in the map
+     */
     @Override
     public T getSelectedItem() {
         return getSelectedItem(0);
     }
 
+    /**
+     * @return the selected item in the map with the given index or null
+     * if not found
+     */
     @Override
     public T getSelectedItem(int index) {
         if (selectedItems.isEmpty()) {
@@ -115,27 +172,35 @@ public class ListSelectionModel<T> implements IListSelectionModel<T> {
         }
     }
 
+    /**
+     * @return an unmodifiable list of all the selected items
+     */
     @Override
     public List<T> getSelectedItems() {
         return List.copyOf(selectedItems.values());
     }
 
+    /**
+     * @return the map property used for the selection
+     */
     @Override
     public MapProperty<Integer, T> selectedItemsProperty() {
         return this.selectedItems;
     }
 
+    /**
+     * @return true if allows multiple selection, false if not.
+     */
     @Override
     public boolean allowsMultipleSelection() {
         return allowsMultipleSelection;
     }
 
+    /**
+     * Sets the selection mode of the model, single or multiple.
+     */
     @Override
     public void setAllowsMultipleSelection(boolean multipleSelection) {
         this.allowsMultipleSelection = multipleSelection;
-    }
-
-    protected ObservableMap<Integer, T> getObservableTreeMap() {
-        return FXCollections.observableMap(new TreeMap<>());
     }
 }

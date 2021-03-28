@@ -42,7 +42,18 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This control is a context menu built from scratch which extends {@code VBox}.
+ * <p>
+ * It easily styleable and allows to add separators between the context menu nodes.
+ * The context menu is shown in a {@code PopupControl}.
+ * <p></p>
+ * It is <b>highly recommended</b> to use the {@link Builder} class to create a context menu.
+ */
 public class MFXContextMenu extends VBox {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final String STYLE_CLASS = "mfx-context-menu";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-contextmenu.css");
 
@@ -56,6 +67,9 @@ public class MFXContextMenu extends VBox {
     private final EventHandler<MouseEvent> openHandler;
     private final EventHandler<KeyEvent> keyHandler;
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXContextMenu() {
         this(0);
     }
@@ -102,6 +116,13 @@ public class MFXContextMenu extends VBox {
         };
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
+
+    /**
+     * Installs the context menu to the given node.
+     */
     public void install(Node node) {
         node.sceneProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
@@ -122,6 +143,10 @@ public class MFXContextMenu extends VBox {
         installBehavior();
     }
 
+    /**
+     * Installs the context menu behavior to the given node.
+     * Used in {@link #install(Node)}.
+     */
     private void installBehavior() {
         if (nodeReference != null) {
             Node node = nodeReference.get();
@@ -133,6 +158,10 @@ public class MFXContextMenu extends VBox {
         }
     }
 
+    /**
+     * If the node reference is not null and {@link #install(Node)} is called again, this method is called to
+     * remove the context menu from the previous node.
+     */
     private void dispose() {
         if (nodeReference != null) {
             Node node = nodeReference.get();
@@ -168,10 +197,16 @@ public class MFXContextMenu extends VBox {
         });
     }
 
+    /**
+     * Shows the context menu' popup.
+     */
     public void show(Node ownerNode, double anchorX, double anchorY) {
         popupControl.show(ownerNode, anchorX, anchorY);
     }
 
+    /**
+     * Hides the context menu' popup.
+     */
     public void hide() {
         popupControl.hide();
     }
@@ -192,28 +227,87 @@ public class MFXContextMenu extends VBox {
         popupControl.removeEventFilter(eventType, eventHandler);
     }
 
+    /**
+     * Utils class that facilitates the creation of context menus with fluent api.
+     * <p>
+     * Example from {@code MFXTableView Skin}:
+     * <p></p>
+     * <pre>
+     * {@code
+     * MFXContextMenuItem restoreWidthThis = new MFXContextMenuItem(
+     *      "Restore this column width",
+     *      event -> column.setMinWidth(column.getInitialWidth())
+     * );
+     *
+     * MFXContextMenuItem restoreWidthAll = new MFXContextMenuItem(
+     *      "Restore all columns width",
+     *      event -> columnsContainer.getChildren().stream()
+     *          .filter(node -> node instanceof MFXTableColumnCell)
+     *          .map(node -> (MFXTableColumnCell<T>) node)
+     *          .forEach(c -> c.setMinWidth(c.getInitialWidth()))
+     * );
+     *
+     * MFXContextMenuItem autoSizeThis = new MFXContextMenuItem(
+     *      "Autosize this column",
+     *      event -> autoSizeColumn(column)
+     *  );
+     *
+     * MFXContextMenuItem autoSizeAll = new MFXContextMenuItem(
+     *      "Autosize all columns",
+     *      event -> columnsContainer.getChildren().stream()
+     *          .filter(node -> node instanceof MFXTableColumnCell)
+     *          .map(node -> (MFXTableColumnCell<T>) node)
+     *          .forEach(this::autoSizeColumn)
+     * );
+     *
+     * new MFXContextMenu.Builder()
+     *      .addMenuItem(autoSizeAll)
+     *      .addMenuItem(autoSizeThis)
+     *      .addSeparator()
+     *      .addMenuItem(restoreWidthAll)
+     *      .addMenuItem(restoreWidthThis)
+     *      .install(column);
+     * }
+     * </pre>
+     */
     public static class Builder {
         private final MFXContextMenu contextMenu;
 
+        /**
+         * Creates a new Builder with a new MFXContextMenu instance.
+         */
         public Builder() {
             contextMenu = new MFXContextMenu();
         }
 
+        /**
+         * Creates a new Builder with a new MFXContextMenu instance that has
+         * the spacing set to the given value.
+         */
         public Builder(double spacing) {
             contextMenu = new MFXContextMenu(spacing);
         }
 
+        /**
+         * Adds a new node to the context menu with the specified action on mouse pressed.
+         */
         public Builder addMenuItem(Node node, EventHandler<MouseEvent> action) {
             node.addEventHandler(MouseEvent.MOUSE_PRESSED, action);
             contextMenu.getChildren().add(node);
             return this;
         }
 
+        /**
+         * Adds the specified {@link MFXContextMenuItem} to the context menu.
+         */
         public Builder addMenuItem(MFXContextMenuItem item) {
             contextMenu.getChildren().add(item.getNode());
             return this;
         }
 
+        /**
+         * Adds a separator to the context menu.
+         */
         public Builder addSeparator() {
             Line separator = new Line();
             separator.getStyleClass().add("separator");
@@ -223,10 +317,17 @@ public class MFXContextMenu extends VBox {
             return this;
         }
 
+        /**
+         * @return the built context menu instance
+         */
         public MFXContextMenu get() {
             return contextMenu;
         }
 
+        /**
+         * Installs the context menu to the given node and returns the
+         * context menu instance.
+         */
         public MFXContextMenu install(Node node) {
             contextMenu.install(node);
             return contextMenu;

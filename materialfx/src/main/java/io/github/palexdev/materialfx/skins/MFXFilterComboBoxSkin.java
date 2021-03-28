@@ -147,6 +147,9 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
 
     /**
      * Calls the methods which define the control behavior.
+     * <p>
+     * See {@link #comboBehavior()}, {@link #selectionBehavior()},
+     * {@link #popupBehavior()}, {@link #listBehavior()}, {@link #iconBehavior()}
      */
     private void setBehavior() {
         comboBehavior();
@@ -206,7 +209,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
     }
 
     /**
-     * Specifies the behavior for selectedValue, listview selection, combo box selection and filtered list change.
+     * Specifies the behavior for combo box selection, listview selection, and selectedValue.
      */
     private void selectionBehavior() {
         MFXFilterComboBox<T> comboBox = getSkinnable();
@@ -474,6 +477,9 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         transition.play();
     }
 
+    /**
+     * Used to generate the ripple effect of the icon when an event filter consumes the event.
+     */
     private void forceRipple() {
         RippleGenerator rg = icon.getRippleGenerator();
         rg.setGeneratorCenterX(icon.getWidth() / 2);

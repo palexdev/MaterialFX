@@ -135,6 +135,10 @@ public class MFXToggleNode extends ToggleButton {
         NodeUtils.makeRegionCircular(this);
     }
 
+    /**
+     * Initializes the ripple generator's properties and
+     * adds the handler for ripple generation to the control.
+     */
     protected void setupRippleGenerator() {
         rippleGenerator.setAnimateBackground(false);
         rippleGenerator.setRippleColor(Color.GRAY);
@@ -151,9 +155,6 @@ public class MFXToggleNode extends ToggleButton {
     // Styleable Properties
     //================================================================================
 
-    /**
-     * Specifies the size (both width and height) of the control.
-     */
     private final StyleableDoubleProperty size = new SimpleStyleableDoubleProperty(
             StyleableProperties.SIZE,
             this,
@@ -161,9 +162,6 @@ public class MFXToggleNode extends ToggleButton {
             40.0
     );
 
-    /**
-     * Specifies the shape of the control
-     */
     private final StyleableObjectProperty<ToggleNodeShape> toggleShape = new SimpleStyleableObjectProperty<>(
             StyleableProperties.SHAPE,
             this,
@@ -171,11 +169,6 @@ public class MFXToggleNode extends ToggleButton {
             ToggleNodeShape.CIRCLE
     );
 
-    /**
-     * Specifies the background color when selected.
-     *
-     * @see Color
-     */
     private final StyleableObjectProperty<Paint> selectedColor = new SimpleStyleableObjectProperty<>(
             StyleableProperties.SELECTED_COLOR,
             this,
@@ -183,11 +176,6 @@ public class MFXToggleNode extends ToggleButton {
             Color.rgb(190, 190, 190, 0.5)
     );
 
-    /**
-     * Specifies the background color when unselected.
-     *
-     * @see Color
-     */
     private final StyleableObjectProperty<Paint> unSelectedColor = new SimpleStyleableObjectProperty<>(
             StyleableProperties.UNSELECTED_COLOR,
             this,
@@ -199,6 +187,9 @@ public class MFXToggleNode extends ToggleButton {
         return size.get();
     }
 
+    /**
+     * Specifies the size (both width and height) of the control.
+     */
     public StyleableDoubleProperty sizeProperty() {
         return size;
     }
@@ -211,6 +202,9 @@ public class MFXToggleNode extends ToggleButton {
         return toggleShape.get();
     }
 
+    /**
+     * Specifies the shape of the control
+     */
     public StyleableObjectProperty<ToggleNodeShape> toggleShapeProperty() {
         return toggleShape;
     }
@@ -223,6 +217,9 @@ public class MFXToggleNode extends ToggleButton {
         return selectedColor.get();
     }
 
+    /**
+     * Specifies the background color when selected.
+     */
     public StyleableObjectProperty<Paint> selectedColorProperty() {
         return selectedColor;
     }
@@ -235,6 +232,9 @@ public class MFXToggleNode extends ToggleButton {
         return unSelectedColor.get();
     }
 
+    /**
+     * Specifies the background color when unselected.
+     */
     public StyleableObjectProperty<Paint> unSelectedColorProperty() {
         return unSelectedColor;
     }

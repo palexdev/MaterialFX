@@ -37,12 +37,27 @@ import javafx.util.Duration;
 
 import java.util.List;
 
+/**
+ * Base class for all list views based on Flowless, defines common properties and behavior.
+ * <p>
+ * Extends {@link Control} and implements {@link IListView}.
+ *
+ * @param <T> the type of data within the ListView
+ * @param <C> the type of cells that will be used
+ * @param <S> the type of selection model
+ */
 public abstract class AbstractFlowlessListView<T, C extends AbstractMFXFlowlessListCell<T>, S extends IListSelectionModel<T>> extends Control implements IListView<T, C, S> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private static final StyleablePropertyFactory<AbstractFlowlessListView<?, ?, ?>> FACTORY = new StyleablePropertyFactory<>(Control.getClassCssMetaData());
     protected final ReadOnlyObjectWrapper<ObservableList<T>> items = new ReadOnlyObjectWrapper<>(FXCollections.observableArrayList());
     protected final ObjectProperty<Callback<T, C>> celFactory = new SimpleObjectProperty<>();
     protected final ObjectProperty<S> selectionModel = new SimpleObjectProperty<>();
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public AbstractFlowlessListView() {
         this(FXCollections.observableArrayList());
     }
@@ -54,6 +69,23 @@ public abstract class AbstractFlowlessListView<T, C extends AbstractMFXFlowlessL
         addBarsListeners();
     }
 
+    //================================================================================
+    // Abstract Methods
+    //================================================================================
+
+    /**
+     * Abstract method called by the constructor to set a default factory for the cells.
+     */
+    protected abstract void setDefaultCellFactory();
+
+    /**
+     * Abstract method called by the constructor to set a default selection model.
+     */
+    protected abstract void setDefaultSelectionModel();
+
+    //================================================================================
+    // Methods
+    //================================================================================
     protected void addBarsListeners() {
         this.trackColor.addListener((observable, oldValue, newValue) -> {
             if (!newValue.equals(oldValue)) {
@@ -74,9 +106,6 @@ public abstract class AbstractFlowlessListView<T, C extends AbstractMFXFlowlessL
         });
     }
 
-    protected abstract void setDefaultCellFactory();
-    protected abstract void setDefaultSelectionModel();
-
     /**
      * Sets the CSS looked-up colors
      */
@@ -89,6 +118,9 @@ public abstract class AbstractFlowlessListView<T, C extends AbstractMFXFlowlessL
         setStyle(sb.toString());
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
 
     @Override
     public ObservableList<T> getItems() {
@@ -141,55 +173,18 @@ public abstract class AbstractFlowlessListView<T, C extends AbstractMFXFlowlessL
     //================================================================================
     // ScrollBars Properties
     //================================================================================
-
-    /**
-     * Specifies the color of the scrollbars' track.
-     */
     private final ObjectProperty<Paint> trackColor = new SimpleObjectProperty<>(Color.rgb(132, 132, 132));
-
-    /**
-     * Specifies the color of the scrollbars' thumb.
-     */
     private final ObjectProperty<Paint> thumbColor = new SimpleObjectProperty<>(Color.rgb(137, 137, 137));
-
-    /**
-     * Specifies the color of the scrollbars' thumb when mouse hover.
-     */
     private final ObjectProperty<Paint> thumbHoverColor = new SimpleObjectProperty<>(Color.rgb(89, 88, 91));
-
-    /**
-     * Specifies the time after which the scrollbars are hidden.
-     */
     private final ObjectProperty<Duration> hideAfter = new SimpleObjectProperty<>(Duration.seconds(1));
-
-    //================================================================================
-    // Styleable Properties
-    //================================================================================
-
-    /**
-     * Specifies if the scrollbars should be hidden when the mouse is not on the list.
-     */
-    private final StyleableBooleanProperty hideScrollBars = new SimpleStyleableBooleanProperty(
-            StyleableProperties.HIDE_SCROLLBARS,
-            this,
-            "hideScrollBars",
-            false
-    );
-
-    /**
-     * Specifies the shadow strength around the control.
-     */
-    private final StyleableObjectProperty<DepthLevel> depthLevel = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.DEPTH_LEVEL,
-            this,
-            "depthLevel",
-            DepthLevel.LEVEL2
-    );
 
     public Paint getTrackColor() {
         return trackColor.get();
     }
 
+    /**
+     * Specifies the color of the scrollbars' track.
+     */
     public ObjectProperty<Paint> trackColorProperty() {
         return trackColor;
     }
@@ -202,6 +197,9 @@ public abstract class AbstractFlowlessListView<T, C extends AbstractMFXFlowlessL
         return thumbColor.get();
     }
 
+    /**
+     * Specifies the color of the scrollbars' thumb.
+     */
     public ObjectProperty<Paint> thumbColorProperty() {
         return thumbColor;
     }
@@ -214,6 +212,9 @@ public abstract class AbstractFlowlessListView<T, C extends AbstractMFXFlowlessL
         return thumbHoverColor.get();
     }
 
+    /**
+     * Specifies the color of the scrollbars' thumb when mouse hover.
+     */
     public ObjectProperty<Paint> thumbHoverColorProperty() {
         return thumbHoverColor;
     }
@@ -226,6 +227,9 @@ public abstract class AbstractFlowlessListView<T, C extends AbstractMFXFlowlessL
         return hideAfter.get();
     }
 
+    /**
+     * Specifies the time after which the scrollbars are hidden.
+     */
     public ObjectProperty<Duration> hideAfterProperty() {
         return hideAfter;
     }
@@ -234,10 +238,30 @@ public abstract class AbstractFlowlessListView<T, C extends AbstractMFXFlowlessL
         this.hideAfter.set(hideAfter);
     }
 
+    //================================================================================
+    // Styleable Properties
+    //================================================================================
+    private final StyleableBooleanProperty hideScrollBars = new SimpleStyleableBooleanProperty(
+            StyleableProperties.HIDE_SCROLLBARS,
+            this,
+            "hideScrollBars",
+            false
+    );
+
+    private final StyleableObjectProperty<DepthLevel> depthLevel = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.DEPTH_LEVEL,
+            this,
+            "depthLevel",
+            DepthLevel.LEVEL2
+    );
+
     public boolean isHideScrollBars() {
         return hideScrollBars.get();
     }
 
+    /**
+     * Specifies if the scrollbars should be hidden when the mouse is not on the list.
+     */
     public StyleableBooleanProperty hideScrollBarsProperty() {
         return hideScrollBars;
     }
@@ -250,6 +274,9 @@ public abstract class AbstractFlowlessListView<T, C extends AbstractMFXFlowlessL
         return depthLevel.get();
     }
 
+    /**
+     * Specifies the shadow strength around the control.
+     */
     public StyleableObjectProperty<DepthLevel> depthLevelProperty() {
         return depthLevel;
     }

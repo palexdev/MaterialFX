@@ -134,12 +134,10 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
     //================================================================================
 
     /**
-     * Adds listeners for: focus, selected value, maxPopupHeight and maxPopupWidth,
-     * selectedIndex and selectedItem properties, parent property.
+     * Calls the methods which define the control behavior.
      * <p>
-     * Adds bindings for: selected value, maxPopupHeight and maxPopupWidth,
-     * <p>
-     * Adds handlers for: focus, managePopup/hide the popup.
+     * See {@link #comboBehavior()}, {@link #selectionBehavior()},
+     * {@link #popupBehavior()}, {@link #listBehavior()}, {@link #iconBehavior()}
      */
     private void setBehavior() {
         comboBehavior();
@@ -194,7 +192,7 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
     }
 
     /**
-     * Specifies the behavior for selectedValue, listview selection, combo box selection and filtered list change.
+     * Specifies the behavior for combo box selection, listview selection and selectedValue.
      */
     private void selectionBehavior() {
         MFXComboBox<T> comboBox = getSkinnable();
@@ -311,7 +309,7 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
     }
 
     /**
-     * This method build the combo box popup and initializes the listview.
+     * This method builds the combo box popup and initializes the listview.
      */
     protected PopupControl buildPopup() {
         MFXComboBox<T> comboBox = getSkinnable();
@@ -326,6 +324,10 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         return popupControl;
     }
 
+    /**
+     * Convenience method to manage the popup. If the popup is not showing
+     * gets the coordinates and calls show() otherwise hides it.
+     */
     private void managePopup() {
         MFXComboBox<T> comboBox = getSkinnable();
 
@@ -345,6 +347,9 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         }
     }
 
+    /**
+     * Used to generate the ripple effect of the icon when an event filter consumes the event.
+     */
     private void forceRipple() {
         RippleGenerator rg = icon.getRippleGenerator();
         rg.setGeneratorCenterX(icon.getWidth() / 2);
@@ -382,7 +387,7 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
     /**
      * Sets the label text according to the combo box selected item.
      * <p>
-     * If the item is instance of {@code Labeled} then whe check if the item has a graphic != null
+     * If the item is instance of {@code Labeled} then we check if the item has a graphic != null
      * and use the item text. If that's not the case then we call toString on the item.
      */
     private void setValueLabel(T item) {

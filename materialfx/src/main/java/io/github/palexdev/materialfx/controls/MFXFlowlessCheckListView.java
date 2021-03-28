@@ -28,10 +28,27 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Skin;
 
+/**
+ * Implementation of a check list view based on Flowless.
+ * <p>
+ * Extends {@link AbstractFlowlessListView}.
+ * <p></p>
+ * Default cell: {@link MFXFlowlessCheckListCell}.
+ * <p>
+ * Default selection model: {@link ListCheckModel}.
+ * <p>
+ * Default skin: {@link MFXFlowlessListViewSkin}.
+ */
 public class MFXFlowlessCheckListView<T> extends AbstractFlowlessListView<T, MFXFlowlessCheckListCell<T>, IListCheckModel<T>> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final String STYLE_CLASS = "mfx-check-list-view";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-flowless-check-listview.css");
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXFlowlessCheckListView() {
         this(FXCollections.observableArrayList());
     }
@@ -41,10 +58,16 @@ public class MFXFlowlessCheckListView<T> extends AbstractFlowlessListView<T, MFX
         initialize();
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
     @Override
     protected void setDefaultCellFactory() {
         setCellFactory(item -> new MFXFlowlessCheckListCell<>(this, item));

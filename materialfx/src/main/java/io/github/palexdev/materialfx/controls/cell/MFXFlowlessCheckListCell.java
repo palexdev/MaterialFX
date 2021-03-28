@@ -33,7 +33,15 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 
+/**
+ * Implementation of an {@link AbstractMFXFlowlessListCell} which has a combo box
+ * for usage in {@link MFXFlowlessCheckListCell}, has the checked property and pseudo class
+ * ":checked" for usage in CSS.
+ */
 public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final String STYLE_CLASS = "mfx-check-list-cell";
     private final String STYLESHHET = MFXResourcesLoader.load("css/mfx-flowless-check-listcell.css");
     protected final RippleGenerator rippleGenerator = new RippleGenerator(this);
@@ -45,6 +53,9 @@ public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> 
 
     private boolean clearSelectionOnCheck = false;
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXFlowlessCheckListCell(MFXFlowlessCheckListView<T> listView, T data) {
         this(listView, data, 32);
     }
@@ -55,9 +66,25 @@ public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> 
         checkbox = new MFXCheckbox("");
         initialize();
     }
-    
+
+    //================================================================================
+    // Methods
+    //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
+        addListeners();
+        setupRippleGenerator();
+    }
+
+    /**
+     * Adds listeners to:
+     *  - checked property to update the pseudo class state.<p>
+     *  - binds the checked property to the selected property of the checkbox.<p>
+     *  - checkbox' selected property to update the check model and also checks if the behavior
+     *      is set to clear selection.<p>
+     *  - check model's checked items property to properly update the state of the check box's selected property.
+     */
+    private void addListeners() {
         checked.addListener(invalidated -> pseudoClassStateChanged(CHECKED_PSEUDO_CLASS, checked.get()));
         checked.bind(checkbox.selectedProperty());
 
@@ -73,9 +100,11 @@ public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> 
             }
         });
 
-        setupRippleGenerator();
     }
 
+    /**
+     * Sets up the properties of the ripple generator and adds the mouse pressed filter.
+     */
     protected void setupRippleGenerator() {
         rippleGenerator.setManaged(false);
         rippleGenerator.rippleRadiusProperty().bind(widthProperty().divide(2.0));
@@ -92,10 +121,21 @@ public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> 
         return clearSelectionOnCheck;
     }
 
+    /**
+     * Sets the behavior of the cell when an item is checked.
+     * <p>
+     * Selection and check are handled separately, this means that you can check and select items
+     * at the same time. By setting this flag to true when an item is checked the selection
+     * will be cleared.
+     */
     public void setClearSelectionOnCheck(boolean clearSelectionOnCheck) {
         this.clearSelectionOnCheck = clearSelectionOnCheck;
     }
 
+    /**
+     * Updates the state of the check model according to the cell's
+     * check state.
+     */
     public void updateCheckModel(boolean checked) {
         IListCheckModel<T> checkModel = (IListCheckModel<T>) listView.getSelectionModel();
         if (checked) {
@@ -105,12 +145,18 @@ public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> 
         }
     }
 
+    /**
+     * Checks if the check model contains the index and the data of this cell.
+     */
     protected boolean containsEqualsBothCheck() {
         IListCheckModel<T> checkModel = (IListCheckModel<T>) listView.getSelectionModel();
         return checkModel.checkedItemsProperty().containsKey(getIndex()) &&
                 checkModel.checkedItemsProperty().get(getIndex()).equals(getData());
     }
 
+    /**
+     * Checks if the check model contains the data of the cell but the index is not the same.
+     */
     protected boolean containsNotEqualsIndexCheck() {
         IListCheckModel<T> checkModel = (IListCheckModel<T>) listView.getSelectionModel();
         return checkModel.checkedItemsProperty().containsValue(getData()) &&
@@ -119,12 +165,30 @@ public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> 
                         .anyMatch(entry -> entry.getKey() != getIndex() && entry.getValue().equals(getData()));
     }
 
+    /**
+     * Checks if the check model contains the index of the cell but the data is not the same.
+     */
     protected boolean containsNotEqualsDataCheck() {
         IListCheckModel<T> checkModel = (IListCheckModel<T>) listView.getSelectionModel();
         return checkModel.checkedItemsProperty().containsKey(getIndex()) &&
                 !checkModel.checkedItemsProperty().get(getIndex()).equals(getData());
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
+
+    /**
+     * Inherited doc:
+     * <p>
+     * {@inheritDoc}
+     * <p></p>
+     *
+     * If the given data is instance of Node then the data is cast
+     * to Node and added to the children list with the checkbox as well.
+     * Otherwise a Label is created and toString is called on the data.
+     * The label has style class: "data-label"
+     */
     @Override
     protected void render(T data) {
         if (data instanceof Node) {

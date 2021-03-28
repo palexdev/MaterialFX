@@ -47,6 +47,9 @@ public class MFXButtonSkin extends ButtonSkin {
     // Methods
     //================================================================================
 
+    /**
+     * Binds the button's ripple properties to the ripple generator ones.
+     */
     protected void setupRippleGenerator() {
         MFXButton button = (MFXButton) getSkinnable();
         RippleGenerator rippleGenerator = button.getRippleGenerator();

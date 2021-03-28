@@ -54,6 +54,9 @@ public class MFXTableColumnCellSkin<T> extends LabelSkin {
         setListeners();
     }
 
+    /**
+     * Adds listeners to the following properties: hasTooltipProperty
+     */
     @SuppressWarnings("unchecked")
     private void setListeners() {
         MFXTableColumnCell<T> column = (MFXTableColumnCell<T>) getSkinnable();
@@ -97,6 +100,10 @@ public class MFXTableColumnCellSkin<T> extends LabelSkin {
         }
     }
 
+    /**
+     * Responsible for building the column cell tooltip. By default creates
+     * a tooltip with the name of the column as text.
+     */
     @SuppressWarnings("unchecked")
     private Tooltip buildTooltip() {
         MFXTableColumnCell<T> column = (MFXTableColumnCell<T>) getSkinnable();

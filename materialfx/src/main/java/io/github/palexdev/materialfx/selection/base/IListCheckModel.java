@@ -22,6 +22,9 @@ import javafx.beans.property.MapProperty;
 
 import java.util.List;
 
+/**
+ * Public API used by any {@code MFXFlowlessCheckListView}.
+ */
 public interface IListCheckModel<T> extends IListSelectionModel<T> {
     void check(int index, T data);
     void clearCheckedItem(int index);

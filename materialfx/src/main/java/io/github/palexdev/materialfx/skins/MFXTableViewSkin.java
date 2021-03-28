@@ -49,6 +49,7 @@ import javafx.collections.transformation.SortedList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.Skin;
 import javafx.scene.control.SkinBase;
 import javafx.scene.input.MouseButton;
@@ -57,6 +58,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.util.Duration;
 
@@ -204,8 +206,8 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
      * <p>
      * Adds bindings to:
      * <p>
-     * - filter icon disable property, bound to tableFiltered property.<p>
-     * - clear filter icon disable property, bound to tableFiltered.not() property.<p>
+     * - filter icon disable property, bound to tableFiltered property or listEmpty.<p>
+     * - clear filter icon disable property, bound to tableFiltered.not() property or listEmpty.<p>
      * <p>
      * Adds event handlers for:
      * <p>
@@ -217,7 +219,6 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
     private void setListeners() {
         MFXTableView<T> tableView = getSkinnable();
 
-        tableView.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> tableView.requestFocus());
         tableView.getItems().addListener((InvalidationListener) invalidated -> {
             tableView.getSelectionModel().clearSelection();
             if (tableFiltered.get()) {
@@ -227,16 +228,6 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
             sortedList = new SortedList<>(tableView.getItems(), prevComp);
             buildRows();
         });
-        tableView.addEventHandler(TableViewEvent.FORCE_UPDATE_EVENT, event -> {
-            tableView.getSelectionModel().clearSelection();
-            if (tableFiltered.get()) {
-                tableFiltered.set(false);
-            }
-            Comparator<? super T> prevComp = sortedList.getComparator();
-            sortedList = new SortedList<>(tableView.getItems(), prevComp);
-            buildRows();
-        });
-
         rowsPerPageCombo.selectedValueProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.equals(oldValue)) {
                 index = 0;
@@ -253,6 +244,23 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
             }
         });
 
+        BooleanBinding listEmpty = Bindings.createBooleanBinding(
+                () -> tableView.getItems().isEmpty(),
+                tableView.getItems()
+        );
+        filterIcon.disableProperty().bind(tableFiltered.or(listEmpty));
+        clearFilterIcon.disableProperty().bind(tableFiltered.not().or(listEmpty));
+
+        tableView.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> tableView.requestFocus());
+        tableView.addEventHandler(TableViewEvent.FORCE_UPDATE_EVENT, event -> {
+            tableView.getSelectionModel().clearSelection();
+            if (tableFiltered.get()) {
+                tableFiltered.set(false);
+            }
+            Comparator<? super T> prevComp = sortedList.getComparator();
+            sortedList = new SortedList<>(tableView.getItems(), prevComp);
+            buildRows();
+        });
         filterIcon.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> filterDialog.show());
         clearFilterIcon.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (tableFiltered.get()) {
@@ -260,13 +268,6 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
                 buildRows();
             }
         });
-
-        BooleanBinding listEmpty = Bindings.createBooleanBinding(
-                () -> tableView.getItems().isEmpty(),
-                tableView.getItems()
-        );
-        filterIcon.disableProperty().bind(tableFiltered.or(listEmpty));
-        clearFilterIcon.disableProperty().bind(tableFiltered.not().or(listEmpty));
     }
 
     /**
@@ -293,6 +294,17 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         }
     }
 
+    /**
+     * Adds a context menu to the columns.
+     * <p>
+     * The context menu contains the following actions:
+     * <p> - "Restore this column width"
+     * <p> - "Restore all columns width"
+     * <p> - "Autosize this column"
+     * <p> - "Autosize all columns"
+     *
+     * @see MFXContextMenu
+     */
     @SuppressWarnings("unchecked")
     protected void addContextMenu(MFXTableColumnCell<T> column) {
         MFXContextMenuItem restoreWidthThis = new MFXContextMenuItem(
@@ -330,6 +342,15 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
                 .install(column);
     }
 
+    /**
+     * Resize the given column so that all row cells' text of that column are visible.
+     * <p>
+     * Takes the column's index in the columnsContainer then takes all the shown rows,
+     * for each row gets the child at the retrieved column index (in short gets all the row cells of that column),
+     * then checks if the text is truncated with {@link LabelUtils#isLabelTruncated(Label)}, if true adds the cell
+     * to a temp list. Then calls {@link #getMaxCellWidth(List)} to compute which cell has the longest text and then sets
+     * the column minWidth to that computed value.
+     */
     @SuppressWarnings("unchecked")
     protected void autoSizeColumn(MFXTableColumnCell<T> column) {
         int index = columnsContainer.getChildren().indexOf(column);
@@ -352,6 +373,11 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         }
     }
 
+    /**
+     * Given a list of row cells computes which cell would be the widest if the text was not truncated.
+     * This width is computed with {@link LabelUtils#computeTextWidth(Font, String)}. To this value both
+     * right and left insets of the cell are added.
+     */
     protected double getMaxCellWidth(List<MFXTableRowCell> rowCells) {
         double max = -1;
         for (MFXTableRowCell rowCell : rowCells) {
@@ -393,7 +419,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         int i;
         int size = items.size();
         int pageIndex = tableView.getMaxRows() + index;
-        computeRowsContainerHeight(items.size() - index);
+        computeRowsContainerHeight(size - index);
 
         for (i = index; i < pageIndex && size > 0 && i < size; i++) {
             T item = items.get(i);
@@ -590,9 +616,11 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
     }
 
     /**
-     * Gets the selected items from that list, gets the row nodes in the rowsContainer,
-     * if the selected items contains the row item
-     * them the reference in the model is updated.
+     * Gets the selected items from the selection model, gets the row nodes in the rowsContainer,
+     * if the selected items contains the row item then the reference in the model is updated.
+     * <p></p>
+     * Unfortunately this kind of solution is necessary since the rows are rebuilt every time the page
+     * is changed.
      */
     @SuppressWarnings("unchecked")
     private void updateSelection() {
@@ -744,12 +772,22 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         filterDialog.close();
     }
 
-    private void computeRowsContainerHeight(int index) {
+    /**
+     * Ensures that the rows container has always a minimum height so that the table
+     * doesn't "collapse". The height computation is done when the items list is empty
+     * or there aren't enough rows to fill the page.
+     * <p>
+     * The height is computed like this: (topInset + fixedRowsHeight + bottomInset) * nrows.
+     * <p></p>
+     * Used by {@link #buildRows(List)}, the param is the number of rows that will be shown,
+     * and it's calculated as the passed list size minus the current row index.
+     */
+    private void computeRowsContainerHeight(int shownRows) {
         MFXTableView<T> tableView = getSkinnable();
 
         int nrows = rowsPerPageCombo.getSelectedValue() != null ? rowsPerPageCombo.getSelectedValue() : 5;
         double value = -1;
-        if (tableView.getItems().isEmpty() || index < nrows) {
+        if (tableView.getItems().isEmpty() || shownRows < nrows) {
             value = (rowsContainer.snappedTopInset() +
                     tableView.getFixedRowsHeight() +
                     rowsContainer.snappedBottomInset()) * nrows;

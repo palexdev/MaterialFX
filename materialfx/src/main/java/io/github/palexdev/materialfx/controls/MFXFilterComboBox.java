@@ -66,6 +66,10 @@ public class MFXFilterComboBox<T> extends MFXComboBox<T> {
         return editorFocused.get();
     }
 
+    /**
+     * Bound to the editor focus property. This allows to keep the focused style specified
+     * by css when the focus is acquired by the editor. The pseudo class to use in css is ":editor"
+     */
     public BooleanProperty editorFocusedProperty() {
         return editorFocused;
     }

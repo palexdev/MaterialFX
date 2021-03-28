@@ -25,11 +25,14 @@ import javafx.util.Callback;
 import java.net.URL;
 
 /**
- * Support bean for {@code MFXHLoader} and {@code MFXVLoader}
+ * Support bean for {@code MFXHLoader} and {@code MFXVLoader}.
+ * <p>
  * Basically a wrapper for a {@code Node} which is the root of an fxml file,
- * the controller factory of the fxml file, the toggle button associated with the item
+ * the controller factory of the fxml file (optional), the toggle button associated with the item
  * which is responsible for the views switching, the {@code URL} of the fxml file,
- * and an index which represents the toggle button position in the children list of the loader.
+ * and a flag which specified if this is the view to be shown when loading is finished.
+ * <p></p>
+ * It is <b>highly recommended</b> to use the {@link Builder} class to create a bean.
  */
 public class MFXLoaderBean {
     //================================================================================
@@ -82,6 +85,9 @@ public class MFXLoaderBean {
         return fxmlURL;
     }
 
+    /**
+     * Utils class that facilitates the creation of {@code MFXLoaderBean}s with fluent api.
+     */
     public static class Builder {
         private final URL fxmlURL;
         private final ToggleButton button;
@@ -93,6 +99,11 @@ public class MFXLoaderBean {
             this.button = button;
         }
 
+        /**
+         * Convenience static method to avoid using the new keyword.
+         *
+         * @return a new {@code Builder} instance with the specified parameters
+         */
         public static Builder build(ToggleButton button, URL fxmlURL) {
             return new Builder(button, fxmlURL);
         }
@@ -107,6 +118,9 @@ public class MFXLoaderBean {
             return this;
         }
 
+        /**
+         * @return the new {@code MFXLoaderBean} instance
+         */
         public MFXLoaderBean get() {
             return new MFXLoaderBean(button, fxmlURL, defaultRoot, controllerFactory);
         }

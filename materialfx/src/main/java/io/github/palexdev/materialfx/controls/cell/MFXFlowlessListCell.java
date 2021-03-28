@@ -27,11 +27,21 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 
+/**
+ * Simple implementation of {@link AbstractMFXFlowlessListCell},
+ * includes a ripple generator for ripple effects on mouse pressed.
+ */
 public class MFXFlowlessListCell<T> extends AbstractMFXFlowlessListCell<T> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final String STYLE_CLASS = "mfx-list-cell";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-flowless-listcell.css");
     protected final RippleGenerator rippleGenerator = new RippleGenerator(this);
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXFlowlessListCell(AbstractFlowlessListView<T, ?, ?> listView, T  data) {
         super(listView, data);
         initialize();
@@ -42,11 +52,17 @@ public class MFXFlowlessListCell<T> extends AbstractMFXFlowlessListCell<T> {
         initialize();
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
         setupRippleGenerator();
     }
 
+    /**
+     * Sets up the properties of the ripple generator and adds the mouse pressed filter.
+     */
     protected void setupRippleGenerator() {
         rippleGenerator.setManaged(false);
         rippleGenerator.rippleRadiusProperty().bind(widthProperty().divide(2.0));
@@ -59,6 +75,20 @@ public class MFXFlowlessListCell<T> extends AbstractMFXFlowlessListCell<T> {
         });
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
+
+    /**
+     * Inherited doc:
+     * <p>
+     * {@inheritDoc}
+     * <p></p>
+     *
+     * If the given data is instance of Node then the data is cast
+     * to Node and added to the children list. Otherwise a Label is created
+     * and toString is called on the data. The label has style class: "data-label"
+     */
     @Override
     protected void render(T data) {
         if (data instanceof Node) {

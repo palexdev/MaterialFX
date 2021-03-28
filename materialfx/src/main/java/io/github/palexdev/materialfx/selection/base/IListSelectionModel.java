@@ -23,6 +23,9 @@ import javafx.scene.input.MouseEvent;
 
 import java.util.List;
 
+/**
+ * Public API used by any {@code MFXFlowlessListView}.
+ */
 public interface IListSelectionModel<T> {
     void select(int index, T data, MouseEvent mouseEvent);
     void updateIndex(T data, int index);

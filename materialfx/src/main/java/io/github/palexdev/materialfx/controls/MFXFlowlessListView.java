@@ -29,10 +29,27 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Skin;
 
+/**
+ * Implementation of a list view based on Flowless.
+ * <p>
+ * Extends {@link AbstractFlowlessListView}.
+ * <p></p>
+ * Default cell: {@link MFXFlowlessListCell}.
+ * <p>
+ * Default selection model: {@link ListSelectionModel}.
+ * <p>
+ * Default skin: {@link MFXFlowlessListViewSkin}.
+ */
 public class MFXFlowlessListView<T> extends AbstractFlowlessListView<T, AbstractMFXFlowlessListCell<T>, IListSelectionModel<T>> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final String STYLE_CLASS = "mfx-list-view";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-flowless-listview.css");
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXFlowlessListView() {
         this(FXCollections.observableArrayList());
     }
@@ -42,10 +59,16 @@ public class MFXFlowlessListView<T> extends AbstractFlowlessListView<T, Abstract
         initialize();
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
     @Override
     protected void setDefaultCellFactory() {
         setCellFactory(item -> new MFXFlowlessListCell<>(this, item));

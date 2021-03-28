@@ -34,12 +34,21 @@ import javafx.scene.control.ScrollBar;
 import javafx.scene.control.SkinBase;
 import javafx.util.Duration;
 
+/**
+ * Implementation of the skin used by all list views based on Flowless.
+ */
 public class MFXFlowlessListViewSkin<T> extends SkinBase<AbstractFlowlessListView<T, ?, ?>> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final ScrollBar vBar;
     private final ScrollBar hBar;
     private Timeline hideBars;
     private Timeline showBars;
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXFlowlessListViewSkin(AbstractFlowlessListView<T, ?, ?> listView) {
         super(listView);
 
@@ -77,6 +86,13 @@ public class MFXFlowlessListViewSkin<T> extends SkinBase<AbstractFlowlessListVie
         setListeners();
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
+
+    /**
+     * Calls {@link #setScrollBarHandlers()}, adds a listener to the list view's depth property.
+     */
     private void setListeners() {
         AbstractFlowlessListView<T, ?, ?> listView = getSkinnable();
 
@@ -88,6 +104,9 @@ public class MFXFlowlessListViewSkin<T> extends SkinBase<AbstractFlowlessListVie
         });
     }
 
+    /**
+     * Sets up the scroll bars behavior.
+     */
     private void setScrollBarHandlers() {
         AbstractFlowlessListView<T, ?, ?> listView = getSkinnable();
 
@@ -150,11 +169,18 @@ public class MFXFlowlessListViewSkin<T> extends SkinBase<AbstractFlowlessListVie
 
     }
 
+    /**
+     * Responsible for creating the cells contained by Flowless VirtualFlow,
+     * uses the list view's defined cell factory.
+     */
     protected AbstractMFXFlowlessListCell<T> createCell(T item) {
         AbstractFlowlessListView<T, ?, ?> listView = getSkinnable();
         return listView.getCellFactory().call(item);
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
     @Override
     protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
         return leftInset + 200 + rightInset;

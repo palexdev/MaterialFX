@@ -96,6 +96,9 @@ public class MFXTableView<T> extends Control {
         return selectionModel.get();
     }
 
+    /**
+     * Specifies the selection model used by the control.
+     */
     public ObjectProperty<ITableSelectionModel<T>> selectionModelProperty() {
         return selectionModel;
     }
@@ -138,6 +141,9 @@ public class MFXTableView<T> extends Control {
         return fixedRowsHeight.get();
     }
 
+    /**
+     * Specifies the max height of all rows in the table.
+     */
     public DoubleProperty fixedRowsHeightProperty() {
         return fixedRowsHeight;
     }

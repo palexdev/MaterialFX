@@ -102,6 +102,11 @@ public class MFXTableColumnCell<T> extends Label {
         return initialWidth.get();
     }
 
+    /**
+     * Specifies what was the initial width assigned to the control by JavaFX.
+     * We keep this value to use it the the context menu of the column,
+     * see {@link io.github.palexdev.materialfx.skins.MFXTableViewSkin}
+     */
     public ReadOnlyDoubleProperty initialWidthProperty() {
         return initialWidth.getReadOnlyProperty();
     }
@@ -114,6 +119,9 @@ public class MFXTableColumnCell<T> extends Label {
         return rowCellFactory.get();
     }
 
+    /**
+     * Specifies the callback which is used to build the row cell of the column.
+     */
     public ObjectProperty<Callback<T, ? extends MFXTableRowCell>> rowCellFactoryProperty() {
         return rowCellFactory;
     }
