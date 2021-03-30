@@ -20,8 +20,6 @@
     -mfx-track-color: rgb(230, 230, 230);
     -mfx-thumb-color: rgb(137, 137, 137);
     -mfx-thumb-hover-color: rgb(89, 88, 91);
-
-    -fx-background-color: white;
 }
 
 .mfx-check-list-view .virtual-flow {

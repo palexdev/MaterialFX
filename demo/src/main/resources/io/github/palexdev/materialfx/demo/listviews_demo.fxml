@@ -4,7 +4,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="730.0" stylesheets="@css/listviews_demo.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.ListViewDemoController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="920.0" stylesheets="@css/listviews_demo.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.ListViewDemoController">
     <padding>
         <Insets left="20.0" right="20.0" />
     </padding>
@@ -49,6 +49,11 @@
         <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="250.0" prefWidth="265.0" spacing="10.0">
             <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="HBoxes" />
             <MFXFlowlessListView fx:id="hBoxViewNew" />
+        </VBox>
+        <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="250.0" prefWidth="135.0"
+              spacing="10.0">
+            <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="125.0" text="CheckListView"/>
+            <MFXFlowlessCheckListView fx:id="checkList"/>
         </VBox>
         <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="250.0" prefWidth="135.0" spacing="10.0">
             <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="125.0" text="Customized and CSS" />
