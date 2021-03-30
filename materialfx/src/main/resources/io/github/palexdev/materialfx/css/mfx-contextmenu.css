@@ -16,28 +16,26 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx;
-
-import java.io.InputStream;
-import java.net.URL;
-
-/**
- * Utility class which manages the access to this project's assets.
- * Helps keeping the assets files structure organized.
- */
-public class MFXResourcesLoader {
-
-    private MFXResourcesLoader() {}
-
-    public static URL loadURL(String path) {
-        return MFXResourcesLoader.class.getResource(path);
-    }
-
-    public static String load(String path) {
-        return loadURL(path).toString();
-    }
-
-    public static InputStream loadStream(String name) {
-        return MFXResourcesLoader.class.getResourceAsStream(name);
-    }
+.mfx-context-menu {
+    -fx-background-radius: 4;
+    -fx-border-color: #A4B1B6;
+    -fx-border-radius: 4;
+    -fx-padding: 3 0 3 0;
 }
+
+.label {
+    -fx-min-height: 27;
+    -fx-padding: 8;
+    -fx-background-color: white;
+}
+
+.label:hover {
+    -fx-background-color: rgb(120, 150, 255);
+}
+
+.separator {
+    -fx-border-color: #A4B1B6;
+    -fx-stroke-width: 0.5;
+    -fx-opacity: 0.5;
+}
+

@@ -19,7 +19,9 @@
 package io.github.palexdev.materialfx.selection;
 
 import io.github.palexdev.materialfx.controls.MFXComboBox;
+import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 
 /**
@@ -37,7 +39,6 @@ public class ComboSelectionModelMock<T> {
     private final MFXComboBox<T> comboBox;
     private final ReadOnlyObjectWrapper<T> selectedItem = new ReadOnlyObjectWrapper<>(null);
     private final ReadOnlyIntegerWrapper selectedIndex = new ReadOnlyIntegerWrapper(-1);
-    private boolean isClearRequested = false;
 
     //================================================================================
     // Constructors
@@ -49,24 +50,36 @@ public class ComboSelectionModelMock<T> {
     //================================================================================
     // Methods
     //================================================================================
+
+    /**
+     * Clears the selection.
+     */
     public void clearSelection() {
-        isClearRequested = true;
         selectedItem.set(null);
         selectedIndex.set(-1);
-        isClearRequested = false;
     }
 
+    /**
+     * Selects the given item if present in the combo items list.
+     */
     public void selectItem(T item) {
         if (!comboBox.getItems().contains(item)) {
             return;
         }
+        selectedIndex.set(comboBox.getItems().indexOf(item));
         selectedItem.set(item);
     }
 
+    /**
+     * Selects the first item in the combo items list.
+     */
     public void selectFirst() {
         selectedIndex.set(0);
     }
 
+    /**
+     * Selects the next item in the combo items list.
+     */
     public void selectNext() {
         if (getSelectedIndex() == (comboBox.getItems().size() - 1)) {
             return;
@@ -74,10 +87,16 @@ public class ComboSelectionModelMock<T> {
         selectedIndex.add(1);
     }
 
+    /**
+     * Selects the last item in the combo items list.
+     */
     public void selectLast() {
         selectedIndex.set(comboBox.getItems().size());
     }
 
+    /**
+     * Selects the previous item in the combo items list.
+     */
     public void selectPrevious() {
         if (getSelectedIndex() == -1) {
             return;
@@ -85,23 +104,31 @@ public class ComboSelectionModelMock<T> {
         selectedIndex.subtract(1);
     }
 
+    /**
+     * Returns the current selected item's index.
+     */
     public int getSelectedIndex() {
         return selectedIndex.get();
     }
 
-    public ReadOnlyIntegerWrapper selectedIndexProperty() {
-        return selectedIndex;
+    /**
+     * Returns the selected index property as a read only.
+     */
+    public ReadOnlyIntegerProperty selectedIndexProperty() {
+        return selectedIndex.getReadOnlyProperty();
     }
 
+    /**
+     * Returns the current selected item.
+     */
     public T getSelectedItem() {
         return selectedItem.get();
     }
 
-    public ReadOnlyObjectWrapper<T> selectedItemProperty() {
-        return selectedItem;
-    }
-
-    public boolean isClearRequested() {
-        return isClearRequested;
+    /**
+     * Returns the selected item property as a read only.
+     */
+    public ReadOnlyObjectProperty<T> selectedItemProperty() {
+        return selectedItem.getReadOnlyProperty();
     }
 }

@@ -29,7 +29,8 @@
     -fx-border-color: transparent;
 }
 
-.mfx-table-column-cell:hover {
+.mfx-table-column-cell:hover,
+.mfx-table-column-cell:dragged {
     -fx-border-color: transparent rgba(46, 52, 64, 0.3) transparent transparent;
     -fx-border-width: 0.5;
 }

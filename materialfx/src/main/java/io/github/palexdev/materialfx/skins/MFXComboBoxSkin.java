@@ -20,8 +20,8 @@ package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
+import io.github.palexdev.materialfx.controls.MFXFlowlessListView;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
-import io.github.palexdev.materialfx.controls.MFXListView;
 import io.github.palexdev.materialfx.controls.enums.Styles;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.effects.RippleGenerator;
@@ -32,6 +32,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
+import javafx.collections.MapChangeListener;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Point2D;
@@ -59,7 +60,7 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
 
     private final MFXIconWrapper icon;
     private final PopupControl popup;
-    private final MFXListView<T> listView;
+    private final MFXFlowlessListView<T> listView;
     private final EventHandler<MouseEvent> popupHandler;
 
     private final Line unfocusedLine;
@@ -101,8 +102,9 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         container = new HBox(20, valueLabel);
         container.setAlignment(Pos.CENTER_LEFT);
 
-        listView = new MFXListView<>();
+        listView = new MFXFlowlessListView<>();
         listView.getStylesheets().add(comboBox.getUserAgentStylesheet());
+        listView.getSelectionModel().setAllowsMultipleSelection(false);
         popup = buildPopup();
 
         popupHandler = event -> {
@@ -132,12 +134,10 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
     //================================================================================
 
     /**
-     * Adds listeners for: focus, selected value, maxPopupHeight and maxPopupWidth,
-     * selectedIndex and selectedItem properties, parent property.
+     * Calls the methods which define the control behavior.
      * <p>
-     * Adds bindings for: selected value, maxPopupHeight and maxPopupWidth,
-     * <p>
-     * Adds handlers for: focus, managePopup/hide the popup.
+     * See {@link #comboBehavior()}, {@link #selectionBehavior()},
+     * {@link #popupBehavior()}, {@link #listBehavior()}, {@link #iconBehavior()}
      */
     private void setBehavior() {
         comboBehavior();
@@ -178,10 +178,6 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
 
         // FOCUS
         comboBox.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue && popup.isShowing()) {
-                popup.hide();
-            }
-
             if (comboBox.isAnimateLines()) {
                 buildAndPlayLinesAnimation(newValue);
                 return;
@@ -196,40 +192,31 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
     }
 
     /**
-     * Specifies the behavior for selectedValue, listview selection, combo box selection and filtered list change.
+     * Specifies the behavior for combo box selection, listview selection and selectedValue.
      */
     private void selectionBehavior() {
         MFXComboBox<T> comboBox = getSkinnable();
         ComboSelectionModelMock<T> selectionModel = comboBox.getSelectionModel();
 
-        comboBox.selectedValueProperty().bind(listView.getSelectionModel().selectedItemProperty());
+        selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue != newValue) {
+                comboBox.setSelectedValue(newValue);
+            }
+        });
+
+        listView.getSelectionModel().selectedItemsProperty().addListener((MapChangeListener<? super Integer, ? super T>) change -> {
+            T item = change.getValueAdded();
+            if (item != null) {
+                selectionModel.selectItem(item);
+            }
+        });
+
         comboBox.selectedValueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 setValueLabel(newValue);
             } else {
                 valueLabel.setText("");
                 valueLabel.setGraphic(null);
-            }
-        });
-
-        listView.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> selectionModel.selectedIndexProperty().set(newValue.intValue()));
-        listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> selectionModel.selectedItemProperty().set(newValue));
-        selectionModel.selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.intValue() != oldValue.intValue()) {
-                if (newValue.intValue() == -1) {
-                    listView.getSelectionModel().clearSelection();
-                } else {
-                    listView.getSelectionModel().select(newValue.intValue());
-                }
-            }
-        });
-        selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != oldValue) {
-                if (newValue == null) {
-                    listView.getSelectionModel().clearSelection();
-                } else {
-                    listView.getSelectionModel().select(newValue);
-                }
             }
         });
     }
@@ -303,6 +290,8 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         icon.getIcon().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
             if (popup.isShowing()) {
                 popup.hide();
+                forceRipple();
+                getSkinnable().requestFocus();
                 event.consume();
             }
         });
@@ -320,14 +309,14 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
     }
 
     /**
-     * This method build the combo box popup and initializes the listview.
+     * This method builds the combo box popup and initializes the listview.
      */
     protected PopupControl buildPopup() {
         MFXComboBox<T> comboBox = getSkinnable();
 
         PopupControl popupControl = new PopupControl();
 
-        listView.itemsProperty().bind(comboBox.itemsProperty());
+        listView.setItems(comboBox.getItems());
         popupControl.getScene().setRoot(listView);
         popupControl.setOnShowing(event -> buildAnimation(true).play());
         popupControl.setOnHiding(event -> buildAnimation(false).play());
@@ -335,6 +324,10 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         return popupControl;
     }
 
+    /**
+     * Convenience method to manage the popup. If the popup is not showing
+     * gets the coordinates and calls show() otherwise hides it.
+     */
     private void managePopup() {
         MFXComboBox<T> comboBox = getSkinnable();
 
@@ -354,6 +347,9 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         }
     }
 
+    /**
+     * Used to generate the ripple effect of the icon when an event filter consumes the event.
+     */
     private void forceRipple() {
         RippleGenerator rg = icon.getRippleGenerator();
         rg.setGeneratorCenterX(icon.getWidth() / 2);
@@ -391,7 +387,7 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
     /**
      * Sets the label text according to the combo box selected item.
      * <p>
-     * If the item is instance of {@code Labeled} then whe check if the item has a graphic != null
+     * If the item is instance of {@code Labeled} then we check if the item has a graphic != null
      * and use the item text. If that's not the case then we call toString on the item.
      */
     private void setValueLabel(T item) {

@@ -223,6 +223,7 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
 
         textNode.setVisible(false);
         MFXTextField textField = new MFXTextField(textNode.getText());
+        label.editorFocusedProperty().bind(textField.focusedProperty());
         textField.setId("editor-node");
         textField.setManaged(false);
         textField.setUnfocusedLineColor(Color.TRANSPARENT);

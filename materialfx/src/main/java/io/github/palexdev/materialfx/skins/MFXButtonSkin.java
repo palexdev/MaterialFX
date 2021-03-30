@@ -25,65 +25,39 @@ import io.github.palexdev.materialfx.effects.MFXDepthManager;
 import io.github.palexdev.materialfx.effects.RippleGenerator;
 import javafx.scene.control.skin.ButtonSkin;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.util.Duration;
 
 /**
  * This is the implementation of the {@code Skin} associated with every {@code MFXButton}.
  */
 public class MFXButtonSkin extends ButtonSkin {
     //================================================================================
-    // Properties
-    //================================================================================
-    private final RippleGenerator rippleGenerator;
-
-    //================================================================================
     // Constructors
     //================================================================================
     public MFXButtonSkin(MFXButton button) {
         super(button);
 
-        rippleGenerator = new RippleGenerator(button);
-        setupRippleGenerator();
-
         setListeners();
         updateButtonType();
 
         updateChildren();
+        setupRippleGenerator();
     }
 
     //================================================================================
     // Methods
     //================================================================================
 
+    /**
+     * Binds the button's ripple properties to the ripple generator ones.
+     */
     protected void setupRippleGenerator() {
         MFXButton button = (MFXButton) getSkinnable();
+        RippleGenerator rippleGenerator = button.getRippleGenerator();
 
-        button.rippleColorProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && !newValue.equals(oldValue)) {
-                rippleGenerator.setRippleColor((Color) newValue);
-            }
-        });
-        button.rippleRadiusProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && !newValue.equals(oldValue)) {
-                rippleGenerator.setRippleRadius(newValue.doubleValue());
-            }
-        });
-        button.rippleInDurationProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && !newValue.equals(oldValue)) {
-                rippleGenerator.setInDuration(newValue);
-            }
-        });
-        button.rippleOutDurationProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && !newValue.equals(oldValue)) {
-                rippleGenerator.setOutDuration(newValue);
-            }
-        });
-
-        button.setRippleRadius(25);
-        button.setRippleColor(Color.rgb(190, 190, 190));
-        button.setRippleInDuration(Duration.millis(700));
-        button.setRippleOutDuration(button.getRippleInDuration().divide(2));
+        button.rippleColorProperty().bind(rippleGenerator.rippleColorProperty());
+        button.rippleRadiusProperty().bind(rippleGenerator.rippleRadiusProperty());
+        button.rippleInDurationProperty().bind(rippleGenerator.inDurationProperty());
+        button.rippleOutDurationProperty().bind(rippleGenerator.outDurationProperty());
     }
 
     /**
@@ -91,6 +65,7 @@ public class MFXButtonSkin extends ButtonSkin {
      */
     private void setListeners() {
         MFXButton button = (MFXButton) getSkinnable();
+        RippleGenerator rippleGenerator = button.getRippleGenerator();
 
         button.depthLevelProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.equals(oldValue) && button.getButtonType().equals(ButtonType.RAISED)) {
@@ -135,8 +110,6 @@ public class MFXButtonSkin extends ButtonSkin {
     @Override
     protected void updateChildren() {
         super.updateChildren();
-        if (rippleGenerator != null) {
-            getChildren().add(0, rippleGenerator);
-        }
+        getChildren().add(0, ((MFXButton) getSkinnable()).getRippleGenerator());
     }
 }

@@ -42,7 +42,7 @@ public class MFXDialog extends AbstractMFXDialog {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-dialog";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-dialog.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-dialog.css");
 
     //================================================================================
     // Constructors

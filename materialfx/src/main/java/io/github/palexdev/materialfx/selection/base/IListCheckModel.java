@@ -16,28 +16,21 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx;
+package io.github.palexdev.materialfx.selection.base;
 
-import java.io.InputStream;
-import java.net.URL;
+import javafx.beans.property.MapProperty;
+
+import java.util.List;
 
 /**
- * Utility class which manages the access to this project's assets.
- * Helps keeping the assets files structure organized.
+ * Public API used by any {@code MFXFlowlessCheckListView}.
  */
-public class MFXResourcesLoader {
-
-    private MFXResourcesLoader() {}
-
-    public static URL loadURL(String path) {
-        return MFXResourcesLoader.class.getResource(path);
-    }
-
-    public static String load(String path) {
-        return loadURL(path).toString();
-    }
-
-    public static InputStream loadStream(String name) {
-        return MFXResourcesLoader.class.getResourceAsStream(name);
-    }
+public interface IListCheckModel<T> extends IListSelectionModel<T> {
+    void check(int index, T data);
+    void clearCheckedItem(int index);
+    void clearCheckedItem(T data);
+    void clearChecked();
+    T getCheckedItem(int index);
+    List<T> getCheckedItems();
+    MapProperty<Integer, T> checkedItemsProperty();
 }

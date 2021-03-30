@@ -18,7 +18,7 @@
 
 package io.github.palexdev.materialfx.skins;
 
-import io.github.palexdev.materialfx.controls.MFXFlowlessListView;
+import io.github.palexdev.materialfx.controls.base.AbstractFlowlessListView;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXFlowlessListCell;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.controls.flowless.MFXVirtualizedScrollPane;
@@ -32,15 +32,24 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.SkinBase;
-import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 
-public class MFXFlowlessListViewSkin<T> extends SkinBase<MFXFlowlessListView<T>> {
+/**
+ * Implementation of the skin used by all list views based on Flowless.
+ */
+public class MFXFlowlessListViewSkin<T> extends SkinBase<AbstractFlowlessListView<T, ?, ?>> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final ScrollBar vBar;
+    private final ScrollBar hBar;
     private Timeline hideBars;
     private Timeline showBars;
 
-    public MFXFlowlessListViewSkin(MFXFlowlessListView<T> listView) {
+    //================================================================================
+    // Constructors
+    //================================================================================
+    public MFXFlowlessListViewSkin(AbstractFlowlessListView<T, ?, ?> listView) {
         super(listView);
 
         VirtualFlow<T, AbstractMFXFlowlessListCell<T>> flow = VirtualFlow.createVertical(listView.getItems(), this::createCell);
@@ -52,19 +61,23 @@ public class MFXFlowlessListViewSkin<T> extends SkinBase<MFXFlowlessListView<T>>
         virtualScrollPane.getStylesheets().setAll(listView.getUserAgentStylesheet());
         //MFXVirtualizedScrollPane.smoothVScrolling(virtualScrollPane); // Not working atm
 
-        vBar = (ScrollBar) virtualScrollPane.lookup(".vvbar");
+        vBar = virtualScrollPane.getVBar();
+        hBar = virtualScrollPane.getHBar();
 
-        if (vBar != null) {
-            hideBars = new Timeline(
-                    new KeyFrame(Duration.millis(400),
-                            new KeyValue(vBar.opacityProperty(), 0.0, MFXAnimationFactory.getInterpolatorV2())));
-            showBars = new Timeline(
-                    new KeyFrame(Duration.millis(400),
-                            new KeyValue(vBar.opacityProperty(), 1.0, MFXAnimationFactory.getInterpolatorV2())));
-        }
+        hideBars = new Timeline(
+                new KeyFrame(Duration.millis(400),
+                        new KeyValue(vBar.opacityProperty(), 0.0, MFXAnimationFactory.getInterpolatorV1()),
+                        new KeyValue(hBar.opacityProperty(), 0.0, MFXAnimationFactory.getInterpolatorV1()))
+        );
+        showBars = new Timeline(
+                new KeyFrame(Duration.millis(400),
+                        new KeyValue(vBar.opacityProperty(), 1.0, MFXAnimationFactory.getInterpolatorV1()),
+                        new KeyValue(hBar.opacityProperty(), 1.0, MFXAnimationFactory.getInterpolatorV1()))
+        );
 
-        if (vBar != null && listView.isHideScrollBars()) {
+        if (listView.isHideScrollBars()) {
             vBar.setOpacity(0.0);
+            hBar.setOpacity(0.0);
         }
 
         getChildren().add(virtualScrollPane);
@@ -73,8 +86,15 @@ public class MFXFlowlessListViewSkin<T> extends SkinBase<MFXFlowlessListView<T>>
         setListeners();
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
+
+    /**
+     * Calls {@link #setScrollBarHandlers()}, adds a listener to the list view's depth property.
+     */
     private void setListeners() {
-        MFXFlowlessListView<T> listView = getSkinnable();
+        AbstractFlowlessListView<T, ?, ?> listView = getSkinnable();
 
         setScrollBarHandlers();
         listView.depthLevelProperty().addListener((observable, oldValue, newValue) -> {
@@ -84,68 +104,83 @@ public class MFXFlowlessListViewSkin<T> extends SkinBase<MFXFlowlessListView<T>>
         });
     }
 
+    /**
+     * Sets up the scroll bars behavior.
+     */
     private void setScrollBarHandlers() {
-        if (vBar != null) {
-            MFXFlowlessListView<T> listView = getSkinnable();
+        AbstractFlowlessListView<T, ?, ?> listView = getSkinnable();
 
-            listView.setOnMouseExited(event -> {
-                if (listView.isHideScrollBars()) {
-                    hideBars.setDelay(listView.getHideAfter());
+        listView.setOnMouseExited(event -> {
+            if (listView.isHideScrollBars()) {
+                hideBars.setDelay(listView.getHideAfter());
 
-                    if (vBar.isPressed()) {
-                        vBar.pressedProperty().addListener(new ChangeListener<>() {
-                            @Override
-                            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                                if (!newValue) {
-                                    hideBars.play();
-                                }
-                                vBar.pressedProperty().removeListener(this);
+                if (hBar.isPressed()) {
+                    hBar.pressedProperty().addListener(new ChangeListener<>() {
+                        @Override
+                        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                            if (!newValue) {
+                                hideBars.play();
                             }
-                        });
-                        return;
-                    }
-
-                    hideBars.play();
+                            hBar.pressedProperty().removeListener(this);
+                        }
+                    });
+                    return;
                 }
-            });
 
-            listView.setOnMouseEntered(event -> {
-                if (hideBars.getStatus().equals(Animation.Status.RUNNING)) {
-                    hideBars.stop();
+                if (vBar.isPressed()) {
+                    vBar.pressedProperty().addListener(new ChangeListener<>() {
+                        @Override
+                        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                            if (!newValue) {
+                                hideBars.play();
+                            }
+                            vBar.pressedProperty().removeListener(this);
+                        }
+                    });
+                    return;
                 }
+
+                hideBars.play();
+            }
+        });
+
+        listView.setOnMouseEntered(event -> {
+            if (hideBars.getStatus().equals(Animation.Status.RUNNING)) {
+                hideBars.stop();
+            }
+            showBars.play();
+        });
+
+        listView.hideScrollBarsProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                hideBars.play();
+            } else {
                 showBars.play();
-            });
+            }
+            if (newValue &&
+                    hideBars.getStatus() != Animation.Status.RUNNING ||
+                    vBar.getOpacity() != 0 ||
+                    hBar.getOpacity() != 0
+            ) {
+                vBar.setOpacity(0.0);
+                hBar.setOpacity(0.0);
+            }
+        });
 
-            listView.hideScrollBarsProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue) {
-                    hideBars.play();
-                } else {
-                    showBars.play();
-                }
-                if (newValue &&
-                        hideBars.getStatus() != Animation.Status.RUNNING ||
-                        vBar.getOpacity() != 0
-                ) {
-                    vBar.setOpacity(0.0);
-                }
-            });
-        }
     }
 
+    /**
+     * Responsible for creating the cells contained by Flowless VirtualFlow,
+     * uses the list view's defined cell factory.
+     */
     protected AbstractMFXFlowlessListCell<T> createCell(T item) {
-        MFXFlowlessListView<T> listView = getSkinnable();
-
-        AbstractMFXFlowlessListCell<T> cell = listView.getCellFactory().call(item);
-        setCellBehavior(cell);
-        return cell;
+        AbstractFlowlessListView<T, ?, ?> listView = getSkinnable();
+        return listView.getCellFactory().call(item);
     }
 
-    protected void setCellBehavior(AbstractMFXFlowlessListCell<T> cell) {
-        MFXFlowlessListView<T> listView = getSkinnable();
-
-        cell.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> listView.getSelectionModel().select(cell, event));
-    }
-
+    //================================================================================
+    // Override Methods
+    //================================================================================
     @Override
     protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
         return leftInset + 200 + rightInset;

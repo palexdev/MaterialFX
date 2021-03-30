@@ -51,14 +51,14 @@ public class TableSelectionModel<T> implements ITableSelectionModel<T> {
      * If the model is set to not allow multiple selection then we clear the list
      * and then add the item to it.
      *
-     * @param item the item to select
+     * @param row the row to select
      */
     @SuppressWarnings("unchecked")
-    protected void select(MFXTableRow<T> item) {
+    protected void select(MFXTableRow<T> row) {
         if (!allowsMultipleSelection) {
-            selectedItems.setAll(item);
+            selectedItems.setAll(row);
         } else {
-            selectedItems.add(item);
+            selectedItems.add(row);
         }
     }
 

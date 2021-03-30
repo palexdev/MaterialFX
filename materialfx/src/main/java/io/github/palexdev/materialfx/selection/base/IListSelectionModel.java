@@ -18,15 +18,24 @@
 
 package io.github.palexdev.materialfx.selection.base;
 
-import io.github.palexdev.materialfx.controls.base.AbstractMFXFlowlessListCell;
-import javafx.beans.property.ListProperty;
+import javafx.beans.property.MapProperty;
 import javafx.scene.input.MouseEvent;
 
+import java.util.List;
+
+/**
+ * Public API used by any {@code MFXFlowlessListView}.
+ */
 public interface IListSelectionModel<T> {
-    void select(AbstractMFXFlowlessListCell<T> item, MouseEvent mouseEvent);
+    void select(int index, T data, MouseEvent mouseEvent);
+    void updateIndex(T data, int index);
+    void clearSelectedItem(int index);
+    void clearSelectedItem(T item);
     void clearSelection();
-    AbstractMFXFlowlessListCell<T> getSelectedItem();
-    ListProperty<AbstractMFXFlowlessListCell<T>> getSelectedItems();
+    T getSelectedItem();
+    T getSelectedItem(int index);
+    List<T> getSelectedItems();
+    MapProperty<Integer, T> selectedItemsProperty();
     boolean allowsMultipleSelection();
     void setAllowsMultipleSelection(boolean multipleSelection);
 }

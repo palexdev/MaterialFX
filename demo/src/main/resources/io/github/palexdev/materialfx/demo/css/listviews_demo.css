@@ -12,7 +12,7 @@
 }
 
 #customView .mfx-list-cell .ripple-generator {
-    -mfx-ripple-color: derive(red, 10%);
+    -mfx-ripple-color: #f55c49;
 }
 
 #customViewNew {
@@ -34,7 +34,7 @@
 }
 
 #customViewNew .mfx-list-cell .ripple-generator {
-    -mfx-ripple-color: derive(red, 10%);
+    -mfx-ripple-color: #f55c49;
 }
 
 #label {

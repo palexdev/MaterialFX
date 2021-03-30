@@ -84,7 +84,7 @@ public class MFXDatePickerContent extends VBox {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-datepicker-content";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-datepicker-content.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-datepicker-content.css");
 
     private final double DEFAULT_WIDTH = 300;
     private final double DEFAULT_HEIGHT = 380;

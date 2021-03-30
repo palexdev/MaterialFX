@@ -1,5 +1,6 @@
 package io.github.palexdev.materialfx.demo.controllers;
 
+import io.github.palexdev.materialfx.beans.MFXLoaderBean.Builder;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.demo.MFXResourcesLoader;
@@ -125,22 +126,22 @@ public class DemoController implements Initializable {
 
         // VLoader
         vLoader.setContentPane(contentPane);
-        vLoader.addItem(0, "BUTTONS", new MFXToggleNode("BUTTONS"), MFXResourcesLoader.load("buttons_demo.fxml"));
-        vLoader.addItem(1, "CHECKBOXES", new MFXToggleNode("CHECKBOXES"), MFXResourcesLoader.load("checkboxes_demo.fxml"));
-        vLoader.addItem(2, "COMBOBOXES", new MFXToggleNode("COMBOBOXES"), MFXResourcesLoader.load("combo_boxes_demo.fxml"));
-        vLoader.addItem(3, "DATEPICKERS", new MFXToggleNode("DATEPICKERS"), MFXResourcesLoader.load("datepickers_demo.fxml"));
-        vLoader.addItem(4, "DIALOGS", new MFXToggleNode("DIALOGS"), MFXResourcesLoader.load("dialogs_demo.fxml"), controller -> new DialogsController(demoPane));
-        vLoader.addItem(5, "LABELS", new MFXToggleNode("LABELS"), MFXResourcesLoader.load("labels_demo.fxml"));
-        vLoader.addItem(6, "LISTVIEWS", new MFXToggleNode("LISTVIEWS"), MFXResourcesLoader.load("listviews_demo.fxml"));
-        vLoader.addItem(7, "NOTIFICATIONS", new MFXToggleNode("NOTIFICATIONS"), MFXResourcesLoader.load("notifications_demo.fxml"));
-        vLoader.addItem(8, "PROGRESS_SPINNERS", new MFXToggleNode("PROGRESS_SPINNERS"), MFXResourcesLoader.load("progress_spinners_demo.fxml"));
-        vLoader.addItem(9, "RADIOBUTTONS", new MFXToggleNode("RADIOBUTTONS"), MFXResourcesLoader.load("radio_buttons_demo.fxml"));
-        vLoader.addItem(10, "SCROLLPANES", new MFXToggleNode("SCROLLPANES"), MFXResourcesLoader.load("scrollpanes_demo.fxml"));
-        vLoader.addItem(11, "TABLEVIEWS", new MFXToggleNode("TABLEVIEWS"), MFXResourcesLoader.load("tableviews_demo.fxml"));
-        vLoader.addItem(12, "TEXTFIELDS", new MFXToggleNode("TEXTFIELDS"), MFXResourcesLoader.load("textfields_demo.fxml"));
-        vLoader.addItem(13, "TOGGLES", new MFXToggleNode("TOGGLES"), MFXResourcesLoader.load("toggle_buttons_demo.fxml"));
-        vLoader.addItem(14, "TREEVIEWS", new MFXToggleNode("TREEVIEWS"), MFXResourcesLoader.load("treeviews_demo.fxml"));
-        vLoader.setDefault("BUTTONS");
+        vLoader.addItem("BUTTONS", Builder.build(new MFXToggleNode("BUTTONS"), MFXResourcesLoader.load("buttons_demo.fxml")).setDefaultRoot(true));
+        vLoader.addItem("CHECKBOXES", Builder.build(new MFXToggleNode("CHECKBOXES"), MFXResourcesLoader.load("checkboxes_demo.fxml")));
+        vLoader.addItem("COMBOBOXES", Builder.build(new MFXToggleNode("COMBOBOXES"), MFXResourcesLoader.load("combo_boxes_demo.fxml")));
+        vLoader.addItem("DATEPICKERS", Builder.build(new MFXToggleNode("DATEPICKERS"), MFXResourcesLoader.load("datepickers_demo.fxml")));
+        vLoader.addItem("DIALOGS", Builder.build(new MFXToggleNode("DIALOGS"), MFXResourcesLoader.load("dialogs_demo.fxml")).setControllerFactory(controller -> new DialogsController(demoPane)));
+        vLoader.addItem("LABELS", Builder.build(new MFXToggleNode("LABELS"), MFXResourcesLoader.load("labels_demo.fxml")));
+        vLoader.addItem("LISTVIEWS", Builder.build(new MFXToggleNode("LISTVIEWS"), MFXResourcesLoader.load("listviews_demo.fxml")));
+        vLoader.addItem("NOTIFICATIONS", Builder.build(new MFXToggleNode("NOTIFICATIONS"), MFXResourcesLoader.load("notifications_demo.fxml")));
+        vLoader.addItem("PROGRESS_SPINNERS", Builder.build(new MFXToggleNode("PROGRESS_SPINNERS"), MFXResourcesLoader.load("progress_spinners_demo.fxml")));
+        vLoader.addItem("RADIOBUTTONS", Builder.build(new MFXToggleNode("RADIOBUTTONS"), MFXResourcesLoader.load("radio_buttons_demo.fxml")));
+        vLoader.addItem("SCROLLPANES", Builder.build(new MFXToggleNode("SCROLLPANES"), MFXResourcesLoader.load("scrollpanes_demo.fxml")));
+        vLoader.addItem("TABLEVIEWS", Builder.build(new MFXToggleNode("TABLEVIEWS"), MFXResourcesLoader.load("tableviews_demo.fxml")));
+        vLoader.addItem("TEXTFIELDS", Builder.build(new MFXToggleNode("TEXTFIELDS"), MFXResourcesLoader.load("textfields_demo.fxml")));
+        vLoader.addItem("TOGGLES", Builder.build(new MFXToggleNode("TOGGLES"), MFXResourcesLoader.load("toggle_buttons_demo.fxml")));
+        vLoader.addItem("TREEVIEWS", Builder.build(new MFXToggleNode("TREEVIEWS"), MFXResourcesLoader.load("treeviews_demo.fxml")));
+        vLoader.start();
 
         // Others
         MFXScrollPane.smoothVScrolling(scrollPane);

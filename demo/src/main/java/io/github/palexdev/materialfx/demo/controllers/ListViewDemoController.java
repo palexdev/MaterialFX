@@ -1,9 +1,6 @@
 package io.github.palexdev.materialfx.demo.controllers;
 
-import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXFlowlessListView;
-import io.github.palexdev.materialfx.controls.MFXLabel;
-import io.github.palexdev.materialfx.controls.MFXListView;
+import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import javafx.beans.property.ObjectProperty;
@@ -61,6 +58,9 @@ public class ListViewDemoController implements Initializable {
     private MFXFlowlessListView<HBox> hBoxViewNew;
 
     @FXML
+    private MFXFlowlessCheckListView<String> checkList;
+
+    @FXML
     private MFXFlowlessListView<String> cssViewNew;
 
     @FXML
@@ -103,6 +103,7 @@ public class ListViewDemoController implements Initializable {
         stringViewNew.setItems(stringList);
         labelViewNew.setItems(labelsListNew);
         hBoxViewNew.setItems(hBoxesListNew);
+        checkList.setItems(stringList);
         cssViewNew.setItems(stringList);
 
         switchButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> updateState());

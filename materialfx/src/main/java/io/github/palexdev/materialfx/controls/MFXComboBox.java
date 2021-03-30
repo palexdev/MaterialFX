@@ -58,10 +58,10 @@ public class MFXComboBox<T> extends Control {
     private final ObjectProperty<T> selectedValue = new SimpleObjectProperty<>();
     private final ObjectProperty<ObservableList<T>> items = new SimpleObjectProperty<>();
 
-    private final DoubleProperty maxPopupWidth = new SimpleDoubleProperty(150);
-    private final DoubleProperty maxPopupHeight = new SimpleDoubleProperty(200);
+    private final DoubleProperty maxPopupWidth = new SimpleDoubleProperty();
+    private final DoubleProperty maxPopupHeight = new SimpleDoubleProperty(190);
     private final DoubleProperty popupXOffset = new SimpleDoubleProperty(0);
-    private final DoubleProperty popupYOffset = new SimpleDoubleProperty(1);
+    private final DoubleProperty popupYOffset = new SimpleDoubleProperty(2);
 
     private final ComboSelectionModelMock<T> mockSelection;
 
@@ -73,7 +73,7 @@ public class MFXComboBox<T> extends Control {
     }
 
     public MFXComboBox(ObservableList<T> items) {
-        this.STYLESHEET = MFXResourcesLoader.load(getComboStyle().getStyleSheetPath()).toString();
+        this.STYLESHEET = MFXResourcesLoader.load(getComboStyle().getStyleSheetPath());
         this.items.set(items);
         this.mockSelection = new ComboSelectionModelMock<>(this);
 
@@ -92,10 +92,11 @@ public class MFXComboBox<T> extends Control {
          */
         comboStyle.addListener((observable, oldValue, newValue) -> {
             if (newValue != null && newValue != oldValue) {
-                STYLESHEET = MFXResourcesLoader.load(newValue.getStyleSheetPath()).toString();
+                STYLESHEET = MFXResourcesLoader.load(newValue.getStyleSheetPath());
                 getStylesheets().setAll(STYLESHEET);
             }
         });
+        maxPopupWidthProperty().bind(widthProperty());
     }
 
     public T getSelectedValue() {

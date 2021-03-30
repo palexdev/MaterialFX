@@ -18,14 +18,126 @@
 
 package io.github.palexdev.materialfx.utils;
 
+import io.github.palexdev.materialfx.beans.MFXLoaderBean;
+import io.github.palexdev.materialfx.controls.MFXHLoader;
+import io.github.palexdev.materialfx.controls.MFXVLoader;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.util.Callback;
+
+import java.io.IOException;
 import java.net.URL;
+import java.util.concurrent.*;
 
 /**
- * Convenience class to avoid duplicated code in {@code MFXHLoader} and {@code MFXVLoader} classes
+ * Utils class which defines the core methods used by {@link MFXHLoader} and {@link MFXVLoader}.
  */
 public class LoaderUtils {
+    private static final ThreadPoolExecutor executor;
+
+    static {
+        executor = new ThreadPoolExecutor(
+                2,
+                4,
+                5,
+                TimeUnit.SECONDS,
+                new LinkedBlockingDeque<>(),
+                runnable -> {
+                    Thread thread = Executors.defaultThreadFactory().newThread(runnable);
+                    thread.setName("MFXLoaderThread");
+                    thread.setDaemon(true);
+                    return thread;
+                }
+        );
+        executor.allowCoreThreadTimeOut(true);
+    }
 
     private LoaderUtils() {
+    }
+
+    /**
+     * Submits a value-returning task for execution and returns a
+     * Future representing the pending results of the task. The
+     * Future's {@code get} method will return the task's result upon
+     * successful completion.
+     *
+     * <p>
+     * If you would like to immediately block waiting
+     * for a task, you can use constructions of the form
+     * {@code result = exec.submit(aCallable).get();}
+     *
+     * <p>Note: The {@link Executors} class includes a set of methods
+     * that can convert some other common closure-like objects,
+     * for example, {@link java.security.PrivilegedAction} to
+     * {@link Callable} form so they can be submitted.
+     *
+     * @param task the task to submit
+     * @return a Future representing pending completion of the task
+     * @throws RejectedExecutionException if the task cannot be
+     *                                    scheduled for execution
+     * @throws NullPointerException       if the task is null
+     */
+    public static Future<Node> submit(Callable<Node> task) {
+        return executor.submit(task);
+    }
+
+    /**
+     * Creates a new FXMLLoader with location {@link MFXLoaderBean#getFxmlURL()} and
+     * controller {@link MFXLoaderBean#getControllerFactory()} (if not null) and loads the fxml file.
+     *
+     * @return  the loaded object hierarchy from the fxml
+     * @see     #fxmlLoad(FXMLLoader, URL)
+     * @see     #fxmlLoad(FXMLLoader, URL, Callback)
+     */
+    public static Node fxmlLoad(MFXLoaderBean loaderBean) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        if (loaderBean.getControllerFactory() != null) {
+            return fxmlLoad(fxmlLoader, loaderBean.getFxmlURL(), loaderBean.getControllerFactory());
+        }
+        return fxmlLoad(fxmlLoader, loaderBean.getFxmlURL());
+    }
+
+    /**
+     * Sets the location and the controller factory (if not null) for the given
+     * fxmlLoader with {@link MFXLoaderBean#getFxmlURL()} and {@link MFXLoaderBean#getControllerFactory()},
+     * and loads the fxml file.
+     * <p></p>
+     * This method is useful for example when using a DI framework with JavaFX.
+     *
+     * @param   fxmlLoader the FXMLLoader instance to use
+     * @return  the loaded object hierarchy from the fxml
+     * @see     #fxmlLoad(FXMLLoader, URL)
+     * @see     #fxmlLoad(FXMLLoader, URL, Callback)
+     */
+    public static Node fxmlLoad(FXMLLoader fxmlLoader, MFXLoaderBean loaderBean) throws IOException {
+        if (loaderBean.getControllerFactory() != null) {
+            return fxmlLoad(fxmlLoader, loaderBean.getFxmlURL(), loaderBean.getControllerFactory());
+        }
+        return fxmlLoad(fxmlLoader, loaderBean.getFxmlURL());
+    }
+
+    /**
+     * Sets the location for the given fxmlLoader and loads the fmxl file.
+     *
+     * @param   fxmlURL the fxml file to load
+     * @return  the loaded object hierarchy from the fxml
+     */
+    private static Node fxmlLoad(FXMLLoader fxmlLoader, URL fxmlURL) throws IOException {
+        fxmlLoader.setLocation(fxmlURL);
+        return fxmlLoader.load();
+    }
+
+    /**
+     * Sets the location and the controller factory for the given fxmlLoader and loads the fmxl file.
+     *
+     * @param   fxmlURL the fxml file to load
+     * @param   controllerFactory the controller object to set
+     * @return  the loaded object hierarchy from the fxml
+     */
+    private static Node fxmlLoad(FXMLLoader fxmlLoader, URL fxmlURL, Callback<Class<?>, Object> controllerFactory) throws IOException {
+        fxmlLoader.setLocation(fxmlURL);
+        fxmlLoader.setControllerFactory(controllerFactory);
+        return fxmlLoader.load();
     }
 
     /**

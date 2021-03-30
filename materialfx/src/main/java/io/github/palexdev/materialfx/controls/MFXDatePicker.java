@@ -67,7 +67,7 @@ public class MFXDatePicker extends VBox {
     //================================================================================
     private static final StyleablePropertyFactory<MFXDatePicker> FACTORY = new StyleablePropertyFactory<>(VBox.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-date-picker";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-datepicker.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-datepicker.css");
 
     private final DatePicker datePicker;
     private final ObjectProperty<DateTimeFormatter> dateFormatter = new SimpleObjectProperty<>(DateTimeFormatter.ofPattern("dd/M/yyyy"));

@@ -77,7 +77,7 @@ public class MFXFilterDialog extends MFXDialog {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-filter-dialog";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-filter-dialog.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-filter-dialog.css");
 
     private final VBox container;
     private final VBox textFieldsContainer;

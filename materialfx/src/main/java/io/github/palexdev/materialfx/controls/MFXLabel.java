@@ -20,10 +20,7 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.skins.MFXLabelSkin;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.css.*;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -64,6 +61,9 @@ public class MFXLabel extends Control {
 
     private final ObjectProperty<Pos> alignment = new SimpleObjectProperty<>(Pos.CENTER);
 
+    private static final PseudoClass EDITOR_FOCUSED_PSEUDO_CLASS = PseudoClass.getPseudoClass("editor");
+    private final BooleanProperty editorFocused = new SimpleBooleanProperty();
+
     //================================================================================
     // Constructors
     //================================================================================
@@ -73,7 +73,7 @@ public class MFXLabel extends Control {
 
     public MFXLabel(String text) {
         setText(text);
-        this.STYLESHEET = MFXResourcesLoader.load(getLabelStyle().getStyleSheetPath()).toString();
+        this.STYLESHEET = MFXResourcesLoader.load(getLabelStyle().getStyleSheetPath());
         initialize();
     }
 
@@ -83,13 +83,15 @@ public class MFXLabel extends Control {
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
 
+        editorFocused.addListener(invalidated ->pseudoClassStateChanged(EDITOR_FOCUSED_PSEUDO_CLASS, editorFocused.get()));
+
         /* Makes possible to choose the control style without depending on the constructor,
-         *  it seems to work well but to be honest it would be way better if JavaFX would give us
+         * it seems to work well but to be honest it would be way better if JavaFX would give us
          * the possibility to change the user agent stylesheet at runtime (I mean by re-calling getUserAgentStylesheet)
          */
         labelStyle.addListener((observable, oldValue, newValue) -> {
             if (newValue != null && newValue != oldValue) {
-                STYLESHEET = MFXResourcesLoader.load(newValue.getStyleSheetPath()).toString();
+                STYLESHEET = MFXResourcesLoader.load(newValue.getStyleSheetPath());
                 getStylesheets().setAll(STYLESHEET);
             }
         });
@@ -173,6 +175,10 @@ public class MFXLabel extends Control {
         return trailingIcon;
     }
 
+    public void setTrailingIcon(Node trailingIcon) {
+        this.trailingIcon.set(trailingIcon);
+    }
+
     public Pos getAlignment() {
         return alignment.get();
     }
@@ -188,8 +194,16 @@ public class MFXLabel extends Control {
         this.alignment.set(alignment);
     }
 
-    public void setTrailingIcon(Node trailingIcon) {
-        this.trailingIcon.set(trailingIcon);
+    public boolean isEditorFocused() {
+        return editorFocused.get();
+    }
+
+    /**
+     * Bound to the editor focus property. This allows to keep the focused style specified
+     * by css when the focus is acquired by the editor. The pseudo class to use in css is ":editor"
+     */
+    public BooleanProperty editorFocusedProperty() {
+        return editorFocused;
     }
 
     //================================================================================
@@ -210,9 +224,6 @@ public class MFXLabel extends Control {
             Color.BLACK
     );
 
-    /**
-     * Specifies the style of the MFXLabel.
-     */
     private final StyleableObjectProperty<LabelStyles> labelStyle = new SimpleStyleableObjectProperty<>(
             StyleableProperties.STYLE,
             this,
@@ -220,9 +231,6 @@ public class MFXLabel extends Control {
             LabelStyles.STYLE1
     );
 
-    /**
-     * Specifies the space between the icons and the text.
-     */
     private final StyleableDoubleProperty graphicTextGap = new SimpleStyleableDoubleProperty(
             StyleableProperties.GRAPHIC_TEXT_GAP,
             this,
@@ -230,9 +238,6 @@ public class MFXLabel extends Control {
             5.0
     );
 
-    /**
-     * Specifies whether the label can be edited or not.
-     */
     private final StyleableBooleanProperty editable = new SimpleStyleableBooleanProperty(
             StyleableProperties.EDITABLE,
             this,
@@ -240,9 +245,6 @@ public class MFXLabel extends Control {
             false
     );
 
-    /**
-     * Specifies if focus lines should be animated.
-     */
     private final StyleableBooleanProperty animateLines = new SimpleStyleableBooleanProperty(
             StyleableProperties.ANIMATE_LINES,
             this,
@@ -250,9 +252,6 @@ public class MFXLabel extends Control {
             true
     );
 
-    /**
-     * Specifies the focusedLine color.
-     */
     private final StyleableObjectProperty<Paint> lineColor = new SimpleStyleableObjectProperty<>(
             StyleableProperties.LINE_COLOR,
             this,
@@ -260,9 +259,6 @@ public class MFXLabel extends Control {
             Color.rgb(82, 0, 237)
     );
 
-    /**
-     * Specifies the unfocusedLine color.
-     */
     private final StyleableObjectProperty<Paint> unfocusedLineColor = new SimpleStyleableObjectProperty<>(
             StyleableProperties.UNFOCUSED_LINE_COLOR,
             this,
@@ -270,9 +266,6 @@ public class MFXLabel extends Control {
             Color.rgb(159, 159, 159)
     );
 
-    /**
-     * Specifies the lines' stroke width.
-     */
     private final StyleableDoubleProperty lineStrokeWidth = new SimpleStyleableDoubleProperty(
             StyleableProperties.LINE_STROKE_WIDTH,
             this,
@@ -314,6 +307,9 @@ public class MFXLabel extends Control {
         return labelStyle.get();
     }
 
+    /**
+     * Specifies the label css style.
+     */
     public StyleableObjectProperty<LabelStyles> labelStyleProperty() {
         return labelStyle;
     }
@@ -326,6 +322,9 @@ public class MFXLabel extends Control {
         return graphicTextGap.get();
     }
 
+    /**
+     * Specifies the space between the label's leading and trailing icons.
+     */
     public StyleableDoubleProperty graphicTextGapProperty() {
         return graphicTextGap;
     }
@@ -338,6 +337,9 @@ public class MFXLabel extends Control {
         return editable.get();
     }
 
+    /**
+     * Specifies whether the label is editable or not.
+     */
     public StyleableBooleanProperty editableProperty() {
         return editable;
     }
@@ -350,6 +352,9 @@ public class MFXLabel extends Control {
         return animateLines.get();
     }
 
+    /**
+     * Specifies if the line should be animated when focus changes. (works only with STYLE1)
+     */
     public StyleableBooleanProperty animateLinesProperty() {
         return animateLines;
     }
@@ -362,6 +367,9 @@ public class MFXLabel extends Control {
         return lineColor.get();
     }
 
+    /**
+     * Specifies the focused line color.
+     */
     public StyleableObjectProperty<Paint> lineColorProperty() {
         return lineColor;
     }
@@ -374,6 +382,9 @@ public class MFXLabel extends Control {
         return unfocusedLineColor.get();
     }
 
+    /**
+     * Specifies the unfocused line color.
+     */
     public StyleableObjectProperty<Paint> unfocusedLineColorProperty() {
         return unfocusedLineColor;
     }
@@ -386,6 +397,9 @@ public class MFXLabel extends Control {
         return lineStrokeWidth.get();
     }
 
+    /**
+     * Specifies the lines stroke width.
+     */
     public StyleableDoubleProperty lineStrokeWidthProperty() {
         return lineStrokeWidth;
     }
@@ -471,7 +485,6 @@ public class MFXLabel extends Control {
             );
         }
     }
-
 
     public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
         return StyleableProperties.cssMetaDataList;

@@ -43,7 +43,7 @@ public class MFXTreeView<T> extends MFXScrollPane {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-tree-view";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-treeview.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-treeview.css");
 
     private final ObjectProperty<AbstractMFXTreeItem<T>> root = new SimpleObjectProperty<>(null);
     private final ObjectProperty<ITreeSelectionModel<T>> selectionModel = new SimpleObjectProperty<>(null);

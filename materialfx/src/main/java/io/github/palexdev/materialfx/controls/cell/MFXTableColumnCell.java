@@ -22,8 +22,12 @@ import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.enums.SortState;
 import io.github.palexdev.materialfx.skins.MFXTableColumnCellSkin;
 import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.css.PseudoClass;
 import javafx.scene.control.Label;
 import javafx.scene.control.Skin;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
 import java.util.Comparator;
@@ -41,7 +45,9 @@ public class MFXTableColumnCell<T> extends Label {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-table-column-cell";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-table-column-cell.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-table-column-cell.css");
+
+    private final ReadOnlyDoubleWrapper initialWidth = new ReadOnlyDoubleWrapper();
 
     private final ObjectProperty<Callback<T, ? extends MFXTableRowCell>> rowCellFactory = new SimpleObjectProperty<>();
     private final StringProperty columnName = new SimpleStringProperty("");
@@ -50,6 +56,9 @@ public class MFXTableColumnCell<T> extends Label {
 
     private SortState sortState = SortState.UNSORTED;
     private Comparator<T> comparator;
+
+    private static final PseudoClass DRAG_PSEUDO_CLASS = PseudoClass.getPseudoClass("dragged");
+    private final BooleanProperty dragged = new SimpleBooleanProperty(false);
 
     //================================================================================
     // Constructors
@@ -73,12 +82,46 @@ public class MFXTableColumnCell<T> extends Label {
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
         setTooltipText(getColumnName());
+
+        dragged.addListener(invalidate -> pseudoClassStateChanged(DRAG_PSEUDO_CLASS, dragged.get()));
+        addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> dragged.set(true));
+        addEventFilter(MouseEvent.MOUSE_RELEASED, event -> dragged.set(false));
+
+        widthProperty().addListener(new ChangeListener<>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                if (newValue != null && newValue.doubleValue() > 0) {
+                    setInitialWidth(newValue.doubleValue());
+                    widthProperty().removeListener(this);
+                }
+            }
+        });
+    }
+
+    public double getInitialWidth() {
+        return initialWidth.get();
+    }
+
+    /**
+     * Specifies what was the initial width assigned to the control by JavaFX.
+     * We keep this value to use it the the context menu of the column,
+     * see {@link io.github.palexdev.materialfx.skins.MFXTableViewSkin}
+     */
+    public ReadOnlyDoubleProperty initialWidthProperty() {
+        return initialWidth.getReadOnlyProperty();
+    }
+
+    protected void setInitialWidth(double initialWidth) {
+        this.initialWidth.set(initialWidth);
     }
 
     public Callback<T, ? extends MFXTableRowCell> getRowCellFactory() {
         return rowCellFactory.get();
     }
 
+    /**
+     * Specifies the callback which is used to build the row cell of the column.
+     */
     public ObjectProperty<Callback<T, ? extends MFXTableRowCell>> rowCellFactoryProperty() {
         return rowCellFactory;
     }

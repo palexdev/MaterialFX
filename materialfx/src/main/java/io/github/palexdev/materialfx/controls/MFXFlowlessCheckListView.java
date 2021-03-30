@@ -16,35 +16,44 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.controls.legacy;
+package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.skins.legacy.MFXLegacyTableViewSkin;
+import io.github.palexdev.materialfx.controls.base.AbstractFlowlessListView;
+import io.github.palexdev.materialfx.controls.cell.MFXFlowlessCheckListCell;
+import io.github.palexdev.materialfx.selection.ListCheckModel;
+import io.github.palexdev.materialfx.selection.base.IListCheckModel;
+import io.github.palexdev.materialfx.skins.MFXFlowlessListViewSkin;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Skin;
-import javafx.scene.control.TableView;
 
 /**
- * This is a restyle of JavaFX's {@link TableView} control.
- * For a table view which more closely follows the guidelines of material design see {@link io.github.palexdev.materialfx.controls.MFXTableView}.
- *
- * @param <S>
+ * Implementation of a check list view based on Flowless.
+ * <p>
+ * Extends {@link AbstractFlowlessListView}.
+ * <p></p>
+ * Default cell: {@link MFXFlowlessCheckListCell}.
+ * <p>
+ * Default selection model: {@link ListCheckModel}.
+ * <p>
+ * Default skin: {@link MFXFlowlessListViewSkin}.
  */
-public class MFXLegacyTableView<S> extends TableView<S> {
+public class MFXFlowlessCheckListView<T> extends AbstractFlowlessListView<T, MFXFlowlessCheckListCell<T>, IListCheckModel<T>> {
     //================================================================================
     // Properties
     //================================================================================
-    private final String STYLE_CLASS = "mfx-legacy-table-view";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/mfx-tableview.css");
+    private final String STYLE_CLASS = "mfx-check-list-view";
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-flowless-check-listview.css");
 
     //================================================================================
     // Constructors
     //================================================================================
-    public MFXLegacyTableView() {
-        initialize();
+    public MFXFlowlessCheckListView() {
+        this(FXCollections.observableArrayList());
     }
 
-    public MFXLegacyTableView(ObservableList<S> items) {
+    public MFXFlowlessCheckListView(ObservableList<T> items) {
         super(items);
         initialize();
     }
@@ -54,16 +63,26 @@ public class MFXLegacyTableView<S> extends TableView<S> {
     //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
-        setRowFactory(row -> new MFXLegacyTableRow<>());
-        setFixedCellSize(27);
     }
 
     //================================================================================
     // Override Methods
     //================================================================================
     @Override
+    protected void setDefaultCellFactory() {
+        setCellFactory(item -> new MFXFlowlessCheckListCell<>(this, item));
+    }
+
+    @Override
+    protected void setDefaultSelectionModel() {
+        IListCheckModel<T> selectionModel = new ListCheckModel<>();
+        selectionModel.setAllowsMultipleSelection(true);
+        setSelectionModel(selectionModel);
+    }
+
+    @Override
     protected Skin<?> createDefaultSkin() {
-        return new MFXLegacyTableViewSkin<>(this);
+        return new MFXFlowlessListViewSkin<>(this);
     }
 
     @Override

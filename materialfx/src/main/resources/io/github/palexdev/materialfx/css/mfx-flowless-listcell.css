@@ -23,15 +23,15 @@
 }
 
 .mfx-list-cell:hover {
-    -fx-background-color: rgb(222, 255, 214);
-    -fx-border-color: rgb(222, 255, 214);
+    -fx-background-color: #F5F5F5;
+    -fx-border-color: #F5F5F5;
 }
 
 .mfx-list-cell:selected {
-    -fx-background-color: rgb(173, 255, 153);
-    -fx-border-color: rgb(173, 255, 153);
+    -fx-background-color: #E1E1E1;
+    -fx-border-color: #E1E1E1;
 }
 
 .mfx-list-cell .ripple-generator {
-    -mfx-ripple-color: rgb(141, 255, 112);
+    -mfx-ripple-color: #C8C8C8;
 }

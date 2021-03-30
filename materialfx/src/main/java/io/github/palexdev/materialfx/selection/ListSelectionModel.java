@@ -18,97 +18,187 @@
 
 package io.github.palexdev.materialfx.selection;
 
-import io.github.palexdev.materialfx.controls.base.AbstractMFXFlowlessListCell;
 import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.MapProperty;
+import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableMap;
 import javafx.scene.input.MouseEvent;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
+/**
+ * Concrete implementation of the {@code IListSelectionModel} interface.
+ */
 public class ListSelectionModel<T> implements IListSelectionModel<T> {
-    private final ListProperty<AbstractMFXFlowlessListCell<T>> selectedItems = new SimpleListProperty<>(FXCollections.observableArrayList());
+    //================================================================================
+    // Properties
+    //================================================================================
+    private final MapProperty<Integer, T> selectedItems = new SimpleMapProperty<>(getObservableTreeMap());
     private boolean allowsMultipleSelection = false;
 
-    public ListSelectionModel() {
-        selectedItems.addListener((ListChangeListener<AbstractMFXFlowlessListCell<T>>) change -> {
-            List<AbstractMFXFlowlessListCell<T>> tmpRemoved = new ArrayList<>();
-            List<AbstractMFXFlowlessListCell<T>> tmpAdded = new ArrayList<>();
+    //================================================================================
+    // Methods
+    //================================================================================
 
-            while (change.next()) {
-                tmpRemoved.addAll(change.getRemoved());
-                tmpAdded.addAll(change.getAddedSubList());
-            }
-            tmpRemoved.forEach(item -> item.setSelected(false));
-            tmpAdded.forEach(item -> item.setSelected(true));
-        });
-    }
-
-    @SuppressWarnings("unchecked")
-    protected void select(AbstractMFXFlowlessListCell<T> item) {
-        if (!allowsMultipleSelection) {
-            clearSelection();
-            selectedItems.setAll(item);
+    /**
+     * This method is called when the mouse event passed to {@link #select(int, Object, MouseEvent)}
+     * is null. Since it's null there's no check for isShiftDown() or isControlDown(), so in case
+     * of multiple selection enabled the passed index and data will always be added to the map.
+     */
+    protected void select(int index, T data) {
+        if (allowsMultipleSelection) {
+            selectedItems.put(index, data);
         } else {
-            selectedItems.add(item);
+            ObservableMap<Integer, T> tmpMap = getObservableTreeMap();
+            tmpMap.put(index, data);
+            selectedItems.set(tmpMap);
         }
     }
 
-    @SuppressWarnings("unchecked")
+    /**
+     * Builds a new observable map backed by a TreeMap.
+     */
+    protected ObservableMap<Integer, T> getObservableTreeMap() {
+        return FXCollections.observableMap(new TreeMap<>());
+    }
+
+    //================================================================================
+    // Override Methods
+    //================================================================================
+
+    /**
+     * Called by the list cells when the mouse is pressed.
+     * The mouse event is needed in case of multiple selection allowed because
+     * we check if the Shift key or Ctrl key were pressed.
+     * <p>
+     * If the mouseEvent is null we call the other {@link #select(int, T)} method.
+     * <p>
+     * If the selection is multiple and Shift or Ctrl are pressed the new entry
+     * is put in the map.
+     * <p>
+     * If the selection is single the map is replaced by a new one that contains only the
+     * passed entry.
+     * <p>
+     * Note that if the item is already selected it is removed from the map, this behavior though is
+     * managed by the cells.
+     */
     @Override
-    public void select(AbstractMFXFlowlessListCell<T> item, MouseEvent mouseEvent) {
+    public void select(int index, T data, MouseEvent mouseEvent) {
         if (mouseEvent == null) {
-            select(item);
+            select(index, data);
             return;
         }
 
-        if (!allowsMultipleSelection && !selectedItems.contains(item)) {
-            selectedItems.setAll(item);
-            return;
-        }
-
-        if (mouseEvent.isShiftDown() || mouseEvent.isControlDown()) {
-            if (item.isSelected()) {
-                selectedItems.remove(item);
-            } else {
-                selectedItems.add(item);
-            }
-        } else if (!selectedItems.contains(item)) {
-            selectedItems.setAll(item);
+        if (allowsMultipleSelection && (mouseEvent.isShiftDown() || mouseEvent.isControlDown())) {
+            selectedItems.put(index, data);
+        } else {
+            ObservableMap<Integer, T> tmpMap = getObservableTreeMap();
+            tmpMap.put(index, data);
+            selectedItems.set(tmpMap);
         }
     }
 
+    /**
+     * This method is called when the cell finds the data in the selection model
+     * but the index changed so it needs to be updated.
+     */
+    @Override
+    public void updateIndex(T data, int index) {
+        int mapIndex = selectedItems.entrySet()
+                .stream()
+                .filter(entry -> data.equals(entry.getValue()))
+                .findFirst()
+                .map(Map.Entry::getKey)
+                .orElse(-1);
+        if (mapIndex != -1) {
+            selectedItems.put(mapIndex, data);
+        }
+    }
+
+    /**
+     * Removes the mapping for the given index.
+     */
+    @Override
+    public void clearSelectedItem(int index) {
+        selectedItems.remove(index);
+    }
+
+    /**
+     * Retrieves the index for the given data, if preset
+     * removes the mapping for that index.
+     */
+    @Override
+    public void clearSelectedItem(T data) {
+        selectedItems.entrySet().stream()
+                .filter(entry -> entry.getValue().equals(data))
+                .findFirst()
+                .ifPresent(entry -> selectedItems.remove(entry.getKey()));
+    }
+
+    /**
+     * Removes all the entries from the map.
+     */
     @Override
     public void clearSelection() {
-        if (selectedItems.isEmpty()) {
-            return;
-        }
-
-        selectedItems.forEach(item -> item.setSelected(false));
         selectedItems.clear();
     }
 
+    /**
+     * @return the first selected item in the map
+     */
     @Override
-    public AbstractMFXFlowlessListCell<T> getSelectedItem() {
+    public T getSelectedItem() {
+        return getSelectedItem(0);
+    }
+
+    /**
+     * @return the selected item in the map with the given index or null
+     * if not found
+     */
+    @Override
+    public T getSelectedItem(int index) {
         if (selectedItems.isEmpty()) {
             return null;
         }
-        return selectedItems.get(0);
+
+        try {
+            return selectedItems.get(index);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
+    /**
+     * @return an unmodifiable list of all the selected items
+     */
     @Override
-    public ListProperty<AbstractMFXFlowlessListCell<T>> getSelectedItems() {
+    public List<T> getSelectedItems() {
+        return List.copyOf(selectedItems.values());
+    }
+
+    /**
+     * @return the map property used for the selection
+     */
+    @Override
+    public MapProperty<Integer, T> selectedItemsProperty() {
         return this.selectedItems;
     }
 
+    /**
+     * @return true if allows multiple selection, false if not.
+     */
     @Override
     public boolean allowsMultipleSelection() {
         return allowsMultipleSelection;
     }
 
+    /**
+     * Sets the selection mode of the model, single or multiple.
+     */
     @Override
     public void setAllowsMultipleSelection(boolean multipleSelection) {
         this.allowsMultipleSelection = multipleSelection;

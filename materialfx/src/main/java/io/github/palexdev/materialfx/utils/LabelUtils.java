@@ -24,8 +24,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 /**
  * Utils class for JavaFX's {@code Label}s.
  */
@@ -40,15 +38,13 @@ public class LabelUtils {
      * @param label The specified label
      */
     public static boolean isLabelTruncated(Label label) {
-        AtomicBoolean isTruncated = new AtomicBoolean(false);
-
-        label.needsLayoutProperty().addListener((observable, oldValue, newValue) -> {
-            String originalString = label.getText();
-            Text textNode = (Text) label.lookup(".text");
+        String originalString = label.getText();
+        Text textNode = (Text) label.lookup(".text");
+        if (textNode != null) {
             String actualString = textNode.getText();
-            isTruncated.set(!actualString.isEmpty() && !originalString.equals(actualString));
-        });
-        return isTruncated.get();
+            return (!actualString.isEmpty() && !originalString.equals(actualString));
+        }
+        return false;
     }
 
     /**

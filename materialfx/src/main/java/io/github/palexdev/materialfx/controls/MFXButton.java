@@ -50,7 +50,8 @@ public class MFXButton extends Button {
     //================================================================================
     private static final StyleablePropertyFactory<MFXButton> FACTORY = new StyleablePropertyFactory<>(Button.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-button";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-button.css").toString();
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-button.css");
+    private final RippleGenerator rippleGenerator = new RippleGenerator(this);
 
     //================================================================================
     // Constructors
@@ -82,103 +83,86 @@ public class MFXButton extends Button {
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
         setAlignment(Pos.CENTER);
+
+        setRippleRadius(25);
+        setRippleColor(Color.rgb(190, 190, 190));
+    }
+
+    public RippleGenerator getRippleGenerator() {
+        return this.rippleGenerator;
     }
 
     //================================================================================
     // Ripple properties
     //================================================================================
-
-    /**
-     * Specifies the ripples color of this control.
-     *
-     * @see Color
-     */
     private final ObjectProperty<Paint> rippleColor = new SimpleObjectProperty<>();
-
-    /**
-     * Specifies the ripples radius of this control.
-     */
     private final DoubleProperty rippleRadius = new SimpleDoubleProperty();
-
-    /**
-     * Specifies the ripples in animation duration of this control.
-     *
-     * @see Duration
-     */
     private final ObjectProperty<Duration> rippleInDuration = new SimpleObjectProperty<>();
-
-    /**
-     * Specifies the ripples out animation duration of this control.
-     *
-     * @see Duration
-     */
     private final ObjectProperty<Duration> rippleOutDuration = new SimpleObjectProperty<>();
 
-    public Paint getRippleColor() {
+    public final Paint getRippleColor() {
         return rippleColor.get();
     }
 
-    public ObjectProperty<Paint> rippleColorProperty() {
-        return rippleColor;
+    /**
+     * Specifies the ripples color of this control.
+     */
+    public final ObjectProperty<Paint> rippleColorProperty() {
+        return this.rippleColor;
     }
 
-    public void setRippleColor(Paint rippleColor) {
-        this.rippleColor.set(rippleColor);
+    public final void setRippleColor(Paint rippleColor) {
+        rippleGenerator.setRippleColor(rippleColor);
     }
 
     public double getRippleRadius() {
         return rippleRadius.get();
     }
 
+    /**
+     * Specifies the ripples radius of this control.
+     */
     public DoubleProperty rippleRadiusProperty() {
         return rippleRadius;
     }
 
     public void setRippleRadius(double rippleRadius) {
-        this.rippleRadius.set(rippleRadius);
+        rippleGenerator.setRippleRadius(rippleRadius);
     }
 
     public Duration getRippleInDuration() {
         return rippleInDuration.get();
     }
 
+    /**
+     * Specifies the ripples in animation duration of this control.
+     */
     public ObjectProperty<Duration> rippleInDurationProperty() {
         return rippleInDuration;
     }
 
     public void setRippleInDuration(Duration rippleInDuration) {
-        this.rippleInDuration.set(rippleInDuration);
+        rippleGenerator.setInDuration(rippleInDuration);
     }
 
     public Duration getRippleOutDuration() {
         return rippleOutDuration.get();
     }
 
+    /**
+     * Specifies the ripples out animation duration of this control.
+     */
     public ObjectProperty<Duration> rippleOutDurationProperty() {
         return rippleOutDuration;
     }
 
     public void setRippleOutDuration(Duration rippleOutDuration) {
-        this.rippleOutDuration.set(rippleOutDuration);
-    }
-
-    public RippleGenerator getRippleGenerator() {
-        try {
-            return (RippleGenerator) lookup(".ripple-generator");
-        } catch (ClassCastException ex) {
-            return null;
-        }
+        rippleGenerator.setOutDuration(rippleOutDuration);
     }
 
     //================================================================================
     // Styleable Properties
     //================================================================================
-
-    /**
-     * Specifies how intense is the {@code DropShadow} effect applied to this control.
-     * <p>
-     * The {@code DropShadow} effect is used to make the control appear {@code RAISED}.
-     */
     private final StyleableObjectProperty<DepthLevel> depthLevel = new SimpleStyleableObjectProperty<>(
             StyleableProperties.DEPTH_LEVEL,
             this,
@@ -186,13 +170,6 @@ public class MFXButton extends Button {
             DepthLevel.LEVEL2
     );
 
-    /**
-     * Specifies the appearance of this control. According to material design there are two types of buttons:
-     * <p>
-     * - {@code FLAT}
-     * <p>
-     * - {@code RAISED}
-     */
     private final StyleableObjectProperty<ButtonType> buttonType = new SimpleStyleableObjectProperty<>(
             StyleableProperties.BUTTON_TYPE,
             this,
@@ -204,6 +181,13 @@ public class MFXButton extends Button {
         return depthLevel.get();
     }
 
+    /**
+     * Specifies how intense is the {@code DropShadow} effect applied to this control.
+     * <p>
+     * The {@code DropShadow} effect is used to make the control appear {@code RAISED}.
+     *
+     * @see io.github.palexdev.materialfx.effects.MFXDepthManager
+     */
     public StyleableObjectProperty<DepthLevel> depthLevelProperty() {
         return depthLevel;
     }
@@ -216,6 +200,13 @@ public class MFXButton extends Button {
         return buttonType.get();
     }
 
+    /**
+     * Specifies the appearance of this control. According to material design there are two types of buttons:
+     * <p>
+     * - {@code FLAT}
+     * <p>
+     * - {@code RAISED}
+     */
     public StyleableObjectProperty<ButtonType> buttonTypeProperty() {
         return buttonType;
     }
