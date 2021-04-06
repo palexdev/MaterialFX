@@ -19,12 +19,14 @@
 package io.github.palexdev.materialfx.controls.cell;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.controls.base.AbstractFlowlessListView;
+import io.github.palexdev.materialfx.controls.MFXFlowlessListView;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXFlowlessListCell;
 import io.github.palexdev.materialfx.effects.RippleGenerator;
+import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 
 /**
@@ -39,25 +41,29 @@ public class MFXFlowlessListCell<T> extends AbstractMFXFlowlessListCell<T> {
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-flowless-listcell.css");
     protected final RippleGenerator rippleGenerator = new RippleGenerator(this);
 
+    private final MFXFlowlessListView<T> listView;
+
     //================================================================================
     // Constructors
     //================================================================================
-    public MFXFlowlessListCell(AbstractFlowlessListView<T, ?, ?> listView, T  data) {
-        super(listView, data);
-        initialize();
+    public MFXFlowlessListCell(MFXFlowlessListView<T> listView, T  data) {
+        this(listView, data, 32);
     }
 
-    public MFXFlowlessListCell(AbstractFlowlessListView<T, ?, ?> listView, T data, double fixedHeight) {
-        super(listView, data, fixedHeight);
+    public MFXFlowlessListCell(MFXFlowlessListView<T> listView, T data, double fixedHeight) {
+        super(data, fixedHeight);
+        this.listView = listView;
         initialize();
     }
 
     //================================================================================
     // Methods
     //================================================================================
-    private void initialize() {
+    protected void initialize() {
+        super.initialize();
         getStyleClass().add(STYLE_CLASS);
         setupRippleGenerator();
+        render(getData());
     }
 
     /**
@@ -78,6 +84,10 @@ public class MFXFlowlessListCell<T> extends AbstractMFXFlowlessListCell<T> {
     //================================================================================
     // Override Methods
     //================================================================================
+    @Override
+    public HBox getNode() {
+        return this;
+    }
 
     /**
      * Inherited doc:
@@ -99,6 +109,11 @@ public class MFXFlowlessListCell<T> extends AbstractMFXFlowlessListCell<T> {
             getChildren().setAll(label);
         }
         getChildren().add(0, rippleGenerator);
+    }
+
+    @Override
+    protected IListSelectionModel<T> getSelectionModel() {
+        return listView.getSelectionModel();
     }
 
     @Override

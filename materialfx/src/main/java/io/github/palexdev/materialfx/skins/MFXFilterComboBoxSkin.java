@@ -15,7 +15,6 @@ import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.StringUtils;
 import javafx.animation.*;
-import javafx.collections.MapChangeListener;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
@@ -105,25 +104,10 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         searchContainer.setAlignment(Pos.CENTER_LEFT);
         searchContainer.setManaged(false);
 
-        listView = new MFXFlowlessListView<>() {
-            {
-                setCellFactory(item -> new MFXFlowlessListCell<>(this, item) {
-                    @Override
-                    public void updateIndex(int index) {
-                        setIndex(index);
-                        if (containsEqualsBoth() && !isSelected()) {
-                            setSelected(true);
-                            return;
-                        }
-                        if (containsNotEqualsIndex()) {
-                            listView.getSelectionModel().updateIndex(getData(), index);
-                            setSelected(true);
-                        }
-                    }
-                });
-            }
-        };
+        listView = new MFXFlowlessListView<>();
+        listView.setCellFactory(item -> new FilterListCell<>(comboBox, item));
         listView.getStylesheets().add(comboBox.getUserAgentStylesheet());
+
         popup = buildPopup();
         popupHandler = event -> {
             if (popup.isShowing() && !NodeUtils.inHierarchy(event.getPickResult().getIntersectedNode(), comboBox)) {
@@ -218,13 +202,6 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (oldValue != newValue) {
                 comboBox.setSelectedValue(newValue);
-            }
-        });
-
-        listView.getSelectionModel().selectedItemsProperty().addListener((MapChangeListener<? super Integer, ? super T>) change -> {
-            T item = change.getValueAdded();
-            if (item != null) {
-                selectionModel.selectItem(item);
             }
         });
 
@@ -608,5 +585,58 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         icon.resizeRelocate(contentWidth - iconWidth, center, iconWidth, iconHeight);
         focusedLine.relocate(0, contentHeight);
         unfocusedLine.relocate(0, contentHeight);
+    }
+
+    private static class FilterListCell<T> extends MFXFlowlessListCell<T> {
+        private final String STYLE_CLASS = "mfx-list-cell";
+        private final MFXFilterComboBox<T> comboBox;
+
+        public FilterListCell(MFXFilterComboBox<T> comboBox, T data) {
+            this(comboBox, data, 32);
+        }
+
+        public FilterListCell(MFXFilterComboBox<T> comboBox, T data, double fixedHeight) {
+            super(null, data, fixedHeight);
+            this.comboBox = comboBox;
+            initialize();
+
+            if (comboBox.getSelectionModel().getSelectedItem() == getData() && !isSelected()) {
+                setSelected(true);
+                pseudoClassStateChanged(SELECTED_PSEUDO_CLASS, isSelected());
+            }
+            setBehavior();
+            render(getData());
+        }
+
+        @Override
+        protected void initialize() {
+            getStyleClass().add(STYLE_CLASS);
+        }
+
+        @Override
+        protected void setBehavior() {
+            addEventFilter(MouseEvent.MOUSE_PRESSED, event -> comboBox.getSelectionModel().selectItem(getData()));
+        }
+
+        @Override
+        public HBox getNode() {
+            return this;
+        }
+
+        @Override
+        protected void render(T data) {
+            if (data instanceof Node) {
+                getChildren().setAll((Node) data);
+            } else {
+                Label label = new Label(data.toString());
+                label.getStyleClass().add("data-label");
+                getChildren().setAll(label);
+            }
+        }
+
+        @Override
+        protected IListSelectionModel<T> getSelectionModel() {
+            return null;
+        }
     }
 }

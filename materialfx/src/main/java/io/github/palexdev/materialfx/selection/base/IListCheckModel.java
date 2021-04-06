@@ -26,6 +26,7 @@ import java.util.List;
  * Public API used by any {@code MFXFlowlessCheckListView}.
  */
 public interface IListCheckModel<T> extends IListSelectionModel<T> {
+    boolean containsChecked(int index);
     void check(int index, T data);
     void clearCheckedItem(int index);
     void clearCheckedItem(T data);

@@ -19,20 +19,19 @@
 package io.github.palexdev.materialfx.controls.base;
 
 import io.github.palexdev.materialfx.controls.flowless.Cell;
+import io.github.palexdev.materialfx.selection.ListSelectionModel;
 import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 /**
  * Base class for all cells used in list views based on Flowless,
- * defines common properties and behavior.
+ * defines common properties and behavior (e.g selection), has the selected property
+ * and pseudo class ":selected" for usage in CSS.
  * <p>
  * Extends {@link HBox} and implements {@link Cell}.
  *
@@ -42,31 +41,29 @@ public abstract class AbstractMFXFlowlessListCell<T> extends HBox implements Cel
     //================================================================================
     // Properties
     //================================================================================
-    protected final AbstractFlowlessListView<T, ?, ?> listView;
-    private final ReadOnlyObjectWrapper<T> data;
-    private final ReadOnlyIntegerWrapper index = new ReadOnlyIntegerWrapper(-1);
-    private final DoubleProperty fixedCellSize = new SimpleDoubleProperty();
+    protected final ReadOnlyIntegerWrapper index = new ReadOnlyIntegerWrapper(-1);
+    protected final ReadOnlyObjectWrapper<T> data = new ReadOnlyObjectWrapper<>();
+    protected final DoubleProperty fixedCellHeight = new SimpleDoubleProperty();
 
-    private static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
-    private final BooleanProperty selected = new SimpleBooleanProperty(false);
+    private final ReadOnlyBooleanWrapper selected = new ReadOnlyBooleanWrapper();
+    protected final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
 
     //================================================================================
     // Constructors
     //================================================================================
-    public AbstractMFXFlowlessListCell(AbstractFlowlessListView<T, ?, ?> listView, T data) {
-        this(listView, data, 32);
+    public AbstractMFXFlowlessListCell(T data) {
+        this(data, 32);
     }
 
-    public AbstractMFXFlowlessListCell(AbstractFlowlessListView<T, ?, ?> listView, T data, double fixedHeight) {
-        this.listView = listView;
-        this.data = new ReadOnlyObjectWrapper<>(data);
-        this.fixedCellSize.set(fixedHeight);
+    public AbstractMFXFlowlessListCell(T data, double fixedHeight) {
+        setData(data);
+        setFixedCellHeight(fixedHeight);
 
         setMinHeight(USE_PREF_SIZE);
         setMaxHeight(USE_PREF_SIZE);
-        prefHeightProperty().bind(fixedCellSize);
-
-        initialize();
+        prefHeightProperty().bind(fixedCellHeight);
+        setAlignment(Pos.CENTER_LEFT);
+        setSpacing(5);
     }
 
     //================================================================================
@@ -78,59 +75,76 @@ public abstract class AbstractMFXFlowlessListCell<T> extends HBox implements Cel
      */
     protected abstract void render(T data);
 
+    protected abstract IListSelectionModel<T> getSelectionModel();
+
     //================================================================================
     // Methods
     //================================================================================
-    private void initialize() {
-        setAlignment(Pos.CENTER_LEFT);
-        setSpacing(5);
-
-        addListeners();
+    protected void initialize() {
+        setBehavior();
     }
 
     /**
-     * Adds listeners to:
+     * Sets the following behaviors:
      * <p>
-     *  - selected property to update the pseudo class state.<p>
-     *  - scene property to call the {@link #render(T)} method the first time.<p>
-     *  - selection model's selected items property to properly update the state of the selected property.<p>
-     *  <p>
-     * Adds a filter for MOUSE_PRESSED which calls {@link #updateModel(MouseEvent)}.
+     * - Calls {@link #updateSelection(MouseEvent)} on mouse pressed.<p>
+     * - Updates the selected pseudo class state when selected property changes.<p>
+     * - Calls {@link #afterUpdateIndex()} when the index property changes.<p>
+     * - Updates the selected property according to the list view' selection model changes.
      */
-    private void addListeners() {
-        selected.addListener(invalidate -> pseudoClassStateChanged(SELECTED_PSEUDO_CLASS, selected.get()));
-
-        sceneProperty().addListener(new ChangeListener<>() {
-            @Override
-            public void changed(ObservableValue<? extends Scene> observable, Scene oldValue, Scene newValue) {
-                if (newValue != null) {
-                    render(getData());
-                    sceneProperty().removeListener(this);
-                }
-            }
-        });
-
-        addEventFilter(MouseEvent.MOUSE_PRESSED, this::updateModel);
-        listView.getSelectionModel().selectedItemsProperty().addListener((InvalidationListener) invalidated -> {
-            if (!containsEqualsBoth() && isSelected()) {
+    protected void setBehavior() {
+        selected.addListener(invalidated -> pseudoClassStateChanged(SELECTED_PSEUDO_CLASS, selected.get()));
+        addEventFilter(MouseEvent.MOUSE_PRESSED, this::updateSelection);
+        index.addListener(invalidated -> afterUpdateIndex());
+        getSelectionModel().selectedItemsProperty().addListener((InvalidationListener) invalidated -> {
+            if (isSelected() && !getSelectionModel().containSelected(getIndex())) {
                 setSelected(false);
             }
         });
     }
 
-    public T getData() {
-        return data.get();
+    /**
+     * Inverts the selected property state (from true to false and viceversa),
+     * then according to the new state updates the selection model.
+     * <p></p>
+     * If true and the selection model doesn't already contain the cell index then calls
+     * {@link ListSelectionModel#select(int, T, MouseEvent)} with the cell's index and data.
+     * <p></p>
+     * If false calls {@link ListSelectionModel#clearSelectedItem(int)} with the cell's index.
+     */
+    protected void updateSelection(MouseEvent mouseEvent) {
+        IListSelectionModel<T> selectionModel = getSelectionModel();
+        setSelected(!isSelected());
+
+        boolean selected = isSelected();
+        int index = getIndex();
+        if (!selected && selectionModel.containSelected(index)) {
+            selectionModel.clearSelectedItem(index);
+        } else if (selected && !selectionModel.containSelected(index)) {
+            selectionModel.select(index, getData(), mouseEvent);
+        }
     }
 
     /**
-     * Data property of the cell.
+     * After the index property is updated by {@link #updateIndex(int)} this method
+     * is called to set the selected property state accordingly to the selection model state.
+     * <p></p>
+     * If the cell is not selected but the selection model contains the cell's index then
+     * sets the selected property to true.
+     * <p></p>
+     * If the cell is selected but the selection model doesn't contain the cell's index then
+     * sets the selected property to false.
      */
-    public ReadOnlyObjectProperty<T> dataProperty() {
-        return data.getReadOnlyProperty();
-    }
+    protected void afterUpdateIndex() {
+        IListSelectionModel<T> selectionModel = getSelectionModel();
 
-    protected void setData(T data) {
-        this.data.set(data);
+        boolean selected = isSelected();
+        int index = getIndex();
+        if (!selected && selectionModel.containSelected(index)) {
+            setSelected(true);
+        } else if (selected && !selectionModel.containSelected(index)) {
+            setSelected(false);
+        }
     }
 
     public int getIndex() {
@@ -148,26 +162,42 @@ public abstract class AbstractMFXFlowlessListCell<T> extends HBox implements Cel
         this.index.set(index);
     }
 
+    public T getData() {
+        return data.get();
+    }
+
+    /**
+     * Data property of the cell.
+     */
+    public ReadOnlyObjectProperty<T> dataProperty() {
+        return data.getReadOnlyProperty();
+    }
+
+    protected void setData(T data) {
+        this.data.set(data);
+    }
+
+    public double getFixedCellHeight() {
+        return fixedCellHeight.get();
+    }
+
     /**
      * Specifies the fixed height of the cell.
      */
-    public DoubleProperty fixedCellSizeProperty() {
-        return fixedCellSize;
+    public DoubleProperty fixedCellHeightProperty() {
+        return fixedCellHeight;
     }
 
-    public void setFixedCellSize(double fixedCellSize) {
-        this.fixedCellSize.set(fixedCellSize);
+    public void setFixedCellHeight(double fixedCellHeight) {
+        this.fixedCellHeight.set(fixedCellHeight);
     }
 
     public boolean isSelected() {
         return selected.get();
     }
 
-    /**
-     * Selection state of the cell.
-     */
-    public BooleanProperty selectedProperty() {
-        return selected;
+    public ReadOnlyBooleanProperty selectedProperty() {
+        return selected.getReadOnlyProperty();
     }
 
     public void setSelected(boolean selected) {
@@ -175,83 +205,10 @@ public abstract class AbstractMFXFlowlessListCell<T> extends HBox implements Cel
     }
 
     /**
-     * Updates the selection state of the cell and the state
-     * of the selection model as well.
-     */
-    public void updateModel(MouseEvent event) {
-        setSelected(!isSelected());
-        if (isSelected()) {
-            listView.getSelectionModel().select(getIndex(), getData(), event);
-        } else {
-            listView.getSelectionModel().clearSelectedItem(getIndex());
-        }
-    }
-
-    /**
-     * Checks if the selection model contains the index and the data of this cell.
-     */
-    protected boolean containsEqualsBoth() {
-        IListSelectionModel<T> selectionModel = listView.getSelectionModel();
-        return selectionModel.selectedItemsProperty().containsKey(getIndex()) &&
-                selectionModel.selectedItemsProperty().get(getIndex()).equals(getData());
-    }
-
-    /**
-     * Checks if the selection model contains the data of the cell but the index is not the same.
-     */
-    protected boolean containsNotEqualsIndex() {
-        IListSelectionModel<T> selectionModel = listView.getSelectionModel();
-        return selectionModel.selectedItemsProperty().containsValue(getData()) &&
-                selectionModel.selectedItemsProperty().entrySet()
-                        .stream()
-                        .anyMatch(entry -> entry.getKey() != getIndex() && entry.getValue().equals(getData()));
-    }
-
-    /**
-     * Checks if the selection model contains the index of the cell but the data is not the same.
-     */
-    protected boolean containsNotEqualsData() {
-        IListSelectionModel<T> selectionModel = listView.getSelectionModel();
-        return selectionModel.selectedItemsProperty().containsKey(getIndex()) &&
-                !selectionModel.selectedItemsProperty().get(getIndex()).equals(getData());
-    }
-
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    public HBox getNode() {
-        return this;
-    }
-
-    /**
-     * Inherited doc:
-     * <p>
-     * {@inheritDoc}
-     *
-     * <p></p>
-     * Updates the index property of the cell with the given index parameter
-     * (which is provided by Flowless) then checks and fixes inconsistencies in the
-     * selection model.
-     *
-     *{@link #containsEqualsBoth()},
-     *{@link #containsNotEqualsIndex()},
-     *{@link #containsNotEqualsData()},
+     * Updates the index property of the cell with the given index (provided automatically by Flowless).
      */
     @Override
     public void updateIndex(int index) {
-        setIndex(index);
-        if (containsEqualsBoth() && !isSelected()) {
-            setSelected(true);
-            return;
-        }
-        if (containsNotEqualsIndex()) {
-            listView.getSelectionModel().updateIndex(getData(), index);
-            setSelected(true);
-            return;
-        }
-        if (containsNotEqualsData()) {
-            listView.getSelectionModel().clearSelectedItem(index);
-        }
+        this.index.set(index);
     }
 }

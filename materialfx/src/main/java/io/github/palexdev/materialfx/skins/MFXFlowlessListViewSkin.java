@@ -18,8 +18,8 @@
 
 package io.github.palexdev.materialfx.skins;
 
-import io.github.palexdev.materialfx.controls.base.AbstractFlowlessListView;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXFlowlessListCell;
+import io.github.palexdev.materialfx.controls.base.AbstractMFXFlowlessListView;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.controls.flowless.MFXVirtualizedScrollPane;
 import io.github.palexdev.materialfx.controls.flowless.VirtualFlow;
@@ -37,7 +37,7 @@ import javafx.util.Duration;
 /**
  * Implementation of the skin used by all list views based on Flowless.
  */
-public class MFXFlowlessListViewSkin<T> extends SkinBase<AbstractFlowlessListView<T, ?, ?>> {
+public class MFXFlowlessListViewSkin<T> extends SkinBase<AbstractMFXFlowlessListView<T, ?, ?>> {
     //================================================================================
     // Properties
     //================================================================================
@@ -49,10 +49,13 @@ public class MFXFlowlessListViewSkin<T> extends SkinBase<AbstractFlowlessListVie
     //================================================================================
     // Constructors
     //================================================================================
-    public MFXFlowlessListViewSkin(AbstractFlowlessListView<T, ?, ?> listView) {
+    public MFXFlowlessListViewSkin(AbstractMFXFlowlessListView<T, ?, ?> listView) {
         super(listView);
 
-        VirtualFlow<T, AbstractMFXFlowlessListCell<T>> flow = VirtualFlow.createVertical(listView.getItems(), this::createCell);
+        VirtualFlow<T, AbstractMFXFlowlessListCell<T>> flow = VirtualFlow.createVertical(
+                listView.getItems(),
+                listView.getCellFactory()
+        );
         flow.setId("virtualFlow");
         flow.getStylesheets().setAll(listView.getUserAgentStylesheet());
 
@@ -94,7 +97,7 @@ public class MFXFlowlessListViewSkin<T> extends SkinBase<AbstractFlowlessListVie
      * Calls {@link #setScrollBarHandlers()}, adds a listener to the list view's depth property.
      */
     private void setListeners() {
-        AbstractFlowlessListView<T, ?, ?> listView = getSkinnable();
+        AbstractMFXFlowlessListView<T, ?, ?> listView = getSkinnable();
 
         setScrollBarHandlers();
         listView.depthLevelProperty().addListener((observable, oldValue, newValue) -> {
@@ -108,7 +111,7 @@ public class MFXFlowlessListViewSkin<T> extends SkinBase<AbstractFlowlessListVie
      * Sets up the scroll bars behavior.
      */
     private void setScrollBarHandlers() {
-        AbstractFlowlessListView<T, ?, ?> listView = getSkinnable();
+        AbstractMFXFlowlessListView<T, ?, ?> listView = getSkinnable();
 
         listView.setOnMouseExited(event -> {
             if (listView.isHideScrollBars()) {
@@ -167,15 +170,6 @@ public class MFXFlowlessListViewSkin<T> extends SkinBase<AbstractFlowlessListVie
             }
         });
 
-    }
-
-    /**
-     * Responsible for creating the cells contained by Flowless VirtualFlow,
-     * uses the list view's defined cell factory.
-     */
-    protected AbstractMFXFlowlessListCell<T> createCell(T item) {
-        AbstractFlowlessListView<T, ?, ?> listView = getSkinnable();
-        return listView.getCellFactory().call(item);
     }
 
     //================================================================================

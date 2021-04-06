@@ -20,9 +20,10 @@ package io.github.palexdev.materialfx.controls.base;
 
 import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ObservableList;
-import javafx.util.Callback;
+
+import java.util.List;
+import java.util.function.Function;
 
 /**
  * Interface that defines the public api for all the list views based on Flowless.
@@ -39,30 +40,24 @@ public interface IListView<T, C extends AbstractMFXFlowlessListCell<T>, S extend
     ObservableList<T> getItems();
 
     /**
-     * @return the items observable list wrapped in a read-only property,
-     * to change the list items use {@link #setItems(ObservableList)} or {@link #getItems()}
-     */
-    ReadOnlyObjectProperty<ObservableList<T>> itemsProperty();
-
-    /**
      * Set all the items to the specified list.
      */
-    void setItems(ObservableList<T> items);
+    void setItems(List<T> items);
 
     /**
-     * @return the callback used to build the list cells
+     * @return the function used to build the list cells
      */
-    Callback<T, C> getCellFactory();
+    Function<T, C> getCellFactory();
 
     /**
      * @return the cell factory property
      */
-    ObjectProperty<Callback<T, C>> cellFactoryProperty();
+    ObjectProperty<Function<T, C>> cellFactoryProperty();
 
     /**
      * Replaces the cell factory with the given one
      */
-    void setCellFactory(Callback<T, C> cellFactory);
+    void setCellFactory(Function<T, C> cellFactory);
 
     /**
      * @return the list view selection model

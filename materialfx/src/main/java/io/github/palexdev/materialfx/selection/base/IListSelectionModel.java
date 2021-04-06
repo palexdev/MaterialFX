@@ -18,6 +18,7 @@
 
 package io.github.palexdev.materialfx.selection.base;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.MapProperty;
 import javafx.scene.input.MouseEvent;
 
@@ -27,6 +28,7 @@ import java.util.List;
  * Public API used by any {@code MFXFlowlessListView}.
  */
 public interface IListSelectionModel<T> {
+    boolean containSelected(int index);
     void select(int index, T data, MouseEvent mouseEvent);
     void updateIndex(T data, int index);
     void clearSelectedItem(int index);
@@ -38,4 +40,7 @@ public interface IListSelectionModel<T> {
     MapProperty<Integer, T> selectedItemsProperty();
     boolean allowsMultipleSelection();
     void setAllowsMultipleSelection(boolean multipleSelection);
+    boolean isUpdating();
+    BooleanProperty updatingProperty();
+    void setUpdating(boolean updating);
 }

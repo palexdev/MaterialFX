@@ -16,11 +16,19 @@ public class ListCheckModel<T> extends ListSelectionModel<T> implements IListChe
     //================================================================================
     // Properties
     //================================================================================
-    private final MapProperty<Integer, T> checkedItems = new SimpleMapProperty<>(getObservableTreeMap());
+    private final MapProperty<Integer, T> checkedItems = new SimpleMapProperty<>(getMap());
 
     //================================================================================
     // Override Methods
     //================================================================================
+
+    /**
+     * Checks if the map contains the given index key.
+     */
+    @Override
+    public boolean containsChecked(int index) {
+        return checkedItems.containsKey(index);
+    }
 
     /**
      * Puts the specified entry in the map.
@@ -74,7 +82,7 @@ public class ListCheckModel<T> extends ListSelectionModel<T> implements IListChe
      */
     @Override
     public void clearChecked() {
-        checkedItems.clear();
+        checkedItems.set(getMap());
     }
 
     /**

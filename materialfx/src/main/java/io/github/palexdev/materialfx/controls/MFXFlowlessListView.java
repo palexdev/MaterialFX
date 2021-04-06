@@ -19,20 +19,26 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.controls.base.AbstractFlowlessListView;
-import io.github.palexdev.materialfx.controls.base.AbstractMFXFlowlessListCell;
+import io.github.palexdev.materialfx.controls.base.AbstractMFXFlowlessListView;
 import io.github.palexdev.materialfx.controls.cell.MFXFlowlessListCell;
 import io.github.palexdev.materialfx.selection.ListSelectionModel;
 import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
 import io.github.palexdev.materialfx.skins.MFXFlowlessListViewSkin;
+import javafx.beans.property.MapProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableMap;
 import javafx.scene.control.Skin;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.IntStream;
 
 /**
  * Implementation of a list view based on Flowless.
  * <p>
- * Extends {@link AbstractFlowlessListView}.
+ * Extends {@link AbstractMFXFlowlessListView}.
  * <p></p>
  * Default cell: {@link MFXFlowlessListCell}.
  * <p>
@@ -40,7 +46,7 @@ import javafx.scene.control.Skin;
  * <p>
  * Default skin: {@link MFXFlowlessListViewSkin}.
  */
-public class MFXFlowlessListView<T> extends AbstractFlowlessListView<T, AbstractMFXFlowlessListCell<T>, IListSelectionModel<T>> {
+public class MFXFlowlessListView<T> extends AbstractMFXFlowlessListView<T, MFXFlowlessListCell<T>, IListSelectionModel<T>> {
     //================================================================================
     // Properties
     //================================================================================
@@ -51,10 +57,10 @@ public class MFXFlowlessListView<T> extends AbstractFlowlessListView<T, Abstract
     // Constructors
     //================================================================================
     public MFXFlowlessListView() {
-        this(FXCollections.observableArrayList());
+        this(List.of());
     }
 
-    public MFXFlowlessListView(ObservableList<T> items) {
+    public MFXFlowlessListView(List<T> items) {
         super(items);
         initialize();
     }
@@ -62,8 +68,62 @@ public class MFXFlowlessListView<T> extends AbstractFlowlessListView<T, Abstract
     //================================================================================
     // Methods
     //================================================================================
-    private void initialize() {
-        getStyleClass().add(STYLE_CLASS);
+    protected void initialize() {
+        super.initialize();
+        getStyleClass().setAll(STYLE_CLASS);
+
+        items.addListener((ListChangeListener<? super T>) change -> {
+            if (getSelectionModel().getSelectedItems().isEmpty()) {
+                return;
+            }
+            if (change.getList().isEmpty()) {
+                getSelectionModel().clearSelection();
+                return;
+            }
+
+            getSelectionModel().setUpdating(true);
+            Map<Integer, Integer> addedOffsets = new HashMap<>();
+            Map<Integer, Integer> removedOffsets = new HashMap<>();
+
+            while (change.next()) {
+                if (change.wasAdded()) {
+                    int from = change.getFrom();
+                    int to = change.getTo();
+                    int offset = to - from;
+                    addedOffsets.put(from, offset);
+                }
+                if (change.wasRemoved()) {
+                    int from = change.getFrom();
+                    int offset = change.getRemovedSize();
+                    IntStream.range(from, from + offset)
+                            .filter(getSelectionModel()::containSelected)
+                            .forEach(getSelectionModel()::clearSelectedItem);
+                    removedOffsets.put(from, offset);
+                }
+            }
+            updateSelection(addedOffsets, removedOffsets);
+        });
+    }
+
+    protected void updateSelection(Map<Integer, Integer> addedOffsets, Map<Integer, Integer> removedOffsets) {
+        MapProperty<Integer, T> selectedItems = getSelectionModel().selectedItemsProperty();
+        ObservableMap<Integer, T> updatedMap = FXCollections.observableHashMap();
+        selectedItems.forEach((key, value) -> {
+            int sum = addedOffsets.entrySet().stream()
+                    .filter(entry -> entry.getKey() <= key)
+                    .mapToInt(Map.Entry::getValue)
+                    .sum();
+            int diff = removedOffsets.entrySet().stream()
+                    .filter(entry -> entry.getKey() < key)
+                    .mapToInt(Map.Entry::getValue)
+                    .sum();
+            int shift = sum - diff;
+            updatedMap.put(key + shift, value);
+        });
+        if (!selectedItems.equals(updatedMap)) {
+            selectedItems.set(updatedMap);
+        }
+        getSelectionModel().setUpdating(false);
     }
 
     //================================================================================
@@ -77,7 +137,6 @@ public class MFXFlowlessListView<T> extends AbstractFlowlessListView<T, Abstract
     @Override
     protected void setDefaultSelectionModel() {
         IListSelectionModel<T> selectionModel = new ListSelectionModel<>();
-        selectionModel.setAllowsMultipleSelection(true);
         setSelectionModel(selectionModel);
     }
 
