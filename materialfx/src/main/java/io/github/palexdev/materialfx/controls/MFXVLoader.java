@@ -19,6 +19,7 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.beans.MFXLoaderBean;
+import io.github.palexdev.materialfx.controls.enums.LoaderCacheLevel;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.utils.LoaderUtils;
 import io.github.palexdev.materialfx.utils.ToggleButtonsUtil;
@@ -26,10 +27,13 @@ import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
+import javafx.scene.CacheHint;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
@@ -38,6 +42,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -55,6 +61,11 @@ import java.util.stream.Collectors;
  * <p></p>
  * Once everything is loaded: {@link ToggleButtonsUtil#addAlwaysOneSelectedSupport(ToggleGroup)} is called, the loaded
  * toggles are added to the children list and {@link #setDefault()} is called.
+ * <p></p>
+ *
+ * <b>NOTE: the cache level must be set before invoking the {@link #start()} method.</b>
+ * <p>
+ * By default it is set to: {@link LoaderCacheLevel#SCENE_CACHE}
  *
  * @see LoaderUtils
  * @see MFXLoaderBean
@@ -68,13 +79,15 @@ public class MFXVLoader extends VBox {
     private Pane contentPane;
     private final ToggleGroup toggleGroup;
 
-    private final BooleanProperty isAnimated = new SimpleBooleanProperty(false);
+    private final BooleanProperty animated = new SimpleBooleanProperty(false);
     private final DoubleProperty animationMillis = new SimpleDoubleProperty(800);
     private MFXAnimationFactory animationType = MFXAnimationFactory.FADE_IN;
 
     private final IntegerProperty loadedItems = new SimpleIntegerProperty(0);
     private final Map<String, MFXLoaderBean> idViewMap;
     private Supplier<FXMLLoader> fxmlLoaderSupplier;
+
+    private LoaderCacheLevel cacheLevel = LoaderCacheLevel.SCENE_CACHE;
 
     //================================================================================
     // Constructors
@@ -167,9 +180,8 @@ public class MFXVLoader extends VBox {
     /**
      * Starts the loading process.
      * <p></p>
-     * Retrieves the {@link MFXLoaderBean}s in the idViewMa, for each of them
-     * checks if the node has been already loaded, if not then calls {@link #buildLoadCallable(MFXLoaderBean)},
-     * submit the callable to {@link LoaderUtils#submit(Callable)}, then increments the loadedItems counter.
+     * Retrieves the {@link MFXLoaderBean}s in the idViewMap, for each of them
+     * checks if the node has been already loaded, if not then calls {@link #load(MFXLoaderBean)}
      */
     public void start() {
         if (contentPane == null) {
@@ -179,10 +191,53 @@ public class MFXVLoader extends VBox {
         List<MFXLoaderBean> loaderBeans = new ArrayList<>(idViewMap.values());
         for (MFXLoaderBean loaderBean : loaderBeans) {
             if (loaderBean.getRoot() == null) {
-                LoaderUtils.submit(buildLoadCallable(loaderBean));
-                loadedItems.set(loadedItems.get() + 1);
+                load(loaderBean);
             }
         }
+    }
+
+    /**
+     * Loads the root node of a {@link MFXLoaderBean}. The load process depends
+     * on the set cache level. If the level is set to {@link LoaderCacheLevel#NONE}
+     * the load task built by {@link #buildLoadCallable(MFXLoaderBean)} is submitted
+     * to the loader executor {@link LoaderUtils#submit(Callable)}.
+     * In the other cases the task is submitted to the executor but the {@link Future#get()} method
+     * is invoked which causes the thread to wait until the fxml is loaded.
+     *
+     * @see #cacheParent(Parent)
+     */
+    private void load(MFXLoaderBean loaderBean) {
+        if (cacheLevel != LoaderCacheLevel.NONE) {
+            try {
+                Parent loaded = LoaderUtils.submit(buildLoadCallable(loaderBean)).get();
+                cacheParent(loaded);
+                loadedItems.set(loadedItems.get() + 1);
+            } catch (InterruptedException | ExecutionException ex) {
+                loadedItems.set(loadedItems.get() + 1);
+                ex.printStackTrace();
+            }
+        } else {
+            LoaderUtils.submit(buildLoadCallable(loaderBean));
+            loadedItems.set(loadedItems.get() + 1);
+        }
+    }
+
+    /**
+     * Called if the cache level is not set to {@link LoaderCacheLevel#NONE}.
+     *
+     * @see LoaderCacheLevel
+     */
+    private void cacheParent(Parent parent) {
+        if (cacheLevel == LoaderCacheLevel.SCENE_JAVAFX_CACHE) {
+            parent.setCache(true);
+            parent.setCacheHint(CacheHint.SPEED);
+        }
+
+        StackPane pane = new StackPane();
+        pane.getChildren().setAll(parent);
+        Scene scene = new Scene(pane);
+        pane.applyCss();
+        pane.layout();
     }
 
     /**
@@ -190,9 +245,9 @@ public class MFXVLoader extends VBox {
      * or {@link LoaderUtils#fxmlLoad(MFXLoaderBean)} if the FXMLLoader supplier is null.
      * When the file is loaded adds a listener to the toggle's selected property to handle the view switching.
      */
-    private Callable<Node> buildLoadCallable(MFXLoaderBean loaderBean) {
+    private Callable<Parent> buildLoadCallable(MFXLoaderBean loaderBean) {
         return () -> {
-            Node root;
+            Parent root;
             if (fxmlLoaderSupplier != null) {
                 root = LoaderUtils.fxmlLoad(fxmlLoaderSupplier.get(), loaderBean);
             } else {
@@ -201,15 +256,11 @@ public class MFXVLoader extends VBox {
             loaderBean.setRoot(root);
 
             loaderBean.getButton().selectedProperty().addListener((observable, oldValue, newValue) -> {
-                if (isAnimated.get()) {
+                if (isAnimated()) {
                     animationType.build(loaderBean.getRoot(), animationMillis.doubleValue()).play();
                 }
                 if (newValue) {
-                    try {
-                        contentPane.getChildren().set(0, loaderBean.getRoot());
-                    } catch (IndexOutOfBoundsException ex) {
-                        contentPane.getChildren().add(0, loaderBean.getRoot());
-                    }
+                        contentPane.getChildren().setAll(loaderBean.getRoot());
                 }
             });
             return root;
@@ -250,19 +301,19 @@ public class MFXVLoader extends VBox {
         }
     }
 
-    public boolean isIsAnimated() {
-        return isAnimated.get();
+    public boolean isAnimated() {
+        return animated.get();
     }
 
     /**
      * Specifies if the view switching is animated.
      */
-    public BooleanProperty isAnimatedProperty() {
-        return isAnimated;
+    public BooleanProperty animatedProperty() {
+        return animated;
     }
 
-    public void setIsAnimated(boolean isAnimated) {
-        this.isAnimated.set(isAnimated);
+    public void setAnimated(boolean animated) {
+        this.animated.set(animated);
     }
 
     public double getAnimationMillis() {
@@ -289,5 +340,13 @@ public class MFXVLoader extends VBox {
      */
     public void setAnimationType(MFXAnimationFactory animationType) {
         this.animationType = animationType;
+    }
+
+    public LoaderCacheLevel getCacheLevel() {
+        return cacheLevel;
+    }
+
+    public void setCacheLevel(LoaderCacheLevel cacheLevel) {
+        this.cacheLevel = cacheLevel;
     }
 }

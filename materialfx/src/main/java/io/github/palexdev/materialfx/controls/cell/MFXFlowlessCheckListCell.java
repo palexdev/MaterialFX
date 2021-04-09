@@ -51,7 +51,7 @@ public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> 
     protected final MFXCheckbox checkbox;
 
     private final ReadOnlyBooleanWrapper checked = new ReadOnlyBooleanWrapper();
-    private static final PseudoClass CHECKED_PSEUDO_CLASS = PseudoClass.getPseudoClass("checked");
+    protected static final PseudoClass CHECKED_PSEUDO_CLASS = PseudoClass.getPseudoClass("checked");
 
     private boolean clearSelectionOnCheck = true;
 

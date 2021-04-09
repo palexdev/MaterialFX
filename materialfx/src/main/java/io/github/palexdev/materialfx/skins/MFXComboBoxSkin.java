@@ -246,7 +246,7 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
 
         comboBox.skinProperty().addListener((observable, oldValue, newValue) -> comboBox.getScene().addEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler));
         comboBox.sceneProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != oldValue) {
+            if (oldValue != null && newValue != oldValue) {
                 oldValue.removeEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
             }
             if (newValue != null) {

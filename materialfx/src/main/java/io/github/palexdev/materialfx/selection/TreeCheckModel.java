@@ -151,9 +151,11 @@ public class TreeCheckModel<T> extends TreeSelectionModel<T> implements ITreeChe
      */
     @Override
     public void scanTree(MFXCheckTreeItem<T> item) {
-        clearChecked();
         TreeItemStream.flattenTree(item).forEach(treeItem -> {
-            if (((MFXCheckTreeItem<T>) treeItem).isChecked()) check(item, null);
+            MFXCheckTreeItem<T> cItem = (MFXCheckTreeItem<T>) treeItem;
+            if (cItem.isChecked() && !checkedItems.contains(cItem)) {
+                check(cItem, null);
+            }
         });
     }
 

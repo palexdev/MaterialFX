@@ -240,7 +240,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
 
         comboBox.skinProperty().addListener((observable, oldValue, newValue) -> comboBox.getScene().addEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler));
         comboBox.sceneProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != oldValue) {
+            if (oldValue != null && newValue != oldValue) {
                 oldValue.removeEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
             }
             if (newValue != null) {
@@ -598,7 +598,6 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         public FilterListCell(MFXFilterComboBox<T> comboBox, T data, double fixedHeight) {
             super(null, data, fixedHeight);
             this.comboBox = comboBox;
-            initialize();
 
             if (comboBox.getSelectionModel().getSelectedItem() == getData() && !isSelected()) {
                 setSelected(true);

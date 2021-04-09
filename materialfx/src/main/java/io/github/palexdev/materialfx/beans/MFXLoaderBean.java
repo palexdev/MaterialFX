@@ -18,7 +18,7 @@
 
 package io.github.palexdev.materialfx.beans;
 
-import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.ToggleButton;
 import javafx.util.Callback;
 
@@ -38,7 +38,7 @@ public class MFXLoaderBean {
     //================================================================================
     // Properties
     //================================================================================
-    private Node root;
+    private Parent root;
     private final boolean defaultRoot;
     private final Callback<Class<?>, Object> controllerFactory;
     private final ToggleButton button;
@@ -61,7 +61,7 @@ public class MFXLoaderBean {
     //================================================================================
     // Methods
     //================================================================================
-    public Node getRoot() {
+    public Parent getRoot() {
         return root;
     }
 
@@ -73,7 +73,7 @@ public class MFXLoaderBean {
         return controllerFactory;
     }
 
-    public void setRoot(Node root) {
+    public void setRoot(Parent root) {
         this.root = root;
     }
 
