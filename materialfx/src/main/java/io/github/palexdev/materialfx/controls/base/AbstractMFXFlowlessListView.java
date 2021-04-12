@@ -18,18 +18,29 @@
 
 package io.github.palexdev.materialfx.controls.base;
 
+import io.github.palexdev.materialfx.controls.flowless.VirtualFlow;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
 import io.github.palexdev.materialfx.utils.ColorUtils;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.css.*;
+import javafx.event.EventHandler;
 import javafx.scene.control.Control;
+import javafx.scene.control.Skin;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.util.Duration;
+import org.reactfx.value.Var;
 
 import java.util.List;
 import java.util.function.Function;
@@ -112,6 +123,81 @@ public abstract class AbstractMFXFlowlessListView<T, C extends AbstractMFXFlowle
                 .append(";\n-mfx-thumb-hover-color: ").append(ColorUtils.rgb((Color) thumbHoverColor.get()))
                 .append(";");
         setStyle(sb.toString());
+    }
+
+    public static void setSmoothScrolling(AbstractMFXFlowlessListView<?, ?, ?> listView) {
+        if (listView.getScene() != null) {
+            VirtualFlow<?, ?> flow = (VirtualFlow<?, ?>) listView.lookup(".virtual-flow");
+            setSmoothScrolling(flow, flow.estimatedScrollYProperty());
+        } else {
+            listView.skinProperty().addListener(new ChangeListener<>() {
+                @Override
+                public void changed(ObservableValue<? extends Skin<?>> observable, Skin<?> oldValue, Skin<?> newValue) {
+                    if (newValue != null) {
+                        VirtualFlow<?, ?> flow = (VirtualFlow<?, ?>) listView.lookup(".virtual-flow");
+                        setSmoothScrolling(flow, flow.estimatedScrollYProperty());
+                        listView.skinProperty().removeListener(this);
+                    }
+                }
+            });
+        }
+    }
+
+    private static void setSmoothScrolling(VirtualFlow<?, ?> flow, Var<Double> scrollDirection) {
+        final double[] frictions = {0.99, 0.1, 0.05, 0.04, 0.03, 0.02, 0.01, 0.04, 0.01, 0.008, 0.008, 0.008, 0.008, 0.0006, 0.0005, 0.00003, 0.00001};
+        final double[] pushes = {1};
+        final double[] derivatives = new double[frictions.length];
+
+        Timeline timeline = new Timeline();
+        final EventHandler<MouseEvent> dragHandler = event -> {
+            System.out.println("STOP!");
+            timeline.stop();
+        };
+
+        final EventHandler<ScrollEvent> scrollHandler = event -> {
+            if (event.getEventType() == ScrollEvent.SCROLL) {
+                System.out.println("Smooth Scrolling");
+                int direction = event.getDeltaY() > 0 ? -1 : 1;
+                for (int i = 0; i < pushes.length; i++) {
+                    derivatives[i] += direction * pushes[i];
+                }
+                if (timeline.getStatus() == Animation.Status.STOPPED) {
+                    timeline.play();
+                }
+                event.consume();
+            }
+        };
+
+        if (flow.getParent() != null) {
+            flow.getParent().addEventFilter(MouseEvent.DRAG_DETECTED, dragHandler);
+        }
+       flow.parentProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue != null) {
+                oldValue.removeEventFilter(MouseEvent.DRAG_DETECTED, dragHandler);
+            }
+            if (newValue != null) {
+                newValue.addEventFilter(MouseEvent.DRAG_DETECTED, dragHandler);
+            }
+        });
+        flow.addEventFilter(MouseEvent.DRAG_DETECTED, dragHandler);
+        flow.addEventFilter(ScrollEvent.ANY, scrollHandler);
+
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(3), (event) -> {
+            for (int i = 0; i < derivatives.length; i++) {
+                derivatives[i] *= frictions[i];
+            }
+            for (int i = 1; i < derivatives.length; i++) {
+                derivatives[i] += derivatives[i - 1];
+            }
+            double dy = derivatives[derivatives.length - 1];
+
+            scrollDirection.setValue(scrollDirection.getValue() + dy);
+
+            if (Math.abs(dy) < 0.001) {
+                timeline.stop();
+            }
+        }));
+        timeline.setCycleCount(Animation.INDEFINITE);
     }
 
     //================================================================================

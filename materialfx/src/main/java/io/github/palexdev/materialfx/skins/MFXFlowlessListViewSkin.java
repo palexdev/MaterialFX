@@ -62,7 +62,6 @@ public class MFXFlowlessListViewSkin<T> extends SkinBase<AbstractMFXFlowlessList
         MFXVirtualizedScrollPane<VirtualFlow<T, AbstractMFXFlowlessListCell<T>>> virtualScrollPane = new MFXVirtualizedScrollPane<>(flow);
         virtualScrollPane.setId("virtualScrollPane");
         virtualScrollPane.getStylesheets().setAll(listView.getUserAgentStylesheet());
-        //MFXVirtualizedScrollPane.smoothVScrolling(virtualScrollPane); // Not working atm
 
         vBar = virtualScrollPane.getVBar();
         hBar = virtualScrollPane.getHBar();
