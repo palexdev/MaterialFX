@@ -24,7 +24,6 @@ import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Parent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
@@ -78,6 +77,14 @@ public class MFXDialog extends AbstractMFXDialog {
                 clearDragHandlers();
             }
         });
+
+        setManaged(isCenterBeforeShow());
+        centerBeforeShow.addListener((observable, oldValue, newValue) -> {
+            if (isDraggable()) {
+                return;
+            }
+            setManaged(newValue);
+        });
     }
 
     //================================================================================
@@ -88,19 +95,18 @@ public class MFXDialog extends AbstractMFXDialog {
      * Tries to center the dialog before showing, currently works only for {@code AnchorPane}s
      */
     @Override
-    public void computeCenter() {
+    public void computeSizeAndPosition() {
         Parent parent = this.getParent();
         if (!(parent instanceof Pane)) {
             return;
         }
 
         Pane dialogParent = (Pane) parent;
-        if (dialogParent instanceof AnchorPane) {
-            double topBottom = (dialogParent.getHeight() - getPrefHeight()) / 2;
-            double leftRight = (dialogParent.getWidth() - getPrefWidth()) / 2;
-            setLayoutX(leftRight);
-            setLayoutY(topBottom);
-        }
+        double w = computePrefWidth(-1);
+        double h = computePrefHeight(-1);
+        double x = (dialogParent.getWidth() - snapSpaceX(w)) / 2.0;
+        double y = (dialogParent.getHeight() - snapSpaceY(h)) / 2.0;
+        resizeRelocate(x, y, w, h);
     }
 
     /**
@@ -108,8 +114,8 @@ public class MFXDialog extends AbstractMFXDialog {
      */
     @Override
     public void show() {
-        if (centerBeforeShow) {
-            computeCenter();
+        if (isCenterBeforeShow()) {
+            computeSizeAndPosition();
         }
 
         if (animateIn.get()) {

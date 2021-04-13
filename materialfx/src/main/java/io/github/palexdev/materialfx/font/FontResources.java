@@ -45,6 +45,7 @@ public enum FontResources {
     CIRCLE("mfx-circle", '\uE909'),
     CONTENT_COPY("mfx-content-copy", '\uE935'),
     DASHBOARD("mfx-dashboard", '\uE930'),
+    DEBUG("mfx-debug", '\uE93e'),
     EXCLAMATION_CIRCLE("mfx-exclamation-circle", '\uE917'),
     EXCLAMATION_TRIANGLE("mfx-exclamation-triangle", '\uE918'),
     EXPAND("mfx-expand", '\uE919'),
@@ -64,6 +65,7 @@ public enum FontResources {
     MODENA_MARK("mfx-modena-mark", '\uE90d'),
     SEARCH("mfx-search", '\uE92e'),
     SEARCH_PLUS("mfx-search-plus", '\uE92a'),
+    SLIDERS("mfx-sliders", '\uE93f'),
     STEP_BACKWARD("mfx-step-backward", '\uE923'),
     STEP_FORWARD("mfx-step-forward", '\uE924'),
     SYNC("mfx-sync", '\uE937'),
@@ -83,7 +85,7 @@ public enum FontResources {
     X("mfx-x", '\uE916'),
     X_ALT("mfx-x-alt", '\uE93d'),
     X_CIRCLE("mfx-x-circle", '\uE915'),
-    X_CIRCLE_LIGHT("mfx-x-circle-light", '\uE900'),
+    X_CIRCLE_LIGHT("mfx-x-circle-light", '\uE939'),
     ;
 
     public static FontResources findByDescription(String description) {

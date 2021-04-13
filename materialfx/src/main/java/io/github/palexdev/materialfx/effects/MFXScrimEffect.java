@@ -140,10 +140,15 @@ public class MFXScrimEffect {
         unbindResizing();
     }
 
+    /**
+     * Removes the bindings to the width and height properties of the
+     * scrim effect when it is removed.
+     */
     private void unbindResizing() {
         scrim.widthProperty().unbind();
         scrim.heightProperty().unbind();
     }
+
     public Node getScrimNode() {
         return scrim;
     }
