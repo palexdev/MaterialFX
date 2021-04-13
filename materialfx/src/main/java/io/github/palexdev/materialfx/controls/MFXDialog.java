@@ -92,7 +92,7 @@ public class MFXDialog extends AbstractMFXDialog {
     //================================================================================
 
     /**
-     * Tries to center the dialog before showing, currently works only for {@code AnchorPane}s
+     * Tries to center the dialog before showing.
      */
     @Override
     public void computeSizeAndPosition() {
@@ -102,10 +102,10 @@ public class MFXDialog extends AbstractMFXDialog {
         }
 
         Pane dialogParent = (Pane) parent;
-        double w = computePrefWidth(-1);
-        double h = computePrefHeight(-1);
-        double x = (dialogParent.getWidth() - snapSpaceX(w)) / 2.0;
-        double y = (dialogParent.getHeight() - snapSpaceY(h)) / 2.0;
+        double w = getLayoutBounds().getWidth();
+        double h = getLayoutBounds().getHeight();
+        double x = (dialogParent.getWidth() - w) / 2.0;
+        double y = (dialogParent.getHeight() - h) / 2.0;
         resizeRelocate(x, y, w, h);
     }
 
