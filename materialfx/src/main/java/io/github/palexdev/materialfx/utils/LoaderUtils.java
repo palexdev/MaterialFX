@@ -22,7 +22,7 @@ import io.github.palexdev.materialfx.beans.MFXLoaderBean;
 import io.github.palexdev.materialfx.controls.MFXHLoader;
 import io.github.palexdev.materialfx.controls.MFXVLoader;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.util.Callback;
 
 import java.io.IOException;
@@ -77,7 +77,7 @@ public class LoaderUtils {
      *                                    scheduled for execution
      * @throws NullPointerException       if the task is null
      */
-    public static Future<Node> submit(Callable<Node> task) {
+    public static Future<Parent> submit(Callable<Parent> task) {
         return executor.submit(task);
     }
 
@@ -89,7 +89,7 @@ public class LoaderUtils {
      * @see     #fxmlLoad(FXMLLoader, URL)
      * @see     #fxmlLoad(FXMLLoader, URL, Callback)
      */
-    public static Node fxmlLoad(MFXLoaderBean loaderBean) throws IOException {
+    public static Parent fxmlLoad(MFXLoaderBean loaderBean) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader();
         if (loaderBean.getControllerFactory() != null) {
             return fxmlLoad(fxmlLoader, loaderBean.getFxmlURL(), loaderBean.getControllerFactory());
@@ -109,7 +109,7 @@ public class LoaderUtils {
      * @see     #fxmlLoad(FXMLLoader, URL)
      * @see     #fxmlLoad(FXMLLoader, URL, Callback)
      */
-    public static Node fxmlLoad(FXMLLoader fxmlLoader, MFXLoaderBean loaderBean) throws IOException {
+    public static Parent fxmlLoad(FXMLLoader fxmlLoader, MFXLoaderBean loaderBean) throws IOException {
         if (loaderBean.getControllerFactory() != null) {
             return fxmlLoad(fxmlLoader, loaderBean.getFxmlURL(), loaderBean.getControllerFactory());
         }
@@ -122,7 +122,7 @@ public class LoaderUtils {
      * @param   fxmlURL the fxml file to load
      * @return  the loaded object hierarchy from the fxml
      */
-    private static Node fxmlLoad(FXMLLoader fxmlLoader, URL fxmlURL) throws IOException {
+    private static Parent fxmlLoad(FXMLLoader fxmlLoader, URL fxmlURL) throws IOException {
         fxmlLoader.setLocation(fxmlURL);
         return fxmlLoader.load();
     }
@@ -134,7 +134,7 @@ public class LoaderUtils {
      * @param   controllerFactory the controller object to set
      * @return  the loaded object hierarchy from the fxml
      */
-    private static Node fxmlLoad(FXMLLoader fxmlLoader, URL fxmlURL, Callback<Class<?>, Object> controllerFactory) throws IOException {
+    private static Parent fxmlLoad(FXMLLoader fxmlLoader, URL fxmlURL, Callback<Class<?>, Object> controllerFactory) throws IOException {
         fxmlLoader.setLocation(fxmlURL);
         fxmlLoader.setControllerFactory(controllerFactory);
         return fxmlLoader.load();

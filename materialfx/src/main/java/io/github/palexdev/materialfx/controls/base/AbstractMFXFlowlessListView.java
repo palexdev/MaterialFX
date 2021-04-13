@@ -18,55 +18,56 @@
 
 package io.github.palexdev.materialfx.controls.base;
 
+import io.github.palexdev.materialfx.controls.flowless.VirtualFlow;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
 import io.github.palexdev.materialfx.utils.ColorUtils;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.css.*;
+import javafx.event.EventHandler;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.util.Callback;
 import javafx.util.Duration;
+import org.reactfx.value.Var;
 
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Base class for all list views based on Flowless, defines common properties and behavior.
- * <p>
- * Extends {@link Control} and implements {@link IListView}.
  *
  * @param <T> the type of data within the ListView
- * @param <C> the type of cells that will be used
- * @param <S> the type of selection model
  */
-public abstract class AbstractFlowlessListView<T, C extends AbstractMFXFlowlessListCell<T>, S extends IListSelectionModel<T>> extends Control implements IListView<T, C, S> {
+public abstract class AbstractMFXFlowlessListView<T, C extends AbstractMFXFlowlessListCell<T>, S extends IListSelectionModel<T>> extends Control implements IListView<T, C, S> {
     //================================================================================
     // Properties
     //================================================================================
-    private static final StyleablePropertyFactory<AbstractFlowlessListView<?, ?, ?>> FACTORY = new StyleablePropertyFactory<>(Control.getClassCssMetaData());
-    protected final ReadOnlyObjectWrapper<ObservableList<T>> items = new ReadOnlyObjectWrapper<>(FXCollections.observableArrayList());
-    protected final ObjectProperty<Callback<T, C>> celFactory = new SimpleObjectProperty<>();
+    private static final StyleablePropertyFactory<AbstractMFXFlowlessListView<?, ?, ?>> FACTORY = new StyleablePropertyFactory<>(Control.getClassCssMetaData());
+    protected final ObservableList<T> items = FXCollections.observableArrayList();
+    protected final ObjectProperty<Function<T, C>> cellFactory = new SimpleObjectProperty<>();
     protected final ObjectProperty<S> selectionModel = new SimpleObjectProperty<>();
 
     //================================================================================
     // Constructors
     //================================================================================
-    public AbstractFlowlessListView() {
+    public AbstractMFXFlowlessListView() {
         this(FXCollections.observableArrayList());
     }
 
-    public AbstractFlowlessListView(ObservableList<T> items) {
+    public AbstractMFXFlowlessListView(List<T> items) {
         setItems(items);
-        setDefaultCellFactory();
-        setDefaultSelectionModel();
-        addBarsListeners();
     }
 
     //================================================================================
@@ -86,6 +87,12 @@ public abstract class AbstractFlowlessListView<T, C extends AbstractMFXFlowlessL
     //================================================================================
     // Methods
     //================================================================================
+    protected void initialize() {
+        setDefaultCellFactory();
+        setDefaultSelectionModel();
+        addBarsListeners();
+    }
+
     protected void addBarsListeners() {
         this.trackColor.addListener((observable, oldValue, newValue) -> {
             if (!newValue.equals(oldValue)) {
@@ -118,38 +125,107 @@ public abstract class AbstractFlowlessListView<T, C extends AbstractMFXFlowlessL
         setStyle(sb.toString());
     }
 
+    public static void setSmoothScrolling(AbstractMFXFlowlessListView<?, ?, ?> listView) {
+        if (listView.getScene() != null) {
+            VirtualFlow<?, ?> flow = (VirtualFlow<?, ?>) listView.lookup(".virtual-flow");
+            setSmoothScrolling(flow, flow.estimatedScrollYProperty());
+        } else {
+            listView.skinProperty().addListener(new ChangeListener<>() {
+                @Override
+                public void changed(ObservableValue<? extends Skin<?>> observable, Skin<?> oldValue, Skin<?> newValue) {
+                    if (newValue != null) {
+                        VirtualFlow<?, ?> flow = (VirtualFlow<?, ?>) listView.lookup(".virtual-flow");
+                        setSmoothScrolling(flow, flow.estimatedScrollYProperty());
+                        listView.skinProperty().removeListener(this);
+                    }
+                }
+            });
+        }
+    }
+
+    private static void setSmoothScrolling(VirtualFlow<?, ?> flow, Var<Double> scrollDirection) {
+        final double[] frictions = {0.99, 0.1, 0.05, 0.04, 0.03, 0.02, 0.01, 0.04, 0.01, 0.008, 0.008, 0.008, 0.008, 0.0006, 0.0005, 0.00003, 0.00001};
+        final double[] pushes = {1};
+        final double[] derivatives = new double[frictions.length];
+
+        Timeline timeline = new Timeline();
+        final EventHandler<MouseEvent> dragHandler = event -> {
+            System.out.println("STOP!");
+            timeline.stop();
+        };
+
+        final EventHandler<ScrollEvent> scrollHandler = event -> {
+            if (event.getEventType() == ScrollEvent.SCROLL) {
+                System.out.println("Smooth Scrolling");
+                int direction = event.getDeltaY() > 0 ? -1 : 1;
+                for (int i = 0; i < pushes.length; i++) {
+                    derivatives[i] += direction * pushes[i];
+                }
+                if (timeline.getStatus() == Animation.Status.STOPPED) {
+                    timeline.play();
+                }
+                event.consume();
+            }
+        };
+
+        if (flow.getParent() != null) {
+            flow.getParent().addEventFilter(MouseEvent.DRAG_DETECTED, dragHandler);
+        }
+       flow.parentProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue != null) {
+                oldValue.removeEventFilter(MouseEvent.DRAG_DETECTED, dragHandler);
+            }
+            if (newValue != null) {
+                newValue.addEventFilter(MouseEvent.DRAG_DETECTED, dragHandler);
+            }
+        });
+        flow.addEventFilter(MouseEvent.DRAG_DETECTED, dragHandler);
+        flow.addEventFilter(ScrollEvent.ANY, scrollHandler);
+
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(3), (event) -> {
+            for (int i = 0; i < derivatives.length; i++) {
+                derivatives[i] *= frictions[i];
+            }
+            for (int i = 1; i < derivatives.length; i++) {
+                derivatives[i] += derivatives[i - 1];
+            }
+            double dy = derivatives[derivatives.length - 1];
+
+            scrollDirection.setValue(scrollDirection.getValue() + dy);
+
+            if (Math.abs(dy) < 0.001) {
+                timeline.stop();
+            }
+        }));
+        timeline.setCycleCount(Animation.INDEFINITE);
+    }
+
     //================================================================================
     // Override Methods
     //================================================================================
-
     @Override
     public ObservableList<T> getItems() {
-        return items.get();
+        return items;
     }
 
     @Override
-    public ReadOnlyObjectProperty<ObservableList<T>> itemsProperty() {
-        return items.getReadOnlyProperty();
+    public void setItems(List<T> items) {
+        this.items.setAll(items);
     }
 
     @Override
-    public void setItems(ObservableList<T> items) {
-        getItems().setAll(items);
+    public Function<T, C> getCellFactory() {
+        return cellFactory.get();
     }
 
     @Override
-    public Callback<T, C> getCellFactory() {
-        return celFactory.get();
+    public ObjectProperty<Function<T, C>> cellFactoryProperty() {
+        return cellFactory;
     }
 
     @Override
-    public ObjectProperty<Callback<T, C>> cellFactoryProperty() {
-        return celFactory;
-    }
-
-    @Override
-    public void setCellFactory(Callback<T, C> cellFactory) {
-        this.celFactory.set(cellFactory);
+    public void setCellFactory(Function<T, C> cellFactory) {
+        this.cellFactory.set(cellFactory);
     }
 
     @Override
@@ -166,9 +242,6 @@ public abstract class AbstractFlowlessListView<T, C extends AbstractMFXFlowlessL
     public void setSelectionModel(S selectionModel) {
         this.selectionModel.set(selectionModel);
     }
-
-    @Override
-    protected abstract Skin<?> createDefaultSkin();
 
     //================================================================================
     // ScrollBars Properties
@@ -288,18 +361,18 @@ public abstract class AbstractFlowlessListView<T, C extends AbstractMFXFlowlessL
     private static class StyleableProperties {
         private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
-        private static final CssMetaData<AbstractFlowlessListView<?, ?, ?>, Boolean> HIDE_SCROLLBARS =
+        private static final CssMetaData<AbstractMFXFlowlessListView<?, ?, ?>, Boolean> HIDE_SCROLLBARS =
                 FACTORY.createBooleanCssMetaData(
                         "-mfx-hide-scrollbars",
-                        AbstractFlowlessListView::hideScrollBarsProperty,
+                        AbstractMFXFlowlessListView::hideScrollBarsProperty,
                         false
                 );
 
-        private static final CssMetaData<AbstractFlowlessListView<?, ?, ?>, DepthLevel> DEPTH_LEVEL =
+        private static final CssMetaData<AbstractMFXFlowlessListView<?, ?, ?>, DepthLevel> DEPTH_LEVEL =
                 FACTORY.createEnumCssMetaData(
                         DepthLevel.class,
                         "-mfx-depth-level",
-                        AbstractFlowlessListView::depthLevelProperty,
+                        AbstractMFXFlowlessListView::depthLevelProperty,
                         DepthLevel.LEVEL2
                 );
 
@@ -315,6 +388,6 @@ public abstract class AbstractFlowlessListView<T, C extends AbstractMFXFlowlessL
 
     @Override
     protected List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return AbstractFlowlessListView.getControlCssMetaDataList();
+        return AbstractMFXFlowlessListView.getControlCssMetaDataList();
     }
 }

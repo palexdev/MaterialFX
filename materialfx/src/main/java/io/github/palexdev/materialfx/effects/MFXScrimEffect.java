@@ -56,8 +56,8 @@ public class MFXScrimEffect {
      * @param opacity The effect opacity/strength
      */
     public void scrim(Pane pane, double opacity) {
-        scrim.setWidth(pane.getWidth());
-        scrim.setHeight(pane.getHeight());
+        scrim.widthProperty().bind(pane.widthProperty());
+        scrim.heightProperty().bind(pane.heightProperty());
         scrim.setFill(Color.rgb(0, 0, 0, opacity));
         scrim.setBlendMode(BlendMode.SRC_ATOP);
 
@@ -74,8 +74,8 @@ public class MFXScrimEffect {
      * @param opacity The effect opacity/strength
      */
     public void modalScrim(Pane parent, Node child, double opacity) {
-        scrim.setWidth(parent.getWidth());
-        scrim.setHeight(parent.getHeight());
+        scrim.widthProperty().bind(parent.widthProperty());
+        scrim.heightProperty().bind(parent.heightProperty());
         scrim.setFill(Color.rgb(0, 0, 0, opacity));
         scrim.setBlendMode(BlendMode.SRC_ATOP);
 
@@ -111,9 +111,8 @@ public class MFXScrimEffect {
      */
     public void scrimWindow(Window window, double opacity) {
         Pane root = (Pane) window.getScene().getRoot();
-
-        scrim.setWidth(root.getWidth());
-        scrim.setHeight(root.getHeight());
+        scrim.widthProperty().bind(root.widthProperty());
+        scrim.heightProperty().bind(root.heightProperty());
         scrim.setFill(Color.rgb(0, 0, 0, opacity));
         scrim.setBlendMode(BlendMode.SRC_ATOP);
 
@@ -127,6 +126,7 @@ public class MFXScrimEffect {
      */
     public void removeEffect(Pane pane) {
         pane.getChildren().remove(scrim);
+        unbindResizing();
     }
 
     /**
@@ -137,6 +137,16 @@ public class MFXScrimEffect {
     public void removeEffect(Window window) {
         Pane root = (Pane) window.getScene().getRoot();
         removeEffect(root);
+        unbindResizing();
+    }
+
+    /**
+     * Removes the bindings to the width and height properties of the
+     * scrim effect when it is removed.
+     */
+    private void unbindResizing() {
+        scrim.widthProperty().unbind();
+        scrim.heightProperty().unbind();
     }
 
     public Node getScrimNode() {

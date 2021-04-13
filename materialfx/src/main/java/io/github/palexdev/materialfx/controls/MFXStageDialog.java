@@ -30,10 +30,9 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.Window;
-import javafx.stage.WindowEvent;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
+import javafx.stage.*;
 import javafx.util.Duration;
 
 /**
@@ -76,6 +75,12 @@ public class MFXStageDialog {
     //================================================================================
     // Constructors
     //================================================================================
+    public MFXStageDialog() {
+        dialogStage = new Stage();
+        dialogStage.initStyle(StageStyle.TRANSPARENT);
+        initialize();
+    }
+
     public MFXStageDialog(AbstractMFXDialog dialog) {
         this.dialogStage = MFXStageDialogFactory.buildDialog(dialog);
         initialize();
@@ -87,16 +92,21 @@ public class MFXStageDialog {
     }
 
     private void initialize() {
-        this.dialogStage.getScene().getRoot().setOnMousePressed(event -> {
-            xOffset = dialogStage.getX() - event.getScreenX();
-            yOffset = dialogStage.getY() - event.getScreenY();
-        });
-        this.dialogStage.getScene().getRoot().setOnMouseDragged(event -> {
-            if (allowDrag) {
-                dialogStage.setX(event.getScreenX() + xOffset);
-                dialogStage.setY(event.getScreenY() + yOffset);
-            }
-        });
+        Scene scene = dialogStage.getScene();
+        if (scene != null) {
+            this.dialogStage.getScene().getRoot().setOnMousePressed(event -> {
+                xOffset = dialogStage.getX() - event.getScreenX();
+                yOffset = dialogStage.getY() - event.getScreenY();
+            });
+            this.dialogStage.getScene().getRoot().setOnMouseDragged(event -> {
+                if (allowDrag) {
+                    dialogStage.setX(event.getScreenX() + xOffset);
+                    dialogStage.setY(event.getScreenY() + yOffset);
+                }
+            });
+            getDialog().setCloseHandler(event -> close());
+        }
+
         this.centerInOwner.addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 dialogStage.addEventHandler(WindowEvent.WINDOW_SHOWN, centerHandler);
@@ -105,7 +115,6 @@ public class MFXStageDialog {
             }
         });
 
-        getDialog().setCloseHandler(event -> close());
     }
 
     //================================================================================
@@ -116,6 +125,10 @@ public class MFXStageDialog {
      * Shows the dialog by showing the stage, center the stage in its owner and plays animations if requested
      */
     public void show() {
+        if (dialogStage.getScene() == null) {
+            throw new NullPointerException("The dialog has not been set!");
+        }
+
         if (animate) {
             resetAnimation();
         }
@@ -236,6 +249,30 @@ public class MFXStageDialog {
      */
     public AbstractMFXDialog getDialog() {
         return (AbstractMFXDialog) this.dialogStage.getScene().getRoot();
+    }
+
+    public void setDialog(AbstractMFXDialog dialog) {
+        if (dialogStage.getScene() != null) {
+            return;
+        }
+
+        dialog.setCloseHandler(event -> close());
+        dialog.setVisible(true);
+        Scene scene = new Scene(dialog);
+        scene.setFill(Color.TRANSPARENT);
+        dialogStage.setTitle(dialog.getTitle());
+        dialogStage.setScene(scene);
+
+        dialog.setOnMousePressed(event -> {
+            xOffset = dialogStage.getX() - event.getScreenX();
+            yOffset = dialogStage.getY() - event.getScreenY();
+        });
+        dialog.setOnMouseDragged(event -> {
+            if (allowDrag) {
+                dialogStage.setX(event.getScreenX() + xOffset);
+                dialogStage.setY(event.getScreenY() + yOffset);
+            }
+        });
     }
 
     /**

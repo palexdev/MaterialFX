@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.palexdev'
-version '11.10.0'
+version '11.10.1'
 
 repositories {
     mavenCentral()

@@ -51,8 +51,8 @@ public abstract class AbstractMFXDialog extends BorderPane {
 
     protected final StringProperty title = new SimpleStringProperty("");
     protected final StringProperty content = new SimpleStringProperty("");
+    protected BooleanProperty centerBeforeShow = new SimpleBooleanProperty(true);
     protected final List<Node> closeButtons = new ArrayList<>();
-    protected boolean centerBeforeShow = true;
 
     protected final MFXScrimEffect scrimEffect = new MFXScrimEffect();
 
@@ -185,7 +185,7 @@ public abstract class AbstractMFXDialog extends BorderPane {
     //================================================================================
     public abstract void show();
     public abstract void close();
-    public abstract void computeCenter();
+    public abstract void computeSizeAndPosition();
 
     //================================================================================
     // Methods
@@ -222,8 +222,16 @@ public abstract class AbstractMFXDialog extends BorderPane {
         this.content.set(content);
     }
 
+    public boolean isCenterBeforeShow() {
+        return centerBeforeShow.get();
+    }
+
+    public BooleanProperty centerBeforeShowProperty() {
+        return centerBeforeShow;
+    }
+
     public void setCenterBeforeShow(boolean centerBeforeShow) {
-        this.centerBeforeShow = centerBeforeShow;
+        this.centerBeforeShow.set(centerBeforeShow);
     }
 
     public MFXScrimEffect getScrimEffect() {
@@ -310,7 +318,7 @@ public abstract class AbstractMFXDialog extends BorderPane {
         this.overlayClose.set(overlayClose);
     }
 
-    public boolean isIsDraggable() {
+    public boolean isDraggable() {
         return isDraggable.get();
     }
 

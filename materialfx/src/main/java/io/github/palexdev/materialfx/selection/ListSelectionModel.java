@@ -19,7 +19,9 @@
 package io.github.palexdev.materialfx.selection;
 
 import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.MapProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
@@ -27,7 +29,6 @@ import javafx.scene.input.MouseEvent;
 
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * Concrete implementation of the {@code IListSelectionModel} interface.
@@ -36,7 +37,8 @@ public class ListSelectionModel<T> implements IListSelectionModel<T> {
     //================================================================================
     // Properties
     //================================================================================
-    private final MapProperty<Integer, T> selectedItems = new SimpleMapProperty<>(getObservableTreeMap());
+    private final MapProperty<Integer, T> selectedItems = new SimpleMapProperty<>(getMap());
+    private final BooleanProperty updating = new SimpleBooleanProperty();
     private boolean allowsMultipleSelection = false;
 
     //================================================================================
@@ -52,22 +54,30 @@ public class ListSelectionModel<T> implements IListSelectionModel<T> {
         if (allowsMultipleSelection) {
             selectedItems.put(index, data);
         } else {
-            ObservableMap<Integer, T> tmpMap = getObservableTreeMap();
+            ObservableMap<Integer, T> tmpMap = getMap();
             tmpMap.put(index, data);
             selectedItems.set(tmpMap);
         }
     }
 
     /**
-     * Builds a new observable map backed by a TreeMap.
+     * Builds a new observable hash map.
      */
-    protected ObservableMap<Integer, T> getObservableTreeMap() {
-        return FXCollections.observableMap(new TreeMap<>());
+    protected ObservableMap<Integer, T> getMap() {
+        return FXCollections.observableHashMap();
     }
 
     //================================================================================
     // Override Methods
     //================================================================================
+
+    /**
+     * Checks if the map contains the given index key.
+     */
+    @Override
+    public boolean containSelected(int index) {
+        return selectedItems.containsKey(index);
+    }
 
     /**
      * Called by the list cells when the mouse is pressed.
@@ -95,7 +105,7 @@ public class ListSelectionModel<T> implements IListSelectionModel<T> {
         if (allowsMultipleSelection && (mouseEvent.isShiftDown() || mouseEvent.isControlDown())) {
             selectedItems.put(index, data);
         } else {
-            ObservableMap<Integer, T> tmpMap = getObservableTreeMap();
+            ObservableMap<Integer, T> tmpMap = getMap();
             tmpMap.put(index, data);
             selectedItems.set(tmpMap);
         }
@@ -143,7 +153,7 @@ public class ListSelectionModel<T> implements IListSelectionModel<T> {
      */
     @Override
     public void clearSelection() {
-        selectedItems.clear();
+        selectedItems.set(getMap());
     }
 
     /**
@@ -202,5 +212,24 @@ public class ListSelectionModel<T> implements IListSelectionModel<T> {
     @Override
     public void setAllowsMultipleSelection(boolean multipleSelection) {
         this.allowsMultipleSelection = multipleSelection;
+    }
+
+    @Override
+    public boolean isUpdating() {
+        return updating.get();
+    }
+
+    /**
+     * Specifies if the model is being updated by the list view after a change
+     * in the items observable list.
+     */
+    @Override
+    public BooleanProperty updatingProperty() {
+        return updating;
+    }
+
+    @Override
+    public void setUpdating(boolean updating) {
+        this.updating.set(updating);
     }
 }

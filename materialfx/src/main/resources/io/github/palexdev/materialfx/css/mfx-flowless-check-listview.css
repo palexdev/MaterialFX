@@ -22,16 +22,10 @@
     -mfx-thumb-hover-color: rgb(89, 88, 91);
 }
 
-.mfx-check-list-view .virtual-flow {
-    -fx-padding: 5;
-}
-
 /* Remove JavaFX crap */
 .scroll-bar,
 .scroll-bar .decrement-arrow,
-.scroll-bar .increment-arrow,
-.scroll-bar .decrement-button,
-.scroll-bar .increment-button {
+.scroll-bar .increment-arrow {
     -fx-pref-width: 0;
     -fx-pref-height: 0;
 }

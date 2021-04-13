@@ -19,19 +19,26 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.controls.base.AbstractFlowlessListView;
+import io.github.palexdev.materialfx.controls.base.AbstractMFXFlowlessListView;
 import io.github.palexdev.materialfx.controls.cell.MFXFlowlessCheckListCell;
 import io.github.palexdev.materialfx.selection.ListCheckModel;
 import io.github.palexdev.materialfx.selection.base.IListCheckModel;
 import io.github.palexdev.materialfx.skins.MFXFlowlessListViewSkin;
+import javafx.beans.property.MapProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableMap;
 import javafx.scene.control.Skin;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.IntStream;
 
 /**
  * Implementation of a check list view based on Flowless.
  * <p>
- * Extends {@link AbstractFlowlessListView}.
+ * Extends {@link AbstractMFXFlowlessListView}.
  * <p></p>
  * Default cell: {@link MFXFlowlessCheckListCell}.
  * <p>
@@ -39,7 +46,7 @@ import javafx.scene.control.Skin;
  * <p>
  * Default skin: {@link MFXFlowlessListViewSkin}.
  */
-public class MFXFlowlessCheckListView<T> extends AbstractFlowlessListView<T, MFXFlowlessCheckListCell<T>, IListCheckModel<T>> {
+public class MFXFlowlessCheckListView<T> extends AbstractMFXFlowlessListView<T, MFXFlowlessCheckListCell<T>, IListCheckModel<T>> {
     //================================================================================
     // Properties
     //================================================================================
@@ -53,7 +60,7 @@ public class MFXFlowlessCheckListView<T> extends AbstractFlowlessListView<T, MFX
         this(FXCollections.observableArrayList());
     }
 
-    public MFXFlowlessCheckListView(ObservableList<T> items) {
+    public MFXFlowlessCheckListView(List<T> items) {
         super(items);
         initialize();
     }
@@ -61,8 +68,87 @@ public class MFXFlowlessCheckListView<T> extends AbstractFlowlessListView<T, MFX
     //================================================================================
     // Methods
     //================================================================================
-    private void initialize() {
-        getStyleClass().add(STYLE_CLASS);
+    protected void initialize() {
+        super.initialize();
+        getStyleClass().setAll(STYLE_CLASS);
+
+        items.addListener((ListChangeListener<? super T>) change -> {
+            if (getSelectionModel().getSelectedItems().isEmpty() &&
+                    getSelectionModel().getCheckedItems().isEmpty()) {
+                return;
+            }
+            if (change.getList().isEmpty()) {
+                getSelectionModel().clearSelection();
+                getSelectionModel().clearChecked();
+                return;
+            }
+
+            getSelectionModel().setUpdating(true);
+            Map<Integer, Integer> addedOffsets = new HashMap<>();
+            Map<Integer, Integer> removedOffsets = new HashMap<>();
+
+            while (change.next()) {
+                if (change.wasAdded()) {
+                    int from = change.getFrom();
+                    int to = change.getTo();
+                    int offset = to - from;
+                    addedOffsets.put(from, offset);
+                }
+                if (change.wasRemoved()) {
+                    int from = change.getFrom();
+                    int offset = change.getRemovedSize();
+                    IntStream.range(from, from + offset)
+                            .filter(getSelectionModel()::containSelected)
+                            .forEach(getSelectionModel()::clearSelectedItem);
+                    IntStream.range(from, from + offset)
+                            .filter(getSelectionModel()::containsChecked)
+                            .forEach(getSelectionModel()::clearCheckedItem);
+                    removedOffsets.put(from, offset);
+                }
+            }
+            updateSelection(addedOffsets, removedOffsets);
+        });
+    }
+
+    protected void updateSelection(Map<Integer, Integer> addedOffsets, Map<Integer, Integer> removedOffsets) {
+        MapProperty<Integer, T> selectedItems = getSelectionModel().selectedItemsProperty();
+        MapProperty<Integer, T> checkedItems = getSelectionModel().checkedItemsProperty();
+
+        ObservableMap<Integer, T> updatedSelectionMap = FXCollections.observableHashMap();
+        ObservableMap<Integer, T> updatedCheckMap = FXCollections.observableHashMap();
+
+        selectedItems.forEach((key, value) -> {
+            int sum = addedOffsets.entrySet().stream()
+                    .filter(entry -> entry.getKey() <= key)
+                    .mapToInt(Map.Entry::getValue)
+                    .sum();
+            int diff = removedOffsets.entrySet().stream()
+                    .filter(entry -> entry.getKey() < key)
+                    .mapToInt(Map.Entry::getValue)
+                    .sum();
+            int shift = sum - diff;
+            updatedSelectionMap.put(key + shift, value);
+        });
+        checkedItems.forEach((key, value) -> {
+            int sum = addedOffsets.entrySet().stream()
+                    .filter(entry -> entry.getKey() <= key)
+                    .mapToInt(Map.Entry::getValue)
+                    .sum();
+            int diff = removedOffsets.entrySet().stream()
+                    .filter(entry -> entry.getKey() < key)
+                    .mapToInt(Map.Entry::getValue)
+                    .sum();
+            int shift = sum - diff;
+            updatedCheckMap.put(key + shift, value);
+        });
+
+        if (!selectedItems.equals(updatedSelectionMap)) {
+            selectedItems.set(updatedSelectionMap);
+        }
+        if (!checkedItems.equals(updatedCheckMap)) {
+            checkedItems.set(updatedCheckMap);
+        }
+        getSelectionModel().setUpdating(false);
     }
 
     //================================================================================
@@ -76,7 +162,6 @@ public class MFXFlowlessCheckListView<T> extends AbstractFlowlessListView<T, MFX
     @Override
     protected void setDefaultSelectionModel() {
         IListCheckModel<T> selectionModel = new ListCheckModel<>();
-        selectionModel.setAllowsMultipleSelection(true);
         setSelectionModel(selectionModel);
     }
 
