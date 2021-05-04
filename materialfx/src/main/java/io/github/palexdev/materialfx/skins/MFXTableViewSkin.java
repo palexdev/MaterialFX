@@ -158,7 +158,6 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         filterDialog = new MFXFilterDialog();
         filterDialog.setTitle("Filter TableView");
         filterDialog.getStage().setCenterInOwner(true);
-        filterDialog.getStage().setOwner(tableView.getScene().getWindow());
         filterDialog.getStage().setModality(Modality.WINDOW_MODAL);
         filterDialog.getFilterButton().setOnAction(event -> filterTable());
 
@@ -266,6 +265,12 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
             if (tableFiltered.get()) {
                 tableFiltered.set(false);
                 buildRows();
+            }
+        });
+
+        tableView.sceneProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                filterDialog.getStage().setOwner(newValue.getWindow());
             }
         });
     }
