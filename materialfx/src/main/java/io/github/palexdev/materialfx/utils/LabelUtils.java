@@ -19,6 +19,8 @@
 package io.github.palexdev.materialfx.utils;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
@@ -70,11 +72,40 @@ public class LabelUtils {
      * @param font the label font
      * @param text the label text
      */
-    public static double computeTextWidth(Font font, String text) {
+    public static double computeLabelWidth(Font font, String text) {
         Label helper = new Label(text);
         helper.setMaxWidth(Double.MAX_VALUE);
         helper.setFont(font);
 
         return NodeUtils.getNodeWidth(helper);
+    }
+
+    public static double computeLabelHeight(Font font, String text) {
+        Label helper = new Label(text);
+        helper.setMaxWidth(Double.MAX_VALUE);
+        helper.setFont(font);
+        return NodeUtils.getNodeHeight(helper);
+    }
+
+    public static double computeTextWidth(Font font, String text) {
+        Text helper = new Text(text);
+        helper.setFont(font);
+
+        Group group = new Group(helper);
+        Scene scene = new Scene(group);
+        group.applyCss();
+        group.layout();
+        return helper.getLayoutBounds().getWidth();
+    }
+
+    public static double computeTextHeight(Font font, String text) {
+        Text helper = new Text(text);
+        helper.setFont(font);
+
+        Group group = new Group(helper);
+        Scene scene = new Scene(group);
+        group.applyCss();
+        group.layout();
+        return helper.getLayoutBounds().getHeight();
     }
 }

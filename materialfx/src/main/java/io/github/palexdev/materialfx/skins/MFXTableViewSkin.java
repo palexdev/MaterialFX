@@ -380,13 +380,13 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
 
     /**
      * Given a list of row cells computes which cell would be the widest if the text was not truncated.
-     * This width is computed with {@link LabelUtils#computeTextWidth(Font, String)}. To this value both
+     * This width is computed with {@link LabelUtils#computeLabelWidth(Font, String)}. To this value both
      * right and left insets of the cell are added.
      */
     protected double getMaxCellWidth(List<MFXTableRowCell> rowCells) {
         double max = -1;
         for (MFXTableRowCell rowCell : rowCells) {
-            double computed = LabelUtils.computeTextWidth(rowCell.getFont(), rowCell.getText());
+            double computed = LabelUtils.computeLabelWidth(rowCell.getFont(), rowCell.getText());
             computed += rowCell.snappedRightInset() + rowCell.snappedLeftInset();
             if (computed > max) {
                 max = computed;
