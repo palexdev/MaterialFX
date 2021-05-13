@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * This is the implementation of the {@code Skin} associated with every {@code MFXProgressSpinner}.
+ * This is the implementation of the {@code Skin} associated with every {@link MFXProgressSpinner}.
  */
 public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
     //================================================================================

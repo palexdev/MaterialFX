@@ -51,7 +51,7 @@ public class MFXToggleNode extends ToggleButton {
     // Properties
     //================================================================================
     private static final StyleablePropertyFactory<MFXToggleNode> FACTORY = new StyleablePropertyFactory<>(ToggleButton.getClassCssMetaData());
-    private final String STYLECLASS = "mfx-toggle-node";
+    private final String STYLE_CLASS = "mfx-toggle-node";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-togglenode.css");
     protected final RippleGenerator rippleGenerator = new RippleGenerator(this);
 
@@ -82,7 +82,7 @@ public class MFXToggleNode extends ToggleButton {
     // Methods
     //================================================================================
     private void initialize() {
-        getStyleClass().add(STYLECLASS);
+        getStyleClass().add(STYLE_CLASS);
         setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 

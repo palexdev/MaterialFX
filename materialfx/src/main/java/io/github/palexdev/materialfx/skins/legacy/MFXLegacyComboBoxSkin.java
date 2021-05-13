@@ -19,17 +19,17 @@
 package io.github.palexdev.materialfx.skins.legacy;
 
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
+import io.github.palexdev.materialfx.controls.MFXLabel;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyComboBox;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.materialfx.utils.LabelUtils;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
 import javafx.animation.ScaleTransition;
-import javafx.scene.control.Label;
 import javafx.scene.control.skin.ComboBoxListViewSkin;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 /**
@@ -41,9 +41,9 @@ public class MFXLegacyComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
     //================================================================================
     private final double padding = 11;
 
-    private final Line line;
-    private final Line focusLine;
-    private final Label validate;
+    private final Line unfocusedLine;
+    private final Line focusedLine;
+    private final MFXLabel validate;
 
     //================================================================================
     // Constructors
@@ -51,33 +51,44 @@ public class MFXLegacyComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
     public MFXLegacyComboBoxSkin(MFXLegacyComboBox<T> comboBox) {
         super(comboBox);
 
-        line = new Line();
-        line.getStyleClass().add("unfocused-line");
-        line.setStroke(comboBox.getUnfocusedLineColor());
-        line.setStrokeWidth(comboBox.getLineStrokeWidth());
-        line.setSmooth(true);
+        unfocusedLine = new Line();
+        unfocusedLine.getStyleClass().add("unfocused-line");
+        unfocusedLine.setManaged(false);
+        unfocusedLine.strokeWidthProperty().bind(comboBox.lineStrokeWidthProperty());
+        unfocusedLine.strokeLineCapProperty().bind(comboBox.lineStrokeCapProperty());
+        unfocusedLine.strokeProperty().bind(comboBox.unfocusedLineColorProperty());
+        unfocusedLine.endXProperty().bind(comboBox.widthProperty());
+        unfocusedLine.setSmooth(true);
+        unfocusedLine.setManaged(false);
 
-        focusLine = new Line();
-        focusLine.getStyleClass().add("focused-line");
-        focusLine.setStroke(comboBox.getLineColor());
-        focusLine.setStrokeWidth(comboBox.getLineStrokeWidth());
-        focusLine.setSmooth(true);
-        focusLine.setScaleX(0.0);
-
-        line.endXProperty().bind(comboBox.widthProperty());
-        focusLine.endXProperty().bind(comboBox.widthProperty());
+        focusedLine = new Line();
+        focusedLine.getStyleClass().add("focused-line");
+        focusedLine.setManaged(false);
+        focusedLine.strokeWidthProperty().bind(comboBox.lineStrokeWidthProperty());
+        focusedLine.strokeLineCapProperty().bind(comboBox.lineStrokeCapProperty());
+        focusedLine.strokeProperty().bind(comboBox.lineColorProperty());
+        focusedLine.setSmooth(true);
+        focusedLine.endXProperty().bind(comboBox.widthProperty());
+        focusedLine.setScaleX(0.0);
+        focusedLine.setManaged(false);
 
         MFXFontIcon warnIcon = new MFXFontIcon("mfx-exclamation-triangle", Color.RED);
         MFXIconWrapper warnWrapper = new MFXIconWrapper(warnIcon, 10);
 
-        validate = new Label("", warnWrapper);
+        validate = new MFXLabel();
+        validate.setLeadingIcon(warnWrapper);
         validate.getStyleClass().add("validate-label");
+        validate.getStylesheets().setAll(comboBox.getUserAgentStylesheet());
         validate.textProperty().bind(comboBox.getValidator().validatorMessageProperty());
-        validate.setFont(Font.font(padding));
-        validate.setGraphicTextGap(padding / 2);
+        validate.setGraphicTextGap(padding);
         validate.setVisible(false);
+        validate.setManaged(false);
 
-        getChildren().addAll(line, focusLine, validate);
+        if (comboBox.isValidated() && comboBox.getValidator().isInitControlValidation()) {
+            validate.setVisible(!comboBox.isValid());
+        }
+
+        getChildren().addAll(unfocusedLine, focusedLine, validate);
 
         setListeners();
     }
@@ -87,7 +98,7 @@ public class MFXLegacyComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
     //================================================================================
 
     /**
-     * Adds listeners for: line, focus, disabled and validator properties.
+     * Adds listeners for: line, focus, disabled, validator properties and validate label's text.
      * <p>
      * Validator: when the control is not focused, and of course if {@code isValidated} is true,
      * all the conditions in the validator are evaluated and if one is false the {@code validate} label is shown.
@@ -101,28 +112,10 @@ public class MFXLegacyComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
         MFXLegacyComboBox<T> comboBox = (MFXLegacyComboBox<T>) getSkinnable();
         MFXDialogValidator validator = comboBox.getValidator();
 
-        comboBox.lineColorProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.equals(oldValue)) {
-                focusLine.setStroke(newValue);
-            }
-        });
-
-        comboBox.unfocusedLineColorProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.equals(oldValue)) {
-                line.setStroke(newValue);
-            }
-        });
-
-        comboBox.lineStrokeWidthProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.doubleValue() != oldValue.doubleValue()) {
-                line.setStrokeWidth(newValue.doubleValue());
-                focusLine.setStrokeWidth(newValue.doubleValue() * 1.3);
-            }
-        });
-
         comboBox.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue && comboBox.isValidated()) {
-                validate.setVisible(!validator.isValid());
+                comboBox.getValidator().update();
+                validate.setVisible(!comboBox.isValid());
             }
 
             if (comboBox.isAnimateLines()) {
@@ -131,9 +124,9 @@ public class MFXLegacyComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
             }
 
             if (newValue) {
-                focusLine.setScaleX(1.0);
+                focusedLine.setScaleX(1.0);
             } else {
-                focusLine.setScaleX(0.0);
+                focusedLine.setScaleX(0.0);
             }
         });
 
@@ -149,19 +142,21 @@ public class MFXLegacyComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
             }
         });
 
-        validator.addChangeListener((observable, oldValue, newValue) -> {
+        validator.addListener((observable, oldValue, newValue) -> {
             if (comboBox.isValidated()) {
                 validate.setVisible(!newValue);
             }
         });
-        validate.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> validator.showModal(comboBox.getScene().getWindow()));
+
+        validate.textProperty().addListener(invalidated -> comboBox.requestLayout());
+        validate.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> validator.showModal(comboBox.getScene().getWindow()));
     }
 
     /**
      * Builds and play the lines animation if {@code animateLines} is true.
      */
     private void buildAndPlayAnimation(boolean focused) {
-        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(400), focusLine);
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(350), focusedLine);
         if (focused) {
             scaleTransition.setFromX(0.0);
             scaleTransition.setToX(1.0);
@@ -169,7 +164,7 @@ public class MFXLegacyComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
             scaleTransition.setFromX(1.0);
             scaleTransition.setToX(0.0);
         }
-        scaleTransition.setInterpolator(MFXAnimationFactory.getInterpolatorV1());
+        scaleTransition.setInterpolator(MFXAnimationFactory.getInterpolatorV2());
         scaleTransition.play();
     }
 
@@ -180,13 +175,23 @@ public class MFXLegacyComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
     protected void layoutChildren(double x, double y, double w, double h) {
         super.layoutChildren(x, y, w, h);
 
-        final double size = padding / 2.5;
-        final double tx = -((w - line.getEndX()) / 2);
+        double lw = snapSizeX(
+                LabelUtils.computeLabelWidth(validate.getFont(), validate.getText()) +
+                        (validate.getLeadingIcon() != null ? validate.getLeadingIcon().getBoundsInParent().getWidth() : 0.0) +
+                        (validate.getTrailingIcon() != null ? validate.getTrailingIcon().getBoundsInParent().getWidth() : 0.0) +
+                        (validate.getGraphicTextGap() * 2) +
+                        20.0
+        );
+        double lh = snapSizeY(LabelUtils.computeTextHeight(validate.getFont(), validate.getText()));
+        double lx = w - lw;
+        double ly = h + (padding * 0.7);
 
-        focusLine.setTranslateY(h);
-        line.setTranslateY(h);
-        validate.resize(w * 1.5, h - size);
-        validate.setTranslateY(focusLine.getTranslateY() + size);
-        validate.setTranslateX(tx);
+        if (lw > w) {
+            lx = -((lw - w) / 2.0);
+        }
+
+        validate.resizeRelocate(lx, ly, lw, lh);
+        focusedLine.relocate(0, h);
+        unfocusedLine.relocate(0, h);
     }
 }

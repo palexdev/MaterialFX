@@ -35,7 +35,7 @@ import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 /**
- * This is the implementation of the {@code Skin} associated with every {@code MFXCheckbox}.
+ * This is the implementation of the {@code Skin} associated with every {@link MFXCheckbox}.
  */
 public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
     //================================================================================

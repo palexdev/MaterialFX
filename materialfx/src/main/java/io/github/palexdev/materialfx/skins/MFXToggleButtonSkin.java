@@ -31,14 +31,13 @@ import javafx.scene.Cursor;
 import javafx.scene.control.skin.ToggleButtonSkin;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.util.Duration;
 
 /**
- * This is the implementation of the {@code Skin} associated with every {@code MFXToggleButton}.
+ * This is the implementation of the {@code Skin} associated with every {@link MFXToggleButton}.
  */
 public class MFXToggleButtonSkin extends ToggleButtonSkin {
     //================================================================================
@@ -84,7 +83,7 @@ public class MFXToggleButtonSkin extends ToggleButtonSkin {
 
         rippleGenerator = new RippleGenerator(container, new RippleClipTypeFactory());
         rippleGenerator.setAnimateBackground(false);
-        rippleGenerator.setRippleColor((Color) (toggleButton.isSelected() ? toggleButton.getUnToggleLineColor() : toggleButton.getToggleLineColor()));
+        rippleGenerator.setRippleColor(toggleButton.isSelected() ? toggleButton.getUnToggleLineColor() : toggleButton.getToggleLineColor());
         rippleGenerator.setRippleRadius(circleRadius * 1.2);
         rippleGenerator.setInDuration(Duration.millis(400));
         rippleGenerator.setTranslateX(-circleRadius);
@@ -108,11 +107,11 @@ public class MFXToggleButtonSkin extends ToggleButtonSkin {
         toggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 line.setStroke(toggleButton.getToggleLineColor());
-                rippleGenerator.setRippleColor((Color) toggleButton.getToggleLineColor());
+                rippleGenerator.setRippleColor(toggleButton.getToggleLineColor());
                 circle.setFill(toggleButton.getToggleColor());
             } else {
                 line.setStroke(toggleButton.getUnToggleLineColor());
-                rippleGenerator.setRippleColor((Color) toggleButton.getUnToggleLineColor());
+                rippleGenerator.setRippleColor(toggleButton.getUnToggleLineColor());
                 circle.setFill(toggleButton.getUnToggleColor());
             }
         });

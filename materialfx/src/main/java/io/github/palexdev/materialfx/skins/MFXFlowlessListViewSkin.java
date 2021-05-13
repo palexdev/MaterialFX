@@ -35,7 +35,7 @@ import javafx.scene.control.SkinBase;
 import javafx.util.Duration;
 
 /**
- * Implementation of the skin used by all list views based on Flowless.
+ * Implementation of the {@code Skin} used by all list views based on Flowless.
  */
 public class MFXFlowlessListViewSkin<T> extends SkinBase<AbstractMFXFlowlessListView<T, ?, ?>> {
     //================================================================================

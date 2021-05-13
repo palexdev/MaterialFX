@@ -20,6 +20,7 @@ package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
+import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import io.github.palexdev.materialfx.controls.MFXTextField;
@@ -39,6 +40,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Tooltip;
@@ -67,11 +69,11 @@ import static java.time.temporal.ChronoUnit.DAYS;
 import static java.time.temporal.ChronoUnit.MONTHS;
 
 /**
- * This class is the beating heart of every {@code MFXDatePicker}.
+ * This class is the beating heart of every {@link MFXDatePicker}.
  * <p>
- * Extends {@code VBox}, the style class is set to "mfx-datepicker-content" for usage in CSS.
+ * Extends {@link VBox}, the style class is set to "mfx-datepicker-content" for usage in CSS.
  * <p></p>
- * In JavaFX every {@code DatePicker} has a content like this but the code is a huge mess.
+ * In JavaFX every {@link DatePicker} has a content like this but the code is a huge mess.
  * <p>
  * To make things even worse the class is part of the com.sun.javafx package which means that
  * jvm arguments are needed to make it accessible... this is BAD.
@@ -682,9 +684,8 @@ public class MFXDatePickerContent extends VBox {
             }
         });
 
-        inputField.getValidator().setValidatorMessage("Invalid Date");
         inputField.getValidator().add(validInput, "Invalid Date");
-        inputField.setIsValidated(true);
+        inputField.setValidated(true);
     }
 
     /**

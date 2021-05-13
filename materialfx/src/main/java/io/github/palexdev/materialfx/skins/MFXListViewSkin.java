@@ -40,7 +40,7 @@ import javafx.util.Duration;
 import java.util.Set;
 
 /**
- * This is the implementation of the {@code Skin} associated with every {@code MFXListView}.
+ * This is the implementation of the {@code Skin} associated with every {@link MFXListView}.
  * <p>
  * The most important thing this skin does is replacing the default scrollbars with new ones,
  * this makes styling them a lot more easy.

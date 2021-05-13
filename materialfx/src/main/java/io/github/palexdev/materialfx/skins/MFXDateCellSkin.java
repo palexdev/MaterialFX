@@ -27,9 +27,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 
 /**
- * This is the implementation of the {@code Skin} associated with every {@code MFXDateCell}.
+ * This is the implementation of the {@code Skin} associated with every {@link MFXDateCell}.
  * <p>
- * This is necessary to make the {@code RippleGenerator work properly}.
+ * This is necessary to make the {@link RippleGenerator work properly}.
  */
 public class MFXDateCellSkin extends DateCellSkin {
     //================================================================================

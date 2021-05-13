@@ -51,7 +51,7 @@ public abstract class AbstractMFXDialog extends BorderPane {
 
     protected final StringProperty title = new SimpleStringProperty("");
     protected final StringProperty content = new SimpleStringProperty("");
-    protected BooleanProperty centerBeforeShow = new SimpleBooleanProperty(true);
+    protected final BooleanProperty centerBeforeShow = new SimpleBooleanProperty(true);
     protected final List<Node> closeButtons = new ArrayList<>();
 
     protected final MFXScrimEffect scrimEffect = new MFXScrimEffect();

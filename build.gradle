@@ -1,6 +1,6 @@
 plugins {
     id 'java-library'
-    id 'org.openjfx.javafxplugin' version '0.0.9' apply false
+    id 'org.openjfx.javafxplugin' version '0.0.10' apply false
 }
 
 group 'io.github.palexdev'
@@ -15,12 +15,9 @@ subprojects {
     apply plugin: 'org.openjfx.javafxplugin'
 
     javafx {
-        version = "15.0.1"
+        version = "16"
         modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.swing', 'javafx.web' ]
     }
-
-    // Workaround for newer Gradle versions (see https://github.com/java9-modularity/gradle-modules-plugin/issues/165)
-    modularity.disableEffectiveArgumentsAdjustment()
 }
 
 

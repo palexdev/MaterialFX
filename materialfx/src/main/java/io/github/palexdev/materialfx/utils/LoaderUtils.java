@@ -117,7 +117,7 @@ public class LoaderUtils {
     }
 
     /**
-     * Sets the location for the given fxmlLoader and loads the fmxl file.
+     * Sets the location for the given fxmlLoader and loads the fxml file.
      *
      * @param   fxmlURL the fxml file to load
      * @return  the loaded object hierarchy from the fxml
@@ -128,7 +128,7 @@ public class LoaderUtils {
     }
 
     /**
-     * Sets the location and the controller factory for the given fxmlLoader and loads the fmxl file.
+     * Sets the location and the controller factory for the given fxmlLoader and loads the fxml file.
      *
      * @param   fxmlURL the fxml file to load
      * @param   controllerFactory the controller object to set

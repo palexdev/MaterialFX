@@ -28,7 +28,7 @@ import javafx.scene.shape.Shape;
  * Convenience class for building Ripple clip shapes.
  */
 public class RippleClipTypeFactory {
-    private RippleClipType rippleClipType = RippleClipType.NOCLIP;
+    private RippleClipType rippleClipType = RippleClipType.NO_CLIP;
     private double arcW = 0;
     private double arcH = 0;
 

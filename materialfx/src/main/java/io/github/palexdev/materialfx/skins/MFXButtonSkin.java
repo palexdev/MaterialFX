@@ -27,7 +27,7 @@ import javafx.scene.control.skin.ButtonSkin;
 import javafx.scene.input.MouseEvent;
 
 /**
- * This is the implementation of the {@code Skin} associated with every {@code MFXButton}.
+ * This is the implementation of the {@code Skin} associated with every {@link MFXButton}.
  */
 public class MFXButtonSkin extends ButtonSkin {
     //================================================================================

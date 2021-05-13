@@ -35,7 +35,7 @@ import java.util.List;
  * This is the implementation of a toggle button following Google's material design guidelines in JavaFX.
  * <p>
  * Extends {@code ToggleButton}, redefines the style class to "mfx-toggle-button" for usage in CSS and
- * includes a {@code RippleGenerator}(in the Skin) to generate ripple effect when toggled/untoggled.
+ * includes a {@code RippleGenerator}(in the Skin) to generate ripple effect when toggled/un-toggled.
  */
 public class MFXToggleButton extends ToggleButton {
     //================================================================================
@@ -94,7 +94,7 @@ public class MFXToggleButton extends ToggleButton {
     );
 
     /**
-     * Specifies the color of the "circle" when untoggled.
+     * Specifies the color of the "circle" when un-toggled.
      *
      * @see Color
      */
@@ -118,7 +118,7 @@ public class MFXToggleButton extends ToggleButton {
     );
 
     /**
-     * Specifies the color of the line when untoggled.
+     * Specifies the color of the line when un-toggled.
      *
      * @see Color
      */
@@ -142,9 +142,9 @@ public class MFXToggleButton extends ToggleButton {
     );
 
     /**
-     * When this is set to true and toggle color is changed the untoggle color is automatically adjusted.
+     * When this is set to true and toggle color is changed the un-toggle color is automatically adjusted.
      * <p>
-     * NOTE: This works only if changing toggle color, if untoggle color is changed the toggle color won't be automatically adjusted.
+     * NOTE: This works only if changing toggle color, if un-toggle color is changed the toggle color won't be automatically adjusted.
      * You can see this behavior in the demo.
      */
     private final BooleanProperty automaticColorAdjustment = new SimpleBooleanProperty(false);

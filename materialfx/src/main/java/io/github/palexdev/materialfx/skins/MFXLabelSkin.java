@@ -38,6 +38,23 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
+/**
+ * This is the implementation of the {@code Skin} associated with every {@link MFXLabelSkin}.
+ * <p>
+ * This skin simply wrappers a normal JavaFX {@link Label} in an {@link HBox}.
+ * Why? Because designing a new label entirely from scratch would be too much work, plus I'm not
+ * entirely sure it could be done because lots of apis for the JavaFX label are part of the com.sun.javafx package,
+ * so they are private.
+ * <p>
+ * This leads to the loss of some base features of the JavaFX {@link Label}, you can get the wrapper label
+ * by using the {@link MFXLabel#getTextNode()} method, but I don't guarantee that all options are working.
+ * <p>
+ * That said it's important to remember that {@link MFXLabel} also introduces new features and fixes. For example
+ * you can have two icons, one leading and one trailing. Also, the alignment of the icons with the text should be way better
+ * and you can also control it by setting the margin of the icons using {@link HBox#setMargin(Node, Insets)} since the icons
+ * are added to the {@link HBox}. The label can also be edited like a text field by setting {@link MFXLabel#editableProperty()} to true
+ * and double clicking it.
+ */
 public class MFXLabelSkin extends SkinBase<MFXLabel> {
     //================================================================================
     // Properties
@@ -262,9 +279,9 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
     /**
      * Responsible for showing the editor correctly, handles its size and location.
      * <p>
-     * Note that when the editor with is computed we set that same width as the textNode's prefWidth as well,
-     * this is done so the trailing icon position is automatically managed by the container. When the editor is removed
-     * the textNode's prefWidth is set to USE_COMPUTED_SIZE.
+     * Note that when the editor width is computed we set that same width as the textNode's prefWidth as well,
+     * by doing so the trailing icon position will be automatically managed by the container. When the editor is removed
+     * the textNode's prefWidth is set back to USE_COMPUTED_SIZE.
      */
     private void computeEditorPosition(MFXTextField textField) {
         MFXLabel label = getSkinnable();

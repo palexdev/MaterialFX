@@ -31,7 +31,7 @@ import javafx.scene.control.skin.LabelSkin;
 import javafx.scene.layout.Region;
 
 /**
- * This is the implementation of the Skin associated with every {@code MFXTableColumnCell}.
+ * This is the implementation of the {@code Skin} associated with every {@link MFXTableColumnCell}.
  */
 public class MFXTableColumnCellSkin<T> extends LabelSkin {
     //================================================================================

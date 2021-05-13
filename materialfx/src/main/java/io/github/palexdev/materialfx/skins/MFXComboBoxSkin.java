@@ -48,7 +48,7 @@ import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
 /**
- * This is the implementation of the Skin associated with every {@code MFXComboBox}.
+ * This is the implementation of the Skin associated with every {@link MFXComboBox}.
  */
 public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
     //================================================================================

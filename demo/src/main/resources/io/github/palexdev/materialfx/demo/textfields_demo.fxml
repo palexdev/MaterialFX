@@ -4,7 +4,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@css/textfields_demo.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.TextfieldsDemoController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@css/textfields_demo.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.TextfieldsDemoController">
     <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="TextFields" StackPane.alignment="TOP_CENTER">
         <StackPane.margin>
           <Insets top="20.0" />
@@ -29,16 +29,11 @@
          <Insets top="130.0" />
       </StackPane.margin>
    </Label>
-   <MFXTextField id="colors" alignment="CENTER" lineColor="#52db32" maxWidth="-Infinity" prefWidth="120.0" promptText="Colors" StackPane.alignment="TOP_CENTER">
-      <StackPane.margin>
-         <Insets right="150.0" top="180.0" />
-      </StackPane.margin>
-   </MFXTextField>
-   <MFXTextField fx:id="validated" alignment="CENTER" maxWidth="-Infinity" prefWidth="120.0" text="Validation" StackPane.alignment="TOP_CENTER">
-      <StackPane.margin>
-         <Insets left="150.0" top="180.0" />
-      </StackPane.margin>
-   </MFXTextField>
+   <HBox maxHeight="-Infinity" maxWidth="-Infinity" spacing="100.0">
+      <MFXTextField id="colors" alignment="CENTER" lineColor="#52db32" maxWidth="-Infinity" prefWidth="120.0"
+                    promptText="Colors"/>
+      <MFXTextField fx:id="validated" alignment="CENTER" maxWidth="-Infinity" prefWidth="120.0" text="Validation"/>
+   </HBox>
    <MFXCheckbox fx:id="checkbox" checkedColor="#00e240" markSize="9.0" markType="mfx-variant9-mark" text="CheckBox Validation" StackPane.alignment="BOTTOM_LEFT">
       <StackPane.margin>
          <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

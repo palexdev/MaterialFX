@@ -36,7 +36,7 @@ import java.util.function.Predicate;
 // TODO implement StringConverter (low priority)
 
 /**
- * This is the implementation of the Skin associated with every MFXFilterComboBox.
+ * This is the implementation of the {@code Skin} associated with every {@link MFXFilterComboBox}.
  */
 public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
     //================================================================================

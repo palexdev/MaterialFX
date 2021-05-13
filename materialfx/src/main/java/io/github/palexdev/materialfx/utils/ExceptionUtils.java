@@ -16,30 +16,26 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-.mfx-text-field {
-    -fx-prompt-text-fill: #61606C;
-    -fx-padding: 0.333333em 0 0.333333em 0;
-    -mfx-line-color: rgb(50, 150, 205);
-    -mfx-unfocused-line-color: rgb(77, 77, 77);
-}
+package io.github.palexdev.materialfx.utils;
 
-.mfx-text-field,
-.mfx-text-field:focused {
-    -fx-background-color: TRANSPARENT, TRANSPARENT, TRANSPARENT;
-}
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
-.mfx-text-field .validate-label {
-    -mfx-line-color: transparent;
-    -mfx-unfocused-line-color: transparent;
-    -fx-background-color: transparent;
-    -mfx-font-family: "Open Sans SemiBold";
-    -mfx-font-size: 11;
-    -mfx-text-fill: #EF6E6B;
-}
+/**
+ * Little utils class to convert a throwable stack trace to a String.
+ */
+public class ExceptionUtils {
+    private static final StringWriter sw = new StringWriter();
 
-.mfx-text-field:invalid {
-    -fx-text-fill: #EF6E6B;
-    -fx-prompt-text-fill: #EF6E6B;
-    -mfx-line-color: #EF6E6B;
-    -mfx-unfocused-line-color: #EF6E6B;
+    private ExceptionUtils() {}
+
+    /**
+     * Converts the given exception stack trace to a String
+     * by using a {@link StringWriter} and a {@link PrintWriter}.
+     */
+    public static String getStackTraceString(Throwable ex) {
+        sw.flush();
+        ex.printStackTrace(new PrintWriter(sw));
+        return sw.toString();
+    }
 }

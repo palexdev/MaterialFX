@@ -19,25 +19,31 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.controls.enums.DialogType;
 import io.github.palexdev.materialfx.skins.MFXTextFieldSkin;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
+import io.github.palexdev.materialfx.validation.base.AbstractMFXValidator;
+import io.github.palexdev.materialfx.validation.base.Validated;
+import javafx.beans.property.StringProperty;
 import javafx.css.*;
 import javafx.scene.control.Skin;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.StrokeLineCap;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * This is the implementation of a TextField restyled to comply with modern standards.
- * <p>
+ * <p></p>
  * Extends {@code TextField}, redefines the style class to "mfx-text-field" for usage in CSS and
  * includes a {@code MFXDialogValidator} for input validation.
- * <p>
- * <b>Note: validator conditions are empty by default</b>
+ * <p></p>
+ * Defines a new PseudoClass: ":invalid" to specify the control's look when the validator's state is invalid.
  */
-public class MFXTextField extends TextField {
+public class MFXTextField extends TextField implements Validated<MFXDialogValidator> {
     //================================================================================
     // Properties
     //================================================================================
@@ -46,6 +52,7 @@ public class MFXTextField extends TextField {
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-textfield.css");
 
     private MFXDialogValidator validator;
+    protected static final PseudoClass INVALID_PSEUDO_CLASS = PseudoClass.getPseudoClass("invalid");
 
     //================================================================================
     // Constructors
@@ -57,6 +64,72 @@ public class MFXTextField extends TextField {
     public MFXTextField(String text) {
         super(text);
         initialize();
+    }
+
+    //================================================================================
+    // Validation
+    //================================================================================
+
+    /**
+     * Configures the validator. The first time the error label can appear in two cases:
+     * <p></p>
+     * 1) The validator {@link AbstractMFXValidator#isInitControlValidation()} flag is true,
+     * in this case as soon as the control is laid out in the scene the label visible property is
+     * set accordingly to the validator state. (by default is false) <p>
+     * 2) When the control lose the focus and the the validator's state is invalid.
+     * <p></p>
+     * Then the label visible property is automatically updated when the validator state changes.
+     * <p></p>
+     * The validator is also responsible for updating the ":invalid" pseudo class.
+     */
+    private void setupValidator() {
+        validator = new MFXDialogValidator("Error");
+        validator.setDialogType(DialogType.ERROR);
+        validator.validProperty().addListener(invalidated -> pseudoClassStateChanged(INVALID_PSEUDO_CLASS, !isValid()));
+
+        sceneProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null)
+                if (getValidator().isInitControlValidation()) {
+                    pseudoClassStateChanged(INVALID_PSEUDO_CLASS, !isValid());
+                } else {
+                    pseudoClassStateChanged(INVALID_PSEUDO_CLASS, false);
+                }
+        });
+    }
+
+    @Override
+    public MFXTextField installValidator(Supplier<MFXDialogValidator> validatorSupplier) {
+        this.validator = validatorSupplier.get();
+        return this;
+    }
+
+    /**
+     * Returns the validator instance of this control.
+     */
+    @Override
+    public MFXDialogValidator getValidator() {
+        return validator;
+    }
+
+    /**
+     * Delegate method to get the validator's title.
+     */
+    public String getValidatorTitle() {
+        return validator.getTitle();
+    }
+
+    /**
+     * Delegate method to get the validator's title property.
+     */
+    public StringProperty validatorTitleProperty() {
+        return validator.titleProperty();
+    }
+
+    /**
+     * Delegate method to set the validator's title.
+     */
+    public void setValidatorTitle(String title) {
+        validator.setTitle(title);
     }
 
     //================================================================================
@@ -79,28 +152,9 @@ public class MFXTextField extends TextField {
         });
     }
 
-    /**
-     * Configures the validator. If {@link #isValidated()} is true, by default shows a warning
-     * if no item is selected. The warning is showed as soon as the control is out of focus.
-     */
-    private void setupValidator() {
-        validator = new MFXDialogValidator("Warning");
-    }
-
-    /**
-     * Returns the validator instance of this control.
-     */
-    public MFXDialogValidator getValidator() {
-        return validator;
-    }
-
     //================================================================================
     // Styleable Properties
     //================================================================================
-
-    /**
-     * Specifies the maximum text length.
-     */
     private final StyleableIntegerProperty textLimit = new SimpleStyleableIntegerProperty(
             StyleableProperties.TEXT_LIMIT,
             this,
@@ -108,9 +162,6 @@ public class MFXTextField extends TextField {
             -1
     );
 
-    /**
-     * Specifies the line's color when the control is focused.
-     */
     private final StyleableObjectProperty<Paint> lineColor = new SimpleStyleableObjectProperty<>(
             StyleableProperties.LINE_COLOR,
             this,
@@ -118,9 +169,6 @@ public class MFXTextField extends TextField {
             Color.rgb(50, 120, 220)
     );
 
-    /**
-     * Specifies the line's color when the control is not focused.
-     */
     private final StyleableObjectProperty<Paint> unfocusedLineColor = new SimpleStyleableObjectProperty<>(
             StyleableProperties.UNFOCUSED_LINE_COLOR,
             this,
@@ -128,19 +176,20 @@ public class MFXTextField extends TextField {
             Color.rgb(77, 77, 77)
     );
 
-    /**
-     * Specifies the lines' stroke width.
-     */
     private final StyleableDoubleProperty lineStrokeWidth = new SimpleStyleableDoubleProperty(
             StyleableProperties.LINE_STROKE_WIDTH,
             this,
             "lineStrokeWidth",
-            1.0
+            2.0
     );
 
-    /**
-     * Specifies if the lines switch between focus/un-focus should be animated.
-     */
+    private final StyleableObjectProperty<StrokeLineCap> lineStrokeCap = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.LINE_STROKE_CAP,
+            this,
+            "lineStrokeCap",
+            StrokeLineCap.ROUND
+    );
+
     private final StyleableBooleanProperty animateLines = new SimpleStyleableBooleanProperty(
             StyleableProperties.ANIMATE_LINES,
             this,
@@ -148,9 +197,6 @@ public class MFXTextField extends TextField {
             true
     );
 
-    /**
-     * Specifies if validation is required for the control.
-     */
     private final StyleableBooleanProperty validated = new SimpleStyleableBooleanProperty(
             StyleableProperties.IS_VALIDATED,
             this,
@@ -162,6 +208,9 @@ public class MFXTextField extends TextField {
         return textLimit.get();
     }
 
+    /**
+     * Specifies the maximum text length.
+     */
     public StyleableIntegerProperty textLimitProperty() {
         return textLimit;
     }
@@ -174,6 +223,9 @@ public class MFXTextField extends TextField {
         return lineColor.get();
     }
 
+    /**
+     * Specifies the line's color when the control is focused.
+     */
     public StyleableObjectProperty<Paint> lineColorProperty() {
         return lineColor;
     }
@@ -186,6 +238,9 @@ public class MFXTextField extends TextField {
         return unfocusedLineColor.get();
     }
 
+    /**
+     * Specifies the line's color when the control is not focused.
+     */
     public StyleableObjectProperty<Paint> unfocusedLineColorProperty() {
         return unfocusedLineColor;
     }
@@ -198,6 +253,9 @@ public class MFXTextField extends TextField {
         return lineStrokeWidth.get();
     }
 
+    /**
+     * Specifies the lines' stroke width.
+     */
     public StyleableDoubleProperty lineStrokeWidthProperty() {
         return lineStrokeWidth;
     }
@@ -206,10 +264,28 @@ public class MFXTextField extends TextField {
         this.lineStrokeWidth.set(lineStrokeWidth);
     }
 
+    public StrokeLineCap getLineStrokeCap() {
+        return lineStrokeCap.get();
+    }
+
+    /**
+     * Specifies the lines' stroke cap.
+     */
+    public StyleableObjectProperty<StrokeLineCap> lineStrokeCapProperty() {
+        return lineStrokeCap;
+    }
+
+    public void setLineStrokeCap(StrokeLineCap lineStrokeCap) {
+        this.lineStrokeCap.set(lineStrokeCap);
+    }
+
     public boolean isAnimateLines() {
         return animateLines.get();
     }
 
+    /**
+     * Specifies if the lines switch between focus/un-focus should be animated.
+     */
     public StyleableBooleanProperty animateLinesProperty() {
         return animateLines;
     }
@@ -222,12 +298,15 @@ public class MFXTextField extends TextField {
         return validated.get();
     }
 
+    /**
+     * Specifies if validation is required for the control.
+     */
     public StyleableBooleanProperty isValidatedProperty() {
         return validated;
     }
 
-    public void setIsValidated(boolean isValidated) {
-        this.validated.set(isValidated);
+    public void setValidated(boolean validated) {
+        this.validated.set(validated);
     }
 
     //================================================================================
@@ -261,7 +340,15 @@ public class MFXTextField extends TextField {
                 FACTORY.createSizeCssMetaData(
                         "-mfx-line-stroke-width",
                         MFXTextField::lineStrokeWidthProperty,
-                        1.0
+                        2.0
+                );
+
+        private static final CssMetaData<MFXTextField, StrokeLineCap> LINE_STROKE_CAP =
+                FACTORY.createEnumCssMetaData(
+                        StrokeLineCap.class,
+                        "-mfx-line-stroke-cap",
+                        MFXTextField::lineStrokeCapProperty,
+                        StrokeLineCap.ROUND
                 );
 
         private static final CssMetaData<MFXTextField, Boolean> ANIMATE_LINES =
@@ -279,7 +366,12 @@ public class MFXTextField extends TextField {
                 );
 
         static {
-            cssMetaDataList = List.of(TEXT_LIMIT, LINE_COLOR, UNFOCUSED_LINE_COLOR, LINE_STROKE_WIDTH, IS_VALIDATED);
+            cssMetaDataList = List.of(
+                    TEXT_LIMIT,
+                    LINE_COLOR, UNFOCUSED_LINE_COLOR,
+                    LINE_STROKE_WIDTH, LINE_STROKE_CAP,
+                    IS_VALIDATED
+            );
         }
 
     }
@@ -297,12 +389,12 @@ public class MFXTextField extends TextField {
     }
 
     @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
+    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+        return MFXTextField.getControlCssMetaDataList();
     }
 
     @Override
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return MFXTextField.getControlCssMetaDataList();
+    public String getUserAgentStylesheet() {
+        return STYLESHEET;
     }
 }

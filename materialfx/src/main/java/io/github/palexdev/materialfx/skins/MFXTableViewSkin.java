@@ -71,7 +71,7 @@ import static io.github.palexdev.materialfx.controls.MFXTableView.TableViewEvent
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
 
 /**
- * This is the implementation of the Skin associated with every {@code MFXTableView}.
+ * This is the implementation of the {@code Skin} associated with every {@link MFXTableView}.
  * <p>
  * It's the main class since it handles the graphic of the control and its functionalities.
  * <p>

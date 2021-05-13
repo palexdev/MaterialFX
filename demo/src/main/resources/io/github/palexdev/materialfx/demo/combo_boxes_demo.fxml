@@ -5,7 +5,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="600.0" stylesheets="@css/combo_boxes_demo.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.ComboBoxesDemoController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="850.0" stylesheets="@css/combo_boxes_demo.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.ComboBoxesDemoController">
    <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Legacy Combo Boxes" StackPane.alignment="TOP_CENTER">
       <StackPane.margin>
          <Insets top="20.0" />
@@ -31,34 +31,18 @@
          <Insets top="125.0" />
       </StackPane.margin>
    </Label>
-   <MFXLegacyComboBox fx:id="editable" prefHeight="23.0" prefWidth="90.0" promptText="Editable" StackPane.alignment="TOP_CENTER">
+   <HBox maxHeight="-Infinity" maxWidth="-Infinity" spacing="100.0">
       <StackPane.margin>
-         <Insets right="120.0" top="170.0" />
+         <Insets bottom="80.0"/>
       </StackPane.margin>
-   </MFXLegacyComboBox>
-   <MFXLegacyComboBox fx:id="labels" prefHeight="23.0" prefWidth="90.0" promptText="Labels" StackPane.alignment="TOP_CENTER">
-      <StackPane.margin>
-         <Insets right="350.0" top="170.0" />
-      </StackPane.margin>
-   </MFXLegacyComboBox>
-   <MFXLegacyComboBox fx:id="validated" lineColor="#ffdc00" prefHeight="23.0" prefWidth="90.0" promptText="Validated" validated="true" StackPane.alignment="TOP_CENTER">
-      <StackPane.margin>
-         <Insets left="120.0" top="170.0" />
-      </StackPane.margin>
-   </MFXLegacyComboBox>
-   <MFXLegacyComboBox id="custom" fx:id="customized" prefHeight="23.0" prefWidth="90.0" promptText="CSS" StackPane.alignment="TOP_CENTER">
-      <StackPane.margin>
-         <Insets left="350.0" top="170.0" />
-      </StackPane.margin>
-   </MFXLegacyComboBox>
-   <MFXCheckbox fx:id="checkbox" text="Validation!" StackPane.alignment="BOTTOM_RIGHT">
-      <StackPane.margin>
-         <Insets bottom="200.0" left="10.0" right="10.0" top="10.0" />
-      </StackPane.margin>
-   </MFXCheckbox>
+      <MFXLegacyComboBox fx:id="labels" prefHeight="23.0" prefWidth="90.0" promptText="Labels"/>
+      <MFXLegacyComboBox fx:id="editable" prefHeight="23.0" prefWidth="90.0" promptText="Editable"/>
+      <MFXLegacyComboBox fx:id="validated" prefHeight="23.0" prefWidth="90.0" promptText="Validated" validated="true"/>
+      <MFXLegacyComboBox id="custom" fx:id="customized" prefHeight="23.0" prefWidth="90.0" promptText="CSS"/>
+   </HBox>
    <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="New Combo Boxes">
       <StackPane.margin>
-         <Insets top="105.0" />
+         <Insets top="70.0" />
       </StackPane.margin>
    </Label>
    <MFXComboBox fx:id="style1">
@@ -91,4 +75,9 @@
          <Insets bottom="25.0" left="150.0" />
       </StackPane.margin>
    </MFXFilterComboBox>
+   <MFXCheckbox fx:id="checkbox" text="Validation!" StackPane.alignment="BOTTOM_RIGHT">
+      <StackPane.margin>
+         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+      </StackPane.margin>
+   </MFXCheckbox>
 </StackPane>

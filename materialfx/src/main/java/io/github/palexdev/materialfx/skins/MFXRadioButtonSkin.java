@@ -37,7 +37,7 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 /**
- * This is the implementation of the {@code Skin} associated with every {@code MFXRadioButton}.
+ * This is the implementation of the {@code Skin} associated with every {@link MFXRadioButton}.
  */
 public class MFXRadioButtonSkin extends RadioButtonSkin {
     //================================================================================

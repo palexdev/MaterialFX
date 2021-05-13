@@ -19,12 +19,14 @@
 package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
+import io.github.palexdev.materialfx.controls.MFXLabel;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.materialfx.utils.LabelUtils;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
 import javafx.animation.ScaleTransition;
-import javafx.scene.control.Label;
+import javafx.scene.Cursor;
 import javafx.scene.control.skin.TextFieldSkin;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -32,7 +34,7 @@ import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
 /**
- * This is the implementation of the {@code Skin} associated with every {@code MFXTextField}.
+ * This is the implementation of the {@code Skin} associated with every {@link MFXTextField}.
  */
 public class MFXTextFieldSkin extends TextFieldSkin {
     //================================================================================
@@ -42,7 +44,7 @@ public class MFXTextFieldSkin extends TextFieldSkin {
 
     private final Line unfocusedLine;
     private final Line focusedLine;
-    private final Label validate;
+    private final MFXLabel validate;
 
     //================================================================================
     // Constructors
@@ -52,30 +54,40 @@ public class MFXTextFieldSkin extends TextFieldSkin {
 
         unfocusedLine = new Line();
         unfocusedLine.getStyleClass().add("unfocused-line");
-        unfocusedLine.setStroke(textField.getUnfocusedLineColor());
-        unfocusedLine.setStrokeWidth(textField.getLineStrokeWidth());
+        unfocusedLine.setManaged(false);
+        unfocusedLine.strokeWidthProperty().bind(textField.lineStrokeWidthProperty());
+        unfocusedLine.strokeLineCapProperty().bind(textField.lineStrokeCapProperty());
+        unfocusedLine.strokeProperty().bind(textField.unfocusedLineColorProperty());
+        unfocusedLine.endXProperty().bind(textField.widthProperty());
         unfocusedLine.setSmooth(true);
+        unfocusedLine.setManaged(false);
 
         focusedLine = new Line();
         focusedLine.getStyleClass().add("focused-line");
-        focusedLine.setStroke(textField.getLineColor());
-        focusedLine.setStrokeWidth(textField.getLineStrokeWidth());
+        focusedLine.setManaged(false);
+        focusedLine.strokeWidthProperty().bind(textField.lineStrokeWidthProperty());
+        focusedLine.strokeLineCapProperty().bind(textField.lineStrokeCapProperty());
+        focusedLine.strokeProperty().bind(textField.lineColorProperty());
         focusedLine.setSmooth(true);
-        focusedLine.setScaleX(0.0);
-
-        unfocusedLine.endXProperty().bind(textField.widthProperty());
         focusedLine.endXProperty().bind(textField.widthProperty());
-        unfocusedLine.setManaged(false);
+        focusedLine.setScaleX(0.0);
         focusedLine.setManaged(false);
 
         MFXFontIcon warnIcon = new MFXFontIcon("mfx-exclamation-triangle", Color.RED);
         MFXIconWrapper warnWrapper = new MFXIconWrapper(warnIcon, 10);
 
-        validate = new Label("", warnWrapper);
+        validate = new MFXLabel();
+        validate.setLeadingIcon(warnWrapper);
         validate.getStyleClass().add("validate-label");
+        validate.getStylesheets().setAll(textField.getUserAgentStylesheet());
         validate.textProperty().bind(textField.getValidator().validatorMessageProperty());
         validate.setGraphicTextGap(padding);
         validate.setVisible(false);
+        validate.setManaged(false);
+
+        if (textField.isValidated() && textField.getValidator().isInitControlValidation()) {
+            validate.setVisible(!textField.isValid());
+        }
 
         getChildren().addAll(unfocusedLine, focusedLine, validate);
 
@@ -100,28 +112,10 @@ public class MFXTextFieldSkin extends TextFieldSkin {
         MFXTextField textField = (MFXTextField) getSkinnable();
         MFXDialogValidator validator = textField.getValidator();
 
-        textField.lineColorProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.equals(oldValue)) {
-                focusedLine.setStroke(newValue);
-            }
-        });
-
-        textField.unfocusedLineColorProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.equals(oldValue)) {
-                unfocusedLine.setStroke(newValue);
-            }
-        });
-
-        textField.lineStrokeWidthProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.doubleValue() != oldValue.doubleValue()) {
-                unfocusedLine.setStrokeWidth(newValue.doubleValue());
-                focusedLine.setStrokeWidth(newValue.doubleValue() * 1.3);
-            }
-        });
-
         textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue && textField.isValidated()) {
-                validate.setVisible(!validator.isValid());
+                textField.getValidator().update();
+                validate.setVisible(!textField.isValid());
             }
 
             if (textField.isAnimateLines()) {
@@ -153,17 +147,19 @@ public class MFXTextFieldSkin extends TextFieldSkin {
 
         textField.disabledProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
-                validate.setVisible(false);
+                validate.setVisible(!textField.isValid());
             }
         });
 
-        validator.addChangeListener((observable, oldValue, newValue) -> {
+        validator.addListener((observable, oldValue, newValue) -> {
             if (textField.isValidated()) {
                 validate.setVisible(!newValue);
             }
         });
 
-        validate.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> validator.show());
+        validate.textProperty().addListener(invalidated -> textField.requestLayout());
+        validate.addEventFilter(MouseEvent.MOUSE_ENTERED, event -> validate.setCursor(Cursor.DEFAULT));
+        validate.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> validator.showModal(textField.getScene().getWindow()));
     }
 
     /**
@@ -189,11 +185,24 @@ public class MFXTextFieldSkin extends TextFieldSkin {
     protected void layoutChildren(double x, double y, double w, double h) {
         super.layoutChildren(x, y, w, h);
 
-        final double size = padding / 2.5;
+        double lw = snapSizeX(
+                LabelUtils.computeLabelWidth(validate.getFont(), validate.getText()) +
+                        (validate.getLeadingIcon() != null ? validate.getLeadingIcon().getBoundsInParent().getWidth() : 0.0) +
+                        (validate.getTrailingIcon() != null ? validate.getTrailingIcon().getBoundsInParent().getWidth() : 0.0) +
+                        (validate.getGraphicTextGap() * 2) +
+                        20.0
+        );
+        double lh = snapSizeY(LabelUtils.computeTextHeight(validate.getFont(), validate.getText()));
+        double lx = w - lw;
+        double ly = h + lh;
 
-        focusedLine.setTranslateY(h + padding * 0.7);
-        unfocusedLine.setTranslateY(h + padding * 0.7);
-        validate.resize(w * 1.5, h - size);
-        validate.setTranslateY(focusedLine.getTranslateY() + size);
+        if (lw > w) {
+            lx = -((lw - w) / 2.0);
+        }
+
+        validate.resizeRelocate(lx, ly, lw, lh);
+        focusedLine.relocate(0, h + padding * 0.7);
+        unfocusedLine.relocate(0, h + padding * 0.7);
+
     }
 }

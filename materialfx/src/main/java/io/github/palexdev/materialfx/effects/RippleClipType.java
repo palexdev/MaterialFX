@@ -22,5 +22,5 @@ public enum RippleClipType {
     CIRCLE,
     RECTANGLE,
     ROUNDED_RECTANGLE,
-    NOCLIP,
+    NO_CLIP,
 }

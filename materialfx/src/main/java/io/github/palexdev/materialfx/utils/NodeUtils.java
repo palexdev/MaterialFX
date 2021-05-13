@@ -252,12 +252,11 @@ public class NodeUtils {
     public static double computeYOffset(double height, double contentHeight, VPos vpos) {
 
         switch (vpos) {
-            case TOP:
-                return 0;
             case CENTER:
                 return (height - contentHeight) / 2;
             case BOTTOM:
                 return height - contentHeight;
+            case TOP:
             default:
                 return 0;
         }
@@ -429,7 +428,7 @@ public class NodeUtils {
     }
 
     /*
-     * Simple utitilty function to return the 'opposite' value of a given HPos, taking
+     * Simple utility function to return the 'opposite' value of a given HPos, taking
      * into account the current VPos value. This is used to try and avoid overlapping.
      */
     private static HPos getHPosOpposite(HPos hpos, VPos vpos) {

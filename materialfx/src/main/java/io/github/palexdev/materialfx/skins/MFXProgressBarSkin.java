@@ -26,7 +26,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 /**
- * This is the implementation of the Skin associated with every {@code MFXProgressBar}.
+ * This is the implementation of the {@code Skin} associated with every {@link MFXProgressBar}.
  */
 public class MFXProgressBarSkin extends SkinBase<MFXProgressBar> {
     //================================================================================

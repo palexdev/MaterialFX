@@ -44,7 +44,7 @@ public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> 
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-check-list-cell";
-    private final String STYLESHHET = MFXResourcesLoader.load("css/mfx-flowless-check-listcell.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-flowless-check-listcell.css");
     protected final RippleGenerator rippleGenerator = new RippleGenerator(this);
 
     private final MFXFlowlessCheckListView<T> listView;
@@ -240,7 +240,7 @@ public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> 
 
     @Override
     public String getUserAgentStylesheet() {
-        return STYLESHHET;
+        return STYLESHEET;
     }
 
     @Override

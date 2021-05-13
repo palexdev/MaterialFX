@@ -149,14 +149,10 @@ public abstract class AbstractMFXFlowlessListView<T, C extends AbstractMFXFlowle
         final double[] derivatives = new double[frictions.length];
 
         Timeline timeline = new Timeline();
-        final EventHandler<MouseEvent> dragHandler = event -> {
-            System.out.println("STOP!");
-            timeline.stop();
-        };
+        final EventHandler<MouseEvent> dragHandler = event -> timeline.stop();
 
         final EventHandler<ScrollEvent> scrollHandler = event -> {
             if (event.getEventType() == ScrollEvent.SCROLL) {
-                System.out.println("Smooth Scrolling");
                 int direction = event.getDeltaY() > 0 ? -1 : 1;
                 for (int i = 0; i < pushes.length; i++) {
                     derivatives[i] += direction * pushes[i];
