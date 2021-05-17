@@ -24,7 +24,7 @@ import io.github.palexdev.materialfx.controls.MFXStepperToggle;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle.MFXStepperToggleEvent;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.controls.factories.RippleClipTypeFactory;
-import io.github.palexdev.materialfx.effects.RippleClipType;
+import io.github.palexdev.materialfx.effects.ripple.RippleClipType;
 import javafx.animation.*;
 import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
@@ -115,11 +115,15 @@ public class MFXStepperSkin extends SkinBase<MFXStepper> {
 
         nextButton = new MFXButton("Next");
         nextButton.setManaged(false);
-        nextButton.getRippleGenerator().setRippleClipTypeFactory(new RippleClipTypeFactory(RippleClipType.ROUNDED_RECTANGLE, 34, 34));
+        nextButton.getRippleGenerator().setClipSupplier(() ->
+                new RippleClipTypeFactory(RippleClipType.ROUNDED_RECTANGLE, 34, 34).build(nextButton)
+        );
 
         previousButton = new MFXButton("Previous");
         previousButton.setManaged(false);
-        previousButton.getRippleGenerator().setRippleClipTypeFactory(new RippleClipTypeFactory(RippleClipType.ROUNDED_RECTANGLE, 34, 34));
+        previousButton.getRippleGenerator().setClipSupplier(() ->
+                new RippleClipTypeFactory(RippleClipType.ROUNDED_RECTANGLE, 34, 34).build(previousButton)
+        );
 
         buttonsBox = new HBox(64, previousButton, nextButton);
         buttonsBox.getStyleClass().setAll("buttons-box");

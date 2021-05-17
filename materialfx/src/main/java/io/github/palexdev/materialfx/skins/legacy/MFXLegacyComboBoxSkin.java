@@ -142,9 +142,9 @@ public class MFXLegacyComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
             }
         });
 
-        validator.addListener((observable, oldValue, newValue) -> {
+        validator.addListener(invalidated -> {
             if (comboBox.isValidated()) {
-                validate.setVisible(!newValue);
+                validate.setVisible(!comboBox.isValid());
             }
         });
 

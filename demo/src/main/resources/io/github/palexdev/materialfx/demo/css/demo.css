@@ -26,7 +26,7 @@
     -fx-border-color: rgb(75, 181, 255);
 }
 
-#infoButton .ripple-generator {
+#infoButton .mfx-ripple-generator {
     -mfx-ripple-radius: 15px;
     -mfx-ripple-color: #d3d8ff;
 }
@@ -48,7 +48,7 @@
     -fx-font-size: 0;
 }
 
-#navButton .ripple-generator {
+#navButton .mfx-ripple-generator {
     -mfx-ripple-color: #e2caff;
 }
 
@@ -102,7 +102,7 @@
     -fx-opacity: 1.0;
 }
 
-#vLoader .mfx-toggle-node .ripple-generator {
+#vLoader .mfx-toggle-node .mfx-ripple-generator {
     -mfx-ripple-radius: 40px;
     -mfx-ripple-color: #e2caff;
     -mfx-animate-background: true;

@@ -32,7 +32,7 @@
     -fx-border-color: rgba(127, 15, 255, 0.55);
 }
 
-.mfx-icon-wrapper .ripple-generator {
+.mfx-icon-wrapper .mfx-ripple-generator {
     -mfx-ripple-color: #c4acff;
 }
 

@@ -4,7 +4,6 @@ import io.github.palexdev.materialfx.beans.MFXLoaderBean.Builder;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.demo.MFXResourcesLoader;
-import io.github.palexdev.materialfx.effects.RippleGenerator;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.KeyFrame;
@@ -88,16 +87,9 @@ public class DemoController implements Initializable {
         expandButton.setId("expandButton");
         expandButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> primaryStage.setFullScreen(!primaryStage.isFullScreen()));
 
-        MFXIconWrapper infoButton = new MFXIconWrapper(infoIcon, 30).addRippleGenerator();
-        RippleGenerator rippleGenerator = infoButton.getRippleGenerator();
+        MFXIconWrapper infoButton = new MFXIconWrapper(infoIcon, 30).defaultRippleGeneratorBehavior();
         infoButton.setId("infoButton");
-        infoButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            rippleGenerator.setGeneratorCenterX(event.getX());
-            rippleGenerator.setGeneratorCenterY(event.getY());
-            rippleGenerator.createRipple();
-
-            showInfo();
-        });
+        infoButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> showInfo());
 
         opNavButton = new MFXButton("");
         opNavButton.setId("navButton");
@@ -214,14 +206,8 @@ public class DemoController implements Initializable {
         StackPane header = (StackPane) infoDialog.lookup("#headerNode");
 
         MFXFontIcon xIcon = new MFXFontIcon("mfx-x", 8);
-        MFXIconWrapper closeButton = new MFXIconWrapper(xIcon, 22).addRippleGenerator();
-        RippleGenerator rippleGenerator = closeButton.getRippleGenerator();
+        MFXIconWrapper closeButton = new MFXIconWrapper(xIcon, 22).defaultRippleGeneratorBehavior();
         closeButton.setId("closeButton");
-        closeButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            rippleGenerator.setGeneratorCenterX(event.getX());
-            rippleGenerator.setGeneratorCenterY(event.getY());
-            rippleGenerator.createRipple();
-        });
         StackPane.setAlignment(closeButton, Pos.TOP_RIGHT);
         StackPane.setMargin(closeButton, new Insets(4, 4, 0, 0));
         NodeUtils.makeRegionCircular(closeButton);

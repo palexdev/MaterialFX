@@ -8,7 +8,8 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.cell.MFXFlowlessListCell;
 import io.github.palexdev.materialfx.controls.enums.Styles;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
-import io.github.palexdev.materialfx.effects.RippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.selection.ComboSelectionModelMock;
 import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
@@ -90,7 +91,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         valueLabel = buildLabel();
 
         MFXFontIcon fontIcon = new MFXFontIcon("mfx-caret-down", 12);
-        icon = new MFXIconWrapper(fontIcon, 24).addRippleGenerator();
+        icon = new MFXIconWrapper(fontIcon, 24);
         icon.setManaged(false);
         icon.getStylesheets().addAll(comboBox.getUserAgentStylesheet());
         NodeUtils.makeRegionCircular(icon, 10);
@@ -280,15 +281,13 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
      * the popup handling when the mouse is pressed.
      */
     private void iconBehavior() {
-        RippleGenerator rg = icon.getRippleGenerator();
-        rg.setRippleRadius(8);
-        rg.setInDuration(Duration.millis(350));
+        icon.rippleGeneratorBehavior(event ->
+                new RipplePosition(icon.getWidth() / 2, icon.getHeight() / 2)
+        );
 
-        icon.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            rg.setGeneratorCenterX(icon.getWidth() / 2);
-            rg.setGeneratorCenterY(icon.getHeight() / 2);
-            rg.createRipple();
-        });
+        MFXCircleRippleGenerator rg = icon.getRippleGenerator();
+        rg.setAnimationSpeed(1.3);
+        rg.setRippleRadius(8);
 
         icon.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (!popup.isShowing()) {
@@ -458,10 +457,8 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
      * Used to generate the ripple effect of the icon when an event filter consumes the event.
      */
     private void forceRipple() {
-        RippleGenerator rg = icon.getRippleGenerator();
-        rg.setGeneratorCenterX(icon.getWidth() / 2);
-        rg.setGeneratorCenterY(icon.getHeight() / 2);
-        rg.createRipple();
+        MFXCircleRippleGenerator rg = icon.getRippleGenerator();
+        rg.generateRipple(null);
     }
 
     /**

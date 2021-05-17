@@ -37,7 +37,7 @@
     -fx-font-smoothing-type: grey;
 }
 
-.mfx-combo-box .mfx-icon-wrapper .ripple-generator {
+.mfx-combo-box .mfx-icon-wrapper .mfx-ripple-generator {
     -mfx-ripple-color: rgba(76, 0, 225, 0.3);
 }
 

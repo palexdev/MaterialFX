@@ -22,6 +22,7 @@ import javafx.event.Event;
 import javafx.geometry.*;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -232,6 +233,23 @@ public class NodeUtils {
     public static boolean isRightAlignment(Pos alignment) {
         return alignment == Pos.BASELINE_RIGHT || alignment == Pos.BOTTOM_RIGHT ||
                 alignment == Pos.CENTER_RIGHT || alignment == Pos.TOP_RIGHT;
+    }
+
+    /**
+     * Recursively gets all nodes that are descendants of the given root.
+     */
+    public static ArrayList<Node> getAllNodes(Parent root) {
+        ArrayList<Node> nodes = new ArrayList<>();
+        addAllDescendents(root, nodes);
+        return nodes;
+    }
+
+    private static void addAllDescendents(Parent parent, ArrayList<Node> nodes) {
+        for (Node node : parent.getChildrenUnmodifiable()) {
+            nodes.add(node);
+            if (node instanceof Parent)
+                addAllDescendents((Parent)node, nodes);
+        }
     }
 
     /* The following methods are copied from com.sun.javafx.scene.control.skin.Utils class

@@ -85,14 +85,20 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
     private void setupValidator() {
         validator = new MFXDialogValidator("Error");
         validator.setDialogType(DialogType.ERROR);
-        validator.validProperty().addListener(invalidated -> pseudoClassStateChanged(INVALID_PSEUDO_CLASS, !isValid()));
+        validator.validProperty().addListener(invalidated -> {
+            if (isValidated()) {
+                pseudoClassStateChanged(INVALID_PSEUDO_CLASS, !isValid());
+            }
+        });
 
         sceneProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null)
-                if (getValidator().isInitControlValidation()) {
-                    pseudoClassStateChanged(INVALID_PSEUDO_CLASS, !isValid());
-                } else {
-                    pseudoClassStateChanged(INVALID_PSEUDO_CLASS, false);
+                if (isValidated()) {
+                    if (getValidator().isInitControlValidation()) {
+                        pseudoClassStateChanged(INVALID_PSEUDO_CLASS, !isValid());
+                    } else {
+                        pseudoClassStateChanged(INVALID_PSEUDO_CLASS, false);
+                    }
                 }
         });
     }

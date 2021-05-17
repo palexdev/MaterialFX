@@ -58,19 +58,19 @@
     -fx-background-color: white;
 }
 
-.years-button .ripple-generator {
+.years-button .mfx-ripple-generator {
     -mfx-ripple-color: rgb(220, 220, 220);
 }
 
-.month-back-button .ripple-generator {
+.month-back-button .mfx-ripple-generator {
     -mfx-ripple-color: rgb(220, 220, 220);
 }
 
-.month-forward-button .ripple-generator {
+.month-forward-button .mfx-ripple-generator {
     -mfx-ripple-color: rgb(220, 220, 220);
 }
 
-.change-input-button .ripple-generator {
+.change-input-button .mfx-ripple-generator {
     -mfx-ripple-color: rgb(220, 220, 220);
 }
 
@@ -149,7 +149,7 @@
     -fx-text-fill: white;
 }
 
-.day-cell .ripple-generator {
+.day-cell .mfx-ripple-generator {
     -mfx-ripple-radius: 16px;
     -mfx-ripple-color: rgba(211, 211, 211, 0.7);
 }
@@ -174,12 +174,12 @@
     -fx-text-fill: white;
 }
 
-.year-cell .ripple-generator {
+.year-cell .mfx-ripple-generator {
     -mfx-ripple-radius: 30px;
     -mfx-ripple-color: rgba(211, 211, 211, 0.6);
 }
 
-.day-name-cell .ripple-generator {
+.day-name-cell .mfx-ripple-generator {
     -mfx-ripple-radius: 0;
     -mfx-animate-background: false;
 }

@@ -18,7 +18,7 @@
 
 package io.github.palexdev.materialfx.controls.factories;
 
-import io.github.palexdev.materialfx.effects.RippleClipType;
+import io.github.palexdev.materialfx.effects.ripple.RippleClipType;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -29,6 +29,7 @@ import javafx.scene.shape.Shape;
  */
 public class RippleClipTypeFactory {
     private RippleClipType rippleClipType = RippleClipType.NO_CLIP;
+    private double radius = 0;
     private double arcW = 0;
     private double arcH = 0;
 
@@ -46,12 +47,12 @@ public class RippleClipTypeFactory {
     }
 
     public Shape build(Region region) {
-        double w = region.getWidth() - 0.5;
-        double h = region.getHeight() - 0.5;
+        double w = region.getWidth();
+        double h = region.getHeight();
 
         switch (rippleClipType) {
             case CIRCLE:
-                double radius = Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2)) / 2;
+                double radius = this.radius == 0 ? Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2)) / 2 : this.radius;
                 Circle circle = new Circle(radius);
                 circle.setTranslateX(w / 2);
                 circle.setTranslateY(h / 2);
@@ -71,6 +72,11 @@ public class RippleClipTypeFactory {
     public RippleClipTypeFactory setArcs(double arcW, double arcH) {
         this.arcW = arcW;
         this.arcH = arcH;
+        return this;
+    }
+
+    public RippleClipTypeFactory setRadius(double radius) {
+        this.radius = radius;
         return this;
     }
 

@@ -18,7 +18,9 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.effects.RippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
+import io.github.palexdev.materialfx.effects.ripple.base.IRippleGenerator;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -26,7 +28,10 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+
+import java.util.function.Function;
 
 /**
  * Convenience class for creating icons wrapped in a StackPane.
@@ -41,7 +46,7 @@ public class MFXIconWrapper extends StackPane {
 
     private final ObjectProperty<Node> icon = new SimpleObjectProperty<>();
     private final DoubleProperty size = new SimpleDoubleProperty();
-    private final RippleGenerator rippleGenerator = new RippleGenerator(this);
+    private final MFXCircleRippleGenerator rippleGenerator = new MFXCircleRippleGenerator(this);
 
     //================================================================================
     // Constructors
@@ -69,6 +74,34 @@ public class MFXIconWrapper extends StackPane {
             super.getChildren().add(0, rippleGenerator);
         }
 
+        return this;
+    }
+
+    /**
+     * Adds the ripple generator to the icon by calling {@link #addRippleGenerator()}, sets its position function
+     * to use the mouse event x and y coordinates, and adds the event filter to the icon to generate the ripples.
+     *
+     * @see IRippleGenerator
+     * @see MFXCircleRippleGenerator
+     */
+    public MFXIconWrapper defaultRippleGeneratorBehavior() {
+        addRippleGenerator();
+        rippleGenerator.setRipplePositionFunction(event -> new RipplePosition(event.getX(), event.getY()));
+        addEventFilter(MouseEvent.MOUSE_PRESSED, rippleGenerator::generateRipple);
+        return this;
+    }
+
+    /**
+     * Adds the ripple generator to the icon by calling {@link #addRippleGenerator()}, sets its position function
+     * to the given function, and adds the event filter to the icon to generate the ripples.
+     *
+     * @see IRippleGenerator
+     * @see MFXCircleRippleGenerator
+     */
+    public MFXIconWrapper rippleGeneratorBehavior(Function<MouseEvent, RipplePosition> positionFunction) {
+        addRippleGenerator();
+        rippleGenerator.setRipplePositionFunction(positionFunction);
+        addEventFilter(MouseEvent.MOUSE_PRESSED, rippleGenerator::generateRipple);
         return this;
     }
 
@@ -112,7 +145,7 @@ public class MFXIconWrapper extends StackPane {
     /**
      * @return the RippleGenerator instance.
      */
-    public RippleGenerator getRippleGenerator() {
+    public MFXCircleRippleGenerator getRippleGenerator() {
         return rippleGenerator;
     }
 

@@ -32,6 +32,6 @@
     -fx-border-color: #E1E1E1;
 }
 
-.mfx-list-cell .ripple-generator {
+.mfx-list-cell .mfx-ripple-generator {
     -mfx-ripple-color: #C8C8C8;
 }

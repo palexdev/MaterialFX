@@ -21,12 +21,10 @@ package io.github.palexdev.materialfx.controls;
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.enums.ButtonType;
 import io.github.palexdev.materialfx.effects.DepthLevel;
-import io.github.palexdev.materialfx.effects.RippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import io.github.palexdev.materialfx.skins.MFXButtonSkin;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.css.*;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -34,7 +32,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Skin;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.util.Duration;
 
 import java.util.List;
 
@@ -51,7 +48,7 @@ public class MFXButton extends Button {
     private static final StyleablePropertyFactory<MFXButton> FACTORY = new StyleablePropertyFactory<>(Button.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-button";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-button.css");
-    private final RippleGenerator rippleGenerator = new RippleGenerator(this);
+    private final MFXCircleRippleGenerator rippleGenerator = new MFXCircleRippleGenerator(this);
 
     //================================================================================
     // Constructors
@@ -83,22 +80,123 @@ public class MFXButton extends Button {
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
         setAlignment(Pos.CENTER);
-
-        setRippleRadius(25);
-        setRippleColor(Color.rgb(190, 190, 190));
+        setupRippleGenerator();
     }
 
-    public RippleGenerator getRippleGenerator() {
+    public MFXCircleRippleGenerator getRippleGenerator() {
         return this.rippleGenerator;
     }
 
     //================================================================================
     // Ripple properties
     //================================================================================
-    private final ObjectProperty<Paint> rippleColor = new SimpleObjectProperty<>();
-    private final DoubleProperty rippleRadius = new SimpleDoubleProperty();
-    private final ObjectProperty<Duration> rippleInDuration = new SimpleObjectProperty<>();
-    private final ObjectProperty<Duration> rippleOutDuration = new SimpleObjectProperty<>();
+    private final BooleanProperty computeRadiusMultiplier = new SimpleBooleanProperty(rippleGenerator.isComputeRadiusMultiplier());
+    private final BooleanProperty rippleAnimateBackground = new SimpleBooleanProperty(rippleGenerator.isAnimateBackground());
+    private final BooleanProperty rippleAnimateShadow = new SimpleBooleanProperty(rippleGenerator.isAnimateShadow());
+    private final DoubleProperty rippleAnimationSpeed = new SimpleDoubleProperty(rippleGenerator.getAnimationSpeed());
+    private final DoubleProperty rippleBackgroundOpacity = new SimpleDoubleProperty(rippleGenerator.getBackgroundOpacity());
+    private final ObjectProperty<Paint> rippleColor = new SimpleObjectProperty<>(rippleGenerator.getRippleColor());
+    private final DoubleProperty rippleRadius = new SimpleDoubleProperty(rippleGenerator.getRippleRadius());
+    private final DoubleProperty rippleRadiusMultiplier = new SimpleDoubleProperty(rippleGenerator.getRadiusMultiplier());
+
+    /**
+     * Binds the button's ripple properties to the ripple generator ones.
+     */
+    protected void setupRippleGenerator() {
+        MFXCircleRippleGenerator rippleGenerator = getRippleGenerator();
+
+        rippleGenerator.rippleColorProperty().bindBidirectional(rippleColorProperty());
+        rippleGenerator.rippleRadiusProperty().bindBidirectional(rippleRadiusProperty());
+        rippleGenerator.animationSpeedProperty().bindBidirectional(rippleAnimationSpeedProperty());
+        rippleGenerator.backgroundOpacityProperty().bindBidirectional(rippleBackgroundOpacityProperty());
+        rippleGenerator.radiusMultiplierProperty().bind(rippleRadiusMultiplierProperty());
+        rippleGenerator.computeRadiusMultiplierProperty().bind(computeRadiusMultiplierProperty());
+        rippleGenerator.animateBackgroundProperty().bind(rippleAnimateBackgroundProperty());
+        rippleGenerator.animateShadowProperty().bind(rippleAnimateShadowProperty());
+
+        setRippleAnimateShadow(true);
+        setRippleColor(Color.rgb(190, 190, 190));
+        setRippleRadius(25);
+        setComputeRadiusMultiplier(true);
+        rippleGenerator.setRipplePositionFunction(event -> new RipplePosition(event.getX(), event.getY()));
+    }
+
+    public boolean isComputeRadiusMultiplier() {
+        return computeRadiusMultiplier.get();
+    }
+
+    /**
+     * Specifies if the {@link #rippleRadiusMultiplierProperty()} should be computed automatically.
+     *
+     * @see MFXCircleRippleGenerator
+     */
+    public BooleanProperty computeRadiusMultiplierProperty() {
+        return computeRadiusMultiplier;
+    }
+
+    public void setComputeRadiusMultiplier(boolean computeRadiusMultiplier) {
+        this.computeRadiusMultiplier.set(computeRadiusMultiplier);
+    }
+
+    public boolean isRippleAnimateBackground() {
+        return rippleAnimateBackground.get();
+    }
+
+    /**
+     * Specifies if the button's background should also be animated.
+     */
+    public BooleanProperty rippleAnimateBackgroundProperty() {
+        return rippleAnimateBackground;
+    }
+
+    public void setRippleAnimateBackground(boolean rippleAnimateBackground) {
+        this.rippleAnimateBackground.set(rippleAnimateBackground);
+    }
+
+    public boolean isRippleAnimateShadow() {
+        return rippleAnimateShadow.get();
+    }
+
+    /**
+     * Specifies if the button's shadow should also be animated.
+     */
+    public BooleanProperty rippleAnimateShadowProperty() {
+        return rippleAnimateShadow;
+    }
+
+    public void setRippleAnimateShadow(boolean rippleAnimateShadow) {
+        this.rippleAnimateShadow.set(rippleAnimateShadow);
+    }
+
+    public double getRippleAnimationSpeed() {
+        return rippleAnimationSpeed.get();
+    }
+
+    /**
+     * Specifies the ripple generator's animations speed.
+     */
+    public DoubleProperty rippleAnimationSpeedProperty() {
+        return rippleAnimationSpeed;
+    }
+
+    public void setRippleAnimationSpeed(double rippleAnimationSpeed) {
+        this.rippleAnimationSpeed.set(rippleAnimationSpeed);
+    }
+
+    public double getRippleBackgroundOpacity() {
+        return rippleBackgroundOpacity.get();
+    }
+
+    /**
+     * Specifies the opacity for the background animation. (if {@link #rippleAnimateBackgroundProperty()} is true).
+     */
+    public DoubleProperty rippleBackgroundOpacityProperty() {
+        return rippleBackgroundOpacity;
+    }
+
+    public void setRippleBackgroundOpacity(double rippleBackgroundOpacity) {
+        this.rippleBackgroundOpacity.set(rippleBackgroundOpacity);
+    }
 
     public final Paint getRippleColor() {
         return rippleColor.get();
@@ -112,7 +210,7 @@ public class MFXButton extends Button {
     }
 
     public final void setRippleColor(Paint rippleColor) {
-        rippleGenerator.setRippleColor(rippleColor);
+        this.rippleColor.set(rippleColor);
     }
 
     public double getRippleRadius() {
@@ -120,44 +218,31 @@ public class MFXButton extends Button {
     }
 
     /**
-     * Specifies the ripples radius of this control.
+     * Specifies the radius of the ripples.
      */
     public DoubleProperty rippleRadiusProperty() {
         return rippleRadius;
     }
 
     public void setRippleRadius(double rippleRadius) {
-        rippleGenerator.setRippleRadius(rippleRadius);
+        this.rippleRadius.set(rippleRadius);
     }
 
-    public Duration getRippleInDuration() {
-        return rippleInDuration.get();
-    }
-
-    /**
-     * Specifies the ripples in animation duration of this control.
-     */
-    public ObjectProperty<Duration> rippleInDurationProperty() {
-        return rippleInDuration;
-    }
-
-    public void setRippleInDuration(Duration rippleInDuration) {
-        rippleGenerator.setInDuration(rippleInDuration);
-    }
-
-    public Duration getRippleOutDuration() {
-        return rippleOutDuration.get();
+    public double getRippleRadiusMultiplier() {
+        return rippleRadiusMultiplier.get();
     }
 
     /**
-     * Specifies the ripples out animation duration of this control.
+     * Specifies the number by which the ripples' radius will be multiplied.
+     *
+     * @see MFXCircleRippleGenerator
      */
-    public ObjectProperty<Duration> rippleOutDurationProperty() {
-        return rippleOutDuration;
+    public DoubleProperty rippleRadiusMultiplierProperty() {
+        return rippleRadiusMultiplier;
     }
 
-    public void setRippleOutDuration(Duration rippleOutDuration) {
-        rippleGenerator.setOutDuration(rippleOutDuration);
+    public void setRippleRadiusMultiplier(double rippleRadiusMultiplier) {
+        this.rippleRadiusMultiplier.set(rippleRadiusMultiplier);
     }
 
     //================================================================================
@@ -255,12 +340,12 @@ public class MFXButton extends Button {
     }
 
     @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
+    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+        return MFXButton.getControlCssMetaDataList();
     }
 
     @Override
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return MFXButton.getControlCssMetaDataList();
+    public String getUserAgentStylesheet() {
+        return STYLESHEET;
     }
 }

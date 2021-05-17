@@ -16,7 +16,7 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.effects;
+package io.github.palexdev.materialfx.effects.ripple;
 
 public enum RippleClipType {
     CIRCLE,

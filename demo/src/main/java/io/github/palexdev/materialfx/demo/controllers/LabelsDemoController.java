@@ -20,12 +20,12 @@ package io.github.palexdev.materialfx.demo.controllers;
 
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXLabel;
-import io.github.palexdev.materialfx.effects.RippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -37,27 +37,17 @@ public class LabelsDemoController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        MFXIconWrapper leading = new MFXIconWrapper(new MFXFontIcon("mfx-filter", 15), 20).addRippleGenerator();
-        MFXIconWrapper trailing = new MFXIconWrapper(new MFXFontIcon("mfx-info-circle", 15), 20).addRippleGenerator();
+        MFXIconWrapper leading = new MFXIconWrapper(new MFXFontIcon("mfx-filter", 15), 22).defaultRippleGeneratorBehavior();
+        MFXIconWrapper trailing = new MFXIconWrapper(new MFXFontIcon("mfx-info-circle", 15), 22).defaultRippleGeneratorBehavior();
 
         NodeUtils.makeRegionCircular(leading);
         NodeUtils.makeRegionCircular(trailing);
 
-        RippleGenerator lrg = leading.getRippleGenerator();
-        lrg.setRippleRadius(8);
-        RippleGenerator trg = trailing.getRippleGenerator();
-        trg.setRippleRadius(8);
+        MFXCircleRippleGenerator lrg = leading.getRippleGenerator();
+        lrg.setRippleColor(Color.web("#849ED7"));
 
-        leading.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            lrg.setGeneratorCenterX(event.getX());
-            lrg.setGeneratorCenterY(event.getY());
-            lrg.createRipple();
-        });
-        trailing.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            trg.setGeneratorCenterX(event.getX());
-            trg.setGeneratorCenterY(event.getY());
-            trg.createRipple();
-        });
+        MFXCircleRippleGenerator trg = trailing.getRippleGenerator();
+        trg.setRippleColor(Color.web("#849ED7"));
 
         custom.setLeadingIcon(leading);
         custom.setTrailingIcon(trailing);

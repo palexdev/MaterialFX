@@ -49,7 +49,7 @@
     -fx-fill: white;
 }
 
-.mfx-stepper .buttons-box .mfx-button .ripple-generator {
-    -mfx-ripple-color: derive(-mfx-base-color, 30%);
+.mfx-stepper .buttons-box .mfx-button .mfx-ripple-generator {
+    -mfx-ripple-color: derive(-mfx-base-color, 70%);
     -mfx-ripple-radius: 60px;
 }

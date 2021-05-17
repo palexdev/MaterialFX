@@ -29,7 +29,7 @@
     -fx-text-fill: rgb(85, 85, 85);
 }
 
-.mfx-button .ripple-generator {
+.mfx-button .mfx-ripple-generator {
     -mfx-ripple-color: rgba(82, 0, 237, 0.3);
     -mfx-ripple-radius: 40;
 }
@@ -55,7 +55,7 @@
     -fx-text-fill: rgb(85, 85, 85);
 }
 
-.mfx-toggle-button .ripple-generator {
+.mfx-toggle-button .mfx-ripple-generator {
     -mfx-ripple-radius: 10;
 }
 

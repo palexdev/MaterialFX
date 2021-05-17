@@ -22,6 +22,9 @@ import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle.MFXStepperToggleEvent;
 import io.github.palexdev.materialfx.controls.enums.StepperToggleState;
 import io.github.palexdev.materialfx.skins.MFXStepperSkin;
+import io.github.palexdev.materialfx.utils.NodeUtils;
+import io.github.palexdev.materialfx.validation.base.AbstractMFXValidator;
+import io.github.palexdev.materialfx.validation.base.Validated;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,6 +34,7 @@ import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.scene.paint.Color;
@@ -38,6 +42,7 @@ import javafx.scene.paint.Paint;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This is the implementation of a stepper/wizard following material design guidelines in JavaFX.
@@ -71,6 +76,7 @@ public class MFXStepper extends Control {
     private final ReadOnlyIntegerWrapper currentIndex = new ReadOnlyIntegerWrapper(-1);
     private final ReadOnlyObjectWrapper<Node> currentContent = new ReadOnlyObjectWrapper<>();
     private final ReadOnlyBooleanWrapper lastToggle = new ReadOnlyBooleanWrapper(false);
+    private boolean enableContentValidationOnError = true;
 
     //================================================================================
     // Constructors
@@ -128,6 +134,9 @@ public class MFXStepper extends Control {
             if (current.getState() != StepperToggleState.ERROR) {
                 current.setState(StepperToggleState.ERROR);
             }
+            if (isEnableContentValidationOnError()) {
+                forceContentValidation();
+            }
             fireEvent(MFXStepperEvent.VALIDATION_FAILED_EVENT);
             return;
         }
@@ -182,6 +191,29 @@ public class MFXStepper extends Control {
             setCurrentContent(previous.getContent());
             fireEvent(MFXStepperEvent.PREVIOUS_EVENT);
         }
+    }
+
+    private void forceContentValidation() {
+        if (getCurrentContent() == null) {
+            return;
+        }
+
+        List<AbstractMFXValidator> validators = new ArrayList<>();
+        Node currentContent = getCurrentContent();
+        if (currentContent instanceof Validated) {
+            Validated<?> validated = (Validated<?>) currentContent;
+            if (validated.getValidator() != null) {
+                validators.add(validated.getValidator());
+            }
+        } else if(currentContent instanceof Parent) {
+            List<Node> allChildren = NodeUtils.getAllNodes((Parent) currentContent);
+            allChildren.stream()
+                    .filter(node -> node instanceof Validated)
+                    .map(node -> ((Validated<?>) node).getValidator())
+                    .filter(Objects::nonNull)
+                    .forEach(validators::add);
+        }
+       validators.forEach(AbstractMFXValidator::update);
     }
 
     /**
@@ -309,6 +341,18 @@ public class MFXStepper extends Control {
 
     protected void setLastToggle(boolean lastToggle) {
         this.lastToggle.set(lastToggle);
+    }
+
+    public boolean isEnableContentValidationOnError() {
+        return enableContentValidationOnError;
+    }
+
+    /**
+     * Specifies if all the controls that implement {@link Validated} should be
+     * validated when the next button is pressed and the toggle state is ERROR.
+     */
+    public void setEnableContentValidationOnError(boolean enableContentValidationOnError) {
+        this.enableContentValidationOnError = enableContentValidationOnError;
     }
 
     //================================================================================

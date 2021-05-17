@@ -19,14 +19,15 @@
 package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.controls.MFXToggleButton;
-import io.github.palexdev.materialfx.controls.factories.RippleClipTypeFactory;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.effects.MFXDepthManager;
-import io.github.palexdev.materialfx.effects.RippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.binding.Bindings;
 import javafx.scene.Cursor;
 import javafx.scene.control.skin.ToggleButtonSkin;
 import javafx.scene.layout.Region;
@@ -47,7 +48,7 @@ public class MFXToggleButtonSkin extends ToggleButtonSkin {
     private final Circle circle;
     final double circleRadius;
     private final Line line;
-    private final RippleGenerator rippleGenerator;
+    private final MFXCircleRippleGenerator rippleGenerator;
 
     //================================================================================
     // Constructors
@@ -81,16 +82,12 @@ public class MFXToggleButtonSkin extends ToggleButtonSkin {
         container.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         container.setPrefSize(50, 40);
 
-        rippleGenerator = new RippleGenerator(container, new RippleClipTypeFactory());
-        rippleGenerator.setAnimateBackground(false);
-        rippleGenerator.setRippleColor(toggleButton.isSelected() ? toggleButton.getUnToggleLineColor() : toggleButton.getToggleLineColor());
-        rippleGenerator.setRippleRadius(circleRadius * 1.2);
-        rippleGenerator.setInDuration(Duration.millis(400));
-        rippleGenerator.setTranslateX(-circleRadius);
+        rippleGenerator = new MFXCircleRippleGenerator(container);
         container.getChildren().add(0, rippleGenerator);
 
         toggleButton.setGraphic(container);
 
+        setupRippleGenerator();
         setListeners();
     }
 
@@ -139,6 +136,28 @@ public class MFXToggleButtonSkin extends ToggleButtonSkin {
         });
     }
 
+    protected void setupRippleGenerator() {
+        MFXToggleButton toggleButton = (MFXToggleButton) getSkinnable();
+
+        rippleGenerator.setAnimateBackground(false);
+        rippleGenerator.setAnimationSpeed(1.5);
+        rippleGenerator.setClipSupplier(() -> null);
+        rippleGenerator.setRippleColor(toggleButton.isSelected() ? toggleButton.getUnToggleLineColor() : toggleButton.getToggleLineColor());
+        rippleGenerator.setRipplePositionFunction(mouseEvent -> {
+            RipplePosition position = new RipplePosition();
+            position.xPositionProperty().bind(Bindings.createDoubleBinding(
+                    () -> circle.getBoundsInParent().getCenterX(),
+                    circle.boundsInParentProperty()
+            ));
+            position.yPositionProperty().bind(Bindings.createDoubleBinding(
+                    () -> circle.localToParent(circle.getLayoutBounds()).getCenterY(),
+                    circle.layoutBoundsProperty()
+            ));
+            return position;
+        });
+        rippleGenerator.setRippleRadius(circleRadius * 1.2);
+    }
+
     /**
      * Re-builds and plays the translation animation every time the control is selected/unselected.
      *
@@ -146,18 +165,14 @@ public class MFXToggleButtonSkin extends ToggleButtonSkin {
      */
     private void buildAndPlayAnimation(boolean isSelected) {
         KeyValue circleTranslateXKey;
-        KeyValue rippleTranslateXKey;
         KeyFrame circleTranslateXFrame;
-        KeyFrame rippleTranslateXFrame;
         KeyFrame rippleAnimationFrame;
 
         circleTranslateXKey = new KeyValue(circle.translateXProperty(), computeTranslateX(isSelected), Interpolator.EASE_BOTH);
-        rippleTranslateXKey = new KeyValue(rippleGenerator.translateXProperty(), computeTranslateX(isSelected), Interpolator.EASE_BOTH);
 
         circleTranslateXFrame = new KeyFrame(Duration.millis(150), circleTranslateXKey);
-        rippleTranslateXFrame = new KeyFrame(Duration.millis(150), rippleTranslateXKey);
-        rippleAnimationFrame = new KeyFrame(Duration.ZERO, event -> rippleGenerator.createRipple());
-        Timeline timeline = new Timeline(circleTranslateXFrame, rippleTranslateXFrame, rippleAnimationFrame);
+        rippleAnimationFrame = new KeyFrame(Duration.ZERO, event -> rippleGenerator.generateRipple(null));
+        Timeline timeline = new Timeline(circleTranslateXFrame, rippleAnimationFrame);
         timeline.play();
     }
 

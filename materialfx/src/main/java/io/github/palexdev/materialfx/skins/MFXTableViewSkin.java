@@ -25,7 +25,6 @@ import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.controls.enums.SortState;
 import io.github.palexdev.materialfx.controls.enums.Styles;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
-import io.github.palexdev.materialfx.effects.RippleGenerator;
 import io.github.palexdev.materialfx.filter.IFilterable;
 import io.github.palexdev.materialfx.filter.MFXFilterDialog;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
@@ -471,30 +470,17 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
      * Utils method to build a {@link MFXIconWrapper} from the given icon description and size.
      */
     protected MFXIconWrapper buildIcon(String description, double size) {
-        MFXIconWrapper icon = new MFXIconWrapper(new MFXFontIcon(description, size), 22).addRippleGenerator();
-        RippleGenerator rippleGenerator = icon.getRippleGenerator();
-        icon.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            rippleGenerator.setGeneratorCenterX(event.getX());
-            rippleGenerator.setGeneratorCenterY(event.getY());
-            rippleGenerator.createRipple();
-        });
-        return icon;
+        return new MFXIconWrapper(new MFXFontIcon(description, size), 22).defaultRippleGeneratorBehavior();
     }
 
     /**
      * Utils method to build the filter icon.
      */
     protected MFXIconWrapper buildFilterIcon() {
-        MFXIconWrapper icon = new MFXIconWrapper(new MFXFontIcon("mfx-filter", 16), 22).addRippleGenerator();
+        MFXIconWrapper icon = new MFXIconWrapper(new MFXFontIcon("mfx-filter", 16), 22).defaultRippleGeneratorBehavior();
         icon.getStylesheets().addAll(getSkinnable().getUserAgentStylesheet());
         NodeUtils.makeRegionCircular(icon);
         HBox.setMargin(icon, new Insets(0, 0, 0, 10));
-        RippleGenerator rippleGenerator = icon.getRippleGenerator();
-        icon.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            rippleGenerator.setGeneratorCenterX(event.getX());
-            rippleGenerator.setGeneratorCenterY(event.getY());
-            rippleGenerator.createRipple();
-        });
         return icon;
     }
 
@@ -502,16 +488,10 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
      * Utils method to build the clear filter icon.
      */
     protected MFXIconWrapper buildClearFilterIcon() {
-        MFXIconWrapper icon = new MFXIconWrapper(new MFXFontIcon("mfx-filter-clear", 16), 22).addRippleGenerator();
+        MFXIconWrapper icon = new MFXIconWrapper(new MFXFontIcon("mfx-filter-clear", 16), 22).defaultRippleGeneratorBehavior();
         icon.getStylesheets().addAll(getSkinnable().getUserAgentStylesheet());
         NodeUtils.makeRegionCircular(icon);
         HBox.setMargin(icon, new Insets(0, 0, 0, 10));
-        RippleGenerator rippleGenerator = icon.getRippleGenerator();
-        icon.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            rippleGenerator.setGeneratorCenterX(event.getX());
-            rippleGenerator.setGeneratorCenterY(event.getY());
-            rippleGenerator.createRipple();
-        });
         return icon;
     }
 

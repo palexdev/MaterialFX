@@ -19,6 +19,8 @@ module MaterialFX.materialfx.main {
     exports io.github.palexdev.materialfx.controls.flowless;
     exports io.github.palexdev.materialfx.controls.legacy;
     exports io.github.palexdev.materialfx.effects;
+    exports io.github.palexdev.materialfx.effects.ripple;
+    exports io.github.palexdev.materialfx.effects.ripple.base;
     exports io.github.palexdev.materialfx.filter;
     exports io.github.palexdev.materialfx.font;
     exports io.github.palexdev.materialfx.notifications;

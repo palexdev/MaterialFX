@@ -28,7 +28,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
 
 /**
  * Specific dialog to show an exception's stack trace in a text area using {@link ExceptionUtils}
@@ -56,9 +55,9 @@ public class MFXExceptionDialog extends MFXDialog {
         closeButton.setPrefSize(20, 20);
         closeButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         closeButton.setGraphic(closeIcon);
-        closeButton.setRippleRadius(15);
+        closeButton.setRippleAnimationSpeed(1.5);
         closeButton.setRippleColor(Color.rgb(255, 0, 0, 0.1));
-        closeButton.setRippleInDuration(Duration.millis(500));
+        closeButton.setRippleRadius(15);
         closeButton.setButtonType(ButtonType.FLAT);
 
         NodeUtils.makeRegionCircular(closeButton);

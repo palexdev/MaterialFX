@@ -76,6 +76,10 @@ public class MFXProgressBarSkin extends SkinBase<MFXProgressBar> {
     private void setListeners() {
         MFXProgressBar progressBar = getSkinnable();
 
+        progressBar.progressProperty().addListener(invalidated -> {
+            progressBar.requestLayout();
+            updateProgress();
+        });
         progressBar.widthProperty().addListener((observable, oldValue, newValue) -> updateProgress());
         progressBar.visibleProperty().addListener((observable, oldValue, newValue) -> updateAnimation());
         progressBar.parentProperty().addListener((observable, oldValue, newValue) -> updateAnimation());

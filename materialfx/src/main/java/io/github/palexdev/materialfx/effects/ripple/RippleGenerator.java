@@ -16,10 +16,11 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.effects;
+package io.github.palexdev.materialfx.effects.ripple;
 
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.controls.factories.RippleClipTypeFactory;
+import io.github.palexdev.materialfx.effects.DepthLevel;
 import javafx.animation.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -43,6 +44,7 @@ import static io.github.palexdev.materialfx.effects.MFXDepthManager.shadowOf;
  * <p>
  * Extends {@code Group} and sets the style class to "ripple-generator" for usage in CSS.
  */
+@Deprecated
 public class RippleGenerator extends Group {
     //================================================================================
     // Properties

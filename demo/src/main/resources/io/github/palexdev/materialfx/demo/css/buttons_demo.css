@@ -2,8 +2,8 @@
     -fx-background-color: transparent;
 }
 
-.flat-button .ripple-generator {
-    -mfx-ripple-color: lightgray;
+.flat-button .mfx-ripple-generator {
+    -mfx-ripple-color: #E1E1E1;
 }
 
 .flat-button .text {
@@ -17,8 +17,8 @@
     -mfx-button-type: raised;
 }
 
-.raised-button .ripple-generator {
-    -mfx-ripple-color: lightgray;
+.raised-button .mfx-ripple-generator {
+    -mfx-ripple-color: #E1E1E1;
 }
 
 .raised-button .text {
@@ -36,7 +36,7 @@
     -fx-fill: white;
 }
 
-#colored-raised .ripple-generator {
+#colored-raised .mfx-ripple-generator {
     -mfx-ripple-color: rgba(255, 255, 255, 0.4);
 }
 
@@ -49,6 +49,6 @@
     -fx-fill: white;
 }
 
-#custom-ripple .ripple-generator {
+#custom-ripple .mfx-ripple-generator {
     -mfx-ripple-color: #1900ff;
 }

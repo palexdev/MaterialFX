@@ -61,6 +61,6 @@
     -fx-background-color: transparent;
 }
 
-.mfx-dialog .header-node .mfx-button .ripple-generator {
+.mfx-dialog .header-node .mfx-button .mfx-ripple-generator {
     -mfx-animate-background: false;
 }

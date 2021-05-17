@@ -23,7 +23,6 @@ import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.enums.ButtonType;
 import io.github.palexdev.materialfx.controls.enums.Styles;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
-import io.github.palexdev.materialfx.effects.RippleGenerator;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.StringUtils;
@@ -107,14 +106,8 @@ public class MFXFilterDialog extends MFXDialog {
         label.getStylesheets().setAll(STYLESHEET);
         VBox.setMargin(label, new Insets(7, 0, 7, 0));
 
-        MFXIconWrapper add = new MFXIconWrapper(new MFXFontIcon("mfx-search-plus"), 20).addRippleGenerator();
+        MFXIconWrapper add = new MFXIconWrapper(new MFXFontIcon("mfx-search-plus"), 20).defaultRippleGeneratorBehavior();
         NodeUtils.makeRegionCircular(add);
-        RippleGenerator rg = add.getRippleGenerator();
-        add.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            rg.setGeneratorCenterX(event.getX());
-            rg.setGeneratorCenterY(event.getX());
-            rg.createRipple();
-        });
         add.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> addTextField());
         label.setTrailingIcon(add);
         label.skinProperty().addListener(new ChangeListener<>() {
@@ -381,7 +374,10 @@ public class MFXFilterDialog extends MFXDialog {
          * applies the function to the given string.
          */
         public Boolean callEvaluation(String item) {
-            return evaluators.get(evaluationCombo.getSelectedValue()).test(item, textField.getText());
+            if (evaluationCombo.getSelectedValue() != null) {
+                return evaluators.get(evaluationCombo.getSelectedValue()).test(item, textField.getText());
+            }
+            return false;
         }
 
         /**

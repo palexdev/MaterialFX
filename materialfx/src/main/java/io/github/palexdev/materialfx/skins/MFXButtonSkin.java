@@ -22,7 +22,7 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.enums.ButtonType;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.effects.MFXDepthManager;
-import io.github.palexdev.materialfx.effects.RippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import javafx.scene.control.skin.ButtonSkin;
 import javafx.scene.input.MouseEvent;
 
@@ -40,32 +40,17 @@ public class MFXButtonSkin extends ButtonSkin {
         updateButtonType();
 
         updateChildren();
-        setupRippleGenerator();
     }
 
     //================================================================================
     // Methods
     //================================================================================
-
-    /**
-     * Binds the button's ripple properties to the ripple generator ones.
-     */
-    protected void setupRippleGenerator() {
-        MFXButton button = (MFXButton) getSkinnable();
-        RippleGenerator rippleGenerator = button.getRippleGenerator();
-
-        button.rippleColorProperty().bind(rippleGenerator.rippleColorProperty());
-        button.rippleRadiusProperty().bind(rippleGenerator.rippleRadiusProperty());
-        button.rippleInDurationProperty().bind(rippleGenerator.inDurationProperty());
-        button.rippleOutDurationProperty().bind(rippleGenerator.outDurationProperty());
-    }
-
     /**
      * Adds listeners to: depthLevel and buttonType properties.
      */
     private void setListeners() {
         MFXButton button = (MFXButton) getSkinnable();
-        RippleGenerator rippleGenerator = button.getRippleGenerator();
+        MFXCircleRippleGenerator rippleGenerator = button.getRippleGenerator();
 
         button.depthLevelProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.equals(oldValue) && button.getButtonType().equals(ButtonType.RAISED)) {
@@ -79,12 +64,7 @@ public class MFXButtonSkin extends ButtonSkin {
             }
         });
 
-        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            rippleGenerator.setGeneratorCenterX(event.getX());
-            rippleGenerator.setGeneratorCenterY(event.getY());
-            rippleGenerator.createRipple();
-        });
-
+        button.addEventFilter(MouseEvent.MOUSE_PRESSED, rippleGenerator::generateRipple);
     }
 
     /**
@@ -110,6 +90,10 @@ public class MFXButtonSkin extends ButtonSkin {
     @Override
     protected void updateChildren() {
         super.updateChildren();
-        getChildren().add(0, ((MFXButton) getSkinnable()).getRippleGenerator());
+
+        MFXButton button = (MFXButton) getSkinnable();
+        if (!getChildren().contains(button.getRippleGenerator())) {
+            getChildren().add(0, button.getRippleGenerator());
+        }
     }
 }

@@ -21,13 +21,13 @@ package io.github.palexdev.materialfx.controls.cell;
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.MFXFlowlessListView;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXFlowlessListCell;
-import io.github.palexdev.materialfx.effects.RippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.util.Duration;
 
 /**
  * Simple implementation of {@link AbstractMFXFlowlessListCell},
@@ -39,7 +39,7 @@ public class MFXFlowlessListCell<T> extends AbstractMFXFlowlessListCell<T> {
     //================================================================================
     private final String STYLE_CLASS = "mfx-list-cell";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-flowless-listcell.css");
-    protected final RippleGenerator rippleGenerator = new RippleGenerator(this);
+    protected final MFXCircleRippleGenerator rippleGenerator = new MFXCircleRippleGenerator(this);
 
     private final MFXFlowlessListView<T> listView;
 
@@ -71,14 +71,9 @@ public class MFXFlowlessListCell<T> extends AbstractMFXFlowlessListCell<T> {
      */
     protected void setupRippleGenerator() {
         rippleGenerator.setManaged(false);
+        rippleGenerator.setRipplePositionFunction(event -> new RipplePosition(event.getX(), event.getY()));
         rippleGenerator.rippleRadiusProperty().bind(widthProperty().divide(2.0));
-        rippleGenerator.setInDuration(Duration.millis(400));
-
-        addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            rippleGenerator.setGeneratorCenterX(event.getX());
-            rippleGenerator.setGeneratorCenterY(event.getY());
-            rippleGenerator.createRipple();
-        });
+        addEventFilter(MouseEvent.MOUSE_PRESSED, rippleGenerator::generateRipple);
     }
 
     //================================================================================

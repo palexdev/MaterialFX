@@ -33,7 +33,7 @@
     -fx-border-color: #E1E1E1;
 }
 
-.mfx-check-list-cell .ripple-generator {
+.mfx-check-list-cell .mfx-ripple-generator {
     -mfx-ripple-color: #C8C8C8;
 }
 

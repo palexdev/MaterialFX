@@ -19,6 +19,8 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.skins.MFXDatePickerContent;
 import io.github.palexdev.materialfx.utils.NodeUtils;
@@ -75,6 +77,7 @@ public class MFXDatePicker extends VBox {
     private Line line;
     private PopupControl popup;
     private MFXDatePickerContent datePickerContent;
+    private MFXCircleRippleGenerator rippleGenerator;
 
     //================================================================================
     // Constructors
@@ -132,6 +135,21 @@ public class MFXDatePicker extends VBox {
         }
 
         datePickerContent.updateColor((Color) getPickerColor());
+
+        rippleGenerator = new MFXCircleRippleGenerator(this);
+        rippleGenerator.setManaged(false);
+        rippleGenerator.setAnimateBackground(false);
+        rippleGenerator.setAnimationSpeed(2.0);
+        rippleGenerator.setClipSupplier(() -> null);
+        rippleGenerator.setRadiusMultiplier(1.7);
+        rippleGenerator.setRippleColor(Color.rgb(98, 0, 238, 0.3));
+        rippleGenerator.setRipplePositionFunction(event -> {
+            RipplePosition ripplePosition = new RipplePosition();
+            ripplePosition.setXPosition(calendar.getBoundsInParent().getCenterX());
+            ripplePosition.setYPosition(calendar.getBoundsInParent().getCenterY());
+            return ripplePosition;
+        });
+        getChildren().add(0, rippleGenerator);
     }
 
     /**
@@ -144,6 +162,7 @@ public class MFXDatePicker extends VBox {
      */
     private void addListeners() {
         calendar.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            rippleGenerator.generateRipple(null);
             if (!popup.isShowing()) {
                 Point2D point = NodeUtils.pointRelativeTo(this, datePickerContent, HPos.CENTER, VPos.BOTTOM, 0, 0, true);
                 popup.show(this, snapPositionX(point.getX() - 4), snapPositionY(point.getY() + 2));

@@ -44,8 +44,9 @@
 
 }
 
-.mfx-table-view .pagination * .ripple-generator {
+.mfx-table-view .pagination * .mfx-ripple-generator {
     -mfx-ripple-color: rgba(127, 15, 255, 0.6);
+    -mfx-animation-speed: 2.0;
 }
 
 /* END */

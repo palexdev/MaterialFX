@@ -20,8 +20,8 @@ package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
-import io.github.palexdev.materialfx.controls.factories.RippleClipTypeFactory;
-import io.github.palexdev.materialfx.effects.RippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.geometry.Insets;
@@ -32,7 +32,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.util.Duration;
 
 /**
  * This is the implementation of the {@code Skin} associated with every {@link MFXCheckbox}.
@@ -48,7 +47,7 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
 
     private final AnchorPane rippleContainer;
     private final double rippleContainerSize = 31;
-    private final RippleGenerator rippleGenerator;
+    private final MFXCircleRippleGenerator rippleGenerator;
 
     //================================================================================
     // Constructors
@@ -63,10 +62,18 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
         rippleContainer.getStyleClass().setAll("ripple-container");
         NodeUtils.makeRegionCircular(rippleContainer);
 
-        rippleGenerator = new RippleGenerator(rippleContainer, new RippleClipTypeFactory());
-        rippleGenerator.setRippleRadius(16);
-        rippleGenerator.setInDuration(Duration.millis(500));
+        rippleGenerator = new MFXCircleRippleGenerator(rippleContainer);
         rippleGenerator.setAnimateBackground(false);
+        rippleGenerator.setAnimationSpeed(1.5);
+        rippleGenerator.setCheckBounds(false);
+        rippleGenerator.setClipSupplier(() -> null);
+        rippleGenerator.setRipplePositionFunction(event -> {
+            RipplePosition position = new RipplePosition();
+            position.setXPosition(Math.min(event.getX(), rippleContainer.getWidth()));
+            position.setYPosition(Math.min(event.getY(), rippleContainer.getHeight()));
+            return position;
+        });
+        rippleGenerator.setRippleRadius(16);
 
         // Contains the mark
         MFXFontIcon icon = new MFXFontIcon(checkbox.getMarkType(), checkbox.getMarkSize(), Color.WHITE);
@@ -136,14 +143,12 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
         /* Listener on control but if the coordinates of the event are greater than then ripple container size
          * then the center of the ripple is set to the width and/or height of container
          */
-        checkBox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+        checkBox.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
             if (!NodeUtils.inHierarchy(event.getPickResult().getIntersectedNode(), checkBox)) {
                 return;
             }
 
-            rippleGenerator.setGeneratorCenterX(Math.min(event.getX(), rippleContainer.getWidth()));
-            rippleGenerator.setGeneratorCenterY(Math.min(event.getY(), rippleContainer.getHeight()));
-            rippleGenerator.createRipple();
+            rippleGenerator.generateRipple(event);
             checkBox.fire();
         });
 

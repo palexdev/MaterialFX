@@ -11,7 +11,7 @@
     -mfx-hover-color: derive(salmon, 70%);
 }
 
-#customView .mfx-list-cell .ripple-generator {
+#customView .mfx-list-cell .mfx-ripple-generator {
     -mfx-ripple-color: #f55c49;
 }
 
@@ -33,7 +33,7 @@
     -fx-border-color: salmon;
 }
 
-#customViewNew .mfx-list-cell .ripple-generator {
+#customViewNew .mfx-list-cell .mfx-ripple-generator {
     -mfx-ripple-color: #f55c49;
 }
 

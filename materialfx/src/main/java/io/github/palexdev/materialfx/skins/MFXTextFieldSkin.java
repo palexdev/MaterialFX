@@ -151,9 +151,9 @@ public class MFXTextFieldSkin extends TextFieldSkin {
             }
         });
 
-        validator.addListener((observable, oldValue, newValue) -> {
+        validator.addListener(invalidated -> {
             if (textField.isValidated()) {
-                validate.setVisible(!newValue);
+                validate.setVisible(!textField.isValid());
             }
         });
 

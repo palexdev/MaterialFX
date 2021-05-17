@@ -20,7 +20,7 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.enums.ToggleNodeShape;
-import io.github.palexdev.materialfx.effects.RippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.RippleGenerator;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.css.*;
 import javafx.geometry.Insets;

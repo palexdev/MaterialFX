@@ -16,19 +16,16 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-.mfx-tree-cell {
-    -fx-padding: 0px 0px 0px 5px;
-    -fx-background-radius: 7px;
-}
+package io.github.palexdev.materialfx.effects.ripple.base;
 
-.mfx-tree-cell .mfx-ripple-generator {
-    -mfx-ripple-color: rgba(0, 190, 0, 0.3);
-}
+import javafx.animation.Animation;
 
-.mfx-tree-cell:selected {
-    -fx-background-color: lightgray;
-}
-
-.mfx-tree-cell * {
-    -fx-font-smoothing-type: gray;
+/**
+ * RippleGenerators only accept ripple types that implement this interface.
+ */
+public interface IRipple {
+    /**
+     * Every ripple type should specify its animation.
+     */
+    Animation getAnimation();
 }
