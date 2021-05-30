@@ -293,8 +293,8 @@ public class MFXStepperToggle extends Control implements Validated<MFXDialogVali
     //================================================================================
     // Styleable Properties
     //================================================================================
-    private final StyleableDoubleProperty textGap = new SimpleStyleableDoubleProperty(
-            StyleableProperties.TEXT_GAP,
+    private final StyleableDoubleProperty labelTextGap = new SimpleStyleableDoubleProperty(
+            StyleableProperties.LABEL_TEXT_GAP,
             this,
             "textGap",
             10.0
@@ -321,19 +321,19 @@ public class MFXStepperToggle extends Control implements Validated<MFXDialogVali
             2.5
     );
 
-    public double getTextGap() {
-        return textGap.get();
+    public double getLabelTextGap() {
+        return labelTextGap.get();
     }
 
     /**
      * Specifies the gap between the toggle's circle and the label.
      */
-    public StyleableDoubleProperty textGapProperty() {
-        return textGap;
+    public StyleableDoubleProperty labelTextGapProperty() {
+        return labelTextGap;
     }
 
-    public void setTextGap(double textGap) {
-        this.textGap.set(textGap);
+    public void setLabelTextGap(double labelTextGap) {
+        this.labelTextGap.set(labelTextGap);
     }
 
     public TextPosition getTextPosition() {
@@ -388,10 +388,10 @@ public class MFXStepperToggle extends Control implements Validated<MFXDialogVali
     private static class StyleableProperties {
         private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
-        private static final CssMetaData<MFXStepperToggle, Number> TEXT_GAP =
+        private static final CssMetaData<MFXStepperToggle, Number> LABEL_TEXT_GAP =
                 FACTORY.createSizeCssMetaData(
-                        "-mfx-text-gap",
-                        MFXStepperToggle::textGapProperty,
+                        "-mfx-label-text-gap",
+                        MFXStepperToggle::labelTextGapProperty,
                         10.0
                 );
 
@@ -418,7 +418,7 @@ public class MFXStepperToggle extends Control implements Validated<MFXDialogVali
                 );
 
         static {
-            cssMetaDataList = List.of(TEXT_GAP, TEXT_POSITION, SIZE, STROKE_WIDTH);
+            cssMetaDataList = List.of(LABEL_TEXT_GAP, TEXT_POSITION, SIZE, STROKE_WIDTH);
         }
     }
 

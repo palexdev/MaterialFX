@@ -90,17 +90,24 @@ public class MFXFontIcon extends Text {
     }
 
     /**
-     * Specifies the icon code of the icon.
+     * @return a new MFXFontIcon with a random icon, the specified size and color.
      */
+    public static MFXFontIcon getRandomIcon(double size, Color color) {
+        FontResources[] resources = FontResources.values();
+        int random = (int) (Math.random() * resources.length);
+        String desc = resources[random].getDescription();
+        return new MFXFontIcon(desc, size, color);
+    }
+
+    //================================================================================
+    // Styleable Properties
+    //================================================================================
     private final StyleableStringProperty description = new SimpleStyleableStringProperty(
             StyleableProperties.DESCRIPTION,
             this,
             "description"
     );
 
-    /**
-     * Specifies the size of the icon.
-     */
     private final StyleableDoubleProperty size = new SimpleStyleableDoubleProperty(
             StyleableProperties.SIZE,
             this,
@@ -108,9 +115,6 @@ public class MFXFontIcon extends Text {
             10.0
     );
 
-    /**
-     * Specifies the color of the icon.
-     */
     private final StyleableObjectProperty<Paint> color = new SimpleStyleableObjectProperty<>(
             StyleableProperties.COLOR,
             this,
@@ -122,6 +126,9 @@ public class MFXFontIcon extends Text {
         return description.get();
     }
 
+    /**
+     * Specifies the icon's code.
+     */
     public StyleableStringProperty descriptionProperty() {
         return description;
     }
@@ -134,6 +141,9 @@ public class MFXFontIcon extends Text {
         return size.get();
     }
 
+    /**
+     * Specifies the size of the icon.
+     */
     public StyleableDoubleProperty sizeProperty() {
         return size;
     }
@@ -146,6 +156,9 @@ public class MFXFontIcon extends Text {
         return color.get();
     }
 
+    /**
+     * Specifies the color of the icon.
+     */
     public StyleableObjectProperty<Paint> colorProperty() {
         return color;
     }
@@ -189,6 +202,9 @@ public class MFXFontIcon extends Text {
         return StyleableProperties.cssMetaDataList;
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
     @Override
     public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
         return MFXFontIcon.getClassCssMetaDataList();

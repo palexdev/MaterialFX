@@ -108,6 +108,8 @@ public class MFXStepperToggleSkin extends SkinBase<MFXStepperToggle> {
                 errorIcon.setVisible(false);
             }
         });
+
+        stepperToggle.labelTextGapProperty().addListener(invalidated -> stepperToggle.requestLayout());
         stepperToggle.textPositionProperty().addListener(invalidated -> stepperToggle.requestLayout());
 
         validator.validProperty().addListener((observable, oldValue, newValue) -> {
@@ -150,11 +152,11 @@ public class MFXStepperToggleSkin extends SkinBase<MFXStepperToggle> {
 
         if (stepperToggle.getTextPosition() == TextPosition.BOTTOM) {
             label.setTranslateY(0);
-            ly = snapPositionY(circle.getBoundsInParent().getMaxY() + stepperToggle.getTextGap());
+            ly = snapPositionY(circle.getBoundsInParent().getMaxY() + stepperToggle.getLabelTextGap());
             label.resizeRelocate(lx, ly, lw, lh);
         } else {
             label.resizeRelocate(lx, ly, lw, lh);
-            label.setTranslateY(-stepperToggle.getTextGap() - lh);
+            label.setTranslateY(-stepperToggle.getLabelTextGap() - lh);
         }
 
         double ix = snapPositionX(circle.getBoundsInParent().getMaxX());

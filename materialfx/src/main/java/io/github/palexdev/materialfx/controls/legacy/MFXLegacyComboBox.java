@@ -104,7 +104,7 @@ public class MFXLegacyComboBox<T> extends ComboBox<T> implements Validated<MFXDi
      * <p></p>
      * Then the label visible property is automatically updated when the validator state changes.
      * <p></p>
-     * The validator is also responsible for updating the ":invalid" pseudo class.
+     * The validator is also responsible for updating the ":invalid" PseudoClass.
      */
     private void setupValidator() {
         validator = new MFXDialogValidator("Error");

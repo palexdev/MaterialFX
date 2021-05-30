@@ -31,7 +31,7 @@ import javafx.scene.layout.HBox;
 /**
  * Base class for all cells used in list views based on Flowless,
  * defines common properties and behavior (e.g selection), has the selected property
- * and pseudo class ":selected" for usage in CSS.
+ * and PseudoClass ":selected" for usage in CSS.
  * <p>
  * Extends {@link HBox} and implements {@link Cell}.
  *
@@ -88,7 +88,7 @@ public abstract class AbstractMFXFlowlessListCell<T> extends HBox implements Cel
      * Sets the following behaviors:
      * <p>
      * - Calls {@link #updateSelection(MouseEvent)} on mouse pressed.<p>
-     * - Updates the selected pseudo class state when selected property changes.<p>
+     * - Updates the selected PseudoClass state when selected property changes.<p>
      * - Calls {@link #afterUpdateIndex()} when the index property changes.<p>
      * - Updates the selected property according to the list view' selection model changes.
      */
@@ -108,7 +108,7 @@ public abstract class AbstractMFXFlowlessListCell<T> extends HBox implements Cel
      * then according to the new state updates the selection model.
      * <p></p>
      * If true and the selection model doesn't already contain the cell index then calls
-     * {@link ListSelectionModel#select(int, T, MouseEvent)} with the cell's index and data.
+     * {@link ListSelectionModel#select(int, Object, MouseEvent)} with the cell's index and data.
      * <p></p>
      * If false calls {@link ListSelectionModel#clearSelectedItem(int)} with the cell's index.
      */

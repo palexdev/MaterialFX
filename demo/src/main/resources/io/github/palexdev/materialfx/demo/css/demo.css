@@ -76,25 +76,23 @@
     -fx-border-color: #7F0FFF;
     -fx-border-radius: 6;
     -fx-border-insets: -1;
-    -fx-border-width: 1.2;
-    -mfx-shape: rectangle;
-    -mfx-size: 35px;
+    -fx-pref-width: 160;
 }
 
-#vLoader .mfx-toggle-node .text {
-    -fx-font-family: 'Open Sans Bold';
-    -fx-fill: #7F0FFF;
-    -fx-font-size: 13;
+#vLoader .mfx-toggle-node .mfx-label {
+    -mfx-font-family: 'Open Sans Bold';
+    -mfx-text-fill: #7F0FFF;
+    -mfx-font-size: 13;
     -fx-opacity: 0.7;
 }
 
 #vLoader .mfx-toggle-node:hover,
-#vLoader .mfx-toggle-node:hover .text {
+#vLoader .mfx-toggle-node:hover .mfx-label {
     -fx-opacity: 1.0;
 }
 
 #vLoader .mfx-toggle-node:selected {
-    -fx-background-color: white;
+    -fx-background-color: derive(#7F0FFF, 150%);
     -fx-opacity: 1;
 }
 

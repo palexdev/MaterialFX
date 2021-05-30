@@ -62,9 +62,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.TextStyle;
 import java.time.temporal.WeekFields;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 import static java.time.temporal.ChronoUnit.MONTHS;
@@ -95,6 +93,7 @@ public class MFXDatePickerContent extends VBox {
 
     private final int daysPerWeek = 7;
     private final List<MFXDateCell> days = new ArrayList<>();
+    private final Map<String, Integer> dayNameMap = new LinkedHashMap<>();
     private final List<MFXDateCell> dayNameCells = new ArrayList<>();
     private final List<MFXDateCell> yearsList = new ArrayList<>();
 
@@ -276,6 +275,7 @@ public class MFXDatePickerContent extends VBox {
             cell.setAlignment(Pos.CENTER);
 
             String name = weekDayNameFormatter.withLocale(getLocale()).format(date.plus(i, DAYS));
+            dayNameMap.put(name, i);
             if (weekDayNameFormatter.getLocale() == java.util.Locale.CHINA) {
                 name = name.substring(name.length() - 1).toUpperCase();
             } else {
@@ -322,20 +322,14 @@ public class MFXDatePickerContent extends VBox {
             days.add(cell);
         }
 
-        int offset = 0;
-        int firstDayIndex = firstDayIndex();
-        if (firstDayIndex == 7) {
-            offset = 1;
-        }
-
-        int index = firstDayIndex - 1 + offset;
+        int index = firstDayIndex();
         int monthLength = getYearMonth().getMonth().length(getYearMonth().isLeapYear());
         int cnt = 1;
         for (i = index; i < monthLength + index; i++) {
             MFXDateCell cell = days.get(i);
             cell.setText(Integer.toString(cnt));
 
-            if (day == i &&
+            if (day == cnt &&
                     LocalDate.now().getMonth().equals(getYearMonth().getMonth()) &&
                     LocalDate.now().getYear() == getYearMonth().getYear()) {
                 cell.setCurrent(true);
@@ -754,7 +748,9 @@ public class MFXDatePickerContent extends VBox {
      */
     private int firstDayIndex() {
         DayOfWeek fd = getYearMonth().atDay(1).getDayOfWeek();
-        return fd.getValue();
+        LocalDate date = LocalDate.of(2009, 7, 12 + fd.getValue());
+        String name = weekDayNameFormatter.withLocale(getLocale()).format(date.plus(0, DAYS));
+        return dayNameMap.get(name);
     }
 
     /**

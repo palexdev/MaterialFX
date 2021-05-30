@@ -1,0 +1,8 @@
+.mfx-table-column {
+    -fx-border-color: white;
+}
+
+.mfx-table-column:resizable:hover,
+.mfx-table-column:resizable:dragged {
+    -fx-border-color: transparent lightgray transparent transparent;
+}

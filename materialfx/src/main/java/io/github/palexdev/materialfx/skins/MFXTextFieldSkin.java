@@ -26,7 +26,9 @@ import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.LabelUtils;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
 import javafx.animation.ScaleTransition;
+import javafx.beans.binding.Bindings;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.skin.TextFieldSkin;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -35,6 +37,15 @@ import javafx.util.Duration;
 
 /**
  * This is the implementation of the {@code Skin} associated with every {@link MFXTextField}.
+ * <p></p>
+ * A little note on the icon positioning and the text field width.
+ * If you use the control in SceneBuilder you will immediately notice that the width of the text field doesn't take into
+ * account the icon. The icon is placed "outside" the control because otherwise the input text would end under the icon,
+ * and that's not a pleasant view.
+ * <p>
+ * Another solution would be to entirely recreate the TextFieldSkin using an HBox to contain the field and the icon,
+ * but I don't think it's necessary since this strategy seems to work fine. Also don't forget that you can position the icon manually,
+ * you should be able to put the icon "inside" the control by specifying a right inset equal to the icon's width, see {@link MFXTextField#iconInsetsProperty()}.
  */
 public class MFXTextFieldSkin extends TextFieldSkin {
     //================================================================================
@@ -58,7 +69,14 @@ public class MFXTextFieldSkin extends TextFieldSkin {
         unfocusedLine.strokeWidthProperty().bind(textField.lineStrokeWidthProperty());
         unfocusedLine.strokeLineCapProperty().bind(textField.lineStrokeCapProperty());
         unfocusedLine.strokeProperty().bind(textField.unfocusedLineColorProperty());
-        unfocusedLine.endXProperty().bind(textField.widthProperty());
+        unfocusedLine.endXProperty().bind(Bindings.createDoubleBinding(() -> {
+            Node icon = textField.getIcon();
+            if (icon != null) {
+                return textField.getWidth() + icon.getLayoutBounds().getWidth() +
+                        textField.getIconInsets().getLeft() - textField.getIconInsets().getRight();
+            }
+            return textField.getWidth();
+        }, textField.widthProperty(), textField.iconProperty()));
         unfocusedLine.setSmooth(true);
         unfocusedLine.setManaged(false);
 
@@ -69,7 +87,14 @@ public class MFXTextFieldSkin extends TextFieldSkin {
         focusedLine.strokeLineCapProperty().bind(textField.lineStrokeCapProperty());
         focusedLine.strokeProperty().bind(textField.lineColorProperty());
         focusedLine.setSmooth(true);
-        focusedLine.endXProperty().bind(textField.widthProperty());
+        focusedLine.endXProperty().bind(Bindings.createDoubleBinding(() -> {
+            Node icon = textField.getIcon();
+            if (icon != null) {
+                return textField.getWidth() + icon.getLayoutBounds().getWidth() +
+                        textField.getIconInsets().getLeft() - textField.getIconInsets().getRight();
+            }
+            return textField.getWidth();
+        }, textField.widthProperty(), textField.iconProperty()));
         focusedLine.setScaleX(0.0);
         focusedLine.setManaged(false);
 
@@ -90,6 +115,11 @@ public class MFXTextFieldSkin extends TextFieldSkin {
         }
 
         getChildren().addAll(unfocusedLine, focusedLine, validate);
+        Node icon = textField.getIcon();
+        if (icon != null) {
+            icon.addEventFilter(MouseEvent.MOUSE_ENTERED, event -> icon.setCursor(Cursor.DEFAULT));
+            getChildren().add(icon);
+        }
 
         setListeners();
     }
@@ -99,7 +129,7 @@ public class MFXTextFieldSkin extends TextFieldSkin {
     //================================================================================
 
     /**
-     * Adds listeners for: line, focus, disabled and validator properties.
+     * Adds listeners for: icon, icon insets, line, focus, disabled and validator properties.
      * <p>
      * Validator: when the control is not focused, and of course if {@code isValidated} is true,
      * all the conditions in the validator are evaluated and if one is false the {@code validate} label is shown.
@@ -111,6 +141,18 @@ public class MFXTextFieldSkin extends TextFieldSkin {
     private void setListeners() {
         MFXTextField textField = (MFXTextField) getSkinnable();
         MFXDialogValidator validator = textField.getValidator();
+
+        textField.iconProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                getChildren().remove(oldValue);
+            } else {
+                getChildren().remove(oldValue);
+                newValue.addEventFilter(MouseEvent.MOUSE_ENTERED, event -> newValue.setCursor(Cursor.DEFAULT));
+                getChildren().add(newValue);
+            }
+        });
+
+        textField.iconInsetsProperty().addListener(invalidated -> textField.requestLayout());
 
         textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue && textField.isValidated()) {
@@ -182,8 +224,14 @@ public class MFXTextFieldSkin extends TextFieldSkin {
     // Override Methods
     //================================================================================
     @Override
+    protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return Math.max(super.computeMinWidth(height, topInset, rightInset, bottomInset, leftInset), 120);
+    }
+
+    @Override
     protected void layoutChildren(double x, double y, double w, double h) {
         super.layoutChildren(x, y, w, h);
+        MFXTextField textField = (MFXTextField) getSkinnable();
 
         double lw = snapSizeX(
                 LabelUtils.computeLabelWidth(validate.getFont(), validate.getText()) +
@@ -204,5 +252,20 @@ public class MFXTextFieldSkin extends TextFieldSkin {
         focusedLine.relocate(0, h + padding * 0.7);
         unfocusedLine.relocate(0, h + padding * 0.7);
 
+        Node icon = textField.getIcon();
+        if (icon != null) {
+            icon.setManaged(false);
+
+            double iX = snapPositionX(w +
+                    textField.getIconInsets().getLeft() -
+                    textField.getIconInsets().getRight()
+            );
+            double iY = snapPositionY(h - (icon.getLayoutBounds().getHeight() / 2.0) +
+                    textField.getIconInsets().getTop() -
+                    textField.getIconInsets().getBottom() -
+                    padding * 0.7
+            );
+            icon.relocate(iX, iY);
+        }
     }
 }

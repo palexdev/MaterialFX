@@ -144,6 +144,10 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
      * and then dropped to 0. When the opacity is 0 it is removed from the children list.
      */
     protected Animation getBackgroundAnimation() {
+        if (getClipSupplier() == null || getClipSupplier().get() == null) {
+            throw new NullPointerException("RippleGenerator cannot animate background because clip supplier is null!!");
+        }
+
         Shape shape = getClipSupplier().get();
         shape.setFill(getRippleColor());
         shape.setOpacity(0);

@@ -125,6 +125,21 @@ public class StringUtils {
         return false;
     }
 
+    /**
+     * Checks if thee given string starts with the specifies prefix, ignores case.
+     */
+    public static boolean startsWithIgnoreCase(String str, String prefix) {
+        return str.regionMatches(true, 0, prefix, 0, prefix.length());
+    }
+
+    /**
+     * Checks if the given string ends with the given prefix, ignores case.
+     */
+    public static boolean endsWithIgnoreCase(String str, String suffix) {
+        int suffixLength = suffix.length();
+        return str.regionMatches(true, str.length() - suffixLength, suffix, 0, suffixLength);
+    }
+
     private static boolean regionMatches(final CharSequence cs, final int thisStart,
                                          final CharSequence substring, final int length) {
         if (cs instanceof String && substring instanceof String) {

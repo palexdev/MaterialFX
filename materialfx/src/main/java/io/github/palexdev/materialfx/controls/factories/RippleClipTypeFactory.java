@@ -32,6 +32,8 @@ public class RippleClipTypeFactory {
     private double radius = 0;
     private double arcW = 0;
     private double arcH = 0;
+    private double offsetW = 0;
+    private double offsetH = 0;
 
     public RippleClipTypeFactory() {
     }
@@ -47,8 +49,8 @@ public class RippleClipTypeFactory {
     }
 
     public Shape build(Region region) {
-        double w = region.getWidth();
-        double h = region.getHeight();
+        double w = region.getWidth() + offsetW;
+        double h = region.getHeight() + offsetH;
 
         switch (rippleClipType) {
             case CIRCLE:
@@ -69,14 +71,30 @@ public class RippleClipTypeFactory {
         }
     }
 
+    public RippleClipTypeFactory setRadius(double radius) {
+        this.radius = radius;
+        return this;
+    }
+
+    public RippleClipTypeFactory setArcs(double arcs) {
+        this.arcW = arcs;
+        this.arcH = arcs;
+        return this;
+    }
+
     public RippleClipTypeFactory setArcs(double arcW, double arcH) {
         this.arcW = arcW;
         this.arcH = arcH;
         return this;
     }
 
-    public RippleClipTypeFactory setRadius(double radius) {
-        this.radius = radius;
+    public RippleClipTypeFactory setOffsetW(double offsetW) {
+        this.offsetW = offsetW;
+        return this;
+    }
+
+    public RippleClipTypeFactory setOffsetH(double offsetH) {
+        this.offsetH = offsetH;
         return this;
     }
 

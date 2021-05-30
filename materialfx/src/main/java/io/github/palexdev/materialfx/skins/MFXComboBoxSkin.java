@@ -33,6 +33,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
+import javafx.beans.InvalidationListener;
+import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -128,6 +130,34 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         }
 
         setBehavior();
+        initSelection();
+    }
+
+    /**
+     * Initialized the combo box value if the selected index specified by the selection model is not -1.
+     *
+     * @see ComboSelectionModelMock
+     */
+    private void initSelection() {
+        MFXComboBox<T> comboBox = getSkinnable();
+        ComboSelectionModelMock<T> selectionModel = comboBox.getSelectionModel();
+
+        if (selectionModel.getSelectedIndex() != -1 && comboBox.getItems().isEmpty()) {
+            selectionModel.clearSelection();
+            return;
+        }
+
+        if (selectionModel.getSelectedIndex() != -1) {
+            int index = selectionModel.getSelectedIndex();
+            if (index < comboBox.getItems().size()) {
+                T item = comboBox.getItems().get(index);
+                selectionModel.selectItem(item);
+                listView.getSelectionModel().select(index, item, null);
+                comboBox.setSelectedValue(item);
+            } else {
+                comboBox.getSelectionModel().clearSelection();
+            }
+        }
     }
 
     //================================================================================
@@ -268,6 +298,22 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         listView.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (popup.isShowing()) {
                 popup.hide();
+            }
+        });
+
+        if (comboBox.getItems() != null) {
+            comboBox.getItems().addListener((InvalidationListener) invalidated -> {
+                comboBox.getSelectionModel().clearSelection();
+                listView.setItems(comboBox.getItems());
+            });
+        }
+        comboBox.itemsProperty().addListener((observable, oldValue, newValue) -> {
+            comboBox.getSelectionModel().clearSelection();
+            if (newValue != null) {
+                newValue.addListener((InvalidationListener) invalidated -> listView.setItems(newValue));
+                listView.setItems(newValue);
+            } else {
+                listView.setItems(FXCollections.observableArrayList());
             }
         });
     }

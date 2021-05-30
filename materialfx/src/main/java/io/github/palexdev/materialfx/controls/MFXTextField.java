@@ -19,15 +19,22 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.beans.MFXContextMenuItem;
 import io.github.palexdev.materialfx.controls.enums.DialogType;
 import io.github.palexdev.materialfx.skins.MFXTextFieldSkin;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
 import io.github.palexdev.materialfx.validation.base.AbstractMFXValidator;
 import io.github.palexdev.materialfx.validation.base.Validated;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.css.*;
+import javafx.event.Event;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Skin;
 import javafx.scene.control.TextField;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeLineCap;
@@ -40,6 +47,9 @@ import java.util.function.Supplier;
  * <p></p>
  * Extends {@code TextField}, redefines the style class to "mfx-text-field" for usage in CSS and
  * includes a {@code MFXDialogValidator} for input validation.
+ * <p>
+ * Also includes new features: you can now add an icon to the text field and adjust its position,
+ * replaces the default JavaFX context menu in favor of {@link MFXContextMenu}.
  * <p></p>
  * Defines a new PseudoClass: ":invalid" to specify the control's look when the validator's state is invalid.
  */
@@ -50,6 +60,11 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
     private static final StyleablePropertyFactory<MFXTextField> FACTORY = new StyleablePropertyFactory<>(TextField.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-text-field";
     private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-textfield.css");
+
+    private final ObjectProperty<Node> icon = new SimpleObjectProperty<>();
+    private final ObjectProperty<Insets> iconInsets = new SimpleObjectProperty<>(new Insets(0, 0, 0, 9));
+
+    private final ObjectProperty<MFXContextMenu> mfxContextMenu = new SimpleObjectProperty<>();
 
     private MFXDialogValidator validator;
     protected static final PseudoClass INVALID_PSEUDO_CLASS = PseudoClass.getPseudoClass("invalid");
@@ -80,7 +95,7 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
      * <p></p>
      * Then the label visible property is automatically updated when the validator state changes.
      * <p></p>
-     * The validator is also responsible for updating the ":invalid" pseudo class.
+     * The validator is also responsible for updating the ":invalid" PseudoClass.
      */
     private void setupValidator() {
         validator = new MFXDialogValidator("Error");
@@ -145,6 +160,20 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
         getStyleClass().add(STYLE_CLASS);
         setupValidator();
 
+        addListeners();
+        defaultContextMenu();
+    }
+
+    private void addListeners() {
+        mfxContextMenu.addListener((observable, oldValue, newValue) -> {
+            if (oldValue != null) {
+                oldValue.dispose();
+            }
+            if (newValue != null) {
+                newValue.install(this);
+            }
+        });
+
         textProperty().addListener((observable, oldValue, newValue) -> {
             int limit = getTextLimit();
             if (limit == -1) {
@@ -156,6 +185,99 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
                 setText(s);
             }
         });
+        addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
+    }
+
+    /**
+     * Installs the default {@link MFXContextMenu}.
+     */
+    protected void defaultContextMenu() {
+        MFXContextMenuItem copy = new MFXContextMenuItem(
+                "Copy",
+                event -> copy()
+        );
+
+        MFXContextMenuItem cut = new MFXContextMenuItem(
+                "Cut",
+                event -> cut()
+        );
+
+        MFXContextMenuItem paste = new MFXContextMenuItem(
+                "Paste",
+                event -> paste()
+        );
+
+        MFXContextMenuItem delete = new MFXContextMenuItem(
+                "Delete",
+                event -> deleteText(getSelection())
+        );
+
+        MFXContextMenuItem selectAll = new MFXContextMenuItem(
+                "Select All",
+                event -> selectAll()
+        );
+
+        setMFXContextMenu(
+                new MFXContextMenu.Builder()
+                .addMenuItem(copy)
+                .addMenuItem(cut)
+                .addMenuItem(paste)
+                .addMenuItem(delete)
+                .addSeparator()
+                .addMenuItem(selectAll)
+                .get()
+        );
+    }
+
+    public Node getIcon() {
+        return icon.get();
+    }
+
+    /**
+     * Specifies the field's icon.
+     */
+    public ObjectProperty<Node> iconProperty() {
+        return icon;
+    }
+
+    public void setIcon(Node icon) {
+        this.icon.set(icon);
+    }
+
+    public Insets getIconInsets() {
+        return iconInsets.get();
+    }
+
+    /**
+     * Allows to adjust the icon's position without changing the skin.
+     * <p></p>
+     * Positive Bottom and Top insets adjust the Y position (up/down respectively).
+     * <p>
+     * Positive Right and Left insets adjust the X position (left/right respectively).
+     *
+     * @see #iconProperty()
+     */
+    public ObjectProperty<Insets> iconInsetsProperty() {
+        return iconInsets;
+    }
+
+    public void setIconInsets(Insets iconInsets) {
+        this.iconInsets.set(iconInsets);
+    }
+
+    public MFXContextMenu getMFXContextMenu() {
+        return mfxContextMenu.get();
+    }
+
+    /**
+     * Specifies the field's {@link MFXContextMenu}.
+     */
+    public ObjectProperty<MFXContextMenu> mfxContextMenuProperty() {
+        return mfxContextMenu;
+    }
+
+    public void setMFXContextMenu(MFXContextMenu mfxContextMenu) {
+        this.mfxContextMenu.set(mfxContextMenu);
     }
 
     //================================================================================

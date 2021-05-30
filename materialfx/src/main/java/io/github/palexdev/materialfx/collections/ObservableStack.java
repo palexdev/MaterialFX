@@ -188,7 +188,7 @@ public class ObservableStack<E> extends SimpleListProperty<E> {
     }
 
     /**
-     * Used to determine what change occured in the stack
+     * Used to determine what change occurred in the stack
      */
     private enum ChangeType {
         PUSH, POP;

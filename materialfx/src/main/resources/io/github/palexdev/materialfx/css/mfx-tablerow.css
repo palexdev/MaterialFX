@@ -1,0 +1,9 @@
+.mfx-table-row {
+    -fx-background-insets: 0 -5 0 -5;
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+}
+
+.mfx-table-row:selected {
+    -fx-background-color: #F4F4F4;
+}

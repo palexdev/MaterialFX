@@ -16,6 +16,15 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+@import "fonts.css";
+
+.mfx-toggle-node {
+    -mfx-unselected-color: #F9F9F9;
+    -mfx-selected-color: #EDEDED;
+    -mfx-unselected-border-color: #E1E1E1;
+    -mfx-selected-border-color: #E1E1E1;
+}
+
 .mfx-toggle-node,
 .mfx-toggle-node:armed,
 .mfx-toggle-node:hover,
@@ -28,9 +37,22 @@
 }
 
 .mfx-toggle-node {
-    -fx-opacity: 0.5;
+    -fx-background-color: -mfx-unselected-color;
+    -fx-background-radius: 10;
+    -fx-border-color: -mfx-unselected-border-color;
+    -fx-border-radius: 10;
 }
 
 .mfx-toggle-node:selected {
-    -fx-opacity: 1.0;
+    -fx-background-color: -mfx-selected-color;
+    -fx-background-radius: 10;
+    -fx-border-color: -mfx-selected-border-color;
+    -fx-border-radius: 10;
+}
+
+.mfx-toggle-node .mfx-label {
+    -mfx-line-color: transparent;
+    -mfx-unfocused-line-color: transparent;
+    -mfx-font-family: 'Open Sans Regular';
+    -fx-background-color: transparent;
 }

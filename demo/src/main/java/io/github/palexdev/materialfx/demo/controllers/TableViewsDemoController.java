@@ -20,17 +20,24 @@ package io.github.palexdev.materialfx.demo.controllers;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTableView;
-import io.github.palexdev.materialfx.controls.cell.MFXTableColumnCell;
+import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyTableView;
 import io.github.palexdev.materialfx.demo.model.FilterablePerson;
 import io.github.palexdev.materialfx.demo.model.Person;
+import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.Comparator;
@@ -38,26 +45,46 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class TableViewsDemoController implements Initializable {
+    private final ObjectProperty<Stage> tableStage = new SimpleObjectProperty<>();
+    private final MFXLegacyTableView<Person> legacyTable;
+    private final MFXTableView<FilterablePerson> tableView;
+    private final StackPane stackPane = new StackPane();
+    private final Scene scene = new Scene(stackPane, 800, 600);
 
     @FXML
-    private MFXButton switchButton;
+    private MFXButton showLegacy;
 
     @FXML
-    private MFXLegacyTableView<Person> legacyTable;
+    private MFXButton showNew;
 
-    @FXML
-    private MFXTableView<FilterablePerson> table;
+    public TableViewsDemoController() {
+        tableStage.addListener((observable, oldValue, newValue) -> {
+            getTableStage().initOwner(showLegacy.getScene().getWindow());
+            getTableStage().initModality(Modality.APPLICATION_MODAL);
+        });
+
+        Platform.runLater(() -> tableStage.set(new Stage()));
+
+        legacyTable = new MFXLegacyTableView<>();
+        tableView = new MFXTableView<>();
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        switchButton.setOnAction(event -> {
-            if (legacyTable.isVisible()) {
-                legacyTable.setVisible(false);
-                table.setVisible(true);
-            } else {
-                legacyTable.setVisible(true);
-                table.setVisible(false);
-            }
+        showLegacy.setOnAction(event -> {
+            getTableStage().close();
+            stackPane.getChildren().setAll(legacyTable);
+            getTableStage().setScene(scene);
+            getTableStage().setTitle("Legacy TableView - Preview");
+            getTableStage().show();
+        });
+
+        showNew.setOnAction(event -> {
+            getTableStage().close();
+            stackPane.getChildren().setAll(tableView);
+            getTableStage().setScene(scene);
+            getTableStage().setTitle("New TableView - Preview");
+            getTableStage().show();
         });
 
         populateLegacy();
@@ -112,22 +139,30 @@ public class TableViewsDemoController implements Initializable {
                 )
         );
 
-        MFXTableColumnCell<FilterablePerson> firstNameColumn = new MFXTableColumnCell<>("First Name", Comparator.comparing(FilterablePerson::getFirstName));
-        firstNameColumn.setRowCellFactory(person -> new MFXTableRowCell(person.firstNameProperty()));
-        MFXTableColumnCell<FilterablePerson> lastNameColumn = new MFXTableColumnCell<>("Last Name", Comparator.comparing(FilterablePerson::getLastName));
-        lastNameColumn.setRowCellFactory(person -> new MFXTableRowCell(person.lastNameProperty()));
-        MFXTableColumnCell<FilterablePerson> addressColumn = new MFXTableColumnCell<>("Address", Comparator.comparing(FilterablePerson::getAddress));
-        addressColumn.setRowCellFactory(person -> new MFXTableRowCell(person.addressProperty()));
-        MFXTableColumnCell<FilterablePerson> ageColumn = new MFXTableColumnCell<>("Age", Comparator.comparing(FilterablePerson::getAge));
-        ageColumn.setRowCellFactory(person -> new MFXTableRowCell(person.ageProperty().asString()) {
+        MFXTableColumn<FilterablePerson> firstNameColumn = new MFXTableColumn<>("First Name", Comparator.comparing(FilterablePerson::getFirstName));
+        firstNameColumn.setRowCellFunction(person -> new MFXTableRowCell(person.firstNameProperty()));
+        MFXTableColumn<FilterablePerson> lastNameColumn = new MFXTableColumn<>("Last Name", Comparator.comparing(FilterablePerson::getLastName));
+        lastNameColumn.setRowCellFunction(person -> new MFXTableRowCell(person.lastNameProperty()));
+        MFXTableColumn<FilterablePerson> addressColumn = new MFXTableColumn<>("Address", Comparator.comparing(FilterablePerson::getAddress));
+        addressColumn.setRowCellFunction(person -> new MFXTableRowCell(person.addressProperty()));
+        MFXTableColumn<FilterablePerson> ageColumn = new MFXTableColumn<>("Age", Comparator.comparing(FilterablePerson::getAge));
+        ageColumn.setRowCellFunction(person -> new MFXTableRowCell(person.ageProperty().asString()) {
             {
-                setAlignment(Pos.CENTER_RIGHT);
+                setRowAlignment(Pos.CENTER_RIGHT);
             }
         });
-        ageColumn.setAlignment(Pos.CENTER_RIGHT);
+        ageColumn.setColumnAlignment(Pos.CENTER_RIGHT);
 
-        table.setItems(people);
-        table.getColumns().addAll(firstNameColumn, lastNameColumn, addressColumn, ageColumn);
+        tableView.setItems(people);
+        tableView.getTableColumns().addAll(firstNameColumn, lastNameColumn, addressColumn, ageColumn);
+    }
+
+    public Stage getTableStage() {
+        return tableStage.get();
+    }
+
+    public void setTableStage(Stage tableStage) {
+        this.tableStage.set(tableStage);
     }
 }
 

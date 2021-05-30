@@ -16,14 +16,8 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-.mfx-table-row {
-    -fx-background-insets: 0 -5 0 -5;
-}
+package io.github.palexdev.materialfx.filter;
 
-.mfx-table-row:hover {
-    -fx-background-color: rgb(245, 245, 245);
-}
-
-.mfx-table-row:selected {
-    -fx-background-color: lightgreen;
+public enum EvaluationMode {
+    AND, OR
 }

@@ -76,6 +76,7 @@ public class MFXContextMenu extends VBox {
 
     public MFXContextMenu(double spacing) {
         super(spacing);
+        setMinWidth(100);
         setAlignment(Pos.TOP_CENTER);
         getStyleClass().setAll(STYLE_CLASS);
         popupControl = new PopupControl();
@@ -124,6 +125,15 @@ public class MFXContextMenu extends VBox {
      * Installs the context menu to the given node.
      */
     public void install(Node node) {
+        if (node.getScene() != null) {
+            Scene scene = node.getScene();
+            Window window = scene.getWindow();
+            scene.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> hide());
+            if (window != null) {
+                window.focusedProperty().addListener(windowFocusListener);
+            }
+        }
+
         node.sceneProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 newValue.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> hide());
@@ -133,6 +143,7 @@ public class MFXContextMenu extends VBox {
                 }
             }
         });
+
         Node nR = nodeReference != null ? nodeReference.get() : null;
         if (nR != null && nR == node) {
             return;
@@ -162,7 +173,7 @@ public class MFXContextMenu extends VBox {
      * If the node reference is not null and {@link #install(Node)} is called again, this method is called to
      * remove the context menu from the previous node.
      */
-    private void dispose() {
+    public void dispose() {
         if (nodeReference != null) {
             Node node = nodeReference.get();
             if (node != null) {

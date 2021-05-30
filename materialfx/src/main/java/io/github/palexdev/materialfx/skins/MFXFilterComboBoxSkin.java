@@ -1,10 +1,7 @@
 package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
-import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
-import io.github.palexdev.materialfx.controls.MFXFlowlessListView;
-import io.github.palexdev.materialfx.controls.MFXIconWrapper;
-import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXFlowlessListCell;
 import io.github.palexdev.materialfx.controls.enums.Styles;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
@@ -16,6 +13,8 @@ import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.StringUtils;
 import javafx.animation.*;
+import javafx.beans.InvalidationListener;
+import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
@@ -56,7 +55,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
     private final Line focusedLine;
 
     private final HBox searchContainer;
-    private final FilteredList<T> filteredList;
+    private FilteredList<T> filteredList;
     private MFXTextField searchField;
 
     private Timeline arrowAnimation;
@@ -124,11 +123,39 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         }
 
         setBehavior();
+        initSelection();
     }
 
     //================================================================================
     // Methods
     //================================================================================
+
+    /**
+     * Initialized the combo box value if the selected index specified by the selection model is not -1.
+     *
+     * @see ComboSelectionModelMock
+     */
+    private void initSelection() {
+        MFXComboBox<T> comboBox = getSkinnable();
+        ComboSelectionModelMock<T> selectionModel = comboBox.getSelectionModel();
+
+        if (selectionModel.getSelectedIndex() != -1 && comboBox.getItems().isEmpty()) {
+            selectionModel.clearSelection();
+            return;
+        }
+
+        if (selectionModel.getSelectedIndex() != -1) {
+            int index = selectionModel.getSelectedIndex();
+            if (index < comboBox.getItems().size()) {
+                T item = comboBox.getItems().get(index);
+                selectionModel.selectItem(item);
+                listView.getSelectionModel().select(index, item, null);
+                comboBox.setSelectedValue(item);
+            } else {
+                comboBox.getSelectionModel().clearSelection();
+            }
+        }
+    }
 
     /**
      * Calls the methods which define the control behavior.
@@ -273,6 +300,27 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
             if (popup.isShowing()) {
                 reset();
             }
+        });
+
+        if (comboBox.getItems() != null) {
+            comboBox.getItems().addListener((InvalidationListener) invalidated -> {
+                comboBox.getSelectionModel().clearSelection();
+                filteredList = new FilteredList<>(comboBox.getItems());
+                listView.setItems(filteredList);
+            });
+        }
+        comboBox.itemsProperty().addListener((observable, oldValue, newValue) -> {
+            comboBox.getSelectionModel().clearSelection();
+            if (newValue != null) {
+                newValue.addListener((InvalidationListener) invalidated -> {
+                    filteredList = new FilteredList<>(comboBox.getItems());
+                    listView.setItems(filteredList);
+                });
+                filteredList = new FilteredList<>(comboBox.getItems());
+            } else {
+                filteredList = new FilteredList<>(FXCollections.observableArrayList());
+            }
+            listView.setItems(filteredList);
         });
     }
 

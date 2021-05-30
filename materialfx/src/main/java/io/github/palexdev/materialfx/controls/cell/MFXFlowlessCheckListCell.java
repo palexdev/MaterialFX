@@ -36,7 +36,7 @@ import javafx.scene.layout.HBox;
 
 /**
  * Implementation of an {@link AbstractMFXFlowlessListCell} which has a combo box
- * for usage in {@link MFXFlowlessCheckListView}, has the checked property and pseudo class
+ * for usage in {@link MFXFlowlessCheckListView}, has the checked property and PseudoClass
  * ":checked" for usage in CSS.
  */
 public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> {
@@ -100,7 +100,7 @@ public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> 
      * <p>
      * - Binds the checked property to the selected property of the combo box.<p>
      * - Clears the selection (if {@link #clearSelectionOnCheck} is true), updates the
-     * checked pseudo class state and calls {@link #updateCheck()} when the checked property changes.
+     * checked PseudoClass state and calls {@link #updateCheck()} when the checked property changes.
      */
     @Override
     protected void setBehavior() {
@@ -119,7 +119,7 @@ public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> 
      * Updates the check model accordingly to the new state of the checked property.
      * <p></p>
      * If true and the check model doesn't already contain the cell index then calls
-     * {@link ListCheckModel#check(int, T)} with the cell's index and data.
+     * {@link ListCheckModel#check(int, Object)} with the cell's index and data.
      * <p></p>
      * If false calls {@link ListCheckModel#clearCheckedItem(int)} with the cell's index.
      */

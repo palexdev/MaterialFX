@@ -46,7 +46,7 @@ public class ListSelectionModel<T> implements IListSelectionModel<T> {
     //================================================================================
 
     /**
-     * This method is called when the mouse event passed to {@link #select(int, Object, MouseEvent)}
+     * This method is called when the mouse event passed to {@link #select(int, T, MouseEvent)}
      * is null. Since it's null there's no check for isShiftDown() or isControlDown(), so in case
      * of multiple selection enabled the passed index and data will always be added to the map.
      */

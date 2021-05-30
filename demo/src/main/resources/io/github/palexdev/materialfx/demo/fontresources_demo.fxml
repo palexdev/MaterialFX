@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXFlowlessListView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.StackPane?>
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0"
+           prefWidth="900.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="io.github.palexdev.materialfx.demo.controllers.FontResourcesDemoController">
+   <MFXFlowlessListView fx:id="list" depthLevel="LEVEL1">
+      <StackPane.margin>
+         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+      </StackPane.margin>
+   </MFXFlowlessListView>
+</StackPane>

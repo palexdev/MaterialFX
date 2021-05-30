@@ -45,7 +45,7 @@ public class MFXDateCellSkin extends DateCellSkin {
         super(dateCell);
 
         rippleGenerator = new MFXCircleRippleGenerator(dateCell);
-        rippleGenerator.setClipSupplier(() -> new RippleClipTypeFactory(RippleClipType.ROUNDED_RECTANGLE).setArcs(15, 15).build(dateCell));
+        rippleGenerator.setClipSupplier(() -> new RippleClipTypeFactory(RippleClipType.ROUNDED_RECTANGLE).setArcs(15).build(dateCell));
         rippleGenerator.setRippleColor(Color.rgb(220, 220, 220, 0.6));
         rippleGenerator.setRipplePositionFunction(event -> new RipplePosition(event.getX(), event.getY()));
         dateCell.addEventFilter(MouseEvent.MOUSE_PRESSED, rippleGenerator::generateRipple);

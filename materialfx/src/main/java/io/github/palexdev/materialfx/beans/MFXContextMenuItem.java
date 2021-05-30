@@ -54,7 +54,7 @@ public class MFXContextMenuItem {
     public MFXContextMenuItem(String text) {
         Label label = new Label(text);
         label.setMaxWidth(Double.MAX_VALUE);
-        node = new Label(text);
+        node = label;
     }
 
     /**

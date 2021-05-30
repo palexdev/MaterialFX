@@ -4,7 +4,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@css/textfields_demo.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.TextfieldsDemoController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@css/textfields_demo.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.TextFieldsDemoController">
     <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="TextFields" StackPane.alignment="TOP_CENTER">
         <StackPane.margin>
           <Insets top="20.0" />
@@ -30,9 +30,11 @@
       </StackPane.margin>
    </Label>
    <HBox maxHeight="-Infinity" maxWidth="-Infinity" spacing="100.0">
-      <MFXTextField id="colors" alignment="CENTER" lineColor="#52db32" maxWidth="-Infinity" prefWidth="120.0"
-                    promptText="Colors"/>
-      <MFXTextField fx:id="validated" alignment="CENTER" maxWidth="-Infinity" prefWidth="120.0" text="Validation"/>
+      <MFXTextField id="colors" alignment="CENTER" lineColor="#52db32" maxWidth="-Infinity" prefWidth="120.0" promptText="Colors" />
+      <MFXTextField fx:id="validated" maxWidth="-Infinity" prefWidth="120.0" text="Validation">
+         <HBox.margin>
+            <Insets />
+         </HBox.margin></MFXTextField>
    </HBox>
    <MFXCheckbox fx:id="checkbox" checkedColor="#00e240" markSize="9.0" markType="mfx-variant9-mark" text="CheckBox Validation" StackPane.alignment="BOTTOM_LEFT">
       <StackPane.margin>

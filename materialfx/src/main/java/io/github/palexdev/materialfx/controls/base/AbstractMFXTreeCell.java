@@ -93,7 +93,7 @@ public abstract class AbstractMFXTreeCell<T> extends HBox {
     }
 
     /**
-     * Adds a listener to the selected property to change the pseudo class state.
+     * Adds a listener to the selected property to change the PseudoClass state.
      */
     private void addListeners() {
         selected.addListener(invalidate -> pseudoClassStateChanged(SELECTED_PSEUDO_CLASS, selected.get()));

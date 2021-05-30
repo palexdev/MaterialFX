@@ -31,6 +31,15 @@ public class BindingUtils {
 
     private BindingUtils() {}
 
+    public static <T> ObjectProperty<T> toProperty(ObjectExpression<T> expression) {
+        if (expression == null) {
+            throw  new IllegalArgumentException("The argument cannot be null!");
+        }
+        ObjectProperty<T> property = new SimpleObjectProperty<>();
+        property.bind(expression);
+        return property;
+    }
+
     /**
      * Creates a new {@link IntegerProperty} and binds it to the given binding/expression.
      */

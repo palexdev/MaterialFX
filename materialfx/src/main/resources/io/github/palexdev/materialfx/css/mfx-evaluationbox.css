@@ -1,0 +1,26 @@
+.mfx-evaluation-box {
+    -mfx-base-color: rgb(76, 0, 225);
+}
+
+.mfx-evaluation-box #modeLabel {
+    -fx-border-color: -mfx-base-color;
+    -fx-border-radius: 3;
+    -fx-font-family: "Open Sans SemiBold";
+}
+
+.mfx-evaluation-box .mfx-text-field {
+    -mfx-line-color: -mfx-base-color;
+    -fx-font-family: "Open Sans Regular";
+}
+
+.mfx-evaluation-box .label {
+    -fx-font-family: "Open Sans SemiBold";
+}
+
+.mfx-evaluation-box .mfx-font-icon {
+    -mfx-color: #4D4D4D
+}
+
+.mfx-evaluation-box:hover .mfx-font-icon {
+    -mfx-color: #EF6E6B
+}

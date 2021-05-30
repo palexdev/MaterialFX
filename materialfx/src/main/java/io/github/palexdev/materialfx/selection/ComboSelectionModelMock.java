@@ -55,8 +55,8 @@ public class ComboSelectionModelMock<T> {
      * Clears the selection.
      */
     public void clearSelection() {
-        selectedItem.set(null);
-        selectedIndex.set(-1);
+        setSelectItem(null);
+        setSelectIndex(-1);
     }
 
     /**
@@ -66,15 +66,20 @@ public class ComboSelectionModelMock<T> {
         if (!comboBox.getItems().contains(item)) {
             return;
         }
-        selectedIndex.set(comboBox.getItems().indexOf(item));
-        selectedItem.set(item);
+        setSelectIndex(comboBox.getItems().indexOf(item));
+        setSelectItem(item);
     }
 
     /**
      * Selects the first item in the combo items list.
      */
     public void selectFirst() {
-        selectedIndex.set(0);
+        if (comboBox.getItems().isEmpty()) {
+            return;
+        }
+
+        setSelectIndex(0);
+        setSelectItem(comboBox.getItems().get(0));
     }
 
     /**
@@ -84,24 +89,33 @@ public class ComboSelectionModelMock<T> {
         if (getSelectedIndex() == (comboBox.getItems().size() - 1)) {
             return;
         }
-        selectedIndex.add(1);
-    }
 
-    /**
-     * Selects the last item in the combo items list.
-     */
-    public void selectLast() {
-        selectedIndex.set(comboBox.getItems().size());
+        setSelectIndex(getSelectedIndex() + 1);
+        setSelectItem(comboBox.getItems().get(getSelectedIndex()));
     }
 
     /**
      * Selects the previous item in the combo items list.
      */
     public void selectPrevious() {
-        if (getSelectedIndex() == -1) {
+        if (getSelectedIndex() <= 0) {
             return;
         }
-        selectedIndex.subtract(1);
+
+        setSelectIndex(getSelectedIndex() - 1);
+        setSelectItem(comboBox.getItems().get(getSelectedIndex()));
+    }
+
+    /**
+     * Selects the last item in the combo items list.
+     */
+    public void selectLast() {
+        if (comboBox.getItems().isEmpty()) {
+            return;
+        }
+
+        setSelectIndex(comboBox.getItems().size() - 1);
+        setSelectItem(comboBox.getItems().get(comboBox.getItems().size() - 1));
     }
 
     /**
@@ -118,6 +132,10 @@ public class ComboSelectionModelMock<T> {
         return selectedIndex.getReadOnlyProperty();
     }
 
+    private void setSelectIndex(int index) {
+        selectedIndex.set(index);
+    }
+
     /**
      * Returns the current selected item.
      */
@@ -130,5 +148,9 @@ public class ComboSelectionModelMock<T> {
      */
     public ReadOnlyObjectProperty<T> selectedItemProperty() {
         return selectedItem.getReadOnlyProperty();
+    }
+
+    public void setSelectItem(T item) {
+        selectedItem.set(item);
     }
 }
