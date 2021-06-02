@@ -33,7 +33,7 @@ public class MFXProgressBar extends ProgressBar {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-progress-bar";
-    private final String STYLESHEETS = MFXResourcesLoader.load("css/mfx-progressbar.css");
+    private final String STYLESHEETS = MFXResourcesLoader.load("css/MFXProgressBar.css");
 
     //================================================================================
     // Constructors

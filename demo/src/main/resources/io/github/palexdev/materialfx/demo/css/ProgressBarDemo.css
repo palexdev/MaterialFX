@@ -1,0 +1,9 @@
+#custom > .track {
+    -fx-background-color: derive(salmon, 60%);
+}
+
+#custom > .bar,
+#custom:indeterminate > .bar {
+    -fx-background-color: salmon;
+    -fx-padding: 2.0;
+}

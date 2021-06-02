@@ -1,0 +1,109 @@
+/*
+ *     Copyright (C) 2021 Parisi Alessandro
+ *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ *     MaterialFX is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     MaterialFX is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import "Fonts.css";
+
+.mfx-combo-box {
+    -mfx-line-color: rgb(82, 0, 237);
+    -mfx-unfocused-line-color: rgb(159, 159, 159);
+    -fx-background-color: white;
+    -fx-background-radius: 2px;
+    -fx-border-color: -mfx-unfocused-line-color;
+    -fx-border-radius: 2px;
+}
+
+.mfx-combo-box:focused,
+.mfx-combo-box:editor {
+    -fx-border-color: -mfx-line-color;
+}
+
+.mfx-combo-box .label {
+    -fx-padding: 0 0 0 8;
+    -fx-font-family: "Open Sans Regular";
+    -fx-font-smoothing-type: grey;
+}
+
+.mfx-combo-box .mfx-icon-wrapper .mfx-ripple-generator {
+    -mfx-ripple-color: rgba(76, 0, 225, 0.3);
+}
+
+.mfx-combo-box .mfx-icon-wrapper .mfx-font-icon {
+    -mfx-color: black;
+}
+
+.mfx-combo-box:focused .mfx-icon-wrapper .mfx-font-icon {
+    -mfx-color: rgb(76, 0, 225);
+}
+
+.mfx-combo-box:editor .mfx-icon-wrapper .mfx-font-icon {
+    -mfx-color: rgb(76, 0, 225);
+}
+
+.mfx-list-view {
+    -fx-background-color: white;
+    -fx-border-color: #A4B1B6;
+    -fx-background-insets: 0 -1 0 -1;
+    -fx-border-insets: 0 -1 0 -1;
+
+    -mfx-track-color: transparent;
+    -mfx-thumb-color: rgba(76, 0, 225, 0.1);
+    -mfx-thumb-hover-color: rgb(158, 107, 255);
+}
+
+.mfx-list-view .mfx-list-cell:hover {
+    -fx-background-color: rgb(242, 242, 242);
+    -fx-border-color: rgb(242, 242, 242);
+}
+
+.mfx-list-view .mfx-list-cell:selected {
+    -fx-background-color: rgb(185, 152, 255);
+    -fx-border-color: rgb(185, 152, 255);
+}
+
+/* VALIDATION */
+.mfx-combo-box:invalid {
+    -mfx-line-color: #EF6E6B;
+    -mfx-unfocused-line-color: #EF6E6B;
+}
+
+.mfx-combo-box:invalid .mfx-icon-wrapper .mfx-font-icon{
+    -mfx-color: #EF6E6B;
+}
+
+.mfx-combo-box:focused:invalid .mfx-icon-wrapper .mfx-font-icon{
+    -mfx-color: #EF6E6B;
+}
+
+.mfx-combo-box:focused:editor:invalid .mfx-icon-wrapper .mfx-font-icon{
+    -mfx-color: #EF6E6B;
+}
+
+.mfx-combo-box:invalid .mfx-label {
+    -mfx-text-fill: #EF6E6B;
+}
+
+.mfx-combo-box:invalid .mfx-label:prompt {
+    -mfx-text-fill: #EF6E6B;
+}
+
+.mfx-combo-box .validate-label {
+    -fx-background-color: transparent;
+    -fx-font-family: "Open Sans SemiBold";
+    -fx-font-size: 11;
+    -fx-text-fill: #EF6E6B;
+}

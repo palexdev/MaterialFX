@@ -28,7 +28,7 @@ import javafx.scene.layout.HBox;
 // TODO implement StringConverter (low priority)
 
 /**
- * Base class for every cell used by {@code MFXTreeItem}s.
+ * Base class for every cell used by {@code MFXTreeItems}.
  * Specifies properties and methods that should be common to all cells.
  * <p>
  * It's common for TreeViews to display the data in an horizontal container and that's why
@@ -40,7 +40,7 @@ import javafx.scene.layout.HBox;
  * It's kinda tricky because one needs to select the item but if you select the item and update its background
  * accordingly you set the background color of the entire container not the item's cell. So we
  * select the item in the model but in the view the cell appears selected.
- * The same concept applies to {@code MFXCheckTreeCell}s.
+ * The same concept applies to {@code MFXCheckTreeCells}.
  * <p>
  * Also, note that to build a cell the height must be fixed for layout reasons, by default it's 27.
  * When the cell is created the {@link #render(Object)} method is called.

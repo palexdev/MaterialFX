@@ -6,6 +6,7 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.enums.Styles;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.StringUtils;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -36,6 +37,10 @@ import java.util.function.BiPredicate;
  * <p>
  * If the selected predicate is "Contains Ignore Case" then {@link #test(String)} will check if s1 contains s2 ignoring case and will return true.
  *
+ * <p></p>
+ * <b>N.B: </b> Since "Contains Any" and "Contains All" are advanced functions the field text is cleared when one of those functions is selected
+ * in the combo box and a prompt text that shows a small example on how to format the string is set.
+ *
  * @see BiPredicate
  */
 public class MFXEvaluationBox extends HBox {
@@ -43,7 +48,7 @@ public class MFXEvaluationBox extends HBox {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx/evaluation-box";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-evaluationbox.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXEvaluationBox.css");
 
     private final EvaluationMode mode;
     private final Map<String, BiPredicate<String, String>> biPredicates = new LinkedHashMap<>();
@@ -89,6 +94,10 @@ public class MFXEvaluationBox extends HBox {
         inputField.getStylesheets().add(STYLESHEET);
 
         removeIcon = new MFXFontIcon("mfx-x-circle", 16, Color.web("#4D4D4D"));
+        removeIcon.colorProperty().bind(Bindings.createObjectBinding(
+                () -> removeIcon.isHover() ? Color.web("#EF6E6B") : Color.web("#4D4D4D"),
+                removeIcon.hoverProperty()
+        ));
 
         box.getChildren().addAll(predicateLabel, predicatesCombo);
         getChildren().addAll(removeIcon, modeLabel, box, inputField);
@@ -104,12 +113,23 @@ public class MFXEvaluationBox extends HBox {
 
         biPredicates.put("Contains", String::contains);
         biPredicates.put("Contains Ignore Case", StringUtils::containsIgnoreCase);
+        biPredicates.put("Contains Any", StringUtils::containsAny);
+        biPredicates.put("Contains All", StringUtils::containsAll);
         biPredicates.put("Starts With", String::startsWith);
         biPredicates.put("Start With Ignore Case", StringUtils::startsWithIgnoreCase);
         biPredicates.put("Ends With", String::endsWith);
         biPredicates.put("Ends With Ignore Case", StringUtils::endsWithIgnoreCase);
         biPredicates.put("Equals", String::equals);
         biPredicates.put("Equals Ignore Case", String::equalsIgnoreCase);
+
+        predicatesCombo.selectedValueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.equals("Contains Any") || newValue.equals("Contains All")) {
+                inputField.setPromptText("Eg. \"A, B, C, DEF GHI, E, F...\"");
+                inputField.clear();
+            } else {
+                inputField.setPromptText("");
+            }
+        });
 
         predicatesCombo.setItems(FXCollections.observableArrayList(biPredicates.keySet()));
         predicatesCombo.getSelectionModel().selectFirst();

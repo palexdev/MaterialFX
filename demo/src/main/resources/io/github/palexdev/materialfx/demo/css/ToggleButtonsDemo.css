@@ -1,0 +1,12 @@
+#customRippleRadius .container .mfx-ripple-generator {
+    -mfx-ripple-radius: 15px;
+}
+
+.mfx-toggle-node {
+    -mfx-shape: circle;
+}
+
+.mfx-toggle-node .mfx-ripple-generator {
+    -mfx-ripple-radius: 15px;
+    -mfx-ripple-color: #b3b3b3;
+}

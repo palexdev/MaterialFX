@@ -33,7 +33,6 @@ import io.github.palexdev.materialfx.validation.MFXPriorityValidator;
 import io.github.palexdev.materialfx.validation.base.AbstractMFXValidator;
 import javafx.scene.control.SkinBase;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -61,7 +60,6 @@ public class MFXStepperToggleSkin extends SkinBase<MFXStepperToggle> {
         circle.setStrokeType(StrokeType.CENTERED);
 
         container = new StackPane(circle, stepperToggle.getIcon());
-        container.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
         container.getStylesheets().setAll(stepperToggle.getUserAgentStylesheet());
 
         label = new MFXLabel();
@@ -119,6 +117,7 @@ public class MFXStepperToggleSkin extends SkinBase<MFXStepperToggle> {
         });
 
         errorIcon.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> showErrorsDialog());
+        label.visibleProperty().bind(stepperToggle.textProperty().isEmpty().not());
     }
 
     /**
@@ -141,11 +140,21 @@ public class MFXStepperToggleSkin extends SkinBase<MFXStepperToggle> {
     }
 
     @Override
+    protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return topInset + container.prefWidth(-1) + (getSkinnable().getLabelTextGap() * 2) + (label.getHeight() * 2) + bottomInset;
+    }
+
+    @Override
+    protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return leftInset + Math.max(circle.getRadius() * 2, label.getWidth()) + rightInset;
+    }
+
+    @Override
     protected void layoutChildren(double x, double y, double w, double h) {
         super.layoutChildren(x, y, w, h);
         MFXStepperToggle stepperToggle = getSkinnable();
 
-        double lw = snapSizeX(LabelUtils.computeTextWidth(label.getFont(), label.getText())) + 20;
+        double lw = snapSizeX(LabelUtils.computeMFXLabelWidth(label));
         double lh = snapSizeY(LabelUtils.computeTextHeight(label.getFont(), label.getText()));
         double lx = snapPositionX(circle.getBoundsInParent().getCenterX() - (lw / 2.0));
         double ly = 0;

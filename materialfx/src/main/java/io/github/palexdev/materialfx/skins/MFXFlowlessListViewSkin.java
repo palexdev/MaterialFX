@@ -175,13 +175,23 @@ public class MFXFlowlessListViewSkin<T> extends SkinBase<AbstractMFXFlowlessList
     // Override Methods
     //================================================================================
     @Override
+    protected double computePrefHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return topInset + 350 + bottomInset;
+    }
+
+    @Override
     protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
         return leftInset + 200 + rightInset;
     }
 
     @Override
-    protected double computePrefHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return topInset + 350 + bottomInset;
+    protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return getSkinnable().prefHeight(width);
+    }
+
+    @Override
+    protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return getSkinnable().prefWidth(height);
     }
 
     @Override

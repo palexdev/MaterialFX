@@ -24,6 +24,7 @@ import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Parent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
@@ -41,7 +42,7 @@ public class MFXDialog extends AbstractMFXDialog {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-dialog";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-dialog.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXDialog.css");
 
     //================================================================================
     // Constructors
@@ -87,6 +88,20 @@ public class MFXDialog extends AbstractMFXDialog {
         });
     }
 
+    /**
+     * This method sets the bottom of the dialog (extends BorderPane) to the specified HBox.
+     * <p></p>
+     * The idea is to give users an easy way to add actions to the dialog, you can add any
+     * node wrapped in a HBox
+     *
+     * @param actionsBox the HBox which contains the nodes for actions
+     */
+    @Override
+    public MFXDialog setActions(HBox actionsBox) {
+        setBottom(actionsBox);
+        return this;
+    }
+
     //================================================================================
     // Override Methods
     //================================================================================
@@ -110,10 +125,13 @@ public class MFXDialog extends AbstractMFXDialog {
     }
 
     /**
-     * Shows the dialog, computes the center and plays animations if requested
+     * Shows the dialog, computes the center and plays animations if requested.
+     * <p></p>
+     * Its also responsible for firing the following events: {@link MFXDialogEvent#BEFORE_OPEN_EVENT}, {@link MFXDialogEvent#ON_OPENED_EVENT}.
      */
     @Override
     public void show() {
+        fireDialogEvent(MFXDialogEvent.BEFORE_OPEN_EVENT);
         if (isCenterBeforeShow()) {
             computeSizeAndPosition();
         }
@@ -127,20 +145,26 @@ public class MFXDialog extends AbstractMFXDialog {
                 );
                 inAnimation.getChildren().add(fadeInScrim);
             }
+            inAnimation.setOnFinished(event -> fireDialogEvent(MFXDialogEvent.ON_OPENED_EVENT));
+            setVisible(true);
             inAnimation.play();
         } else {
             if (scrimBackground.get()) {
                 scrimEffect.modalScrim((Pane) getParent(), this, scrimOpacity.get());
             }
+            setVisible(true);
+            fireDialogEvent(MFXDialogEvent.ON_OPENED_EVENT);
         }
-        setVisible(true);
     }
 
     /**
-     * Closes the dialog, plays animations if requested
+     * Closes the dialog, plays animations if requested.
+     * <p></p>
+     * Its also responsible for firing the following events: {@link MFXDialogEvent#BEFORE_CLOSE_EVENT}, {@link MFXDialogEvent#ON_CLOSED_EVENT}.
      */
     @Override
     public void close() {
+        fireDialogEvent(MFXDialogEvent.BEFORE_CLOSE_EVENT);
         if (animateOut.get()) {
             outAnimation.getChildren().setAll(outAnimationType.build(this, animationMillis.get()));
             if (scrimBackground.get()) {
@@ -151,6 +175,7 @@ public class MFXDialog extends AbstractMFXDialog {
             outAnimation.setOnFinished(event -> {
                 setVisible(false);
                 setOpacity(1.0);
+                fireDialogEvent(MFXDialogEvent.ON_CLOSED_EVENT);
             });
             outAnimation.play();
         } else {
@@ -158,6 +183,7 @@ public class MFXDialog extends AbstractMFXDialog {
                 scrimEffect.removeEffect((Pane) getParent());
             }
             setVisible(false);
+            fireDialogEvent(MFXDialogEvent.ON_CLOSED_EVENT);
         }
     }
 

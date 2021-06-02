@@ -2,19 +2,23 @@ package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
+import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.DragResizer;
 import io.github.palexdev.materialfx.utils.NodeUtils;
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.SkinBase;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 
 /**
  * This is the implementation of the {@code Skin} associated with every {@link MFXTableColumn}.
  * <p></p>
- * Simply an HBox with a label and an icon for sorting positioned manually based on the column's alignment.
+ * Simply an HBox with a label, an icon for sorting and an icon for locking/unlocking the column's width,
+ * both positioned manually based on the column's alignment.
  * It also has support for resizing the column on drag.
  */
 public class MFXTableColumnSkin<T> extends SkinBase<MFXTableColumn<T>> {
@@ -23,6 +27,7 @@ public class MFXTableColumnSkin<T> extends SkinBase<MFXTableColumn<T>> {
     //================================================================================
     private final HBox container;
     private final Label label;
+    private final MFXIconWrapper lockIcon;
 
     private final DragResizer dragResizer;
 
@@ -35,7 +40,20 @@ public class MFXTableColumnSkin<T> extends SkinBase<MFXTableColumn<T>> {
         label = new Label();
         label.textProperty().bind(column.textProperty());
 
-        container = new HBox(label, column.getSortIcon());
+        MFXFontIcon icon = new MFXFontIcon(column.isResizable() ? "mfx-lock" : "mfx-lock-open", 14);
+        lockIcon = new MFXIconWrapper(icon, 18).defaultRippleGeneratorBehavior();
+        lockIcon.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            column.setResizable(!column.isResizable());
+            event.consume();
+        });
+        lockIcon.visibleProperty().bind(Bindings.createBooleanBinding(
+                () -> column.isShowLockIcon() && (column.isHover() || !column.isResizable()),
+                column.showLockIconProperty(), column.hoverProperty(), column.resizableProperty()
+        ));
+        lockIcon.setManaged(false);
+        NodeUtils.makeRegionCircular(lockIcon);
+
+        container = new HBox(label, column.getSortIcon(), lockIcon);
         container.setMinWidth(Region.USE_PREF_SIZE);
         container.setPadding(new Insets(0,10, 0, 0));
         container.alignmentProperty().bind(column.columnAlignmentProperty());
@@ -86,9 +104,9 @@ public class MFXTableColumnSkin<T> extends SkinBase<MFXTableColumn<T>> {
         double computed;
         MFXTableColumn<T> column = getSkinnable();
         if (NodeUtils.isRightAlignment(column.getColumnAlignment())) {
-            computed = leftInset + label.getWidth() + column.getSortIcon().getSize() + rightInset + 20;
+            computed = leftInset + label.getWidth() + column.getSortIcon().getSize() + lockIcon.getSize() + rightInset + 20;
         } else {
-            computed = leftInset + label.getWidth() + getSkinnable().getSortIcon().getSize() + rightInset + 10;
+            computed = leftInset + label.getWidth() + column.getSortIcon().getSize() + lockIcon.getSize() + rightInset + 10;
         }
         return computed;
     }
@@ -97,13 +115,14 @@ public class MFXTableColumnSkin<T> extends SkinBase<MFXTableColumn<T>> {
     protected void layoutChildren(double x, double y, double w, double h) {
         super.layoutChildren(x, y, w, h);
 
+        // SORT ICON
         MFXTableColumn<T> column = getSkinnable();
         MFXIconWrapper sortIcon = column.getSortIcon();
         Pos alignment = column.getColumnAlignment();
 
         double sortSize = sortIcon.getSize();
         double sX;
-        double sY = snapPositionY((h / 2) - (sortSize / 2));
+        double iconsY = snapPositionY((h / 2) - (sortSize / 2));
 
         if (!NodeUtils.isRightAlignment(alignment)) {
             sX = snapPositionX(w - sortSize - 5);
@@ -111,6 +130,18 @@ public class MFXTableColumnSkin<T> extends SkinBase<MFXTableColumn<T>> {
             sX = 5;
         }
 
-        sortIcon.resizeRelocate(sX, sY, sortSize, sortSize);
+        sortIcon.resizeRelocate(sX, iconsY, sortSize, sortSize);
+
+        // LOCK ICON
+        double lockSize = lockIcon.getSize();
+        double lX;
+
+        if (!NodeUtils.isRightAlignment(alignment)) {
+            lX = snapPositionX(w - sortSize - lockSize - 10);
+        } else {
+            lX = 10 + sortSize;
+        }
+
+        lockIcon.resizeRelocate(lX, iconsY, lockSize, lockSize);
     }
 }

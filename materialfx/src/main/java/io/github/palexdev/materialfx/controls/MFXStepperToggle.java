@@ -75,7 +75,7 @@ public class MFXStepperToggle extends Control implements Validated<MFXDialogVali
     //================================================================================
     private static final StyleablePropertyFactory<MFXStepperToggle> FACTORY = new StyleablePropertyFactory<>(Control.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-stepper-toggle";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-steppertoggle.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXStepperToggle.css");
 
     private MFXDialogValidator validator;
     private final BooleanProperty showErrorIcon = new SimpleBooleanProperty(true);
@@ -318,7 +318,7 @@ public class MFXStepperToggle extends Control implements Validated<MFXDialogVali
             StyleableProperties.STROKE_WIDTH,
             this,
             "strokeWidth",
-            2.5
+            2.0
     );
 
     public double getLabelTextGap() {
@@ -414,7 +414,7 @@ public class MFXStepperToggle extends Control implements Validated<MFXDialogVali
                 FACTORY.createSizeCssMetaData(
                         "-mfx-stroke-width",
                         MFXStepperToggle::strokeWidthProperty,
-                        2.5
+                        2.0
                 );
 
         static {

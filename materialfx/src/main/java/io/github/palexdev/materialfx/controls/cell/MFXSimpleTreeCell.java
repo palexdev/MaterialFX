@@ -40,7 +40,7 @@ public class MFXSimpleTreeCell<T> extends AbstractMFXTreeCell<T> {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-tree-cell";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-treecell.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTreeCell.css");
 
     //================================================================================
     // Constructors

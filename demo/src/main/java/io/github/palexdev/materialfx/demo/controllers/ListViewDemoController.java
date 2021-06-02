@@ -40,7 +40,7 @@ public class ListViewDemoController implements Initializable {
     private MFXListView<String> stringView;
 
     @FXML
-    private MFXListView<MFXLabel> labelView;
+    private MFXListView<Label> labelView;
 
     @FXML
     private MFXListView<HBox> hBoxView;
@@ -73,7 +73,7 @@ public class ListViewDemoController implements Initializable {
     private MFXButton colorsButton;
 
     private ObservableList<String> stringList;
-    private ObservableList<MFXLabel> labelsList;
+    private ObservableList<Label> labelsList;
     private ObservableList<HBox> hBoxesList;
 
     private ObservableList<MFXLabel> labelsListNew;
@@ -109,6 +109,8 @@ public class ListViewDemoController implements Initializable {
         switchButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> updateState());
         depthButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> updateDepth());
         colorsButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> updateColors());
+
+        stringViewNew.getSelectionModel().setAllowsMultipleSelection(true);
     }
 
     private void initLists() {
@@ -125,14 +127,14 @@ public class ListViewDemoController implements Initializable {
 
         // LEGACY //
         labelsList = FXCollections.observableArrayList(List.of(
-                createLabel("Label 0", "fas-home"),
-                createLabel("Label 1", "fas-star"),
-                createLabel("Label 2", "fas-heart"),
-                createLabel("Label 3", "fas-cocktail"),
-                createLabel("Label 4", "fas-anchor"),
-                createLabel("Label 5", "fas-apple-alt"),
-                createLabel("Label 6", "fas-bug"),
-                createLabel("Label 7", "fas-beer")
+                createLegacyLabel("Label 0", "fas-home"),
+                createLegacyLabel("Label 1", "fas-star"),
+                createLegacyLabel("Label 2", "fas-heart"),
+                createLegacyLabel("Label 3", "fas-cocktail"),
+                createLegacyLabel("Label 4", "fas-anchor"),
+                createLegacyLabel("Label 5", "fas-apple-alt"),
+                createLegacyLabel("Label 6", "fas-bug"),
+                createLegacyLabel("Label 7", "fas-beer")
         ));
         hBoxesList = FXCollections.observableArrayList(List.of(
                 createHBox(0),
@@ -178,6 +180,18 @@ public class ListViewDemoController implements Initializable {
         label.setUnfocusedLineColor(Color.TRANSPARENT);
         label.setStyle("-fx-background-color: transparent");
         label.setLeadingIcon(icon);
+        label.setGraphicTextGap(10);
+        return label;
+    }
+
+    private Label createLegacyLabel(String text, String iconDescription) {
+        FontIcon icon = new FontIcon(iconDescription);
+        icon.setIconColor(Color.PURPLE);
+        icon.setIconSize(14);
+
+        Label label = new Label(text);
+        label.setStyle("-fx-background-color: transparent");
+        label.setGraphic(icon);
         label.setGraphicTextGap(10);
         return label;
     }

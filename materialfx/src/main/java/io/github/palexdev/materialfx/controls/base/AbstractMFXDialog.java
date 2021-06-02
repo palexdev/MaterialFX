@@ -19,16 +19,20 @@
 package io.github.palexdev.materialfx.controls.base;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXDialog;
 import io.github.palexdev.materialfx.controls.enums.DialogType;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.effects.MFXScrimEffect;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.ParallelTransition;
 import javafx.beans.property.*;
+import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 
@@ -185,6 +189,7 @@ public abstract class AbstractMFXDialog extends BorderPane {
     //================================================================================
     public abstract void show();
     public abstract void close();
+    public abstract AbstractMFXDialog setActions(HBox actionsBox);
     public abstract void computeSizeAndPosition();
 
     //================================================================================
@@ -398,7 +403,7 @@ public abstract class AbstractMFXDialog extends BorderPane {
     }
 
     /**
-     * When the {@code isDraggable} property is set to true, adds the {@code EventHandler}s for the drag.
+     * When the {@code isDraggable} property is set to true, adds the {@code EventHandlers} for the drag.
      */
     protected void makeDraggable() {
         addEventFilter(MouseEvent.MOUSE_PRESSED, pressHandler);
@@ -406,10 +411,121 @@ public abstract class AbstractMFXDialog extends BorderPane {
     }
 
     /**
-     * When the {@code isDraggable} property is set to false, removes the {@code EventHandler}s for the drag.
+     * When the {@code isDraggable} property is set to false, removes the {@code EventHandlers} for the drag.
      */
     protected void clearDragHandlers() {
         removeEventFilter(MouseEvent.MOUSE_PRESSED, pressHandler);
         removeEventFilter(MouseEvent.MOUSE_DRAGGED, dragHandler);
+    }
+
+    //================================================================================
+    // Events
+    //================================================================================
+
+    /**
+     * Events class for MFXDialogs.
+     * <p>
+     *  Defines four new EvenTypes:
+     * <p>
+     * - BEFORE_OPEN_EVENT: should be fired at the start of the {@link #show()} method or even before. <p></p>
+     * - ON_OPENED_EVENT : should be fired when the dialog is set to visible or at the end of the show animation. <p></p>
+     * - BEFORE_CLOSE_EVENT: should be fired at the start of the {@link #close()} methods or even before. <p></p>
+     * - ON_CLOSED_EVENT: should be fired when the dialog is se to not be visible or at the end of the hide animation. <p></p>
+     * <p></p>
+     * Note that if the dialog is not animated, or the animation are really short, the BEFORE events will "overlap" with the ON events.
+     * These events are automatically fired by {@link MFXDialog}, if you wan to change the behavior you must override the
+     * {@link MFXDialog#show()} and {@link MFXDialog#close()} methods, for any other custom implementation that extends {@link AbstractMFXDialog}
+     * you have to define the behavior yourself.
+     */
+    public static class MFXDialogEvent extends Event {
+
+        public static final EventType<MFXDialogEvent> BEFORE_OPEN_EVENT = new EventType<>(ANY, "BEFORE_OPEN_EVENT");
+        public static final EventType<MFXDialogEvent> ON_OPENED_EVENT = new EventType<>(ANY, "ON_OPENED_EVENT");
+        public static final EventType<MFXDialogEvent> BEFORE_CLOSE_EVENT = new EventType<>(ANY, "BEFORE_CLOSE_EVENT");
+        public static final EventType<MFXDialogEvent> ON_CLOSED_EVENT = new EventType<>(ANY, "ON_CLOSED_EVENT");
+
+        public MFXDialogEvent(EventType<? extends Event> eventType) {
+            super(eventType);
+        }
+    }
+
+    private final ObjectProperty<EventHandler<MFXDialogEvent>> onBeforeOpen = new SimpleObjectProperty<>() {
+        @Override
+        protected void invalidated() {
+            setEventHandler(MFXDialogEvent.BEFORE_OPEN_EVENT, get());
+        }
+    };
+
+    private final ObjectProperty<EventHandler<MFXDialogEvent>> onOpened = new SimpleObjectProperty<>() {
+        @Override
+        protected void invalidated() {
+            setEventHandler(MFXDialogEvent.ON_OPENED_EVENT, get());
+        }
+    };
+
+    private final ObjectProperty<EventHandler<MFXDialogEvent>> onBeforeClose = new SimpleObjectProperty<>() {
+        @Override
+        protected void invalidated() {
+            setEventHandler(MFXDialogEvent.BEFORE_CLOSE_EVENT, get());
+        }
+    };
+
+    private final ObjectProperty<EventHandler<MFXDialogEvent>> onClosed = new SimpleObjectProperty<>() {
+        @Override
+        protected void invalidated() {
+            setEventHandler(MFXDialogEvent.ON_CLOSED_EVENT, get());
+        }
+    };
+
+    public EventHandler<MFXDialogEvent> getOnBeforeOpen() {
+        return onBeforeOpen.get();
+    }
+
+    public ObjectProperty<EventHandler<MFXDialogEvent>> onBeforeOpenProperty() {
+        return onBeforeOpen;
+    }
+
+    public void setOnBeforeOpen(EventHandler<MFXDialogEvent> onBeforeOpen) {
+        this.onBeforeOpen.set(onBeforeOpen);
+    }
+
+    public EventHandler<MFXDialogEvent> getOnOpened() {
+        return onOpened.get();
+    }
+
+    public ObjectProperty<EventHandler<MFXDialogEvent>> onOpenedProperty() {
+        return onOpened;
+    }
+
+    public void setOnOpened(EventHandler<MFXDialogEvent> onOpened) {
+        this.onOpened.set(onOpened);
+    }
+
+    public EventHandler<MFXDialogEvent> getOnBeforeClose() {
+        return onBeforeClose.get();
+    }
+
+    public ObjectProperty<EventHandler<MFXDialogEvent>> onBeforeCloseProperty() {
+        return onBeforeClose;
+    }
+
+    public void setOnBeforeClose(EventHandler<MFXDialogEvent> onBeforeClose) {
+        this.onBeforeClose.set(onBeforeClose);
+    }
+
+    public EventHandler<MFXDialogEvent> getOnClosed() {
+        return onClosed.get();
+    }
+
+    public ObjectProperty<EventHandler<MFXDialogEvent>> onClosedProperty() {
+        return onClosed;
+    }
+
+    public void setOnClosed(EventHandler<MFXDialogEvent> onClosed) {
+        this.onClosed.set(onClosed);
+    }
+
+    public void fireDialogEvent(EventType<MFXDialogEvent> eventType) {
+        fireEvent(new MFXDialogEvent(eventType));
     }
 }

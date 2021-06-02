@@ -126,16 +126,20 @@ public abstract class AbstractMFXFlowlessListView<T, C extends AbstractMFXFlowle
     }
 
     public static void setSmoothScrolling(AbstractMFXFlowlessListView<?, ?, ?> listView) {
+        setSmoothScrolling(listView, 1);
+    }
+
+    public static void setSmoothScrolling(AbstractMFXFlowlessListView<?, ?, ?> listView, int speed) {
         if (listView.getScene() != null) {
             VirtualFlow<?, ?> flow = (VirtualFlow<?, ?>) listView.lookup(".virtual-flow");
-            setSmoothScrolling(flow, flow.estimatedScrollYProperty());
+            setSmoothScrolling(flow, flow.estimatedScrollYProperty(), speed);
         } else {
             listView.skinProperty().addListener(new ChangeListener<>() {
                 @Override
                 public void changed(ObservableValue<? extends Skin<?>> observable, Skin<?> oldValue, Skin<?> newValue) {
                     if (newValue != null) {
                         VirtualFlow<?, ?> flow = (VirtualFlow<?, ?>) listView.lookup(".virtual-flow");
-                        setSmoothScrolling(flow, flow.estimatedScrollYProperty());
+                        setSmoothScrolling(flow, flow.estimatedScrollYProperty(), speed);
                         listView.skinProperty().removeListener(this);
                     }
                 }
@@ -143,9 +147,9 @@ public abstract class AbstractMFXFlowlessListView<T, C extends AbstractMFXFlowle
         }
     }
 
-    private static void setSmoothScrolling(VirtualFlow<?, ?> flow, Var<Double> scrollDirection) {
+    private static void setSmoothScrolling(VirtualFlow<?, ?> flow, Var<Double> scrollDirection, int speed) {
         final double[] frictions = {0.99, 0.1, 0.05, 0.04, 0.03, 0.02, 0.01, 0.04, 0.01, 0.008, 0.008, 0.008, 0.008, 0.0006, 0.0005, 0.00003, 0.00001};
-        final double[] pushes = {1};
+        final double[] pushes = {speed};
         final double[] derivatives = new double[frictions.length];
 
         Timeline timeline = new Timeline();

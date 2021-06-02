@@ -16,7 +16,9 @@ import java.util.List;
 /**
  * Concrete implementation of the {@code ITableSelectionModel} interface.
  * <p>
- * Basic selection model, allows to: clear the selection, single and multiple selection for {@link MFXTableRow}s data.
+ * Basic selection model, allows to: clear the selection, single and multiple selection for {@code MFXTableRows} data.
+ *
+ * @see MFXTableRow
  */
 public class TableSelectionModel<T> implements ITableSelectionModel<T> {
     //================================================================================

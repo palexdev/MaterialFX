@@ -26,7 +26,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 
 /**
- * Utils class for {@code ToggleButton}s.
+ * Utils class for {@code ToggleButtons}.
  */
 public class ToggleButtonsUtil {
 

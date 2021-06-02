@@ -10,8 +10,10 @@ import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.selection.ComboSelectionModelMock;
 import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
+import io.github.palexdev.materialfx.utils.LabelUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.StringUtils;
+import io.github.palexdev.materialfx.validation.MFXDialogValidator;
 import javafx.animation.*;
 import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
@@ -43,7 +45,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
     // Properties
     //================================================================================
     private final HBox container;
-    private final Label valueLabel;
+    private final MFXLabel valueLabel;
     private final double minWidth = 120;
 
     private final MFXIconWrapper icon;
@@ -53,6 +55,8 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
 
     private final Line unfocusedLine;
     private final Line focusedLine;
+    private final Label validate;
+    private final double padding = 11;
 
     private final HBox searchContainer;
     private FilteredList<T> filteredList;
@@ -85,6 +89,22 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         focusedLine.endXProperty().bind(comboBox.widthProperty().subtract(1));
         focusedLine.setScaleX(0.0);
 
+        MFXFontIcon warnIcon = new MFXFontIcon("mfx-exclamation-triangle", Color.RED);
+        MFXIconWrapper warnWrapper = new MFXIconWrapper(warnIcon, 10);
+
+        validate = new Label();
+        validate.setGraphic(warnWrapper);
+        validate.getStyleClass().add("validate-label");
+        validate.getStylesheets().setAll(comboBox.getUserAgentStylesheet());
+        validate.textProperty().bind(comboBox.getValidator().validatorMessageProperty());
+        validate.setGraphicTextGap(padding);
+        validate.setVisible(false);
+        validate.setManaged(false);
+
+        if (comboBox.isValidated() && comboBox.getValidator().isInitControlValidation()) {
+            validate.setVisible(!comboBox.isValid());
+        }
+
         filteredList = new FilteredList<>(comboBox.getItems());
 
         valueLabel = buildLabel();
@@ -116,10 +136,10 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
             }
         };
 
-        if (comboBox.getComboStyle() == Styles.ComboBoxStyles.STYLE1) {
-            getChildren().addAll(container, icon, unfocusedLine, focusedLine);
+        if (comboBox.getComboStyle() != Styles.ComboBoxStyles.STYLE2) {
+            getChildren().addAll(container, icon, unfocusedLine, focusedLine, validate);
         } else {
-            getChildren().addAll(container, icon);
+            getChildren().addAll(container, icon, validate);
         }
 
         setBehavior();
@@ -180,6 +200,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
      */
     private void comboBehavior() {
         MFXFilterComboBox<T> comboBox = getSkinnable();
+        MFXDialogValidator validator = comboBox.getValidator();
 
         // STYLE
         comboBox.comboStyleProperty().addListener((observable, oldValue, newValue) -> {
@@ -202,6 +223,11 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
 
         // FOCUS
         comboBox.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue && comboBox.isValidated()) {
+                comboBox.getValidator().update();
+                validate.setVisible(!comboBox.isValid());
+            }
+
             boolean fieldCondition = searchField != null && searchField.isFocused();
             if (fieldCondition) {
                 return;
@@ -218,6 +244,29 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
                 focusedLine.setScaleX(0.0);
             }
         });
+
+        // VALIDATION
+        comboBox.isValidatedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                validate.setVisible(false);
+            }
+        });
+
+        comboBox.disabledProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                validate.setVisible(false);
+            }
+        });
+
+        validator.addListener(invalidated -> {
+            if (comboBox.isValidated()) {
+                validate.setVisible(!comboBox.isValid());
+            }
+        });
+
+        validate.textProperty().addListener(invalidated -> comboBox.requestLayout());
+        validate.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> validator.showModal(comboBox.getScene().getWindow()));
+
     }
 
     /**
@@ -228,6 +277,11 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         ComboSelectionModelMock<T> selectionModel = comboBox.getSelectionModel();
 
         selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                listView.getSelectionModel().select(selectionModel.getSelectedIndex(), newValue, null);
+            } else {
+                listView.getSelectionModel().clearSelection();
+            }
             if (oldValue != newValue) {
                 comboBox.setSelectedValue(newValue);
             }
@@ -238,7 +292,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
                 setValueLabel(newValue);
             } else {
                 valueLabel.setText("");
-                valueLabel.setGraphic(null);
+                valueLabel.setLeadingIcon(null);
             }
         });
     }
@@ -357,10 +411,16 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
     /**
      * This method builds the label used to display the selected value of the combo box.
      */
-    protected Label buildLabel() {
-        Label label = new Label("");
+    protected MFXLabel buildLabel() {
+        MFXLabel label = new MFXLabel("");
+        label.setAlignment(Pos.CENTER_LEFT);
+        label.setContainerPadding(new Insets(0, 0, 0, 2));
         label.setMinWidth(snappedLeftInset() + minWidth + snappedRightInset());
         label.setMouseTransparent(true);
+        label.promptTextProperty().bind(getSkinnable().promptTextProperty());
+        label.setLineColor(Color.TRANSPARENT);
+        label.setUnfocusedLineColor(Color.TRANSPARENT);
+        label.getStylesheets().setAll(getSkinnable().getUserAgentStylesheet());
 
         return label;
     }
@@ -553,7 +613,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         if (item instanceof Labeled) {
             Labeled nodeItem = (Labeled) item;
             if (nodeItem.getGraphic() != null) {
-                valueLabel.setGraphic(new MFXSnapshotWrapper(nodeItem.getGraphic()).getGraphic());
+                valueLabel.setLeadingIcon(new MFXSnapshotWrapper(nodeItem.getGraphic()).getGraphic());
             }
             valueLabel.setText(nodeItem.getText());
         } else {
@@ -598,17 +658,17 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
 
     @Override
     protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return Math.max(super.computeMinHeight(width, topInset, rightInset, bottomInset, leftInset), 30);
+        return Math.max(super.computeMinHeight(width, topInset, rightInset, bottomInset, leftInset), 27);
     }
 
     @Override
     protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return super.computePrefWidth(height, topInset, rightInset, bottomInset, leftInset);
+        return getSkinnable().prefWidth(height);
     }
 
     @Override
     protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return super.computePrefHeight(width, topInset, rightInset, bottomInset, leftInset);
+        return getSkinnable().prefHeight(width);
     }
 
     @Override
@@ -621,15 +681,22 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
     }
 
     @Override
-    protected void layoutChildren(double contentX, double contentY, double contentWidth, double contentHeight) {
-        super.layoutChildren(contentX, contentY, contentWidth, contentHeight);
+    protected void layoutChildren(double x, double y, double w, double h) {
+        super.layoutChildren(x, y, w, h);
+
+        double lw = snapSizeX(LabelUtils.computeLabelWidth(validate));
+        double lh = snapSizeY(LabelUtils.computeTextHeight(validate.getFont(), validate.getText()));
+        double lx = 0;
+        double ly = h + (padding * 0.7);
+
+        validate.resizeRelocate(lx, ly, lw, lh);
 
         double iconWidth = icon.getPrefWidth();
         double iconHeight = icon.getPrefHeight();
-        double center = ((snappedTopInset() + snappedBottomInset()) / 2.0) + ((contentHeight - iconHeight) / 2.0);
-        icon.resizeRelocate(contentWidth - iconWidth, center, iconWidth, iconHeight);
-        focusedLine.relocate(0, contentHeight);
-        unfocusedLine.relocate(0, contentHeight);
+        double center = ((snappedTopInset() + snappedBottomInset()) / 2.0) + ((h - iconHeight) / 2.0);
+        icon.resizeRelocate(w - iconWidth, center, iconWidth, iconHeight);
+        focusedLine.relocate(0, h);
+        unfocusedLine.relocate(0, h);
     }
 
     private static class FilterListCell<T> extends MFXFlowlessListCell<T> {
@@ -672,6 +739,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
             if (data instanceof Node) {
                 getChildren().setAll((Node) data);
             } else {
+                setEmpty(data.toString().isEmpty());
                 Label label = new Label(data.toString());
                 label.getStyleClass().add("data-label");
                 getChildren().setAll(label);

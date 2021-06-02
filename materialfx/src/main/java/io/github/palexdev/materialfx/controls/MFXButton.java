@@ -47,7 +47,7 @@ public class MFXButton extends Button {
     //================================================================================
     private static final StyleablePropertyFactory<MFXButton> FACTORY = new StyleablePropertyFactory<>(Button.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-button";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-button.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXButton.css");
     private final MFXCircleRippleGenerator rippleGenerator = new MFXCircleRippleGenerator(this);
 
     //================================================================================
@@ -114,7 +114,6 @@ public class MFXButton extends Button {
         rippleGenerator.animateBackgroundProperty().bind(rippleAnimateBackgroundProperty());
         rippleGenerator.animateShadowProperty().bind(rippleAnimateShadowProperty());
 
-        setRippleAnimateShadow(true);
         setRippleColor(Color.rgb(190, 190, 190));
         setRippleRadius(25);
         setComputeRadiusMultiplier(true);

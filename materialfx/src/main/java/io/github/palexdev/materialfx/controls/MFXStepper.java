@@ -50,7 +50,7 @@ import java.util.Objects;
  * Steppers display progress through a sequence of logical and numbered steps.
  * They may also be used for navigation.
  * <p></p>
- * Every stepper has a number of {@link MFXStepperToggle}s that should be added to the list
+ * Every stepper has a number of {@code MFXStepperToggles} that should be added to the list
  * after instantiating the stepper. If the list is changed after the stepper has already been laid out
  * then a {@link #reset()} attempt is made.
  * <p></p>
@@ -61,6 +61,8 @@ import java.util.Objects;
  * <b>NOTE:</b> the stepper allows you to change the toggles even after it is already shown, it has been
  * tested and it seems to work well. However, the stepper is intended to be a "static" control, that means
  * you should plan ahead of time what toggles to place and their content.
+ *
+ * @see MFXStepperToggle
  */
 public class MFXStepper extends Control {
     //================================================================================
@@ -68,7 +70,7 @@ public class MFXStepper extends Control {
     //================================================================================
     private static final StyleablePropertyFactory<MFXStepper> FACTORY = new StyleablePropertyFactory<>(Control.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-stepper";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-stepper.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXStepper.css");
 
     private final ObservableList<MFXStepperToggle> stepperToggles = FXCollections.observableArrayList();
     private final DoubleProperty animationDuration = new SimpleDoubleProperty(700.0);
@@ -92,6 +94,7 @@ public class MFXStepper extends Control {
 
     private void initialize() {
         getStyleClass().setAll(STYLE_CLASS);
+        setMinHeight(400);
         addListeners();
     }
 
@@ -112,13 +115,14 @@ public class MFXStepper extends Control {
      * reaches the 100%.
      * <p></p>
      * This method is also responsible for updating the toggles' state
-     * and firing the following events: {@link MFXStepperEvent#NEXT_EVENT}, {@link MFXStepperEvent#LAST_NEXT_EVENT},
-     * {@link MFXStepperEvent#VALIDATION_FAILED_EVENT}.
+     * and firing the following events: {@link MFXStepperEvent#BEFORE_NEXT_EVENT}, {@link MFXStepperEvent#NEXT_EVENT},
+     * {@link MFXStepperEvent#LAST_NEXT_EVENT}, {@link MFXStepperEvent#VALIDATION_FAILED_EVENT}.
      */
     public void next() {
         if (stepperToggles.isEmpty()) {
             return;
         }
+        fireEvent(MFXStepperEvent.BEFORE_NEXT_EVENT);
 
         int currentIndex = getCurrentIndex();
         if (currentIndex == -1) {
@@ -160,12 +164,13 @@ public class MFXStepper extends Control {
      * {@link #currentIndexProperty()} accordingly.
      * <p></p>
      * This method is also responsible for updating the toggles' state
-     * and firing the following events: {@link MFXStepperEvent#PREVIOUS_EVENT}.
+     * and firing the following events: {@link MFXStepperEvent#BEFORE_PREVIOUS_EVENT}, {@link MFXStepperEvent#PREVIOUS_EVENT}.
      */
     public void previous() {
         if (stepperToggles.isEmpty()) {
             return;
         }
+        fireEvent(MFXStepperEvent.BEFORE_PREVIOUS_EVENT);
 
         int currentIndex = getCurrentIndex();
         if (isLastToggle()) {
@@ -688,9 +693,12 @@ public class MFXStepper extends Control {
     /**
      * Events class for MFXSteppers.
      * <p>
-     * Defines four new EventTypes:
+     * Defines seven new EventTypes:
      * <p>
+     * - FORCE_LAYOUT_UPDATE_EVENT: if there is a bug with the stepper layout the user can call {@link #forceLayoutUpdate()} to fire this event and update the layout. <p></p>
+     * - BEFORE_NEXT_EVENT: at the start of the {@link MFXStepper#next()} method but after checking if the toggles list is empty. <p></p>
      * - NEXT_EVENT: when the {@link MFXStepper#next()} method is called and the index property is updated. <p></p>
+     * - BEFORE_PREVIOUS_EVENT: at the start of the {@link MFXStepper#previous()} method but after checking if the toggles list is empty. <p></p>
      * - PREVIOUS_EVENT: when the {@link MFXStepper#previous()} method is called and the index property is updated. <p></p>
      * - LAST_NEXT_EVENT: when the {@link MFXStepper#next()} method is called and the last toggle is selected/already reached. <p></p>
      * - VALIDATION_FAILED_EVENT: when the {@link MFXStepper#next()} method is called and the validator's state is invalid. <p></p>
@@ -699,7 +707,10 @@ public class MFXStepper extends Control {
      */
     public static class MFXStepperEvent extends Event {
 
+        public static final EventType<MFXStepperEvent> FORCE_LAYOUT_UPDATE_EVENT = new EventType<>(ANY, "FORCE_LAYOUT_UPDATE_EVENT");
+        public static final EventType<MFXStepperEvent> BEFORE_NEXT_EVENT = new EventType<>(ANY, "BEFORE_NEXT_EVENT");
         public static final EventType<MFXStepperEvent> NEXT_EVENT = new EventType<>(ANY, "NEXT_EVENT");
+        public static final EventType<MFXStepperEvent> BEFORE_PREVIOUS_EVENT = new EventType<>(ANY, "BEFORE_PREVIOUS_EVENT");
         public static final EventType<MFXStepperEvent> PREVIOUS_EVENT = new EventType<>(ANY, "PREVIOUS_EVENT");
         public static final EventType<MFXStepperEvent> LAST_NEXT_EVENT = new EventType<>(ANY, "LAST_NEXT_EVENT");
         public static final EventType<MFXStepperEvent> VALIDATION_FAILED_EVENT = new EventType<>(ANY, "VALIDATION_FAILED_EVENT");
@@ -709,10 +720,24 @@ public class MFXStepper extends Control {
         }
     }
 
+    private final ObjectProperty<EventHandler<MFXStepperEvent>> onBeforeNext = new SimpleObjectProperty<>() {
+        @Override
+        protected void invalidated() {
+            setEventHandler(MFXStepperEvent.BEFORE_NEXT_EVENT, get());
+        }
+    };
+
     private final ObjectProperty<EventHandler<MFXStepperEvent>> onNext = new SimpleObjectProperty<>() {
         @Override
         protected void invalidated() {
             setEventHandler(MFXStepperEvent.NEXT_EVENT, get());
+        }
+    };
+
+    private final ObjectProperty<EventHandler<MFXStepperEvent>> onBeforePrevious = new SimpleObjectProperty<>() {
+        @Override
+        protected void invalidated() {
+            setEventHandler(MFXStepperEvent.BEFORE_PREVIOUS_EVENT, get());
         }
     };
 
@@ -737,6 +762,21 @@ public class MFXStepper extends Control {
         }
     };
 
+    public EventHandler<MFXStepperEvent> getOnBeforeNext() {
+        return onBeforeNext.get();
+    }
+
+    /**
+     * Specifies the action to perform when a {@link MFXStepperEvent#BEFORE_NEXT_EVENT} is fired.
+     */
+    public ObjectProperty<EventHandler<MFXStepperEvent>> onBeforeNextProperty() {
+        return onBeforeNext;
+    }
+
+    public void setOnBeforeNext(EventHandler<MFXStepperEvent> onBeforeNext) {
+        this.onBeforeNext.set(onBeforeNext);
+    }
+
     public EventHandler<MFXStepperEvent> getOnNext() {
         return onNext.get();
     }
@@ -752,6 +792,21 @@ public class MFXStepper extends Control {
 
     public void setOnNext(EventHandler<MFXStepperEvent> onNext) {
         this.onNext.set(onNext);
+    }
+
+    public EventHandler<MFXStepperEvent> getOnBeforePrevious() {
+        return onBeforePrevious.get();
+    }
+
+    /**
+     * Specifies the action to perform when a {@link MFXStepperEvent#BEFORE_PREVIOUS_EVENT} is fired.
+     */
+    public ObjectProperty<EventHandler<MFXStepperEvent>> onBeforePreviousProperty() {
+        return onBeforePrevious;
+    }
+
+    public void setOnBeforePrevious(EventHandler<MFXStepperEvent> onBeforePrevious) {
+        this.onBeforePrevious.set(onBeforePrevious);
     }
 
     public EventHandler<MFXStepperEvent> getOnPrevious() {
@@ -810,5 +865,12 @@ public class MFXStepper extends Control {
      */
     public void fireEvent(EventType<MFXStepperEvent> eventType) {
         fireEvent(new MFXStepperEvent(eventType));
+    }
+
+    /**
+     * Forces the layout of the stepper to update.
+     */
+    public void forceLayoutUpdate() {
+        fireEvent(MFXStepperEvent.FORCE_LAYOUT_UPDATE_EVENT);
     }
 }

@@ -27,7 +27,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 /**
- * Factory class to build {@code MFXStageDialog}s.
+ * Factory class to build {@code MFXStageDialogs}.
  */
 public class MFXStageDialogFactory {
 

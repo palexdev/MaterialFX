@@ -21,7 +21,7 @@ public class MFXFilterComboBox<T> extends MFXComboBox<T> {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-filter-combo-box";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-filter-combobox.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXFilterComboBox.css");
 
     private static final PseudoClass EDITOR_FOCUSED_PSEUDO_CLASS = PseudoClass.getPseudoClass("editor");
     private final BooleanProperty editorFocused = new SimpleBooleanProperty();

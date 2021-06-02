@@ -228,23 +228,23 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
     // Override Methods
     //================================================================================
     @Override
-    protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return rippleContainer.getWidth() + label.getWidth() + container.getSpacing();
-    }
-
-    @Override
     protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
         return rippleContainer.getHeight();
     }
 
     @Override
-    protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+    protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
         return rippleContainer.getWidth() + label.getWidth() + container.getSpacing();
     }
 
     @Override
     protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
         return rippleContainer.getHeight();
+    }
+
+    @Override
+    protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return getSkinnable().prefWidth(height);
     }
 
     @Override

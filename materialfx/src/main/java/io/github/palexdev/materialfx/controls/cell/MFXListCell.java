@@ -48,7 +48,7 @@ public class MFXListCell<T> extends ListCell<T> {
     //================================================================================
     private static final StyleablePropertyFactory<MFXListCell<?>> FACTORY = new StyleablePropertyFactory<>(ListCell.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-list-cell";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-listcell.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXListCell.css");
     private final MFXCircleRippleGenerator rippleGenerator = new MFXCircleRippleGenerator(this);
 
     //================================================================================
@@ -282,7 +282,7 @@ public class MFXListCell<T> extends ListCell<T> {
 
     /**
      * Overridden method to add the {@code RippleGenerator} and
-     * allow {@code Node}s.
+     * allow {@code Nodes}.
      */
     @Override
     protected void updateItem(T item, boolean empty) {
@@ -295,7 +295,6 @@ public class MFXListCell<T> extends ListCell<T> {
             if (item instanceof Node) {
                 Node nodeItem = (Node) item;
                 setGraphic(nodeItem);
-
             } else {
                 setText(item.toString());
             }

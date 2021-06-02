@@ -21,7 +21,7 @@ public class DatePickersDemoController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        String css = MFXResourcesLoader.load("customcss/custom-datepicker.css").toString();
+        String css = MFXResourcesLoader.load("css/CustomDatePicker.css").toString();
         customPicker.getContent().getStylesheets().add(css);
 
         MFXDatePicker initialized = new MFXDatePicker(LocalDate.now());

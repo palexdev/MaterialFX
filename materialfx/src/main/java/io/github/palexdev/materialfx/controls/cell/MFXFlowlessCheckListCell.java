@@ -44,7 +44,7 @@ public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> 
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-check-list-cell";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-flowless-check-listcell.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXFlowlessCheckListCell.css");
     protected final MFXCircleRippleGenerator rippleGenerator = new MFXCircleRippleGenerator(this);
 
     private final MFXFlowlessCheckListView<T> listView;
@@ -214,13 +214,15 @@ public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> 
      * If the given data is instance of Node then the data is cast
      * to Node and added to the children list with the checkbox as well.
      * Otherwise a Label is created and toString is called on the data.
-     * The label has style class: "data-label"
+     * The {@link #emptyProperty()} is updated accordingly to the generated string.
+     * The label has style class: "data-label".
      */
     @Override
     protected void render(T data) {
         if (data instanceof Node) {
             getChildren().setAll(checkbox, (Node) data);
         } else {
+            setEmpty(data.toString().isEmpty());
             Label label = new Label(data.toString());
             label.getStyleClass().add("data-label");
             getChildren().setAll(checkbox, label);

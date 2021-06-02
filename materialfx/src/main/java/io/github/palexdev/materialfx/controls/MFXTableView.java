@@ -40,7 +40,7 @@ public class MFXTableView<T> extends Control {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-table-view";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-tableview.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTableView.css");
 
     private final ObjectProperty<ObservableList<T>> items = new SimpleObjectProperty<>(FXCollections.observableArrayList());
     private final ObjectProperty<ITableSelectionModel<T>> selectionModel = new SimpleObjectProperty<>();

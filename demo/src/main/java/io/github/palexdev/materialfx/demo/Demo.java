@@ -20,7 +20,7 @@ public class Demo extends Application {
     public void start(Stage primaryStage) throws IOException {
         CSSFX.start();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(MFXResourcesLoader.load("demo.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MFXResourcesLoader.load("Demo.fxml"));
         fxmlLoader.setControllerFactory(controller -> new DemoController(primaryStage, getHostServices()));
         StackPane demoPane = fxmlLoader.load();
 

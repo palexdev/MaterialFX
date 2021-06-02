@@ -139,7 +139,6 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         rowsPerPageCombo = new MFXComboBox<>();
         rowsPerPageCombo.setComboStyle(Styles.ComboBoxStyles.STYLE2);
         rowsPerPageCombo.setMaxPopupHeight(100);
-        rowsPerPageCombo.getSelectionModel().selectFirst();
 
         shownRows = new Label("Shown Rows: ");
         shownRows.textProperty().bind(Bindings.createStringBinding(
@@ -147,7 +146,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
                     if (getShownRowsRange() != null) {
                         return new StringBuilder()
                                 .append("Shown Rows:  ")
-                                .append(getShownRowsRange().getStart() + 1)
+                                .append(tableFiltered.get() && filteredList.isEmpty() || sortedList.isEmpty() ? 0 : getShownRowsRange().getStart() + 1)
                                 .append("-").append(Math.min(getShownRowsRange().getEnd(), tableFiltered.get() ? filteredList.size() : sortedList.size()))
                                 .append(" of ")
                                 .append(tableFiltered.get() ? filteredList.size() : sortedList.size())
@@ -465,6 +464,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         for (int i = 5; i <= tableView.getMaxRowsPerPage(); i += 5) {
             rowsPerPageCombo.getItems().add(i);
         }
+        rowsPerPageCombo.getSelectionModel().selectFirst();
 
         HBox box1 = new HBox(5, firstIcon, previousIcon, nextIcon, lastIcon);
         HBox box2 = new HBox(10, rowsPerPageLabel, rowsPerPageCombo);

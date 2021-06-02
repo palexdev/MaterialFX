@@ -47,7 +47,7 @@ public class MFXListView<T> extends ListView<T> {
     //================================================================================
     private static final StyleablePropertyFactory<MFXListView<?>> FACTORY = new StyleablePropertyFactory<>(ListView.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-legacy-list-view";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-listview.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXListView.css");
 
     //================================================================================
     // Constructors

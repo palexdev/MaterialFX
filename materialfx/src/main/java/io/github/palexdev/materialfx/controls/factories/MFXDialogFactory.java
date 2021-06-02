@@ -34,7 +34,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
 /**
- * Factory class to build specific {@code MFXDialog}s and generic {@code MFXDialog}s.
+ * Factory class to build specific {@code MFXDialogs} and generic {@code MFXDialogs}.
  * <p></p>
  * Also provides convenience methods to convert a specific dialog to another one
  * and from generic to specific (the reverse is not true).

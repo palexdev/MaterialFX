@@ -1,0 +1,113 @@
+@import "Common.css";
+
+#demoPane {
+    -fx-background-color: #FAFAFA;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+}
+
+#closeButton:hover {
+    -fx-background-color: #ffdcdc;
+}
+
+#minimizeButton:hover {
+    -fx-background-color: #dce2ff;
+}
+
+#expandButton:hover {
+    -fx-background-color: #fff3cc;
+}
+
+#infoButton {
+    -fx-background-radius: 16.4, 15;
+    -fx-background-insets: -1.4, 0;
+    -fx-border-radius: 15;
+    -fx-border-width: 2;
+    -fx-border-color: rgb(75, 181, 255);
+}
+
+#infoButton .mfx-ripple-generator {
+    -mfx-ripple-radius: 15px;
+    -mfx-ripple-color: #d3d8ff;
+}
+
+#contentPane {
+    -fx-background-color: #FAFAFA;
+    -fx-background-insets: 0 2 2 2;
+    -fx-background-radius: 10;
+}
+
+#navButton {
+    -fx-background-color: white, white;
+    -fx-background-radius: 16.4, 15;
+    -fx-background-insets: -1.4, 0;
+    -fx-border-radius: 15;
+    -fx-border-width: 1.2;
+    -fx-border-color: rgba(127, 15, 255, 0.35);
+    -fx-padding: 0;
+    -fx-font-size: 0;
+}
+
+#navButton .mfx-ripple-generator {
+    -mfx-ripple-color: #e2caff;
+}
+
+#navButton .mfx-font-icon {
+    -mfx-color: #6e0ede;
+    -fx-opacity: 0.5;
+}
+
+#navButton .mfx-font-icon:hover {
+    -mfx-color: #6e0ede;
+    -fx-opacity: 1.0;
+}
+
+#navBar {
+    -fx-background-radius: 10;
+    -fx-border-color: #7F0FFF;
+    -fx-border-width: 0.2;
+    -fx-border-radius: 10;
+}
+
+#vLoader .mfx-toggle-node {
+    -fx-background-color: white;
+    -fx-background-radius: 6;
+    -fx-background-insets: -1;
+    -fx-border-color: #7F0FFF;
+    -fx-border-radius: 6;
+    -fx-border-insets: -1;
+    -fx-pref-width: 160;
+}
+
+#vLoader .mfx-toggle-node .mfx-label {
+    -mfx-font-family: 'Open Sans Bold';
+    -mfx-text-fill: #7F0FFF;
+    -mfx-font-size: 13px;
+    -fx-opacity: 0.7;
+}
+
+#vLoader .mfx-toggle-node:hover,
+#vLoader .mfx-toggle-node:hover .mfx-label {
+    -fx-opacity: 1.0;
+}
+
+#vLoader .mfx-toggle-node:selected {
+    -fx-background-color: derive(#7F0FFF, 150%);
+    -fx-opacity: 1;
+}
+
+#vLoader .mfx-toggle-node:selected .text {
+    -fx-opacity: 1.0;
+}
+
+#vLoader .mfx-toggle-node .mfx-ripple-generator {
+    -mfx-ripple-radius: 40px;
+    -mfx-ripple-color: #e2caff;
+    -mfx-animate-background: true;
+}
+
+#loaderScroll {
+    -mfx-track-color: #e6d7ff;
+    -mfx-thumb-color: #b885ff;
+    -mfx-thumb-hover-color: #9e47ff;
+}

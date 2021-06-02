@@ -94,7 +94,7 @@ public class PositionManager {
     /**
      * Shows the specified notification on screen.
      * <p>
-     * The show mechanism uses a {@link ThreadPoolExecutor} with JavaFX's {@link Task}s and
+     * The show mechanism uses a {@link ThreadPoolExecutor} with JavaFX's {@code Tasks} and
      * a {@link Semaphore} to make threads wait when the notifications limit is reached,
      * in a sense it simulates the operation of a queue.
      * <p>
@@ -107,6 +107,7 @@ public class PositionManager {
      * On failed task, logs the exception.
      *
      * @param newNotification The notification to show
+     * @see Task
      */
     public void show(MFXNotification newNotification) {
         Task<Void> showTask = new Task<>() {

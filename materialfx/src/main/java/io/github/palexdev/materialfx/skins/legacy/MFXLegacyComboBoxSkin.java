@@ -19,18 +19,24 @@
 package io.github.palexdev.materialfx.skins.legacy;
 
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
-import io.github.palexdev.materialfx.controls.MFXLabel;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyComboBox;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.LabelUtils;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
 import javafx.animation.ScaleTransition;
+import javafx.beans.binding.Bindings;
+import javafx.css.PseudoClass;
+import javafx.scene.control.Label;
 import javafx.scene.control.skin.ComboBoxListViewSkin;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This is the implementation of the {@code Skin} associated with every {@code MFXLegacyComboBox}.
@@ -43,7 +49,7 @@ public class MFXLegacyComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
 
     private final Line unfocusedLine;
     private final Line focusedLine;
-    private final MFXLabel validate;
+    private final Label validate;
 
     //================================================================================
     // Constructors
@@ -56,7 +62,12 @@ public class MFXLegacyComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
         unfocusedLine.setManaged(false);
         unfocusedLine.strokeWidthProperty().bind(comboBox.lineStrokeWidthProperty());
         unfocusedLine.strokeLineCapProperty().bind(comboBox.lineStrokeCapProperty());
-        unfocusedLine.strokeProperty().bind(comboBox.unfocusedLineColorProperty());
+        unfocusedLine.strokeProperty().bind(Bindings.createObjectBinding(
+                () -> {
+                    List<PseudoClass> pseudoClasses = new ArrayList<>(comboBox.getPseudoClassStates());
+                    return pseudoClasses.stream().map(PseudoClass::getPseudoClassName).collect(Collectors.toList()).contains("invalid") ? comboBox.getInvalidLineColor() : comboBox.getUnfocusedLineColor();
+                }, comboBox.focusedProperty(), comboBox.getPseudoClassStates(), comboBox.unfocusedLineColorProperty()
+        ));
         unfocusedLine.endXProperty().bind(comboBox.widthProperty());
         unfocusedLine.setSmooth(true);
         unfocusedLine.setManaged(false);
@@ -66,17 +77,22 @@ public class MFXLegacyComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
         focusedLine.setManaged(false);
         focusedLine.strokeWidthProperty().bind(comboBox.lineStrokeWidthProperty());
         focusedLine.strokeLineCapProperty().bind(comboBox.lineStrokeCapProperty());
-        focusedLine.strokeProperty().bind(comboBox.lineColorProperty());
-        focusedLine.setSmooth(true);
+        focusedLine.strokeProperty().bind(Bindings.createObjectBinding(
+                () -> {
+                    List<PseudoClass> pseudoClasses = new ArrayList<>(comboBox.getPseudoClassStates());
+                    return pseudoClasses.stream().map(PseudoClass::getPseudoClassName).collect(Collectors.toList()).contains("invalid") ? comboBox.getInvalidLineColor() : comboBox.getLineColor();
+                }, comboBox.focusedProperty(), comboBox.getPseudoClassStates(), comboBox.lineColorProperty()
+        ));
         focusedLine.endXProperty().bind(comboBox.widthProperty());
+        focusedLine.setSmooth(true);
         focusedLine.setScaleX(0.0);
         focusedLine.setManaged(false);
 
         MFXFontIcon warnIcon = new MFXFontIcon("mfx-exclamation-triangle", Color.RED);
         MFXIconWrapper warnWrapper = new MFXIconWrapper(warnIcon, 10);
 
-        validate = new MFXLabel();
-        validate.setLeadingIcon(warnWrapper);
+        validate = new Label();
+        validate.setGraphic(warnWrapper);
         validate.getStyleClass().add("validate-label");
         validate.getStylesheets().setAll(comboBox.getUserAgentStylesheet());
         validate.textProperty().bind(comboBox.getValidator().validatorMessageProperty());
@@ -175,20 +191,10 @@ public class MFXLegacyComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
     protected void layoutChildren(double x, double y, double w, double h) {
         super.layoutChildren(x, y, w, h);
 
-        double lw = snapSizeX(
-                LabelUtils.computeLabelWidth(validate.getFont(), validate.getText()) +
-                        (validate.getLeadingIcon() != null ? validate.getLeadingIcon().getBoundsInParent().getWidth() : 0.0) +
-                        (validate.getTrailingIcon() != null ? validate.getTrailingIcon().getBoundsInParent().getWidth() : 0.0) +
-                        (validate.getGraphicTextGap() * 2) +
-                        20.0
-        );
+        double lw = snapSizeX(LabelUtils.computeLabelWidth(validate));
         double lh = snapSizeY(LabelUtils.computeTextHeight(validate.getFont(), validate.getText()));
-        double lx = w - lw;
+        double lx = 0;
         double ly = h + (padding * 0.7);
-
-        if (lw > w) {
-            lx = -((lw - w) / 2.0);
-        }
 
         validate.resizeRelocate(lx, ly, lw, lh);
         focusedLine.relocate(0, h);

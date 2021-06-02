@@ -22,7 +22,7 @@ public class MFXTableRow<T> extends HBox {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-table-row";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-tablerow.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTableRow.css");
 
     protected static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
     private final BooleanProperty selected = new SimpleBooleanProperty(false);

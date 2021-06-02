@@ -59,7 +59,7 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
     //================================================================================
     private static final StyleablePropertyFactory<MFXTextField> FACTORY = new StyleablePropertyFactory<>(TextField.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-text-field";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-textfield.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTextField.css");
 
     private final ObjectProperty<Node> icon = new SimpleObjectProperty<>();
     private final ObjectProperty<Insets> iconInsets = new SimpleObjectProperty<>(new Insets(0, 0, 0, 9));
@@ -67,6 +67,7 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
     private final ObjectProperty<MFXContextMenu> mfxContextMenu = new SimpleObjectProperty<>();
 
     private MFXDialogValidator validator;
+    private final ObjectProperty<Paint> invalidLineColor = new SimpleObjectProperty<>(Color.web("#EF6E6B"));
     protected static final PseudoClass INVALID_PSEUDO_CLASS = PseudoClass.getPseudoClass("invalid");
 
     //================================================================================
@@ -151,6 +152,25 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
      */
     public void setValidatorTitle(String title) {
         validator.setTitle(title);
+    }
+
+    public Paint getInvalidLineColor() {
+        return invalidLineColor.get();
+    }
+
+    /**
+     * Specifies the color of the focused line when the validator state is invalid.
+     * <p></p>
+     * This workaround is needed because I discovered a rather surprising/shocking bug.
+     * If you set the line color in SceneBuilder (didn't test in Java code) and the validator state is invalid,
+     * the line won't change color as specified in the CSS file, damn you JavaFX :)
+     */
+    public ObjectProperty<Paint> invalidLineColorProperty() {
+        return invalidLineColor;
+    }
+
+    public void setInvalidLineColor(Paint invalidLineColor) {
+        this.invalidLineColor.set(invalidLineColor);
     }
 
     //================================================================================
@@ -454,7 +474,7 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
                 FACTORY.createPaintCssMetaData(
                         "-mfx-line-color",
                         MFXTextField::lineColorProperty,
-                        Color.rgb(50, 150, 205)
+                        Color.rgb(50, 150, 220)
                 );
 
         private static final CssMetaData<MFXTextField, Paint> UNFOCUSED_LINE_COLOR =

@@ -40,7 +40,7 @@ public class MFXRadioButton extends RadioButton {
     //================================================================================
     private static final StyleablePropertyFactory<MFXRadioButton> FACTORY = new StyleablePropertyFactory<>(RadioButton.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-radio-button";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-radiobutton.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXRadioButton.css");
 
     //================================================================================
     // Constructors

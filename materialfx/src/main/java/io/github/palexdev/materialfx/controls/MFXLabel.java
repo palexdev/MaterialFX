@@ -22,6 +22,7 @@ import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.skins.MFXLabelSkin;
 import javafx.beans.property.*;
 import javafx.css.*;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Control;
@@ -53,16 +54,19 @@ public class MFXLabel extends Control {
     private String STYLESHEET;
 
     private final StringProperty text = new SimpleStringProperty();
-    private final StringProperty promptText = new SimpleStringProperty("Label");
+    private final StringProperty promptText = new SimpleStringProperty("");
 
+    private final ObjectProperty<Insets> containerPadding = new SimpleObjectProperty<>(new Insets(0, 10, 0, 10));
     private final ObjectProperty<Pos> labelAlignment = new SimpleObjectProperty<>(Pos.CENTER);
     private final ObjectProperty<Node> leadingIcon = new SimpleObjectProperty<>();
     private final ObjectProperty<Node> trailingIcon = new SimpleObjectProperty<>();
 
     private final ObjectProperty<Pos> alignment = new SimpleObjectProperty<>(Pos.CENTER);
 
-    private static final PseudoClass EDITOR_FOCUSED_PSEUDO_CLASS = PseudoClass.getPseudoClass("editor");
+    protected static final PseudoClass EDITOR_FOCUSED_PSEUDO_CLASS = PseudoClass.getPseudoClass("editor");
+    protected static final PseudoClass PROMPT_TEXT_SHOWING_PSEUDO_CLASS = PseudoClass.getPseudoClass("prompt");
     private final BooleanProperty editorFocused = new SimpleBooleanProperty();
+    private final BooleanProperty promptTextShowing = new SimpleBooleanProperty();
 
     //================================================================================
     // Constructors
@@ -83,7 +87,8 @@ public class MFXLabel extends Control {
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
 
-        editorFocused.addListener(invalidated ->pseudoClassStateChanged(EDITOR_FOCUSED_PSEUDO_CLASS, editorFocused.get()));
+        editorFocused.addListener(invalidated -> pseudoClassStateChanged(EDITOR_FOCUSED_PSEUDO_CLASS, editorFocused.get()));
+        promptTextShowing.addListener(invalidated -> pseudoClassStateChanged(PROMPT_TEXT_SHOWING_PSEUDO_CLASS, promptTextShowing.get()));
 
         /* Makes possible to choose the control style without depending on the constructor,
          * it seems to work well but to be honest it would be way better if JavaFX would give us
@@ -132,6 +137,21 @@ public class MFXLabel extends Control {
 
     public void setPromptText(String promptText) {
         this.promptText.set(promptText);
+    }
+
+    public Insets getContainerPadding() {
+        return containerPadding.get();
+    }
+
+    /**
+     * Specifies the label's container padding.
+     */
+    public ObjectProperty<Insets> containerPaddingProperty() {
+        return containerPadding;
+    }
+
+    public void setContainerPadding(Insets containerPadding) {
+        this.containerPadding.set(containerPadding);
     }
 
     public Pos getLabelAlignment() {
@@ -206,7 +226,19 @@ public class MFXLabel extends Control {
         return editorFocused;
     }
 
-    //================================================================================
+    public boolean isPromptTextShowing() {
+        return promptTextShowing.get();
+    }
+
+    /**
+     * Bound to the text node's text property. This allows to customize the
+     * label's prompt text. The PseudoClass to use in css is: ":prompt".
+     */
+    public BooleanProperty promptTextShowingProperty() {
+        return promptTextShowing;
+    }
+
+//================================================================================
     // Styleable Properties
     //================================================================================
 
@@ -221,14 +253,14 @@ public class MFXLabel extends Control {
             StyleableProperties.TEXT_FILL,
             this,
             "textFill",
-            Color.BLACK
+            Color.rgb(77, 77, 77)
     );
 
     private final StyleableObjectProperty<LabelStyles> labelStyle = new SimpleStyleableObjectProperty<>(
             StyleableProperties.STYLE,
             this,
             "labelStyle",
-            LabelStyles.STYLE1
+            LabelStyles.STYLE3
     );
 
     private final StyleableDoubleProperty graphicTextGap = new SimpleStyleableDoubleProperty(
@@ -425,7 +457,7 @@ public class MFXLabel extends Control {
                 FACTORY.createColorCssMetaData(
                         "-mfx-text-fill",
                         MFXLabel::textFillProperty,
-                        Color.BLACK
+                        Color.rgb(77, 77, 77)
                 );
 
         private static final CssMetaData<MFXLabel, LabelStyles> STYLE =
@@ -433,7 +465,7 @@ public class MFXLabel extends Control {
                         LabelStyles.class,
                         "-mfx-style",
                         MFXLabel::labelStyleProperty,
-                        LabelStyles.STYLE1
+                        LabelStyles.STYLE3
                 );
 
         private static final CssMetaData<MFXLabel, Number> GRAPHIC_TEXT_GAP =

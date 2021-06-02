@@ -1,0 +1,8 @@
+.mfx-label {
+    -mfx-line-color: transparent;
+    -mfx-unfocused-line-color: transparent;
+}
+
+.mfx-stepper {
+    -mfx-bar-background: #EFEFEF;
+}

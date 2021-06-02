@@ -1,4 +1,4 @@
-module MaterialFX.materialfx.main {
+module MaterialFX {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;

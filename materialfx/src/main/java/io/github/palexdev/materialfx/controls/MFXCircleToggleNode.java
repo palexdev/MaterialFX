@@ -26,6 +26,7 @@ import javafx.css.*;
 import javafx.scene.Node;
 import javafx.scene.control.Skin;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.shape.StrokeType;
 
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class MFXCircleToggleNode extends AbstractMFXToggleNode {
     // Properties
     //================================================================================
     private static final StyleablePropertyFactory<MFXCircleToggleNode> FACTORY = new StyleablePropertyFactory<>(AbstractMFXToggleNode.getControlCssMetaDataList());
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-circle-togglenode.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXCircleToggleNode.css");
 
     //================================================================================
     // Constructors
@@ -86,6 +87,13 @@ public class MFXCircleToggleNode extends AbstractMFXToggleNode {
             this,
             "strokeWidth",
             1.5
+    );
+
+    private final StyleableObjectProperty<StrokeType> strokeType = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.STROKE_TYPE,
+            this,
+            "strokeType",
+            StrokeType.CENTERED
     );
 
     public double getSize() {
@@ -133,6 +141,18 @@ public class MFXCircleToggleNode extends AbstractMFXToggleNode {
         this.strokeWidth.set(strokeWidth);
     }
 
+    public StrokeType getStrokeType() {
+        return strokeType.get();
+    }
+
+    public StyleableObjectProperty<StrokeType> strokeTypeProperty() {
+        return strokeType;
+    }
+
+    public void setStrokeType(StrokeType strokeType) {
+        this.strokeType.set(strokeType);
+    }
+
     //================================================================================
     // CssMetaData
     //================================================================================
@@ -161,10 +181,18 @@ public class MFXCircleToggleNode extends AbstractMFXToggleNode {
                         1.5
                 );
 
+        private static final CssMetaData<MFXCircleToggleNode, StrokeType> STROKE_TYPE =
+                FACTORY.createEnumCssMetaData(
+                        StrokeType.class,
+                        "-mfx-stroke-type",
+                        MFXCircleToggleNode::strokeTypeProperty,
+                        StrokeType.CENTERED
+                );
+
         static {
             cssMetaDataList = List.of(
                     SIZE, TEXT_POSITION,
-                    STROKE_WIDTH
+                    STROKE_WIDTH, STROKE_TYPE
             );
         }
                 

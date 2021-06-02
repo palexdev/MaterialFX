@@ -66,7 +66,7 @@ public class MFXScrimEffect {
 
     /**
      * Adds a scrim effect to the specified pane with specified opacity.
-     * It also simulates the modal behavior of {@code Stage}s, leaving only the specified
+     * It also simulates the modal behavior of {@code Stages}, leaving only the specified
      * {@code Node} interactive.
      *
      * @param parent  The pane to which add the effect

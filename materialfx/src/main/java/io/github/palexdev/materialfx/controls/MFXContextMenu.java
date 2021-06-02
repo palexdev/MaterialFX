@@ -55,7 +55,7 @@ public class MFXContextMenu extends VBox {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-context-menu";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-contextmenu.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXContextMenu.css");
 
     private final List<Line> separators = new ArrayList<>();
 

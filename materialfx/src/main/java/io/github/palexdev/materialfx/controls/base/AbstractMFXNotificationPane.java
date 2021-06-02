@@ -33,7 +33,7 @@ public abstract class AbstractMFXNotificationPane extends VBox {
     // Properties
     //================================================================================
     protected final String STYLE_CLASS = "mfx-notification";
-    protected final String STYLESHEET = MFXResourcesLoader.load("css/mfx-notification.css");
+    protected final String STYLESHEET = MFXResourcesLoader.load("css/MFXNotification.css");
 
     protected final StringProperty headerProperty = new SimpleStringProperty("");
     protected final StringProperty titleProperty = new SimpleStringProperty("");

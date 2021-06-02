@@ -38,7 +38,7 @@ public class MFXFlowlessListCell<T> extends AbstractMFXFlowlessListCell<T> {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-list-cell";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-flowless-listcell.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXFlowlessListCell.css");
     protected final MFXCircleRippleGenerator rippleGenerator = new MFXCircleRippleGenerator(this);
 
     private final MFXFlowlessListView<T> listView;
@@ -92,13 +92,15 @@ public class MFXFlowlessListCell<T> extends AbstractMFXFlowlessListCell<T> {
      *
      * If the given data is instance of Node then the data is cast
      * to Node and added to the children list. Otherwise a Label is created
-     * and toString is called on the data. The label has style class: "data-label"
+     * and toString is called on the data. The {@link #emptyProperty()} is updated
+     * accordingly to the generated string. The label has style class: "data-label"
      */
     @Override
     protected void render(T data) {
         if (data instanceof Node) {
             getChildren().setAll((Node) data);
         } else {
+            setEmpty(data.toString().isEmpty());
             Label label = new Label(data.toString());
             label.getStyleClass().add("data-label");
             getChildren().setAll(label);

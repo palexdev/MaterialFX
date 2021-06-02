@@ -20,6 +20,7 @@ package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
+import io.github.palexdev.materialfx.controls.MFXStepper.MFXStepperEvent;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle.MFXStepperToggleEvent;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
@@ -32,7 +33,6 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.SkinBase;
 import javafx.scene.input.MouseEvent;
@@ -49,7 +49,7 @@ import javafx.util.Duration;
  * <p>
  * It is basically a {@link BorderPane} with three sections: top, center, bottom.
  * <p>
- * At the top there is the {@link HBox} that contains the {@link MFXStepperToggle}s and the progress bar
+ * At the top there is the {@link HBox} that contains the {@code MFXStepperToggles} and the progress bar
  * which is realized by using a group and two rectangles. One rectangle is for the background and the other is for the progress.
  * The first one is manually adjusted both for x property and width property.
  * <p>
@@ -59,12 +59,14 @@ import javafx.util.Duration;
  * At the bottom there is the {@link HBox} that contains the previous and next buttons. The style class is set to "buttons-box".
  * <p></p>
  * The stepper skin is rather delicate because the progress bar is quite hard to manage since every layout change can
- * potentially break. In fact the skin keeps track with two separate listeners of the stepper's parent size and the scene size.
- * When they change the progress must be computed again with {@link #computeProgress()}.
+ * potentially break. The skin updates the layout by adding a listener to the {@link MFXStepper#needsLayoutProperty()}.
+ * When it changes the progress must be computed again with {@link #computeProgress()}.
  * A workaround is also needed in case the progress bar is animated and the layout changes. Without the workaround the
  * progress bar layout is re-computed by using the animation so the reposition process is not instantaneous.
  * To fix this annoying UI issue a boolean flag (buttonWasPressed) is set to true only when buttons are pressed and then set to false when the animation finishes,
- * so every layout change is treated without playing the animation.
+ * so every layout change is done without playing the animation.
+ *
+ * @see MFXStepperToggle
  */
 public class MFXStepperSkin extends SkinBase<MFXStepper> {
     private final StackPane contentPane;
@@ -111,6 +113,7 @@ public class MFXStepperSkin extends SkinBase<MFXStepper> {
         stepperBar.spacingProperty().bind(stepper.spacingProperty());
         stepperBar.alignmentProperty().bind(stepper.alignmentProperty());
         stepperBar.getChildren().addAll(stepper.getStepperToggles());
+        stepperBar.setMinHeight(100);
         stepperBar.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
 
         nextButton = new MFXButton("Next");
@@ -128,9 +131,9 @@ public class MFXStepperSkin extends SkinBase<MFXStepper> {
         buttonsBox = new HBox(64, previousButton, nextButton);
         buttonsBox.getStyleClass().setAll("buttons-box");
         buttonsBox.setAlignment(Pos.CENTER);
+        buttonsBox.setMinHeight(50);
 
         contentPane = new StackPane();
-        contentPane.setMinSize(400, 400);
         contentPane.getStyleClass().setAll("content-pane");
 
         BorderPane container = new BorderPane();
@@ -153,6 +156,7 @@ public class MFXStepperSkin extends SkinBase<MFXStepper> {
     /**
      * Adds the following listeners and handlers/filters.
      * <p>
+     * <p> - Adds a filter for FORCE_LAYOUT_UPDATE_EVENT events to updated the layout and the progress bar.
      * <p> - Adds a filter for MOUSE_PRESSED events to acquire the focus.
      * <p> - Adds a filter for STATE_CHANGES events to re-compute the progress, {@link #computeProgress()}.
      * <p> - Adds a listener to the stepper's toggles list, when it is invalidated the stepper state is reset with
@@ -168,6 +172,11 @@ public class MFXStepperSkin extends SkinBase<MFXStepper> {
      */
     private void setListeners() {
         MFXStepper stepper = getSkinnable();
+
+        stepper.addEventFilter(MFXStepperEvent.FORCE_LAYOUT_UPDATE_EVENT, event -> {
+            stepper.requestLayout();
+            computeProgress();
+        });
 
         stepper.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> stepper.requestFocus());
         stepper.addEventFilter(MFXStepperToggleEvent.STATE_CHANGED, event -> computeProgress());
@@ -208,47 +217,29 @@ public class MFXStepperSkin extends SkinBase<MFXStepper> {
     }
 
     /**
-     * Responsible for managing the stepper's parent and size. Adds listeners to the parent
-     * needsLayoutProperty to re-compute the layout of the stepper, to the scene to initialize the stepper
-     * by calling {@link MFXStepper#next()} the first time thus selecting the first toggle, to the scene's windowProperty
-     * to re-compute the progress.
+     * Responsible for managing the stepper' scene. Adds listeners to the scene to initialize the stepper
+     * by calling {@link MFXStepper#next()} the first time thus selecting the first toggle, to the
+     * {@link MFXStepper#needsLayoutProperty()} to updated the layout and the progress bar.
      */
     private void manageScene() {
         MFXStepper stepper = getSkinnable();
 
         Scene scene = stepper.getScene();
-        Parent parent = stepper.getParent();
-        if (parent != null) {
-            parent.needsLayoutProperty().addListener(parentSizeListener);
-        }
         if (scene != null) {
             stepper.next();
-            Window window = scene.getWindow();
-            if (window != null) {
-                window.setOnShown(event -> computeProgress());
-            }
-            scene.windowProperty().addListener((observable, oldValue, newValue) -> computeProgress());
         }
 
-        stepper.parentProperty().addListener((observable, oldValue, newValue) -> {
-            if (oldValue != null) {
-                oldValue.needsLayoutProperty().removeListener(parentSizeListener);
-            }
-            if (newValue != null) {
-                newValue.needsLayoutProperty().addListener(parentSizeListener);
-            }
-        });
         stepper.sceneProperty().addListener((observableScene, oldScene, newScene) -> {
             if (newScene != null && stepper.getCurrentIndex() == -1) {
                 stepper.next();
             }
-            if (newScene != null) {
-                Window window = newScene.getWindow();
-                if (window != null) {
-                    window.setOnShown(event -> computeProgress());
-                }
-                newScene.windowProperty().addListener(windowListener);
+        });
+
+        stepper.needsLayoutProperty().addListener((observable, oldValue, newValue) -> {
+            if (!buttonWasPressed) {
+                stepper.requestLayout();
             }
+            computeProgress();
         });
     }
 
@@ -318,18 +309,23 @@ public class MFXStepperSkin extends SkinBase<MFXStepper> {
     }
 
     @Override
-    protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return super.computePrefWidth(height, topInset, leftInset, bottomInset, rightInset) + (getSkinnable().getExtraSpacing() * 2);
+    protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return Math.max(super.computeMinWidth(height, topInset, leftInset, bottomInset, rightInset) + (getSkinnable().getExtraSpacing() * 2), 300);
+    }
+
+    @Override
+    protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return topInset + stepperBar.getHeight() + buttonsBox.getHeight() + bottomInset;
     }
 
     @Override
     protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return computePrefWidth(height, topInset, rightInset, bottomInset, leftInset);
+        return getSkinnable().prefWidth(height);
     }
 
     @Override
     protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return computePrefHeight(width, topInset, rightInset, bottomInset, leftInset);
+        return getSkinnable().prefHeight(width);
     }
 
     @Override
@@ -354,7 +350,7 @@ public class MFXStepperSkin extends SkinBase<MFXStepper> {
         double bh = 34;
         double pbx = snapPositionX(15);
         double nbx = snapPositionX(w - bw - 15);
-        double by = snapPositionY((bh / 2.0) - (buttonsBox.getHeight() / 2.0));
+        double by = snapPositionY((buttonsBox.getHeight() / 2.0) - (bh / 2.0));
 
         previousButton.resizeRelocate(pbx, by, bw, bh);
         nextButton.resizeRelocate(nbx, by, bw, bh);

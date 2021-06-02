@@ -50,7 +50,7 @@ public class MFXScrollPane extends ScrollPane {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-scroll-pane";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-scrollpane.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXScrollPane.css");
 
     //================================================================================
     // Constructors
@@ -165,9 +165,9 @@ public class MFXScrollPane extends ScrollPane {
     //================================================================================
     // Static Methods
     //================================================================================
-    private static void customScrolling(ScrollPane scrollPane, DoubleProperty scrollDirection, Function<Bounds, Double> sizeFunc) {
+    private static void customScrolling(ScrollPane scrollPane, DoubleProperty scrollDirection, Function<Bounds, Double> sizeFunc, int speed) {
         final double[] frictions = {0.99, 0.1, 0.05, 0.04, 0.03, 0.02, 0.01, 0.04, 0.01, 0.008, 0.008, 0.008, 0.008, 0.0006, 0.0005, 0.00003, 0.00001};
-        final double[] pushes = {1};
+        final double[] pushes = {speed};
         final double[] derivatives = new double[frictions.length];
 
         Timeline timeline = new Timeline();
@@ -219,19 +219,38 @@ public class MFXScrollPane extends ScrollPane {
      * Adds smooth vertical scrolling to the specified scroll pane.
      * <p>
      * <b>Note: not recommended for small scroll panes</b>
+     *
+     * @param speed regulates the speed of the scrolling
      */
-    public static void smoothVScrolling(ScrollPane scrollPane) {
-        customScrolling(scrollPane, scrollPane.vvalueProperty(), Bounds::getHeight);
+    public static void smoothVScrolling(ScrollPane scrollPane, int speed) {
+        customScrolling(scrollPane, scrollPane.vvalueProperty(), Bounds::getHeight, speed);
     }
 
     /**
      * Adds smooth horizontal scrolling to the specified scroll pane.
      * <p>
      * <b>Note: not recommended for small scroll panes</b>
+     *
+     * @param speed regulates the speed of the scrolling
+     */
+    public static void smoothHScrolling(ScrollPane scrollPane, int speed) {
+        customScrolling(scrollPane, scrollPane.hvalueProperty(), Bounds::getWidth, speed);
+    }
+
+    /**
+     * Calls {@link #smoothVScrolling(ScrollPane, int)} with a default speed modifier of 1.
+     */
+    public static void smoothVScrolling(ScrollPane scrollPane) {
+        smoothVScrolling(scrollPane, 1);
+    }
+
+    /**
+     * Calls {@link #smoothHScrolling(ScrollPane, int)} with a default speed modifier of 1.
      */
     public static void smoothHScrolling(ScrollPane scrollPane) {
-        customScrolling(scrollPane, scrollPane.hvalueProperty(), Bounds::getWidth);
+        smoothHScrolling(scrollPane, 1);
     }
+
 
     //================================================================================
     // Override Methods

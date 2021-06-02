@@ -160,7 +160,7 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
         return new Timeline(
                 new KeyFrame(Duration.ZERO, event -> getChildren().add(0, shape)),
                 new KeyFrame(Duration.millis(300), new KeyValue(shape.opacityProperty(), getBackgroundOpacity())),
-                new KeyFrame(Duration.millis(450), new KeyValue(shape.opacityProperty(), 0))
+                new KeyFrame(Duration.millis(450), new KeyValue(shape.opacityProperty(), 0, Interpolator.LINEAR))
         );
     }
 
@@ -357,7 +357,7 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
             return new Timeline(
                     new KeyFrame(Duration.millis(150), new KeyValue(radiusProperty(), getRippleRadius())),
                     new KeyFrame(Duration.millis(400), new KeyValue(radiusProperty(), (getRippleRadius() * mul))),
-                    new KeyFrame(Duration.millis(1600), new KeyValue(opacityProperty(), 0, MFXAnimationFactory.getInterpolatorV2())),
+                    new KeyFrame(Duration.millis(1200), new KeyValue(opacityProperty(), 0, MFXAnimationFactory.getInterpolatorV2())),
                     new KeyFrame(Duration.millis(500), event -> animationsStack.pop())
             );
         }

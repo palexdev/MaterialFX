@@ -60,9 +60,9 @@ public class MFXCircleToggleNodeSkin extends SkinBase<MFXCircleToggleNode> {
         circle.setId("circle");
         circle.radiusProperty().bind(toggleNode.sizeProperty());
         circle.strokeWidthProperty().bind(toggleNode.strokeWidthProperty());
+        circle.strokeTypeProperty().bind(toggleNode.strokeTypeProperty());
 
         label = new MFXLabel();
-        label.setPromptText("");
         label.setId("textNode");
         label.setManaged(false);
         label.textProperty().bind(toggleNode.textProperty());
@@ -193,17 +193,8 @@ public class MFXCircleToggleNodeSkin extends SkinBase<MFXCircleToggleNode> {
 
         MFXCircleToggleNode toggleNode = getSkinnable();
 
-        Node leading = toggleNode.getLabelLeadingIcon();
-        Node trailing = toggleNode.getLabelTrailingIcon();
-        double textWidth = snapSizeX(LabelUtils.computeTextWidth(label.getFont(), label.getText()));
-
-        double lw = snapSizeX((leading != null ? leading.getBoundsInParent().getWidth() : 0.0) +
-                textWidth +
-                (trailing != null ? trailing.getBoundsInParent().getWidth() : 0.0) +
-                (toggleNode.getGraphicTextGap() * 2) +
-                60
-        );
-        double lh = snapSizeY(LabelUtils.computeTextHeight(label.getFont(), label.getText()));
+        double lw = snapSizeX(LabelUtils.computeMFXLabelWidth(label));
+        double lh = label.prefHeight(lw);
         double lx = snapPositionX(circle.getBoundsInParent().getCenterX() - (lw / 2.0));
         double ly = 0;
 

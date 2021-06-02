@@ -18,8 +18,10 @@
 
 package io.github.palexdev.materialfx.utils;
 
+import io.github.palexdev.materialfx.controls.MFXLabel;
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
@@ -27,7 +29,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 /**
- * Utils class for JavaFX's {@code Label}s.
+ * Utils class for JavaFX's {@code Labels} and {@code MFXLabels}.
  */
 public class LabelUtils {
 
@@ -67,7 +69,9 @@ public class LabelUtils {
     }
 
     /**
-     * Computes the min width of a label to show all the text. Uses {@link NodeUtils#getNodeWidth(Region)}.
+     * Computes the min width of a text node so that all the text is visible. Uses {@link NodeUtils#getNodeWidth(Region)}.
+     * <p>
+     * Uses {@link Label} as helper.
      *
      * @param font the label font
      * @param text the label text
@@ -80,6 +84,14 @@ public class LabelUtils {
         return NodeUtils.getNodeWidth(helper);
     }
 
+    /**
+     * Computes the min height of a text node.
+     * <p>
+     * Uses {@link Label} as helper.
+     *
+     * @param font the node font
+     * @param text the node text
+     */
     public static double computeLabelHeight(Font font, String text) {
         Label helper = new Label(text);
         helper.setMaxWidth(Double.MAX_VALUE);
@@ -87,6 +99,14 @@ public class LabelUtils {
         return NodeUtils.getNodeHeight(helper);
     }
 
+    /**
+     * Computes the min width of a text node so that all the text is visible.
+     * <p>
+     * Uses {@link Text} as helper.
+     *
+     * @param font the node font
+     * @param text the node text
+     */
     public static double computeTextWidth(Font font, String text) {
         Text helper = new Text(text);
         helper.setFont(font);
@@ -98,6 +118,14 @@ public class LabelUtils {
         return helper.getLayoutBounds().getWidth();
     }
 
+    /**
+     * Computes the min height of a text node.
+     * <p>
+     * Uses {@link Text} as helper.
+     *
+     * @param font the node font
+     * @param text the node text
+     */
     public static double computeTextHeight(Font font, String text) {
         Text helper = new Text(text);
         helper.setFont(font);
@@ -107,5 +135,43 @@ public class LabelUtils {
         group.applyCss();
         group.layout();
         return helper.getLayoutBounds().getHeight();
+    }
+
+    /**
+     * Computes the min width for the specified {@link MFXLabel} so that all the text is visible.
+     * <p>
+     * Uses {@link #computeTextWidth(Font, String)}, but also takes into account the label's
+     * icons bounds (if not null), the {@link MFXLabel#graphicTextGapProperty()} multiplied by 2,
+     * and the container's padding {@link MFXLabel#containerPaddingProperty()}.
+     * <p></p>
+     * Note: this works only after the label has been laid out.
+     */
+    public static double computeMFXLabelWidth(MFXLabel label) {
+        Node leading = label.getLeadingIcon();
+        Node trailing = label.getTrailingIcon();
+        return label.snappedLeftInset() +
+                (leading != null ? leading.getBoundsInParent().getWidth() : 0) +
+                LabelUtils.computeTextWidth(label.getFont(), (label.getText().isEmpty() ? label.getPromptText() : label.getText())) +
+                (trailing != null ? trailing.getBoundsInParent().getWidth() : 0) +
+                label.snappedRightInset() +
+                (2 * label.getGraphicTextGap()) +
+                label.getContainerPadding().getLeft() + label.getContainerPadding().getLeft();
+    }
+
+    /**
+     * Computes the min width for the specified {@link Label} so that all the text is visible.
+     * <p>
+     * Uses {@link #computeTextWidth(Font, String)}, but also takes into account the label's
+     * graphic bounds (if not null) and the {@link Label#graphicTextGapProperty()}.
+     * <p></p>
+     * Note: this works only after the label has been laid out.
+     */
+    public static double computeLabelWidth(Label label) {
+        Node graphic = label.getGraphic();
+        return label.snappedLeftInset() +
+                (graphic != null ? graphic.getBoundsInParent().getWidth() : 0) +
+                LabelUtils.computeTextWidth(label.getFont(), label.getText()) +
+                label.snappedRightInset() +
+                label.getGraphicTextGap();
     }
 }

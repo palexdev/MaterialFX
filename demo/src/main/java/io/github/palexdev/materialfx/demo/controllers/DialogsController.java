@@ -1,16 +1,27 @@
 package io.github.palexdev.materialfx.demo.controllers;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXNotification;
 import io.github.palexdev.materialfx.controls.MFXStageDialog;
+import io.github.palexdev.materialfx.controls.SimpleMFXNotificationPane;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXDialog;
+import io.github.palexdev.materialfx.controls.enums.ButtonType;
 import io.github.palexdev.materialfx.controls.enums.DialogType;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.controls.factories.MFXDialogFactory;
+import io.github.palexdev.materialfx.effects.DepthLevel;
+import io.github.palexdev.materialfx.notifications.NotificationPos;
+import io.github.palexdev.materialfx.notifications.NotificationsManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.stage.Modality;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -29,6 +40,9 @@ public class DialogsController implements Initializable {
 
     @FXML
     private MFXButton pGeneric;
+
+    @FXML
+    private MFXButton pGenericActions;
 
     @FXML
     private MFXButton pFade;
@@ -75,10 +89,18 @@ public class DialogsController implements Initializable {
 
     public DialogsController(Pane pane) {
         this.pane = pane;
-        this.dialog = MFXDialogFactory.buildDialog(DialogType.INFO, "MFXDialog - Generic Dialog", text);
-        this.animateDialog = MFXDialogFactory.buildDialog(DialogType.INFO, "", text);
-        this.animateDialog.setAnimateIn(true);
-        this.animateDialog.setAnimateOut(true);
+
+        dialog = MFXDialogFactory.buildDialog(DialogType.INFO, "MFXDialog - Generic Dialog", text);
+
+        animateDialog = MFXDialogFactory.buildDialog(DialogType.INFO, "", text);
+        animateDialog.setAnimateIn(true);
+        animateDialog.setAnimateOut(true);
+
+        animateDialog.setOnBeforeOpen(event -> System.out.println("BEFORE OPEN"));
+        animateDialog.setOnOpened(event -> System.out.println("OPENED"));
+        animateDialog.setOnBeforeClose(event -> System.out.println("BEFORE CLOSING"));
+        animateDialog.setOnClosed(event -> System.out.println("CLOSED"));
+
         Platform.runLater(() -> this.pane.getChildren().addAll(dialog, animateDialog));
     }
 
@@ -116,6 +138,18 @@ public class DialogsController implements Initializable {
             });
             genericDialog.setVisible(false);
             this.pane.getChildren().add(genericDialog);
+            genericDialog.show();
+        });
+
+        pGenericActions.setOnAction(event -> {
+            AbstractMFXDialog genericDialog = MFXDialogFactory.buildGenericDialog("MFXDialog - Generic Dialog", text);
+            genericDialog.setCloseHandler(c -> {
+                genericDialog.close();
+                DialogsController.this.pane.getChildren().remove(genericDialog);
+            });
+            genericDialog.setVisible(false);
+            this.pane.getChildren().add(genericDialog);
+            genericDialog.setActions(createActionsBar(genericDialog));
             genericDialog.show();
         });
 
@@ -200,5 +234,43 @@ public class DialogsController implements Initializable {
     private void resetDialog() {
         dialog.setOverlayClose(false);
         dialog.setIsDraggable(false);
+    }
+
+    private HBox createActionsBar(AbstractMFXDialog dialog) {
+        MFXButton action1 = new MFXButton("Perform Action 1");
+        MFXButton action2 = new MFXButton("Perform Action 2");
+        MFXButton action3 = new MFXButton("Perform Action 3");
+        MFXButton close = new MFXButton("Close");
+
+        action1.setButtonType(ButtonType.RAISED);
+        action2.setButtonType(ButtonType.RAISED);
+        action3.setButtonType(ButtonType.RAISED);
+        close.setButtonType(ButtonType.RAISED);
+
+        action1.setDepthLevel(DepthLevel.LEVEL1);
+        action2.setDepthLevel(DepthLevel.LEVEL1);
+        action3.setDepthLevel(DepthLevel.LEVEL1);
+        close.setDepthLevel(DepthLevel.LEVEL1);
+
+        action1.setOnAction(event -> NotificationsManager.send(NotificationPos.BOTTOM_RIGHT, createNotification("Action 1 Performed")));
+        action2.setOnAction(event -> NotificationsManager.send(NotificationPos.BOTTOM_RIGHT, createNotification("Action 2 Performed")));
+        action3.setOnAction(event -> NotificationsManager.send(NotificationPos.BOTTOM_RIGHT, createNotification("Action 3 Performed")));
+        dialog.addCloseButton(close);
+
+        HBox box = new HBox(20, action1, action2, action3, close);
+        box.setAlignment(Pos.CENTER);
+        box.setPadding(new Insets(20, 5, 20, 5));
+        return box;
+    }
+
+    private MFXNotification createNotification(String text) {
+        Region notificationPane = new SimpleMFXNotificationPane(
+                "Dialogs Actions Test",
+                "",
+                text
+        );
+        MFXNotification notification = new MFXNotification(notificationPane, true, true);
+        notification.setHideAfterDuration(Duration.seconds(3));
+        return notification;
     }
 }

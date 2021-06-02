@@ -286,18 +286,18 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
         MFXProgressSpinner spinner = getSkinnable();
 
         if (Region.USE_COMPUTED_SIZE == spinner.getRadius()) {
-            return super.computeMaxHeight(width, topInset, rightInset, bottomInset, leftInset);
+            return spinner.prefHeight(width);
         } else {
             return spinner.getRadius() * 2 + arc.getStrokeWidth() * 2;
         }
     }
 
     @Override
-    protected double computeMaxWidth(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+    protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
         MFXProgressSpinner spinner = getSkinnable();
 
         if (Region.USE_COMPUTED_SIZE == spinner.getRadius()) {
-            return super.computeMaxHeight(width, topInset, rightInset, bottomInset, leftInset);
+            return spinner.prefWidth(height);
         } else {
             return spinner.getRadius() * 2 + arc.getStrokeWidth() * 2;
         }

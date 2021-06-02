@@ -45,6 +45,8 @@ public class FontResourcesDemoController implements Initializable {
     @FXML
     private MFXFlowlessListView<HBox> list;
 
+    @FXML
+    private MFXLabel count;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -53,8 +55,9 @@ public class FontResourcesDemoController implements Initializable {
             cell.setFixedCellHeight(48);
             return cell;
         });
-        MFXFlowlessListView.setSmoothScrolling(list);
+        MFXFlowlessListView.setSmoothScrolling(list, 5);
         populateList();
+        count.setText(list.getItems().size() + " Icons");
     }
 
     private void populateList() {

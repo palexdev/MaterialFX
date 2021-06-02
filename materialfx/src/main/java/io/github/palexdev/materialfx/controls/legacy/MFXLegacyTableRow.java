@@ -45,7 +45,7 @@ public class MFXLegacyTableRow<T> extends TableRow<T> {
     //================================================================================
     private static final StyleablePropertyFactory<MFXLegacyTableRow<?>> FACTORY = new StyleablePropertyFactory<>(TableRow.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-legacy-table-row";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/mfx-tablerow.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/MFXTableRow.css");
     private final MFXCircleRippleGenerator rippleGenerator = new MFXCircleRippleGenerator(this);
 
     //================================================================================

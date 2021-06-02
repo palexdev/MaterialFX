@@ -40,7 +40,7 @@ public class MFXRectangleToggleNode extends AbstractMFXToggleNode {
     //================================================================================
     // Properties
     //================================================================================
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-rectangle-togglenode.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXRectangleRoggleNode.css");
     private final ObjectProperty<RippleClipTypeFactory> rippleClipTypeFactory = new SimpleObjectProperty<>();
 
     //================================================================================

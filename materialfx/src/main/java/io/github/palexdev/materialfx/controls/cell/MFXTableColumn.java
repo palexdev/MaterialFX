@@ -36,13 +36,15 @@ import java.util.function.Supplier;
  * - Has a row cell factory because each column knows how to build the corresponding row cell in each table row<p>
  * - Has a sort state and a comparator because each column knows how to sort the rows based on the given comparator, also
  * retains its sort state thus allowing switching between ASCENDING, DESCENDING, UNSORTED<p>
+ *
+ * @see MFXTableColumnSkin
  */
 public class MFXTableColumn<T> extends Control {
     //================================================================================
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-table-column";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-tablecolumn.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTableColumn.css");
 
     private final ReadOnlyDoubleWrapper initialWidth = new ReadOnlyDoubleWrapper();
 
@@ -54,6 +56,7 @@ public class MFXTableColumn<T> extends Control {
     private MFXIconWrapper sortIcon;
     private Comparator<T> comparator;
 
+    private final BooleanProperty showLockIcon = new SimpleBooleanProperty(true);
     private final ObjectProperty<Supplier<Tooltip>> tooltipSupplier = new SimpleObjectProperty<>();
 
     protected static final PseudoClass RESIZABLE_PSEUDO_CLASS = PseudoClass.getPseudoClass("resizable");
@@ -97,7 +100,7 @@ public class MFXTableColumn<T> extends Control {
         addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> dragged.set(true));
         addEventFilter(MouseEvent.MOUSE_RELEASED, event -> dragged.set(false));
 
-        sortIcon = new MFXIconWrapper(new MFXFontIcon("mfx-caret-up", 12), 18);
+        sortIcon = new MFXIconWrapper(new MFXFontIcon("mfx-caret-up", 14), 18);
         sortIcon.setManaged(false);
         sortIcon.setVisible(false);
         NodeUtils.makeRegionCircular(sortIcon);
@@ -211,6 +214,21 @@ public class MFXTableColumn<T> extends Control {
      */
     public MFXIconWrapper getSortIcon() {
         return sortIcon;
+    }
+
+    public boolean isShowLockIcon() {
+        return showLockIcon.get();
+    }
+
+    /**
+     * Specifies if the lock icon should be visible.
+     */
+    public BooleanProperty showLockIconProperty() {
+        return showLockIcon;
+    }
+
+    public void setShowLockIcon(boolean showLockIcon) {
+        this.showLockIcon.set(showLockIcon);
     }
 
     /**

@@ -53,7 +53,6 @@ public class MFXRectangleToggleNodeSkin extends SkinBase<MFXRectangleToggleNode>
         super(toggleNode);
 
         label = new MFXLabel();
-        label.setPromptText("");
         label.setId("textNode");
         label.textProperty().bind(toggleNode.textProperty());
         label.graphicTextGapProperty().bind(toggleNode.labelTextGapProperty());
@@ -155,17 +154,7 @@ public class MFXRectangleToggleNodeSkin extends SkinBase<MFXRectangleToggleNode>
 
     @Override
     protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        MFXRectangleToggleNode toggleNode = getSkinnable();
-        Node leading = toggleNode.getLabelLeadingIcon();
-        Node trailing = toggleNode.getLabelTrailingIcon();
-        double lw = snapSizeX(LabelUtils.computeTextWidth(label.getFont(), label.getText()));
-        return leftInset +
-                (leading != null ? leading.getBoundsInParent().getWidth() : 0.0) +
-                lw +
-                (trailing != null ? trailing.getBoundsInParent().getWidth() : 0.0) +
-                (toggleNode.getGraphicTextGap() * 2) +
-                40 +
-                rightInset;
+        return leftInset + LabelUtils.computeMFXLabelWidth(label) + rightInset;
     }
 
     @Override

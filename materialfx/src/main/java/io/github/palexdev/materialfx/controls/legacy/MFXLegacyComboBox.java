@@ -27,6 +27,8 @@ import io.github.palexdev.materialfx.skins.legacy.MFXLegacyComboBoxSkin;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
 import io.github.palexdev.materialfx.validation.base.AbstractMFXValidator;
 import io.github.palexdev.materialfx.validation.base.Validated;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.css.*;
@@ -73,9 +75,10 @@ public class MFXLegacyComboBox<T> extends ComboBox<T> implements Validated<MFXDi
     //================================================================================
     private static final StyleablePropertyFactory<MFXLegacyComboBox<?>> FACTORY = new StyleablePropertyFactory<>(ComboBox.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-legacy-combo-box";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/mfx-combobox.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/MFXComboBox.css");
 
     private MFXDialogValidator validator;
+    private final ObjectProperty<Paint> invalidLineColor = new SimpleObjectProperty<>(Color.web("#EF6E6B"));
     protected static final PseudoClass INVALID_PSEUDO_CLASS = PseudoClass.getPseudoClass("invalid");
 
     //================================================================================
@@ -160,6 +163,25 @@ public class MFXLegacyComboBox<T> extends ComboBox<T> implements Validated<MFXDi
      */
     public void setValidatorTitle(String title) {
         validator.setTitle(title);
+    }
+
+    public Paint getInvalidLineColor() {
+        return invalidLineColor.get();
+    }
+
+    /**
+     * Specifies the color of the focused line when the validator state is invalid.
+     * <p></p>
+     * This workaround is needed because I discovered a rather surprising/shocking bug.
+     * If you set the line color in SceneBuilder (didn't test in Java code) and the validator state is invalid,
+     * the line won't change color as specified in the CSS file, damn you JavaFX :)
+     */
+    public ObjectProperty<Paint> invalidLineColorProperty() {
+        return invalidLineColor;
+    }
+
+    public void setInvalidLineColor(Paint invalidLineColor) {
+        this.invalidLineColor.set(invalidLineColor);
     }
 
     //================================================================================
@@ -407,6 +429,7 @@ public class MFXLegacyComboBox<T> extends ComboBox<T> implements Validated<MFXDi
 
         static {
             cssMetaDataList = List.of(
+                    ANIMATE_LINES,
                     LINE_COLOR, UNFOCUSED_LINE_COLOR,
                     LINE_STROKE_WIDTH, LINE_STROKE_CAP,
                     IS_VALIDATED

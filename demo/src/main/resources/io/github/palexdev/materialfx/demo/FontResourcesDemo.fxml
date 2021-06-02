@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXFlowlessListView?>
+<?import io.github.palexdev.materialfx.controls.MFXLabel?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.FontResourcesDemoController">
+   <MFXFlowlessListView fx:id="list" depthLevel="LEVEL1" maxHeight="-Infinity" prefHeight="420.0" prefWidth="860.0" StackPane.alignment="BOTTOM_CENTER">
+      <StackPane.margin>
+         <Insets bottom="10.0" left="20.0" right="20.0" />
+      </StackPane.margin>
+   </MFXFlowlessListView>
+   <MFXLabel fx:id="count" labelStyle="STYLE2" maxWidth="-Infinity" prefHeight="27.0" prefWidth="860.0" promptText="" style="-fx-border-color: #5200ed;" text="69 Icons" unfocusedLineColor="#5200ed" StackPane.alignment="TOP_CENTER">
+      <StackPane.margin>
+         <Insets left="20.0" right="20.0" top="20.0" />
+      </StackPane.margin>
+      <font>
+         <Font name="Open Sans SemiBold" size="14.0" />
+      </font>
+      <textFill>
+         <Color red="0.3019607961177826" green="0.3019607961177826" blue="0.3019607961177826" />
+      </textFill>
+   </MFXLabel>
+</StackPane>

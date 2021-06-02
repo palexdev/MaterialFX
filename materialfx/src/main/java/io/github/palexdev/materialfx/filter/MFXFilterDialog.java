@@ -33,7 +33,7 @@ public class MFXFilterDialog<T> extends MFXDialog {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-filter-dialog";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-filterdialog.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXFilterDialog.css");
 
     private final MFXIconWrapper closeIcon;
     private final MFXLabel label;
@@ -88,6 +88,7 @@ public class MFXFilterDialog<T> extends MFXDialog {
             cell.setSelectedColor(Color.WHITE);
             return cell;
         });
+        listView.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
         HBox buttonsBox = new HBox(30);
         buttonsBox.setPrefHeight(60);
@@ -134,6 +135,8 @@ public class MFXFilterDialog<T> extends MFXDialog {
      * Sets the buttons behavior
      */
     private void setBehavior() {
+        addEventFilter(MouseEvent.MOUSE_PRESSED, event -> requestFocus());
+
         addAnd.setOnAction(event -> addFilterBox(EvaluationMode.AND));
         addOr.setOnAction(event -> addFilterBox(EvaluationMode.OR));
         clear.setOnAction(event -> evaluationBoxes.clear());

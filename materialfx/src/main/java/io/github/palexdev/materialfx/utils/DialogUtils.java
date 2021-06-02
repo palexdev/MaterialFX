@@ -27,7 +27,9 @@ import javafx.stage.Modality;
 import javafx.stage.Window;
 
 /**
- * Utils class to quickly get modal {@link MFXStageDialog}s and other specialized dialogs.
+ * Utils class to quickly get modal {@code MFXStageDialogs} and other specialized dialogs.
+ *
+ * @see MFXStageDialog
  */
 public class DialogUtils {
 

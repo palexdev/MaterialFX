@@ -24,9 +24,14 @@ import io.github.palexdev.materialfx.skins.MFXPasswordFieldSkin;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
+import javafx.css.PseudoClass;
 import javafx.scene.control.Skin;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This is my implementation of a password field, a TextField which masks the given input text.
@@ -54,9 +59,9 @@ public class MFXPasswordField extends MFXTextField {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-password-field";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-passwordfield.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXPasswordField.css");
 
-    private final ReadOnlyStringWrapper password = new ReadOnlyStringWrapper();
+    private final ReadOnlyStringWrapper password = new ReadOnlyStringWrapper("");
     private final BooleanProperty showPassword = new SimpleBooleanProperty(false);
     private final StringProperty hideCharacter = new SimpleStringProperty("\u25cf") {
         @Override
@@ -103,6 +108,12 @@ public class MFXPasswordField extends MFXTextField {
         icon.descriptionProperty().bind(Bindings.createStringBinding(
                 () -> isShowPassword() ? "mfx-eye-slash" : "mfx-eye",
                 showPasswordProperty()
+        ));
+        icon.colorProperty().bind(Bindings.createObjectBinding(
+                () -> {
+                    List<PseudoClass> pseudoClasses = new ArrayList<>(getPseudoClassStates());
+                    return pseudoClasses.stream().map(PseudoClass::getPseudoClassName).collect(Collectors.toList()).contains("invalid") ? getInvalidLineColor() : Color.web("#4D4D4D");
+                }, focusedProperty(), getPseudoClassStates()
         ));
         MFXIconWrapper showPasswordIcon = new MFXIconWrapper(icon, 24).defaultRippleGeneratorBehavior();
         NodeUtils.makeRegionCircular(showPasswordIcon);
