@@ -151,7 +151,7 @@ public class NodeUtils {
         try {
             region.setClip(circle);
         } catch (IllegalArgumentException ex) {
-            LoggingUtils.logException("Could not set region's clip to make it circular", ex);
+            throw new IllegalArgumentException("Could not set region's clip to make it circular", ex);
         }
     }
 
@@ -170,7 +170,7 @@ public class NodeUtils {
         try {
             region.setClip(circle);
         } catch (IllegalArgumentException ex) {
-            LoggingUtils.logException("Could not set region's clip to make it circular", ex);
+            throw new IllegalArgumentException("Could not set region's clip to make it circular", ex);
         }
     }
 

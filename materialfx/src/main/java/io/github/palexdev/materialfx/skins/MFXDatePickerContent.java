@@ -29,7 +29,6 @@ import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.ColorUtils;
-import io.github.palexdev.materialfx.utils.LoggingUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.StringUtils;
 import javafx.animation.*;
@@ -655,7 +654,7 @@ public class MFXDatePickerContent extends VBox {
                     selectedDate.setText(date.format(getDateFormatter()));
                     setCurrentDate(LocalDate.parse(selectedDate.getText(), getDateFormatter()));
                 } catch (DateTimeParseException ex) {
-                    LoggingUtils.logException(ex);
+                    ex.printStackTrace();
                     inputField.getValidator().add(validInput, ex.getMessage());
                     validInput.set(false);
                 }

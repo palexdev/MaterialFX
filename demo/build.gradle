@@ -38,5 +38,4 @@ jlink {
     jpackage {
         imageOptions = ['--icon', 'src/main/resources/logo.ico']
     }
-    forceMerge('log4j-api')
 }

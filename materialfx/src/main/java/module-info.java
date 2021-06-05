@@ -5,7 +5,6 @@ module MaterialFX {
     requires java.desktop;
 
     requires reactfx;
-    requires org.apache.logging.log4j;
 
     exports io.github.palexdev.materialfx;
     exports io.github.palexdev.materialfx.beans;

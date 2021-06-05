@@ -20,7 +20,6 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.controls.base.AbstractMFXNotificationPane;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
-import io.github.palexdev.materialfx.utils.LoggingUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -148,11 +147,8 @@ public class SimpleMFXNotificationPane extends AbstractMFXNotificationPane {
         try {
             this.buttonsBox.getChildren().add(index, button);
         } catch (IndexOutOfBoundsException ex) {
-            LoggingUtils.logException(
-                    "Could not add button at index:" + index +
-                            ", list size is:" + this.buttonsBox.getChildren().size(),
-                    ex
-            );
+            throw new IndexOutOfBoundsException("Could not add button at index:" + index +
+                    ", list size is:" + this.buttonsBox.getChildren().size());
         }
     }
 

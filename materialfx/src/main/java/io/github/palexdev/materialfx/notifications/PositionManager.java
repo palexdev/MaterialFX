@@ -19,7 +19,6 @@
 package io.github.palexdev.materialfx.notifications;
 
 import io.github.palexdev.materialfx.controls.MFXNotification;
-import io.github.palexdev.materialfx.utils.LoggingUtils;
 import javafx.animation.Interpolator;
 import javafx.animation.Transition;
 import javafx.application.Platform;
@@ -128,7 +127,11 @@ public class PositionManager {
                 return null;
             }
         };
-        showTask.setOnFailed(event -> LoggingUtils.logException(showTask.getException()));
+        showTask.setOnFailed(event -> {
+            if (showTask.getException() != null) {
+                showTask.getException().printStackTrace();
+            }
+        });
         service.submit(showTask);
     }
 
