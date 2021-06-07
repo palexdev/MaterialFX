@@ -254,7 +254,7 @@ public class MFXTextFieldSkin extends TextFieldSkin {
         MFXTextField textField = (MFXTextField) getSkinnable();
 
         double lw = snapSizeX(LabelUtils.computeLabelWidth(validate));
-        double lh = snapSizeY(LabelUtils.computeTextHeight(validate.getFont(), validate.getText())); // TODO Check
+        double lh = snapSizeY(LabelUtils.computeTextHeight(validate.getFont(), validate.getText()));
         double lx = 0;
         double ly = h + lh;
 
