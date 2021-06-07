@@ -1,3 +1,5 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
 plugins {
     id 'biz.aQute.bnd.builder' version '5.2.0'
     id 'com.vanniktech.maven.publish' version '0.13.0'
@@ -63,7 +65,13 @@ jar {
 
 task copyJar(type: Copy) {
     from jar
-    into 'C:/Users/thund/AppData/Roaming/Scene Builder/Library'
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        into System.getenv("APPDATA") + '/Scene Builder/Library'
+    } else if(Os.isFamily(Os.FAMILY_MAC)) {
+        into System.getProperty("user.home") + '/Library/Application Support' + '/Scene Builder/Library'
+    } else if(Os.isFamily(Os.FAMILY_UNIX)) {
+        into System.getProperty("user.home") + '/.scenebuilder/Library'
+    }
 }
 
 task removeBnd(type: Delete) {
