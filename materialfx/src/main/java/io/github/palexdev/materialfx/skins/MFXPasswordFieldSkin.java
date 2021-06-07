@@ -18,9 +18,10 @@
 
 package io.github.palexdev.materialfx.skins;
 
-import io.github.palexdev.materialfx.beans.MFXContextMenuItem;
 import io.github.palexdev.materialfx.controls.MFXContextMenu;
+import io.github.palexdev.materialfx.controls.MFXContextMenuItem;
 import io.github.palexdev.materialfx.controls.MFXPasswordField;
+import io.github.palexdev.materialfx.font.MFXFontIcon;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -257,53 +258,58 @@ public class MFXPasswordFieldSkin extends MFXTextFieldSkin {
     protected void setContextMenu() {
         MFXPasswordField passwordField = (MFXPasswordField) getSkinnable();
 
-        MFXContextMenuItem copy = new MFXContextMenuItem(
-                "Copy",
-                event -> {
+        MFXContextMenuItem copy = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-content-copy", 14))
+                .setText("Copy")
+                .setAccelerator("Ctrl + C")
+                .setAction(event -> {
                     if (passwordField.isAllowCopy()) {
                         passwordField.copy();
                     }
-                }
-        );
+                });
 
-        MFXContextMenuItem cut = new MFXContextMenuItem(
-                "Cut",
-                event -> {
+        MFXContextMenuItem cut = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-content-cut", 14))
+                .setText("Cut")
+                .setAccelerator("Ctrl + X")
+                .setAction(event -> {
                     if (passwordField.isAllowCut()) {
                         passwordField.cut();
                         handleDeletion(passwordField.getText().length());
                     }
-                }
-        );
+                });
 
-        MFXContextMenuItem paste = new MFXContextMenuItem(
-                "Paste",
-                event -> {
+        MFXContextMenuItem paste = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-content-paste", 14))
+                .setText("Paste")
+                .setAccelerator("Ctrl + V")
+                .setAction(event -> {
                     if (passwordField.isAllowPaste()) {
                         handlePaste();
                     }
-                }
-        );
+                });
 
-        MFXContextMenuItem delete = new MFXContextMenuItem(
-                "Delete",
-                event -> handleDeletion(passwordField.getText().length())
-        );
+        MFXContextMenuItem delete = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-delete-alt", 16))
+                .setText("Delete")
+                .setAccelerator("Ctrl + D")
+                .setAction(event -> handleDeletion(passwordField.getText().length()));
 
-        MFXContextMenuItem selectAll = new MFXContextMenuItem(
-                "Select All",
-                event -> passwordField.selectAll()
-        );
+        MFXContextMenuItem selectAll = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-select-all", 16))
+                .setText("Select All")
+                .setAccelerator("Ctrl + A")
+                .setAction(event -> passwordField.selectAll());
 
         passwordField.setMFXContextMenu(
-                new MFXContextMenu.Builder()
+                MFXContextMenu.Builder.build(passwordField)
                         .addMenuItem(copy)
                         .addMenuItem(cut)
                         .addMenuItem(paste)
                         .addMenuItem(delete)
                         .addSeparator()
                         .addMenuItem(selectAll)
-                        .get()
+                        .install()
         );
     }
 

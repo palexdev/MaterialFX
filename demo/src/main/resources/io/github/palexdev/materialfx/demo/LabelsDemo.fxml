@@ -4,35 +4,32 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
-<StackPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1"
-           xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="io.github.palexdev.materialfx.demo.controllers.LabelsDemoController">
-   <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Labels"
-          StackPane.alignment="TOP_CENTER">
+<StackPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.LabelsDemoController">
+   <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Labels" StackPane.alignment="TOP_CENTER">
       <StackPane.margin>
-         <Insets top="20.0"/>
+         <Insets top="20.0" />
       </StackPane.margin>
    </Label>
    <HBox maxHeight="-Infinity" maxWidth="-Infinity" spacing="50.0" StackPane.alignment="TOP_CENTER">
       <StackPane.margin>
-         <Insets top="60.0"/>
+         <Insets top="60.0" />
       </StackPane.margin>
       <padding>
-         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
       </padding>
-      <MFXLabel promptText="Prompt Text"/>
-      <MFXLabel text="Style 1"/>
-      <MFXLabel labelStyle="STYLE2" text="Style 2"/>
+      <MFXLabel promptText="Prompt Text" />
+      <MFXLabel text="Style 1" />
+      <MFXLabel labelStyle="STYLE2" text="Style 2" />
+      <MFXLabel text="Style 3" />
    </HBox>
    <HBox maxHeight="-Infinity" maxWidth="-Infinity" spacing="50.0" StackPane.alignment="TOP_CENTER">
       <padding>
-         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
       </padding>
       <StackPane.margin>
-         <Insets top="120.0"/>
+         <Insets top="120.0" />
       </StackPane.margin>
-      <MFXLabel editable="true" promptText="Double Click Me!!"/>
-      <MFXLabel fx:id="custom" editable="true" lineColor="#eb4400" promptText="Double Click Me!! Custom"
-                unfocusedLineColor="#0caf00"/>
+      <MFXLabel editable="true" promptText="Double Click Me!!" />
+      <MFXLabel fx:id="custom" editable="true" lineColor="#eb4400" promptText="Double Click Me!! Custom" unfocusedLineColor="#0caf00" />
    </HBox>
 </StackPane>

@@ -165,7 +165,7 @@ public class MFXDialogFactory {
         headerNode.getStyleClass().add("header-node");
         headerNode.setStyle("-fx-background-color: " + color + ";\n");
 
-        MFXFontIcon closeIcon = new MFXFontIcon("mfx-x", Color.WHITE);
+        MFXFontIcon closeIcon = new MFXFontIcon("mfx-x-alt", 16, Color.WHITE);
 
         if (dialog.getType() != null && dialog.getType().equals(DialogType.GENERIC)) {
             dialog.setCloseButtons(new MFXButton(""));

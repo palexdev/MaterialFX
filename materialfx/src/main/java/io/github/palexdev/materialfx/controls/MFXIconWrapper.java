@@ -28,6 +28,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 
@@ -87,7 +88,11 @@ public class MFXIconWrapper extends StackPane {
     public MFXIconWrapper defaultRippleGeneratorBehavior() {
         addRippleGenerator();
         rippleGenerator.setRipplePositionFunction(event -> new RipplePosition(event.getX(), event.getY()));
-        addEventFilter(MouseEvent.MOUSE_PRESSED, rippleGenerator::generateRipple);
+        addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                rippleGenerator.generateRipple(event);
+            }
+        });
         return this;
     }
 
@@ -101,7 +106,11 @@ public class MFXIconWrapper extends StackPane {
     public MFXIconWrapper rippleGeneratorBehavior(Function<MouseEvent, RipplePosition> positionFunction) {
         addRippleGenerator();
         rippleGenerator.setRipplePositionFunction(positionFunction);
-        addEventFilter(MouseEvent.MOUSE_PRESSED, rippleGenerator::generateRipple);
+        addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                rippleGenerator.generateRipple(event);
+            }
+        });
         return this;
     }
 

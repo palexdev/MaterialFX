@@ -318,7 +318,9 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
     /**
      * Specifies the behavior for maxPopupHeight and maxPopupWidth properties, also adds the
      * {@link #popupHandler} to the scene to close the popup in case it is open and the mouse is not
-     * pressed on the combo box.
+     * pressed on the combo box. And resets the control when the popup is hidden.
+     *
+     * @see #reset()
      */
     private void popupBehavior() {
         MFXFilterComboBox<T> comboBox = getSkinnable();
@@ -355,6 +357,8 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
                 listSelectionModel.select(selectionModelMock.getSelectedIndex(), selectionModelMock.getSelectedItem(), null);
             }
         });
+
+        popup.addEventHandler(WindowEvent.WINDOW_HIDDEN, event -> reset());
     }
 
     /**
@@ -523,6 +527,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
 
         valueLabel.setVisible(false);
         searchField = new MFXTextField("");
+        searchField.setMFXContextMenu(null);
         comboBox.editorFocusedProperty().bind(searchField.focusedProperty());
         searchField.setPromptText("Search...");
         searchField.setId("search-field");
@@ -709,10 +714,11 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
 
         validate.resizeRelocate(lx, ly, lw, lh);
 
+        double extraX = getSkinnable().getComboStyle() == Styles.ComboBoxStyles.STYLE3 ? 5 : 3;
         double iconWidth = icon.getPrefWidth();
         double iconHeight = icon.getPrefHeight();
         double center = ((snappedTopInset() + snappedBottomInset()) / 2.0) + ((h - iconHeight) / 2.0);
-        icon.resizeRelocate(w - iconWidth, center, iconWidth, iconHeight);
+        icon.resizeRelocate(w - iconWidth + extraX, center, iconWidth, iconHeight);
         focusedLine.relocate(0, h);
         unfocusedLine.relocate(0, h);
     }

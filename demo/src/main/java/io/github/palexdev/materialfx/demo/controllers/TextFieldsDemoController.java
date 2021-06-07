@@ -29,7 +29,6 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
@@ -47,9 +46,6 @@ public class TextFieldsDemoController implements Initializable {
 
     @FXML
     private MFXDatePicker picker;
-
-    @FXML
-    private Label label;
 
     @FXML
     private MFXPasswordField passwordValidated;
@@ -80,8 +76,6 @@ public class TextFieldsDemoController implements Initializable {
         validated.setValidated(true);
         validated.setIcon(new MFXFontIcon("mfx-variant7-mark", 16, Color.web("#8FF7A7")));
         validated.getIcon().visibleProperty().bind(validated.getValidator().validProperty());
-
-        label.visibleProperty().bind(validated.getValidator().validProperty());
 
         passwordValidated.setValidated(true);
         passwordValidated.getValidator().add(

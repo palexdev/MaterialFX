@@ -19,8 +19,8 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.beans.MFXContextMenuItem;
 import io.github.palexdev.materialfx.controls.enums.DialogType;
+import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.skins.MFXTextFieldSkin;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
 import io.github.palexdev.materialfx.validation.base.AbstractMFXValidator;
@@ -189,9 +189,6 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
             if (oldValue != null) {
                 oldValue.dispose();
             }
-            if (newValue != null) {
-                newValue.install(this);
-            }
         });
 
         textProperty().addListener((observable, oldValue, newValue) -> {
@@ -212,40 +209,45 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
      * Installs the default {@link MFXContextMenu}.
      */
     protected void defaultContextMenu() {
-        MFXContextMenuItem copy = new MFXContextMenuItem(
-                "Copy",
-                event -> copy()
-        );
+        MFXContextMenuItem copy = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-content-copy", 14))
+                .setText("Copy")
+                .setAccelerator("Ctrl + C")
+                .setAction(event -> copy());
 
-        MFXContextMenuItem cut = new MFXContextMenuItem(
-                "Cut",
-                event -> cut()
-        );
+        MFXContextMenuItem cut = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-content-cut", 14))
+                .setText("Cut")
+                .setAccelerator("Ctrl + X")
+                .setAction(event -> cut());
 
-        MFXContextMenuItem paste = new MFXContextMenuItem(
-                "Paste",
-                event -> paste()
-        );
+        MFXContextMenuItem paste = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-content-paste", 14))
+                .setText("Paste")
+                .setAccelerator("Ctrl + V")
+                .setAction(event -> paste());
 
-        MFXContextMenuItem delete = new MFXContextMenuItem(
-                "Delete",
-                event -> deleteText(getSelection())
-        );
+        MFXContextMenuItem delete = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-delete-alt", 16))
+                .setText("Delete")
+                .setAccelerator("Ctrl + D")
+                .setAction(event -> deleteText(getSelection()));
 
-        MFXContextMenuItem selectAll = new MFXContextMenuItem(
-                "Select All",
-                event -> selectAll()
-        );
+        MFXContextMenuItem selectAll = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-select-all", 16))
+                .setText("Select All")
+                .setAccelerator("Ctrl + A")
+                .setAction(event -> selectAll());
 
         setMFXContextMenu(
-                new MFXContextMenu.Builder()
-                .addMenuItem(copy)
-                .addMenuItem(cut)
-                .addMenuItem(paste)
-                .addMenuItem(delete)
-                .addSeparator()
-                .addMenuItem(selectAll)
-                .get()
+                MFXContextMenu.Builder.build(this)
+                        .addMenuItem(copy)
+                        .addMenuItem(cut)
+                        .addMenuItem(paste)
+                        .addMenuItem(delete)
+                        .addSeparator()
+                        .addMenuItem(selectAll)
+                        .install()
         );
     }
 

@@ -4,53 +4,37 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0"
-            prefWidth="650.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="io.github.palexdev.materialfx.demo.controllers.TextFieldsDemoController">
-   <Label id="customLabel" alignment="CENTER" layoutX="167.0" layoutY="14.0" prefHeight="26.0" prefWidth="266.0"
-          text="TextFields" AnchorPane.leftAnchor="167.0" AnchorPane.rightAnchor="167.0" AnchorPane.topAnchor="20.0"/>
-   <HBox alignment="CENTER" layoutX="200.0" layoutY="46.0" prefWidth="200.0" spacing="60.0" AnchorPane.leftAnchor="20.0"
-         AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.TextFieldsDemoController">
+   <Label id="customLabel" alignment="CENTER" layoutX="167.0" layoutY="14.0" prefHeight="26.0" prefWidth="266.0" text="TextFields" AnchorPane.leftAnchor="167.0" AnchorPane.rightAnchor="167.0" AnchorPane.topAnchor="20.0" />
+   <HBox alignment="CENTER" layoutX="200.0" layoutY="46.0" prefWidth="200.0" spacing="60.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">
       <padding>
-         <Insets bottom="20.0" top="20.0"/>
+         <Insets bottom="20.0" top="20.0" />
       </padding>
-      <MFXTextField alignment="CENTER" maxWidth="-Infinity" prefWidth="120.0" text="MFXTextField"/>
-      <MFXTextField alignment="CENTER" maxWidth="-Infinity" prefWidth="120.0" promptText="Text Limit" textLimit="5"/>
-      <MFXTextField alignment="CENTER" disable="true" maxWidth="-Infinity" prefWidth="120.0" text="Disabled"/>
+      <MFXTextField alignment="CENTER" maxWidth="-Infinity" prefWidth="120.0" text="MFXTextField" />
+      <MFXTextField alignment="CENTER" maxWidth="-Infinity" prefWidth="120.0" promptText="Text Limit" textLimit="5" />
+      <MFXTextField alignment="CENTER" disable="true" maxWidth="-Infinity" prefWidth="120.0" text="Disabled" />
    </HBox>
-   <Label id="customLabel" alignment="CENTER" layoutX="167.0" layoutY="125.0" prefHeight="26.0" prefWidth="266.0"
-          text="Customization" AnchorPane.leftAnchor="167.0" AnchorPane.rightAnchor="167.0"
-          AnchorPane.topAnchor="130.0"/>
-   <HBox alignment="CENTER" layoutX="60.0" layoutY="156.0" prefWidth="200.0" spacing="120.0"
-         AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="170.0">
+   <Label id="customLabel" alignment="CENTER" layoutX="167.0" layoutY="125.0" prefHeight="26.0" prefWidth="266.0" text="Customization" AnchorPane.leftAnchor="167.0" AnchorPane.rightAnchor="167.0" AnchorPane.topAnchor="130.0" />
+   <HBox alignment="CENTER" layoutX="60.0" layoutY="156.0" prefWidth="200.0" spacing="120.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="170.0">
       <padding>
-         <Insets bottom="20.0" top="20.0"/>
+         <Insets bottom="20.0" top="20.0" />
       </padding>
-      <MFXTextField id="colors" alignment="CENTER" lineColor="#52db32" maxWidth="-Infinity" prefWidth="120.0"
-                    promptText="Colors"/>
-      <MFXTextField fx:id="validated" lineColor="#52db32" maxWidth="-Infinity" prefWidth="120.0" text="Validation"/>
+      <MFXTextField id="colors" alignment="CENTER" lineColor="#52db32" maxWidth="-Infinity" prefWidth="120.0" promptText="Colors" />
+      <MFXTextField fx:id="validated" lineColor="#52db32" maxWidth="-Infinity" prefWidth="120.0" text="Validation" />
    </HBox>
    <HBox layoutX="15.0" layoutY="348.0" spacing="50.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0">
       <padding>
-         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
       </padding>
-      <MFXCheckbox fx:id="checkbox" checkedColor="#00e240" markSize="9.0" markType="mfx-variant9-mark"
-                   text="CheckBox Validation"/>
-      <MFXDatePicker fx:id="picker" colorText="true" lineColor="#00c133b2" maxHeight="-Infinity" maxWidth="-Infinity"
-                     pickerColor="#00c133" prefHeight="30.0" prefWidth="120.0"/>
-      <Label fx:id="label" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0"
-             prefWidth="100.0" text="VALID" textFill="#00c133" visible="false"/>
+      <MFXCheckbox fx:id="checkbox" checkedColor="#00e240" markSize="9.0" markType="mfx-variant9-mark" text="CheckBox Validation" />
+      <MFXDatePicker fx:id="picker" colorText="true" lineColor="#00c133b2" maxHeight="-Infinity" maxWidth="-Infinity" pickerColor="#00c133" prefHeight="30.0" prefWidth="120.0" />
    </HBox>
-   <Label id="customLabel" alignment="CENTER" layoutX="167.0" layoutY="235.0" prefHeight="26.0" prefWidth="266.0"
-          text="Customization" AnchorPane.leftAnchor="167.0" AnchorPane.rightAnchor="167.0"
-          AnchorPane.topAnchor="240.0"/>
-   <HBox alignment="CENTER" layoutX="120.0" layoutY="266.0" prefWidth="200.0" spacing="60.0"
-         AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="275.0">
+   <Label id="customLabel" alignment="CENTER" layoutX="167.0" layoutY="235.0" prefHeight="26.0" prefWidth="266.0" text="Customization" AnchorPane.leftAnchor="167.0" AnchorPane.rightAnchor="167.0" AnchorPane.topAnchor="240.0" />
+   <HBox alignment="CENTER" layoutX="120.0" layoutY="266.0" prefWidth="200.0" spacing="60.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="275.0">
       <padding>
-         <Insets bottom="20.0" top="20.0"/>
+         <Insets bottom="20.0" top="20.0" />
       </padding>
-      <MFXPasswordField lineColor="#52db32" promptText="Prompt Text"/>
-      <MFXPasswordField fx:id="passwordValidated" lineColor="#52db32" promptText="Enter Password..."
-                        showPassword="true"/>
+      <MFXPasswordField lineColor="#52db32" promptText="Prompt Text" />
+      <MFXPasswordField fx:id="passwordValidated" lineColor="#52db32" promptText="Enter Password..." showPassword="true" />
    </HBox>
 </AnchorPane>

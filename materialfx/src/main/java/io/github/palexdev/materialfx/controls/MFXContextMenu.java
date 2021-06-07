@@ -19,36 +19,33 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.beans.MFXContextMenuItem;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.PopupControl;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.stage.Window;
 import javafx.stage.WindowEvent;
-
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This control is a context menu built from scratch which extends {@code VBox}.
  * <p>
  * It easily styleable and allows to add separators between the context menu nodes.
  * The context menu is shown in a {@code PopupControl}.
+ * <p>
+ * It also allows to easily change owner and menu items even at runtime.
  * <p></p>
- * It is <b>highly recommended</b> to use the {@link Builder} class to create a context menu.
+ * It is <b>highly recommended</b> to use the {@link MFXContextMenu.Builder} class to create a context menu.
  */
 public class MFXContextMenu extends VBox {
     //================================================================================
@@ -57,140 +54,171 @@ public class MFXContextMenu extends VBox {
     private final String STYLE_CLASS = "mfx-context-menu";
     private final String STYLESHEET = MFXResourcesLoader.load("css/MFXContextMenu.css");
 
-    private final List<Line> separators = new ArrayList<>();
-
-    private WeakReference<Node> nodeReference;
-    private final PopupControl popupControl;
-    private final ChangeListener<Scene> sceneListener;
-    private final ChangeListener<Boolean> windowFocusListener;
-    private final EventHandler<MouseEvent> sceneHandler;
-    private final EventHandler<MouseEvent> openHandler;
-    private final EventHandler<KeyEvent> keyHandler;
+    private final ObjectProperty<ObservableList<Node>> items = new SimpleObjectProperty<>(FXCollections.observableArrayList());
+    private final ObjectProperty<Node> owner = new SimpleObjectProperty<>();
+    private final PopupControl popup;
+    private EventHandler<MouseEvent> openHandler;
+    private ChangeListener<Boolean> ownerFocus;
 
     //================================================================================
     // Constructors
     //================================================================================
-    public MFXContextMenu() {
-        this(0);
+    public MFXContextMenu(Node owner) {
+        this(0, owner);
     }
 
-    public MFXContextMenu(double spacing) {
+    public MFXContextMenu(double spacing, Node owner) {
         super(spacing);
-        setMinWidth(100);
-        setAlignment(Pos.TOP_CENTER);
-        getStyleClass().setAll(STYLE_CLASS);
-        popupControl = new PopupControl();
-        popupControl.getScene().setFill(Color.WHITE);
-        popupControl.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> hide());
 
-        sceneHandler = event -> {
-            if (popupControl.isShowing()) {
-                hide();
-            }
-        };
-        sceneListener = (observable, oldValue, newValue) -> {
-            if (oldValue != null) {
-                oldValue.removeEventFilter(MouseEvent.MOUSE_PRESSED, sceneHandler);
-            }
-            if (newValue != null) {
-                newValue.addEventFilter(MouseEvent.MOUSE_PRESSED, sceneHandler);
-            }
-        };
-        windowFocusListener = (observable, oldValue, newValue) -> {
-            if (!newValue && popupControl.isShowing()) {
-                hide();
-            }
-        };
+        popup = new PopupControl();
+        popup.getScene().setRoot(this);
+        popup.getScene().setFill(Color.TRANSPARENT);
+        popup.setAutoHide(true);
+        popup.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> hide());
+
         openHandler = event -> {
             if (event.getButton() == MouseButton.SECONDARY) {
-                popupControl.getScene().setRoot(MFXContextMenu.this);
-                show(nodeReference.get(), event.getScreenX(), event.getScreenY());
+                show(event);
             }
         };
-        keyHandler = event -> {
-            if (event.getEventType() != KeyEvent.KEY_PRESSED) return;
-
-            final KeyCode code = event.getCode();
-            if (code == KeyCode.ENTER || code == KeyCode.SPACE) {
+        ownerFocus = (observable, oldValue, newValue) -> {
+            if (!newValue && isShowing()) {
                 hide();
             }
         };
+
+        initialize();
+        setOwner(owner);
     }
 
     //================================================================================
     // Methods
     //================================================================================
+    private void initialize() {
+        getStyleClass().add(STYLE_CLASS);
+        setStyle("-fx-background-color: white");
+        setMinWidth(100);
+        setAlignment(Pos.TOP_CENTER);
 
-    /**
-     * Installs the context menu to the given node.
-     */
-    public void install(Node node) {
-        if (node.getScene() != null) {
-            Scene scene = node.getScene();
-            Window window = scene.getWindow();
-            scene.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> hide());
-            if (window != null) {
-                window.focusedProperty().addListener(windowFocusListener);
+
+        items.addListener((observable, oldValue, newValue) -> {
+            if (oldValue != null && !oldValue.isEmpty()) {
+                oldValue.clear();
             }
-        }
-
-        node.sceneProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                newValue.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> hide());
-                Window window = newValue.getWindow();
-                if (window != null) {
-                    window.focusedProperty().addListener(windowFocusListener);
-                }
+                super.getChildren().setAll(newValue);
             }
         });
 
-        Node nR = nodeReference != null ? nodeReference.get() : null;
-        if (nR != null && nR == node) {
-            return;
-        }
-
-        dispose();
-        nodeReference = new WeakReference<>(node);
-        installBehavior();
-    }
-
-    /**
-     * Installs the context menu behavior to the given node.
-     * Used in {@link #install(Node)}.
-     */
-    private void installBehavior() {
-        if (nodeReference != null) {
-            Node node = nodeReference.get();
-            if (node != null) {
-                node.sceneProperty().addListener(sceneListener);
-                node.addEventHandler(MouseEvent.MOUSE_PRESSED, openHandler);
-                node.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler);
+        owner.addListener((observable, oldValue, newValue) -> {
+            if (oldValue != null) {
+                oldValue.removeEventFilter(MouseEvent.MOUSE_PRESSED, openHandler);
+                oldValue.focusedProperty().removeListener(ownerFocus);
             }
-        }
+            if (newValue != null) {
+                newValue.addEventFilter(MouseEvent.MOUSE_PRESSED, openHandler);
+                newValue.focusedProperty().addListener(ownerFocus);
+            }
+        });
     }
 
     /**
-     * If the node reference is not null and {@link #install(Node)} is called again, this method is called to
-     * remove the context menu from the previous node.
+     * Shows the context menu' popup.
+     */
+    public void show(MouseEvent event) {
+        popup.show(getOwner(), event.getScreenX(), event.getScreenY());
+    }
+
+    /**
+     * Hides the context menu' popup.
+     */
+    public void hide() {
+        popup.hide();
+    }
+
+    /**
+     * Removes the popup handler from the current set owner (if not null) and then
+     * sets it to null.
      */
     public void dispose() {
-        if (nodeReference != null) {
-            Node node = nodeReference.get();
-            if (node != null) {
-                node.sceneProperty().removeListener(sceneListener);
-                node.getScene().removeEventFilter(MouseEvent.MOUSE_PRESSED, sceneHandler);
-                Window window = node.getScene().getWindow();
-                if (window != null) {
-                    window.focusedProperty().removeListener(windowFocusListener);
-                }
-                node.removeEventHandler(MouseEvent.MOUSE_PRESSED, openHandler);
-                node.removeEventHandler(KeyEvent.KEY_PRESSED, keyHandler);
-            }
+        if (getOwner() != null) {
+            getOwner().removeEventFilter(MouseEvent.MOUSE_PRESSED, openHandler);
+            getOwner().focusedProperty().removeListener(ownerFocus);
         }
+        openHandler = null;
+        ownerFocus = null;
     }
 
-    void addSeparator(Line line) {
-        separators.add(line);
+    /**
+     * @return the item's list of this context menu, separators included
+     */
+    public ObservableList<Node> getItems() {
+        return items.get();
+    }
+
+    /**
+     * Sets the item's list of this context menu with the given list.
+     */
+    public void setItems(ObservableList<Node> items) {
+        this.items.set(items);
+    }
+
+    public Node getOwner() {
+        return owner.get();
+    }
+
+    /**
+     * Specifies the popup's owner. This is needed to invoke {@link PopupControl#show(Node, double, double)}.
+     */
+    public ObjectProperty<Node> ownerProperty() {
+        return owner;
+    }
+
+    public void setOwner(Node owner) {
+        this.owner.set(owner);
+    }
+
+    //================================================================================
+    // Delegate Methods
+    //================================================================================
+    public void setOnCloseRequest(EventHandler<WindowEvent> value) {
+        popup.setOnCloseRequest(value);
+    }
+
+    public void setOnShowing(EventHandler<WindowEvent> value) {
+        popup.setOnShowing(value);
+    }
+
+    public void setOnShown(EventHandler<WindowEvent> value) {
+        popup.setOnShown(value);
+    }
+
+    public void setOnHiding(EventHandler<WindowEvent> value) {
+        popup.setOnHiding(value);
+    }
+
+    public void setOnHidden(EventHandler<WindowEvent> value) {
+        popup.setOnHidden(value);
+    }
+
+    public boolean isShowing() {
+        return popup.isShowing();
+    }
+
+    public ReadOnlyBooleanProperty showingProperty() {
+        return popup.showingProperty();
+    }
+
+    //================================================================================
+    // Override Methods
+    //================================================================================
+
+    /**
+     * @return an unmodifiable list containing the control's children
+     */
+    @Override
+    public ObservableList<Node> getChildren() {
+        return super.getChildrenUnmodifiable();
     }
 
     @Override
@@ -202,145 +230,146 @@ public class MFXContextMenu extends VBox {
     protected void layoutChildren() {
         super.layoutChildren();
 
-        separators.forEach(line -> {
-            line.setStartX(0);
-            line.setEndX(getWidth() - (snappedRightInset() + snappedLeftInset()));
-        });
+        getItems().stream()
+                .filter(node -> node instanceof Line)
+                .map(node -> (Line) node)
+                .forEach(line -> {
+                    line.setStartX(0);
+                    line.setEndX(getWidth() - (snappedRightInset() + snappedLeftInset()));
+                });
     }
+
+    //================================================================================
+    // Builder
+    //================================================================================
 
     /**
-     * Shows the context menu' popup.
-     */
-    public void show(Node ownerNode, double anchorX, double anchorY) {
-        popupControl.show(ownerNode, anchorX, anchorY);
-    }
-
-    /**
-     * Hides the context menu' popup.
-     */
-    public void hide() {
-        popupControl.hide();
-    }
-
-    public void addPopupEventHandler(EventType<WindowEvent> eventType, EventHandler<WindowEvent> eventHandler) {
-        popupControl.addEventHandler(eventType, eventHandler);
-    }
-
-    public void addPopupEventFilter(EventType<WindowEvent> eventType, EventHandler<WindowEvent> eventHandler) {
-        popupControl.addEventFilter(eventType, eventHandler);
-    }
-
-    public void removePopupEventHandler(EventType<WindowEvent> eventType, EventHandler<WindowEvent> eventHandler) {
-        popupControl.removeEventHandler(eventType, eventHandler);
-    }
-
-    public void removePopupEventFilter(EventType<WindowEvent> eventType, EventHandler<WindowEvent> eventHandler) {
-        popupControl.removeEventFilter(eventType, eventHandler);
-    }
-
-    /**
-     * Utils class that facilitates the creation of context menus with fluent api.
+     * Builder class that facilitates the creation of context menus with fluent api.
      * <p>
-     * Example from {@code MFXTableView Skin}:
+     * An example:
      * <p></p>
      * <pre>
      * {@code
-     * MFXContextMenuItem restoreWidthThis = new MFXContextMenuItem(
-     *      "Restore this column width",
-     *      event -> column.setMinWidth(column.getInitialWidth())
-     * );
+     * MFXContextMenuItem item1 = new MFXContextMenuItem()
+     *         .setText("A")
+     *         .setAccelerator("Shift + A")
+     *         .setTooltipSupplier(() -> new Tooltip("A"))
+     *         .setAction(event -> System.out.println("Action A"));
      *
-     * MFXContextMenuItem restoreWidthAll = new MFXContextMenuItem(
-     *      "Restore all columns width",
-     *      event -> columnsContainer.getChildren().stream()
-     *          .filter(node -> node instanceof MFXTableColumnCell)
-     *          .map(node -> (MFXTableColumnCell<T>) node)
-     *          .forEach(c -> c.setMinWidth(c.getInitialWidth()))
-     * );
+     * MFXContextMenuItem item2 = new MFXContextMenuItem()
+     *         .setText("B")
+     *         .setAccelerator("Shift + B")
+     *         .setTooltipSupplier(() -> new Tooltip("B"))
+     *         .setAction(event -> System.out.println("Action B"));
      *
-     * MFXContextMenuItem autoSizeThis = new MFXContextMenuItem(
-     *      "Autosize this column",
-     *      event -> autoSizeColumn(column)
-     *  );
+     * MFXContextMenuItem item3 = new MFXContextMenuItem()
+     *         .setText("C")
+     *         .setAccelerator("Shift + C")
+     *         .setTooltipSupplier(() -> new Tooltip("C"))
+     *         .setAction(event -> System.out.println("Action C"));
      *
-     * MFXContextMenuItem autoSizeAll = new MFXContextMenuItem(
-     *      "Autosize all columns",
-     *      event -> columnsContainer.getChildren().stream()
-     *          .filter(node -> node instanceof MFXTableColumnCell)
-     *          .map(node -> (MFXTableColumnCell<T>) node)
-     *          .forEach(this::autoSizeColumn)
-     * );
+     * MFXContextMenuItem item4 = new MFXContextMenuItem()
+     *         .setText("D")
+     *         .setAccelerator("Shift + D")
+     *         .setTooltipSupplier(() -> new Tooltip("D"))
+     *         .setAction(event -> System.out.println("Action D"));
      *
-     * new MFXContextMenu.Builder()
-     *      .addMenuItem(autoSizeAll)
-     *      .addMenuItem(autoSizeThis)
-     *      .addSeparator()
-     *      .addMenuItem(restoreWidthAll)
-     *      .addMenuItem(restoreWidthThis)
-     *      .install(column);
+     * MFXContextMenuItem item5 = new MFXContextMenuItem()
+     *         .setText("E")
+     *         .setAccelerator("Shift + E")
+     *         .setTooltipSupplier(() -> new Tooltip("E"))
+     *         .setAction(event -> System.out.println("Action E"));
+     *
+     * MFXContextMenuItem item6 = new MFXContextMenuItem()
+     *         .setText("F")
+     *         .setAccelerator("Shift + F")
+     *         .setTooltipSupplier(() -> new Tooltip("F"))
+     *         .setAction(event -> System.out.println("Action F"));
+     *
+     * MFXContextMenu.Builder.build(owner)
+     *         .addMenuItem(item1)
+     *         .addMenuItem(item2)
+     *         .addSeparator()
+     *         .addMenuItem(item3)
+     *         .addMenuItem(item4)
+     *         .addSeparator()
+     *         .addMenuItem(item5)
+     *         .addMenuItem(item6)
+     *         .install();
      * }
      * </pre>
+     *
+     * @see MFXContextMenuItem
      */
     public static class Builder {
         private final MFXContextMenu contextMenu;
+        private final ObservableList<Node> items = FXCollections.observableArrayList();
 
-        /**
-         * Creates a new Builder with a new MFXContextMenu instance.
-         */
-        public Builder() {
-            contextMenu = new MFXContextMenu();
+        private Builder(Node owner) {
+            this(0, owner);
+        }
+
+        private Builder(double spacing, Node owner) {
+            contextMenu = new MFXContextMenu(spacing, owner);
         }
 
         /**
-         * Creates a new Builder with a new MFXContextMenu instance that has
-         * the spacing set to the given value.
+         * @return a new Builder instance with the given owner for the MFXContextMenu
          */
-        public Builder(double spacing) {
-            contextMenu = new MFXContextMenu(spacing);
+        public static Builder build(Node owner) {
+            return new Builder(owner);
         }
 
         /**
-         * Adds a new node to the context menu with the specified action on mouse pressed.
+         * @return a new Builder instance with the given owner for the MFXContextMenu
+         * and the given spacing
+         */
+        public static Builder build(double spacing, Node owner) {
+            return new Builder(spacing, owner);
+        }
+
+        /**
+         * Adds the specifies node to the items list.
+         */
+        public Builder addMenuItem(Node node) {
+            items.add(node);
+            return this;
+        }
+
+        /**
+         * Adds the specified action to the specified node by adding an event handler
+         * for MOUSE_PRESSED to the node and then adds the node to the items list.
          */
         public Builder addMenuItem(Node node, EventHandler<MouseEvent> action) {
             node.addEventHandler(MouseEvent.MOUSE_PRESSED, action);
-            contextMenu.getChildren().add(node);
+            items.add(node);
             return this;
         }
 
         /**
-         * Adds the specified {@link MFXContextMenuItem} to the context menu.
+         * Adds the specified {@link MFXContextMenuItem} to the items list.
          */
         public Builder addMenuItem(MFXContextMenuItem item) {
-            contextMenu.getChildren().add(item.getNode());
+            items.add(item);
             return this;
         }
 
         /**
-         * Adds a separator to the context menu.
+         * Adds a separator to the items list.
          */
         public Builder addSeparator() {
             Line separator = new Line();
             separator.getStyleClass().add("separator");
             VBox.setMargin(separator, new Insets(4, 0, 3, 0));
-            contextMenu.addSeparator(separator);
-            contextMenu.getChildren().add(separator);
+            items.add(separator);
             return this;
         }
 
         /**
-         * @return the built context menu instance
+         * Installs the added items in the context menu.
          */
-        public MFXContextMenu get() {
-            return contextMenu;
-        }
-
-        /**
-         * Installs the context menu to the given node and returns the
-         * context menu instance.
-         */
-        public MFXContextMenu install(Node node) {
-            contextMenu.install(node);
+        public MFXContextMenu install() {
+            contextMenu.setItems(items);
             return contextMenu;
         }
     }

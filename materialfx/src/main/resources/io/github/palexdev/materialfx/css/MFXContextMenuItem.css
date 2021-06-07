@@ -16,17 +16,10 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-.mfx-context-menu {
+.mfx-context-menu-item {
     -fx-background-color: white;
-    -fx-background-radius: 5;
-    -fx-border-color: #ADB5BD;
-    -fx-border-radius: 5;
-    -fx-padding: 1;
 }
 
-.separator {
-    -fx-border-color: #ADB5BD;
-    -fx-stroke-width: 0.5;
-    -fx-opacity: 0.5;
+.mfx-context-menu-item:hover {
+    -fx-background-color: #ECF9FD;
 }
-

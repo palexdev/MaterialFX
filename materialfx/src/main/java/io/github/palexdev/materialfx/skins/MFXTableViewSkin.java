@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.skins;
 
-import io.github.palexdev.materialfx.beans.MFXContextMenuItem;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.MFXTableView.MFXTableViewEvent;
 import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
@@ -625,37 +624,37 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
     protected void addContextMenu(MFXTableColumn<T> column) {
         MFXTableView<T> tableView = getSkinnable();
 
-        MFXContextMenuItem restoreWidthThis = new MFXContextMenuItem(
-                "Restore this column width",
-                event -> column.setMinWidth(column.getInitialWidth())
-        );
+        MFXContextMenuItem restoreWidthThis = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-restore", 16))
+                .setText("Restore this column width")
+                .setAction(event -> column.setMinWidth(column.getInitialWidth()));
 
-        MFXContextMenuItem restoreWidthAll = new MFXContextMenuItem(
-                "Restore all columns width",
-                event -> tableView.getTableColumns().forEach(c -> c.setMinWidth(c.getInitialWidth()))
-        );
+        MFXContextMenuItem restoreWidthAll = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-restore", 16))
+                .setText("Restore all columns width")
+                .setAction(event -> tableView.getTableColumns().forEach(c -> c.setMinWidth(c.getInitialWidth())));
 
-        MFXContextMenuItem autoSizeThis = new MFXContextMenuItem(
-                "Autosize this column",
-                event -> autoSizeColumn(column)
-        );
+        MFXContextMenuItem autoSizeThis = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-fit", 16))
+                .setText("Autosize this column")
+                .setAction(event -> autoSizeColumn(column));
 
-        MFXContextMenuItem autoSizeAll = new MFXContextMenuItem(
-                "Autosize all columns",
-                event -> tableView.getTableColumns().forEach(this::autoSizeColumn)
-        );
+        MFXContextMenuItem autoSizeAll = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-fit", 16))
+                .setText("Autosize all columns")
+                .setAction(event -> tableView.getTableColumns().forEach(this::autoSizeColumn));
 
-        MFXContextMenuItem lockSize = new MFXContextMenuItem(
-                "Lock this column size",
-                event -> column.setResizable(false)
-        );
+        MFXContextMenuItem lockSize = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-lock", 12))
+                .setText("Lock this column size")
+                .setAction(event -> column.setResizable(false));
 
-        MFXContextMenuItem unlockSize = new MFXContextMenuItem(
-                "Unlock this column size",
-                event -> column.setResizable(true)
-        );
+        MFXContextMenuItem unlockSize = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-lock-open", 12))
+                .setText("Unlock this column size")
+                .setAction(event -> column.setResizable(true));
 
-        new MFXContextMenu.Builder()
+        MFXContextMenu.Builder.build(column)
                 .addMenuItem(autoSizeAll)
                 .addMenuItem(autoSizeThis)
                 .addSeparator()
@@ -664,7 +663,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
                 .addSeparator()
                 .addMenuItem(lockSize)
                 .addMenuItem(unlockSize)
-                .install(column);
+                .install();
     }
 
     /**
@@ -684,7 +683,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
                     .collect(Collectors.toList());
             List<MFXTableRowCell> rowCells = new ArrayList<>();
             tableRows.forEach(row -> {
-                MFXTableRowCell rowCell = (MFXTableRowCell) row.getChildren().get(index);
+                MFXTableRowCell rowCell = (MFXTableRowCell) row.getChildren().get(index + 1);
                 rowCell.requestLayout();
                 if (rowCell.isTruncated()) {
                     rowCells.add(rowCell);

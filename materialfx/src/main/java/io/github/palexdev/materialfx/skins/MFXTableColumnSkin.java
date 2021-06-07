@@ -28,6 +28,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.SkinBase;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -58,10 +59,16 @@ public class MFXTableColumnSkin<T> extends SkinBase<MFXTableColumn<T>> {
         label = new Label();
         label.textProperty().bind(column.textProperty());
 
-        MFXFontIcon icon = new MFXFontIcon(column.isResizable() ? "mfx-lock" : "mfx-lock-open", 14);
-        lockIcon = new MFXIconWrapper(icon, 18).defaultRippleGeneratorBehavior();
+        MFXFontIcon icon = new MFXFontIcon(column.isResizable() ? "mfx-lock" : "mfx-lock-open", 12);
+        icon.descriptionProperty().bind(Bindings.createStringBinding(
+                () -> column.isResizable() ? "mfx-lock" : "mfx-lock-open",
+                column.resizableProperty()
+        ));
+        lockIcon = new MFXIconWrapper(icon, 20).defaultRippleGeneratorBehavior();
         lockIcon.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            column.setResizable(!column.isResizable());
+            if (event.getButton() == MouseButton.PRIMARY) {
+                column.setResizable(!column.isResizable());
+            }
             event.consume();
         });
         lockIcon.visibleProperty().bind(Bindings.createBooleanBinding(

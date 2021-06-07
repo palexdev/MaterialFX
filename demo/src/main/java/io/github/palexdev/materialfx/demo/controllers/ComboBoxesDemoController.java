@@ -160,6 +160,8 @@ public class ComboBoxesDemoController implements Initializable {
         filtersValidated.setValidated(true);
         filtersValidated.getValidator().add(BindingUtils.toProperty(filtersValidated.getSelectionModel().selectedIndexProperty().isNotEqualTo(-1)), "A value must be selected");
         filtersValidated.getValidator().add(checkbox.selectedProperty(), "Checkbox must be selected");
+
+        filters3.setForceFieldFocusOnShow(true);
     }
 
     private FontIcon createIcon(String s) {

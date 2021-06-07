@@ -19,8 +19,8 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.beans.MFXContextMenuItem;
 import io.github.palexdev.materialfx.controls.enums.DialogType;
+import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.selection.ComboSelectionModelMock;
 import io.github.palexdev.materialfx.skins.MFXComboBoxSkin;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
@@ -203,9 +203,6 @@ public class MFXComboBox<T> extends Control implements Validated<MFXDialogValida
             if (oldValue != null) {
                 oldValue.dispose();
             }
-            if (newValue != null) {
-                newValue.install(this);
-            }
         });
 
         setupValidator();
@@ -213,40 +210,40 @@ public class MFXComboBox<T> extends Control implements Validated<MFXDialogValida
     }
 
     protected void defaultContextMenu() {
-        MFXContextMenuItem selectFirst = new MFXContextMenuItem(
-                "Select First",
-                event -> mockSelection.selectFirst()
-        );
+        MFXContextMenuItem selectFirst = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-first-page", 16))
+                .setText("Select First")
+                .setAction(event -> mockSelection.selectFirst());
 
-        MFXContextMenuItem selectNext = new MFXContextMenuItem(
-                "Select Next",
-                event -> mockSelection.selectNext()
-        );
+        MFXContextMenuItem selectNext = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-next", 18))
+                .setText("Select Next")
+                .setAction(event -> mockSelection.selectNext());
 
-        MFXContextMenuItem selectPrevious = new MFXContextMenuItem(
-                "Select Previous",
-                event -> mockSelection.selectPrevious()
-        );
+        MFXContextMenuItem selectPrevious = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-back", 18))
+                .setText("Select Previous")
+                .setAction(event -> mockSelection.selectPrevious());
 
-        MFXContextMenuItem selectLast = new MFXContextMenuItem(
-                "Select Last",
-                event -> mockSelection.selectLast()
-        );
+        MFXContextMenuItem selectLast = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-last-page", 16))
+                .setText("Select Last")
+                .setAction(event -> mockSelection.selectLast());
 
-        MFXContextMenuItem resetSelection = new MFXContextMenuItem(
-                "Clear Selection",
-                event -> mockSelection.clearSelection()
-        );
+        MFXContextMenuItem resetSelection = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-x", 16))
+                .setText("Clear Selection")
+                .setAction(event -> mockSelection.clearSelection());
 
         setMFXContextMenu(
-                new MFXContextMenu.Builder()
+                MFXContextMenu.Builder.build(this)
                         .addMenuItem(selectFirst)
                         .addMenuItem(selectNext)
                         .addMenuItem(selectPrevious)
                         .addMenuItem(selectLast)
                         .addSeparator()
                         .addMenuItem(resetSelection)
-                        .get()
+                        .install()
         );
     }
 

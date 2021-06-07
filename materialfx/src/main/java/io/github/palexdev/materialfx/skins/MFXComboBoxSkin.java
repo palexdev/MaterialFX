@@ -562,10 +562,11 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
 
         validate.resizeRelocate(lx, ly, lw, lh);
 
+        double extraX = getSkinnable().getComboStyle() == Styles.ComboBoxStyles.STYLE3 ? 5 : 3;
         double iconWidth = icon.getPrefWidth();
         double iconHeight = icon.getPrefHeight();
         double center = ((snappedTopInset() + snappedBottomInset()) / 2.0) + ((h - iconHeight) / 2.0);
-        icon.resizeRelocate(w - iconWidth, center, iconWidth, iconHeight);
+        icon.resizeRelocate(w - iconWidth + extraX, center, iconWidth, iconHeight);
         focusedLine.relocate(0, h);
         unfocusedLine.relocate(0, h);
     }

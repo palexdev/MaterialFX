@@ -250,6 +250,7 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
 
         textNode.setVisible(false);
         MFXTextField textField = new MFXTextField(label.getText());
+        textField.setMFXContextMenu(null);
         label.editorFocusedProperty().bind(textField.focusedProperty());
         textField.setId("editor-node");
         textField.setManaged(false);

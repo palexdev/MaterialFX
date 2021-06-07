@@ -63,7 +63,6 @@ import java.time.format.TextStyle;
 import java.time.temporal.WeekFields;
 import java.util.*;
 
-import static java.time.temporal.ChronoUnit.DAYS;
 import static java.time.temporal.ChronoUnit.MONTHS;
 
 /**
@@ -131,7 +130,6 @@ public class MFXDatePickerContent extends VBox {
 
     // Date formatters
     private final ObjectProperty<DateTimeFormatter> dateFormatter = new SimpleObjectProperty<>(DateTimeFormatter.ofPattern("d/M/yyyy"));
-    private final DateTimeFormatter weekDayNameFormatter = DateTimeFormatter.ofPattern("ccc");
 
     private final BooleanProperty animateCalendar = new SimpleBooleanProperty();
 
@@ -173,13 +171,13 @@ public class MFXDatePickerContent extends VBox {
         if (localDate != null) {
             setCurrentDate(localDate);
             setYearMonth(YearMonth.of(getCurrentDate().getYear(), getCurrentDate().getMonth()));
-            lastSelectedDayCell.set(
+            setLastSelectedDayCell(
                     days.stream()
                             .filter(day -> day.getText().equals(Integer.toString(getCurrentDate().getDayOfMonth())))
                             .findFirst()
                             .orElse(null)
             );
-            lastSelectedDayCell.get().setSelectedDate(true);
+            getLastSelectedDayCell().setSelectedDate(true);
             lastSelectedYearCell = yearsList.stream()
                     .filter(year -> year.getText().equals(Integer.toString(getYearMonth().getYear())))
                     .findFirst()
@@ -248,7 +246,7 @@ public class MFXDatePickerContent extends VBox {
 
                 setYearMonth(getYearMonth().withYear(Integer.parseInt(lastSelectedYearCell.getText())));
 
-                if (lastSelectedDayCell.get() == null) {
+                if (getLastSelectedDayCell() == null) {
                     selectDay();
                 }
             });
@@ -264,24 +262,27 @@ public class MFXDatePickerContent extends VBox {
     private void createDayNameCells() {
         dayNameCells.clear();
 
-        int firstDayOfWeek = WeekFields.of(getLocale()).getFirstDayOfWeek().getValue();
-        LocalDate date = LocalDate.of(2009, 7, 12 + firstDayOfWeek);
+        Locale locale = getLocale();
+        WeekFields wf = WeekFields.of(locale);
+        DayOfWeek day = wf.getFirstDayOfWeek();
 
         int i;
-        for (i = 0; i < daysPerWeek; i++) {
-            MFXDateCell cell = new MFXDateCell();
-            cell.getStyleClass().add("day-name-cell");
-            cell.setAlignment(Pos.CENTER);
-
-            String name = weekDayNameFormatter.withLocale(getLocale()).format(date.plus(i, DAYS));
+        for (i = 0; i < DayOfWeek.values().length; i++) {
+            String name = day.getDisplayName(TextStyle.SHORT, locale);
             dayNameMap.put(name, i);
-            if (weekDayNameFormatter.getLocale() == java.util.Locale.CHINA) {
+
+            if (locale == java.util.Locale.CHINA) {
                 name = name.substring(name.length() - 1).toUpperCase();
             } else {
                 name = name.substring(0, 1).toUpperCase();
             }
-            cell.setText(name);
 
+            day = day.plus(1);
+
+            MFXDateCell cell = new MFXDateCell();
+            cell.getStyleClass().add("day-name-cell");
+            cell.setAlignment(Pos.CENTER);
+            cell.setText(name);
             dayNameCells.add(cell);
         }
     }
@@ -307,11 +308,11 @@ public class MFXDatePickerContent extends VBox {
             NodeUtils.makeRegionCircular(cell, 13);
 
             cell.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-                if (lastSelectedDayCell.get() != null) {
-                    lastSelectedDayCell.get().setSelectedDate(false);
+                if (getLastSelectedDayCell() != null) {
+                    getLastSelectedDayCell().setSelectedDate(false);
                 }
-                lastSelectedDayCell.set(cell);
-                lastSelectedDayCell.get().setSelectedDate(true);
+                setLastSelectedDayCell(cell);
+                getLastSelectedDayCell().setSelectedDate(true);
 
                 if (lastSelectedYearCell == null) {
                     selectYear();
@@ -328,11 +329,9 @@ public class MFXDatePickerContent extends VBox {
             MFXDateCell cell = days.get(i);
             cell.setText(Integer.toString(cnt));
 
-            if (day == cnt &&
+            cell.setCurrent(day == cnt &&
                     LocalDate.now().getMonth().equals(getYearMonth().getMonth()) &&
-                    LocalDate.now().getYear() == getYearMonth().getYear()) {
-                cell.setCurrent(true);
-            }
+                    LocalDate.now().getYear() == getYearMonth().getYear());
 
             cnt++;
         }
@@ -420,13 +419,13 @@ public class MFXDatePickerContent extends VBox {
 
             refresh();
 
-            if (lastSelectedDayCell.get() != null) {
+            if (getLastSelectedDayCell() != null) {
                 MFXDateCell day = days.stream()
-                        .filter(cell -> cell.getText().equals(lastSelectedDayCell.get().getText()))
+                        .filter(cell -> cell.getText().equals(getLastSelectedDayCell().getText()))
                         .findFirst()
                         .orElse(null);
                 if (day != null) {
-                    lastSelectedDayCell.set(day);
+                    setLastSelectedDayCell(day);
                     day.setSelectedDate(true);
                 }
             }
@@ -655,7 +654,7 @@ public class MFXDatePickerContent extends VBox {
                     setCurrentDate(LocalDate.parse(selectedDate.getText(), getDateFormatter()));
                 } catch (DateTimeParseException ex) {
                     ex.printStackTrace();
-                    inputField.getValidator().add(validInput, ex.getMessage());
+                    inputField.getValidator().add(validInput, "Invalid at index " + ex.getErrorIndex());
                     validInput.set(false);
                 }
             }
@@ -746,9 +745,10 @@ public class MFXDatePickerContent extends VBox {
      * Finds the index of the first day of the week from {@link #yearMonth}.
      */
     private int firstDayIndex() {
-        DayOfWeek fd = getYearMonth().atDay(1).getDayOfWeek();
-        LocalDate date = LocalDate.of(2009, 7, 12 + fd.getValue());
-        String name = weekDayNameFormatter.withLocale(getLocale()).format(date.plus(0, DAYS));
+        Locale locale = getLocale();
+        LocalDate firstDay = getYearMonth().atDay(1);
+        DayOfWeek day = firstDay.getDayOfWeek();
+        String name = day.getDisplayName(TextStyle.SHORT, locale);
         return dayNameMap.get(name);
     }
 
@@ -770,7 +770,7 @@ public class MFXDatePickerContent extends VBox {
             setYearMonth(getYearMonth().minus(1, MONTHS));
         }
 
-        if (lastSelectedDayCell.get() == null) {
+        if (getLastSelectedDayCell() == null) {
             selectDay();
         }
         if (lastSelectedYearCell == null) {
@@ -778,11 +778,11 @@ public class MFXDatePickerContent extends VBox {
         }
 
         if (
-                lastSelectedDayCell.get() != null &&
+                getLastSelectedDayCell() != null &&
                         getYearMonth().getMonth().length(getYearMonth().isLeapYear()) <
-                                Integer.parseInt(lastSelectedDayCell.get().getText())
+                                Integer.parseInt(getLastSelectedDayCell().getText())
         ) {
-            lastSelectedDayCell.get().setSelectedDate(false);
+            getLastSelectedDayCell().setSelectedDate(false);
 
             MFXDateCell cell = days.stream()
                     .filter(dayCell -> dayCell.getText().equals("1"))
@@ -791,7 +791,7 @@ public class MFXDatePickerContent extends VBox {
 
             if (cell != null) {
                 cell.setSelectedDate(true);
-                lastSelectedDayCell.set(cell);
+                setLastSelectedDayCell(cell);
             }
         }
     }
@@ -812,16 +812,16 @@ public class MFXDatePickerContent extends VBox {
                     .filter(day -> day.getText().equals("1"))
                     .findFirst()
                     .ifPresent(day -> {
-                        lastSelectedDayCell.set(day);
-                        lastSelectedDayCell.get().setSelectedDate(true);
+                        setLastSelectedDayCell(day);
+                        getLastSelectedDayCell().setSelectedDate(true);
                     });
         } else {
             days.stream()
                     .filter(day -> day.getText().equals(Integer.toString(getCurrentDate().getDayOfMonth())))
                     .findFirst()
                     .ifPresent(day -> {
-                        lastSelectedDayCell.set(day);
-                        lastSelectedDayCell.get().setSelectedDate(true);
+                        setLastSelectedDayCell(day);
+                        getLastSelectedDayCell().setSelectedDate(true);
                     });
         }
     }
@@ -881,6 +881,10 @@ public class MFXDatePickerContent extends VBox {
 
     public ObjectProperty<MFXDateCell> lastSelectedDayCellProperty() {
         return lastSelectedDayCell;
+    }
+
+    public void setLastSelectedDayCell(MFXDateCell lastSelectedDayCell) {
+        this.lastSelectedDayCell.set(lastSelectedDayCell);
     }
 
     public DateTimeFormatter getDateFormatter() {
