@@ -1,0 +1,73 @@
+/*
+ *     Copyright (C) 2021 Parisi Alessandro
+ *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ *     MaterialFX is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     MaterialFX is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+.flat-button {
+    -fx-background-color: transparent;
+}
+
+.flat-button .mfx-ripple-generator {
+    -mfx-ripple-color: #E1E1E1;
+}
+
+.flat-button .text {
+    -fx-font-family: Comfortaa-SemiBold;
+    -fx-font-size: 12;
+    -fx-font-weight: bold;
+}
+
+.raised-button {
+    -fx-background-color: white;
+    -mfx-button-type: raised;
+}
+
+.raised-button .mfx-ripple-generator {
+    -mfx-ripple-color: #E1E1E1;
+}
+
+.raised-button .text {
+    -fx-font-family: Comfortaa-SemiBold;
+    -fx-font-size: 12;
+    -fx-font-weight: bold;
+}
+
+#colored-raised {
+    -fx-background-color: #b700ff;
+    -fx-text-fill: white;
+}
+
+#colored-raised .text {
+    -fx-fill: white;
+}
+
+#colored-raised .mfx-ripple-generator {
+    -mfx-ripple-color: rgba(255, 255, 255, 0.4);
+}
+
+#custom-ripple {
+    -fx-background-color: #55bbff;
+    -fx-text-fill: white;
+}
+
+#custom-ripple .text {
+    -fx-fill: white;
+}
+
+#custom-ripple .mfx-ripple-generator {
+    -mfx-animation-speed: 1.5;
+    -mfx-ripple-color: #1900ff;
+}

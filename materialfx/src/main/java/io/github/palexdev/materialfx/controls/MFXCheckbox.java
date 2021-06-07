@@ -40,7 +40,7 @@ public class MFXCheckbox extends CheckBox {
     //================================================================================
     private static final StyleablePropertyFactory<MFXCheckbox> FACTORY = new StyleablePropertyFactory<>(CheckBox.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-checkbox";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-checkbox.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXCheckBox.css");
 
     //================================================================================
     // Constructors

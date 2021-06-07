@@ -20,44 +20,81 @@ package io.github.palexdev.materialfx.demo.controllers;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTableView;
-import io.github.palexdev.materialfx.controls.cell.MFXTableColumnCell;
+import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyTableView;
-import io.github.palexdev.materialfx.demo.model.FilterablePerson;
+import io.github.palexdev.materialfx.demo.model.Machine;
 import io.github.palexdev.materialfx.demo.model.Person;
+import io.github.palexdev.materialfx.font.MFXFontIcon;
+import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.Callable;
+
+import static io.github.palexdev.materialfx.demo.model.Machine.State.OFFLINE;
+import static io.github.palexdev.materialfx.demo.model.Machine.State.ONLINE;
 
 public class TableViewsDemoController implements Initializable {
+    private final ObjectProperty<Stage> tableStage = new SimpleObjectProperty<>();
+    private final MFXLegacyTableView<Person> legacyTable;
+    private final MFXTableView<Machine> tableView;
+    private final StackPane stackPane = new StackPane();
+    private final Scene scene = new Scene(stackPane, 800, 600);
 
     @FXML
-    private MFXButton switchButton;
+    private MFXButton showLegacy;
 
     @FXML
-    private MFXLegacyTableView<Person> legacyTable;
+    private MFXButton showNew;
 
-    @FXML
-    private MFXTableView<FilterablePerson> table;
+    public TableViewsDemoController() {
+        tableStage.addListener((observable, oldValue, newValue) -> {
+            getTableStage().initOwner(showLegacy.getScene().getWindow());
+            getTableStage().initModality(Modality.WINDOW_MODAL);
+        });
+
+        Platform.runLater(() -> tableStage.set(new Stage()));
+
+        legacyTable = new MFXLegacyTableView<>();
+        tableView = new MFXTableView<>();
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        switchButton.setOnAction(event -> {
-            if (legacyTable.isVisible()) {
-                legacyTable.setVisible(false);
-                table.setVisible(true);
-            } else {
-                legacyTable.setVisible(true);
-                table.setVisible(false);
-            }
+        showLegacy.setOnAction(event -> {
+            getTableStage().close();
+            stackPane.getChildren().setAll(legacyTable);
+            getTableStage().setScene(scene);
+            getTableStage().setTitle("Legacy TableView - Preview");
+            getTableStage().show();
+        });
+
+        showNew.setOnAction(event -> {
+            getTableStage().close();
+            stackPane.getChildren().setAll(tableView);
+            getTableStage().setScene(scene);
+            getTableStage().setTitle("New TableView - Preview");
+            getTableStage().show();
         });
 
         populateLegacy();
@@ -95,39 +132,67 @@ public class TableViewsDemoController implements Initializable {
 
     @SuppressWarnings("unchecked")
     private void populateTable() {
-        ObservableList<FilterablePerson> people = FXCollections.observableArrayList(
+        ObservableList<Machine> people = FXCollections.observableArrayList(
                 List.of(
-                        new FilterablePerson("Ashley", "Vance", "566 Inverness Court Miami Beach, FL 33139", 19),
-                        new FilterablePerson("Midge", "Phillips", "7983 Honey Creek Ave. Bemidji, MN 56601", 44),
-                        new FilterablePerson("Joella", "Kendall", "640 Bay St. Astoria, NY 11102", 22),
-                        new FilterablePerson("Cletis", "Bryson", "992 Rose Lane Glen Allen, VA 23059", 46),
-                        new FilterablePerson("Minty", "Joyner", "81 South Central Street Millington, TN 38053", 18),
-                        new FilterablePerson("Rupert", "Patton", "5 Shirley St. Niagara Falls, NY 14304", 59),
-                        new FilterablePerson("Missie", "Ecclestone", "392 Galvin Lane Blackwood, NJ 08012", 75),
-                        new FilterablePerson("Aydan", "Avery", "8726 Wilson Drive Asheville, NC 28803", 89),
-                        new FilterablePerson("Cass", "Robert", "631 West Beaver Ridge Ave. Gallatin, TN 37066", 101),
-                        new FilterablePerson("Alyssa", "Parish", "881 West Mayflower St. Bay City, MI 48706", 24),
-                        new FilterablePerson("Brennan", "Woodham", "7957A Garden Street Rocklin, CA 95677", 68),
-                        new FilterablePerson("Etta", "Low", "127 South Kirkland Road Glenview, IL 60025", 18)
+                        new Machine("MainPC", "192.144.1.5", "Me", ONLINE),
+                        new Machine("SecondaryPC", "192.144.1.6", "Me", OFFLINE),
+                        new Machine("GamingLaptop", "192.144.1.44", "My Sons", OFFLINE),
+                        new Machine("OfficeLaptop", "192.144.1.98", "Me", ONLINE),
+                        new Machine("OfficeNAS", "192.144.1.2", "Me", ONLINE),
+                        new Machine("OfficeAlexa", "192.144.1.34", "", ONLINE),
+                        new Machine("OfficeSmartTV", "192.144.1.72", "", OFFLINE),
+                        new Machine("KidsTablet", "192.144.1.11", "My Sons", OFFLINE),
+                        new Machine("WifeKindle", "192.144.1.35", "My Wife", OFFLINE),
+                        new Machine("SmartWasher", "192.144.1.78", "", ONLINE),
+                        new Machine("SmartWatch", "192.144.1.18", "", ONLINE),
+                        new Machine("GenericSmartphone", "192.144.54", "Me", ONLINE)
                 )
         );
 
-        MFXTableColumnCell<FilterablePerson> firstNameColumn = new MFXTableColumnCell<>("First Name", Comparator.comparing(FilterablePerson::getFirstName));
-        firstNameColumn.setRowCellFactory(person -> new MFXTableRowCell(person.firstNameProperty()));
-        MFXTableColumnCell<FilterablePerson> lastNameColumn = new MFXTableColumnCell<>("Last Name", Comparator.comparing(FilterablePerson::getLastName));
-        lastNameColumn.setRowCellFactory(person -> new MFXTableRowCell(person.lastNameProperty()));
-        MFXTableColumnCell<FilterablePerson> addressColumn = new MFXTableColumnCell<>("Address", Comparator.comparing(FilterablePerson::getAddress));
-        addressColumn.setRowCellFactory(person -> new MFXTableRowCell(person.addressProperty()));
-        MFXTableColumnCell<FilterablePerson> ageColumn = new MFXTableColumnCell<>("Age", Comparator.comparing(FilterablePerson::getAge));
-        ageColumn.setRowCellFactory(person -> new MFXTableRowCell(person.ageProperty().asString()) {
-            {
-                setAlignment(Pos.CENTER_RIGHT);
-            }
-        });
-        ageColumn.setAlignment(Pos.CENTER_RIGHT);
+        MFXTableColumn<Machine> nameColumn = new MFXTableColumn<>("Name", Comparator.comparing(Machine::getName));
+        MFXTableColumn<Machine> ipColumn = new MFXTableColumn<>("IP", Comparator.comparing(Machine::getIp));
+        MFXTableColumn<Machine> ownerColumn = new MFXTableColumn<>("Owner", Comparator.comparing(Machine::getOwner));
+        MFXTableColumn<Machine> stateColumn = new MFXTableColumn<>("State", Comparator.comparing(Machine::getState));
 
-        table.setItems(people);
-        table.getColumns().addAll(firstNameColumn, lastNameColumn, addressColumn, ageColumn);
+        nameColumn.setRowCellFunction(machine -> new MFXTableRowCell(machine.nameProperty()));
+        ipColumn.setRowCellFunction(machine -> {
+            MFXTableRowCell cell = new MFXTableRowCell(machine.ipProperty());
+            cell.setRowAlignment(Pos.CENTER_RIGHT);
+            return cell;
+        });
+        ownerColumn.setRowCellFunction(machine -> new MFXTableRowCell(machine.ownerProperty()));
+        stateColumn.setRowCellFunction(machine -> {
+            MFXTableRowCell rowCell = new MFXTableRowCell(machine.stateProperty().asString().concat(" - Click Me"));
+            rowCell.setGraphicTextGap(4);
+            MFXFontIcon icon = new MFXFontIcon("mfx-circle", 6);
+            icon.colorProperty().bind(Bindings.createObjectBinding(
+                    (Callable<Paint>) () -> machine.getState() == ONLINE ? Color.LIMEGREEN : Color.SALMON,
+                    machine.stateProperty())
+            );
+            rowCell.setLeadingGraphic(icon);
+            rowCell.borderProperty().bind(Bindings.createObjectBinding(
+                    () -> {
+                        Color borderColor = machine.getState() == ONLINE ? Color.LIMEGREEN : Color.SALMON;
+                        return new Border(new BorderStroke(borderColor, BorderStrokeStyle.SOLID, new CornerRadii(5), new BorderWidths(1)));
+                    }, machine.stateProperty()
+            ));
+            rowCell.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> machine.setState(machine.getState() == ONLINE ? OFFLINE : ONLINE));
+            rowCell.setPadding(new Insets(0, 5, 0, 5));
+            return rowCell;
+        });
+
+        ipColumn.setColumnAlignment(Pos.CENTER_RIGHT);
+
+        tableView.setItems(people);
+        tableView.getTableColumns().addAll(nameColumn, ipColumn, ownerColumn, stateColumn);
+    }
+
+    public Stage getTableStage() {
+        return tableStage.get();
+    }
+
+    public void setTableStage(Stage tableStage) {
+        this.tableStage.set(tableStage);
     }
 }
 

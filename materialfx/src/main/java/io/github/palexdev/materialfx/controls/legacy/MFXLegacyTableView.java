@@ -35,7 +35,7 @@ public class MFXLegacyTableView<S> extends TableView<S> {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-legacy-table-view";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/mfx-tableview.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/MFXTableView.css");
 
     //================================================================================
     // Constructors

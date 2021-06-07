@@ -55,7 +55,7 @@ import java.util.stream.Collectors;
  * <p></p>
  * Once everything is set up and the fxml files have been added with the various {@code addItem} methods
  * to start loading the views invoke the {@link #start()} method. That method then will get all the
- * {@link MFXLoaderBean}s in the views map and for each of them checks if the root has not been loaded yet,
+ * {@code MFXLoaderBeans} in the views map and for each of them checks if the root has not been loaded yet,
  * creates the load callable by calling {@link #buildLoadCallable(MFXLoaderBean)} and submits it to the executor in
  * {@link LoaderUtils}.
  * <p></p>
@@ -179,8 +179,10 @@ public class MFXHLoader extends HBox {
     /**
      * Starts the loading process.
      * <p></p>
-     * Retrieves the {@link MFXLoaderBean}s in the idViewMap, for each of them
+     * Retrieves the {@code MFXLoaderBeans} in the idViewMap, for each of them
      * checks if the node has been already loaded, if not then calls {@link #load(MFXLoaderBean)}
+     *
+     * @see MFXLoaderBean
      */
     public void start() {
         if (contentPane == null) {

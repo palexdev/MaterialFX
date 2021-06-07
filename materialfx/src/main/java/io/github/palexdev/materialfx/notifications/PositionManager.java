@@ -19,7 +19,6 @@
 package io.github.palexdev.materialfx.notifications;
 
 import io.github.palexdev.materialfx.controls.MFXNotification;
-import io.github.palexdev.materialfx.utils.LoggingUtils;
 import javafx.animation.Interpolator;
 import javafx.animation.Transition;
 import javafx.application.Platform;
@@ -94,7 +93,7 @@ public class PositionManager {
     /**
      * Shows the specified notification on screen.
      * <p>
-     * The show mechanism uses a {@link ThreadPoolExecutor} with JavaFX's {@link Task}s and
+     * The show mechanism uses a {@link ThreadPoolExecutor} with JavaFX's {@code Tasks} and
      * a {@link Semaphore} to make threads wait when the notifications limit is reached,
      * in a sense it simulates the operation of a queue.
      * <p>
@@ -107,6 +106,7 @@ public class PositionManager {
      * On failed task, logs the exception.
      *
      * @param newNotification The notification to show
+     * @see Task
      */
     public void show(MFXNotification newNotification) {
         Task<Void> showTask = new Task<>() {
@@ -127,7 +127,11 @@ public class PositionManager {
                 return null;
             }
         };
-        showTask.setOnFailed(event -> LoggingUtils.logException(showTask.getException()));
+        showTask.setOnFailed(event -> {
+            if (showTask.getException() != null) {
+                showTask.getException().printStackTrace();
+            }
+        });
         service.submit(showTask);
     }
 

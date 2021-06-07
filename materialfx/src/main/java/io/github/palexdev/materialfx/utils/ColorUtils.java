@@ -23,7 +23,7 @@ import javafx.scene.paint.Color;
 import java.util.Random;
 
 /**
- * Utils class for JavaFX's {@code Color}s and CSS.
+ * Utils class for JavaFX's {@code Colors} and CSS.
  */
 public class ColorUtils {
     private static final Random random = new Random(System.currentTimeMillis());

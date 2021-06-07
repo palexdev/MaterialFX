@@ -51,7 +51,7 @@ public class MFXFlowlessCheckListView<T> extends AbstractMFXFlowlessListView<T, 
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-check-list-view";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-flowless-check-listview.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXFlowlessCheckListView.css");
 
     //================================================================================
     // Constructors

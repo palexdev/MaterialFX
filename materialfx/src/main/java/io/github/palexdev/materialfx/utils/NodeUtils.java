@@ -22,6 +22,7 @@ import javafx.event.Event;
 import javafx.geometry.*;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -150,7 +151,7 @@ public class NodeUtils {
         try {
             region.setClip(circle);
         } catch (IllegalArgumentException ex) {
-            LoggingUtils.logException("Could not set region's clip to make it circular", ex);
+            throw new IllegalArgumentException("Could not set region's clip to make it circular", ex);
         }
     }
 
@@ -169,7 +170,7 @@ public class NodeUtils {
         try {
             region.setClip(circle);
         } catch (IllegalArgumentException ex) {
-            LoggingUtils.logException("Could not set region's clip to make it circular", ex);
+            throw new IllegalArgumentException("Could not set region's clip to make it circular", ex);
         }
     }
 
@@ -234,6 +235,23 @@ public class NodeUtils {
                 alignment == Pos.CENTER_RIGHT || alignment == Pos.TOP_RIGHT;
     }
 
+    /**
+     * Recursively gets all nodes that are descendants of the given root.
+     */
+    public static ArrayList<Node> getAllNodes(Parent root) {
+        ArrayList<Node> nodes = new ArrayList<>();
+        addAllDescendents(root, nodes);
+        return nodes;
+    }
+
+    private static void addAllDescendents(Parent parent, ArrayList<Node> nodes) {
+        for (Node node : parent.getChildrenUnmodifiable()) {
+            nodes.add(node);
+            if (node instanceof Parent)
+                addAllDescendents((Parent)node, nodes);
+        }
+    }
+
     /* The following methods are copied from com.sun.javafx.scene.control.skin.Utils class
      * It's a private module, so to avoid adding exports and opens I copied them
      */
@@ -252,12 +270,11 @@ public class NodeUtils {
     public static double computeYOffset(double height, double contentHeight, VPos vpos) {
 
         switch (vpos) {
-            case TOP:
-                return 0;
             case CENTER:
                 return (height - contentHeight) / 2;
             case BOTTOM:
                 return height - contentHeight;
+            case TOP:
             default:
                 return 0;
         }
@@ -429,7 +446,7 @@ public class NodeUtils {
     }
 
     /*
-     * Simple utitilty function to return the 'opposite' value of a given HPos, taking
+     * Simple utility function to return the 'opposite' value of a given HPos, taking
      * into account the current VPos value. This is used to try and avoid overlapping.
      */
     private static HPos getHPosOpposite(HPos hpos, VPos vpos) {

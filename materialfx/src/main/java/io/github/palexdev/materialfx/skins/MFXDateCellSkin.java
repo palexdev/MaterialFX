@@ -20,22 +20,23 @@ package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.controls.cell.MFXDateCell;
 import io.github.palexdev.materialfx.controls.factories.RippleClipTypeFactory;
-import io.github.palexdev.materialfx.effects.RippleClipType;
-import io.github.palexdev.materialfx.effects.RippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.RippleClipType;
+import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import javafx.scene.control.skin.DateCellSkin;
 import javafx.scene.input.MouseEvent;
-import javafx.util.Duration;
+import javafx.scene.paint.Color;
 
 /**
- * This is the implementation of the {@code Skin} associated with every {@code MFXDateCell}.
+ * This is the implementation of the {@code Skin} associated with every {@link MFXDateCell}.
  * <p>
- * This is necessary to make the {@code RippleGenerator work properly}.
+ * This is necessary to make the {@link MFXCircleRippleGenerator work properly}.
  */
 public class MFXDateCellSkin extends DateCellSkin {
     //================================================================================
     // Properties
     //================================================================================
-    private final RippleGenerator rippleGenerator;
+    private final MFXCircleRippleGenerator rippleGenerator;
 
     //================================================================================
     // Constructors
@@ -43,13 +44,11 @@ public class MFXDateCellSkin extends DateCellSkin {
     public MFXDateCellSkin(MFXDateCell dateCell) {
         super(dateCell);
 
-        rippleGenerator = new RippleGenerator(dateCell, new RippleClipTypeFactory(RippleClipType.ROUNDED_RECTANGLE).setArcs(15, 15));
-        rippleGenerator.setOutDuration(Duration.millis(500));
-        dateCell.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            rippleGenerator.setGeneratorCenterX(event.getX());
-            rippleGenerator.setGeneratorCenterY(event.getY());
-            rippleGenerator.createRipple();
-        });
+        rippleGenerator = new MFXCircleRippleGenerator(dateCell);
+        rippleGenerator.setClipSupplier(() -> new RippleClipTypeFactory(RippleClipType.ROUNDED_RECTANGLE).setArcs(15).build(dateCell));
+        rippleGenerator.setRippleColor(Color.rgb(220, 220, 220, 0.6));
+        rippleGenerator.setRipplePositionFunction(event -> new RipplePosition(event.getX(), event.getY()));
+        dateCell.addEventFilter(MouseEvent.MOUSE_PRESSED, rippleGenerator::generateRipple);
 
         updateChildren();
     }

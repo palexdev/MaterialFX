@@ -1,11 +1,10 @@
-module MaterialFX.materialfx.main {
+module MaterialFX {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
     requires java.desktop;
 
     requires reactfx;
-    requires org.apache.logging.log4j;
 
     exports io.github.palexdev.materialfx;
     exports io.github.palexdev.materialfx.beans;
@@ -19,6 +18,8 @@ module MaterialFX.materialfx.main {
     exports io.github.palexdev.materialfx.controls.flowless;
     exports io.github.palexdev.materialfx.controls.legacy;
     exports io.github.palexdev.materialfx.effects;
+    exports io.github.palexdev.materialfx.effects.ripple;
+    exports io.github.palexdev.materialfx.effects.ripple.base;
     exports io.github.palexdev.materialfx.filter;
     exports io.github.palexdev.materialfx.font;
     exports io.github.palexdev.materialfx.notifications;

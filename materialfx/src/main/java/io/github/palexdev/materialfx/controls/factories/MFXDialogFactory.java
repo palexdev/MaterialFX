@@ -32,10 +32,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
 
 /**
- * Factory class to build specific {@code MFXDialog}s and generic {@code MFXDialog}s.
+ * Factory class to build specific {@code MFXDialogs} and generic {@code MFXDialogs}.
  * <p></p>
  * Also provides convenience methods to convert a specific dialog to another one
  * and from generic to specific (the reverse is not true).
@@ -166,7 +165,7 @@ public class MFXDialogFactory {
         headerNode.getStyleClass().add("header-node");
         headerNode.setStyle("-fx-background-color: " + color + ";\n");
 
-        MFXFontIcon closeIcon = new MFXFontIcon("mfx-x", Color.WHITE);
+        MFXFontIcon closeIcon = new MFXFontIcon("mfx-x-alt", 16, Color.WHITE);
 
         if (dialog.getType() != null && dialog.getType().equals(DialogType.GENERIC)) {
             dialog.setCloseButtons(new MFXButton(""));
@@ -176,9 +175,9 @@ public class MFXDialogFactory {
         closeButton.setPrefSize(20, 20);
         closeButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         closeButton.setGraphic(closeIcon);
-        closeButton.setRippleRadius(15);
+        closeButton.setRippleAnimationSpeed(1.5);
         closeButton.setRippleColor(Color.rgb(255, 0, 0, 0.1));
-        closeButton.setRippleInDuration(Duration.millis(500));
+        closeButton.setRippleRadius(15);
         closeButton.setButtonType(ButtonType.FLAT);
         dialog.setCloseButtons(closeButton);
 
@@ -285,9 +284,9 @@ public class MFXDialogFactory {
         closeButton.setText("OK");
         closeButton.setPrefSize(55, 20);
         closeButton.setTextFill(Color.rgb(120, 66, 245));
-        closeButton.setRippleRadius(30);
-        closeButton.setRippleInDuration(Duration.millis(500));
+        closeButton.setRippleAnimationSpeed(1.5);
         closeButton.setRippleColor(Color.rgb(120, 66, 245, 0.3));
+        closeButton.setRippleRadius(30);
         dialog.setCloseButtons(closeButton);
 
         HBox.setMargin(closeButton, new Insets(5, 10, 0, 0));

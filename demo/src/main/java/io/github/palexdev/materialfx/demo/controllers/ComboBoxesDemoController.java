@@ -1,3 +1,21 @@
+/*
+ *     Copyright (C) 2021 Parisi Alessandro
+ *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ *     MaterialFX is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     MaterialFX is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package io.github.palexdev.materialfx.demo.controllers;
 
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
@@ -5,6 +23,7 @@ import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyComboBox;
 import io.github.palexdev.materialfx.demo.model.SimplePerson;
+import io.github.palexdev.materialfx.utils.BindingUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -47,13 +66,22 @@ public class ComboBoxesDemoController implements Initializable {
     private MFXComboBox<String> style2;
 
     @FXML
-    private MFXComboBox<Label> newCustomized;
+    private MFXComboBox<Label> style3;
+
+    @FXML
+    private MFXComboBox<SimplePerson> validatedNew;
 
     @FXML
     private MFXFilterComboBox<SimplePerson> filters1;
 
     @FXML
     private MFXFilterComboBox<SimplePerson> filters2;
+
+    @FXML
+    private MFXFilterComboBox<String> filters3;
+
+    @FXML
+    private MFXFilterComboBox<SimplePerson> filtersValidated;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -113,15 +141,27 @@ public class ComboBoxesDemoController implements Initializable {
         editable.setItems(stringList);
         validated.setItems(stringList);
         customized.setItems(stringList);
-        filters1.setItems(personList);
-        filters2.setItems(personList);
 
         editable.setEditable(true);
         validated.getValidator().add(checkbox.selectedProperty(), "Checkbox is not selected!");
 
         style1.setItems(stringList);
         style2.setItems(stringList);
-        newCustomized.setItems(labelsList);
+        style3.setItems(labelsList);
+        validatedNew.setItems(personList);
+        validatedNew.setValidated(true);
+        validatedNew.getValidator().add(BindingUtils.toProperty(validatedNew.getSelectionModel().selectedIndexProperty().isNotEqualTo(-1)), "A value must be selected");
+        validatedNew.getValidator().add(checkbox.selectedProperty(), "Checkbox must be selected");
+
+        filters1.setItems(personList);
+        filters2.setItems(personList);
+        filters3.setItems(stringList);
+        filtersValidated.setItems(personList);
+        filtersValidated.setValidated(true);
+        filtersValidated.getValidator().add(BindingUtils.toProperty(filtersValidated.getSelectionModel().selectedIndexProperty().isNotEqualTo(-1)), "A value must be selected");
+        filtersValidated.getValidator().add(checkbox.selectedProperty(), "Checkbox must be selected");
+
+        filters3.setForceFieldFocusOnShow(true);
     }
 
     private FontIcon createIcon(String s) {

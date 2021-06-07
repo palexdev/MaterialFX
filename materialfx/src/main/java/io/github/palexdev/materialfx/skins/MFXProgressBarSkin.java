@@ -26,7 +26,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 /**
- * This is the implementation of the Skin associated with every {@code MFXProgressBar}.
+ * This is the implementation of the {@code Skin} associated with every {@link MFXProgressBar}.
  */
 public class MFXProgressBarSkin extends SkinBase<MFXProgressBar> {
     //================================================================================
@@ -76,6 +76,10 @@ public class MFXProgressBarSkin extends SkinBase<MFXProgressBar> {
     private void setListeners() {
         MFXProgressBar progressBar = getSkinnable();
 
+        progressBar.progressProperty().addListener(invalidated -> {
+            progressBar.requestLayout();
+            updateProgress();
+        });
         progressBar.widthProperty().addListener((observable, oldValue, newValue) -> updateProgress());
         progressBar.visibleProperty().addListener((observable, oldValue, newValue) -> updateAnimation());
         progressBar.parentProperty().addListener((observable, oldValue, newValue) -> updateAnimation());

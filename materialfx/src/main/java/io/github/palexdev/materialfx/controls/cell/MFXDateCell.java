@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls.cell;
 
-import io.github.palexdev.materialfx.effects.RippleGenerator;
 import io.github.palexdev.materialfx.skins.MFXDateCellSkin;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -26,7 +25,6 @@ import javafx.css.PseudoClass;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.Skin;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -45,8 +43,6 @@ public class MFXDateCell extends DateCell {
 
     private final BooleanProperty selectedDate = new SimpleBooleanProperty(false);
     private final BooleanProperty current = new SimpleBooleanProperty(false);
-
-    private final RippleGenerator rippleGenerator = new RippleGenerator(this);
 
     private boolean drawGraphic = false;
 
@@ -72,7 +68,6 @@ public class MFXDateCell extends DateCell {
     // Methods
     //================================================================================
     private void initialize() {
-        rippleGenerator.setRippleColor(Color.rgb(220, 220, 220, 0.6));
         getStyleClass().setAll(STYLE_CLASS);
         addListeners();
     }
@@ -94,19 +89,13 @@ public class MFXDateCell extends DateCell {
 
         current.addListener((observable, oldValue, newValue) -> {
             if (newValue && !selectedDate.get() && drawGraphic) {
-                Circle circle = new Circle(getPrefWidth() / 3.5);
+                Circle circle = new Circle(getPrefWidth() / 3.8);
                 circle.setFill(Color.TRANSPARENT);
                 circle.getStyleClass().add("cell-stroke");
 
                 setContentDisplay(ContentDisplay.CENTER);
                 setGraphic(circle);
             }
-        });
-
-        addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            rippleGenerator.setGeneratorCenterX(event.getX());
-            rippleGenerator.setGeneratorCenterY(event.getY());
-            rippleGenerator.createRipple();
         });
     }
 

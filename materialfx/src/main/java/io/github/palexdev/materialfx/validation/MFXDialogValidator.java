@@ -21,39 +21,35 @@ package io.github.palexdev.materialfx.validation;
 import io.github.palexdev.materialfx.controls.MFXStageDialog;
 import io.github.palexdev.materialfx.controls.enums.DialogType;
 import io.github.palexdev.materialfx.controls.factories.MFXDialogFactory;
-import io.github.palexdev.materialfx.utils.StringUtils;
-import io.github.palexdev.materialfx.validation.base.AbstractMFXValidator;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.stage.Modality;
 import javafx.stage.Window;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
- * This is a concrete implementation of a validator.
+ * This is an extension of the {@link MFXPriorityValidator}, basically adds the capability
+ * to shown a dialog showing all the unmet conditions of the validator using the {@link #getUnmetMessages()} method.
  * <p>
- * This validator has a string message associated with every boolean property in its base class.
- * It can show a {@link MFXStageDialog} containing all warning messages.
+ * The dialog used is a {@link MFXStageDialog} so it can also be modal by calling
+ * {@link #showModal(Window)} and specifying the owner.
  */
-public class MFXDialogValidator extends AbstractMFXValidator {
+public class MFXDialogValidator extends MFXPriorityValidator {
     //================================================================================
     // Properties
     //================================================================================
-    private final Map<BooleanProperty, String> messagesMap = new HashMap<>();
     private final ObjectProperty<DialogType> dialogType = new SimpleObjectProperty<>(DialogType.WARNING);
-    private String title;
+    private final StringProperty title = new SimpleStringProperty();
     private MFXStageDialog stageDialog;
 
     //================================================================================
     // Constructors
     //================================================================================
     public MFXDialogValidator(String title) {
-        this.title = title;
+        setTitle(title);
         initialize();
     }
 
@@ -68,6 +64,12 @@ public class MFXDialogValidator extends AbstractMFXValidator {
                 label.setAlignment(Pos.CENTER);
             }
         });
+
+        title.addListener((observable, oldValue, newValue) -> {
+            if (stageDialog != null) {
+                stageDialog.getDialog().setTitle(newValue);
+            }
+        });
     }
 
     /**
@@ -75,12 +77,12 @@ public class MFXDialogValidator extends AbstractMFXValidator {
      */
     public void show() {
         if (stageDialog == null) {
-            stageDialog = new MFXStageDialog(dialogType.get(), title, "");
+            stageDialog = new MFXStageDialog(dialogType.get(), getTitle(), "");
             Label label = (Label) stageDialog.getDialog().lookup(".content-label");
             label.setAlignment(Pos.CENTER);
         }
 
-        stageDialog.getDialog().setContent(getMessages());
+        stageDialog.getDialog().setContent(getUnmetMessages());
         stageDialog.setOwner(null);
         stageDialog.setModality(Modality.NONE);
         stageDialog.setCenterInOwner(false);
@@ -95,12 +97,12 @@ public class MFXDialogValidator extends AbstractMFXValidator {
      */
     public void showModal(Window owner) {
         if (stageDialog == null) {
-            stageDialog = new MFXStageDialog(dialogType.get(), title, "");
+            stageDialog = new MFXStageDialog(dialogType.get(), getTitle(), "");
             Label label = (Label) stageDialog.getDialog().lookup(".content-label");
             label.setAlignment(Pos.CENTER);
         }
 
-        stageDialog.getDialog().setContent(getMessages());
+        stageDialog.getDialog().setContent(getUnmetMessages());
         stageDialog.setOwner(owner);
         stageDialog.setModality(Modality.WINDOW_MODAL);
         stageDialog.setCenterInOwner(true);
@@ -109,43 +111,13 @@ public class MFXDialogValidator extends AbstractMFXValidator {
 
     }
 
-    /**
-     * Adds a new boolean condition to the list with the corresponding message in case it is false.
-     *
-     * @param property The new boolean condition
-     * @param message  The message to show in case it is false
-     */
-    public void add(BooleanProperty property, String message) {
-        super.conditions.add(property);
-        this.messagesMap.put(property, message);
-    }
-
-    /**
-     * Removes the given property and the corresponding message from the list.
-     */
-    public void remove(BooleanProperty property) {
-        messagesMap.remove(property);
-        super.conditions.remove(property);
-    }
-
-    /**
-     * Checks the messages list and if the corresponding boolean condition is false
-     * adds the message to the {@code StringBuilder}.
-     */
-    public String getMessages() {
-        StringBuilder sb = new StringBuilder();
-        for (BooleanProperty property : messagesMap.keySet()) {
-            if (!property.get()) {
-                sb.append(messagesMap.get(property)).append(",\n");
-            }
-        }
-        return StringUtils.replaceLast(sb.toString(), ",", ".");
-    }
-
     public DialogType getDialogType() {
         return dialogType.get();
     }
 
+    /**
+     * Specifies the dialog's type.
+     */
     public ObjectProperty<DialogType> dialogTypeProperty() {
         return dialogType;
     }
@@ -155,10 +127,17 @@ public class MFXDialogValidator extends AbstractMFXValidator {
     }
 
     public String getTitle() {
+        return title.get();
+    }
+
+    /**
+     * Specifies the dialog's title.
+     */
+    public StringProperty titleProperty() {
         return title;
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        this.title.set(title);
     }
 }

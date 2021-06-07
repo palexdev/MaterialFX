@@ -21,13 +21,13 @@ package io.github.palexdev.materialfx.controls.cell;
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.MFXFlowlessListView;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXFlowlessListCell;
-import io.github.palexdev.materialfx.effects.RippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.util.Duration;
 
 /**
  * Simple implementation of {@link AbstractMFXFlowlessListCell},
@@ -38,8 +38,8 @@ public class MFXFlowlessListCell<T> extends AbstractMFXFlowlessListCell<T> {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-list-cell";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-flowless-listcell.css");
-    protected final RippleGenerator rippleGenerator = new RippleGenerator(this);
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXFlowlessListCell.css");
+    protected final MFXCircleRippleGenerator rippleGenerator = new MFXCircleRippleGenerator(this);
 
     private final MFXFlowlessListView<T> listView;
 
@@ -71,14 +71,9 @@ public class MFXFlowlessListCell<T> extends AbstractMFXFlowlessListCell<T> {
      */
     protected void setupRippleGenerator() {
         rippleGenerator.setManaged(false);
+        rippleGenerator.setRipplePositionFunction(event -> new RipplePosition(event.getX(), event.getY()));
         rippleGenerator.rippleRadiusProperty().bind(widthProperty().divide(2.0));
-        rippleGenerator.setInDuration(Duration.millis(400));
-
-        addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            rippleGenerator.setGeneratorCenterX(event.getX());
-            rippleGenerator.setGeneratorCenterY(event.getY());
-            rippleGenerator.createRipple();
-        });
+        addEventFilter(MouseEvent.MOUSE_PRESSED, rippleGenerator::generateRipple);
     }
 
     //================================================================================
@@ -97,13 +92,15 @@ public class MFXFlowlessListCell<T> extends AbstractMFXFlowlessListCell<T> {
      *
      * If the given data is instance of Node then the data is cast
      * to Node and added to the children list. Otherwise a Label is created
-     * and toString is called on the data. The label has style class: "data-label"
+     * and toString is called on the data. The {@link #emptyProperty()} is updated
+     * accordingly to the generated string. The label has style class: "data-label"
      */
     @Override
     protected void render(T data) {
         if (data instanceof Node) {
             getChildren().setAll((Node) data);
         } else {
+            setEmpty(data.toString().isEmpty());
             Label label = new Label(data.toString());
             label.getStyleClass().add("data-label");
             getChildren().setAll(label);

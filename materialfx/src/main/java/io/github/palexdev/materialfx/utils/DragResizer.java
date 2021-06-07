@@ -18,6 +18,7 @@
 
 package io.github.palexdev.materialfx.utils;
 
+import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
@@ -46,10 +47,15 @@ public class DragResizer {
     public static final short LEFT = 8;
     public static final short ALL_DIRECTIONS = 15;
 
+    private final EventHandler<MouseEvent> pressedHandler = this::mousePressed;
+    private final EventHandler<MouseEvent> draggedHandler = this::mouseDragged;
+    private final EventHandler<MouseEvent> movedHandler = this::mouseOver;
+    private final EventHandler<MouseEvent> releasedHandler = this::mouseReleased;
+
     //================================================================================
     // Constructors
     //================================================================================
-    private DragResizer(Region region, int allowedDirection) {
+    public DragResizer(Region region, int allowedDirection) {
         this.region = region;
         this.allowedDirection = allowedDirection;
     }
@@ -57,13 +63,25 @@ public class DragResizer {
     //================================================================================
     // Methods
     //================================================================================
-    public static void makeResizable(Region region, int allowedDirection) {
-        final DragResizer resizer = new DragResizer(region, allowedDirection);
 
-        region.addEventFilter(MouseEvent.MOUSE_PRESSED, resizer::mousePressed);
-        region.addEventFilter(MouseEvent.MOUSE_DRAGGED, resizer::mouseDragged);
-        region.addEventFilter(MouseEvent.MOUSE_MOVED, resizer::mouseOver);
-        region.addEventFilter(MouseEvent.MOUSE_RELEASED, resizer::mouseReleased);
+    /**
+     * Adds the necessary listeners to the specified region to make it resizable.
+     */
+    public void makeResizable() {
+        region.addEventFilter(MouseEvent.MOUSE_PRESSED, pressedHandler);
+        region.addEventFilter(MouseEvent.MOUSE_DRAGGED, draggedHandler);
+        region.addEventFilter(MouseEvent.MOUSE_MOVED, movedHandler);
+        region.addEventFilter(MouseEvent.MOUSE_RELEASED, releasedHandler);
+    }
+
+    /**
+     * Removes all the listeners from the region thus making it not resizable anymore.
+     */
+    public void uninstall() {
+        region.removeEventFilter(MouseEvent.MOUSE_PRESSED, pressedHandler);
+        region.removeEventFilter(MouseEvent.MOUSE_DRAGGED, draggedHandler);
+        region.removeEventFilter(MouseEvent.MOUSE_MOVED, movedHandler);
+        region.removeEventFilter(MouseEvent.MOUSE_RELEASED, releasedHandler);
     }
 
     protected void mouseReleased(MouseEvent event) {

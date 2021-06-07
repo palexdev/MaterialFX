@@ -22,7 +22,8 @@ import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.MFXFlowlessCheckListView;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXFlowlessListCell;
-import io.github.palexdev.materialfx.effects.RippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import io.github.palexdev.materialfx.selection.ListCheckModel;
 import io.github.palexdev.materialfx.selection.base.IListCheckModel;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -32,11 +33,10 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.util.Duration;
 
 /**
  * Implementation of an {@link AbstractMFXFlowlessListCell} which has a combo box
- * for usage in {@link MFXFlowlessCheckListView}, has the checked property and pseudo class
+ * for usage in {@link MFXFlowlessCheckListView}, has the checked property and PseudoClass
  * ":checked" for usage in CSS.
  */
 public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> {
@@ -44,8 +44,8 @@ public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> 
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-check-list-cell";
-    private final String STYLESHHET = MFXResourcesLoader.load("css/mfx-flowless-check-listcell.css");
-    protected final RippleGenerator rippleGenerator = new RippleGenerator(this);
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXFlowlessCheckListCell.css");
+    protected final MFXCircleRippleGenerator rippleGenerator = new MFXCircleRippleGenerator(this);
 
     private final MFXFlowlessCheckListView<T> listView;
     protected final MFXCheckbox checkbox;
@@ -84,14 +84,9 @@ public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> 
      */
     protected void setupRippleGenerator() {
         rippleGenerator.setManaged(false);
+        rippleGenerator.setRipplePositionFunction(event -> new RipplePosition(event.getX(), event.getY()));
         rippleGenerator.rippleRadiusProperty().bind(widthProperty().divide(2.0));
-        rippleGenerator.setInDuration(Duration.millis(400));
-
-        addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            rippleGenerator.setGeneratorCenterX(event.getX());
-            rippleGenerator.setGeneratorCenterY(event.getY());
-            rippleGenerator.createRipple();
-        });
+        addEventFilter(MouseEvent.MOUSE_PRESSED, rippleGenerator::generateRipple);
     }
 
     /**
@@ -105,7 +100,7 @@ public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> 
      * <p>
      * - Binds the checked property to the selected property of the combo box.<p>
      * - Clears the selection (if {@link #clearSelectionOnCheck} is true), updates the
-     * checked pseudo class state and calls {@link #updateCheck()} when the checked property changes.
+     * checked PseudoClass state and calls {@link #updateCheck()} when the checked property changes.
      */
     @Override
     protected void setBehavior() {
@@ -124,7 +119,7 @@ public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> 
      * Updates the check model accordingly to the new state of the checked property.
      * <p></p>
      * If true and the check model doesn't already contain the cell index then calls
-     * {@link ListCheckModel#check(int, T)} with the cell's index and data.
+     * {@link ListCheckModel#check(int, Object)} with the cell's index and data.
      * <p></p>
      * If false calls {@link ListCheckModel#clearCheckedItem(int)} with the cell's index.
      */
@@ -219,13 +214,15 @@ public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> 
      * If the given data is instance of Node then the data is cast
      * to Node and added to the children list with the checkbox as well.
      * Otherwise a Label is created and toString is called on the data.
-     * The label has style class: "data-label"
+     * The {@link #emptyProperty()} is updated accordingly to the generated string.
+     * The label has style class: "data-label".
      */
     @Override
     protected void render(T data) {
         if (data instanceof Node) {
             getChildren().setAll(checkbox, (Node) data);
         } else {
+            setEmpty(data.toString().isEmpty());
             Label label = new Label(data.toString());
             label.getStyleClass().add("data-label");
             getChildren().setAll(checkbox, label);
@@ -240,7 +237,7 @@ public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> 
 
     @Override
     public String getUserAgentStylesheet() {
-        return STYLESHHET;
+        return STYLESHEET;
     }
 
     @Override

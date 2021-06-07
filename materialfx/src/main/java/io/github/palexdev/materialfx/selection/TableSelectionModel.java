@@ -1,11 +1,31 @@
+/*
+ *     Copyright (C) 2021 Parisi Alessandro
+ *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ *     MaterialFX is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     MaterialFX is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package io.github.palexdev.materialfx.selection;
 
 import io.github.palexdev.materialfx.controls.MFXTableRow;
 import io.github.palexdev.materialfx.selection.base.ITableSelectionModel;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.MapProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableMap;
 import javafx.scene.input.MouseEvent;
 
 import java.util.ArrayList;
@@ -14,133 +34,175 @@ import java.util.List;
 /**
  * Concrete implementation of the {@code ITableSelectionModel} interface.
  * <p>
- * Basic selection model, allows to: clear the selection, single and multiple selection of {@link MFXTableRow}s.
+ * Basic selection model, allows to: clear the selection, single and multiple selection for {@code MFXTableRows} data.
+ *
+ * @see MFXTableRow
  */
 public class TableSelectionModel<T> implements ITableSelectionModel<T> {
     //================================================================================
     // Properties
     //================================================================================
-    private final ListProperty<MFXTableRow<T>> selectedItems = new SimpleListProperty<>(FXCollections.observableArrayList());
+    private final MapProperty<Integer, T> selectedItems = new SimpleMapProperty<>(getMap());
+    private final BooleanProperty updating = new SimpleBooleanProperty();
     private boolean allowsMultipleSelection = false;
-
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public TableSelectionModel() {
-        selectedItems.addListener((ListChangeListener<MFXTableRow<T>>) change -> {
-            List<MFXTableRow<T>> tmpRemoved = new ArrayList<>();
-            List<MFXTableRow<T>> tmpAdded = new ArrayList<>();
-
-            while (change.next()) {
-                tmpRemoved.addAll(change.getRemoved());
-                tmpAdded.addAll(change.getAddedSubList());
-            }
-            tmpRemoved.forEach(item -> item.setSelected(false));
-            tmpAdded.forEach(item -> item.setSelected(true));
-        });
-    }
 
     //================================================================================
     // Methods
     //================================================================================
 
     /**
-     * This method is called when the mouseEvent argument passed to
-     * {@link #select(MFXTableRow, MouseEvent)} is null.
-     * <p>
-     * If the model is set to not allow multiple selection then we clear the list
-     * and then add the item to it.
-     *
-     * @param row the row to select
+     * Builds a new observable hash map.
      */
-    @SuppressWarnings("unchecked")
-    protected void select(MFXTableRow<T> row) {
-        if (!allowsMultipleSelection) {
-            selectedItems.setAll(row);
+    protected ObservableMap<Integer, T> getMap() {
+        return FXCollections.observableHashMap();
+    }
+
+    /**
+     * This method is called when the mouse event passed to {@link #select(int, T, MouseEvent)}
+     * is null. Since it's null there's no check for isShiftDown() or isControlDown(), so in case
+     * of multiple selection enabled the passed index and data will always be added to the map.
+     */
+    private void select(int index, T data) {
+        if (allowsMultipleSelection) {
+            selectedItems.put(index, data);
         } else {
-            selectedItems.add(row);
+            ObservableMap<Integer, T> tmpMap = getMap();
+            tmpMap.put(index, data);
+            selectedItems.set(tmpMap);
         }
     }
 
     //================================================================================
-    // Methods Implementation
+    // Override Methods
     //================================================================================
 
     /**
-     * This method is called by {@link io.github.palexdev.materialfx.skins.MFXTableViewSkin} when
-     * the mouse is pressed on a row. We need the mouse event as a parameter in case multiple selection is
-     * allowed because we need to check if the Shift key or Ctrl key were pressed.
-     * <p>
-     * If the mouseEvent is null we call the other {@link #select(MFXTableRow)} method.
-     * <p>
-     * If the selection is single {@link #clearSelection()} we clear the selection
-     * and add the new selected item to the list.
-     * <p>
-     * If the selection is multiple we check if the item was already selected,
-     * if that is the case by default the item is deselected.
-     * <p>
-     * In case neither Shift nor Ctrl are pressed we clear the selection.
+     * Checks if the map contains the given item.
      */
-    @SuppressWarnings("unchecked")
     @Override
-    public void select(MFXTableRow<T> row, MouseEvent mouseEvent) {
+    public boolean containsSelected(T data) {
+        return selectedItems.containsValue(data);
+    }
+
+    /**
+     * Checks if the map contains the given index key.
+     */
+    @Override
+    public boolean containSelected(int index) {
+        return selectedItems.containsKey(index);
+    }
+
+    /**
+     * Called by the rows when the mouse is pressed.
+     * The mouse event is needed in case of multiple selection allowed because
+     * we check if the Shift key or Ctrl key were pressed.
+     * <p>
+     * If the mouseEvent is null we call the other {@link #select(int, T)} method.
+     * <p>
+     * If the selection is multiple and Shift or Ctrl are pressed the new entry
+     * is put in the map.
+     * <p>
+     * If the selection is single the map is replaced by a new one that contains only the
+     * passed entry.
+     * <p>
+     * Note that if the item is already selected it is removed from the map, this behavior though is
+     * managed by the rows.
+     */
+    @Override
+    public void select(int index, T data, MouseEvent mouseEvent) {
         if (mouseEvent == null) {
-            select(row);
+            select(index, data);
             return;
         }
 
-        if (!allowsMultipleSelection) {
-            clearSelection();
-            selectedItems.setAll(row);
-            return;
-        }
-
-
-        if (mouseEvent.isShiftDown() || mouseEvent.isControlDown()) {
-            if (row.isSelected()) {
-                selectedItems.remove(row);
-            } else {
-                selectedItems.add(row);
-            }
+        if (allowsMultipleSelection && (mouseEvent.isShiftDown() || mouseEvent.isControlDown())) {
+            selectedItems.put(index, data);
         } else {
-            clearSelection();
-            selectedItems.setAll(row);
+            ObservableMap<Integer, T> tmpMap = getMap();
+            tmpMap.put(index, data);
+            selectedItems.set(tmpMap);
         }
     }
 
     /**
-     * Resets every item in the list to selected false and then clears the list.
+     * Removes the mapping for the given index.
+     */
+    @Override
+    public void clearSelectedItem(int index) {
+        selectedItems.remove(index);
+    }
+
+    /**
+     * Retrieves the index for the given data, if preset
+     * removes the mapping for that index.
+     */
+    @Override
+    public void clearSelectedItem(T item) {
+        selectedItems.entrySet().stream()
+                .filter(entry -> entry.getValue().equals(item))
+                .findFirst()
+                .ifPresent(entry -> selectedItems.remove(entry.getKey()));
+
+    }
+
+    /**
+     * Removes all the entries from the map.
      */
     @Override
     public void clearSelection() {
-        if (selectedItems.isEmpty()) {
-            return;
-        }
-
-        selectedItems.forEach(item -> item.setSelected(false));
-        selectedItems.clear();
+        selectedItems.set(getMap());
     }
 
     /**
-     * Gets the selected row. If the selection is multiple {@link #getSelectedRows()} ()} should be
-     * called instead, as this method will only return the first item of the list.
-     *
-     * @return the first selected item of the list
+     * @return the currently selected index, 0 if more than one item is selected,
+     * -1 if no item is selected
      */
     @Override
-    public MFXTableRow<T> getSelectedRow() {
-        if (selectedItems.isEmpty()) {
-            return null;
-        }
-        return selectedItems.get(0);
+    public int getSelectedIndex() {
+        List<Integer> keys = new ArrayList<>(selectedItems.keySet());
+        return !keys.isEmpty() ? keys.get(0) : -1;
     }
 
     /**
-     * @return the ListProperty which contains all the selected items.
+     * @return an unmodifiable list containing the currently selected indexes
      */
     @Override
-    public ListProperty<MFXTableRow<T>> getSelectedRows() {
-        return this.selectedItems;
+    public List<Integer> getSelectedIndexes() {
+        return List.copyOf(selectedItems.keySet());
+    }
+
+    /**
+     * @return the first selected item in the map
+     */
+    @Override
+    public T getSelectedItem() {
+        return getSelectedItem(0);
+    }
+
+    /**
+     * @return the selected item in the map with the given index or null
+     * if not found
+     */
+    @Override
+    public T getSelectedItem(int index) {
+        List<T> items = new ArrayList<>(selectedItems.values());
+        return items.size() > index ? items.get(index) : null;
+    }
+
+    /**
+     * @return an unmodifiable list of all the selected items
+     */
+    @Override
+    public List<T> getSelectedItems() {
+        return List.copyOf(selectedItems.values());
+    }
+
+    /**
+     * @return the map property used for the selection
+     */
+    @Override
+    public MapProperty<Integer, T> selectedItemsProperty() {
+        return selectedItems;
     }
 
     /**
@@ -157,5 +219,24 @@ public class TableSelectionModel<T> implements ITableSelectionModel<T> {
     @Override
     public void setAllowsMultipleSelection(boolean multipleSelection) {
         this.allowsMultipleSelection = multipleSelection;
+    }
+
+    @Override
+    public boolean isUpdating() {
+        return updating.get();
+    }
+
+    /**
+     * Specifies if the model is being updated by the table view after a change
+     * in the items observable list.
+     */
+    @Override
+    public BooleanProperty updatingProperty() {
+        return updating;
+    }
+
+    @Override
+    public void setUpdating(boolean updating) {
+        this.updating.set(updating);
     }
 }

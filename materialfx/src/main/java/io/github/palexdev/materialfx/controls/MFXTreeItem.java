@@ -60,7 +60,7 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
     //================================================================================
     private static final StyleablePropertyFactory<MFXTreeItem<?>> FACTORY = new StyleablePropertyFactory<>(MFXTreeItem.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-tree-item";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-treeitem.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTreeItem.css");
 
     private final BooleanProperty expanded = new SimpleBooleanProperty(false);
     private final ReadOnlyBooleanWrapper animationRunning = new ReadOnlyBooleanWrapper(false);
@@ -327,7 +327,7 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
     }
 
     //================================================================================
-    // Events Class
+    // Events
     //================================================================================
 
     /**

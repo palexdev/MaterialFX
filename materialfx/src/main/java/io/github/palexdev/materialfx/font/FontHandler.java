@@ -31,7 +31,7 @@ public class FontHandler {
     }
 
     static {
-        resources = Font.loadFont(MFXResourcesLoader.loadStream("fonts/materialfx-resources.ttf"), 10);
+        resources = Font.loadFont(MFXResourcesLoader.loadStream("fonts/MFXResources.ttf"), 10);
     }
 
     public static Font getResources() {

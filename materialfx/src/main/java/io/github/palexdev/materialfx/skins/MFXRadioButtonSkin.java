@@ -19,8 +19,8 @@
 package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.controls.MFXRadioButton;
-import io.github.palexdev.materialfx.controls.factories.RippleClipTypeFactory;
-import io.github.palexdev.materialfx.effects.RippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.Interpolator;
@@ -37,7 +37,7 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 /**
- * This is the implementation of the {@code Skin} associated with every {@code MFXRadioButton}.
+ * This is the implementation of the {@code Skin} associated with every {@link MFXRadioButton}.
  */
 public class MFXRadioButtonSkin extends RadioButtonSkin {
     //================================================================================
@@ -46,9 +46,9 @@ public class MFXRadioButtonSkin extends RadioButtonSkin {
     private final StackPane container;
     private final Circle radio;
     private final Circle dot;
-    private final double padding = 6;
+    private final double padding = 8;
 
-    private final RippleGenerator rippleGenerator;
+    private final MFXCircleRippleGenerator rippleGenerator;
 
     //================================================================================
     // Constructors
@@ -73,10 +73,17 @@ public class MFXRadioButtonSkin extends RadioButtonSkin {
         container = new StackPane();
         container.getStyleClass().add("radio-container");
 
-        rippleGenerator = new RippleGenerator(container, new RippleClipTypeFactory());
-        rippleGenerator.setRippleRadius(radius * 1.2);
-        rippleGenerator.setInDuration(Duration.millis(350));
+        rippleGenerator = new MFXCircleRippleGenerator(container);
         rippleGenerator.setAnimateBackground(false);
+        rippleGenerator.setAnimationSpeed(2);
+        rippleGenerator.setClipSupplier(() -> null);
+        rippleGenerator.setRipplePositionFunction(event -> {
+            RipplePosition position = new RipplePosition();
+            position.setXPosition(dot.getBoundsInParent().getCenterX());
+            position.setYPosition(dot.getBoundsInParent().getCenterY());
+            return position;
+        });
+        rippleGenerator.setRippleRadius(radius);
 
         container.getChildren().addAll(rippleGenerator, radio, dot);
 
@@ -105,9 +112,7 @@ public class MFXRadioButtonSkin extends RadioButtonSkin {
         radioButton.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
             buildAndPlayAnimation();
             updateColors();
-            rippleGenerator.setGeneratorCenterX(container.getWidth() / 2.0 - 0.3);
-            rippleGenerator.setGeneratorCenterY(container.getHeight() / 2.0 - 0.3);
-            rippleGenerator.createRipple();
+            rippleGenerator.generateRipple(null);
         });
 
         /*
@@ -177,24 +182,6 @@ public class MFXRadioButtonSkin extends RadioButtonSkin {
     }
 
     @Override
-    protected void layoutChildren(final double x, final double y, final double w, final double h) {
-        final RadioButton radioButton = getSkinnable();
-
-        final double contWidth = container.prefWidth(-1);
-        final double contHeight = container.prefHeight(-1);
-        final double computeWidth = Math.max(radioButton.prefWidth(-1), radioButton.minWidth(-1));
-        final double labelWidth = Math.min(computeWidth - contWidth, w - snapSizeX(contWidth));
-        final double labelHeight = Math.min(radioButton.prefHeight(labelWidth), h);
-        final double maxHeight = Math.max(contHeight, labelHeight);
-        final double xOffset = NodeUtils.computeXOffset(w, labelWidth + computeWidth, radioButton.getAlignment().getHpos()) + x;
-        final double yOffset = NodeUtils.computeYOffset(h, maxHeight, radioButton.getAlignment().getVpos()) + y;
-
-        layoutLabelInArea(xOffset + contWidth + padding, yOffset, labelWidth, maxHeight, radioButton.getAlignment());
-        container.resize(snapSizeX(contWidth), snapSizeY(contHeight));
-        positionInArea(container, xOffset, yOffset, contWidth, maxHeight, 0, radioButton.getAlignment().getHpos(), radioButton.getAlignment().getVpos());
-    }
-
-    @Override
     protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
         return super.computeMinWidth(height,
                 topInset,
@@ -210,5 +197,23 @@ public class MFXRadioButtonSkin extends RadioButtonSkin {
                 rightInset,
                 bottomInset,
                 leftInset) + snapSizeX(radio.prefWidth(-1)) + padding;
+    }
+
+    @Override
+    protected void layoutChildren(final double x, final double y, final double w, final double h) {
+        final RadioButton radioButton = getSkinnable();
+
+        final double contWidth = container.prefWidth(-1);
+        final double contHeight = container.prefHeight(-1);
+        final double computeWidth = Math.max(radioButton.prefWidth(-1), radioButton.minWidth(-1));
+        final double labelWidth = Math.min(computeWidth - contWidth, w - snapSizeX(contWidth));
+        final double labelHeight = Math.min(radioButton.prefHeight(labelWidth), h);
+        final double maxHeight = Math.max(contHeight, labelHeight);
+        final double xOffset = NodeUtils.computeXOffset(w, labelWidth + computeWidth, radioButton.getAlignment().getHpos()) + x;
+        final double yOffset = NodeUtils.computeYOffset(h, maxHeight, radioButton.getAlignment().getVpos()) + y;
+
+        layoutLabelInArea(xOffset + contWidth + padding, yOffset, labelWidth, maxHeight, radioButton.getAlignment());
+        container.resize(snapSizeX(contWidth), snapSizeY(contHeight));
+        positionInArea(container, xOffset, yOffset, contWidth, maxHeight, 0, radioButton.getAlignment().getHpos(), radioButton.getAlignment().getVpos());
     }
 }

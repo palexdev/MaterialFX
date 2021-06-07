@@ -19,7 +19,8 @@
 package io.github.palexdev.materialfx.controls.legacy;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.effects.RippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.css.*;
 import javafx.geometry.Insets;
@@ -30,7 +31,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.util.Duration;
 
 import java.util.List;
 
@@ -45,17 +45,13 @@ public class MFXLegacyTableRow<T> extends TableRow<T> {
     //================================================================================
     private static final StyleablePropertyFactory<MFXLegacyTableRow<?>> FACTORY = new StyleablePropertyFactory<>(TableRow.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-legacy-table-row";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/mfx-tablerow.css");
-    private final RippleGenerator rippleGenerator;
+    private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/MFXTableRow.css");
+    private final MFXCircleRippleGenerator rippleGenerator = new MFXCircleRippleGenerator(this);
 
     //================================================================================
     // Constructors
     //================================================================================
     public MFXLegacyTableRow() {
-        rippleGenerator = new RippleGenerator(this);
-        rippleGenerator.setRippleColor(Color.rgb(50, 150, 255));
-        rippleGenerator.setInDuration(Duration.millis(400));
-
         initialize();
     }
 
@@ -64,14 +60,14 @@ public class MFXLegacyTableRow<T> extends TableRow<T> {
     //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
-
-        addEventHandler(MouseEvent.MOUSE_PRESSED, mouseEvent -> {
-            rippleGenerator.setGeneratorCenterX(mouseEvent.getX());
-            rippleGenerator.setGeneratorCenterY(mouseEvent.getY());
-            rippleGenerator.createRipple();
-        });
-
+        setupRippleGenerator();
         addListeners();
+    }
+
+    private void setupRippleGenerator() {
+        rippleGenerator.setRippleColor(Color.rgb(50, 150, 255));
+        rippleGenerator.setRipplePositionFunction(event -> new RipplePosition(event.getX(), event.getY()));
+        addEventFilter(MouseEvent.MOUSE_PRESSED, rippleGenerator::generateRipple);
     }
 
     private void addListeners() {

@@ -1,5 +1,7 @@
-module MaterialFX.demo.main {
-    requires MaterialFX.materialfx.main;
+module MaterialFX.Demo {
+    requires MaterialFX;
+
+    requires jdk.localedata;
 
     requires javafx.controls;
     requires javafx.fxml;

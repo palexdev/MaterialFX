@@ -51,7 +51,7 @@ public class MFXFlowlessListView<T> extends AbstractMFXFlowlessListView<T, MFXFl
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-list-view";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-flowless-listview.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXFlowlessListView.css");
 
     //================================================================================
     // Constructors

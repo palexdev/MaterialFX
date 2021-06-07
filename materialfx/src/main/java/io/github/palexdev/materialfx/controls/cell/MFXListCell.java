@@ -19,7 +19,8 @@
 package io.github.palexdev.materialfx.controls.cell;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.effects.RippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.css.*;
 import javafx.geometry.Insets;
@@ -31,7 +32,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.util.Duration;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,17 +48,13 @@ public class MFXListCell<T> extends ListCell<T> {
     //================================================================================
     private static final StyleablePropertyFactory<MFXListCell<?>> FACTORY = new StyleablePropertyFactory<>(ListCell.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-list-cell";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-listcell.css");
-    private final RippleGenerator rippleGenerator;
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXListCell.css");
+    private final MFXCircleRippleGenerator rippleGenerator = new MFXCircleRippleGenerator(this);
 
     //================================================================================
     // Constructors
     //================================================================================
     public MFXListCell() {
-        rippleGenerator = new RippleGenerator(this);
-        rippleGenerator.setRippleColor(Color.rgb(50, 150, 255));
-        rippleGenerator.setInDuration(Duration.millis(400));
-
         initialize();
     }
 
@@ -128,11 +124,9 @@ public class MFXListCell<T> extends ListCell<T> {
     }
 
     protected void setupRippleGenerator() {
-        this.addEventHandler(MouseEvent.MOUSE_PRESSED, mouseEvent -> {
-            rippleGenerator.setGeneratorCenterX(mouseEvent.getX());
-            rippleGenerator.setGeneratorCenterY(mouseEvent.getY());
-            rippleGenerator.createRipple();
-        });
+        rippleGenerator.setRippleColor(Color.rgb(50, 150, 255));
+        rippleGenerator.setRipplePositionFunction(event -> new RipplePosition(event.getX(), event.getY()));
+        addEventFilter(MouseEvent.MOUSE_PRESSED, rippleGenerator::generateRipple);
     }
 
     private boolean containsFill(List<BackgroundFill> backgroundFills, Paint fill) {
@@ -288,7 +282,7 @@ public class MFXListCell<T> extends ListCell<T> {
 
     /**
      * Overridden method to add the {@code RippleGenerator} and
-     * allow {@code Node}s.
+     * allow {@code Nodes}.
      */
     @Override
     protected void updateItem(T item, boolean empty) {
@@ -301,7 +295,6 @@ public class MFXListCell<T> extends ListCell<T> {
             if (item instanceof Node) {
                 Node nodeItem = (Node) item;
                 setGraphic(nodeItem);
-
             } else {
                 setText(item.toString());
             }

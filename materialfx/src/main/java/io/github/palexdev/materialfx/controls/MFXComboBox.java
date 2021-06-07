@@ -19,12 +19,14 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.controls.enums.DialogType;
+import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.selection.ComboSelectionModelMock;
 import io.github.palexdev.materialfx.skins.MFXComboBoxSkin;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import io.github.palexdev.materialfx.validation.MFXDialogValidator;
+import io.github.palexdev.materialfx.validation.base.AbstractMFXValidator;
+import io.github.palexdev.materialfx.validation.base.Validated;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.css.*;
@@ -34,6 +36,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import static io.github.palexdev.materialfx.controls.enums.Styles.ComboBoxStyles;
 
@@ -47,7 +50,7 @@ import static io.github.palexdev.materialfx.controls.enums.Styles.ComboBoxStyles
  * @param <T> The type of the value that has been selected
  * @see ComboSelectionModelMock
  */
-public class MFXComboBox<T> extends Control {
+public class MFXComboBox<T> extends Control implements Validated<MFXDialogValidator> {
     //================================================================================
     // Properties
     //================================================================================
@@ -55,6 +58,7 @@ public class MFXComboBox<T> extends Control {
     private final String STYLE_CLASS = "mfx-combo-box";
     private String STYLESHEET;
 
+    private final StringProperty promptText = new SimpleStringProperty("");
     private final ObjectProperty<T> selectedValue = new SimpleObjectProperty<>();
     private final ObjectProperty<ObservableList<T>> items = new SimpleObjectProperty<>();
 
@@ -64,6 +68,12 @@ public class MFXComboBox<T> extends Control {
     private final DoubleProperty popupYOffset = new SimpleDoubleProperty(2);
 
     private final ComboSelectionModelMock<T> mockSelection;
+
+    private MFXDialogValidator validator;
+    private final ObjectProperty<Paint> invalidLineColor = new SimpleObjectProperty<>(Color.web("#EF6E6B"));
+    protected static final PseudoClass INVALID_PSEUDO_CLASS = PseudoClass.getPseudoClass("invalid");
+
+    private final ObjectProperty<MFXContextMenu> mfxContextMenu = new SimpleObjectProperty<>();
 
     //================================================================================
     // Constructors
@@ -78,6 +88,97 @@ public class MFXComboBox<T> extends Control {
         this.mockSelection = new ComboSelectionModelMock<>(this);
 
         initialize();
+    }
+
+    //================================================================================
+    // Validation
+    //================================================================================
+
+    /**
+     * Configures the validator. The first time the error label can appear in two cases:
+     * <p></p>
+     * 1) The validator {@link AbstractMFXValidator#isInitControlValidation()} flag is true,
+     * in this case as soon as the control is laid out in the scene the label visible property is
+     * set accordingly to the validator state. (by default is false) <p>
+     * 2) When the control lose the focus and the the validator's state is invalid.
+     * <p></p>
+     * Then the label visible property is automatically updated when the validator state changes.
+     * <p></p>
+     * The validator is also responsible for updating the ":invalid" PseudoClass.
+     */
+    private void setupValidator() {
+        validator = new MFXDialogValidator("Error");
+        validator.setDialogType(DialogType.ERROR);
+        validator.validProperty().addListener(invalidated -> {
+            if (isValidated()) {
+                pseudoClassStateChanged(INVALID_PSEUDO_CLASS, !isValid());
+            }
+        });
+
+        sceneProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null)
+                if (isValidated()) {
+                    if (getValidator().isInitControlValidation()) {
+                        pseudoClassStateChanged(INVALID_PSEUDO_CLASS, !isValid());
+                    } else {
+                        pseudoClassStateChanged(INVALID_PSEUDO_CLASS, false);
+                    }
+                }
+        });
+    }
+
+    @Override
+    public MFXComboBox<T> installValidator(Supplier<MFXDialogValidator> validatorSupplier) {
+        if (validatorSupplier == null) {
+            throw new IllegalArgumentException("The supplier cannot be null!");
+        }
+        this.validator = validatorSupplier.get();
+        return this;
+    }
+
+    @Override
+    public MFXDialogValidator getValidator() {
+        return validator;
+    }
+
+    /**
+     * Delegate method to get the validator's title.
+     */
+    public String getValidatorTitle() {
+        return validator.getTitle();
+    }
+
+    /**
+     * Delegate method to get the validator's title property.
+     */
+    public StringProperty validatorTitleProperty() {
+        return validator.titleProperty();
+    }
+
+    /**
+     * Delegate method to set the validator's title.
+     */
+    public void setValidatorTitle(String title) {
+        validator.setTitle(title);
+    }
+
+    public Paint getInvalidLineColor() {
+        return invalidLineColor.get();
+    }
+
+    /**
+     * Specifies the color of the focused line when the validator state is invalid.
+     * <p></p>
+     * This workaround is needed because I discovered a rather surprising/shocking bug.
+     * If you set the line color in SceneBuilder (didn't test in Java code) and the validator state is invalid,
+     * the line won't change color as specified in the CSS file, damn you JavaFX :)
+     */
+    public ObjectProperty<Paint> invalidLineColorProperty() {
+        return invalidLineColor;
+    }
+
+    public void setInvalidLineColor(Paint invalidLineColor) {
+        this.invalidLineColor.set(invalidLineColor);
     }
 
     //================================================================================
@@ -97,6 +198,65 @@ public class MFXComboBox<T> extends Control {
             }
         });
         maxPopupWidthProperty().bind(widthProperty());
+
+        mfxContextMenu.addListener((observable, oldValue, newValue) -> {
+            if (oldValue != null) {
+                oldValue.dispose();
+            }
+        });
+
+        setupValidator();
+        defaultContextMenu();
+    }
+
+    protected void defaultContextMenu() {
+        MFXContextMenuItem selectFirst = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-first-page", 16))
+                .setText("Select First")
+                .setAction(event -> mockSelection.selectFirst());
+
+        MFXContextMenuItem selectNext = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-next", 18))
+                .setText("Select Next")
+                .setAction(event -> mockSelection.selectNext());
+
+        MFXContextMenuItem selectPrevious = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-back", 18))
+                .setText("Select Previous")
+                .setAction(event -> mockSelection.selectPrevious());
+
+        MFXContextMenuItem selectLast = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-last-page", 16))
+                .setText("Select Last")
+                .setAction(event -> mockSelection.selectLast());
+
+        MFXContextMenuItem resetSelection = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-x", 16))
+                .setText("Clear Selection")
+                .setAction(event -> mockSelection.clearSelection());
+
+        setMFXContextMenu(
+                MFXContextMenu.Builder.build(this)
+                        .addMenuItem(selectFirst)
+                        .addMenuItem(selectNext)
+                        .addMenuItem(selectPrevious)
+                        .addMenuItem(selectLast)
+                        .addSeparator()
+                        .addMenuItem(resetSelection)
+                        .install()
+        );
+    }
+
+    public String getPromptText() {
+        return promptText.get();
+    }
+
+    public StringProperty promptTextProperty() {
+        return promptText;
+    }
+
+    public void setPromptText(String promptText) {
+        this.promptText.set(promptText);
     }
 
     public T getSelectedValue() {
@@ -207,7 +367,7 @@ public class MFXComboBox<T> extends Control {
             StyleableProperties.STYLE,
             this,
             "comboStyle",
-            ComboBoxStyles.STYLE1
+            ComboBoxStyles.STYLE3
     );
 
     /**
@@ -248,6 +408,13 @@ public class MFXComboBox<T> extends Control {
             this,
             "lineStrokeWidth",
             1.0
+    );
+
+    private final StyleableBooleanProperty isValidated = new SimpleStyleableBooleanProperty(
+            StyleableProperties.IS_VALIDATED,
+            this,
+            "isValidated",
+            false
     );
 
     public ComboBoxStyles getComboStyle() {
@@ -313,7 +480,36 @@ public class MFXComboBox<T> extends Control {
         this.lineStrokeWidth.set(lineStrokeWidth);
     }
 
-    //================================================================================
+    public boolean isValidated() {
+        return isValidated.get();
+    }
+
+    /**
+     * Specifies if validation is required for the control.
+     */
+    public StyleableBooleanProperty isValidatedProperty() {
+        return isValidated;
+    }
+
+    public void setValidated(boolean isValidated) {
+        this.isValidated.set(isValidated);
+    }
+
+    public MFXContextMenu getMFXContextMenu() {
+        return mfxContextMenu.get();
+    }
+
+    /**
+     * Specifies the combobox's {@link MFXContextMenu}.
+     */
+    public ObjectProperty<MFXContextMenu> mfxContextMenuProperty() {
+        return mfxContextMenu;
+    }
+
+    public void setMFXContextMenu(MFXContextMenu mfxContextMenu) {
+        this.mfxContextMenu.set(mfxContextMenu);
+    }
+//================================================================================
     // CssMetaData
     //================================================================================
 
@@ -356,10 +552,19 @@ public class MFXComboBox<T> extends Control {
                         1.0
                 );
 
+        private static final CssMetaData<MFXComboBox<?>, Boolean> IS_VALIDATED =
+                FACTORY.createBooleanCssMetaData(
+                        "-mfx-validate",
+                        MFXComboBox::isValidatedProperty,
+                        false
+                );
+
+
         static {
             cssMetaDataList = List.of(
                     STYLE,
-                    ANIMATE_LINES, LINE_COLOR, UNFOCUSED_LINE_COLOR, LINE_STROKE_WIDTH
+                    ANIMATE_LINES, LINE_COLOR, UNFOCUSED_LINE_COLOR, LINE_STROKE_WIDTH,
+                    IS_VALIDATED
             );
         }
     }

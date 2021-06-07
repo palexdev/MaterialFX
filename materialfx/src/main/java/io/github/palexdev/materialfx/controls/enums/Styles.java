@@ -26,8 +26,9 @@ package io.github.palexdev.materialfx.controls.enums;
  */
 public class Styles {
     public enum ComboBoxStyles {
-        STYLE1("css/mfx-combobox-style1.css"),
-        STYLE2("css/mfx-combobox-style2.css");
+        STYLE1("css/MFXComboBoxStyle1.css"),
+        STYLE2("css/MFXComboBoxStyle2.css"),
+        STYLE3("css/MFXComboBoxStyle3.css");
 
         private final String styleSheetPath;
 
@@ -41,9 +42,9 @@ public class Styles {
     }
 
     public enum LabelStyles {
-        STYLE1("css/mfx-label-style1.css"),
-        STYLE2("css/mfx-label-style2.css");
-
+        STYLE1("css/MFXLabelStyle1.css"),
+        STYLE2("css/MFXLabelStyle2.css"),
+        STYLE3("css/MFXLabelStyle3.css");
         private final String styleSheetPath;
 
         LabelStyles(String styleSheetPath) {

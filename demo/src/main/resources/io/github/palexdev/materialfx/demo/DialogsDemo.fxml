@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0"
+            prefWidth="650.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="io.github.palexdev.materialfx.demo.controllers.DialogsController">
+   <Label id="customLabel" alignment="CENTER" layoutX="192.0" layoutY="14.0" prefHeight="26.0" prefWidth="266.0"
+          text="Pane Dialogs/Alerts" AnchorPane.leftAnchor="192.0" AnchorPane.rightAnchor="192.0"
+          AnchorPane.topAnchor="20.0"/>
+   <HBox alignment="CENTER" layoutX="20.0" layoutY="46.0" prefWidth="200.0" spacing="40.0" AnchorPane.leftAnchor="20.0"
+         AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="50.0">
+      <padding>
+         <Insets bottom="20.0" top="20.0"/>
+      </padding>
+      <MFXButton fx:id="pError" buttonType="RAISED" depthLevel="LEVEL1" prefWidth="80.0" rippleColor="LIGHTGRAY"
+                 rippleRadius="20.0" text="ERROR"/>
+      <MFXButton fx:id="pWarning" buttonType="RAISED" depthLevel="LEVEL1" prefWidth="80.0" rippleColor="LIGHTGRAY"
+                 rippleRadius="20.0" text="WARNING"/>
+      <MFXButton fx:id="pInfo" buttonType="RAISED" depthLevel="LEVEL1" prefWidth="80.0" rippleColor="LIGHTGRAY"
+                 rippleRadius="20.0" text="INFO"/>
+      <MFXButton fx:id="pGeneric" buttonType="RAISED" depthLevel="LEVEL1" prefWidth="80.0" rippleColor="LIGHTGRAY"
+                 rippleRadius="20.0" text="GENERIC"/>
+      <MFXButton fx:id="pGenericActions" buttonType="RAISED" depthLevel="LEVEL1" prefWidth="80.0"
+                 rippleColor="LIGHTGRAY" rippleRadius="20.0" text="ACTIONS"/>
+   </HBox>
+   <HBox alignment="CENTER" layoutX="105.0" layoutY="151.0" spacing="40.0" AnchorPane.leftAnchor="20.0"
+         AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="160.0">
+      <padding>
+         <Insets bottom="20.0" top="20.0"/>
+      </padding>
+      <MFXButton fx:id="pFade" buttonType="RAISED" depthLevel="LEVEL1" prefWidth="80.0" rippleColor="LIGHTGRAY"
+                 rippleRadius="20.0" text="FADE"/>
+      <MFXButton fx:id="pSlideLR" buttonType="RAISED" depthLevel="LEVEL1" prefWidth="80.0" rippleColor="LIGHTGRAY"
+                 rippleRadius="20.0" text="SLIDE L/R"/>
+      <MFXButton fx:id="pSlideTB" buttonType="RAISED" depthLevel="LEVEL1" prefWidth="80.0" rippleColor="LIGHTGRAY"
+                 rippleRadius="20.0" text="SLIDE T/B"/>
+      <MFXButton fx:id="pMix" buttonType="RAISED" depthLevel="LEVEL1" prefWidth="80.0" rippleColor="LIGHTGRAY"
+                 rippleRadius="20.0" text="MIX"/>
+   </HBox>
+   <Label id="customLabel" alignment="CENTER" layoutX="192.0" layoutY="125.0" prefHeight="26.0" prefWidth="266.0"
+          text="Animated"/>
+   <Label id="customLabel" alignment="CENTER" layoutX="192.0" layoutY="225.0" prefHeight="26.0" prefWidth="266.0"
+          text="Stage Dialogs/Alerts"/>
+   <HBox alignment="CENTER" layoutX="105.0" layoutY="251.0" spacing="40.0" AnchorPane.leftAnchor="20.0"
+         AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="260.0">
+      <padding>
+         <Insets bottom="20.0" top="20.0"/>
+      </padding>
+      <MFXButton fx:id="sError" buttonType="RAISED" depthLevel="LEVEL1" prefWidth="80.0" rippleColor="#cc74da"
+                 rippleRadius="20.0" text="ERROR"/>
+      <MFXButton fx:id="sWarning" buttonType="RAISED" depthLevel="LEVEL1" prefWidth="80.0" rippleColor="#cc74da"
+                 rippleRadius="20.0" text="WARNING"/>
+      <MFXButton fx:id="sInfo" buttonType="RAISED" depthLevel="LEVEL1" prefWidth="80.0" rippleColor="#cc74da"
+                 rippleRadius="20.0" text="INFO"/>
+      <MFXButton fx:id="sGeneric" buttonType="RAISED" depthLevel="LEVEL1" prefWidth="80.0" rippleColor="#cc74da"
+                 rippleRadius="20.0" text="GENERIC"/>
+   </HBox>
+   <Label id="customLabel" alignment="CENTER" layoutX="192.0" layoutY="325.0" prefHeight="26.0" prefWidth="266.0"
+          text="Options" textAlignment="CENTER"/>
+   <HBox alignment="CENTER" layoutX="105.0" layoutY="351.0" spacing="40.0" AnchorPane.leftAnchor="20.0"
+         AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="360.0">
+      <padding>
+         <Insets bottom="20.0" top="20.0"/>
+      </padding>
+      <MFXButton fx:id="pDraggable" buttonType="RAISED" depthLevel="LEVEL1" prefWidth="150.0" rippleColor="#cc74da"
+                 rippleRadius="20.0" text="Draggable (Pane)"/>
+      <MFXButton fx:id="pOverlayClose" buttonType="RAISED" depthLevel="LEVEL1" prefWidth="150.0"
+                 rippleColor="#cc74da" rippleRadius="20.0" text="Overlay Close (Pane)"/>
+      <MFXButton fx:id="sModal" buttonType="RAISED" depthLevel="LEVEL1" prefWidth="150.0" rippleColor="#cc74da"
+                 rippleRadius="20.0" text="Modal (Stage)"/>
+   </HBox>
+</AnchorPane>

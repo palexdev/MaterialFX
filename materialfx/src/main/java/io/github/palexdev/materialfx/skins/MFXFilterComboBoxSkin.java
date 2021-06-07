@@ -1,20 +1,40 @@
+/*
+ *     Copyright (C) 2021 Parisi Alessandro
+ *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ *     MaterialFX is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     MaterialFX is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
-import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
-import io.github.palexdev.materialfx.controls.MFXFlowlessListView;
-import io.github.palexdev.materialfx.controls.MFXIconWrapper;
-import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXFlowlessListCell;
 import io.github.palexdev.materialfx.controls.enums.Styles;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
-import io.github.palexdev.materialfx.effects.RippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.selection.ComboSelectionModelMock;
 import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
+import io.github.palexdev.materialfx.utils.LabelUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.StringUtils;
+import io.github.palexdev.materialfx.validation.MFXDialogValidator;
 import javafx.animation.*;
+import javafx.beans.InvalidationListener;
+import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
@@ -36,14 +56,14 @@ import java.util.function.Predicate;
 // TODO implement StringConverter (low priority)
 
 /**
- * This is the implementation of the Skin associated with every MFXFilterComboBox.
+ * This is the implementation of the {@code Skin} associated with every {@link MFXFilterComboBox}.
  */
 public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
     //================================================================================
     // Properties
     //================================================================================
     private final HBox container;
-    private final Label valueLabel;
+    private final MFXLabel valueLabel;
     private final double minWidth = 120;
 
     private final MFXIconWrapper icon;
@@ -53,9 +73,11 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
 
     private final Line unfocusedLine;
     private final Line focusedLine;
+    private final Label validate;
+    private final double padding = 11;
 
     private final HBox searchContainer;
-    private final FilteredList<T> filteredList;
+    private FilteredList<T> filteredList;
     private MFXTextField searchField;
 
     private Timeline arrowAnimation;
@@ -85,12 +107,28 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         focusedLine.endXProperty().bind(comboBox.widthProperty().subtract(1));
         focusedLine.setScaleX(0.0);
 
+        MFXFontIcon warnIcon = new MFXFontIcon("mfx-exclamation-triangle", Color.RED);
+        MFXIconWrapper warnWrapper = new MFXIconWrapper(warnIcon, 10);
+
+        validate = new Label();
+        validate.setGraphic(warnWrapper);
+        validate.getStyleClass().add("validate-label");
+        validate.getStylesheets().setAll(comboBox.getUserAgentStylesheet());
+        validate.textProperty().bind(comboBox.getValidator().validatorMessageProperty());
+        validate.setGraphicTextGap(padding);
+        validate.setVisible(false);
+        validate.setManaged(false);
+
+        if (comboBox.isValidated() && comboBox.getValidator().isInitControlValidation()) {
+            validate.setVisible(!comboBox.isValid());
+        }
+
         filteredList = new FilteredList<>(comboBox.getItems());
 
         valueLabel = buildLabel();
 
         MFXFontIcon fontIcon = new MFXFontIcon("mfx-caret-down", 12);
-        icon = new MFXIconWrapper(fontIcon, 24).addRippleGenerator();
+        icon = new MFXIconWrapper(fontIcon, 24);
         icon.setManaged(false);
         icon.getStylesheets().addAll(comboBox.getUserAgentStylesheet());
         NodeUtils.makeRegionCircular(icon, 10);
@@ -116,18 +154,46 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
             }
         };
 
-        if (comboBox.getComboStyle() == Styles.ComboBoxStyles.STYLE1) {
-            getChildren().addAll(container, icon, unfocusedLine, focusedLine);
+        if (comboBox.getComboStyle() != Styles.ComboBoxStyles.STYLE2) {
+            getChildren().addAll(container, icon, unfocusedLine, focusedLine, validate);
         } else {
-            getChildren().addAll(container, icon);
+            getChildren().addAll(container, icon, validate);
         }
 
         setBehavior();
+        initSelection();
     }
 
     //================================================================================
     // Methods
     //================================================================================
+
+    /**
+     * Initialized the combo box value if the selected index specified by the selection model is not -1.
+     *
+     * @see ComboSelectionModelMock
+     */
+    private void initSelection() {
+        MFXComboBox<T> comboBox = getSkinnable();
+        ComboSelectionModelMock<T> selectionModel = comboBox.getSelectionModel();
+
+        if (selectionModel.getSelectedIndex() != -1 && comboBox.getItems().isEmpty()) {
+            selectionModel.clearSelection();
+            return;
+        }
+
+        if (selectionModel.getSelectedIndex() != -1) {
+            int index = selectionModel.getSelectedIndex();
+            if (index < comboBox.getItems().size()) {
+                T item = comboBox.getItems().get(index);
+                selectionModel.selectItem(item);
+                listView.getSelectionModel().select(index, item, null);
+                comboBox.setSelectedValue(item);
+            } else {
+                comboBox.getSelectionModel().clearSelection();
+            }
+        }
+    }
 
     /**
      * Calls the methods which define the control behavior.
@@ -152,6 +218,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
      */
     private void comboBehavior() {
         MFXFilterComboBox<T> comboBox = getSkinnable();
+        MFXDialogValidator validator = comboBox.getValidator();
 
         // STYLE
         comboBox.comboStyleProperty().addListener((observable, oldValue, newValue) -> {
@@ -174,6 +241,11 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
 
         // FOCUS
         comboBox.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue && comboBox.isValidated()) {
+                comboBox.getValidator().update();
+                validate.setVisible(!comboBox.isValid());
+            }
+
             boolean fieldCondition = searchField != null && searchField.isFocused();
             if (fieldCondition) {
                 return;
@@ -190,6 +262,29 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
                 focusedLine.setScaleX(0.0);
             }
         });
+
+        // VALIDATION
+        comboBox.isValidatedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                validate.setVisible(false);
+            }
+        });
+
+        comboBox.disabledProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                validate.setVisible(false);
+            }
+        });
+
+        validator.addListener(invalidated -> {
+            if (comboBox.isValidated()) {
+                validate.setVisible(!comboBox.isValid());
+            }
+        });
+
+        validate.textProperty().addListener(invalidated -> comboBox.requestLayout());
+        validate.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> validator.showModal(comboBox.getScene().getWindow()));
+
     }
 
     /**
@@ -200,6 +295,11 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         ComboSelectionModelMock<T> selectionModel = comboBox.getSelectionModel();
 
         selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                listView.getSelectionModel().select(selectionModel.getSelectedIndex(), newValue, null);
+            } else {
+                listView.getSelectionModel().clearSelection();
+            }
             if (oldValue != newValue) {
                 comboBox.setSelectedValue(newValue);
             }
@@ -210,7 +310,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
                 setValueLabel(newValue);
             } else {
                 valueLabel.setText("");
-                valueLabel.setGraphic(null);
+                valueLabel.setLeadingIcon(null);
             }
         });
     }
@@ -218,7 +318,9 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
     /**
      * Specifies the behavior for maxPopupHeight and maxPopupWidth properties, also adds the
      * {@link #popupHandler} to the scene to close the popup in case it is open and the mouse is not
-     * pressed on the combo box.
+     * pressed on the combo box. And resets the control when the popup is hidden.
+     *
+     * @see #reset()
      */
     private void popupBehavior() {
         MFXFilterComboBox<T> comboBox = getSkinnable();
@@ -255,6 +357,8 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
                 listSelectionModel.select(selectionModelMock.getSelectedIndex(), selectionModelMock.getSelectedItem(), null);
             }
         });
+
+        popup.addEventHandler(WindowEvent.WINDOW_HIDDEN, event -> reset());
     }
 
     /**
@@ -273,6 +377,27 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
                 reset();
             }
         });
+
+        if (comboBox.getItems() != null) {
+            comboBox.getItems().addListener((InvalidationListener) invalidated -> {
+                comboBox.getSelectionModel().clearSelection();
+                filteredList = new FilteredList<>(comboBox.getItems());
+                listView.setItems(filteredList);
+            });
+        }
+        comboBox.itemsProperty().addListener((observable, oldValue, newValue) -> {
+            comboBox.getSelectionModel().clearSelection();
+            if (newValue != null) {
+                newValue.addListener((InvalidationListener) invalidated -> {
+                    filteredList = new FilteredList<>(comboBox.getItems());
+                    listView.setItems(filteredList);
+                });
+                filteredList = new FilteredList<>(comboBox.getItems());
+            } else {
+                filteredList = new FilteredList<>(FXCollections.observableArrayList());
+            }
+            listView.setItems(filteredList);
+        });
     }
 
     /**
@@ -280,15 +405,13 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
      * the popup handling when the mouse is pressed.
      */
     private void iconBehavior() {
-        RippleGenerator rg = icon.getRippleGenerator();
-        rg.setRippleRadius(8);
-        rg.setInDuration(Duration.millis(350));
+        icon.rippleGeneratorBehavior(event ->
+                new RipplePosition(icon.getWidth() / 2, icon.getHeight() / 2)
+        );
 
-        icon.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            rg.setGeneratorCenterX(icon.getWidth() / 2);
-            rg.setGeneratorCenterY(icon.getHeight() / 2);
-            rg.createRipple();
-        });
+        MFXCircleRippleGenerator rg = icon.getRippleGenerator();
+        rg.setAnimationSpeed(1.3);
+        rg.setRippleRadius(8);
 
         icon.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (!popup.isShowing()) {
@@ -310,10 +433,16 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
     /**
      * This method builds the label used to display the selected value of the combo box.
      */
-    protected Label buildLabel() {
-        Label label = new Label("");
+    protected MFXLabel buildLabel() {
+        MFXLabel label = new MFXLabel("");
+        label.setAlignment(Pos.CENTER_LEFT);
+        label.setContainerPadding(new Insets(0, 0, 0, 2));
         label.setMinWidth(snappedLeftInset() + minWidth + snappedRightInset());
         label.setMouseTransparent(true);
+        label.promptTextProperty().bind(getSkinnable().promptTextProperty());
+        label.setLineColor(Color.TRANSPARENT);
+        label.setUnfocusedLineColor(Color.TRANSPARENT);
+        label.getStylesheets().setAll(getSkinnable().getUserAgentStylesheet());
 
         return label;
     }
@@ -398,6 +527,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
 
         valueLabel.setVisible(false);
         searchField = new MFXTextField("");
+        searchField.setMFXContextMenu(null);
         comboBox.editorFocusedProperty().bind(searchField.focusedProperty());
         searchField.setPromptText("Search...");
         searchField.setId("search-field");
@@ -458,10 +588,8 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
      * Used to generate the ripple effect of the icon when an event filter consumes the event.
      */
     private void forceRipple() {
-        RippleGenerator rg = icon.getRippleGenerator();
-        rg.setGeneratorCenterX(icon.getWidth() / 2);
-        rg.setGeneratorCenterY(icon.getHeight() / 2);
-        rg.createRipple();
+        MFXCircleRippleGenerator rg = icon.getRippleGenerator();
+        rg.generateRipple(null);
     }
 
     /**
@@ -508,7 +636,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         if (item instanceof Labeled) {
             Labeled nodeItem = (Labeled) item;
             if (nodeItem.getGraphic() != null) {
-                valueLabel.setGraphic(new MFXSnapshotWrapper(nodeItem.getGraphic()).getGraphic());
+                valueLabel.setLeadingIcon(new MFXSnapshotWrapper(nodeItem.getGraphic()).getGraphic());
             }
             valueLabel.setText(nodeItem.getText());
         } else {
@@ -553,17 +681,17 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
 
     @Override
     protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return Math.max(super.computeMinHeight(width, topInset, rightInset, bottomInset, leftInset), 30);
+        return Math.max(super.computeMinHeight(width, topInset, rightInset, bottomInset, leftInset), 27);
     }
 
     @Override
     protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return super.computePrefWidth(height, topInset, rightInset, bottomInset, leftInset);
+        return getSkinnable().prefWidth(height);
     }
 
     @Override
     protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return super.computePrefHeight(width, topInset, rightInset, bottomInset, leftInset);
+        return getSkinnable().prefHeight(width);
     }
 
     @Override
@@ -576,15 +704,23 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
     }
 
     @Override
-    protected void layoutChildren(double contentX, double contentY, double contentWidth, double contentHeight) {
-        super.layoutChildren(contentX, contentY, contentWidth, contentHeight);
+    protected void layoutChildren(double x, double y, double w, double h) {
+        super.layoutChildren(x, y, w, h);
 
+        double lw = snapSizeX(LabelUtils.computeLabelWidth(validate));
+        double lh = snapSizeY(LabelUtils.computeTextHeight(validate.getFont(), validate.getText()));
+        double lx = 0;
+        double ly = h + (padding * 0.7);
+
+        validate.resizeRelocate(lx, ly, lw, lh);
+
+        double extraX = getSkinnable().getComboStyle() == Styles.ComboBoxStyles.STYLE3 ? 5 : 3;
         double iconWidth = icon.getPrefWidth();
         double iconHeight = icon.getPrefHeight();
-        double center = ((snappedTopInset() + snappedBottomInset()) / 2.0) + ((contentHeight - iconHeight) / 2.0);
-        icon.resizeRelocate(contentWidth - iconWidth, center, iconWidth, iconHeight);
-        focusedLine.relocate(0, contentHeight);
-        unfocusedLine.relocate(0, contentHeight);
+        double center = ((snappedTopInset() + snappedBottomInset()) / 2.0) + ((h - iconHeight) / 2.0);
+        icon.resizeRelocate(w - iconWidth + extraX, center, iconWidth, iconHeight);
+        focusedLine.relocate(0, h);
+        unfocusedLine.relocate(0, h);
     }
 
     private static class FilterListCell<T> extends MFXFlowlessListCell<T> {
@@ -627,6 +763,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
             if (data instanceof Node) {
                 getChildren().setAll((Node) data);
             } else {
+                setEmpty(data.toString().isEmpty());
                 Label label = new Label(data.toString());
                 label.getStyleClass().add("data-label");
                 getChildren().setAll(label);

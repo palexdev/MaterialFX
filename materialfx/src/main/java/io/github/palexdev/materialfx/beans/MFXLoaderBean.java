@@ -86,7 +86,7 @@ public class MFXLoaderBean {
     }
 
     /**
-     * Utils class that facilitates the creation of {@code MFXLoaderBean}s with fluent api.
+     * Utils class that facilitates the creation of {@code MFXLoaderBeans} with fluent api.
      */
     public static class Builder {
         private final URL fxmlURL;

@@ -31,7 +31,7 @@ import javafx.scene.layout.HBox;
 /**
  * Base class for all cells used in list views based on Flowless,
  * defines common properties and behavior (e.g selection), has the selected property
- * and pseudo class ":selected" for usage in CSS.
+ * and PseudoClass ":selected" for usage in CSS.
  * <p>
  * Extends {@link HBox} and implements {@link Cell}.
  *
@@ -46,7 +46,11 @@ public abstract class AbstractMFXFlowlessListCell<T> extends HBox implements Cel
     protected final DoubleProperty fixedCellHeight = new SimpleDoubleProperty();
 
     private final ReadOnlyBooleanWrapper selected = new ReadOnlyBooleanWrapper();
+    private final ReadOnlyBooleanWrapper empty = new ReadOnlyBooleanWrapper();
     protected final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
+    protected final PseudoClass EMPTY_PSEUDO_CLASS = PseudoClass.getPseudoClass("empty");
+
+    protected final BooleanProperty showEmpty = new SimpleBooleanProperty(false);
 
     //================================================================================
     // Constructors
@@ -88,19 +92,26 @@ public abstract class AbstractMFXFlowlessListCell<T> extends HBox implements Cel
      * Sets the following behaviors:
      * <p>
      * - Calls {@link #updateSelection(MouseEvent)} on mouse pressed.<p>
-     * - Updates the selected pseudo class state when selected property changes.<p>
+     * - Updates the selected PseudoClass state when selected property changes.<p>
      * - Calls {@link #afterUpdateIndex()} when the index property changes.<p>
      * - Updates the selected property according to the list view' selection model changes.
      */
     protected void setBehavior() {
         selected.addListener(invalidated -> pseudoClassStateChanged(SELECTED_PSEUDO_CLASS, selected.get()));
-        addEventFilter(MouseEvent.MOUSE_PRESSED, this::updateSelection);
-        index.addListener(invalidated -> afterUpdateIndex());
-        getSelectionModel().selectedItemsProperty().addListener((InvalidationListener) invalidated -> {
-            if (isSelected() && !getSelectionModel().containSelected(getIndex())) {
-                setSelected(false);
+        empty.addListener(invalidated -> {
+            pseudoClassStateChanged(EMPTY_PSEUDO_CLASS, empty.get());
+            if (isEmpty()) {
+                if (!isShowEmpty()) {
+                    prefHeightProperty().unbind();
+                    setPrefHeight(0);
+                } else {
+                    prefHeightProperty().bind(fixedCellHeight);
+                }
             }
         });
+        addEventFilter(MouseEvent.MOUSE_PRESSED, this::updateSelection);
+        index.addListener(invalidated -> afterUpdateIndex());
+        getSelectionModel().selectedItemsProperty().addListener((InvalidationListener) invalidated -> setSelected(getSelectionModel().containSelected(getIndex())));
     }
 
     /**
@@ -108,7 +119,7 @@ public abstract class AbstractMFXFlowlessListCell<T> extends HBox implements Cel
      * then according to the new state updates the selection model.
      * <p></p>
      * If true and the selection model doesn't already contain the cell index then calls
-     * {@link ListSelectionModel#select(int, T, MouseEvent)} with the cell's index and data.
+     * {@link ListSelectionModel#select(int, Object, MouseEvent)} with the cell's index and data.
      * <p></p>
      * If false calls {@link ListSelectionModel#clearSelectedItem(int)} with the cell's index.
      */
@@ -200,8 +211,41 @@ public abstract class AbstractMFXFlowlessListCell<T> extends HBox implements Cel
         return selected.getReadOnlyProperty();
     }
 
-    public void setSelected(boolean selected) {
+    protected void setSelected(boolean selected) {
         this.selected.set(selected);
+    }
+
+    public boolean isEmpty() {
+        return empty.get();
+    }
+
+    /**
+     * Specifies if the cell is empty.
+     */
+    public ReadOnlyBooleanProperty emptyProperty() {
+        return empty.getReadOnlyProperty();
+    }
+
+    protected void setEmpty(boolean empty) {
+        this.empty.set(empty);
+    }
+
+    public boolean isShowEmpty() {
+        return showEmpty.get();
+    }
+
+    /**
+     * Specifies if empty cell should be visible anyway.
+     * <p></p>
+     * False by default, to change this behavior you must change the listview's
+     * cell factory {@link AbstractMFXFlowlessListView#cellFactoryProperty()}
+     */
+    public BooleanProperty showEmptyProperty() {
+        return showEmpty;
+    }
+
+    public void setShowEmpty(boolean showEmpty) {
+        this.showEmpty.set(showEmpty);
     }
 
     /**

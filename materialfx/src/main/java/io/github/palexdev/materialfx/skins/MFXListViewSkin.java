@@ -40,7 +40,7 @@ import javafx.util.Duration;
 import java.util.Set;
 
 /**
- * This is the implementation of the {@code Skin} associated with every {@code MFXListView}.
+ * This is the implementation of the {@code Skin} associated with every {@link MFXListView}.
  * <p>
  * The most important thing this skin does is replacing the default scrollbars with new ones,
  * this makes styling them a lot more easy.
@@ -242,6 +242,16 @@ public class MFXListViewSkin<T> extends ListViewSkin<T> {
         }
 
         return height;
+    }
+
+    @Override
+    protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return getSkinnable().prefHeight(width);
+    }
+
+    @Override
+    protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return getSkinnable().prefWidth(height);
     }
 
     @Override

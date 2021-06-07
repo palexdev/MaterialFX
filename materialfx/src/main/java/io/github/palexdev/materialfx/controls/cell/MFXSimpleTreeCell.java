@@ -23,12 +23,10 @@ import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXTreeItem;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeCell;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
-import io.github.palexdev.materialfx.effects.RippleGenerator;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 
 /**
  * Simple implementation of a MFXTreeItem cell.
@@ -42,7 +40,7 @@ public class MFXSimpleTreeCell<T> extends AbstractMFXTreeCell<T> {
     // Properties
     //================================================================================
     private final String STYLE_CLASS = "mfx-tree-cell";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-treecell.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTreeCell.css");
 
     //================================================================================
     // Constructors
@@ -83,17 +81,11 @@ public class MFXSimpleTreeCell<T> extends AbstractMFXTreeCell<T> {
      */
     @Override
     protected void defaultDisclosureNode() {
-        MFXIconWrapper disclosureNode = new MFXIconWrapper().addRippleGenerator();
-        disclosureNode.setSize(22);
+        MFXIconWrapper disclosureNode = new MFXIconWrapper().defaultRippleGeneratorBehavior();
         disclosureNode.getStyleClass().setAll("disclosure-node");
+        disclosureNode.setSize(22);
         NodeUtils.makeRegionCircular(disclosureNode, 9.5);
 
-        RippleGenerator generator = disclosureNode.getRippleGenerator();
-        disclosureNode.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            generator.setGeneratorCenterX(disclosureNode.getWidth() / 2);
-            generator.setGeneratorCenterY(disclosureNode.getHeight() / 2);
-            generator.createRipple();
-        });
         setDisclosureNode(disclosureNode);
     }
 

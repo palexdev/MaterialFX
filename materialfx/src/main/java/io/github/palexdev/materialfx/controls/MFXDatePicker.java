@@ -19,17 +19,15 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
+import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.skins.MFXDatePickerContent;
-import io.github.palexdev.materialfx.utils.LoggingUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.css.*;
-import javafx.geometry.HPos;
-import javafx.geometry.Point2D;
-import javafx.geometry.Pos;
-import javafx.geometry.VPos;
+import javafx.geometry.*;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PopupControl;
@@ -39,6 +37,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.StrokeLineCap;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -67,16 +66,18 @@ public class MFXDatePicker extends VBox {
     //================================================================================
     private static final StyleablePropertyFactory<MFXDatePicker> FACTORY = new StyleablePropertyFactory<>(VBox.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-date-picker";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/mfx-datepicker.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXDatePicker.css");
 
     private final DatePicker datePicker;
     private final ObjectProperty<DateTimeFormatter> dateFormatter = new SimpleObjectProperty<>(DateTimeFormatter.ofPattern("dd/M/yyyy"));
 
+    private StackPane stackPane;
     private Label value;
     private MFXFontIcon calendar;
     private Line line;
     private PopupControl popup;
     private MFXDatePickerContent datePickerContent;
+    private MFXCircleRippleGenerator rippleGenerator;
 
     //================================================================================
     // Constructors
@@ -107,26 +108,26 @@ public class MFXDatePicker extends VBox {
         calendar.getStyleClass().add("calendar-icon");
         calendar.setColor(getPickerColor());
         calendar.setSize(20);
-        StackPane pane = new StackPane(value, calendar);
-        pane.setAlignment(Pos.BOTTOM_LEFT);
+        stackPane = new StackPane(value, calendar);
+        stackPane.setPadding(new Insets(5, -2.5, 5, 5));
+        stackPane.setAlignment(Pos.BOTTOM_LEFT);
         StackPane.setAlignment(calendar, Pos.BOTTOM_RIGHT);
 
         line = new Line();
         line.getStyleClass().add("line");
         line.setManaged(false);
         line.setSmooth(true);
-        line.setStrokeWidth(2);
+        line.strokeWidthProperty().bind(lineStrokeWidth);
+        line.strokeLineCapProperty().bind(lineStrokeCap);
         line.setStroke(getLineColor());
-        line.setStartX(-3);
-        line.endXProperty().bind(pane.widthProperty().add(6));
-        line.translateYProperty().bind(heightProperty().add(5));
+        line.endXProperty().bind(widthProperty().add(10));
 
         popup = new PopupControl();
         datePickerContent = new MFXDatePickerContent(datePicker.getValue(), getDateFormatter());
         popup.getScene().setRoot(datePickerContent);
         popup.setAutoHide(true);
 
-        getChildren().addAll(pane, line);
+        getChildren().addAll(stackPane, line);
         addListeners();
 
         if (datePicker.getValue() != null) {
@@ -134,11 +135,26 @@ public class MFXDatePicker extends VBox {
         }
 
         datePickerContent.updateColor((Color) getPickerColor());
+
+        rippleGenerator = new MFXCircleRippleGenerator(this);
+        rippleGenerator.setManaged(false);
+        rippleGenerator.setAnimateBackground(false);
+        rippleGenerator.setAnimationSpeed(2.0);
+        rippleGenerator.setClipSupplier(() -> null);
+        rippleGenerator.setRadiusMultiplier(1.7);
+        rippleGenerator.setRippleColor(Color.rgb(98, 0, 238, 0.3));
+        rippleGenerator.setRipplePositionFunction(event -> {
+            RipplePosition ripplePosition = new RipplePosition();
+            ripplePosition.setXPosition(calendar.getBoundsInParent().getCenterX());
+            ripplePosition.setYPosition(calendar.getBoundsInParent().getCenterY());
+            return ripplePosition;
+        });
+        getChildren().add(0, rippleGenerator);
     }
 
     /**
      * Adds listeners to date picker content currentDateProperty, to {@link #dateFormatter}, to {@link #pickerColor},
-     * to {@link #lineColor}, to {@link #colorText} and disabled property.
+     * to {@link #lineColor}, to calendar icon's {@link MFXFontIcon#colorProperty()}, to {@link #colorText} and disabled property.
      * <p>
      * Adds event handler to calendar icon.
      * <p>
@@ -146,6 +162,7 @@ public class MFXDatePicker extends VBox {
      */
     private void addListeners() {
         calendar.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            rippleGenerator.generateRipple(null);
             if (!popup.isShowing()) {
                 Point2D point = NodeUtils.pointRelativeTo(this, datePickerContent, HPos.CENTER, VPos.BOTTOM, 0, 0, true);
                 popup.show(this, snapPositionX(point.getX() - 4), snapPositionY(point.getY() + 2));
@@ -194,7 +211,18 @@ public class MFXDatePicker extends VBox {
                 value.setTextFill(Color.BLACK);
             }
         });
-        lineColor.addListener((observable, oldValue, newValue) -> line.setStroke(newValue));
+        lineColor.addListener((observable, oldValue, newValue) -> {
+            if (!isDisabled()) {
+                line.setStroke(newValue);
+            }
+        });
+        calendar.colorProperty().addListener((observable, oldValue, newValue) -> {
+            if (!isDisabled()) {
+                calendar.setColor(newValue);
+            } else {
+                calendar.setColor(Color.LIGHTGRAY);
+            }
+        });
         colorText.addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 value.setTextFill(getPickerColor());
@@ -235,10 +263,6 @@ public class MFXDatePicker extends VBox {
     //================================================================================
     // Styleable Properties
     //================================================================================
-
-    /**
-     * Specifies the main color of the date picker and its content.
-     */
     private final StyleableObjectProperty<Paint> pickerColor = new SimpleStyleableObjectProperty<>(
             StyleableProperties.PICKER_COLOR,
             this,
@@ -246,9 +270,6 @@ public class MFXDatePicker extends VBox {
             Color.rgb(98, 0, 238)
     );
 
-    /**
-     * Specifies the line color of the date picker.
-     */
     private final StyleableObjectProperty<Paint> lineColor = new SimpleStyleableObjectProperty<>(
             StyleableProperties.LINE_COLOR,
             this,
@@ -256,9 +277,20 @@ public class MFXDatePicker extends VBox {
             Color.rgb(98, 0, 238, 0.7)
     );
 
-    /**
-     * Specifies if the date picker text should be colored too.
-     */
+    private final StyleableDoubleProperty lineStrokeWidth = new SimpleStyleableDoubleProperty(
+            StyleableProperties.LINE_STROKE_WIDTH,
+            this,
+            "lineStrokeWidth",
+            2.0
+    );
+
+    private final StyleableObjectProperty<StrokeLineCap> lineStrokeCap = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.LINE_STROKE_CAP,
+            this,
+            "lineStrokeCap",
+            StrokeLineCap.ROUND
+    );
+
     private final StyleableBooleanProperty colorText = new SimpleStyleableBooleanProperty(
             StyleableProperties.COLOR_TEXT,
             this,
@@ -266,9 +298,6 @@ public class MFXDatePicker extends VBox {
             false
     );
 
-    /**
-     * Specifies if the date picker popup should close on day selected.
-     */
     private final StyleableBooleanProperty closeOnDaySelected = new SimpleStyleableBooleanProperty(
             StyleableProperties.CLOSE_ON_DAY_SELECTED,
             this,
@@ -276,9 +305,6 @@ public class MFXDatePicker extends VBox {
             true
     );
 
-    /**
-     * Specifies if the month change should be animated.
-     */
     private final StyleableBooleanProperty animateCalendar = new SimpleStyleableBooleanProperty(
             StyleableProperties.ANIMATE_CALENDAR,
             this,
@@ -290,17 +316,14 @@ public class MFXDatePicker extends VBox {
         return pickerColor.get();
     }
 
+    /**
+     * Specifies the main color of the date picker and its content.
+     */
     public StyleableObjectProperty<Paint> pickerColorProperty() {
         return pickerColor;
     }
 
     public void setPickerColor(Paint pickerColor) {
-        try {
-            Color.class.cast(pickerColor);
-        } catch (ClassCastException ex) {
-            LoggingUtils.logException("Picker color must be of type Color", ex);
-        }
-
         this.pickerColor.set(pickerColor);
     }
 
@@ -308,6 +331,9 @@ public class MFXDatePicker extends VBox {
         return lineColor.get();
     }
 
+    /**
+     * Specifies the line color of the date picker.
+     */
     public StyleableObjectProperty<Paint> lineColorProperty() {
         return lineColor;
     }
@@ -316,10 +342,43 @@ public class MFXDatePicker extends VBox {
         this.lineColor.set(lineColor);
     }
 
+    public double getLineStrokeWidth() {
+        return lineStrokeWidth.get();
+    }
+
+    /**
+     * Specifies the line's stroke width.
+     */
+    public StyleableDoubleProperty lineStrokeWidthProperty() {
+        return lineStrokeWidth;
+    }
+
+    public void setLineStrokeWidth(double lineStrokeWidth) {
+        this.lineStrokeWidth.set(lineStrokeWidth);
+    }
+
+    public StrokeLineCap getLineStrokeCap() {
+        return lineStrokeCap.get();
+    }
+
+    /**
+     * Specifies the line's stroke cap.
+     */
+    public StyleableObjectProperty<StrokeLineCap> lineStrokeCapProperty() {
+        return lineStrokeCap;
+    }
+
+    public void setLineStrokeCap(StrokeLineCap lineStrokeCap) {
+        this.lineStrokeCap.set(lineStrokeCap);
+    }
+
     public boolean isColorText() {
         return colorText.get();
     }
 
+    /**
+     * Specifies if the date picker text should be colored too.
+     */
     public StyleableBooleanProperty colorTextProperty() {
         return colorText;
     }
@@ -332,6 +391,9 @@ public class MFXDatePicker extends VBox {
         return closeOnDaySelected.get();
     }
 
+    /**
+     * Specifies if the date picker popup should close on day selected.
+     */
     public StyleableBooleanProperty closeOnDaySelectedProperty() {
         return closeOnDaySelected;
     }
@@ -344,6 +406,9 @@ public class MFXDatePicker extends VBox {
         return animateCalendar.get();
     }
 
+    /**
+     * Specifies if the month change should be animated.
+     */
     public StyleableBooleanProperty animateCalendarProperty() {
         return animateCalendar;
     }
@@ -372,6 +437,21 @@ public class MFXDatePicker extends VBox {
                         Color.rgb(90, 0, 238, 0.7)
                 );
 
+        private static final CssMetaData<MFXDatePicker, Number> LINE_STROKE_WIDTH =
+                FACTORY.createSizeCssMetaData(
+                        "-mfx-line-stroke-width",
+                        MFXDatePicker::lineStrokeWidthProperty,
+                        2.0
+                );
+
+        private static final CssMetaData<MFXDatePicker, StrokeLineCap> LINE_STROKE_CAP =
+                FACTORY.createEnumCssMetaData(
+                        StrokeLineCap.class,
+                        "-mfx-line-stroke-cap",
+                        MFXDatePicker::lineStrokeCapProperty,
+                        StrokeLineCap.ROUND
+                );
+
         private static final CssMetaData<MFXDatePicker, Boolean> COLOR_TEXT =
                 FACTORY.createBooleanCssMetaData(
                         "-mfx-color-text",
@@ -394,7 +474,10 @@ public class MFXDatePicker extends VBox {
                 );
 
         static {
-            cssMetaDataList = List.of(PICKER_COLOR, LINE_COLOR, COLOR_TEXT, CLOSE_ON_DAY_SELECTED, ANIMATE_CALENDAR);
+            cssMetaDataList = List.of(
+                    PICKER_COLOR, COLOR_TEXT, CLOSE_ON_DAY_SELECTED, ANIMATE_CALENDAR,
+                    LINE_COLOR, LINE_STROKE_WIDTH, LINE_STROKE_CAP
+            );
         }
 
     }
@@ -416,8 +499,16 @@ public class MFXDatePicker extends VBox {
         return MFXDatePicker.getControlCssMetaDataList();
     }
 
+    @Override
+    protected void layoutChildren() {
+        super.layoutChildren();
+
+        double ly = snapPositionY(stackPane.getBoundsInParent().getMaxY() + (line.getStrokeWidth() / 2.5));
+        line.relocate(-3, ly);
+    }
+
     //================================================================================
-    // Wrapper Methods
+    // Delegate Methods
     //================================================================================
     public DatePicker getDatePicker() {
         return datePicker;

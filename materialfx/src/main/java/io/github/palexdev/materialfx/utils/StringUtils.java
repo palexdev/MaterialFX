@@ -18,15 +18,18 @@
 
 package io.github.palexdev.materialfx.utils;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
- * Utils class for {@code String}s.
+ * Utils class for {@code Strings}.
  */
 public class StringUtils {
     public static final String EMPTY = "";
     public static final int INDEX_NOT_FOUND = -1;
 
     /**
-     * Finds the difference between two {@code String}s.
+     * Finds the difference between two {@code Strings}.
      *
      * @param str1 The first String
      * @param str2 The second String
@@ -47,7 +50,7 @@ public class StringUtils {
     }
 
     /**
-     * Finds the index at which two {@code CharSequence}s differ.
+     * Finds the index at which two {@code CharSequences} differ.
      *
      * @param cs1 The first sequence
      * @param cs2 The second sequence
@@ -123,6 +126,45 @@ public class StringUtils {
             }
         }
         return false;
+    }
+
+    /**
+     * Checks if thee given string starts with the specifies prefix, ignores case.
+     */
+    public static boolean startsWithIgnoreCase(String str, String prefix) {
+        return str.regionMatches(true, 0, prefix, 0, prefix.length());
+    }
+
+    /**
+     * Checks if the given string ends with the given prefix, ignores case.
+     */
+    public static boolean endsWithIgnoreCase(String str, String suffix) {
+        int suffixLength = suffix.length();
+        return str.regionMatches(true, str.length() - suffixLength, suffix, 0, suffixLength);
+    }
+
+    /**
+     * Checks if the given string contains at least one of the given words.
+     *
+     * @param split this is the character that will split the input string, see {@link String#split(String)}
+     */
+    public static boolean containsAny(String str, String split, String... words) {
+        List<String> inputStringList = Arrays.asList(str.split(split));
+        List<String> wordsList = Arrays.asList(words);
+
+        return wordsList.stream().anyMatch(inputStringList::contains);
+    }
+
+    /**
+     * Checks if the given string contains all the specifies words.
+     *
+     * @param split this is the character that will split the input string, see {@link String#split(String)}
+     */
+    public static boolean containsAll(String str, String split, String... words) {
+        List<String> inputStringList = Arrays.asList(str.split(split));
+        List<String> wordsList = Arrays.asList(words);
+
+        return inputStringList.containsAll(wordsList);
     }
 
     private static boolean regionMatches(final CharSequence cs, final int thisStart,

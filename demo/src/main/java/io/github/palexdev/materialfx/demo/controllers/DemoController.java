@@ -1,10 +1,27 @@
+/*
+ *     Copyright (C) 2021 Parisi Alessandro
+ *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ *     MaterialFX is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     MaterialFX is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package io.github.palexdev.materialfx.demo.controllers;
 
 import io.github.palexdev.materialfx.beans.MFXLoaderBean.Builder;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.demo.MFXResourcesLoader;
-import io.github.palexdev.materialfx.effects.RippleGenerator;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.KeyFrame;
@@ -88,16 +105,9 @@ public class DemoController implements Initializable {
         expandButton.setId("expandButton");
         expandButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> primaryStage.setFullScreen(!primaryStage.isFullScreen()));
 
-        MFXIconWrapper infoButton = new MFXIconWrapper(infoIcon, 30).addRippleGenerator();
-        RippleGenerator rippleGenerator = infoButton.getRippleGenerator();
+        MFXIconWrapper infoButton = new MFXIconWrapper(infoIcon, 30).defaultRippleGeneratorBehavior();
         infoButton.setId("infoButton");
-        infoButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            rippleGenerator.setGeneratorCenterX(event.getX());
-            rippleGenerator.setGeneratorCenterY(event.getY());
-            rippleGenerator.createRipple();
-
-            showInfo();
-        });
+        infoButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> showInfo());
 
         opNavButton = new MFXButton("");
         opNavButton.setId("navButton");
@@ -126,25 +136,28 @@ public class DemoController implements Initializable {
 
         // VLoader
         vLoader.setContentPane(contentPane);
-        vLoader.addItem("BUTTONS", Builder.build(new MFXToggleNode("BUTTONS"), MFXResourcesLoader.load("buttons_demo.fxml")).setDefaultRoot(true));
-        vLoader.addItem("CHECKBOXES", Builder.build(new MFXToggleNode("CHECKBOXES"), MFXResourcesLoader.load("checkboxes_demo.fxml")));
-        vLoader.addItem("COMBOBOXES", Builder.build(new MFXToggleNode("COMBOBOXES"), MFXResourcesLoader.load("combo_boxes_demo.fxml")));
-        vLoader.addItem("DATEPICKERS", Builder.build(new MFXToggleNode("DATEPICKERS"), MFXResourcesLoader.load("datepickers_demo.fxml")));
-        vLoader.addItem("DIALOGS", Builder.build(new MFXToggleNode("DIALOGS"), MFXResourcesLoader.load("dialogs_demo.fxml")).setControllerFactory(controller -> new DialogsController(demoPane)));
-        vLoader.addItem("LABELS", Builder.build(new MFXToggleNode("LABELS"), MFXResourcesLoader.load("labels_demo.fxml")));
-        vLoader.addItem("LISTVIEWS", Builder.build(new MFXToggleNode("LISTVIEWS"), MFXResourcesLoader.load("listviews_demo.fxml")));
-        vLoader.addItem("NOTIFICATIONS", Builder.build(new MFXToggleNode("NOTIFICATIONS"), MFXResourcesLoader.load("notifications_demo.fxml")));
-        vLoader.addItem("PROGRESS_SPINNERS", Builder.build(new MFXToggleNode("PROGRESS_SPINNERS"), MFXResourcesLoader.load("progress_spinners_demo.fxml")));
-        vLoader.addItem("RADIOBUTTONS", Builder.build(new MFXToggleNode("RADIOBUTTONS"), MFXResourcesLoader.load("radio_buttons_demo.fxml")));
-        vLoader.addItem("SCROLLPANES", Builder.build(new MFXToggleNode("SCROLLPANES"), MFXResourcesLoader.load("scrollpanes_demo.fxml")));
-        vLoader.addItem("TABLEVIEWS", Builder.build(new MFXToggleNode("TABLEVIEWS"), MFXResourcesLoader.load("tableviews_demo.fxml")));
-        vLoader.addItem("TEXTFIELDS", Builder.build(new MFXToggleNode("TEXTFIELDS"), MFXResourcesLoader.load("textfields_demo.fxml")));
-        vLoader.addItem("TOGGLES", Builder.build(new MFXToggleNode("TOGGLES"), MFXResourcesLoader.load("toggle_buttons_demo.fxml")));
-        vLoader.addItem("TREEVIEWS", Builder.build(new MFXToggleNode("TREEVIEWS"), MFXResourcesLoader.load("treeviews_demo.fxml")));
+        vLoader.addItem("BUTTONS", Builder.build(new MFXRectangleToggleNode("BUTTONS"), MFXResourcesLoader.load("ButtonsDemo.fxml")).setDefaultRoot(true));
+        vLoader.addItem("CHECKBOXES", Builder.build(new MFXRectangleToggleNode("CHECKBOXES"), MFXResourcesLoader.load("CheckBoxesDemo.fxml")));
+        vLoader.addItem("COMBOBOXES", Builder.build(new MFXRectangleToggleNode("COMBOBOXES"), MFXResourcesLoader.load("ComboBoxesDemo.fxml")));
+        vLoader.addItem("DATEPICKERS", Builder.build(new MFXRectangleToggleNode("DATEPICKERS"), MFXResourcesLoader.load("DatePickersDemo.fxml")));
+        vLoader.addItem("DIALOGS", Builder.build(new MFXRectangleToggleNode("DIALOGS"), MFXResourcesLoader.load("DialogsDemo.fxml")).setControllerFactory(controller -> new DialogsController(demoPane)));
+        vLoader.addItem("LABELS", Builder.build(new MFXRectangleToggleNode("LABELS"), MFXResourcesLoader.load("LabelsDemo.fxml")));
+        vLoader.addItem("LISTVIEWS", Builder.build(new MFXRectangleToggleNode("LISTVIEWS"), MFXResourcesLoader.load("ListViewsDemo.fxml")));
+        vLoader.addItem("NOTIFICATIONS", Builder.build(new MFXRectangleToggleNode("NOTIFICATIONS"), MFXResourcesLoader.load("NotificationsDemo.fxml")));
+        vLoader.addItem("PROGRESS_BARS", Builder.build(new MFXRectangleToggleNode("PROGRESS BARS"), MFXResourcesLoader.load("ProgressBarsDemo.fxml")));
+        vLoader.addItem("PROGRESS_SPINNERS", Builder.build(new MFXRectangleToggleNode("PROGRESS SPINNERS"), MFXResourcesLoader.load("ProgressSpinnersDemo.fxml")));
+        vLoader.addItem("RADIOBUTTONS", Builder.build(new MFXRectangleToggleNode("RADIOBUTTONS"), MFXResourcesLoader.load("RadioButtonsDemo.fxml")));
+        vLoader.addItem("SCROLLPANES", Builder.build(new MFXRectangleToggleNode("SCROLLPANES"), MFXResourcesLoader.load("ScrollPanesDemo.fxml")));
+        vLoader.addItem("STEPPER", Builder.build(new MFXRectangleToggleNode("STEPPER"), MFXResourcesLoader.load("StepperDemo.fxml")));
+        vLoader.addItem("TABLEVIEWS", Builder.build(new MFXRectangleToggleNode("TABLEVIEWS"), MFXResourcesLoader.load("TableViewsDemo.fxml")));
+        vLoader.addItem("TEXTFIELDS", Builder.build(new MFXRectangleToggleNode("TEXTFIELDS"), MFXResourcesLoader.load("TextFieldsDemo.fxml")));
+        vLoader.addItem("TOGGLES", Builder.build(new MFXRectangleToggleNode("TOGGLES"), MFXResourcesLoader.load("ToggleButtonsDemo.fxml")));
+        vLoader.addItem("TREEVIEWS", Builder.build(new MFXRectangleToggleNode("TREEVIEWS"), MFXResourcesLoader.load("TreeViewsDemo.fxml")));
+        vLoader.addItem("FONTRESOURCES", Builder.build(new MFXRectangleToggleNode("FONTRESOURCES"), MFXResourcesLoader.load("FontResourcesDemo.fxml")));
         vLoader.start();
 
         // Others
-        MFXScrollPane.smoothVScrolling(scrollPane);
+        MFXScrollPane.smoothVScrolling(scrollPane, 2);
         primaryStage.sceneProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 Scene scene = primaryStage.getScene();
@@ -162,6 +175,8 @@ public class DemoController implements Initializable {
         });
         navBar.setVisible(false);
         initAnimations();
+
+        demoPane.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> demoPane.requestFocus());
     }
 
     private void initAnimations() {
@@ -175,7 +190,7 @@ public class DemoController implements Initializable {
 
         Timeline fadeOut = MFXAnimationFactory.FADE_OUT.build(navBar, 50);
         Timeline close = new Timeline(
-                new KeyFrame(Duration.millis(300), new KeyValue(navBar.translateXProperty(), -200))
+                new KeyFrame(Duration.millis(300), new KeyValue(navBar.translateXProperty(), -240))
         );
         Timeline right = new Timeline(
                 new KeyFrame(Duration.millis(200), new KeyValue(opNavButton.rotateProperty(), 0))
@@ -200,7 +215,7 @@ public class DemoController implements Initializable {
         MFXDialog infoDialog;
         MFXStageDialog stageDialog;
         try {
-            FXMLLoader loader = new FXMLLoader(MFXResourcesLoader.load("info_dialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(MFXResourcesLoader.load("InfoDialog.fxml"));
             loader.setControllerFactory(controller -> new InfoController(hostServices));
             infoDialog = loader.load();
         } catch (IOException e) {
@@ -212,14 +227,8 @@ public class DemoController implements Initializable {
         StackPane header = (StackPane) infoDialog.lookup("#headerNode");
 
         MFXFontIcon xIcon = new MFXFontIcon("mfx-x", 8);
-        MFXIconWrapper closeButton = new MFXIconWrapper(xIcon, 22).addRippleGenerator();
-        RippleGenerator rippleGenerator = closeButton.getRippleGenerator();
+        MFXIconWrapper closeButton = new MFXIconWrapper(xIcon, 22).defaultRippleGeneratorBehavior();
         closeButton.setId("closeButton");
-        closeButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            rippleGenerator.setGeneratorCenterX(event.getX());
-            rippleGenerator.setGeneratorCenterY(event.getY());
-            rippleGenerator.createRipple();
-        });
         StackPane.setAlignment(closeButton, Pos.TOP_RIGHT);
         StackPane.setMargin(closeButton, new Insets(4, 4, 0, 0));
         NodeUtils.makeRegionCircular(closeButton);
