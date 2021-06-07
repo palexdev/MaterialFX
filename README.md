@@ -45,6 +45,7 @@
 * [License](#license)
 * [Contact](#contact)
 * [Donation](#donation)
+* [Supporters](#supporters)
 
 <!-- ABOUT THE PROJECT -->
 
@@ -71,6 +72,9 @@ Over the years the way of creating GUIs has often changed and JavaFX default app
 That's where this project comes in. The aim of my project is to bring components which follow as much as possible the
 Google's material design guidelines to JavaFX. The second purpose is to provide a successor to the already
 available [JFoenix](https://github.com/jfoenixadmin/JFoenix) library, which is a bit old and has a lot of issues.
+
+In recent months the project has evolved a lot, to the point that it is no longer a simple substitute.
+To date MaterialFX offers not only restyled controls, but also: new and unique controls such as the Stepper, controls completely redone from scratch such as ComboBoxes or TableViews (and many others), and many utilities for JavaFX and Java (NodeUtils, ColorUtils, StringUtils ...).
 
 <!-- GETTING STARTED -->
 
@@ -157,3 +161,13 @@ Ever since I was a kid I have always liked programming, I find it interesting an
 be a difficult and stressful job at times. This is my first public project, and I'm dedicating a lot of time to it. This
 is an open source library of course and everyone can use it for free, but if you feel like it you can make a small
 donation here. [![Donate](https://img.shields.io/badge/$-support-green.svg?style=flat-square)](https://bit.ly/31XB8zD)
+
+<!-- SUPPORTERS -->
+
+# Supporters:
+(If you want your github page to be linked here and you didn't specify your username in the donation, feel free to contact me by email and tell me. Also contact me if for some some reason you don't want to be listed here)
+
+- Alex Hawk
+- *Your name can be here by supporting me at this link, [Support](https://bit.ly/31XB8zD)*
+
+Thank you very very much to all supporters, to all people who contribute to the project, to all people that thanked me, you really made my day
