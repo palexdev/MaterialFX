@@ -26,6 +26,14 @@
     -mfx-progress-color: -mfx-base-color;
 }
 
+.mfx-stepper .track {
+    -fx-fill: -mfx-bar-background;
+}
+
+.mfx-stepper .bar {
+    -fx-fill: -mfx-progress-color;
+}
+
 .mfx-stepper .buttons-box .mfx-button {
     -mfx-depth-level: level1;
     -fx-background-color: white;

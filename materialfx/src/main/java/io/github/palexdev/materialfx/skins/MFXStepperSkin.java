@@ -28,7 +28,7 @@ import io.github.palexdev.materialfx.controls.factories.RippleClipTypeFactory;
 import io.github.palexdev.materialfx.effects.ripple.RippleClipType;
 import javafx.animation.*;
 import javafx.beans.InvalidationListener;
-import javafx.beans.value.ChangeListener;
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -40,8 +40,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Window;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.StrokeType;
 import javafx.util.Duration;
 
 /**
@@ -50,71 +53,80 @@ import javafx.util.Duration;
  * It is basically a {@link BorderPane} with three sections: top, center, bottom.
  * <p>
  * At the top there is the {@link HBox} that contains the {@code MFXStepperToggles} and the progress bar
- * which is realized by using a group and two rectangles. One rectangle is for the background and the other is for the progress.
- * The first one is manually adjusted both for x property and width property.
+ * which is realized by using a group and two rectangles. One rectangle is for the background/track and the other is the progress/bar.
+ * The bar is manually adjusted according to the current selected toggle, its width is set using {@link MFXStepperToggle#getGraphicBounds()}
+ * (+10 to ensure that there's no white space between the bar and the toggle).
  * <p>
- * At the center there is a {@link StackPane} with a minimum size of {@code 400x400}, it is the content pane namely the node that
+ * At the center there is a {@link StackPane}, it is the content pane namely the node that
  * will contain the content specifies by each stepper toggle. The style class is set to "content-pane".
  * <p>
  * At the bottom there is the {@link HBox} that contains the previous and next buttons. The style class is set to "buttons-box".
  * <p></p>
  * The stepper skin is rather delicate because the progress bar is quite hard to manage since every layout change can
- * potentially break. The skin updates the layout by adding a listener to the {@link MFXStepper#needsLayoutProperty()}.
+ * potentially break it. The skin updates the layout by adding a listener to the {@link MFXStepper#needsLayoutProperty()}.
  * When it changes the progress must be computed again with {@link #computeProgress()}.
  * A workaround is also needed in case the progress bar is animated and the layout changes. Without the workaround the
  * progress bar layout is re-computed by using the animation so the reposition process is not instantaneous.
- * To fix this annoying UI issue a boolean flag (buttonWasPressed) is set to true only when buttons are pressed and then set to false when the animation finishes,
+ * To fix this annoying UI issue a boolean flag (buttonWasPressed) is set to true only when buttons are pressed and then set to false right after the layout update,
  * so every layout change is done without playing the animation.
  *
  * @see MFXStepperToggle
  */
 public class MFXStepperSkin extends SkinBase<MFXStepper> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final StackPane contentPane;
     private final HBox stepperBar;
     private final HBox buttonsBox;
     private final MFXButton nextButton;
     private final MFXButton previousButton;
-    private ChangeListener<Boolean> parentSizeListener;
-    private ChangeListener<Window> windowListener;
 
     // Progressbar
-    private final Group progressBar;
+    private final Group progressBarGroup;
     private final double height = 7;
-    private final Rectangle progressRect;
-    private final Rectangle backgroundRect;
-    private ParallelTransition progressAnimation;
+    private final Rectangle bar;
+    private final Rectangle track;
+    private Timeline progressAnimation;
     private boolean buttonWasPressed = false;
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXStepperSkin(MFXStepper stepper) {
         super(stepper);
 
-        progressRect = new Rectangle(0, 0, 0, height);
-        progressRect.fillProperty().bind(stepper.progressColorProperty());
-        progressRect.strokeProperty().bind(stepper.progressBarBackgroundProperty());
-        progressRect.widthProperty().bind(stepper.widthProperty());
-        progressRect.arcWidthProperty().bind(stepper.progressBarBorderRadiusProperty());
-        progressRect.arcHeightProperty().bind(stepper.progressBarBorderRadiusProperty());
-        progressRect.getStyleClass().add("bar-progress");
+        track = buildRectangle("track");
+        track.setHeight(height);
+        track.widthProperty().bind(stepper.widthProperty());
 
-        backgroundRect = new Rectangle(0, height);
-        backgroundRect.fillProperty().bind(stepper.progressBarBackgroundProperty());
-        backgroundRect.arcWidthProperty().bind(stepper.progressBarBorderRadiusProperty());
-        backgroundRect.arcHeightProperty().bind(stepper.progressBarBorderRadiusProperty());
-        backgroundRect.getStyleClass().add("bar-background");
+        bar = buildRectangle("bar");
+        bar.setHeight(height);
 
-        progressAnimation = new ParallelTransition();
-        progressAnimation.setInterpolator(MFXAnimationFactory.getInterpolatorV1());
+        Rectangle clip = new Rectangle();
+        clip.setHeight(height);
+        clip.widthProperty().bind(stepper.widthProperty());
+        clip.arcHeightProperty().bind(stepper.progressBarBorderRadiusProperty());
+        clip.arcWidthProperty().bind(stepper.progressBarBorderRadiusProperty());
+
+        progressBarGroup = new Group(track, bar);
+        progressBarGroup.setManaged(false);
+        progressBarGroup.setClip(clip);
+
+        progressAnimation = new Timeline();
         progressAnimation.setOnFinished(event -> buttonWasPressed = false);
 
-        progressBar = new Group(progressRect, backgroundRect);
-        progressBar.setManaged(false);
-
-        stepperBar = new HBox(progressBar);
+        stepperBar = new HBox(progressBarGroup);
         stepperBar.spacingProperty().bind(stepper.spacingProperty());
         stepperBar.alignmentProperty().bind(stepper.alignmentProperty());
         stepperBar.getChildren().addAll(stepper.getStepperToggles());
         stepperBar.setMinHeight(100);
         stepperBar.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+
+        progressBarGroup.layoutYProperty().bind(Bindings.createDoubleBinding(
+                () -> snapPositionY((stepperBar.getHeight() / 2.0) - (height / 2.0)),
+                stepperBar.heightProperty()
+        ));
 
         nextButton = new MFXButton("Next");
         nextButton.setManaged(false);
@@ -143,15 +155,12 @@ public class MFXStepperSkin extends SkinBase<MFXStepper> {
         container.setBottom(buttonsBox);
         getChildren().add(container);
 
-        parentSizeListener = (observable, oldValue, newValue) -> {
-            if (!newValue) {
-                computeProgress();
-            }
-        };
-        windowListener = (observable, oldValue, newValue) -> computeProgress();
-
         setListeners();
     }
+
+    //================================================================================
+    // Methods
+    //================================================================================
 
     /**
      * Adds the following listeners and handlers/filters.
@@ -184,7 +193,7 @@ public class MFXStepperSkin extends SkinBase<MFXStepper> {
         stepper.getStepperToggles().addListener((InvalidationListener) invalidated -> {
             stepper.reset();
             stepperBar.getChildren().setAll(stepper.getStepperToggles());
-            stepperBar.getChildren().add(0, progressBar);
+            stepperBar.getChildren().add(0, progressBarGroup);
             stepper.next();
 
             PauseTransition pauseTransition = new PauseTransition(Duration.millis(250));
@@ -244,31 +253,23 @@ public class MFXStepperSkin extends SkinBase<MFXStepper> {
     }
 
     /**
-     * Responsible for computing the position and size of the rectangle used to show the progress.
-     * <p>
-     * Keep in mind that the rectangle which is moved is the background rectangle not the progress one.
-     * Think about it as the background rectangle covers the progress one and when some progress is made you want to
-     * uncover the progress one by moving the background one.
+     * Responsible for computing the width of the rectangle(bar) used to show the progress.
      * <p></p>
      * Three cases are evaluated:
-     * <p> - The stepper {@link MFXStepper#lastToggleProperty()} is true, so the background rectangle width will be 0.
-     * <p> - The current stepper toggle is not null, so the background rectangle width will be computed as follows.
+     * <p> - The stepper {@link MFXStepper#lastToggleProperty()} is true, so the bar's width is set to the stepper's width.
+     * <p> - The current stepper toggle is not null, so the bar's width is computed as follows:
      * The toggle's circle bounds are retrieved using {@link MFXStepperToggle#getGraphicBounds()}. The X is computed
-     * as the minX of those Bounds converted from local to parent using {@link Node#localToParent(Bounds)}. The width
-     * is computed as the stepper's width minus the previously calculated X.
-     * <p> - The current stepper toggle is null so the X is 0 and the width is equal to the stepper's width.
+     * as the minX of those Bounds converted from local to parent using {@link Node#localToParent(Bounds)}.
+     * This value, +10 to ensure that there is not white space between the bar and the toggle, will be the bar's width.
+     * <p> - The current stepper toggle is null so the width is set to 0.
      * <p></p>
-     * The computed values are used by {@link #updateProgressBar(double, double)}
-     * <p></p>
-     * It can be tricky to understand but with the given information it should be understandable, maybe draw it, it will
-     * be easier.
-     *
+     * The computed values are used by {@link #updateProgressBar(double)}
      */
     private void computeProgress() {
         MFXStepper stepper = getSkinnable();
 
         if (stepper.isLastToggle()) {
-            updateProgressBar(stepper.getWidth(), 0);
+            updateProgressBar(stepper.getWidth());
             return;
         }
 
@@ -277,36 +278,52 @@ public class MFXStepperSkin extends SkinBase<MFXStepper> {
             Bounds bounds = stepperToggle.getGraphicBounds();
             if (bounds != null) {
                 double minX = snapSizeX(stepperToggle.localToParent(bounds).getMinX());
-                double width = snapSizeX(stepper.getWidth() - minX);
-                updateProgressBar(minX, width);
+                updateProgressBar(minX + 10);
             }
         } else {
-            updateProgressBar(0, stepper.getWidth());
+            updateProgressBar(0);
         }
     }
 
     /**
-     * Sets the background rectangle x and width properties to the given values.
+     * Sets the bar's width property to the given value.
      * If the {@link MFXStepper#animatedProperty()} or the buttonWasPressed flag are false
-     * then the properties are updated immediately. Otherwise they are updated by two separate timelines
-     * played at the same time using a {@link ParallelTransition}.
+     * then the properties are updated immediately (without the animation). Otherwise they are updated by a timeline.
      */
-    private void updateProgressBar(double x, double width) {
+    private void updateProgressBar(double width) {
         MFXStepper stepper = getSkinnable();
         if (!stepper.isAnimated() || !buttonWasPressed) {
-            backgroundRect.setX(x);
-            backgroundRect.setWidth(width);
+            bar.setWidth(width);
             buttonWasPressed = false;
             return;
         }
 
-        KeyFrame keyFrame1 = new KeyFrame(Duration.millis(stepper.getAnimationDuration()), new KeyValue(backgroundRect.xProperty(), x));
-        KeyFrame keyFrame2 = new KeyFrame(Duration.millis(stepper.getAnimationDuration()), new KeyValue(backgroundRect.widthProperty(), width));
-        Timeline timeline1 = new Timeline(keyFrame1);
-        Timeline timeline2 = new Timeline(keyFrame2);
-        progressAnimation.getChildren().setAll(timeline1, timeline2);
+        KeyFrame kf = new KeyFrame(Duration.millis(stepper.getAnimationDuration()), new KeyValue(bar.widthProperty(), width, MFXAnimationFactory.getInterpolatorV2()));
+        progressAnimation.getKeyFrames().setAll(kf);
         progressAnimation.playFromStart();
     }
+
+    /**
+     * Responsible for building the track and the bar for the progress bar.
+     */
+    protected Rectangle buildRectangle(String styleClass) {
+        MFXStepper stepper = getSkinnable();
+
+        Rectangle rectangle = new Rectangle();
+        rectangle.getStyleClass().setAll(styleClass);
+        rectangle.setStroke(Color.TRANSPARENT);
+        rectangle.setStrokeLineCap(StrokeLineCap.ROUND);
+        rectangle.setStrokeLineJoin(StrokeLineJoin.ROUND);
+        rectangle.setStrokeType(StrokeType.INSIDE);
+        rectangle.setStrokeWidth(0);
+        rectangle.arcHeightProperty().bind(stepper.progressBarBorderRadiusProperty());
+        rectangle.arcWidthProperty().bind(stepper.progressBarBorderRadiusProperty());
+        return rectangle;
+    }
+
+    //================================================================================
+    // Override Methods
+    //================================================================================
 
     @Override
     protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
@@ -335,16 +352,13 @@ public class MFXStepperSkin extends SkinBase<MFXStepper> {
             progressAnimation.stop();
         }
         progressAnimation = null;
-        parentSizeListener = null;
-        windowListener = null;
     }
 
     @Override
     protected void layoutChildren(double x, double y, double w, double h) {
         super.layoutChildren(x, y, w, h);
 
-        double barY = snapPositionY((stepperBar.getHeight() / 2.0) - (height / 2.0));
-        progressBar.resizeRelocate(0.0, barY, w, height);
+        progressBarGroup.resize(w, height);
 
         double bw = 125;
         double bh = 34;
