@@ -19,11 +19,11 @@
 @import "Fonts.css";
 
 .mfx-combo-box {
-    -mfx-line-color: rgb(82, 0, 237);
-    -mfx-unfocused-line-color: rgb(159, 159, 159);
     -fx-background-color: rgb(232, 232, 232);
     -fx-background-radius: 3 3 0 0;
     -fx-border-width: 1.5;
+    -mfx-line-color: rgb(82, 0, 237);
+    -mfx-unfocused-line-color: rgb(159, 159, 159);
 }
 
 .mfx-combo-box .label {
@@ -100,4 +100,52 @@
     -fx-font-family: "Open Sans SemiBold";
     -fx-font-size: 11;
     -fx-text-fill: #EF6E6B;
+}
+
+.mfx-combo-box .unfocused-line {
+    -fx-stroke: -mfx-unfocused-line-color;
+}
+
+.mfx-combo-box .focused-line {
+    -fx-stroke: -mfx-line-color;
+}
+
+.mfx-combo-box:invalid .unfocused-line {
+    -fx-stroke: #EF6E6B;
+}
+
+.mfx-combo-box:invalid .focused-line {
+    -fx-stroke: #EF6E6B;
+}
+
+.mfx-combo-box .unfocused-line {
+    -fx-stroke: -mfx-unfocused-line-color;
+}
+
+.mfx-combo-box .focused-line {
+    -fx-stroke: -mfx-line-color;
+}
+
+.mfx-combo-box:invalid .unfocused-line {
+    -fx-stroke: #EF6E6B;
+}
+
+.mfx-combo-box:invalid .focused-line {
+    -fx-stroke: #EF6E6B;
+}
+
+.mfx-combo-box .unfocused-line {
+    -fx-stroke: -mfx-unfocused-line-color;
+}
+
+.mfx-combo-box .focused-line {
+    -fx-stroke: -mfx-line-color;
+}
+
+.mfx-combo-box:invalid .unfocused-line {
+    -fx-stroke: #EF6E6B;
+}
+
+.mfx-combo-box:invalid .focused-line {
+    -fx-stroke: #EF6E6B;
 }

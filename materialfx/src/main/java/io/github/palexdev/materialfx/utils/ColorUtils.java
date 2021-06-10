@@ -18,7 +18,7 @@
 
 package io.github.palexdev.materialfx.utils;
 
-import javafx.scene.paint.Color;
+import javafx.scene.paint.*;
 
 import java.util.Random;
 
@@ -29,6 +29,25 @@ public class ColorUtils {
     private static final Random random = new Random(System.currentTimeMillis());
 
     private ColorUtils() {
+    }
+
+    /**
+     * Converts a JavaFX Paint object to the right CSS string.
+     * <p>
+     * Supports: {@link Color}, {@link LinearGradient}, {@link RadialGradient}.
+     */
+    public static String toCss(Paint paint) {
+        if (paint instanceof LinearGradient) {
+            LinearGradient gradient = (LinearGradient) paint;
+            return linearGradientToString(gradient);
+        }
+
+        if (paint instanceof RadialGradient) {
+            RadialGradient gradient = (RadialGradient) paint;
+            return radialGradientToString(gradient);
+        }
+
+        return rgb((Color) paint);
     }
 
     /**
@@ -62,4 +81,94 @@ public class ColorUtils {
     public static Color getRandomColor() {
         return Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256));
     }
+
+    /**
+     * Util method to convert {@link LinearGradient} to a CSS string.
+     * <p></p>
+     * This is partly a copy of {@link LinearGradient#toString()} but {@code Stops} are correctly converted
+     * for CSS.
+     *
+     * @param gradient the linear gradient to convert
+     * @see Stop
+     */
+    public static String linearGradientToString(LinearGradient gradient) {
+        final StringBuilder s = new StringBuilder("linear-gradient(from ")
+                .append(lengthToString(gradient.getStartX(), gradient.isProportional()))
+                .append(" ").append(lengthToString(gradient.getStartY(), gradient.isProportional()))
+                .append(" to ").append(lengthToString(gradient.getEndX(), gradient.isProportional()))
+                .append(" ").append(lengthToString(gradient.getEndY(), gradient.isProportional()))
+                .append(", ");
+
+        switch (gradient.getCycleMethod()) {
+            case REFLECT:
+                s.append("reflect").append(", ");
+                break;
+            case REPEAT:
+                s.append("repeat").append(", ");
+                break;
+        }
+
+        for (Stop stop : gradient.getStops()) {
+            s.append(stopToString(stop)).append(", ");
+        }
+
+        s.delete(s.length() - 2, s.length());
+        s.append(")");
+
+        return s.toString();
+    }
+
+    /**
+     * Util method to convert {@link RadialGradient} to a CSS string.
+     * <p></p>
+     * This is partly a copy of {@link RadialGradient#toString()} but {@code Stops} are correctly converted
+     * for CSS.
+     *
+     * @param gradient the radial gradient to convert
+     * @see Stop
+     */
+    public static String radialGradientToString(RadialGradient gradient) {
+        final StringBuilder s = new StringBuilder("radial-gradient(focus-angle ").append(gradient.getFocusAngle())
+                .append("deg, focus-distance ").append(gradient.getFocusDistance() * 100)
+                .append("% , center ").append(lengthToString(gradient.getCenterX(), gradient.isProportional()))
+                .append(" ").append(lengthToString(gradient.getCenterY(), gradient.isProportional()))
+                .append(", radius ").append(lengthToString(gradient.getRadius(), gradient.isProportional()))
+                .append(", ");
+
+        switch (gradient.getCycleMethod()) {
+            case REFLECT:
+                s.append("reflect").append(", ");
+                break;
+            case REPEAT:
+                s.append("repeat").append(", ");
+                break;
+        }
+
+        for (Stop stop : gradient.getStops()) {
+            s.append(stopToString(stop)).append(", ");
+        }
+
+        s.delete(s.length() - 2, s.length());
+        s.append(")");
+
+        return s.toString();
+
+    }
+
+    /**
+     * Properly converts a {@link Stop} to string. Partly copied from
+     * {@link Stop#toString()} but the color is converted using {@link #rgba(Color)}.
+     */
+    public static String stopToString(Stop stop) {
+        return rgba(stop.getColor()) + " " + stop.getOffset() * 100 + "%";
+    }
+
+    private static String lengthToString(double value, boolean proportional) {
+        if (proportional) {
+            return (value * 100) + "%";
+        } else {
+            return value + "px";
+        }
+    }
+
 }

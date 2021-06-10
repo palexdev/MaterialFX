@@ -39,3 +39,51 @@
     -fx-text-fill: #EF6E6B;
     -fx-prompt-text-fill: #EF6E6B;
 }
+
+.mfx-text-field .unfocused-line {
+    -fx-stroke: -mfx-unfocused-line-color;
+}
+
+.mfx-text-field .focused-line {
+    -fx-stroke: -mfx-line-color;
+}
+
+.mfx-text-field:invalid .unfocused-line {
+    -fx-stroke: #EF6E6B;
+}
+
+.mfx-text-field:invalid .focused-line {
+    -fx-stroke: #EF6E6B;
+}
+
+.mfx-text-field .unfocused-line {
+    -fx-stroke: -mfx-unfocused-line-color;
+}
+
+.mfx-text-field .focused-line {
+    -fx-stroke: -mfx-line-color;
+}
+
+.mfx-text-field:invalid .unfocused-line {
+    -fx-stroke: #EF6E6B;
+}
+
+.mfx-text-field:invalid .focused-line {
+    -fx-stroke: #EF6E6B;
+}
+
+.mfx-text-field .unfocused-line {
+    -fx-stroke: -mfx-unfocused-line-color;
+}
+
+.mfx-text-field .focused-line {
+    -fx-stroke: -mfx-line-color;
+}
+
+.mfx-text-field:invalid .unfocused-line {
+    -fx-stroke: #EF6E6B;
+}
+
+.mfx-text-field:invalid .focused-line {
+    -fx-stroke: #EF6E6B;
+}
