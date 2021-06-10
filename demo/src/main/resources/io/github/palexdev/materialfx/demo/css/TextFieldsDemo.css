@@ -16,6 +16,8 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+@import "MFXColors.css";
+
 .mfx-text-field {
     -fx-font-family: "Open Sans Regular";
 }

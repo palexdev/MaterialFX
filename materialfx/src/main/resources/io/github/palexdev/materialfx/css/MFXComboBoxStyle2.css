@@ -19,12 +19,12 @@
 @import "Fonts.css";
 
 .mfx-combo-box {
-    -mfx-line-color: rgb(82, 0, 237);
-    -mfx-unfocused-line-color: rgb(159, 159, 159);
     -fx-background-color: white;
     -fx-background-radius: 2px;
     -fx-border-color: -mfx-unfocused-line-color;
     -fx-border-radius: 2px;
+    -mfx-line-color: rgb(82, 0, 237);
+    -mfx-unfocused-line-color: rgb(159, 159, 159);
 }
 
 .mfx-combo-box:focused,

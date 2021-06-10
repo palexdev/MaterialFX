@@ -26,7 +26,6 @@ import io.github.palexdev.materialfx.utils.LabelUtils;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
 import javafx.animation.ScaleTransition;
 import javafx.beans.binding.Bindings;
-import javafx.css.PseudoClass;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -35,10 +34,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This is the implementation of the {@code Skin} associated with every {@link MFXTextField}.
@@ -70,15 +65,6 @@ public class MFXTextFieldSkin extends TextFieldSkin {
 
         unfocusedLine = new Line();
         unfocusedLine.getStyleClass().add("unfocused-line");
-        unfocusedLine.setManaged(false);
-        unfocusedLine.strokeWidthProperty().bind(textField.lineStrokeWidthProperty());
-        unfocusedLine.strokeLineCapProperty().bind(textField.lineStrokeCapProperty());
-        unfocusedLine.strokeProperty().bind(Bindings.createObjectBinding(
-                () -> {
-                    List<PseudoClass> pseudoClasses = new ArrayList<>(textField.getPseudoClassStates());
-                    return pseudoClasses.stream().map(PseudoClass::getPseudoClassName).collect(Collectors.toList()).contains("invalid") ? textField.getInvalidLineColor() : textField.getUnfocusedLineColor();
-                }, textField.focusedProperty(), textField.getPseudoClassStates(), textField.unfocusedLineColorProperty()
-        ));
         unfocusedLine.endXProperty().bind(Bindings.createDoubleBinding(() -> {
             Node icon = textField.getIcon();
             if (icon != null) {
@@ -87,21 +73,13 @@ public class MFXTextFieldSkin extends TextFieldSkin {
             }
             return textField.getWidth();
         }, textField.widthProperty(), textField.iconProperty()));
-        unfocusedLine.setSmooth(true);
+        unfocusedLine.strokeLineCapProperty().bind(textField.lineStrokeCapProperty());
+        unfocusedLine.strokeWidthProperty().bind(textField.lineStrokeWidthProperty());
         unfocusedLine.setManaged(false);
+        unfocusedLine.setSmooth(true);
 
         focusedLine = new Line();
         focusedLine.getStyleClass().add("focused-line");
-        focusedLine.setManaged(false);
-        focusedLine.strokeWidthProperty().bind(textField.lineStrokeWidthProperty());
-        focusedLine.strokeLineCapProperty().bind(textField.lineStrokeCapProperty());
-        focusedLine.strokeProperty().bind(Bindings.createObjectBinding(
-                () -> {
-                    List<PseudoClass> pseudoClasses = new ArrayList<>(textField.getPseudoClassStates());
-                    return pseudoClasses.stream().map(PseudoClass::getPseudoClassName).collect(Collectors.toList()).contains("invalid") ? textField.getInvalidLineColor() : textField.getLineColor();
-                }, textField.focusedProperty(), textField.getPseudoClassStates(), textField.lineColorProperty()
-        ));
-        focusedLine.setSmooth(true);
         focusedLine.endXProperty().bind(Bindings.createDoubleBinding(() -> {
             Node icon = textField.getIcon();
             if (icon != null) {
@@ -110,8 +88,11 @@ public class MFXTextFieldSkin extends TextFieldSkin {
             }
             return textField.getWidth();
         }, textField.widthProperty(), textField.iconProperty()));
-        focusedLine.setScaleX(0.0);
+        focusedLine.strokeLineCapProperty().bind(textField.lineStrokeCapProperty());
+        focusedLine.strokeWidthProperty().bind(textField.lineStrokeWidthProperty());
         focusedLine.setManaged(false);
+        focusedLine.setScaleX(0.0);
+        focusedLine.setSmooth(true);
 
         MFXFontIcon warnIcon = new MFXFontIcon("mfx-exclamation-triangle", Color.RED);
         MFXIconWrapper warnWrapper = new MFXIconWrapper(warnIcon, 10);
@@ -119,7 +100,6 @@ public class MFXTextFieldSkin extends TextFieldSkin {
         validate = new Label();
         validate.setGraphic(warnWrapper);
         validate.getStyleClass().add("validate-label");
-        validate.getStylesheets().setAll(textField.getUserAgentStylesheet());
         validate.textProperty().bind(textField.getValidator().validatorMessageProperty());
         validate.setGraphicTextGap(padding);
         validate.setVisible(false);

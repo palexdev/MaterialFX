@@ -24,14 +24,9 @@ import io.github.palexdev.materialfx.skins.MFXPasswordFieldSkin;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
-import javafx.css.PseudoClass;
 import javafx.scene.control.Skin;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This is my implementation of a password field, a TextField which masks the given input text.
@@ -69,11 +64,7 @@ public class MFXPasswordField extends MFXTextField {
             if (newValue.trim().isEmpty()) {
                 return;
             }
-            if (newValue.length() > 1) {
-                super.set(newValue.substring(0, 1));
-            } else {
-                super.set(newValue);
-            }
+            super.set(newValue.length() > 1 ? newValue.substring(0, 1) : newValue);
         }
     };
     private final BooleanProperty allowCopy = new SimpleBooleanProperty(true);
@@ -109,17 +100,12 @@ public class MFXPasswordField extends MFXTextField {
                 () -> isShowPassword() ? "mfx-eye-slash" : "mfx-eye",
                 showPasswordProperty()
         ));
-        icon.colorProperty().bind(Bindings.createObjectBinding(
-                () -> {
-                    List<PseudoClass> pseudoClasses = new ArrayList<>(getPseudoClassStates());
-                    return pseudoClasses.stream().map(PseudoClass::getPseudoClassName).collect(Collectors.toList()).contains("invalid") ? getInvalidLineColor() : Color.web("#4D4D4D");
-                }, focusedProperty(), getPseudoClassStates()
-        ));
         MFXIconWrapper showPasswordIcon = new MFXIconWrapper(icon, 24).defaultRippleGeneratorBehavior();
         NodeUtils.makeRegionCircular(showPasswordIcon);
         showPasswordIcon.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
             setShowPassword(!isShowPassword());
             positionCaret(getText().length());
+            requestFocus();
             event.consume();
         });
 

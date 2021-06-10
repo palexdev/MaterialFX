@@ -94,9 +94,12 @@ public class MFXPasswordFieldSkin extends MFXTextFieldSkin {
         MFXPasswordField passwordField = (MFXPasswordField) getSkinnable();
 
         passwordField.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            if (event.getClickCount() >= 2 && event.getClickCount() % 2 == 0) {
-                passwordField.selectAll();
-                event.consume();
+            if (!passwordField.isShowPassword()) {
+                if (event.getClickCount() >= 2 && event.getClickCount() % 2 == 0) {
+                    passwordField.selectAll();
+                    passwordField.requestFocus();
+                    event.consume();
+                }
             }
         });
 

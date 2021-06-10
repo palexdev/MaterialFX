@@ -92,20 +92,18 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
 
         unfocusedLine = new Line();
         unfocusedLine.getStyleClass().add("unfocused-line");
-        unfocusedLine.setManaged(false);
-        unfocusedLine.strokeWidthProperty().bind(comboBox.lineStrokeWidthProperty());
-        unfocusedLine.strokeProperty().bind(comboBox.unfocusedLineColorProperty());
-        unfocusedLine.setSmooth(true);
         unfocusedLine.endXProperty().bind(comboBox.widthProperty().subtract(1));
+        unfocusedLine.strokeWidthProperty().bind(comboBox.lineStrokeWidthProperty());
+        unfocusedLine.setManaged(false);
+        unfocusedLine.setSmooth(true);
 
         focusedLine = new Line();
         focusedLine.getStyleClass().add("focused-line");
-        focusedLine.setManaged(false);
-        focusedLine.strokeWidthProperty().bind(comboBox.lineStrokeWidthProperty());
-        focusedLine.strokeProperty().bind(comboBox.lineColorProperty());
-        focusedLine.setSmooth(true);
         focusedLine.endXProperty().bind(comboBox.widthProperty().subtract(1));
+        focusedLine.strokeWidthProperty().bind(comboBox.lineStrokeWidthProperty());
+        focusedLine.setManaged(false);
         focusedLine.setScaleX(0.0);
+        focusedLine.setSmooth(true);
 
         MFXFontIcon warnIcon = new MFXFontIcon("mfx-exclamation-triangle", Color.RED);
         MFXIconWrapper warnWrapper = new MFXIconWrapper(warnIcon, 10);
