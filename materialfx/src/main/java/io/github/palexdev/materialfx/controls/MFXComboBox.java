@@ -19,6 +19,7 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
 import io.github.palexdev.materialfx.controls.enums.DialogType;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.selection.ComboSelectionModelMock;
@@ -47,6 +48,11 @@ import static io.github.palexdev.materialfx.controls.enums.Styles.ComboBoxStyles
  * Extends {@code Control} and provides a new skin since it is built from scratch.
  * <p>
  * Side note: unlike JavaFX's one this is NOT editable.
+ * <p></p>
+ * <b>
+ * Warning: the selection via context menu won't work properly if the combo box data type is a Node.
+ * This is because {@link MFXSnapshotWrapper#getGraphic()} cannot take a screenshot of it since the popup is hidden.
+ * </b>
  *
  * @param <T> The type of the value that has been selected
  * @see ComboSelectionModelMock

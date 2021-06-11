@@ -35,6 +35,7 @@
 ## Table of Contents
 
 * [About the Project and History of JavaFX](#about-the-project-and-history-of-javafx)
+* [Some GIFs](#preview-gifs)
 * [Getting Started](#getting-started)
     * [Build](#build)
     * [Usage](#usage)
@@ -75,6 +76,133 @@ available [JFoenix](https://github.com/jfoenixadmin/JFoenix) library, which is a
 
 In recent months the project has evolved a lot, to the point that it is no longer a simple substitute.
 To date MaterialFX offers not only restyled controls, but also: new and unique controls such as the Stepper, controls completely redone from scratch such as ComboBoxes or TableViews (and many others), and many utilities for JavaFX and Java (NodeUtils, ColorUtils, StringUtils ...).
+
+<!-- PREVIEW GIFS -->
+
+## Preview GIFs
+
+#### Imgur Link: [Gallery](https://imgur.com/gallery/J0HUrSZ)
+
+<i>
+<details>
+<summary>Buttons</summary>
+<br>
+<a href="https://imgur.com/n3bKDN9"><img src="https://i.imgur.com/n3bKDN9.gif" title="source: imgur.com" /></a>
+</details>
+<p></p>
+
+<details>
+<summary>CheckBoxes</summary>
+<br>
+<a href="https://imgur.com/gbf69gq"><img src="https://i.imgur.com/gbf69gq.gif" title="source: imgur.com" /></a>
+</details>
+<p></p>
+
+<details>
+<summary>ComboBoxes</summary>
+<br>
+<a href="https://imgur.com/uS8rwgS"><img src="https://i.imgur.com/uS8rwgS.gif" title="source: imgur.com" /></a>
+</details>
+<p></p>
+
+<details>
+<summary>DatePickers</summary>
+<br>
+<a href="https://imgur.com/QVOBaXG"><img src="https://imgur.com/QVOBaXG.gif" title="source: imgur.com" /></a>
+</details>
+<p></p>
+
+<details>
+<summary>Dialogs</summary>
+<br>
+<a href="https://imgur.com/ilKuKF9"><img src="https://imgur.com/ilKuKF9.gif" title="source: imgur.com" /></a>
+</details>
+<p></p>
+
+<details>
+<summary>Labels</summary>
+<br>
+<a href="https://imgur.com/XWO40LR"><img src="https://imgur.com/XWO40LR.gif" title="source: imgur.com" /></a>
+</details>
+<p></p>
+
+<details>
+<summary>ListViews</summary>
+<br>
+<a href="https://imgur.com/WhYKgUI"><img src="https://imgur.com/WhYKgUI.gif" title="source: imgur.com" /></a>
+</details>
+<p></p>
+
+<details>
+<summary>Notifications</summary>
+<br>
+<a href="https://imgur.com/lT8zqzV"><img src="https://imgur.com/lT8zqzV.gif" title="source: imgur.com" /></a>
+</details>
+<p></p>
+
+<details>
+<summary>ProgressBars</summary>
+<br>
+<a href="https://imgur.com/8FEW5bt"><img src="https://imgur.com/8FEW5bt.gif" title="source: imgur.com" /></a>
+</details>
+<p></p>
+
+<details>
+<summary>ProgressSpinners</summary>
+<br>
+<a href="https://imgur.com/x0FiFXW"><img src="https://imgur.com/x0FiFXW.gif" title="source: imgur.com" /></a>
+</details>
+<p></p>
+
+<details>
+<summary>RadioButtons</summary>
+<br>
+<a href="https://imgur.com/i2fEmjB"><img src="https://imgur.com/i2fEmjB.gif" title="source: imgur.com" /></a>
+</details>
+<p></p>
+
+<details>
+<summary>ScrollPanes</summary>
+<br>
+<a href="https://imgur.com/bqRADeQ"><img src="https://imgur.com/bqRADeQ.gif" title="source: imgur.com" /></a>
+</details>
+<p></p>
+
+<details>
+<summary>Stepper</summary>
+<br>
+<a href="https://imgur.com/tNuAwF4"><img src="https://imgur.com/tNuAwF4.gif" title="source: imgur.com" /></a>
+</details>
+<p></p>
+
+<details>
+<summary>TableViews</summary>
+<br>
+<a href="https://imgur.com/GZYQtDT"><img src="https://imgur.com/GZYQtDT.gif" title="source: imgur.com" /></a>
+</details>
+<p></p>
+
+<details>
+<summary>TextFields</summary>
+<br>
+<a href="https://imgur.com/NYp8LJV"><img src="https://imgur.com/NYp8LJV.gif" title="source: imgur.com" /></a>
+</details>
+<p></p>
+
+<details>
+<summary>Toggles</summary>
+<br>
+<a href="https://imgur.com/HcXXi8q"><img src="https://imgur.com/HcXXi8q.gif" title="source: imgur.com" /></a>
+</details>
+<p></p>
+
+<details>
+<summary>FontResources</summary>
+<br>
+<a href="https://imgur.com/PkCZM0v"><img src="https://imgur.com/PkCZM0v.gif" title="source: imgur.com" /></a>
+</details>
+<p></p>
+</i>
 
 <!-- GETTING STARTED -->
 

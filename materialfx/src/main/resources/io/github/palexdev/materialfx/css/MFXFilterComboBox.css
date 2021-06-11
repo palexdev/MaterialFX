@@ -22,3 +22,13 @@
     -fx-prompt-text-fill: grey;
 }
 
+#search-field .focused-line,
+#search-field .unfocused-line {
+    -fx-stroke: transparent;
+}
+
+#validationIcon {
+    -mfx-color: #EF6E6B;
+}
+
+

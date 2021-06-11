@@ -26,6 +26,8 @@ import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import io.github.palexdev.materialfx.selection.ListCheckModel;
 import io.github.palexdev.materialfx.selection.base.IListCheckModel;
+import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
+import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.css.PseudoClass;
@@ -52,8 +54,6 @@ public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> 
 
     private final ReadOnlyBooleanWrapper checked = new ReadOnlyBooleanWrapper();
     protected static final PseudoClass CHECKED_PSEUDO_CLASS = PseudoClass.getPseudoClass("checked");
-
-    private boolean clearSelectionOnCheck = true;
 
     //================================================================================
     // Constructors
@@ -99,17 +99,20 @@ public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> 
      * Sets the following additional behaviors:
      * <p>
      * - Binds the checked property to the selected property of the combo box.<p>
-     * - Clears the selection (if {@link #clearSelectionOnCheck} is true), updates the
-     * checked PseudoClass state and calls {@link #updateCheck()} when the checked property changes.
+     * - Adds a listener to {@link IListCheckModel#allowsSelectionProperty()} to properly handle selection.
      */
     @Override
     protected void setBehavior() {
         super.setBehavior();
-        checked.bind(checkbox.selectedProperty());
-        checked.addListener(invalidated -> {
-            if (clearSelectionOnCheck) {
+
+        getSelectionModel().allowsSelectionProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
                 getSelectionModel().clearSelection();
             }
+        });
+
+        checked.bind(checkbox.selectedProperty());
+        checked.addListener(invalidated -> {
             pseudoClassStateChanged(CHECKED_PSEUDO_CLASS, checked.get());
             updateCheck();
         });
@@ -132,6 +135,35 @@ public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> 
             checkModel.clearCheckedItem(index);
         } else if (checked && !checkModel.containsChecked(index)) {
             checkModel.check(index, getData());
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p></p>
+     * Overridden to manage the selection properly according to {@link IListCheckModel#allowsSelectionProperty()}
+     */
+    @Override
+    protected void updateSelection(MouseEvent mouseEvent) {
+        if (!getSelectionModel().allowsSelection()) {
+            return;
+        }
+
+        if (NodeUtils.inHierarchy(mouseEvent.getPickResult().getIntersectedNode(), checkbox)) {
+            getSelectionModel().clearSelection();
+            return;
+        }
+
+        IListSelectionModel<T> selectionModel = getSelectionModel();
+        setSelected(!isSelected());
+
+        boolean selected = isSelected();
+        int index = getIndex();
+        if (!selected && selectionModel.containSelected(index)) {
+            selectionModel.clearSelectedItem(index);
+        } else if (selected && !selectionModel.containSelected(index)) {
+            selectionModel.select(index, getData(), mouseEvent);
         }
     }
 
@@ -165,21 +197,6 @@ public class MFXFlowlessCheckListCell<T> extends AbstractMFXFlowlessListCell<T> 
         } else if (checked && !checkModel.containsChecked(index)) {
             checkbox.setSelected(false);
         }
-    }
-
-    public boolean isClearSelectionOnCheck() {
-        return clearSelectionOnCheck;
-    }
-
-    /**
-     * Sets the behavior of the cell when an item is checked.
-     * <p>
-     * Selection and check are handled separately, this means that you can check and select items
-     * at the same time. By setting this flag to true when an item is checked the selection
-     * will be cleared.
-     */
-    public void setClearSelectionOnCheck(boolean clearSelectionOnCheck) {
-        this.clearSelectionOnCheck = clearSelectionOnCheck;
     }
 
     public boolean isChecked() {

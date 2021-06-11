@@ -28,8 +28,10 @@ import javafx.animation.ScaleTransition;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.control.IndexRange;
 import javafx.scene.control.Label;
 import javafx.scene.control.skin.TextFieldSkin;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -56,6 +58,7 @@ public class MFXTextFieldSkin extends TextFieldSkin {
     private final Line unfocusedLine;
     private final Line focusedLine;
     private final Label validate;
+    private IndexRange prev = null;
 
     //================================================================================
     // Constructors
@@ -124,7 +127,7 @@ public class MFXTextFieldSkin extends TextFieldSkin {
     //================================================================================
 
     /**
-     * Adds listeners for: icon, icon insets, line, focus, disabled and validator properties.
+     * Adds listeners for: selection, icon, icon insets, line, focus, disabled and validator properties.
      * <p>
      * Validator: when the control is not focused, and of course if {@code isValidated} is true,
      * all the conditions in the validator are evaluated and if one is false the {@code validate} label is shown.
@@ -136,6 +139,20 @@ public class MFXTextFieldSkin extends TextFieldSkin {
     private void setListeners() {
         MFXTextField textField = (MFXTextField) getSkinnable();
         MFXDialogValidator validator = textField.getValidator();
+
+        textField.selectionProperty().addListener((observable, oldValue, newValue) ->{
+            if (prev == null) {
+                prev = newValue;
+            } else {
+                prev = oldValue;
+            }
+        });
+
+        textField.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            if (prev != null && event.getButton() == MouseButton.SECONDARY) {
+                textField.selectRange(prev.getStart(), prev.getEnd());
+            }
+        });
 
         textField.iconProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null) {

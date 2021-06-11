@@ -38,3 +38,9 @@
 .mfx-label:prompt {
     -mfx-text-fill: #A0A0A0;
 }
+
+
+#editor-node .focused-line,
+#editor-node .unfocused-line {
+    -fx-stroke: transparent;
+}

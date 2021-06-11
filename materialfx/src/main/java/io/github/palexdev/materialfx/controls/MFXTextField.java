@@ -220,14 +220,29 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
                 .setAccelerator("Ctrl + A")
                 .setAction(event -> selectAll());
 
+        MFXContextMenuItem redo = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-redo", 12))
+                .setText("Redo")
+                .setAccelerator("Ctrl + Y")
+                .setAction(event -> redo());
+
+        MFXContextMenuItem undo = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-undo", 12))
+                .setText("Undo")
+                .setAccelerator("Ctrl + Z")
+                .setAction(event -> undo());
+
+
         setMFXContextMenu(
                 MFXContextMenu.Builder.build(this)
                         .addMenuItem(copy)
                         .addMenuItem(cut)
                         .addMenuItem(paste)
                         .addMenuItem(delete)
-                        .addSeparator()
                         .addMenuItem(selectAll)
+                        .addSeparator()
+                        .addMenuItem(redo)
+                        .addMenuItem(undo)
                         .install()
         );
     }

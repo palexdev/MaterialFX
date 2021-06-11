@@ -434,12 +434,16 @@ public class MFXDatePickerContent extends VBox {
         lastSelectedDayCell.addListener((observable, oldValue, newValue) -> {
             LocalDate date = getCurrentDate().withDayOfMonth(Integer.parseInt(newValue.getText()));
             if (date.equals(getCurrentDate())) {
-                setCurrentDate(LocalDate.EPOCH);
+                setCurrentDate(null);
             }
             setCurrentDate(date);
         });
 
-        currentDate.addListener((observable, oldValue, newValue) -> selectedDate.setText(newValue.format(getDateFormatter())));
+        currentDate.addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                selectedDate.setText(newValue.format(getDateFormatter()));
+            }
+        });
 
         dateFormatter.addListener((observable, oldValue, newValue) -> selectedDate.setText(getCurrentDate().format(newValue)));
     }

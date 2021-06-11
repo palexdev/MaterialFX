@@ -25,6 +25,7 @@ import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.utils.LabelUtils;
 import javafx.animation.ScaleTransition;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -35,7 +36,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
@@ -72,6 +72,8 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
             event.consume();
         }
     };
+
+    private ChangeListener<Boolean> editorFocusListener;
 
     //================================================================================
     // Constructors
@@ -204,6 +206,13 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
             }
         });
 
+        label.editorFocusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (label.isFocused()) {
+                return;
+            }
+            buildAndPlayAnimation(newValue);
+        });
+
         label.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (label.isAnimateLines() && focusedLine.getScaleX() != 1.0) {
                 buildAndPlayAnimation(true);
@@ -254,33 +263,29 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
         label.editorFocusedProperty().bind(textField.focusedProperty());
         textField.setId("editor-node");
         textField.setManaged(false);
-        textField.setUnfocusedLineColor(Color.TRANSPARENT);
-        textField.setLineColor(Color.TRANSPARENT);
+        textField.getStylesheets().setAll(label.getUserAgentStylesheet());
 
         textField.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                label.setText(textField.getText());
-                container.getChildren().remove(textField);
-                textNode.setVisible(true);
-                textNode.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                removeEditor(textField);
                 label.requestFocus();
             } else if (event.getCode() == KeyCode.ESCAPE) {
-                container.getChildren().remove(textField);
-                textNode.setVisible(true);
-                textNode.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                removeEditor(textField);
                 label.requestFocus();
             }
         });
 
-        textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) {
-                label.setText(textField.getText());
-                container.getChildren().remove(textField);
-                textNode.setVisible(true);
-                textNode.setPrefWidth(Region.USE_COMPUTED_SIZE);
-                label.requestFocus();
-            }
-        });
+        if (editorFocusListener == null) {
+            editorFocusListener = (observable, oldValue, newValue) -> {
+                if (!newValue) {
+                    label.setText(textField.getText());
+                    container.getChildren().remove(textField);
+                    textNode.setVisible(true);
+                    textNode.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                }
+            };
+        }
+        textField.focusedProperty().addListener(editorFocusListener);
 
         container.getChildren().add(textField);
         computeEditorPosition(textField);
@@ -322,6 +327,21 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
                 .findFirst()
                 .orElse(null);
         return editor != null;
+    }
+
+    /**
+     * Removes the editor and sets its text as the label's text.
+     */
+    private void removeEditor(MFXTextField textField) {
+        MFXLabel label = getSkinnable();
+
+        textNode.setVisible(false);
+        label.setText(textField.getText());
+
+        label.editorFocusedProperty().unbind();
+        textField.focusedProperty().removeListener(editorFocusListener);
+
+        container.getChildren().remove(textField);
     }
 
     //================================================================================

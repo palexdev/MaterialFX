@@ -29,7 +29,7 @@
       <MFXCheckbox fx:id="checkbox" checkedColor="#00e240" markSize="9.0" markType="mfx-variant9-mark" text="CheckBox Validation" />
       <MFXDatePicker fx:id="picker" colorText="true" lineColor="#00c133b2" maxHeight="-Infinity" maxWidth="-Infinity" pickerColor="#00c133" prefHeight="30.0" prefWidth="120.0" />
    </HBox>
-   <Label id="customLabel" alignment="CENTER" layoutX="167.0" layoutY="235.0" prefHeight="26.0" prefWidth="266.0" text="Customization" AnchorPane.leftAnchor="167.0" AnchorPane.rightAnchor="167.0" AnchorPane.topAnchor="260.0" />
+   <Label id="customLabel" alignment="CENTER" layoutX="167.0" layoutY="235.0" prefHeight="26.0" prefWidth="266.0" text="PasswordFields" AnchorPane.leftAnchor="167.0" AnchorPane.rightAnchor="167.0" AnchorPane.topAnchor="260.0" />
    <HBox alignment="CENTER" layoutX="120.0" layoutY="266.0" prefWidth="200.0" spacing="60.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="290.0">
       <padding>
          <Insets bottom="20.0" top="20.0" />

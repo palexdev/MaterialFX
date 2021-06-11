@@ -105,7 +105,8 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         focusedLine.setScaleX(0.0);
         focusedLine.setSmooth(true);
 
-        MFXFontIcon warnIcon = new MFXFontIcon("mfx-exclamation-triangle", Color.RED);
+        MFXFontIcon warnIcon = new MFXFontIcon("mfx-exclamation-triangle", Color.web("#EF6E6B"));
+        warnIcon.setId("validationIcon");
         MFXIconWrapper warnWrapper = new MFXIconWrapper(warnIcon, 10);
 
         validate = new Label();
@@ -530,8 +531,6 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
         searchField.setPromptText("Search...");
         searchField.setId("search-field");
         searchField.getStylesheets().setAll(comboBox.getUserAgentStylesheet());
-        searchField.setUnfocusedLineColor(Color.TRANSPARENT);
-        searchField.setLineColor(Color.TRANSPARENT);
         searchField.setFocusTraversable(false);
 
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
