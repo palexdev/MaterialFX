@@ -26,19 +26,16 @@ import io.github.palexdev.materialfx.utils.LabelUtils;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
 import javafx.animation.ScaleTransition;
 import javafx.beans.binding.Bindings;
-import javafx.css.PseudoClass;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.control.IndexRange;
 import javafx.scene.control.Label;
 import javafx.scene.control.skin.TextFieldSkin;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This is the implementation of the {@code Skin} associated with every {@link MFXTextField}.
@@ -61,6 +58,7 @@ public class MFXTextFieldSkin extends TextFieldSkin {
     private final Line unfocusedLine;
     private final Line focusedLine;
     private final Label validate;
+    private IndexRange prev = null;
 
     //================================================================================
     // Constructors
@@ -70,15 +68,6 @@ public class MFXTextFieldSkin extends TextFieldSkin {
 
         unfocusedLine = new Line();
         unfocusedLine.getStyleClass().add("unfocused-line");
-        unfocusedLine.setManaged(false);
-        unfocusedLine.strokeWidthProperty().bind(textField.lineStrokeWidthProperty());
-        unfocusedLine.strokeLineCapProperty().bind(textField.lineStrokeCapProperty());
-        unfocusedLine.strokeProperty().bind(Bindings.createObjectBinding(
-                () -> {
-                    List<PseudoClass> pseudoClasses = new ArrayList<>(textField.getPseudoClassStates());
-                    return pseudoClasses.stream().map(PseudoClass::getPseudoClassName).collect(Collectors.toList()).contains("invalid") ? textField.getInvalidLineColor() : textField.getUnfocusedLineColor();
-                }, textField.focusedProperty(), textField.getPseudoClassStates(), textField.unfocusedLineColorProperty()
-        ));
         unfocusedLine.endXProperty().bind(Bindings.createDoubleBinding(() -> {
             Node icon = textField.getIcon();
             if (icon != null) {
@@ -87,21 +76,13 @@ public class MFXTextFieldSkin extends TextFieldSkin {
             }
             return textField.getWidth();
         }, textField.widthProperty(), textField.iconProperty()));
-        unfocusedLine.setSmooth(true);
+        unfocusedLine.strokeLineCapProperty().bind(textField.lineStrokeCapProperty());
+        unfocusedLine.strokeWidthProperty().bind(textField.lineStrokeWidthProperty());
         unfocusedLine.setManaged(false);
+        unfocusedLine.setSmooth(true);
 
         focusedLine = new Line();
         focusedLine.getStyleClass().add("focused-line");
-        focusedLine.setManaged(false);
-        focusedLine.strokeWidthProperty().bind(textField.lineStrokeWidthProperty());
-        focusedLine.strokeLineCapProperty().bind(textField.lineStrokeCapProperty());
-        focusedLine.strokeProperty().bind(Bindings.createObjectBinding(
-                () -> {
-                    List<PseudoClass> pseudoClasses = new ArrayList<>(textField.getPseudoClassStates());
-                    return pseudoClasses.stream().map(PseudoClass::getPseudoClassName).collect(Collectors.toList()).contains("invalid") ? textField.getInvalidLineColor() : textField.getLineColor();
-                }, textField.focusedProperty(), textField.getPseudoClassStates(), textField.lineColorProperty()
-        ));
-        focusedLine.setSmooth(true);
         focusedLine.endXProperty().bind(Bindings.createDoubleBinding(() -> {
             Node icon = textField.getIcon();
             if (icon != null) {
@@ -110,8 +91,11 @@ public class MFXTextFieldSkin extends TextFieldSkin {
             }
             return textField.getWidth();
         }, textField.widthProperty(), textField.iconProperty()));
-        focusedLine.setScaleX(0.0);
+        focusedLine.strokeLineCapProperty().bind(textField.lineStrokeCapProperty());
+        focusedLine.strokeWidthProperty().bind(textField.lineStrokeWidthProperty());
         focusedLine.setManaged(false);
+        focusedLine.setScaleX(0.0);
+        focusedLine.setSmooth(true);
 
         MFXFontIcon warnIcon = new MFXFontIcon("mfx-exclamation-triangle", Color.RED);
         MFXIconWrapper warnWrapper = new MFXIconWrapper(warnIcon, 10);
@@ -119,7 +103,6 @@ public class MFXTextFieldSkin extends TextFieldSkin {
         validate = new Label();
         validate.setGraphic(warnWrapper);
         validate.getStyleClass().add("validate-label");
-        validate.getStylesheets().setAll(textField.getUserAgentStylesheet());
         validate.textProperty().bind(textField.getValidator().validatorMessageProperty());
         validate.setGraphicTextGap(padding);
         validate.setVisible(false);
@@ -144,7 +127,7 @@ public class MFXTextFieldSkin extends TextFieldSkin {
     //================================================================================
 
     /**
-     * Adds listeners for: icon, icon insets, line, focus, disabled and validator properties.
+     * Adds listeners for: selection, icon, icon insets, line, focus, disabled and validator properties.
      * <p>
      * Validator: when the control is not focused, and of course if {@code isValidated} is true,
      * all the conditions in the validator are evaluated and if one is false the {@code validate} label is shown.
@@ -156,6 +139,20 @@ public class MFXTextFieldSkin extends TextFieldSkin {
     private void setListeners() {
         MFXTextField textField = (MFXTextField) getSkinnable();
         MFXDialogValidator validator = textField.getValidator();
+
+        textField.selectionProperty().addListener((observable, oldValue, newValue) ->{
+            if (prev == null) {
+                prev = newValue;
+            } else {
+                prev = oldValue;
+            }
+        });
+
+        textField.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            if (prev != null && event.getButton() == MouseButton.SECONDARY) {
+                textField.selectRange(prev.getStart(), prev.getEnd());
+            }
+        });
 
         textField.iconProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null) {

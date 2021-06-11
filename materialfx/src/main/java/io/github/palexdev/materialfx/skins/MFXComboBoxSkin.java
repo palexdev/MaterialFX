@@ -37,10 +37,8 @@ import javafx.animation.KeyValue;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.beans.InvalidationListener;
-import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
-import javafx.css.PseudoClass;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
 import javafx.scene.control.Label;
@@ -52,10 +50,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This is the implementation of the Skin associated with every {@link MFXComboBox}.
@@ -88,30 +82,18 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
 
         unfocusedLine = new Line();
         unfocusedLine.getStyleClass().add("unfocused-line");
-        unfocusedLine.setManaged(false);
-        unfocusedLine.strokeWidthProperty().bind(comboBox.lineStrokeWidthProperty());
-        unfocusedLine.strokeProperty().bind(Bindings.createObjectBinding(
-                () -> {
-                    List<PseudoClass> pseudoClasses = new ArrayList<>(comboBox.getPseudoClassStates());
-                    return pseudoClasses.stream().map(PseudoClass::getPseudoClassName).collect(Collectors.toList()).contains("invalid") ? comboBox.getInvalidLineColor() : comboBox.getUnfocusedLineColor();
-                }, comboBox.focusedProperty(), comboBox.getPseudoClassStates(), comboBox.unfocusedLineColorProperty()
-        ));
-        unfocusedLine.setSmooth(true);
         unfocusedLine.endXProperty().bind(comboBox.widthProperty().subtract(1));
+        unfocusedLine.strokeWidthProperty().bind(comboBox.lineStrokeWidthProperty());
+        unfocusedLine.setManaged(false);
+        unfocusedLine.setSmooth(true);
 
         focusedLine = new Line();
         focusedLine.getStyleClass().add("focused-line");
-        focusedLine.setManaged(false);
-        focusedLine.strokeWidthProperty().bind(comboBox.lineStrokeWidthProperty());
-        focusedLine.strokeProperty().bind(Bindings.createObjectBinding(
-                () -> {
-                    List<PseudoClass> pseudoClasses = new ArrayList<>(comboBox.getPseudoClassStates());
-                    return pseudoClasses.stream().map(PseudoClass::getPseudoClassName).collect(Collectors.toList()).contains("invalid") ? comboBox.getInvalidLineColor() : comboBox.getLineColor();
-                }, comboBox.focusedProperty(), comboBox.getPseudoClassStates(), comboBox.lineColorProperty()
-        ));
-        focusedLine.setSmooth(true);
         focusedLine.endXProperty().bind(comboBox.widthProperty().subtract(1));
+        focusedLine.strokeWidthProperty().bind(comboBox.lineStrokeWidthProperty());
+        focusedLine.setManaged(false);
         focusedLine.setScaleX(0.0);
+        focusedLine.setSmooth(true);
 
         MFXFontIcon warnIcon = new MFXFontIcon("mfx-exclamation-triangle", Color.RED);
         MFXIconWrapper warnWrapper = new MFXIconWrapper(warnIcon, 10);

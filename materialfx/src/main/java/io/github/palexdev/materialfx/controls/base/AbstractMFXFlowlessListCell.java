@@ -46,10 +46,10 @@ public abstract class AbstractMFXFlowlessListCell<T> extends HBox implements Cel
     protected final DoubleProperty fixedCellHeight = new SimpleDoubleProperty();
 
     private final ReadOnlyBooleanWrapper selected = new ReadOnlyBooleanWrapper();
-    private final ReadOnlyBooleanWrapper empty = new ReadOnlyBooleanWrapper();
     protected final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
-    protected final PseudoClass EMPTY_PSEUDO_CLASS = PseudoClass.getPseudoClass("empty");
 
+    private final ReadOnlyBooleanWrapper empty = new ReadOnlyBooleanWrapper();
+    protected final PseudoClass EMPTY_PSEUDO_CLASS = PseudoClass.getPseudoClass("empty");
     protected final BooleanProperty showEmpty = new SimpleBooleanProperty(false);
 
     //================================================================================
@@ -109,6 +109,7 @@ public abstract class AbstractMFXFlowlessListCell<T> extends HBox implements Cel
                 }
             }
         });
+
         addEventFilter(MouseEvent.MOUSE_PRESSED, this::updateSelection);
         index.addListener(invalidated -> afterUpdateIndex());
         getSelectionModel().selectedItemsProperty().addListener((InvalidationListener) invalidated -> setSelected(getSelectionModel().containSelected(getIndex())));

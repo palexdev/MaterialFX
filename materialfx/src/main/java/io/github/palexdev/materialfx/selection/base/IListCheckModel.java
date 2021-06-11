@@ -18,6 +18,7 @@
 
 package io.github.palexdev.materialfx.selection.base;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.MapProperty;
 
 import java.util.List;
@@ -34,4 +35,7 @@ public interface IListCheckModel<T> extends IListSelectionModel<T> {
     T getCheckedItem(int index);
     List<T> getCheckedItems();
     MapProperty<Integer, T> checkedItemsProperty();
+    boolean allowsSelection();
+    BooleanProperty allowsSelectionProperty();
+    void setAllowsSelection(boolean allowsSelection);
 }

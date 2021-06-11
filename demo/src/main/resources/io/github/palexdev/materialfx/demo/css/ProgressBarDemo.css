@@ -16,12 +16,15 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#custom > .track {
-    -fx-background-color: derive(salmon, 60%);
+#custom .track {
+    -fx-fill: derive(salmon, 70%);
 }
 
-#custom > .bar,
-#custom:indeterminate > .bar {
-    -fx-background-color: salmon;
-    -fx-padding: 2.0;
+#custom .bar1,
+#custom:indeterminate .bar1 {
+    -fx-fill: linear-gradient(to bottom right, #6A6AF8 0%, #C850C0 30%, darkorange 100%);
+}
+
+#custom:indeterminate .bar2 {
+    -fx-fill: linear-gradient(to bottom right, #F4D03F 0%, #10d7b4 100%);
 }

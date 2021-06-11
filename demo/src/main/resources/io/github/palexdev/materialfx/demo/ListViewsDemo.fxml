@@ -4,76 +4,87 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="920.0" stylesheets="@css/ListViewsDemo.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.ListViewDemoController">
-    <padding>
-        <Insets left="20.0" right="20.0" />
-    </padding>
-    <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="ListViews" StackPane.alignment="TOP_CENTER">
-        <StackPane.margin>
-            <Insets top="20.0" />
-        </StackPane.margin>
-    </Label>
-    <HBox fx:id="legacyBox" alignment="TOP_CENTER" maxHeight="-Infinity" prefHeight="250.0" prefWidth="680.0" spacing="20.0" visible="false">
-        <StackPane.margin>
-            <Insets top="40.0" />
-        </StackPane.margin>
-        <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="250.0" prefWidth="130.0" spacing="10.0">
-            <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="Standard" />
-            <MFXListView fx:id="stringView" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="120.0" />
-        </VBox>
-        <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="250.0" prefWidth="160.0" spacing="10.0">
-            <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="Labels" />
-            <MFXListView fx:id="labelView" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="150.0" />
-        </VBox>
-        <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="250.0" prefWidth="265.0" spacing="10.0">
-            <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="HBoxes" />
-            <MFXListView fx:id="hBoxView" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="265.0" />
-        </VBox>
-        <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="250.0" prefWidth="135.0" spacing="10.0">
-            <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="125.0" text="Customized and CSS" />
-            <MFXListView id="customView" fx:id="cssView" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="110.0" stylesheets="@css/ListViewsDemo.css" />
-        </VBox>
-    </HBox>
-    <HBox fx:id="newBox" alignment="TOP_CENTER" maxHeight="-Infinity" prefHeight="250.0" prefWidth="680.0" spacing="20.0">
-        <StackPane.margin>
-            <Insets top="40.0" />
-        </StackPane.margin>
-        <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="250.0" prefWidth="130.0" spacing="10.0">
-            <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="Standard" />
-            <MFXFlowlessListView fx:id="stringViewNew" />
-        </VBox>
-        <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="250.0" prefWidth="160.0" spacing="10.0">
-            <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="Labels" />
-            <MFXFlowlessListView fx:id="labelViewNew" />
-        </VBox>
-        <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="250.0" prefWidth="265.0" spacing="10.0">
-            <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="HBoxes" />
-            <MFXFlowlessListView fx:id="hBoxViewNew" />
-        </VBox>
-        <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="250.0" prefWidth="135.0" spacing="10.0">
-            <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="125.0" text="CheckListView" />
-            <MFXFlowlessCheckListView fx:id="checkList" />
-        </VBox>
-        <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="250.0" prefWidth="135.0" spacing="10.0">
-            <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="125.0" text="Customized and CSS" />
-            <MFXFlowlessListView id="customViewNew" fx:id="cssViewNew" />
-        </VBox>
-    </HBox>
-    <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="90.0" prefWidth="128.0" spacing="10.0" StackPane.alignment="BOTTOM_RIGHT">
-        <StackPane.margin>
-            <Insets bottom="5.0" />
-        </StackPane.margin>
-        <MFXButton fx:id="depthButton" prefWidth="70.0" text="3D" />
-        <MFXButton fx:id="colorsButton" text="Change bars color" />
-    </VBox>
-   <MFXButton fx:id="switchButton" buttonType="RAISED" prefWidth="120.0" text="Switch to Legacy" StackPane.alignment="TOP_CENTER">
-      <StackPane.margin>
-         <Insets top="75.0" />
-      </StackPane.margin>
-   </MFXButton>
-   <Label text="Multiple Selection On" StackPane.alignment="TOP_LEFT">
-      <StackPane.margin>
-         <Insets left="6.0" top="115.0" />
-      </StackPane.margin>
-   </Label>
-</StackPane>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="920.0" stylesheets="@css/ListViewsDemo.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.ListViewsDemoController">
+   <Label id="customLabel" alignment="CENTER" layoutX="327.0" layoutY="14.0" prefHeight="26.0" prefWidth="266.0" text="ListViews" AnchorPane.leftAnchor="327.0" AnchorPane.rightAnchor="327.0" AnchorPane.topAnchor="15.0" />
+   <HBox fx:id="legacyBox" alignment="CENTER" layoutX="5.0" layoutY="68.0" spacing="10.0" visible="false" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="60.0">
+      <VBox alignment="TOP_CENTER" spacing="10.0">
+         <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="Standard">
+            <VBox.margin>
+               <Insets top="10.0" />
+            </VBox.margin>
+         </Label>
+         <MFXListView fx:id="stringView" depthLevel="LEVEL0" prefHeight="200.0" />
+      </VBox>
+      <VBox alignment="TOP_CENTER" spacing="10.0">
+         <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="Labels">
+            <VBox.margin>
+               <Insets top="10.0" />
+            </VBox.margin>
+         </Label>
+         <MFXListView fx:id="labelView" depthLevel="LEVEL0" prefHeight="200.0" />
+      </VBox>
+      <VBox alignment="TOP_CENTER" spacing="10.0">
+         <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="HBoxes">
+            <VBox.margin>
+               <Insets top="10.0" />
+            </VBox.margin>
+         </Label>
+         <MFXListView fx:id="hBoxView" depthLevel="LEVEL0" prefHeight="200.0" prefWidth="250.0" />
+      </VBox>
+      <VBox alignment="TOP_CENTER" spacing="10.0">
+         <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="Customized and CSS">
+            <VBox.margin>
+               <Insets top="10.0" />
+            </VBox.margin>
+         </Label>
+         <MFXListView id="customView" fx:id="cssView" depthLevel="LEVEL0" prefHeight="200.0" />
+      </VBox>
+   </HBox>
+   <HBox fx:id="newBox" alignment="CENTER" layoutX="-5.0" layoutY="58.0" spacing="10.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="60.0">
+      <VBox alignment="TOP_CENTER" spacing="10.0">
+         <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="Standard">
+            <VBox.margin>
+               <Insets top="10.0" />
+            </VBox.margin>
+         </Label>
+         <MFXFlowlessListView fx:id="stringViewNew" prefHeight="220.0" prefWidth="150.0" />
+         <Label fx:id="mulLabel" text="Multiple Selection On" />
+      </VBox>
+      <VBox alignment="TOP_CENTER" spacing="10.0">
+         <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="Labels">
+            <VBox.margin>
+               <Insets top="10.0" />
+            </VBox.margin>
+         </Label>
+         <MFXFlowlessListView fx:id="labelViewNew" prefHeight="220.0" prefWidth="150.0" />
+      </VBox>
+      <VBox alignment="TOP_CENTER" spacing="10.0">
+         <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="HBoxes">
+            <VBox.margin>
+               <Insets top="10.0" />
+            </VBox.margin>
+         </Label>
+         <MFXFlowlessListView fx:id="hBoxViewNew" prefHeight="220.0" prefWidth="250.0" />
+      </VBox>
+      <VBox alignment="TOP_CENTER" spacing="10.0">
+         <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="CheckListView">
+            <VBox.margin>
+               <Insets top="10.0" />
+            </VBox.margin>
+         </Label>
+         <MFXFlowlessCheckListView fx:id="checkList" prefHeight="220.0" prefWidth="150.0" />
+         <MFXCheckbox fx:id="allowSelection" markType="mfx-variant7-mark" text="Allow Selection" />
+      </VBox>
+      <VBox alignment="TOP_CENTER" spacing="10.0">
+         <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="Customized and CSS">
+            <VBox.margin>
+               <Insets top="10.0" />
+            </VBox.margin>
+         </Label>
+         <MFXFlowlessListView id="customViewNew" fx:id="cssViewNew" prefHeight="220.0" prefWidth="150.0" />
+      </VBox>
+   </HBox>
+   <MFXButton fx:id="swapButton" buttonType="RAISED" depthLevel="LEVEL1" layoutX="385.0" layoutY="461.0" prefWidth="150.0" text="Swap" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="385.0" AnchorPane.rightAnchor="385.0" />
+   <MFXButton fx:id="depthButton" buttonType="RAISED" depthLevel="LEVEL1" layoutX="774.0" layoutY="440.0" text="3D On/Off" AnchorPane.bottomAnchor="50.0" />
+   <MFXButton fx:id="colorsButton" buttonType="RAISED" depthLevel="LEVEL1" layoutX="753.0" layoutY="475.0" text="Change Bar Colors" AnchorPane.bottomAnchor="10.0" />
+</AnchorPane>

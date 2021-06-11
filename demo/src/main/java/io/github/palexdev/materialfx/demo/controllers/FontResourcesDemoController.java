@@ -77,6 +77,7 @@ public class FontResourcesDemoController implements Initializable {
         l1.setStyle("-fx-background-color: transparent");
         l1.setText("Description: " + fontResource.getDescription());
         l1.setMinWidth(300);
+        l1.setAlignment(Pos.CENTER_LEFT);
 
         MFXLabel l2 = new MFXLabel();
         l2.setLineColor(Color.TRANSPARENT);
@@ -84,6 +85,7 @@ public class FontResourcesDemoController implements Initializable {
         l2.setStyle("-fx-background-color: transparent");
         l2.setText("Code: " + Integer.toHexString(fontResource.getCode() | 0x10000).substring(1).toUpperCase());
         l2.setMinWidth(300);
+        l2.setAlignment(Pos.CENTER_LEFT);
 
         Separator s1 = new Separator(Orientation.VERTICAL);
         s1.setStyle("-fx-fill: white");

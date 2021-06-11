@@ -31,6 +31,8 @@ import javafx.geometry.*;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PopupControl;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -172,12 +174,20 @@ public class MFXDatePicker extends VBox {
         });
 
         datePickerContent.currentDateProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                return;
+            }
+
             datePicker.setValue(newValue);
             value.setText(newValue.format(datePickerContent.getDateFormatter()));
         });
 
         datePickerContent.currentDateProperty().addListener((observable, oldValue, newValue) -> {
             if (!isCloseOnDaySelected()) {
+                return;
+            }
+
+            if (newValue == null || oldValue == null) {
                 return;
             }
 
@@ -242,6 +252,12 @@ public class MFXDatePicker extends VBox {
                 calendar.setColor(getPickerColor());
             }
         });
+
+        popup.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER && isCloseOnEnter()) {
+                popup.hide();
+            }
+        });
     }
 
     public MFXDatePickerContent getContent() {
@@ -303,6 +319,13 @@ public class MFXDatePicker extends VBox {
             this,
             "closeOnDaySelected",
             true
+    );
+
+    private final StyleableBooleanProperty closeOnEnter = new SimpleStyleableBooleanProperty(
+            StyleableProperties.CLOSE_ON_ENTER,
+            this,
+            "closeOnEnter",
+            false
     );
 
     private final StyleableBooleanProperty animateCalendar = new SimpleStyleableBooleanProperty(
@@ -402,6 +425,21 @@ public class MFXDatePicker extends VBox {
         this.closeOnDaySelected.set(closeOnDaySelected);
     }
 
+    public boolean isCloseOnEnter() {
+        return closeOnEnter.get();
+    }
+
+    /**
+     * Specifies if the date picker popup should close on ENTER pressed.
+     */
+    public StyleableBooleanProperty closeOnEnterProperty() {
+        return closeOnEnter;
+    }
+
+    public void setCloseOnEnter(boolean closeOnEnter) {
+        this.closeOnEnter.set(closeOnEnter);
+    }
+
     public boolean isAnimateCalendar() {
         return animateCalendar.get();
     }
@@ -465,6 +503,14 @@ public class MFXDatePicker extends VBox {
                         MFXDatePicker::closeOnDaySelectedProperty,
                         true
                 );
+
+        private static final CssMetaData<MFXDatePicker, Boolean> CLOSE_ON_ENTER =
+                FACTORY.createBooleanCssMetaData(
+                        "-mfx-close-on-enter",
+                        MFXDatePicker::closeOnEnterProperty,
+                        false
+                );
+
 
         private static final CssMetaData<MFXDatePicker, Boolean> ANIMATE_CALENDAR =
                 FACTORY.createBooleanCssMetaData(

@@ -96,3 +96,51 @@
     -fx-font-size: 11;
     -fx-text-fill: #EF6E6B;
 }
+
+.mfx-combo-box .unfocused-line {
+    -fx-stroke: -mfx-unfocused-line-color;
+}
+
+.mfx-combo-box .focused-line {
+    -fx-stroke: -mfx-line-color;
+}
+
+.mfx-combo-box:invalid .unfocused-line {
+    -fx-stroke: #EF6E6B;
+}
+
+.mfx-combo-box:invalid .focused-line {
+    -fx-stroke: #EF6E6B;
+}
+
+.mfx-combo-box .unfocused-line {
+    -fx-stroke: -mfx-unfocused-line-color;
+}
+
+.mfx-combo-box .focused-line {
+    -fx-stroke: -mfx-line-color;
+}
+
+.mfx-combo-box:invalid .unfocused-line {
+    -fx-stroke: #EF6E6B;
+}
+
+.mfx-combo-box:invalid .focused-line {
+    -fx-stroke: #EF6E6B;
+}
+
+.mfx-combo-box .unfocused-line {
+    -fx-stroke: -mfx-unfocused-line-color;
+}
+
+.mfx-combo-box .focused-line {
+    -fx-stroke: -mfx-line-color;
+}
+
+.mfx-combo-box:invalid .unfocused-line {
+    -fx-stroke: #EF6E6B;
+}
+
+.mfx-combo-box:invalid .focused-line {
+    -fx-stroke: #EF6E6B;
+}

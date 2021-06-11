@@ -19,7 +19,9 @@
 package io.github.palexdev.materialfx.selection;
 
 import io.github.palexdev.materialfx.selection.base.IListCheckModel;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.MapProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleMapProperty;
 
 import java.util.List;
@@ -35,6 +37,7 @@ public class ListCheckModel<T> extends ListSelectionModel<T> implements IListChe
     // Properties
     //================================================================================
     private final MapProperty<Integer, T> checkedItems = new SimpleMapProperty<>(getMap());
+    private final BooleanProperty allowsSelection = new SimpleBooleanProperty(false);
 
     //================================================================================
     // Override Methods
@@ -135,5 +138,27 @@ public class ListCheckModel<T> extends ListSelectionModel<T> implements IListChe
     @Override
     public MapProperty<Integer, T> checkedItemsProperty() {
         return checkedItems;
+    }
+
+    @Override
+    public boolean allowsSelection() {
+        return allowsSelection.get();
+    }
+
+    /**
+     * Specifies if the check list also should allow the selection of cells.
+     * <p></p>
+     * Note that even if this is true selection will be cleared when pressing on a checkbox.
+     * <p>
+     * So, to use both you should first check and then select.
+     */
+    @Override
+    public BooleanProperty allowsSelectionProperty() {
+        return allowsSelection;
+    }
+
+    @Override
+    public void setAllowsSelection(boolean allowsSelection) {
+        this.allowsSelection.set(allowsSelection);
     }
 }

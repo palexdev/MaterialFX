@@ -22,6 +22,7 @@ import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.enums.DialogType;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.skins.MFXTextFieldSkin;
+import io.github.palexdev.materialfx.utils.ColorUtils;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
 import io.github.palexdev.materialfx.validation.base.AbstractMFXValidator;
 import io.github.palexdev.materialfx.validation.base.Validated;
@@ -67,7 +68,6 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
     private final ObjectProperty<MFXContextMenu> mfxContextMenu = new SimpleObjectProperty<>();
 
     private MFXDialogValidator validator;
-    private final ObjectProperty<Paint> invalidLineColor = new SimpleObjectProperty<>(Color.web("#EF6E6B"));
     protected static final PseudoClass INVALID_PSEUDO_CLASS = PseudoClass.getPseudoClass("invalid");
 
     //================================================================================
@@ -154,25 +154,6 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
         validator.setTitle(title);
     }
 
-    public Paint getInvalidLineColor() {
-        return invalidLineColor.get();
-    }
-
-    /**
-     * Specifies the color of the focused line when the validator state is invalid.
-     * <p></p>
-     * This workaround is needed because I discovered a rather surprising/shocking bug.
-     * If you set the line color in SceneBuilder (didn't test in Java code) and the validator state is invalid,
-     * the line won't change color as specified in the CSS file, damn you JavaFX :)
-     */
-    public ObjectProperty<Paint> invalidLineColorProperty() {
-        return invalidLineColor;
-    }
-
-    public void setInvalidLineColor(Paint invalidLineColor) {
-        this.invalidLineColor.set(invalidLineColor);
-    }
-
     //================================================================================
     // Methods
     //================================================================================
@@ -239,14 +220,29 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
                 .setAccelerator("Ctrl + A")
                 .setAction(event -> selectAll());
 
+        MFXContextMenuItem redo = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-redo", 12))
+                .setText("Redo")
+                .setAccelerator("Ctrl + Y")
+                .setAction(event -> redo());
+
+        MFXContextMenuItem undo = new MFXContextMenuItem()
+                .setIcon(new MFXFontIcon("mfx-undo", 12))
+                .setText("Undo")
+                .setAccelerator("Ctrl + Z")
+                .setAction(event -> undo());
+
+
         setMFXContextMenu(
                 MFXContextMenu.Builder.build(this)
                         .addMenuItem(copy)
                         .addMenuItem(cut)
                         .addMenuItem(paste)
                         .addMenuItem(delete)
-                        .addSeparator()
                         .addMenuItem(selectAll)
+                        .addSeparator()
+                        .addMenuItem(redo)
+                        .addMenuItem(undo)
                         .install()
         );
     }
@@ -317,14 +313,24 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
             this,
             "lineColor",
             Color.rgb(50, 120, 220)
-    );
+    ) {
+        @Override
+        protected void invalidated() {
+            updateColors();
+        }
+    };
 
     private final StyleableObjectProperty<Paint> unfocusedLineColor = new SimpleStyleableObjectProperty<>(
             StyleableProperties.UNFOCUSED_LINE_COLOR,
             this,
             "unfocusedLineColor",
             Color.rgb(77, 77, 77)
-    );
+    ) {
+        @Override
+        protected void invalidated() {
+            updateColors();
+        }
+    };
 
     private final StyleableDoubleProperty lineStrokeWidth = new SimpleStyleableDoubleProperty(
             StyleableProperties.LINE_STROKE_WIDTH,
@@ -356,6 +362,13 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
 
     public int getTextLimit() {
         return textLimit.get();
+    }
+
+    private void updateColors() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("-mfx-line-color: ").append(ColorUtils.toCss(getLineColor())).append(";\n")
+                .append("-mfx-unfocused-line-color: ").append(ColorUtils.toCss(getUnfocusedLineColor())).append(";\n");
+        setStyle(sb.toString());
     }
 
     /**
@@ -526,7 +539,7 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
 
     }
 
-    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
+    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
         return StyleableProperties.cssMetaDataList;
     }
 
@@ -540,7 +553,7 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
 
     @Override
     public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return MFXTextField.getControlCssMetaDataList();
+        return MFXTextField.getClassCssMetaData();
     }
 
     @Override

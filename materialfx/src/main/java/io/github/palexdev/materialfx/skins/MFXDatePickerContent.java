@@ -434,12 +434,16 @@ public class MFXDatePickerContent extends VBox {
         lastSelectedDayCell.addListener((observable, oldValue, newValue) -> {
             LocalDate date = getCurrentDate().withDayOfMonth(Integer.parseInt(newValue.getText()));
             if (date.equals(getCurrentDate())) {
-                setCurrentDate(LocalDate.EPOCH);
+                setCurrentDate(null);
             }
             setCurrentDate(date);
         });
 
-        currentDate.addListener((observable, oldValue, newValue) -> selectedDate.setText(newValue.format(getDateFormatter())));
+        currentDate.addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                selectedDate.setText(newValue.format(getDateFormatter()));
+            }
+        });
 
         dateFormatter.addListener((observable, oldValue, newValue) -> selectedDate.setText(getCurrentDate().format(newValue)));
     }
@@ -652,6 +656,9 @@ public class MFXDatePickerContent extends VBox {
                     validInput.set(true);
                     selectedDate.setText(date.format(getDateFormatter()));
                     setCurrentDate(LocalDate.parse(selectedDate.getText(), getDateFormatter()));
+
+                    selectYear();
+                    selectDay();
                 } catch (DateTimeParseException ex) {
                     ex.printStackTrace();
                     inputField.getValidator().add(validInput, "Invalid at index " + ex.getErrorIndex());
@@ -764,10 +771,23 @@ public class MFXDatePickerContent extends VBox {
             animateCalendar(forward);
         }
 
+        int oldYear = getYearMonth().getYear();
         if (forward) {
             setYearMonth(getYearMonth().plus(1, MONTHS));
         } else {
             setYearMonth(getYearMonth().minus(1, MONTHS));
+        }
+
+        if (oldYear != getYearMonth().getYear()) {
+            yearsList.stream()
+                    .filter(year -> year.getText().equals(Integer.toString(oldYear)))
+                    .findFirst()
+                    .ifPresent(year -> {
+                        if (year.isSelectedDate()) {
+                            year.setSelectedDate(false);
+                        }
+                    });
+            selectYear();
         }
 
         if (getLastSelectedDayCell() == null) {

@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
 
-public class ListViewDemoController implements Initializable {
+public class ListViewsDemoController implements Initializable {
     private final Random random = new Random(System.currentTimeMillis());
 
     private enum State {
@@ -82,13 +82,19 @@ public class ListViewDemoController implements Initializable {
     private MFXFlowlessListView<String> cssViewNew;
 
     @FXML
-    private MFXButton switchButton;
+    private MFXButton swapButton;
 
     @FXML
     private MFXButton depthButton;
 
     @FXML
     private MFXButton colorsButton;
+
+    @FXML
+    private Label mulLabel;
+
+    @FXML
+    private MFXCheckbox allowSelection;
 
     private ObservableList<String> stringList;
     private ObservableList<Label> labelsList;
@@ -103,13 +109,17 @@ public class ListViewDemoController implements Initializable {
 
         state.addListener((observable, oldValue, newValue) -> {
             if (newValue == State.NEW) {
+                mulLabel.setVisible(true);
                 legacyBox.setVisible(false);
                 newBox.setVisible(true);
             } else {
+                mulLabel.setVisible(false);
                 legacyBox.setVisible(true);
                 newBox.setVisible(false);
             }
         });
+
+        checkList.getSelectionModel().allowsSelectionProperty().bind(allowSelection.selectedProperty());
 
         //  LEGACY //
         stringView.setItems(stringList);
@@ -124,7 +134,7 @@ public class ListViewDemoController implements Initializable {
         checkList.setItems(stringList);
         cssViewNew.setItems(stringList);
 
-        switchButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> updateState());
+        swapButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> updateState());
         depthButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> updateDepth());
         colorsButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> updateColors());
 
@@ -235,7 +245,7 @@ public class ListViewDemoController implements Initializable {
 
     private void updateState() {
         State curr = state.get();
-        switchButton.setText(curr == State.LEGACY ?  "Switch to Legacy" : "Switch to New");
+        swapButton.setText(curr == State.LEGACY ?  "Switch to Legacy" : "Switch to New");
         state.set(curr == State.LEGACY ? State.NEW : State.LEGACY);
     }
 

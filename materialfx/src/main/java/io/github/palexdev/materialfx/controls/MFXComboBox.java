@@ -19,10 +19,12 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
 import io.github.palexdev.materialfx.controls.enums.DialogType;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.selection.ComboSelectionModelMock;
 import io.github.palexdev.materialfx.skins.MFXComboBoxSkin;
+import io.github.palexdev.materialfx.utils.ColorUtils;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
 import io.github.palexdev.materialfx.validation.base.AbstractMFXValidator;
 import io.github.palexdev.materialfx.validation.base.Validated;
@@ -46,6 +48,11 @@ import static io.github.palexdev.materialfx.controls.enums.Styles.ComboBoxStyles
  * Extends {@code Control} and provides a new skin since it is built from scratch.
  * <p>
  * Side note: unlike JavaFX's one this is NOT editable.
+ * <p></p>
+ * <b>
+ * Warning: the selection via context menu won't work properly if the combo box data type is a Node.
+ * This is because {@link MFXSnapshotWrapper#getGraphic()} cannot take a screenshot of it since the popup is hidden.
+ * </b>
  *
  * @param <T> The type of the value that has been selected
  * @see ComboSelectionModelMock
@@ -70,7 +77,6 @@ public class MFXComboBox<T> extends Control implements Validated<MFXDialogValida
     private final ComboSelectionModelMock<T> mockSelection;
 
     private MFXDialogValidator validator;
-    private final ObjectProperty<Paint> invalidLineColor = new SimpleObjectProperty<>(Color.web("#EF6E6B"));
     protected static final PseudoClass INVALID_PSEUDO_CLASS = PseudoClass.getPseudoClass("invalid");
 
     private final ObjectProperty<MFXContextMenu> mfxContextMenu = new SimpleObjectProperty<>();
@@ -160,25 +166,6 @@ public class MFXComboBox<T> extends Control implements Validated<MFXDialogValida
      */
     public void setValidatorTitle(String title) {
         validator.setTitle(title);
-    }
-
-    public Paint getInvalidLineColor() {
-        return invalidLineColor.get();
-    }
-
-    /**
-     * Specifies the color of the focused line when the validator state is invalid.
-     * <p></p>
-     * This workaround is needed because I discovered a rather surprising/shocking bug.
-     * If you set the line color in SceneBuilder (didn't test in Java code) and the validator state is invalid,
-     * the line won't change color as specified in the CSS file, damn you JavaFX :)
-     */
-    public ObjectProperty<Paint> invalidLineColorProperty() {
-        return invalidLineColor;
-    }
-
-    public void setInvalidLineColor(Paint invalidLineColor) {
-        this.invalidLineColor.set(invalidLineColor);
     }
 
     //================================================================================
@@ -388,7 +375,12 @@ public class MFXComboBox<T> extends Control implements Validated<MFXDialogValida
             this,
             "lineColor",
             Color.rgb(82, 0, 237)
-    );
+    ) {
+        @Override
+        protected void invalidated() {
+            updateColors();
+        }
+    };
 
     /**
      * Specifies the unfocusedLine color.
@@ -398,7 +390,12 @@ public class MFXComboBox<T> extends Control implements Validated<MFXDialogValida
             this,
             "unfocusedLineColor",
             Color.rgb(159, 159, 159)
-    );
+    ) {
+        @Override
+        protected void invalidated() {
+            updateColors();
+        }
+    };
 
     /**
      * Specifies the lines' stroke width.
@@ -416,6 +413,13 @@ public class MFXComboBox<T> extends Control implements Validated<MFXDialogValida
             "isValidated",
             false
     );
+
+    private void updateColors() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("-mfx-line-color: ").append(ColorUtils.toCss(getLineColor())).append(";\n")
+                .append("-mfx-unfocused-line-color: ").append(ColorUtils.toCss(getUnfocusedLineColor())).append(";\n");
+        setStyle(sb.toString());
+    }
 
     public ComboBoxStyles getComboStyle() {
         return comboStyle.get();

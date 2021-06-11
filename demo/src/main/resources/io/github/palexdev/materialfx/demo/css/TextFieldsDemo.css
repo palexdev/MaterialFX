@@ -16,6 +16,8 @@
  *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+@import "MFXColors.css";
+
 .mfx-text-field {
     -fx-font-family: "Open Sans Regular";
 }
@@ -36,4 +38,64 @@
 #colors:focused {
     -fx-prompt-text-fill: darkorange;
     -fx-text-fill: darkorange;
+}
+
+#customPassword {
+    -fx-prompt-text-fill: -mfx-purple;
+    -fx-text-fill: -mfx-purple;
+    -mfx-unfocused-line-color: -mfx-purple;
+    -mfx-line-color: darkorange;
+}
+
+#customPassword:focused {
+    -fx-prompt-text-fill: darkorange;
+    -fx-text-fill: darkorange;
+}
+
+#customPassword .mfx-icon-wrapper .mfx-font-icon {
+    -mfx-color: -mfx-purple;
+}
+
+#customPassword:focused .mfx-icon-wrapper .mfx-font-icon {
+    -mfx-color: darkorange
+}
+
+#customPassword {
+    -fx-prompt-text-fill: -mfx-purple;
+    -fx-text-fill: -mfx-purple;
+    -mfx-unfocused-line-color: -mfx-purple;
+    -mfx-line-color: darkorange;
+}
+
+#customPassword:focused {
+    -fx-prompt-text-fill: darkorange;
+    -fx-text-fill: darkorange;
+}
+
+#customPassword .mfx-icon-wrapper .mfx-font-icon {
+    -mfx-color: -mfx-purple;
+}
+
+#customPassword:focused .mfx-icon-wrapper .mfx-font-icon {
+    -mfx-color: darkorange
+}
+
+#customPassword {
+    -fx-prompt-text-fill: -mfx-purple;
+    -fx-text-fill: -mfx-purple;
+    -mfx-unfocused-line-color: linear-gradient(to bottom right, #C01ADD 0%, #6A6AF8 100%);
+    -mfx-line-color: linear-gradient(to bottom right, #6A6AF8 0%, #C850C0 46%, darkorange 100%);
+}
+
+#customPassword:focused {
+    -fx-prompt-text-fill: darkorange;
+    -fx-text-fill: darkorange;
+}
+
+#customPassword .mfx-icon-wrapper .mfx-font-icon {
+    -mfx-color: -mfx-purple;
+}
+
+#customPassword:focused .mfx-icon-wrapper .mfx-font-icon {
+    -mfx-color: darkorange
 }
