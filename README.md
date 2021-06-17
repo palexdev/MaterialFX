@@ -81,7 +81,7 @@ To date MaterialFX offers not only restyled controls, but also: new and unique c
 
 ## Preview GIFs
 
-#### Imgur Link: [Gallery](https://imgur.com/gallery/J0HUrSZ)
+#### Imgur Link: [Gallery](https://gifyu.com/album/cU3)
 
 <i>
 <details>
