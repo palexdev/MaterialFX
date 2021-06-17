@@ -46,7 +46,7 @@ public class ListSelectionModel<T> implements IListSelectionModel<T> {
     //================================================================================
 
     /**
-     * This method is called when the mouse event passed to {@link #select(int, T, MouseEvent)}
+     * This method is called when the mouse event passed to {@link #select(int, Object, MouseEvent)}
      * is null. Since it's null there's no check for isShiftDown() or isControlDown(), so in case
      * of multiple selection enabled the passed index and data will always be added to the map.
      */
@@ -84,7 +84,7 @@ public class ListSelectionModel<T> implements IListSelectionModel<T> {
      * The mouse event is needed in case of multiple selection allowed because
      * we check if the Shift key or Ctrl key were pressed.
      * <p>
-     * If the mouseEvent is null we call the other {@link #select(int, T)} method.
+     * If the mouseEvent is null we call the other {@link #select(int, Object)} method.
      * <p>
      * If the selection is multiple and Shift or Ctrl are pressed the new entry
      * is put in the map.

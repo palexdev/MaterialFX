@@ -26,7 +26,12 @@ dependencies {
 }
 
 application {
-    getMainClass().set(moduleName.concat('/').concat(project.findProperty("chooseMain").toString()))
+    String main = project.findProperty("chooseMain").toString()
+    if (main != "null" && !main.trim().isEmpty()) {
+        getMainClass().set(moduleName.concat('/').concat(main))
+    } else {
+        getMainClass().set("io.github.palexdev.materialfx.demo.Demo")
+    }
 }
 
 jlink {
