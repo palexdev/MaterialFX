@@ -32,6 +32,8 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -177,7 +179,9 @@ public class MFXLegacyTableRow<T> extends TableRow<T> {
                 );
 
         static {
-            cssMetaDataList = List.of(SELECTED_COLOR, HOVER_COLOR);
+            List<CssMetaData<? extends Styleable, ?>> tarCssMetaData = new ArrayList<>(TableRow.getClassCssMetaData());
+            Collections.addAll(tarCssMetaData, SELECTED_COLOR, HOVER_COLOR);
+            cssMetaDataList = Collections.unmodifiableList(tarCssMetaData);
         }
 
     }

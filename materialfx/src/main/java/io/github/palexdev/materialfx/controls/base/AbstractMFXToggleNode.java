@@ -26,6 +26,8 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class AbstractMFXToggleNode extends ToggleButton {
@@ -249,11 +251,9 @@ public abstract class AbstractMFXToggleNode extends ToggleButton {
                 );
 
         static {
-            cssMetaDataList = List.of(
-                    UNSELECTED_COLOR, SELECTED_COLOR,
-                    UNSELECTED_BORDER_COLOR, SELECTED_BORDER_COLOR,
-                    LABEL_TEXT_GAP
-            );
+            List<CssMetaData<? extends Styleable, ?>> tonCssMetaData = new ArrayList<>(ToggleButton.getClassCssMetaData());
+            Collections.addAll(tonCssMetaData, UNSELECTED_COLOR, SELECTED_COLOR, UNSELECTED_BORDER_COLOR, SELECTED_BORDER_COLOR, LABEL_TEXT_GAP);
+            cssMetaDataList = Collections.unmodifiableList(tonCssMetaData);
         }
 
     }

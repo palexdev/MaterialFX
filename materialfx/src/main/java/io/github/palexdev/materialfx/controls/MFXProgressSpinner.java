@@ -25,6 +25,8 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.Skin;
 import javafx.scene.layout.Region;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -128,7 +130,9 @@ public class MFXProgressSpinner extends ProgressIndicator {
                 );
 
         static {
-            cssMetaDataList = List.of(RADIUS, STARTING_ANGLE);
+            List<CssMetaData<? extends Styleable, ?>> priCssMetaData = new ArrayList<>(ProgressIndicator.getClassCssMetaData());
+            Collections.addAll(priCssMetaData, RADIUS, STARTING_ANGLE);
+            cssMetaDataList = Collections.unmodifiableList(priCssMetaData);
         }
     }
 

@@ -64,6 +64,7 @@ public class MFXRectangleToggleNodeSkin extends SkinBase<MFXRectangleToggleNode>
         container.getStyleClass().setAll("container");
         container.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         container.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+        container.alignmentProperty().bind(toggleNode.alignmentProperty());
         container.prefWidthProperty().bind(toggleNode.widthProperty());
         container.prefHeightProperty().bind(toggleNode.heightProperty());
 

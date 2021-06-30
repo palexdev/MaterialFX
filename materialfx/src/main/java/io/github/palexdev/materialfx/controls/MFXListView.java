@@ -33,6 +33,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -247,7 +249,9 @@ public class MFXListView<T> extends ListView<T> {
                 );
 
         static {
-            cssMetaDataList = List.of(HIDE_SCROLLBARS, DEPTH_LEVEL);
+            List<CssMetaData<? extends Styleable, ?>> lsvCssMetaData = new ArrayList<>(ListView.getClassCssMetaData());
+            Collections.addAll(lsvCssMetaData, HIDE_SCROLLBARS, DEPTH_LEVEL);
+            cssMetaDataList = Collections.unmodifiableList(lsvCssMetaData);
         }
 
     }

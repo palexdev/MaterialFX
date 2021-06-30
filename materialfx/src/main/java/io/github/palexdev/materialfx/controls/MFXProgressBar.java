@@ -24,6 +24,8 @@ import javafx.css.*;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Skin;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -98,7 +100,9 @@ public class MFXProgressBar extends ProgressBar {
                 );
 
         static {
-            cssMetaDataList = List.of(ANIMATION_SPEED);
+            List<CssMetaData<? extends Styleable, ?>> prbCssMetaData = new ArrayList<>(ProgressBar.getClassCssMetaData());
+            Collections.addAll(prbCssMetaData, ANIMATION_SPEED);
+            cssMetaDataList = Collections.unmodifiableList(prbCssMetaData);
         }
     }
 

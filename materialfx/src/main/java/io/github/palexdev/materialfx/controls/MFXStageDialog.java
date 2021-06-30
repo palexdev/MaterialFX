@@ -123,8 +123,12 @@ public class MFXStageDialog {
 
     /**
      * Shows the dialog by showing the stage, center the stage in its owner and plays animations if requested
+     * Common method to avoid duplicate code for {@link #show()} and {@link #showAndWait()}.
+     * <p>
+     * This is responsible for playing the show animation, add the scrim effect, and setting the stage position
+     * on screen.
      */
-    public void show() {
+    protected void showCommon() {
         if (dialogStage.getScene() == null) {
             throw new NullPointerException("The dialog has not been set!");
         }
@@ -161,8 +165,22 @@ public class MFXStageDialog {
             dialogStage.setX(manualX);
             dialogStage.setY(manualY);
         }
+    }
 
+    /**
+     * Calls {@link #showCommon()} and then {@link Stage#show()}.
+     */
+    public void show() {
+        showCommon();
         this.dialogStage.show();
+    }
+
+    /**
+     * Calls {@link #showCommon()} and then {@link Stage#showAndWait()}.
+     */
+    public void showAndWait() {
+        showCommon();
+        this.dialogStage.showAndWait();
     }
 
     /**

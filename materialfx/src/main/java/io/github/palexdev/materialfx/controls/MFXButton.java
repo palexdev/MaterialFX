@@ -33,6 +33,8 @@ import javafx.scene.control.Skin;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -321,7 +323,9 @@ public class MFXButton extends Button {
                         ButtonType.FLAT);
 
         static {
-            cssMetaDataList = List.of(DEPTH_LEVEL, BUTTON_TYPE);
+            List<CssMetaData<? extends Styleable, ?>> btnCssMetaData = new ArrayList<>(Button.getClassCssMetaData());
+            Collections.addAll(btnCssMetaData, DEPTH_LEVEL, BUTTON_TYPE);
+            cssMetaDataList = Collections.unmodifiableList(btnCssMetaData);
         }
 
     }

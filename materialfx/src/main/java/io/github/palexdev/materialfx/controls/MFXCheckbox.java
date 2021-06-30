@@ -26,6 +26,8 @@ import javafx.scene.control.Skin;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -195,7 +197,9 @@ public class MFXCheckbox extends CheckBox {
                 );
 
         static {
-            cssMetaDataList = List.of(CHECKED_COLOR, UNCHECKED_COLOR, MARK_TYPE, MARK_SIZE);
+            List<CssMetaData<? extends Styleable, ?>> ckbCssMetaData = new ArrayList<>(CheckBox.getClassCssMetaData());
+            Collections.addAll(ckbCssMetaData, CHECKED_COLOR, UNCHECKED_COLOR, MARK_TYPE, MARK_SIZE);
+            cssMetaDataList = Collections.unmodifiableList(ckbCssMetaData);
         }
     }
 

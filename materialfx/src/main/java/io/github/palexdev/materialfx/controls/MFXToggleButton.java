@@ -29,6 +29,8 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -263,11 +265,9 @@ public class MFXToggleButton extends ToggleButton {
                 );
 
         static {
-            cssMetaDataList = List.of(
-                    TOGGLE_COLOR, UNTOGGLE_COLOR,
-                    TOGGLE_LINE_COLOR, UNTOGGLE_LINE_COLOR,
-                    SIZE
-            );
+            List<CssMetaData<? extends Styleable, ?>> tobCssMetaData = new ArrayList<>(ToggleButton.getClassCssMetaData());
+            Collections.addAll(tobCssMetaData, TOGGLE_COLOR, UNTOGGLE_COLOR, TOGGLE_LINE_COLOR, UNTOGGLE_LINE_COLOR, SIZE);
+            cssMetaDataList = Collections.unmodifiableList(tobCssMetaData);
         }
     }
 

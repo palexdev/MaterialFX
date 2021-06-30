@@ -33,6 +33,8 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -258,7 +260,9 @@ public class MFXListCell<T> extends ListCell<T> {
                 );
 
         static {
-            cssMetaDataList = List.of(SELECTED_COLOR, HOVER_COLOR, CORNER_RADIUS, BACKGROUND_INSETS);
+            List<CssMetaData<? extends Styleable, ?>> licCssMetaData = new ArrayList<>(ListCell.getClassCssMetaData());
+            Collections.addAll(licCssMetaData, SELECTED_COLOR, HOVER_COLOR, CORNER_RADIUS, BACKGROUND_INSETS);
+            cssMetaDataList = Collections.unmodifiableList(licCssMetaData);
         }
 
     }

@@ -50,10 +50,6 @@
     -fx-text-fill: white;
 }
 
-#colored-raised .text {
-    -fx-fill: white;
-}
-
 #colored-raised .mfx-ripple-generator {
     -mfx-ripple-color: rgba(255, 255, 255, 0.4);
 }
@@ -61,10 +57,6 @@
 #custom-ripple {
     -fx-background-color: #55bbff;
     -fx-text-fill: white;
-}
-
-#custom-ripple .text {
-    -fx-fill: white;
 }
 
 #custom-ripple .mfx-ripple-generator {

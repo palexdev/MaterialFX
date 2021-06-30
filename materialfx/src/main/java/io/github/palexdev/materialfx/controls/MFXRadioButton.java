@@ -26,6 +26,8 @@ import javafx.scene.control.Skin;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -202,11 +204,9 @@ public class MFXRadioButton extends RadioButton {
                 );
 
         static {
-            cssMetaDataList = List.of(
-                    SELECTED_COLOR, UNSELECTED_COLOR,
-                    SELECTED_TEXT_COLOR, UNSELECTED_TEXT_COLOR,
-                    CHANGE_TEXT_COLOR
-            );
+            List<CssMetaData<? extends Styleable, ?>> rdbCssMetaData = new ArrayList<>(RadioButton.getClassCssMetaData());
+            Collections.addAll(rdbCssMetaData, SELECTED_COLOR, UNSELECTED_COLOR, SELECTED_TEXT_COLOR, UNSELECTED_TEXT_COLOR, CHANGE_TEXT_COLOR);
+            cssMetaDataList = Collections.unmodifiableList(rdbCssMetaData);
         }
 
     }

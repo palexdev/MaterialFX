@@ -105,8 +105,14 @@ public class MFXPasswordFieldSkin extends MFXTextFieldSkin {
 
         passwordField.addEventFilter(KeyEvent.KEY_TYPED, keyEvent -> {
             if (!isInvalidCharacter(keyEvent.getCharacter().charAt(0))) {
+
                 if (passwordField.getSelection().getLength() > 0) {
                     handleDeletion(passwordField.getText().length());
+                }
+
+                if (passwordField.getText().length() == passwordField.getTextLimit()) {
+                    keyEvent.consume();
+                    return;
                 }
 
                 sb.append(keyEvent.getCharacter());

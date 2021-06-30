@@ -57,7 +57,7 @@ public class MFXFlowlessListView<T> extends AbstractMFXFlowlessListView<T, MFXFl
     // Constructors
     //================================================================================
     public MFXFlowlessListView() {
-        this(List.of());
+        this(FXCollections.observableArrayList());
     }
 
     public MFXFlowlessListView(List<T> items) {

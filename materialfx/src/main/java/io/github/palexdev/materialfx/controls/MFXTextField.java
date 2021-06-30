@@ -40,6 +40,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeLineCap;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -529,12 +531,9 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
                 );
 
         static {
-            cssMetaDataList = List.of(
-                    TEXT_LIMIT,
-                    LINE_COLOR, UNFOCUSED_LINE_COLOR,
-                    LINE_STROKE_WIDTH, LINE_STROKE_CAP,
-                    IS_VALIDATED
-            );
+            List<CssMetaData<? extends Styleable, ?>> tefCssMetaData = new ArrayList<>(TextField.getClassCssMetaData());
+            Collections.addAll(tefCssMetaData, TEXT_LIMIT, LINE_COLOR, UNFOCUSED_LINE_COLOR, LINE_STROKE_WIDTH, LINE_STROKE_CAP, IS_VALIDATED);
+            cssMetaDataList = Collections.unmodifiableList(tefCssMetaData);
         }
 
     }

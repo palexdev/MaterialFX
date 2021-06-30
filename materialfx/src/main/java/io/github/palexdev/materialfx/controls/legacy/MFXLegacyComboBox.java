@@ -42,6 +42,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeLineCap;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -428,12 +430,9 @@ public class MFXLegacyComboBox<T> extends ComboBox<T> implements Validated<MFXDi
                 );
 
         static {
-            cssMetaDataList = List.of(
-                    ANIMATE_LINES,
-                    LINE_COLOR, UNFOCUSED_LINE_COLOR,
-                    LINE_STROKE_WIDTH, LINE_STROKE_CAP,
-                    IS_VALIDATED
-            );
+            List<CssMetaData<? extends Styleable, ?>> lcbCssMetaData = new ArrayList<>(ComboBox.getClassCssMetaData());
+            Collections.addAll(lcbCssMetaData, ANIMATE_LINES, LINE_COLOR, UNFOCUSED_LINE_COLOR, LINE_STROKE_WIDTH, LINE_STROKE_CAP, IS_VALIDATED);
+            cssMetaDataList = Collections.unmodifiableList(lcbCssMetaData);
         }
 
     }
