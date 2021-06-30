@@ -24,6 +24,7 @@ import io.github.palexdev.materialfx.controls.MFXLabel;
 import io.github.palexdev.materialfx.controls.cell.MFXFlowlessListCell;
 import io.github.palexdev.materialfx.font.FontResources;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.materialfx.utils.ScrollUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -55,7 +56,7 @@ public class FontResourcesDemoController implements Initializable {
             cell.setFixedCellHeight(48);
             return cell;
         });
-        MFXFlowlessListView.setSmoothScrolling(list, 5);
+        ScrollUtils.addSmoothScrolling(list, 5);
         populateList();
         count.setText(list.getItems().size() + " Icons");
     }

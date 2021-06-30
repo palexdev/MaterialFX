@@ -24,6 +24,7 @@ import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.demo.MFXResourcesLoader;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.NodeUtils;
+import io.github.palexdev.materialfx.utils.ScrollUtils;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.ParallelTransition;
@@ -157,7 +158,8 @@ public class DemoController implements Initializable {
         vLoader.start();
 
         // Others
-        MFXScrollPane.smoothVScrolling(scrollPane, 2);
+        ScrollUtils.addSmoothScrolling(scrollPane, 2);
+        ScrollUtils.animateScrollBars(scrollPane, 500, 500);
         primaryStage.sceneProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 Scene scene = primaryStage.getScene();

@@ -18,9 +18,13 @@
 
 package io.github.palexdev.materialfx.demo.controllers;
 
-import io.github.palexdev.materialfx.controls.*;
+import io.github.palexdev.materialfx.controls.MFXCheckTreeItem;
+import io.github.palexdev.materialfx.controls.MFXCheckTreeView;
+import io.github.palexdev.materialfx.controls.MFXTreeItem;
+import io.github.palexdev.materialfx.controls.MFXTreeView;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.ColorUtils;
+import io.github.palexdev.materialfx.utils.ScrollUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -61,9 +65,9 @@ public class TreeviewsDemoController implements Initializable {
 
         checkTreeView.setRoot(createCheckRoot());
 
-        MFXScrollPane.smoothVScrolling(treeView);
-        MFXScrollPane.smoothVScrolling(treeViewHide);
-        MFXScrollPane.smoothVScrolling(checkTreeView);
+        ScrollUtils.addSmoothScrolling(treeView);
+        ScrollUtils.addSmoothScrolling(treeViewHide);
+        ScrollUtils.addSmoothScrolling(checkTreeView);
 
         treeView.getSelectionModel().getSelectedItems().addListener(
                 (observable, oldValue, newValue) -> text1.setText("Selected Items Count: " + treeView.getSelectionModel().getSelectedItems().size()));

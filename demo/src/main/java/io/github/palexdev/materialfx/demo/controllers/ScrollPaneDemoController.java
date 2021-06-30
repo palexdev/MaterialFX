@@ -21,6 +21,7 @@ package io.github.palexdev.materialfx.demo.controllers;
 
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import io.github.palexdev.materialfx.utils.ColorUtils;
+import io.github.palexdev.materialfx.utils.ScrollUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
@@ -37,8 +38,9 @@ public class ScrollPaneDemoController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        MFXScrollPane.smoothVScrolling(scrollPaneV);
-        MFXScrollPane.smoothVScrolling(scrollPaneVH);
+        ScrollUtils.addSmoothScrolling(scrollPaneV);
+        ScrollUtils.addSmoothScrolling(scrollPaneVH);
+        ScrollUtils.animateScrollBars(scrollPaneVH);
     }
 
     @FXML

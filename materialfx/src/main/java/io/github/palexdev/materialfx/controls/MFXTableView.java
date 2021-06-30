@@ -374,7 +374,7 @@ public class MFXTableView<T> extends Control {
      */
     public static class MFXTableViewEvent extends Event {
 
-        public static EventType<MFXTableViewEvent> FORCE_UPDATE_EVENT = new EventType<>(ANY, "FORCE_UPDATE_EVENT");
+        public static final EventType<MFXTableViewEvent> FORCE_UPDATE_EVENT = new EventType<>(ANY, "FORCE_UPDATE_EVENT");
 
         public MFXTableViewEvent(EventType<? extends Event> eventType) {
             super(eventType);

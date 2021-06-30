@@ -30,6 +30,7 @@ import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
+import io.github.palexdev.materialfx.utils.ScrollUtils;
 import io.github.palexdev.materialfx.utils.StringUtils;
 import javafx.animation.*;
 import javafx.beans.property.BooleanProperty;
@@ -628,7 +629,7 @@ public class MFXDatePickerContent extends VBox {
         yearsScroll = new MFXScrollPane(buildYears());
         yearsScroll.getStyleClass().add("years-scrollpane");
         yearsScroll.setFitToWidth(true);
-        MFXScrollPane.smoothVScrolling(yearsScroll);
+        ScrollUtils.addSmoothScrolling(yearsScroll);
 
         return yearsScroll;
     }

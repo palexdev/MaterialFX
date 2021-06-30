@@ -18,12 +18,16 @@
 
 package io.github.palexdev.materialfx.utils;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.geometry.*;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Control;
+import javafx.scene.control.Skin;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -38,6 +42,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 /**
  * Utility class which provides convenience methods for working with Nodes
@@ -248,13 +253,77 @@ public class NodeUtils {
         for (Node node : parent.getChildrenUnmodifiable()) {
             nodes.add(node);
             if (node instanceof Parent)
-                addAllDescendents((Parent)node, nodes);
+                addAllDescendents((Parent) node, nodes);
         }
     }
 
+    /**
+     * Convenience method to execute a given action after that the given control
+     * has been laid out and its skin is not null anymore.
+     * <p></p>
+     * Note that if the skin is not null the action will be immediately performed and
+     * the listener won't be added to the property.
+     *
+     * @param control        the control to check for skin initialization
+     * @param action         the action to perform when the skin is not null
+     * @param removeListener to specify if the listener added to the skin property
+     *                       should be removed after it is not null anymore.
+     */
+    public static <V> void waitForSkin(Control control, Callable<V> action, boolean removeListener) {
+        if (control.getSkin() != null) {
+            ExecutionUtils.tryCallableAndPrint(action);
+        } else {
+            control.skinProperty().addListener(new ChangeListener<>() {
+                @Override
+                public void changed(ObservableValue<? extends Skin<?>> observable, Skin<?> oldValue, Skin<?> newValue) {
+                    if (newValue != null) {
+                        ExecutionUtils.tryCallableAndPrint(action);
+                        if (removeListener) {
+                            control.skinProperty().removeListener(this);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * Convenience method to execute a given action after that the given control
+     * has been laid out and its scene is not null anymore.
+     * <p></p>
+     * Note that if the scene is not null the action will be immediately performed and
+     * the listener won't be added to the property.
+     *
+     * @param control        the control to check for scene initialization
+     * @param action         the action to perform when the scene is not null
+     * @param removeListener to specify if the listener added to the scene property
+     *                       should be removed after it is not null anymore.
+     */
+    public static <V> void waitForScene(Control control, Callable<V> action, boolean removeListener) {
+        if (control.getScene() != null) {
+            ExecutionUtils.tryCallableAndPrint(action);
+        } else {
+            control.sceneProperty().addListener(new ChangeListener<>() {
+                @Override
+                public void changed(ObservableValue<? extends Scene> observable, Scene oldValue, Scene newValue) {
+                    if (newValue != null) {
+                        ExecutionUtils.tryCallableAndPrint(action);
+                        if (removeListener) {
+                            control.sceneProperty().removeListener(this);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    //================================================================================
+    // JavaFX private methods
+    //================================================================================
     /* The following methods are copied from com.sun.javafx.scene.control.skin.Utils class
      * It's a private module, so to avoid adding exports and opens I copied them
      */
+
     public static double computeXOffset(double width, double contentWidth, HPos hpos) {
         switch (hpos) {
             case LEFT:

@@ -187,8 +187,6 @@ public class MFXProgressBarSkin extends SkinBase<MFXProgressBar> {
      * Responsible for building the track and the bars for the progress bar.
      */
     protected Rectangle buildRectangle(String styleClass) {
-        MFXProgressBar progressBar = getSkinnable();
-
         Rectangle rectangle = new Rectangle();
         rectangle.getStyleClass().setAll(styleClass);
         rectangle.setStroke(Color.TRANSPARENT);
@@ -196,8 +194,6 @@ public class MFXProgressBarSkin extends SkinBase<MFXProgressBar> {
         rectangle.setStrokeLineJoin(StrokeLineJoin.ROUND);
         rectangle.setStrokeType(StrokeType.INSIDE);
         rectangle.setStrokeWidth(0);
-/*        rectangle.arcHeightProperty().bind(progressBar.bordersRadiusProperty());
-        rectangle.arcWidthProperty().bind(progressBar.bordersRadiusProperty());*/
         return rectangle;
     }
 
