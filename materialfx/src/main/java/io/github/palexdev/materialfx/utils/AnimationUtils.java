@@ -12,6 +12,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Window;
 import javafx.util.Duration;
 
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
+
 /**
  * Utility class to easily build animations of any sort. Designed with fluent api.
  */
@@ -178,6 +181,45 @@ public class AnimationUtils {
             addAnimation(animation);
             return this;
         }
+
+        /**
+         * Gets the animation from the supplier and adds it to the "main" animation by calling {@link #addAnimation(Animation)}.
+         */
+        public AbstractBuilder add(Supplier<Animation> animationSupplier) {
+            addAnimation(animationSupplier.get());
+            return this;
+        }
+
+        /**
+         * Gets the animation from the supplier, sets the given onFinished action to it and then adds it to the
+         * "main" animation by calling {@link #addAnimation(Animation)}.
+         */
+        public AbstractBuilder add(Supplier<Animation> animationSupplier, EventHandler<ActionEvent> onFinished) {
+            Animation animation = animationSupplier.get();
+            animation.setOnFinished(onFinished);
+            addAnimation(animation);
+            return this;
+        }
+
+        /**
+         * Builds a {@link Timeline} with the given keyframes and adds it to the "main" animation by calling {@link #addAnimation(Animation)}.
+         */
+        public AbstractBuilder add(KeyFrame... keyFrames) {
+            addAnimation(new Timeline(keyFrames));
+            return this;
+        }
+
+        /**
+         * Builds a {@link Timeline} with the given keyframes, sets the given onFinished action to it and then adds it to the
+         * "main" animation by calling {@link #addAnimation(Animation)}.
+         */
+        public AbstractBuilder add(EventHandler<ActionEvent> onFinished, KeyFrame... keyFrames) {
+            Timeline timeline = new Timeline(keyFrames);
+            timeline.setOnFinished(onFinished);
+            addAnimation(timeline);
+            return this;
+        }
+
 
         /**
          * For each given node builds and adds an animation that disables the node
@@ -481,6 +523,32 @@ public class AnimationUtils {
          */
         public PauseTransition getAnimation() {
             return pauseTransition;
+        }
+
+        public void runWhile(boolean condition, Runnable retryAction, Runnable onSuccessAction) {
+            setOnFinished(event -> {
+                if (!condition) {
+                    retryAction.run();
+                    getAnimation().playFromStart();
+                } else {
+                    onSuccessAction.run();
+                }
+            });
+            getAnimation().play();
+        }
+
+        public void runWhile(boolean condition, Runnable retryAction, Runnable onSuccessAction, int maxRetryCount) {
+            AtomicInteger retryCount = new AtomicInteger(0);
+            setOnFinished(event -> {
+                if (!condition && retryCount.get() < maxRetryCount) {
+                    retryCount.getAndIncrement();
+                    retryAction.run();
+                    getAnimation().playFromStart();
+                } else {
+                    onSuccessAction.run();
+                }
+            });
+            getAnimation().play();
         }
     }
 }

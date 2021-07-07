@@ -25,6 +25,9 @@ package io.github.palexdev.materialfx.controls.enums;
  * These emulators basically are just helpers that store the path to the right css file.
  */
 public class Styles {
+
+    private Styles() {}
+
     public enum ComboBoxStyles {
         STYLE1("css/MFXComboBoxStyle1.css"),
         STYLE2("css/MFXComboBoxStyle2.css"),

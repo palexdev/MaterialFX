@@ -69,7 +69,7 @@ public class LabelUtils {
     }
 
     /**
-     * Computes the min width of a text node so that all the text is visible. Uses {@link NodeUtils#getNodeWidth(Region)}.
+     * Computes the min width of a text node so that all the text is visible. Uses {@link NodeUtils#getRegionWidth(Region)}.
      * <p>
      * Uses {@link Label} as helper.
      *
@@ -81,7 +81,7 @@ public class LabelUtils {
         helper.setMaxWidth(Double.MAX_VALUE);
         helper.setFont(font);
 
-        return NodeUtils.getNodeWidth(helper);
+        return NodeUtils.getRegionWidth(helper);
     }
 
     /**
@@ -96,7 +96,7 @@ public class LabelUtils {
         Label helper = new Label(text);
         helper.setMaxWidth(Double.MAX_VALUE);
         helper.setFont(font);
-        return NodeUtils.getNodeHeight(helper);
+        return NodeUtils.getRegionHeight(helper);
     }
 
     /**

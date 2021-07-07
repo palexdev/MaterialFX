@@ -1,6 +1,9 @@
 package io.github.palexdev.materialfx.utils;
 
 import javafx.application.Platform;
+import javafx.beans.binding.BooleanExpression;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -96,6 +99,24 @@ public class ExecutionUtils {
             return callable.call();
         } catch (Exception ignored) {
             return null;
+        }
+    }
+
+    public static void executeWhen(BooleanExpression condition, Runnable action, boolean isOneShot) {
+        if (condition.get()) {
+            action.run();
+        } else {
+            condition.addListener(new ChangeListener<>() {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                    if (newValue != null) {
+                        action.run();
+                        if (isOneShot) {
+                            condition.removeListener(this);
+                        }
+                    }
+                }
+            });
         }
     }
 }

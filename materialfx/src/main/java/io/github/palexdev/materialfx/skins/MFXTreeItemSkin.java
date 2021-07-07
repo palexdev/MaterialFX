@@ -109,7 +109,7 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
         box.setMinHeight(Region.USE_PREF_SIZE);
         box.setMaxHeight(Region.USE_PREF_SIZE);
 
-        item.setInitialHeight(NodeUtils.getNodeHeight(box));
+        item.setInitialHeight(NodeUtils.getRegionHeight(box));
         getChildren().add(box);
         box.setPrefHeight(item.getInitialHeight());
 
@@ -154,7 +154,7 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
                 item.fireEvent(new TreeItemEvent<>(TreeItemEvent.ADD_REMOVE_ITEM_EVENT, item, -value));
             }
             if (!tmpAdded.isEmpty() && (item.isExpanded() || item.isStartExpanded())) {
-                double value = tmpAdded.stream().mapToDouble(NodeUtils::getNodeHeight).sum();
+                double value = tmpAdded.stream().mapToDouble(NodeUtils::getRegionHeight).sum();
                 box.getChildren().addAll(tmpAdded);
                 FXCollections.sort(box.getChildren(), Comparator.comparingInt(item.getItems()::indexOf));
                 item.fireEvent(new TreeItemEvent<>(TreeItemEvent.ADD_REMOVE_ITEM_EVENT, item, value));

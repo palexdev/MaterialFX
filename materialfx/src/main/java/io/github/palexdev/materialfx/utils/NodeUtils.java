@@ -180,31 +180,69 @@ public class NodeUtils {
     }
 
     /**
-     * Retrieves the region width if it isn't still laid out.
-     *
-     * @param region the Region of which to know the width
-     * @return the calculated width
-     */
-    public static double getNodeWidth(Region region) {
-        Group group = new Group(region);
-        Scene scene = new Scene(group);
-        group.applyCss();
-        group.layout();
-        return region.getWidth();
-    }
-
-    /**
      * Retrieves the region height if it isn't still laid out.
      *
      * @param region the Region of which to know the height
      * @return the calculated height
      */
-    public static double getNodeHeight(Region region) {
+    public static double getRegionHeight(Region region) {
         Group group = new Group(region);
         Scene scene = new Scene(group);
         group.applyCss();
         group.layout();
+
+        group.getChildren().clear();
         return region.getHeight();
+    }
+
+    /**
+     * Retrieves the region width if it isn't still laid out.
+     *
+     * @param region the Region of which to know the width
+     * @return the calculated width
+     */
+    public static double getRegionWidth(Region region) {
+        Group group = new Group(region);
+        Scene scene = new Scene(group);
+        group.applyCss();
+        group.layout();
+
+        group.getChildren().clear();
+        return region.getWidth();
+    }
+
+    /**
+     * Retrieves the node height if it isn't still laid out.
+     *
+     * @param node the Node of which to know the height
+     * @return the calculated height
+     */
+    public static double getNodeHeight(Node node) {
+        Group group = new Group(node);
+        Scene scene = new Scene(group);
+        group.applyCss();
+        group.layout();
+
+        double height = node.prefHeight(-1);
+        group.getChildren().clear();
+        return height;
+    }
+
+    /**
+     * Retrieves the node width if it isn't still laid out.
+     *
+     * @param node the Node of which to know the width
+     * @return the calculated width
+     */
+    public static double getNodeWidth(Node node) {
+        Group group = new Group(node);
+        Scene scene = new Scene(group);
+        group.applyCss();
+        group.layout();
+
+        double width = node.prefWidth(-1);
+        group.getChildren().clear();
+        return width;
     }
 
     /**

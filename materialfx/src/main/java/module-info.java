@@ -9,6 +9,8 @@ module MaterialFX {
     exports io.github.palexdev.materialfx;
     exports io.github.palexdev.materialfx.beans;
     exports io.github.palexdev.materialfx.beans.binding;
+    exports io.github.palexdev.materialfx.beans.properties;
+    exports io.github.palexdev.materialfx.beans.properties.base;
     exports io.github.palexdev.materialfx.collections;
     exports io.github.palexdev.materialfx.controls;
     exports io.github.palexdev.materialfx.controls.base;
