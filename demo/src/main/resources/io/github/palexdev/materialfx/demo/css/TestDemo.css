@@ -1,0 +1,11 @@
+.mfx-slider:min .track {
+    -fx-fill: red;
+}
+
+.mfx-slider:max .bar {
+    -fx-fill: green;
+}
+
+.mfx-slider:val .track {
+    -fx-fill: gold;
+}

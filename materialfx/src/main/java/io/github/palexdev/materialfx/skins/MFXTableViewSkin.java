@@ -118,7 +118,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
     private final HBox pgcBox;
     private final Label rowsPerPageLabel;
     private final MFXComboBox<Integer> rowsPerPageCombo;
-    private final Label shownRows;
+    private final Label shownRowsLabel;
 
     private final ObjectProperty<IndexRange> shownRowsRange = new SimpleObjectProperty<>();
 
@@ -152,13 +152,15 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         VBox.setVgrow(rowsBox, Priority.ALWAYS);
 
         rowsPerPageLabel = new Label("Rows Per Page");
+        rowsPerPageLabel.setId("rowsPerPageLabel");
 
         rowsPerPageCombo = new MFXComboBox<>();
         rowsPerPageCombo.setComboStyle(Styles.ComboBoxStyles.STYLE2);
         rowsPerPageCombo.setMaxPopupHeight(100);
 
-        shownRows = new Label("Shown Rows: ");
-        shownRows.textProperty().bind(Bindings.createStringBinding(
+        shownRowsLabel = new Label("Shown Rows: ");
+        shownRowsLabel.setId("shownRowsLabel");
+        shownRowsLabel.textProperty().bind(Bindings.createStringBinding(
                 () -> {
                     if (getShownRowsRange() != null) {
                         return new StringBuilder()
@@ -491,7 +493,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
 
         HBox pgcBox = new HBox(15,
                 filterIcon, clearFilterIcon, new Separator(Orientation.VERTICAL),
-                box1, new Separator(Orientation.VERTICAL), box2, new Separator(Orientation.VERTICAL), shownRows
+                box1, new Separator(Orientation.VERTICAL), box2, new Separator(Orientation.VERTICAL), shownRowsLabel
         );
         pgcBox.getStyleClass().setAll("pagination-controls-container");
         pgcBox.setAlignment(Pos.CENTER);
@@ -503,9 +505,9 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         pgcBox.setPrefWidth(Region.USE_COMPUTED_SIZE);
         pgcBox.setMaxWidth(Double.MAX_VALUE);
 
-        shownRows.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        shownRows.setPadding(new Insets(5));
-        HBox.setHgrow(shownRows, Priority.ALWAYS);
+        shownRowsLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        shownRowsLabel.setPadding(new Insets(5));
+        HBox.setHgrow(shownRowsLabel, Priority.ALWAYS);
 
         return pgcBox;
     }

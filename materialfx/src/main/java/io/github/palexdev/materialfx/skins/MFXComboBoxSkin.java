@@ -38,6 +38,7 @@ import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
@@ -366,6 +367,9 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
                 listView.setItems(FXCollections.observableArrayList());
             }
         });
+
+        NodeUtils.waitForScene(comboBox, () -> listView.getStylesheets().setAll(comboBox.getStylesheets()), true);
+        comboBox.getStylesheets().addListener((ListChangeListener<? super String>) changed -> listView.getStylesheets().setAll(comboBox.getStylesheets()));
     }
 
     /**

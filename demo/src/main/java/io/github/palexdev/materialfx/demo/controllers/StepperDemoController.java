@@ -19,7 +19,7 @@
 package io.github.palexdev.materialfx.demo.controllers;
 
 import io.github.palexdev.materialfx.controls.*;
-import io.github.palexdev.materialfx.demo.MFXResourcesLoader;
+import io.github.palexdev.materialfx.demo.MFXDemoResourcesLoader;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.BindingUtils;
 import javafx.beans.binding.Bindings;
@@ -144,7 +144,7 @@ public class StepperDemoController implements Initializable {
         b4.setMaxWidth(Region.USE_PREF_SIZE);
 
         VBox box = new VBox(10, b1, b2, b3, b4, checkbox);
-        box.getStylesheets().setAll(MFXResourcesLoader.load("css/StepperDemo.css").toString());
+        box.getStylesheets().setAll(MFXDemoResourcesLoader.load("css/StepperDemo.css"));
         box.setAlignment(Pos.CENTER);
         StackPane.setAlignment(box, Pos.CENTER);
 

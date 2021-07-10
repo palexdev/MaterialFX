@@ -38,7 +38,7 @@ public class Demo extends Application {
     public void start(Stage primaryStage) throws IOException {
         CSSFX.start();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(MFXResourcesLoader.load("Demo.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MFXDemoResourcesLoader.loadURL("Demo.fxml"));
         fxmlLoader.setControllerFactory(controller -> new DemoController(primaryStage, getHostServices()));
         StackPane demoPane = fxmlLoader.load();
 

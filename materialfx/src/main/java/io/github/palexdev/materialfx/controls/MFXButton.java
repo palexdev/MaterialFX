@@ -261,7 +261,13 @@ public class MFXButton extends Button {
             this,
             "buttonType",
             ButtonType.FLAT
-    );
+    ) {
+        @Override
+        public void set(ButtonType v) {
+            if (v == ButtonType.FLAT) setEffect(null);
+            super.set(v);
+        }
+    };
 
     public DepthLevel getDepthLevel() {
         return depthLevel.get();

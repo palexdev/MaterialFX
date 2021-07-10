@@ -19,7 +19,6 @@ import javafx.util.Duration;
 import org.reactfx.value.Var;
 
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -220,7 +219,7 @@ public class ScrollUtils {
      * Adds a fade in and out effect to the given scroll pane's scroll bars
      * with the given fadeSpeedMillis and hideAfterMillis values.
      *
-     * @see NodeUtils#waitForSkin(Control, Callable, boolean)
+     * @see NodeUtils#waitForSkin(Control, Runnable, boolean)
      */
     public static void animateScrollBars(ScrollPane scrollPane, double fadeSpeedMillis, double hideAfterMillis) {
         NodeUtils.waitForSkin(scrollPane, () -> {
@@ -244,7 +243,6 @@ public class ScrollUtils {
                     }
                 });
             });
-            return null;
         }, true);
     }
 
@@ -282,7 +280,6 @@ public class ScrollUtils {
         NodeUtils.waitForSkin(listView, () -> {
             VirtualFlow<?, ?> flow = (VirtualFlow<?, ?>) listView.lookup(".virtual-flow");
             smoothScroll(flow, speed, trackPadAdjustment);
-            return null;
         }, true);
     }
 

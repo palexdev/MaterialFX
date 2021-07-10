@@ -21,7 +21,7 @@ package io.github.palexdev.materialfx.demo.controllers;
 import io.github.palexdev.materialfx.beans.MFXLoaderBean.Builder;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
-import io.github.palexdev.materialfx.demo.MFXResourcesLoader;
+import io.github.palexdev.materialfx.demo.MFXDemoResourcesLoader;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.ScrollUtils;
@@ -137,24 +137,24 @@ public class DemoController implements Initializable {
 
         // VLoader
         vLoader.setContentPane(contentPane);
-        vLoader.addItem("BUTTONS", Builder.build(new MFXRectangleToggleNode("BUTTONS"), MFXResourcesLoader.load("ButtonsDemo.fxml")).setDefaultRoot(true));
-        vLoader.addItem("CHECKBOXES", Builder.build(new MFXRectangleToggleNode("CHECKBOXES"), MFXResourcesLoader.load("CheckBoxesDemo.fxml")));
-        vLoader.addItem("COMBOBOXES", Builder.build(new MFXRectangleToggleNode("COMBOBOXES"), MFXResourcesLoader.load("ComboBoxesDemo.fxml")));
-        vLoader.addItem("DATEPICKERS", Builder.build(new MFXRectangleToggleNode("DATEPICKERS"), MFXResourcesLoader.load("DatePickersDemo.fxml")));
-        vLoader.addItem("DIALOGS", Builder.build(new MFXRectangleToggleNode("DIALOGS"), MFXResourcesLoader.load("DialogsDemo.fxml")).setControllerFactory(controller -> new DialogsController(demoPane)));
-        vLoader.addItem("LABELS", Builder.build(new MFXRectangleToggleNode("LABELS"), MFXResourcesLoader.load("LabelsDemo.fxml")));
-        vLoader.addItem("LISTVIEWS", Builder.build(new MFXRectangleToggleNode("LISTVIEWS"), MFXResourcesLoader.load("ListViewsDemo.fxml")));
-        vLoader.addItem("NOTIFICATIONS", Builder.build(new MFXRectangleToggleNode("NOTIFICATIONS"), MFXResourcesLoader.load("NotificationsDemo.fxml")));
-        vLoader.addItem("PROGRESS_BARS", Builder.build(new MFXRectangleToggleNode("PROGRESS BARS"), MFXResourcesLoader.load("ProgressBarsDemo.fxml")));
-        vLoader.addItem("PROGRESS_SPINNERS", Builder.build(new MFXRectangleToggleNode("PROGRESS SPINNERS"), MFXResourcesLoader.load("ProgressSpinnersDemo.fxml")));
-        vLoader.addItem("RADIOBUTTONS", Builder.build(new MFXRectangleToggleNode("RADIOBUTTONS"), MFXResourcesLoader.load("RadioButtonsDemo.fxml")));
-        vLoader.addItem("SCROLLPANES", Builder.build(new MFXRectangleToggleNode("SCROLLPANES"), MFXResourcesLoader.load("ScrollPanesDemo.fxml")));
-        vLoader.addItem("STEPPER", Builder.build(new MFXRectangleToggleNode("STEPPER"), MFXResourcesLoader.load("StepperDemo.fxml")));
-        vLoader.addItem("TABLEVIEWS", Builder.build(new MFXRectangleToggleNode("TABLEVIEWS"), MFXResourcesLoader.load("TableViewsDemo.fxml")));
-        vLoader.addItem("TEXTFIELDS", Builder.build(new MFXRectangleToggleNode("TEXTFIELDS"), MFXResourcesLoader.load("TextFieldsDemo.fxml")));
-        vLoader.addItem("TOGGLES", Builder.build(new MFXRectangleToggleNode("TOGGLES"), MFXResourcesLoader.load("ToggleButtonsDemo.fxml")));
-        vLoader.addItem("TREEVIEWS", Builder.build(new MFXRectangleToggleNode("TREEVIEWS"), MFXResourcesLoader.load("TreeViewsDemo.fxml")));
-        vLoader.addItem("FONTRESOURCES", Builder.build(new MFXRectangleToggleNode("FONTRESOURCES"), MFXResourcesLoader.load("FontResourcesDemo.fxml")));
+        vLoader.addItem("BUTTONS", Builder.build(new MFXRectangleToggleNode("BUTTONS"), MFXDemoResourcesLoader.loadURL("ButtonsDemo.fxml")).setDefaultRoot(true));
+        vLoader.addItem("CHECKBOXES", Builder.build(new MFXRectangleToggleNode("CHECKBOXES"), MFXDemoResourcesLoader.loadURL("CheckBoxesDemo.fxml")));
+        vLoader.addItem("COMBOBOXES", Builder.build(new MFXRectangleToggleNode("COMBOBOXES"), MFXDemoResourcesLoader.loadURL("ComboBoxesDemo.fxml")));
+        vLoader.addItem("DATEPICKERS", Builder.build(new MFXRectangleToggleNode("DATEPICKERS"), MFXDemoResourcesLoader.loadURL("DatePickersDemo.fxml")));
+        vLoader.addItem("DIALOGS", Builder.build(new MFXRectangleToggleNode("DIALOGS"), MFXDemoResourcesLoader.loadURL("DialogsDemo.fxml")).setControllerFactory(controller -> new DialogsController(demoPane)));
+        vLoader.addItem("LABELS", Builder.build(new MFXRectangleToggleNode("LABELS"), MFXDemoResourcesLoader.loadURL("LabelsDemo.fxml")));
+        vLoader.addItem("LISTVIEWS", Builder.build(new MFXRectangleToggleNode("LISTVIEWS"), MFXDemoResourcesLoader.loadURL("ListViewsDemo.fxml")));
+        vLoader.addItem("NOTIFICATIONS", Builder.build(new MFXRectangleToggleNode("NOTIFICATIONS"), MFXDemoResourcesLoader.loadURL("NotificationsDemo.fxml")));
+        vLoader.addItem("PROGRESS_BARS", Builder.build(new MFXRectangleToggleNode("PROGRESS BARS"), MFXDemoResourcesLoader.loadURL("ProgressBarsDemo.fxml")));
+        vLoader.addItem("PROGRESS_SPINNERS", Builder.build(new MFXRectangleToggleNode("PROGRESS SPINNERS"), MFXDemoResourcesLoader.loadURL("ProgressSpinnersDemo.fxml")));
+        vLoader.addItem("RADIOBUTTONS", Builder.build(new MFXRectangleToggleNode("RADIOBUTTONS"), MFXDemoResourcesLoader.loadURL("RadioButtonsDemo.fxml")));
+        vLoader.addItem("SCROLLPANES", Builder.build(new MFXRectangleToggleNode("SCROLLPANES"), MFXDemoResourcesLoader.loadURL("ScrollPanesDemo.fxml")));
+        vLoader.addItem("STEPPER", Builder.build(new MFXRectangleToggleNode("STEPPER"), MFXDemoResourcesLoader.loadURL("StepperDemo.fxml")));
+        vLoader.addItem("TABLEVIEWS", Builder.build(new MFXRectangleToggleNode("TABLEVIEWS"), MFXDemoResourcesLoader.loadURL("TableViewsDemo.fxml")));
+        vLoader.addItem("TEXTFIELDS", Builder.build(new MFXRectangleToggleNode("TEXTFIELDS"), MFXDemoResourcesLoader.loadURL("TextFieldsDemo.fxml")));
+        vLoader.addItem("TOGGLES", Builder.build(new MFXRectangleToggleNode("TOGGLES"), MFXDemoResourcesLoader.loadURL("ToggleButtonsDemo.fxml")));
+        vLoader.addItem("TREEVIEWS", Builder.build(new MFXRectangleToggleNode("TREEVIEWS"), MFXDemoResourcesLoader.loadURL("TreeViewsDemo.fxml")));
+        vLoader.addItem("FONTRESOURCES", Builder.build(new MFXRectangleToggleNode("FONTRESOURCES"), MFXDemoResourcesLoader.loadURL("FontResourcesDemo.fxml")));
         vLoader.start();
 
         // Others
@@ -217,7 +217,7 @@ public class DemoController implements Initializable {
         MFXDialog infoDialog;
         MFXStageDialog stageDialog;
         try {
-            FXMLLoader loader = new FXMLLoader(MFXResourcesLoader.load("InfoDialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(MFXDemoResourcesLoader.loadURL("InfoDialog.fxml"));
             loader.setControllerFactory(controller -> new InfoController(hostServices));
             infoDialog = loader.load();
         } catch (IOException e) {

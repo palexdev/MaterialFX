@@ -12,7 +12,6 @@ import io.github.palexdev.materialfx.utils.NumberUtils;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.css.*;
-import javafx.event.Event;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -74,7 +73,13 @@ public class MFXSlider extends Control {
         }
     };
     private final ObjectProperty<Supplier<Region>> popupSupplier = new SimpleObjectProperty<>();
-    private final IntegerProperty decimalPrecision = new SimpleIntegerProperty(2);
+    private final DoubleProperty popupPadding = new SimpleDoubleProperty(5.0);
+    private final IntegerProperty decimalPrecision = new SimpleIntegerProperty(0);
+
+    private final DoubleProperty cssVal = new SimpleDoubleProperty();
+    protected final PseudoClass MIN_PSEUDO_CLASS = PseudoClass.getPseudoClass("min");
+    protected final PseudoClass MAX_PSEUDO_CLASS = PseudoClass.getPseudoClass("max");
+    protected final PseudoClass VAL_PSEUDO_CLASS = PseudoClass.getPseudoClass("val");
 
     //================================================================================
     // Constructors
@@ -106,8 +111,32 @@ public class MFXSlider extends Control {
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
 
+        addListeners();
+
         defaultThumbSupplier();
         defaultPopupSupplier();
+    }
+
+    private void addListeners() {
+        min.addListener((observable, oldValue, newValue) -> handlePseudoClasses());
+        max.addListener((observable, oldValue, newValue) -> handlePseudoClasses());
+        value.addListener((observable, oldValue, newValue) -> handlePseudoClasses());
+        cssVal.addListener((observable, oldValue, newValue) -> handlePseudoClasses());
+    }
+
+    private void handlePseudoClasses() {
+        pseudoClassStateChanged(MIN_PSEUDO_CLASS, false);
+        pseudoClassStateChanged(MAX_PSEUDO_CLASS, false);
+        pseudoClassStateChanged(VAL_PSEUDO_CLASS, false);
+
+        double val = getValue();
+        if (val == getMin()) {
+            pseudoClassStateChanged(MIN_PSEUDO_CLASS, true);
+        } else if (val == getMax()) {
+            pseudoClassStateChanged(MAX_PSEUDO_CLASS, true);
+        } else if (val == getCssVal()) {
+            pseudoClassStateChanged(VAL_PSEUDO_CLASS, true);
+        }
     }
 
     protected void defaultThumbSupplier() {
@@ -115,28 +144,24 @@ public class MFXSlider extends Control {
             MFXFontIcon thumb = new MFXFontIcon("mfx-circle", 12);
             MFXFontIcon thumbRadius = new MFXFontIcon("mfx-circle", 30);
             thumb.setMouseTransparent(true);
+            thumbRadius.setMouseTransparent(true);
             thumb.getStyleClass().setAll("thumb");
             thumbRadius.getStyleClass().setAll("thumb-radius");
-
-            thumbRadius.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-                Node track = lookup(".track");
-                if (track != null) {
-                    Event.fireEvent(track, event);
-                }
-            });
 
             StackPane stackPane = new StackPane();
             stackPane.getStyleClass().add("thumb-container");
             stackPane.setMinSize(USE_PREF_SIZE, USE_PREF_SIZE);
             stackPane.setPrefSize(NodeUtils.getNodeWidth(thumb), NodeUtils.getNodeHeight(thumb));
             stackPane.setMaxSize(USE_PREF_SIZE, USE_PREF_SIZE);
-            stackPane.getChildren().setAll(thumbRadius, thumb);
+            stackPane.getChildren().setAll(thumb, thumbRadius);
 
             MFXCircleRippleGenerator rippleGenerator = new MFXCircleRippleGenerator(stackPane);
             rippleGenerator.setAnimateBackground(false);
-            rippleGenerator.setAnimationSpeed(1.5);
+            rippleGenerator.setAnimationSpeed(2);
+            rippleGenerator.setCheckBounds(false);
             rippleGenerator.setClipSupplier(() -> null);
             rippleGenerator.setMouseTransparent(true);
+            rippleGenerator.setRadiusMultiplier(2.5);
             rippleGenerator.setRippleRadius(6);
             rippleGenerator.setRipplePositionFunction(mouseEvent -> new RipplePosition(stackPane.getWidth() / 2, stackPane.getHeight() / 2));
             stackPane.addEventFilter(MouseEvent.MOUSE_PRESSED, rippleGenerator::generateRipple);
@@ -157,6 +182,11 @@ public class MFXSlider extends Control {
                     value
             ));
 
+            text.rotateProperty().bind(Bindings.createDoubleBinding(
+                    () -> getPopupSide() == SliderPopupSide.DEFAULT ? 0.0 : 180.0,
+                    popupSideProperty()
+            ));
+
             MFXFontIcon caret = new MFXFontIcon("mfx-caret-down", 22);
             caret.setId("popupCaret");
             caret.setBoundsType(TextBoundsType.VISUAL);
@@ -173,21 +203,22 @@ public class MFXSlider extends Control {
 
                     Orientation orientation = getOrientation();
                     double x = orientation == Orientation.HORIZONTAL ? (getWidth() / 2) - (caret.prefWidth(-1) / 2) : getHeight();
-                    double y = orientation == Orientation.HORIZONTAL ? getHeight() : -(caret.prefHeight(-1) / 2) + (getWidth() / 2);
+                    double y = orientation == Orientation.HORIZONTAL ? getHeight() : -(caret.prefHeight(-1) / 2) + (getHeight() / 2);
                     caret.relocate(snapPositionX(x), snapPositionY(y));
-                    caret.setRotate(orientation == Orientation.HORIZONTAL ? 0 : -90);
                 }
             };
             container.setAlignment(Pos.TOP_CENTER);
             container.setMinSize(45, 40);
             container.getStylesheets().add(STYLESHEET);
 
-            container.rotateProperty().bind(Bindings.createDoubleBinding(
+            caret.rotateProperty().bind(Bindings.createDoubleBinding(
                     () -> {
-                        Orientation orientation = getOrientation();
-                        return orientation == Orientation.HORIZONTAL ? 0.0 : 90.0;
-                    }, orientationProperty())
-            );
+                        container.requestLayout();
+                        return getOrientation() == Orientation.HORIZONTAL ? 0.0 : -90;
+                    },
+                    needsLayoutProperty(), rotateProperty(), popupSideProperty()
+            ));
+
             return container;
         });
     }
@@ -252,6 +283,18 @@ public class MFXSlider extends Control {
         this.popupSupplier.set(popupSupplier);
     }
 
+    public double getPopupPadding() {
+        return popupPadding.get();
+    }
+
+    public DoubleProperty popupPaddingProperty() {
+        return popupPadding;
+    }
+
+    public void setPopupPadding(double popupPadding) {
+        this.popupPadding.set(popupPadding);
+    }
+
     public int getDecimalPrecision() {
         return decimalPrecision.get();
     }
@@ -262,6 +305,18 @@ public class MFXSlider extends Control {
 
     public void setDecimalPrecision(int decimalPrecision) {
         this.decimalPrecision.set(decimalPrecision);
+    }
+
+    public double getCssVal() {
+        return cssVal.get();
+    }
+
+    public DoubleProperty cssValProperty() {
+        return cssVal;
+    }
+
+    public void setCssVal(double cssVal) {
+        this.cssVal.set(cssVal);
     }
 
     //================================================================================

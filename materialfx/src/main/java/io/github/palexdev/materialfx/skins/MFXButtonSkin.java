@@ -19,8 +19,6 @@
 package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.enums.ButtonType;
-import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.effects.MFXDepthManager;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import javafx.scene.control.skin.ButtonSkin;
@@ -52,17 +50,8 @@ public class MFXButtonSkin extends ButtonSkin {
         MFXButton button = (MFXButton) getSkinnable();
         MFXCircleRippleGenerator rippleGenerator = button.getRippleGenerator();
 
-        button.depthLevelProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.equals(oldValue) && button.getButtonType().equals(ButtonType.RAISED)) {
-                button.setEffect(MFXDepthManager.shadowOf(newValue));
-            }
-        });
-
-        button.buttonTypeProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.equals(oldValue)) {
-                updateButtonType();
-            }
-        });
+        button.depthLevelProperty().addListener((observable, oldValue, newValue) -> updateButtonType());
+        button.buttonTypeProperty().addListener((observable, oldValue, newValue) -> updateButtonType());
 
         button.addEventFilter(MouseEvent.MOUSE_PRESSED, rippleGenerator::generateRipple);
     }
@@ -80,7 +69,6 @@ public class MFXButtonSkin extends ButtonSkin {
                 break;
             }
             case FLAT: {
-                button.setEffect(MFXDepthManager.shadowOf(DepthLevel.LEVEL0));
                 button.setPickOnBounds(true);
                 break;
             }

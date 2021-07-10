@@ -42,7 +42,6 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 /**
  * Utility class which provides convenience methods for working with Nodes
@@ -307,15 +306,15 @@ public class NodeUtils {
      * @param removeListener to specify if the listener added to the skin property
      *                       should be removed after it is not null anymore.
      */
-    public static <V> void waitForSkin(Control control, Callable<V> action, boolean removeListener) {
+    public static void waitForSkin(Control control, Runnable action, boolean removeListener) {
         if (control.getSkin() != null) {
-            ExecutionUtils.tryCallableAndPrint(action);
+            action.run();
         } else {
             control.skinProperty().addListener(new ChangeListener<>() {
                 @Override
                 public void changed(ObservableValue<? extends Skin<?>> observable, Skin<?> oldValue, Skin<?> newValue) {
                     if (newValue != null) {
-                        ExecutionUtils.tryCallableAndPrint(action);
+                        action.run();
                         if (removeListener) {
                             control.skinProperty().removeListener(this);
                         }
@@ -337,15 +336,15 @@ public class NodeUtils {
      * @param removeListener to specify if the listener added to the scene property
      *                       should be removed after it is not null anymore.
      */
-    public static <V> void waitForScene(Control control, Callable<V> action, boolean removeListener) {
+    public static void waitForScene(Control control, Runnable action, boolean removeListener) {
         if (control.getScene() != null) {
-            ExecutionUtils.tryCallableAndPrint(action);
+            action.run();
         } else {
             control.sceneProperty().addListener(new ChangeListener<>() {
                 @Override
                 public void changed(ObservableValue<? extends Scene> observable, Scene oldValue, Scene newValue) {
                     if (newValue != null) {
-                        ExecutionUtils.tryCallableAndPrint(action);
+                        action.run();
                         if (removeListener) {
                             control.sceneProperty().removeListener(this);
                         }

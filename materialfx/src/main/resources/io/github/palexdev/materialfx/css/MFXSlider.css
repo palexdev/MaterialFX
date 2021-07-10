@@ -39,12 +39,18 @@
     -mfx-color: -mfx-main-color-pressed;
 }
 
+.mfx-slider .thumb-container .mfx-ripple-generator {
+    -mfx-ripple-color: -mfx-main-color;
+}
+
 /* TICKS STYLING */
 .mfx-slider .tick-even,
-.mfx-slider .tick-odd,
-.mfx-slider .axis-minor-tick-mark {
+.mfx-slider .tick-odd {
     -mfx-color: derive(-mfx-main-color, 30%);
-    -fx-stroke: derive(-mfx-main-color, 130%);
+}
+
+.mfx-slider .axis-minor-tick-mark {
+    -fx-stroke: -mfx-main-color-hover;
 }
 
 /* POPUP */

@@ -3,6 +3,7 @@ package io.github.palexdev.materialfx.skins;
 import io.github.palexdev.materialfx.beans.NumberRange;
 import io.github.palexdev.materialfx.controls.MFXSlider;
 import io.github.palexdev.materialfx.controls.enums.SliderEnum.SliderMode;
+import io.github.palexdev.materialfx.controls.enums.SliderEnum.SliderPopupSide;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
@@ -13,6 +14,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.PauseTransition;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -32,7 +34,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 
 import java.util.List;
@@ -46,9 +47,10 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
     private final Group ticksGroup;
     private final NumberAxis ticksAxis;
     private Node thumb;
-    private Region valuePopup;
+    private Region popup;
 
     private final LayoutData layoutData = new LayoutData();
+    private final PopupManager popupManager = new PopupManager();
 
     private double preDragThumbPos;
     private Point2D dragStart;
@@ -80,9 +82,9 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
         bar.setMouseTransparent(true);
 
         thumb = slider.getThumbSupplier().get();
-        valuePopup = slider.getPopupSupplier().get();
-        valuePopup.setVisible(false);
-        valuePopup.setOpacity(0.0);
+        popup = slider.getPopupSupplier().get();
+        popup.setVisible(false);
+        popup.setOpacity(0.0);
 
         ticksAxis = new NumberAxis(slider.getMin(), slider.getMax(), slider.getTickUnit());
         ticksAxis.setMinorTickCount(slider.getMinorTicksCount());
@@ -102,7 +104,7 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
         ticksGroup.setManaged(false);
         ticksGroup.setMouseTransparent(true);
 
-        group = new Group(track, ticksGroup, bar, thumb, valuePopup);
+        group = new Group(track, ticksGroup, bar, thumb, popup);
         group.setManaged(false);
         group.getStylesheets().add(slider.getUserAgentStylesheet());
         getChildren().setAll(group);
@@ -209,8 +211,9 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
 
         /* SUPPLIERS HANDLING */
         slider.popupSupplierProperty().addListener((observable, oldValue, newValue) -> {
-            handleValuePopupChange();
+            handlePopupChange();
             slider.requestLayout();
+            popupManager.initPopup();
         });
         slider.thumbSupplierProperty().addListener((observable, oldValue, newValue) -> {
             handleThumbChange();
@@ -246,28 +249,7 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
         track.addEventHandler(MouseEvent.MOUSE_PRESSED, trackPressedHandler);
 
         /* POPUP HANDLING */
-        valuePopup.layoutXProperty().bind(Bindings.createDoubleBinding(
-                () -> {
-                    double hx = thumb.getLayoutX() - (valuePopup.getWidth() / 2) + layoutData.halfThumbWidth();
-                    if (slider.getOrientation() == Orientation.HORIZONTAL) {
-                       return hx;
-                    }
-                    Rotate rotate = new Rotate(-90, hx, 0);
-                    return rotate.getPivotX() + 3;
-                },
-                thumb.layoutXProperty(), valuePopup.widthProperty(), slider.thumbSupplierProperty(), slider.orientationProperty()
-        ));
-        valuePopup.layoutYProperty().bind(Bindings.createDoubleBinding(
-                () -> {
-                    double hy = -(valuePopup.getHeight() + (layoutData.halfThumbHeight() * 2));
-                    if (slider.getOrientation() == Orientation.HORIZONTAL) {
-                        return hy;
-                    }
-                    Rotate rotate = new Rotate(-90, 0, hy);
-                    return rotate.getPivotY();
-                },
-                slider.heightProperty(), valuePopup.heightProperty(), slider.thumbSupplierProperty(), slider.orientationProperty()
-        ));
+        popupManager.initPopup();
 
         /* NumberAxis LAYOUT HANDLING */
         ticksAxis.visibleProperty().bind(slider.showMinorTicksProperty());
@@ -332,32 +314,25 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
         slider.setValue(val);
     }
 
-    private void handleValuePopupChange() {
+    private void handlePopupChange() {
         MFXSlider slider = getSkinnable();
 
         int index = -1;
-        if (valuePopup != null) {
-            index = group.getChildren().indexOf(valuePopup);
-            valuePopup.layoutXProperty().unbind();
-            valuePopup.layoutYProperty().unbind();
-            group.getChildren().remove(valuePopup);
+        if (popup != null) {
+            index = group.getChildren().indexOf(popup);
+            popup.layoutXProperty().unbind();
+            popup.layoutYProperty().unbind();
+            group.getChildren().remove(popup);
         }
 
         Supplier<Region> popupSupplier = slider.getPopupSupplier();
-        valuePopup = popupSupplier != null ? popupSupplier.get() : null;
+        popup = popupSupplier != null ? popupSupplier.get() : null;
 
-        if (valuePopup != null) {
-            valuePopup.setVisible(false);
-            valuePopup.setOpacity(0.0);
-            valuePopup.layoutXProperty().bind(Bindings.createDoubleBinding(
-                    () -> thumb.getLayoutX() - (valuePopup.getWidth() / 2) + layoutData.halfThumbWidth(),
-                    thumb.layoutXProperty(), valuePopup.widthProperty()
-            ));
-            valuePopup.layoutYProperty().bind(Bindings.createDoubleBinding(
-                    () -> -(valuePopup.getHeight() + layoutData.halfThumbHeight()),
-                    slider.heightProperty(), valuePopup.heightProperty()
-            ));
-            group.getChildren().add(index >= 0 ? index : group.getChildren().size() - 1, valuePopup);
+        if (popup != null) {
+            popup.setVisible(false);
+            popup.setOpacity(0.0);
+            group.getChildren().add(index >= 0 ? index : group.getChildren().size() - 1, popup);
+            popupManager.initPopup();
         }
     }
 
@@ -379,39 +354,30 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
             thumb.addEventHandler(MouseEvent.MOUSE_PRESSED, thumbPressHandler);
             thumb.addEventHandler(MouseEvent.MOUSE_DRAGGED, thumbDragHandler);
             group.getChildren().add(index >= 0 ? index : group.getChildren().size() - 1, thumb);
-
-            valuePopup.layoutXProperty().bind(Bindings.createDoubleBinding(
-                    () -> thumb.getLayoutX() - (valuePopup.getWidth() / 2) + layoutData.halfThumbWidth(),
-                    thumb.layoutXProperty(), valuePopup.widthProperty(), slider.thumbSupplierProperty()
-            ));
-            valuePopup.layoutYProperty().bind(Bindings.createDoubleBinding(
-                    () -> -(valuePopup.getHeight() + layoutData.halfThumbHeight()),
-                    slider.heightProperty(), valuePopup.heightProperty(), slider.thumbSupplierProperty()
-            ));
         }
     }
 
     protected void showPopup() {
-        if (valuePopup == null) {
+        if (popup == null) {
             return;
         }
 
         releaseTimer.stop();
         AnimationUtils.SequentialBuilder.build()
-                .add(AnimationUtils.PauseBuilder.build().setDuration(Duration.ONE).setOnFinished(event -> valuePopup.setVisible(true)).getAnimation())
-                .add(new KeyFrame(Duration.millis(200), new KeyValue(valuePopup.opacityProperty(), 1.0, Interpolator.EASE_IN)))
+                .add(AnimationUtils.PauseBuilder.build().setDuration(Duration.ONE).setOnFinished(event -> popup.setVisible(true)).getAnimation())
+                .add(new KeyFrame(Duration.millis(200), new KeyValue(popup.opacityProperty(), 1.0, Interpolator.EASE_IN)))
                 .getAnimation()
                 .play();
     }
 
     protected void hidePopup() {
-        if (valuePopup == null) {
+        if (popup == null) {
             return;
         }
 
         AnimationUtils.SequentialBuilder.build()
-                .add(new KeyFrame(Duration.millis(200), new KeyValue(valuePopup.opacityProperty(), 0.0, Interpolator.EASE_OUT)))
-                .setOnFinished(event -> valuePopup.setVisible(false))
+                .add(new KeyFrame(Duration.millis(200), new KeyValue(popup.opacityProperty(), 0.0, Interpolator.EASE_OUT)))
+                .setOnFinished(event -> popup.setVisible(false))
                 .getAnimation()
                 .play();
     }
@@ -531,8 +497,9 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
                         val,
                         NumberRange.of(slider.getMin(), slider.getMax()),
                         NumberRange.of(0.0, slider.getWidth()),
-                        slider.getDecimalPrecision()
-                ) + 1;
+                        2
+                );
+                zeroPos = NumberUtils.clamp(zeroPos, 0, slider.getWidth());
             }
 
             thumbX = snapPositionX(
@@ -540,7 +507,7 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
                             slider.getValue(),
                             NumberRange.of(slider.getMin(), slider.getMax()),
                             NumberRange.of(0.0, slider.getWidth()),
-                            slider.getDecimalPrecision()
+                            2
                     ) - halfThumbWidth());
             thumbY = snapPositionY(-halfThumbHeight() + (slider.getHeight() / 2));
 
@@ -595,7 +562,9 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
 
                 if (!slider.isShowTicksAtEdges() &&
                         ((double) tickMark.getValue() == slider.getMax() || (double) tickMark.getValue() == slider.getMin())
-                ) { continue; }
+                ) {
+                    continue;
+                }
 
                 ticksGroup.getChildren().add(tickData.tick);
                 tickData.tick.relocate(tickData.x, ticksY);
@@ -619,6 +588,85 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
 
         public double halfThumbHeight() {
             return thumb.prefHeight(-1) / 2;
+        }
+    }
+
+    protected class PopupManager {
+        private DoubleBinding xBinding;
+        private DoubleBinding yBinding;
+        private DoubleBinding rotate;
+
+        private void initPopup() {
+            MFXSlider slider = getSkinnable();
+            if (popup == null) {
+                return;
+            }
+
+            xBinding = Bindings.createDoubleBinding(
+                    this::computeXPos,
+                    thumb.layoutXProperty(), popup.widthProperty(), slider.thumbSupplierProperty(), slider.orientationProperty(), slider.popupSideProperty()
+            );
+            yBinding = Bindings.createDoubleBinding(
+                    this::computeYPos,
+                    thumb.layoutYProperty(), popup.heightProperty(), slider.thumbSupplierProperty(), slider.orientationProperty(), slider.popupSideProperty()
+            );
+            rotate = Bindings.createDoubleBinding(
+                    this::computeRotate,
+                    slider.orientationProperty(), slider.popupSideProperty()
+            );
+
+            popup.rotateProperty().bind(rotate);
+            popup.layoutXProperty().bind(xBinding);
+            popup.layoutYProperty().bind(yBinding);
+        }
+
+        private double computeRotate() {
+            MFXSlider slider = getSkinnable();
+
+            if (slider.getOrientation() == Orientation.HORIZONTAL && slider.getPopupSide() == SliderPopupSide.OTHER_SIDE) {
+                return 180;
+            }
+
+            if (slider.getOrientation() == Orientation.VERTICAL) {
+                return slider.getPopupSide() == SliderPopupSide.DEFAULT ? 90 : -90;
+            }
+
+            return 0;
+        }
+
+        private double computeXPos() {
+            MFXSlider slider = getSkinnable();
+
+            double x;
+            if (slider.getOrientation() == Orientation.HORIZONTAL) {
+                x = thumb.getLayoutX() - ((popup.getWidth() - layoutData.halfThumbWidth() * 2) / 2);
+                x = slider.getPopupSide() == SliderPopupSide.DEFAULT ? x : x - 1;
+            } else {
+                x = thumb.getLayoutX() - (popup.getHeight() / 2) + (layoutData.halfThumbWidth() / 2) + 1;
+            }
+
+            return snapPositionX(x);
+        }
+
+        private double computeYPos() {
+            MFXSlider slider = getSkinnable();
+
+            double y;
+            if (slider.getOrientation() == Orientation.HORIZONTAL) {
+                if (slider.getPopupSide() == SliderPopupSide.DEFAULT) {
+                    y = -(popup.getHeight() + layoutData.halfThumbHeight() + slider.getPopupPadding());
+                } else {
+                    y = slider.getHeight() + layoutData.halfThumbHeight() + slider.getPopupPadding();
+                }
+            } else {
+                if (slider.getPopupSide() == SliderPopupSide.DEFAULT) {
+                    y = -(popup.getWidth() + layoutData.halfThumbHeight() + (slider.getPopupPadding() / 1.5));
+                } else {
+                    y = (slider.getHeight() * 1.5) + layoutData.halfThumbHeight() + slider.getPopupPadding();
+                }
+            }
+
+            return snapPositionY(y);
         }
     }
 
