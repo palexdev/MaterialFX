@@ -270,7 +270,7 @@ contributions you make are **greatly appreciated**.
 
 ## License
 
-Distributed under the GNU GPLv3 License. See `LICENSE` for more information.
+Distributed under the GNU LGPLv3 License. See `LICENSE` for more information.
 
 <!-- CONTACT -->
 
