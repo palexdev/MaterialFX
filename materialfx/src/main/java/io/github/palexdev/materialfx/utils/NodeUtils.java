@@ -298,24 +298,28 @@ public class NodeUtils {
      * Convenience method to execute a given action after that the given control
      * has been laid out and its skin is not null anymore.
      * <p></p>
-     * Note that if the skin is not null the action will be immediately performed and
-     * the listener won't be added to the property.
+     * If the skin is not null when called, the action is executed immediately.
+     * <p>
+     * The listener is added only if the skin is null or the addListenerIfNotNull parameter is true.
      *
-     * @param control        the control to check for skin initialization
-     * @param action         the action to perform when the skin is not null
-     * @param removeListener to specify if the listener added to the skin property
-     *                       should be removed after it is not null anymore.
+     * @param control              the control to check for skin initialization
+     * @param action               the action to perform when the skin is not null
+     * @param addListenerIfNotNull to specify if the listener should be added anyway even if the scene is not null
+     * @param isOneShot            to specify if the listener added to the skin property
+     *                             should be removed after it is not null anymore
      */
-    public static void waitForSkin(Control control, Runnable action, boolean removeListener) {
+    public static void waitForSkin(Control control, Runnable action, boolean addListenerIfNotNull, boolean isOneShot) {
         if (control.getSkin() != null) {
             action.run();
-        } else {
+        }
+
+        if (control.getSkin() == null || addListenerIfNotNull) {
             control.skinProperty().addListener(new ChangeListener<>() {
                 @Override
                 public void changed(ObservableValue<? extends Skin<?>> observable, Skin<?> oldValue, Skin<?> newValue) {
                     if (newValue != null) {
                         action.run();
-                        if (removeListener) {
+                        if (isOneShot) {
                             control.skinProperty().removeListener(this);
                         }
                     }
@@ -328,24 +332,28 @@ public class NodeUtils {
      * Convenience method to execute a given action after that the given control
      * has been laid out and its scene is not null anymore.
      * <p></p>
-     * Note that if the scene is not null the action will be immediately performed and
-     * the listener won't be added to the property.
+     * If the scene is not null when called, the action is executed immediately.
+     * <p>
+     * The listener is added only if the scene is null or the addListenerIfNotNull parameter is true.
      *
-     * @param control        the control to check for scene initialization
-     * @param action         the action to perform when the scene is not null
-     * @param removeListener to specify if the listener added to the scene property
-     *                       should be removed after it is not null anymore.
+     * @param control              the control to check for scene initialization
+     * @param action               the action to perform when the scene is not null
+     * @param addListenerIfNotNull to specify if the listener should be added anyway even if the scene is not null
+     * @param isOneShot            to specify if the listener added to the scene property
+     *                             should be removed after it is not null anymore
      */
-    public static void waitForScene(Control control, Runnable action, boolean removeListener) {
+    public static void waitForScene(Control control, Runnable action, boolean addListenerIfNotNull, boolean isOneShot) {
         if (control.getScene() != null) {
             action.run();
-        } else {
+        }
+
+        if (control.getScene() == null || addListenerIfNotNull) {
             control.sceneProperty().addListener(new ChangeListener<>() {
                 @Override
                 public void changed(ObservableValue<? extends Scene> observable, Scene oldValue, Scene newValue) {
                     if (newValue != null) {
                         action.run();
-                        if (removeListener) {
+                        if (isOneShot) {
                             control.sceneProperty().removeListener(this);
                         }
                     }

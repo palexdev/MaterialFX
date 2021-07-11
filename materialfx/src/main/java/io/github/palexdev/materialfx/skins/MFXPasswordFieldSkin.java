@@ -33,6 +33,12 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
+/**
+ * This is the {@code Skin} used by default by every {@link MFXPasswordField}.
+ * <p>
+ * Extends {@link MFXTextFieldSkin} and implements all the needed methods and fields
+ * needed to make it behave like a password field.
+ */
 public class MFXPasswordFieldSkin extends MFXTextFieldSkin {
     //================================================================================
     // Properties

@@ -32,12 +32,22 @@ import java.util.*;
  * @param <E> Any type
  */
 public class ObservableStack<E> extends SimpleListProperty<E> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final LinkedList<E> stack;
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public ObservableStack() {
         this.stack = new LinkedList<>();
         this.set(FXCollections.observableList(this.stack));
     }
+
+    //================================================================================
+    // Methods
+    //================================================================================
 
     /**
      * Places the item at the top of the stack

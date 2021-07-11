@@ -18,15 +18,29 @@
 
 package io.github.palexdev.materialfx.beans;
 
+/**
+ * Simple bean to represent a range of values from min to max.
+ *
+ * @param <T> The type of Number to represent
+ */
 public class NumberRange<T extends Number> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final T min;
     private final T max;
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public NumberRange(T min, T max) {
         this.min = min;
         this.max = max;
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
     public T getMin() {
         return min;
     }
@@ -35,6 +49,9 @@ public class NumberRange<T extends Number> {
         return max;
     }
 
+    //================================================================================
+    // Static Methods
+    //================================================================================
     public static <T extends Number> NumberRange<T> of(T min, T max) {
         return new NumberRange<>(min, max);
     }

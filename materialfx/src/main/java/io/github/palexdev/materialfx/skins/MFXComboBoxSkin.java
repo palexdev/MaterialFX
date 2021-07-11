@@ -326,7 +326,7 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
             }
         });
 
-        comboBox.skinProperty().addListener((observable, oldValue, newValue) -> comboBox.getScene().addEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler));
+        NodeUtils.waitForSkin(comboBox, () -> comboBox.getScene().addEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler), true, false);
         comboBox.sceneProperty().addListener((observable, oldValue, newValue) -> {
             if (oldValue != null && newValue != oldValue) {
                 oldValue.removeEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
@@ -368,7 +368,7 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
             }
         });
 
-        NodeUtils.waitForScene(comboBox, () -> listView.getStylesheets().setAll(comboBox.getStylesheets()), true);
+        NodeUtils.waitForScene(comboBox, () -> listView.getStylesheets().setAll(comboBox.getStylesheets()), true, true);
         comboBox.getStylesheets().addListener((ListChangeListener<? super String>) changed -> listView.getStylesheets().setAll(comboBox.getStylesheets()));
     }
 

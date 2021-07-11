@@ -21,11 +21,20 @@ package io.github.palexdev.materialfx.beans.properties;
 import io.github.palexdev.materialfx.beans.properties.base.ResettableProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 
+/**
+ * A {@link SimpleDoubleProperty} that implements {@link ResettableProperty}.
+ */
 public class ResettableDoubleProperty extends SimpleDoubleProperty implements ResettableProperty<Number> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private double defaultValue;
     private boolean fireChangeOnReset = false;
     private boolean hasBeenReset = false;
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public ResettableDoubleProperty() {
     }
 
@@ -51,6 +60,9 @@ public class ResettableDoubleProperty extends SimpleDoubleProperty implements Re
         this.defaultValue = defaultValue;
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
     @Override
     public boolean isFireChangeOnReset() {
         return fireChangeOnReset;

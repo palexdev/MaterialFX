@@ -22,6 +22,7 @@ import io.github.palexdev.materialfx.beans.AnimationsData;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import javafx.animation.*;
 import javafx.animation.Animation.Status;
+import javafx.beans.binding.BooleanExpression;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -543,9 +544,22 @@ public class AnimationUtils {
             return pauseTransition;
         }
 
-        public void runWhile(boolean condition, Runnable retryAction, Runnable onSuccessAction) {
+        /**
+         * This method can be considered an utility.
+         * <p></p>
+         * A {@link PauseTransition} with the previously set duration runs while the given boolean boolean expression
+         * is false. When the expression is evaluated and it is false the given retryAction is run and the transition
+         * is restarted. When it ends the expression is re-evaluated. When the expression becomes true the onSuccessAction is run.
+         * <p></p>
+         * So you have a {@link PauseTransition} that runs every tot unit of time and stops only when the given expression is true.
+         *
+         * @param booleanExpression the expression to check at a fixed time rate
+         * @param retryAction       the action to perform when the expression is false
+         * @param onSuccessAction   the action to perform when the expression is true
+         */
+        public void runWhile(BooleanExpression booleanExpression, Runnable retryAction, Runnable onSuccessAction) {
             setOnFinished(event -> {
-                if (!condition) {
+                if (!booleanExpression.get()) {
                     retryAction.run();
                     getAnimation().playFromStart();
                 } else {
@@ -555,10 +569,16 @@ public class AnimationUtils {
             getAnimation().play();
         }
 
-        public void runWhile(boolean condition, Runnable retryAction, Runnable onSuccessAction, int maxRetryCount) {
+        /**
+         * Same method as {@link #runWhile(BooleanExpression, Runnable, Runnable)} but instead of running
+         * until the given expression is true, it is limited to a maximum number of retries.
+         *
+         * @param maxRetryCount the max number of times the transition can be restarted
+         */
+        public void runWhile(BooleanExpression booleanExpression, Runnable retryAction, Runnable onSuccessAction, int maxRetryCount) {
             AtomicInteger retryCount = new AtomicInteger(0);
             setOnFinished(event -> {
-                if (!condition && retryCount.get() < maxRetryCount) {
+                if (!booleanExpression.get() && retryCount.get() < maxRetryCount) {
                     retryCount.getAndIncrement();
                     retryAction.run();
                     getAnimation().playFromStart();

@@ -19,6 +19,7 @@
 package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
+import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.*;
 import javafx.scene.Group;
 import javafx.scene.control.SkinBase;
@@ -100,10 +101,10 @@ public class MFXProgressBarSkin extends SkinBase<MFXProgressBar> {
             resetBars();
             updateBars();
         });
-        progressBar.sceneProperty().addListener((observable, oldValue, newValue) -> {
+        NodeUtils.waitForScene(progressBar, () -> {
             resetBars();
             updateBars();
-        });
+        }, true, false);
         progressBar.animationSpeedProperty().addListener((observable, oldValue, newValue) -> {
             resetBars();
             updateBars();

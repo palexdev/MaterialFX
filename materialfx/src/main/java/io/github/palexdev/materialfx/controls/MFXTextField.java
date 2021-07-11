@@ -23,6 +23,7 @@ import io.github.palexdev.materialfx.controls.enums.DialogType;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.skins.MFXTextFieldSkin;
 import io.github.palexdev.materialfx.utils.ColorUtils;
+import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
 import io.github.palexdev.materialfx.validation.base.AbstractMFXValidator;
 import io.github.palexdev.materialfx.validation.base.Validated;
@@ -109,16 +110,15 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
             }
         });
 
-        sceneProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null)
-                if (isValidated()) {
-                    if (getValidator().isInitControlValidation()) {
-                        pseudoClassStateChanged(INVALID_PSEUDO_CLASS, !isValid());
-                    } else {
-                        pseudoClassStateChanged(INVALID_PSEUDO_CLASS, false);
-                    }
+        NodeUtils.waitForScene(this, () -> {
+            if (isValidated()) {
+                if (getValidator().isInitControlValidation()) {
+                    pseudoClassStateChanged(INVALID_PSEUDO_CLASS, !isValid());
+                } else {
+                    pseudoClassStateChanged(INVALID_PSEUDO_CLASS, false);
                 }
-        });
+            }
+        }, true, false);
     }
 
     @Override

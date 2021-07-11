@@ -122,11 +122,11 @@ public class MFXRadioButtonSkin extends RadioButtonSkin {
          * control's skinProperty, when the skin is not null and the RadioButton isSelected,
          * play the animation.
          */
-        radioButton.skinProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && radioButton.isSelected()) {
+        NodeUtils.waitForSkin(radioButton, () -> {
+            if (radioButton.isSelected()) {
                 buildAndPlayAnimation();
             }
-        });
+        }, true, false);
     }
 
     /**

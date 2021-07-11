@@ -107,9 +107,9 @@ public abstract class AbstractMFXFlowlessListView<T, C extends AbstractMFXFlowle
      */
     protected void setColors() {
         StringBuilder sb = new StringBuilder();
-        sb.append("-mfx-track-color: ").append(ColorUtils.rgb((Color) trackColor.get()))
-                .append(";\n-mfx-thumb-color: ").append(ColorUtils.rgb((Color) thumbColor.get()))
-                .append(";\n-mfx-thumb-hover-color: ").append(ColorUtils.rgb((Color) thumbHoverColor.get()))
+        sb.append("-mfx-track-color: ").append(ColorUtils.toCss(trackColor.get()))
+                .append(";\n-mfx-thumb-color: ").append(ColorUtils.toCss(thumbColor.get()))
+                .append(";\n-mfx-thumb-hover-color: ").append(ColorUtils.toCss(thumbHoverColor.get()))
                 .append(";");
         setStyle(sb.toString());
     }

@@ -180,7 +180,6 @@ public abstract class AbstractMFXDialog extends BorderPane {
         setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
         MFXButton button = new MFXButton("");
-        button.addEventHandler(MouseEvent.MOUSE_PRESSED, closeHandler);
         closeButtons.add(button);
     }
 
@@ -188,8 +187,11 @@ public abstract class AbstractMFXDialog extends BorderPane {
     // Abstract Methods
     //================================================================================
     public abstract void show();
+
     public abstract void close();
+
     public abstract AbstractMFXDialog setActions(HBox actionsBox);
+
     public abstract void computeSizeAndPosition();
 
     //================================================================================
@@ -258,14 +260,10 @@ public abstract class AbstractMFXDialog extends BorderPane {
      * @param buttons The new close button
      */
     public void setCloseButtons(Node... buttons) {
-        for (Node closeButton : closeButtons) {
-            closeButton.removeEventHandler(MouseEvent.MOUSE_PRESSED, closeHandler);
-        }
+        closeButtons.forEach(btn -> btn.removeEventHandler(MouseEvent.MOUSE_PRESSED, closeHandler));
         closeButtons.clear();
         closeButtons.addAll(List.of(buttons));
-        for (Node closeButton : closeButtons) {
-            closeButton.addEventHandler(MouseEvent.MOUSE_PRESSED, closeHandler);
-        }
+        closeButtons.forEach(btn -> btn.addEventHandler(MouseEvent.MOUSE_PRESSED, closeHandler));
     }
 
     public EventHandler<MouseEvent> getCloseHandler() {
@@ -280,10 +278,10 @@ public abstract class AbstractMFXDialog extends BorderPane {
      * @param newHandler The new close handler
      */
     public void setCloseHandler(EventHandler<MouseEvent> newHandler) {
-        for (Node closeButton : closeButtons) {
+        closeButtons.forEach(closeButton -> {
             closeButton.removeEventHandler(MouseEvent.MOUSE_PRESSED, closeHandler);
             closeButton.addEventHandler(MouseEvent.MOUSE_PRESSED, newHandler);
-        }
+        });
         this.closeHandler = newHandler;
     }
 
@@ -425,7 +423,7 @@ public abstract class AbstractMFXDialog extends BorderPane {
     /**
      * Events class for MFXDialogs.
      * <p>
-     *  Defines four new EvenTypes:
+     * Defines four new EvenTypes:
      * <p>
      * - BEFORE_OPEN_EVENT: should be fired at the start of the {@link #show()} method or even before. <p></p>
      * - ON_OPENED_EVENT : should be fired when the dialog is set to visible or at the end of the show animation. <p></p>

@@ -22,16 +22,14 @@ import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
 import io.github.palexdev.materialfx.selection.TreeSelectionModel;
 import io.github.palexdev.materialfx.selection.base.ITreeSelectionModel;
+import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.geometry.Insets;
-import javafx.scene.control.Skin;
 
 /**
  * This is the container for a tree made of AbstractMFXTreeItems.
@@ -104,15 +102,11 @@ public class MFXTreeView<T> extends MFXScrollPane {
         AbstractMFXTreeItem<T> root = getRoot();
         root.prefWidthProperty().bind(widthProperty().subtract(10));
         root.setPadding(new Insets(0, 0, 5, 0));
-        root.skinProperty().addListener(new ChangeListener<>() {
-            @Override
-            public void changed(ObservableValue<? extends Skin<?>> observable, Skin<?> oldValue, Skin<?> newValue) {
-                if (newValue != null && !isShowRoot()) {
-                    root.fireEvent(new TreeViewEvent(TreeViewEvent.HIDE_ROOT_EVENT, isShowRoot()));
-                }
-                root.skinProperty().removeListener(this);
+        NodeUtils.waitForSkin(root, () -> {
+            if (!isShowRoot()) {
+                root.fireEvent(new TreeViewEvent(TreeViewEvent.HIDE_ROOT_EVENT, isShowRoot()));
             }
-        });
+        }, true, true);
     }
 
     /**

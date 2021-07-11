@@ -23,6 +23,7 @@ import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.effects.MFXDepthManager;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
+import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -129,11 +130,11 @@ public class MFXToggleButtonSkin extends ToggleButtonSkin {
          * control's skinProperty, when the skin is not null and the ToggleButton isSelected,
          * play the animation.
          */
-        toggleButton.skinProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && toggleButton.isSelected()) {
+        NodeUtils.waitForSkin(toggleButton, () -> {
+            if (toggleButton.isSelected()) {
                 buildAndPlayAnimation(true);
             }
-        });
+        }, true, false);
     }
 
     protected void setupRippleGenerator() {

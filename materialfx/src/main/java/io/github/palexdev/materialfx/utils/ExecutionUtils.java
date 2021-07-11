@@ -120,18 +120,75 @@ public class ExecutionUtils {
         }
     }
 
-    public static void executeWhen(BooleanExpression condition, Runnable action, boolean isOneShot) {
-        if (condition.get()) {
+    /**
+     * Executes the given action if the given expression and the executeNow parameter are true.
+     * <p>
+     * If the given expression is false or the addListenerIfTrue parameter is true, adds a listener to
+     * the expression and executes the given action every time the property becomes true or just once if
+     * the isOneShot parameter is true.
+     *
+     * @param booleanExpression the expression to evaluate
+     * @param action            the action to execute when the expression is true
+     * @param executeNow        to specify if the given action should be immediately executed if the expression is already true
+     * @param addListenerIfTrue to specify if the listener should be added anyway to the expression even if it is already true
+     * @param isOneShot         to specify if the added listener should be removed after the first time the expression becomes true
+     */
+    public static void executeWhen(BooleanExpression booleanExpression, Runnable action, boolean executeNow, boolean addListenerIfTrue, boolean isOneShot) {
+        if (booleanExpression.get() && executeNow) {
             action.run();
-        } else {
-            condition.addListener(new ChangeListener<>() {
+        }
+
+        if (!booleanExpression.get() || addListenerIfTrue) {
+            booleanExpression.addListener(new ChangeListener<>() {
                 @Override
                 public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                    if (newValue != null) {
+                    if (newValue) {
                         action.run();
                         if (isOneShot) {
-                            condition.removeListener(this);
+                            booleanExpression.removeListener(this);
                         }
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * Executes the given truAction if the given expression and the executeTrueNow parameter are true.
+     * <p>
+     * Executes the given falseAction if the given expression is false and the executeFalseNow parameter is true.
+     * <p>
+     * If the given expression is false or the addListenerIfTrue parameter is true, adds a listener to
+     * the expression and executes the given trueAction every time the property becomes true, and the given
+     * falseAction every time the property becomes false, or just once if the isOneShot parameter is true.
+     *
+     * @param booleanExpression the expression to evaluate
+     * @param trueAction        the action to execute when the expression is true
+     * @param falseAction       the action to execute when the expression is false
+     * @param executeTrueNow    to specify if the given trueAction should be immediately executed if the expression is already true
+     * @param executeFalseNow   to specify if the given falseAction should be immediately executed if the expression is already false
+     * @param addListenerIfTrue to specify if the listener should be added anyway to the expression even if it is already true
+     * @param isOneShot         to specify if the added listener should be removed after the first time the expression becomes true
+     */
+    public static void executeWhen(BooleanExpression booleanExpression, Runnable trueAction, Runnable falseAction,
+                                   boolean executeTrueNow, boolean executeFalseNow, boolean addListenerIfTrue, boolean isOneShot) {
+        if (booleanExpression.get() && executeTrueNow) {
+            trueAction.run();
+        } else if (!booleanExpression.get() && executeFalseNow) {
+            falseAction.run();
+        }
+
+        if (!booleanExpression.get() || addListenerIfTrue) {
+            booleanExpression.addListener(new ChangeListener<>() {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                    if (newValue) {
+                        trueAction.run();
+                    } else {
+                        falseAction.run();
+                    }
+                    if (isOneShot) {
+                        booleanExpression.removeListener(this);
                     }
                 }
             });

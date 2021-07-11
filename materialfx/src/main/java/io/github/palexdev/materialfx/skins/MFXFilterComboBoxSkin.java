@@ -28,12 +28,17 @@ import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.selection.ComboSelectionModelMock;
 import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
+import io.github.palexdev.materialfx.utils.AnimationUtils.PauseBuilder;
 import io.github.palexdev.materialfx.utils.LabelUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.StringUtils;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
-import javafx.animation.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.ScaleTransition;
+import javafx.animation.Timeline;
 import javafx.beans.InvalidationListener;
+import javafx.beans.binding.BooleanExpression;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.EventHandler;
@@ -81,8 +86,6 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
     private MFXTextField searchField;
 
     private Timeline arrowAnimation;
-
-    private int retryCount;
 
     //================================================================================
     // Constructors
@@ -339,9 +342,9 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
             }
         });
 
-        comboBox.skinProperty().addListener((observable, oldValue, newValue) -> comboBox.getScene().addEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler));
+        NodeUtils.waitForSkin(comboBox, () -> comboBox.getScene().addEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler), true, false);
         comboBox.sceneProperty().addListener((observable, oldValue, newValue) -> {
-            if (oldValue != null && newValue != oldValue) {
+            if (oldValue != null) {
                 oldValue.removeEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
             }
             if (newValue != null) {
@@ -566,19 +569,22 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
      * a PauseTransition every n milliseconds (by default 100). If at the end of the transition the text field
      * is not focused yet the transition is played again.
      * <p>
-     * Since this may produce an unexpected behavior by running indefinitely for example I set a max
+     * Since this may produce an unexpected behavior by running indefinitely for example so I set a max
      * retry count of 10.
+     * <p>
+     * Uses the new utility {@link PauseBuilder#runWhile(BooleanExpression, Runnable, Runnable, int)}
      */
     protected void forceFieldFocus() {
-        PauseTransition transition = new PauseTransition(Duration.millis(100));
-        transition.setOnFinished(event -> {
-            if (searchField != null && !searchField.isFocused() && retryCount < 10) {
-                retryCount++;
-                searchField.requestFocus();
-                transition.playFromStart();
-            }
-        });
-        transition.play();
+        if (searchField != null && !searchField.isFocused()) {
+            PauseBuilder.build()
+                    .setDuration(100)
+                    .runWhile(
+                            searchField.focusedProperty(),
+                            () -> searchField.requestFocus(),
+                            () -> {},
+                            10
+                    );
+        }
     }
 
     /**

@@ -25,8 +25,8 @@ import io.github.palexdev.materialfx.controls.MFXSlider;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
-import io.github.palexdev.materialfx.controls.enums.SliderEnum;
-import io.github.palexdev.materialfx.controls.enums.SliderEnum.SliderPopupSide;
+import io.github.palexdev.materialfx.controls.enums.SliderEnums;
+import io.github.palexdev.materialfx.controls.enums.SliderEnums.SliderPopupSide;
 import io.github.palexdev.materialfx.demo.model.FilterablePerson;
 import io.github.palexdev.materialfx.font.FontResources;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
@@ -44,6 +44,7 @@ import javafx.stage.Stage;
 
 import java.util.Random;
 
+@SuppressWarnings("All")
 public class TestDemo extends Application {
     private final Random random = new Random(System.currentTimeMillis());
 
@@ -53,21 +54,12 @@ public class TestDemo extends Application {
         box.setAlignment(Pos.CENTER);
 
         MFXSlider slider = new MFXSlider();
-        slider.setSliderMode(SliderEnum.SliderMode.SNAP_TO_TICKS);
-        //slider.setOrientation(Orientation.VERTICAL);
-        //slider.setPopupSide(SliderPopupSide.OTHER_SIDE);
-
+        slider.setSliderMode(SliderEnums.SliderMode.SNAP_TO_TICKS);
         slider.setBidirectional(false);
         slider.setPrefWidth(200);
-        slider.setValue(25);
-        slider.setMin(-50);
-        slider.setTickUnit(25);
-        slider.setUnitIncrement(1);
-        slider.setAlternativeUnitIncrement(5);
-        slider.setShowTicksAtEdges(true);
-        slider.setShowMajorTicks(true);
-        slider.setShowMinorTicks(true);
-
+        slider.setMin(10);
+        slider.setMax(100);
+        slider.setValue(-50);
         slider.setBidirectional(false);
 
         HBox bbox = new HBox(20);

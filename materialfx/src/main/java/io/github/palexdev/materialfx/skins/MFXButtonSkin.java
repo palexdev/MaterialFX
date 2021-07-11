@@ -75,6 +75,9 @@ public class MFXButtonSkin extends ButtonSkin {
         }
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
     @Override
     protected void updateChildren() {
         super.updateChildren();

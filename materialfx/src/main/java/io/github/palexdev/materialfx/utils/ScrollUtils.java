@@ -237,7 +237,7 @@ public class ScrollUtils {
      * Adds a fade in and out effect to the given scroll pane's scroll bars
      * with the given fadeSpeedMillis and hideAfterMillis values.
      *
-     * @see NodeUtils#waitForSkin(Control, Runnable, boolean)
+     * @see NodeUtils#waitForSkin(Control, Runnable, boolean, boolean)
      */
     public static void animateScrollBars(ScrollPane scrollPane, double fadeSpeedMillis, double hideAfterMillis) {
         NodeUtils.waitForSkin(scrollPane, () -> {
@@ -261,7 +261,7 @@ public class ScrollUtils {
                     }
                 });
             });
-        }, true);
+        }, true, true);
     }
 
     //================================================================================
@@ -298,7 +298,7 @@ public class ScrollUtils {
         NodeUtils.waitForSkin(listView, () -> {
             VirtualFlow<?, ?> flow = (VirtualFlow<?, ?>) listView.lookup(".virtual-flow");
             smoothScroll(flow, speed, trackPadAdjustment);
-        }, true);
+        }, true, true);
     }
 
     private static void smoothScroll(VirtualFlow<?, ?> flow, double speed, double trackPadAdjustment) {

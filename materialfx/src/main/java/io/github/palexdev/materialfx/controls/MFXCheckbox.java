@@ -49,18 +49,18 @@ public class MFXCheckbox extends CheckBox {
     //================================================================================
     public MFXCheckbox() {
         setText("CheckBox");
-        init();
+        initialize();
     }
 
     public MFXCheckbox(String text) {
         super(text);
-        init();
+        initialize();
     }
 
     //================================================================================
     // Methods
     //================================================================================
-    private void init() {
+    private void initialize() {
         getStyleClass().add(STYLE_CLASS);
     }
 

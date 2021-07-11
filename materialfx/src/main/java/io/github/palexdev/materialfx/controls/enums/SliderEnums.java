@@ -18,9 +18,9 @@
 
 package io.github.palexdev.materialfx.controls.enums;
 
-public class SliderEnum {
+public class SliderEnums {
 
-    private SliderEnum() {}
+    private SliderEnums() {}
 
     public enum SliderMode {
         DEFAULT, SNAP_TO_TICKS

@@ -159,11 +159,7 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
          * control's skinProperty, when the skin is not null and the CheckBox isSelected/isIndeterminate,
          * play the animation.
          */
-        checkBox.skinProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                updateColors();
-            }
-        });
+        NodeUtils.waitForSkin(checkBox, this::updateColors, true, false);
     }
 
 

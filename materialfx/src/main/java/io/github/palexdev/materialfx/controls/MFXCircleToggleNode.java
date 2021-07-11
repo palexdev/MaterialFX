@@ -28,6 +28,8 @@ import javafx.scene.control.Skin;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.shape.StrokeType;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -190,12 +192,11 @@ public class MFXCircleToggleNode extends AbstractMFXToggleNode {
                 );
 
         static {
-            cssMetaDataList = List.of(
-                    SIZE, TEXT_POSITION,
-                    STROKE_WIDTH, STROKE_TYPE
-            );
+            List<CssMetaData<? extends Styleable, ?>> mfxTonCssMetaData = new ArrayList<>(AbstractMFXToggleNode.getClassCssMetaData());
+            Collections.addAll(mfxTonCssMetaData, SIZE, TEXT_POSITION, STROKE_WIDTH, STROKE_TYPE);
+            cssMetaDataList = Collections.unmodifiableList(mfxTonCssMetaData);
         }
-                
+
     }
 
     public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {

@@ -298,6 +298,9 @@ public class MFXButton extends Button {
      * - {@code FLAT}
      * <p>
      * - {@code RAISED}
+     * <p></p>
+     * If the new type is {@code FLAT} then setEffect(null) is called so that a user can also
+     * specify it's own effects for the button.
      */
     public StyleableObjectProperty<ButtonType> buttonTypeProperty() {
         return buttonType;

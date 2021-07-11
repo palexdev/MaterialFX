@@ -24,6 +24,7 @@ import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.cell.MFXListCell;
 import io.github.palexdev.materialfx.controls.enums.DialogType;
 import io.github.palexdev.materialfx.skins.legacy.MFXLegacyComboBoxSkin;
+import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
 import io.github.palexdev.materialfx.validation.base.AbstractMFXValidator;
 import io.github.palexdev.materialfx.validation.base.Validated;
@@ -120,16 +121,15 @@ public class MFXLegacyComboBox<T> extends ComboBox<T> implements Validated<MFXDi
             }
         });
 
-        sceneProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null)
-                if (isValidated()) {
-                    if (getValidator().isInitControlValidation()) {
-                        pseudoClassStateChanged(INVALID_PSEUDO_CLASS, !isValid());
-                    } else {
-                        pseudoClassStateChanged(INVALID_PSEUDO_CLASS, false);
-                    }
+        NodeUtils.waitForScene(this, () -> {
+            if (isValidated()) {
+                if (getValidator().isInitControlValidation()) {
+                    pseudoClassStateChanged(INVALID_PSEUDO_CLASS, !isValid());
+                } else {
+                    pseudoClassStateChanged(INVALID_PSEUDO_CLASS, false);
                 }
-        });
+            }
+        }, true, false);
     }
 
     @Override

@@ -233,11 +233,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
             }
         });
 
-        tableView.sceneProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                filterStageDialog.setOwner(newValue.getWindow());
-            }
-        });
+        NodeUtils.waitForScene(tableView, () -> filterStageDialog.setOwner(tableView.getScene().getWindow()), true, false);
 
         tableView.getItems().addListener((InvalidationListener) listInvalidated -> reset(false));
         tableView.itemsProperty().addListener(propertyInvalidated -> {

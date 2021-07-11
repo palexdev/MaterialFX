@@ -84,13 +84,6 @@ public class MFXContextMenuItemSkin extends SkinBase<MFXContextMenuItem> {
         gridPane.add(accelerator, 2, 0);
 
         getChildren().setAll(gridPane);
-        setListeners();
-
         item.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> text.requestFocus());
-    }
-
-    private void setListeners() {
-        MFXContextMenuItem item = getSkinnable();
-
     }
 }

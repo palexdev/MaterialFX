@@ -20,11 +20,12 @@ package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.beans.NumberRange;
 import io.github.palexdev.materialfx.controls.MFXSlider;
-import io.github.palexdev.materialfx.controls.enums.SliderEnum.SliderMode;
-import io.github.palexdev.materialfx.controls.enums.SliderEnum.SliderPopupSide;
+import io.github.palexdev.materialfx.controls.enums.SliderEnums.SliderMode;
+import io.github.palexdev.materialfx.controls.enums.SliderEnums.SliderPopupSide;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
+import io.github.palexdev.materialfx.utils.AnimationUtils.PauseBuilder;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.NumberUtils;
 import javafx.animation.Interpolator;
@@ -32,6 +33,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.PauseTransition;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanExpression;
 import javafx.beans.binding.DoubleBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -58,7 +60,33 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+/**
+ * This is the {@code Skin} used by default by every {@link MFXSlider}l.
+ * <p></p>
+ * To be honest, I always thought that making a slider would be a much easier task, but this skin
+ * but this skin proves just the opposite. Don't get me wrong, if you calmly read the code it is intuitive
+ * but still, one of the most complicated skins I've ever made so far.
+ * <p></p>
+ * At the core a slider is simply a progress bar that the user can adjust with an icon (the thumb).
+ * So, conceptually it is easy, but computing the value based on the mouse drag or press, computing the
+ * layout based on the value, managing the popup position and visibility, positioning the ticks correctly,
+ * the possibility to change the thumb and the popup, the bidirectional feature, all of that is quite tricky, but,
+ * I must say that I'm happy with the final result.
+ * <p></p>
+ * A little note on how the popup visibility is managed.
+ * <p>
+ * The popup is shown when an arrow key is pressed or the mouse is pressed on the thumb.
+ * <p>
+ * To hide the popup a {@link PauseTransition} of 800 milliseconds is played and at the end
+ * the popup is hidden.
+ * <p></p>
+ * This transition, the release timer, should ensure that the popup is not closed when the value is
+ * adjusted rapidly.
+ */
 public class MFXSliderSkin extends SkinBase<MFXSlider> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final Rectangle track;
     private final Rectangle bar;
     private final Group group;
@@ -72,8 +100,8 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
 
     private double preDragThumbPos;
     private Point2D dragStart;
-    private EventHandler<MouseEvent> thumbDragHandler;
     private EventHandler<MouseEvent> thumbPressHandler;
+    private EventHandler<MouseEvent> thumbDragHandler;
     private EventHandler<MouseEvent> trackPressedHandler;
 
     private boolean mousePressed = false;
@@ -85,6 +113,9 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
     private boolean isSnapping = false;
     private boolean wasSnapping = false;
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXSliderSkin(MFXSlider slider) {
         super(slider);
 
@@ -146,6 +177,10 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
         setBehavior();
     }
 
+    //================================================================================
+    // Behavior
+    //================================================================================
+
     /**
      * Calls {@link #sliderHandlers()}, {@link #sliderListeners()}, {@link #skinBehavior()}.
      */
@@ -155,6 +190,17 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
         skinBehavior();
     }
 
+    /**
+     * Defines the slider's behavior as follows:
+     * <p></p>
+     * <p> - Adds a MOUSE_CLICKED event handler to request the focus
+     * <p> - Adds a MOUSE_PRESSED event filter to show the popup if the thumb is pressed, {@link #showPopup()},
+     * also sets a flag "mousePressed" to true, more on this here {@link #updateLayout()}.
+     * <p> - Adds a MOUSE_RELEASED event filter to reset the "mousePressed" flag and starts the releaseTimer
+     * (more about this timer in the skin documentation)
+     * <p> - Adds a KEY_PRESSED event filter to increase/decrease the slider's value accordingly to the
+     * pressed arrow key. Also sets the "keyPressed" and "keyWasPressed" flags to true
+     */
     private void sliderHandlers() {
         MFXSlider slider = getSkinnable();
 
@@ -176,8 +222,11 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
 
         /* KEYBOARD HANDLING */
         slider.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            double val = (event.isShiftDown() || event.isControlDown()) ? slider.getAlternativeUnitIncrement() : slider.getUnitIncrement();
+            if (!slider.isEnableKeyboard()) {
+                return;
+            }
 
+            double val = (event.isShiftDown() || event.isControlDown()) ? slider.getAlternativeUnitIncrement() : slider.getUnitIncrement();
             if (isIncreaseKey(event)) {
                 keyPressed = true;
                 keyWasPressed = true;
@@ -194,6 +243,25 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
         });
     }
 
+    /**
+     * Adds listeners to the following slider's properties:
+     * <p></p>
+     * <p> - {@link MFXSlider#valueProperty()}, to update the update the layout
+     * <p> - {@link MFXSlider#minProperty()}, if this changes the slider's value is reset to prevent inconsistencies,
+     * then updates the layout
+     * <p> - {@link MFXSlider#maxProperty()}, if this changes the slider's value is reset to prevent inconsistencies,
+     * then updates the layout
+     * <p> - {@link MFXSlider#minorTicksCountProperty()}, {@link MFXSlider#tickUnitProperty()}, {@link MFXSlider#showMinorTicksProperty()},
+     * to update the ticks layout according to the changes
+     * <p> - {@link MFXSlider#popupSupplierProperty()}, {@link MFXSlider#thumbSupplierProperty()}, to replace
+     * the popup and the thumb according to the new suppliers, they respectively call {@link #handlePopupChange()} and {@link #handleThumbChange()}.
+     * Also, the popup is managed by the {@link PopupManager}, see {@link PopupManager#initPopup()}.
+     * <p> - {@link MFXSlider#bidirectionalProperty()}, {@link MFXSlider#orientationProperty()}, to update the layout accordingly
+     * <p> - {@link MFXSlider#focusedProperty()}, this is a workaround for an issue with the key handling. For some reason
+     * when the value is adjusted with the arrow keys the slider lose the focus. When this happens we check that
+     * the focus is lost and the "keyPressed" flag is true. If both are true we use {@link PauseBuilder#runWhile(BooleanExpression, Runnable, Runnable)}
+     * to ensure that the focus is reacquired as soon as possible, so that next key events can work too.
+     */
     private void sliderListeners() {
         MFXSlider slider = getSkinnable();
 
@@ -238,15 +306,6 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
             slider.requestLayout();
         });
 
-        /* FOCUS WORKAROUND HANDLING */
-        slider.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue && keyPressed) {
-                AnimationUtils.PauseBuilder.build()
-                        .setDuration(Duration.millis(100))
-                        .runWhile(slider.isFocused(), slider::requestFocus, () -> keyPressed = false);
-            }
-        });
-
         /* LAYOUT HANDLING */
         slider.bidirectionalProperty().addListener((observable, oldValue, newValue) -> slider.requestLayout());
         slider.orientationProperty().addListener((observable, oldValue, newValue) -> {
@@ -256,8 +315,26 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
                 slider.setRotate(0);
             }
         });
+
+        /* FOCUS WORKAROUND HANDLING */
+        slider.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue && keyPressed) {
+                PauseBuilder.build()
+                        .setDuration(Duration.millis(100))
+                        .runWhile(slider.focusedProperty(), slider::requestFocus, () -> keyPressed = false);
+            }
+        });
     }
 
+    /**
+     * Defines the behavior of the skin as follows:
+     * <p></p>
+     * <p> - Adds a MOUSE_PRESSED event handler to the thumb to store layout info needed for the thumb drag before the actual drag begins
+     * <p> - Adds a MOUSE_DRAGGED event handler to the thumb to handle the drag, see {@link #handleDrag(MouseEvent)}
+     * <p> - Adds a MOUSE_PRESSED event handler to the track to update the slider's value according to where the mouse is pressed on the track, see {@link #trackPressed(MouseEvent)}
+     * <p> - Calls {@link PopupManager#initPopup()} for the first time
+     * <p> - Handles the ticks visibility and layout by calling {@link LayoutData#updateTicksData()}
+     */
     private void skinBehavior() {
         MFXSlider slider = getSkinnable();
 
@@ -274,6 +351,26 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
         ticksAxis.needsLayoutProperty().addListener((observable, oldValue, newValue) -> layoutData.updateTicksData());
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
+
+    /**
+     * This is responsible for updating the layout when the slider's value changes.
+     * <p>
+     * Before doing anything it checks if the slider mode is set to "SNAP_TO_TICKS" and the value change
+     * is not due to a key press. In this case the value is adjusted by finding the nearest major tick, see {@link LayoutData#findNearestTick()}.
+     * Also the "isSnapping" flag is set to true so that the value change doesn't trigger this methods again, at the end it is reset to false.
+     * <p></p>
+     * After this first check, {@link LayoutData#update(boolean)} is called (argument is false).
+     * <p>
+     * Then if the "mousePressed" flag is false (so the change is due to a key press) the popup is shown and the release timer is started.
+     * <p></p>
+     * If the value change is due to a mouse press on the track or due to the snap mode and the {@link MFXSlider#animateOnPressProperty()} is true,
+     * the thumb and bar layout is updated with an animation, otherwise it's updated immediately.
+     * <p></p>
+     * At the end the "keyWasPressed" flag is reset to false.
+     */
     private void updateLayout() {
         MFXSlider slider = getSkinnable();
 
@@ -293,7 +390,6 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
         }
 
         if ((trackPressed || wasSnapping) && slider.isAnimateOnPress()) {
-            keyWasPressed = false;
             wasSnapping = false;
             AnimationUtils.ParallelBuilder.build()
                     .add(
@@ -310,8 +406,13 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
             bar.setLayoutX(layoutData.barX);
             bar.setWidth(Math.abs(layoutData.barW));
         }
+
+        keyWasPressed = false;
     }
 
+    /**
+     * Handles the thumb drag and computes the new slider value according to the drag position.
+     */
     private void handleDrag(MouseEvent event) {
         MFXSlider slider = getSkinnable();
         trackPressed = false;
@@ -323,6 +424,9 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
         slider.setValue(val);
     }
 
+    /**
+     * Sets the "trackPressed" flag to true, computes the press position and the new slider value.
+     */
     private void trackPressed(MouseEvent event) {
         MFXSlider slider = getSkinnable();
         trackPressed = true;
@@ -332,6 +436,10 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
         slider.setValue(val);
     }
 
+    /**
+     * Handles changes of the {@link MFXSlider#popupSupplierProperty()}, removes the old popup, builds the new one and if the supplier or the
+     * returned value are not null adds it to the children list, then calls {@link PopupManager#initPopup()}.
+     */
     private void handlePopupChange() {
         MFXSlider slider = getSkinnable();
 
@@ -354,6 +462,10 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
         }
     }
 
+    /**
+     * Handles changes of the {@link MFXSlider#thumbSupplierProperty()} ()}, removes the old thumb, builds the new one and if the supplier or the
+     * returned value are not null (this should never happen though) adds it to the children list, then adds the needed handlers to it.
+     */
     private void handleThumbChange() {
         MFXSlider slider = getSkinnable();
 
@@ -375,6 +487,9 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
         }
     }
 
+    /**
+     * If the popup is not null, stops the release timer and shows the popup with a fade in animation.
+     */
     protected void showPopup() {
         if (popup == null) {
             return;
@@ -382,12 +497,15 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
 
         releaseTimer.stop();
         AnimationUtils.SequentialBuilder.build()
-                .add(AnimationUtils.PauseBuilder.build().setDuration(Duration.ONE).setOnFinished(event -> popup.setVisible(true)).getAnimation())
+                .add(PauseBuilder.build().setDuration(Duration.ONE).setOnFinished(event -> popup.setVisible(true)).getAnimation())
                 .add(new KeyFrame(Duration.millis(200), new KeyValue(popup.opacityProperty(), 1.0, Interpolator.EASE_IN)))
                 .getAnimation()
                 .play();
     }
 
+    /**
+     * If the popup is not null, hides the popup with a fade out animation.
+     */
     protected void hidePopup() {
         if (popup == null) {
             return;
@@ -401,7 +519,7 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
     }
 
     /**
-     * Responsible for building the track and the bars for the progress bar.
+     * Responsible for building the track and the bars for the slider.
      */
     protected Rectangle buildRectangle(String styleClass) {
         Rectangle rectangle = new Rectangle();
@@ -414,10 +532,18 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
         return rectangle;
     }
 
+    /**
+     * Responsible for creating the slider's major ticks.
+     */
     protected Node buildTick() {
         return new MFXFontIcon("mfx-circle", 4);
     }
 
+    /**
+     * Checks if the pressed key is a valid increase key.
+     * <p>
+     * UP or RIGHT respectively for VERTICAL and HORIZONTAL orientations.
+     */
     private boolean isIncreaseKey(KeyEvent event) {
         MFXSlider slider = getSkinnable();
 
@@ -425,6 +551,11 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
                 (event.getCode() == KeyCode.RIGHT && slider.getOrientation() == Orientation.HORIZONTAL);
     }
 
+    /**
+     * Checks if the pressed key is a valid decrease key.
+     * <p>
+     * DOWN or LEFT respectively for VERTICAL and HORIZONTAL orientations.
+     */
     private boolean isDecreaseKey(KeyEvent event) {
         MFXSlider slider = getSkinnable();
 
@@ -432,6 +563,9 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
                 (event.getCode() == KeyCode.LEFT && slider.getOrientation() == Orientation.HORIZONTAL);
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
     @Override
     protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
         return computePrefHeight(width, topInset, rightInset, bottomInset, leftInset);
@@ -484,6 +618,16 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
         ticksAxis.resize(w, h);
     }
 
+    //================================================================================
+    // Support Classes
+    //================================================================================
+
+    /**
+     * Support class to the slider's skin. It helps manage/update info about layout such as:
+     * the x coordinate at zero value (or min if the min is greater than 0, or the max is lesser than 0, or the slider is se
+     * to be non-bidirectional), the thumb x and y coordinates, the bar width and bar x coordinate, the major ticks data (see {@link TickData})
+     * and their y coordinate which is the same for all of them.
+     */
     protected class LayoutData {
         private double zeroPos;
         private double thumbX;
@@ -494,21 +638,25 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
         private final ObservableList<TickData> ticksData = FXCollections.observableArrayList();
         private double ticksY;
 
+        /**
+         * Updated all the layout variables of this class. If the isFullUpdate parameter is false the
+         * zeroPos is not recomputed. It also manages the {@link MFXSlider#bidirectionalProperty()} feature.
+         * <p></p>
+         * One thing I'm excited about this system is how the coordinates are computed. We heavily make use
+         * of {@link NumberUtils#mapOneRangeToAnother(double, NumberRange, NumberRange, int)}. The sliders values
+         * can be negative or be way greater than the slider's width, that's why the slider's value should be mapped
+         * from the min-max range to the width range that goes from 0 to slider.getWidth().
+         */
         public void update(boolean isFullUpdate) {
             MFXSlider slider = getSkinnable();
 
+            boolean ignoreBidirectional = slider.getMin() > 0 || slider.getMax() < 0 || !slider.isBidirectional();
             if (isFullUpdate) {
                 double val;
-                if (slider.getMin() > 0) {
+                if (ignoreBidirectional) {
                     val = slider.getMin();
-                } else if (slider.getMax() < 0) {
-                    val = slider.getMax();
                 } else {
                     val = 0;
-                }
-
-                if (!slider.isBidirectional()) {
-                    val = slider.getMin();
                 }
 
                 zeroPos = NumberUtils.mapOneRangeToAnother(
@@ -529,7 +677,7 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
                     ) - halfThumbWidth());
             thumbY = snapPositionY(-halfThumbHeight() + (slider.getHeight() / 2));
 
-            if (!slider.isBidirectional()) {
+            if (!slider.isBidirectional() || ignoreBidirectional) {
                 barW = thumbX - zeroPos + (halfThumbWidth() * 3);
                 barX = zeroPos - halfThumbWidth();
             } else {
@@ -538,6 +686,12 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
             }
         }
 
+        /**
+         * Builds the major ticks and sets their style class to "tick-even" or "tick-odd" according to their
+         * index in the list.
+         * <p></p>
+         * After building the ticks and their layout data ({@link TickData}, calls {@link #positionTicks()}.
+         */
         public void updateTicksData() {
             MFXSlider slider = getSkinnable();
 
@@ -568,6 +722,13 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
             }
         }
 
+        /**
+         * If the {@link MFXSlider#showMajorTicksProperty()} is set to false, does nothing.
+         * <p></p>
+         * For each previously built {@link TickData} adds the tick to the ticks container and sets their position,
+         * if {@link MFXSlider#showTicksAtEdgesProperty()} is set to false the ticks that represent the min and max values
+         * of the slider are not added.
+         */
         public void positionTicks() {
             MFXSlider slider = getSkinnable();
             if (!slider.isShowMajorTicks()) {
@@ -589,6 +750,12 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
             }
         }
 
+        /**
+         * Gets the current slider's value, then creates a list with the ticks value obtained by mapping the {@link TickData} list
+         * with {@link TickData#getTickVal()}, calls {@link NumberUtils#closestValueTo(double, List)}.
+         *
+         * @return the closest value from the current value and the list of the ticks values
+         */
         public double findNearestTick() {
             MFXSlider slider = getSkinnable();
 
@@ -596,24 +763,48 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
             return NumberUtils.closestValueTo(currVal, ticksData.stream().map(TickData::getTickVal).collect(Collectors.toList()));
         }
 
+        /**
+         * Returns all the ticks by mapping the {@link TickData} list with {@link TickData#getTick()}.
+         */
         public List<Node> getTicks() {
             return ticksData.stream().map(TickData::getTick).collect(Collectors.toList());
         }
 
+        /**
+         * @return half the width of the thumb
+         */
         public double halfThumbWidth() {
             return thumb.prefWidth(-1) / 2;
         }
 
+        /**
+         * @return half the height of the thumb
+         */
         public double halfThumbHeight() {
             return thumb.prefHeight(-1) / 2;
         }
     }
 
+    /**
+     * Support class to the slider's skin. It helps manage the popup, by handling {@link MFXSlider#popupSupplierProperty()} changes,
+     * computing it's position and it's rotation according to the current orientation and side.
+     * <p></p>
+     * The class has three bindings fields: for the layout x (xBinding), layout y (yBinding) and rotation (rBinding).
+     */
+    @SuppressWarnings("FieldCanBeLocal")
     protected class PopupManager {
         private DoubleBinding xBinding;
         private DoubleBinding yBinding;
-        private DoubleBinding rotate;
+        private DoubleBinding rBinding;
 
+        /**
+         * If the popup is not null, re-creates the xBinding (calls {@link #computeXPos()}) which depends on the
+         * thumb's x position, popup's width, thumb supplier, orientation and popup side properties; re-creates the yBinding
+         * (calls {@link #computeYPos()}) which depends on the thumb's y position, popup's height, thumb supplier, orientation and popup side properties;
+         * re-creates the rBinding (calls {@link #computeRotate()}) which depends on the slider's orientation and popup side properties.
+         * <p>
+         * Once the bindings are re-built the popup's layoutX, layoutY and rotate properties are bound to them.
+         */
         private void initPopup() {
             MFXSlider slider = getSkinnable();
             if (popup == null) {
@@ -628,30 +819,21 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
                     this::computeYPos,
                     thumb.layoutYProperty(), popup.heightProperty(), slider.thumbSupplierProperty(), slider.orientationProperty(), slider.popupSideProperty()
             );
-            rotate = Bindings.createDoubleBinding(
+            rBinding = Bindings.createDoubleBinding(
                     this::computeRotate,
                     slider.orientationProperty(), slider.popupSideProperty()
             );
 
-            popup.rotateProperty().bind(rotate);
+            popup.rotateProperty().bind(rBinding);
             popup.layoutXProperty().bind(xBinding);
             popup.layoutYProperty().bind(yBinding);
         }
 
-        private double computeRotate() {
-            MFXSlider slider = getSkinnable();
-
-            if (slider.getOrientation() == Orientation.HORIZONTAL && slider.getPopupSide() == SliderPopupSide.OTHER_SIDE) {
-                return 180;
-            }
-
-            if (slider.getOrientation() == Orientation.VERTICAL) {
-                return slider.getPopupSide() == SliderPopupSide.DEFAULT ? 90 : -90;
-            }
-
-            return 0;
-        }
-
+        /**
+         * Responsible for computing the popup's x position.
+         * <p>
+         * This takes into account the slider's orientation and the popup side properties.
+         */
         private double computeXPos() {
             MFXSlider slider = getSkinnable();
 
@@ -666,6 +848,11 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
             return snapPositionX(x);
         }
 
+        /**
+         * Responsible for computing the popup's y position.
+         * <p>
+         * This takes into account the slider's orientation and the popup side properties.
+         */
         private double computeYPos() {
             MFXSlider slider = getSkinnable();
 
@@ -686,29 +873,67 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
 
             return snapPositionY(y);
         }
+
+        /**
+         * Responsible for computing the popup's rotation angle.
+         * <p>
+         * This takes into account the slider's orientation and the popup side properties.
+         */
+        private double computeRotate() {
+            MFXSlider slider = getSkinnable();
+
+            if (slider.getOrientation() == Orientation.HORIZONTAL && slider.getPopupSide() == SliderPopupSide.OTHER_SIDE) {
+                return 180;
+            }
+
+            if (slider.getOrientation() == Orientation.VERTICAL) {
+                return slider.getPopupSide() == SliderPopupSide.DEFAULT ? 90 : -90;
+            }
+
+            return 0;
+        }
     }
 
+    /**
+     * Support class to the {@link LayoutData} class, simple bean which contains info
+     * about the slider's major ticks such as: the tick Node, the value represented by the tick and its x position.
+     */
     protected static class TickData {
         private Node tick;
         private double tickVal;
         private double x;
 
+        /**
+         * @return the tick Node
+         */
         public Node getTick() {
             return tick;
         }
 
+        /**
+         * @return the value represented by the tick
+         */
         public double getTickVal() {
             return tickVal;
         }
 
+        /**
+         * @return the tick's x position
+         */
         public double getX() {
             return x;
         }
 
+        /**
+         * @return half the tick's height
+         */
         public double halfTickHeight() {
             return tick == null ? 0 : tick.prefHeight(-1) / 2;
         }
 
+        /**
+         * @return half the tick's width
+         */
         public double halfTickWidth() {
             return tick == null ? 0 : tick.prefWidth(-1) / 2;
         }

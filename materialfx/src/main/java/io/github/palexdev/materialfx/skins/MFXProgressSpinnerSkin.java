@@ -19,6 +19,7 @@
 package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
+import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -121,7 +122,7 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
         spinner.progressProperty().addListener((observable, oldValue, newValue) -> updateProgress());
         spinner.visibleProperty().addListener((observable, oldValue, newValue) -> updateAnimation());
         spinner.parentProperty().addListener((observable, oldValue, newValue) -> updateAnimation());
-        spinner.sceneProperty().addListener((observable, oldValue, newValue) -> updateAnimation());
+        NodeUtils.waitForScene(spinner, this::updateAnimation, true, false);
     }
 
     /**

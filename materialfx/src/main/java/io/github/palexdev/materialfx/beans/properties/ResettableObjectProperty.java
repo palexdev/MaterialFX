@@ -21,11 +21,20 @@ package io.github.palexdev.materialfx.beans.properties;
 import io.github.palexdev.materialfx.beans.properties.base.ResettableProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
+/**
+ * A {@link SimpleObjectProperty} that implements {@link ResettableProperty}.
+ */
 public class ResettableObjectProperty<T> extends SimpleObjectProperty<T> implements ResettableProperty<T> {
+    //================================================================================
+    // Properties
+    //================================================================================
     private T defaultValue;
     private boolean fireChangeOnReset = false;
     private boolean hasBeenReset = false;
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public ResettableObjectProperty() {
     }
 
@@ -51,6 +60,9 @@ public class ResettableObjectProperty<T> extends SimpleObjectProperty<T> impleme
         this.defaultValue = defaultValue;
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
     @Override
     public boolean isFireChangeOnReset() {
         return fireChangeOnReset;
