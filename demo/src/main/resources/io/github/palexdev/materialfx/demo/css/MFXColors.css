@@ -17,7 +17,9 @@
  */
 
 * {
+    -mfx-blue: #2196f3;
     -mfx-charcoal: #445055;
-    -mfx-red: #EF6E6B;
+    -mfx-green: #4caf50;
     -mfx-purple: #673AB7;
+    -mfx-red: #EF6E6B;
 }
