@@ -23,9 +23,9 @@ import io.github.palexdev.materialfx.controls.enums.DialogType;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.controls.factories.MFXStageDialogFactory;
 import io.github.palexdev.materialfx.effects.MFXScrimEffect;
+import io.github.palexdev.materialfx.utils.AnimationUtils;
 import javafx.animation.KeyFrame;
 import javafx.animation.ParallelTransition;
-import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
@@ -142,11 +142,12 @@ public class MFXStageDialog {
                 throw new IllegalStateException("Scrim background is set to true but the dialog stage owner is null or modality is not set!!");
             }
             if (animate) {
-                Timeline fadeInScrim = MFXAnimationFactory.FADE_IN.build(scrimEffect.getScrimNode(), animationMillis);
-                fadeInScrim.getKeyFrames().add(
-                        new KeyFrame(Duration.ONE, event -> scrimEffect.scrimWindow(dialogStage.getOwner(), scrimOpacity))
+                inAnimation.getChildren().add(
+                        AnimationUtils.TimelineBuilder.build()
+                                .add(new KeyFrame(Duration.ZERO, event -> scrimEffect.scrimWindow(dialogStage.getOwner(), scrimOpacity)))
+                                .show(animationMillis, scrimEffect.getScrimNode())
+                                .getAnimation()
                 );
-                inAnimation.getChildren().add(fadeInScrim);
             } else {
                 scrimEffect.scrimWindow(dialogStage.getOwner(), scrimOpacity);
             }
@@ -193,9 +194,12 @@ public class MFXStageDialog {
 
         if (scrimBackground) {
             if (animate) {
-                Timeline fadeOutScrim = MFXAnimationFactory.FADE_OUT.build(scrimEffect.getScrimNode(), animationMillis);
-                fadeOutScrim.setOnFinished(event -> scrimEffect.removeEffect(dialogStage.getOwner()));
-                outAnimation.getChildren().add(fadeOutScrim);
+                outAnimation.getChildren().add(
+                        AnimationUtils.TimelineBuilder.build()
+                                .hide(animationMillis, scrimEffect.getScrimNode())
+                                .setOnFinished(event -> scrimEffect.removeEffect(dialogStage.getOwner()))
+                                .getAnimation()
+                );
             } else {
                 scrimEffect.removeEffect(dialogStage.getOwner());
             }

@@ -21,10 +21,10 @@ package io.github.palexdev.materialfx.skins;
 import io.github.palexdev.materialfx.controls.MFXListView;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.effects.MFXDepthManager;
+import io.github.palexdev.materialfx.utils.AnimationUtils;
+import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
 import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
@@ -54,8 +54,8 @@ public class MFXListViewSkin<T> extends ListViewSkin<T> {
     private final ScrollBar vBar;
     private final ScrollBar hBar;
 
-    private final Timeline hideBars;
-    private final Timeline showBars;
+    private final Animation hideBars;
+    private final Animation showBars;
 
     //================================================================================
     // Constructors
@@ -81,16 +81,20 @@ public class MFXListViewSkin<T> extends ListViewSkin<T> {
         hBar.getStyleClass().add("mfx-scroll-bar");
         hBar.visibleProperty().bind(hBar.visibleAmountProperty().isNotEqualTo(0));
 
-        hideBars = new Timeline(
-                new KeyFrame(Duration.millis(400),
-                        new KeyValue(vBar.opacityProperty(), 0.0, MFXAnimationFactory.getInterpolatorV1()),
-                        new KeyValue(hBar.opacityProperty(), 0.0, MFXAnimationFactory.getInterpolatorV1()))
-        );
-        showBars = new Timeline(
-                new KeyFrame(Duration.millis(400),
-                        new KeyValue(vBar.opacityProperty(), 1.0, MFXAnimationFactory.getInterpolatorV1()),
-                        new KeyValue(hBar.opacityProperty(), 1.0, MFXAnimationFactory.getInterpolatorV1()))
-        );
+        hideBars = AnimationUtils.TimelineBuilder.build()
+                .add(
+                        KeyFrames.of(Duration.millis(400),
+                                new KeyValue(vBar.opacityProperty(), 0.0, MFXAnimationFactory.getInterpolatorV1()),
+                                new KeyValue(hBar.opacityProperty(), 0.0, MFXAnimationFactory.getInterpolatorV1()))
+                )
+                .getAnimation();
+        showBars = AnimationUtils.TimelineBuilder.build()
+                .add(
+                        KeyFrames.of(Duration.millis(400),
+                                new KeyValue(vBar.opacityProperty(), 1.0, MFXAnimationFactory.getInterpolatorV1()),
+                                new KeyValue(hBar.opacityProperty(), 1.0, MFXAnimationFactory.getInterpolatorV1()))
+                )
+                .getAnimation();
 
         if (listView.isHideScrollBars()) {
             vBar.setOpacity(0.0);

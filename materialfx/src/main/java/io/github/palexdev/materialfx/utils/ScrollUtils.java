@@ -24,7 +24,6 @@ import io.github.palexdev.materialfx.controls.flowless.VirtualFlow;
 import javafx.animation.Animation;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
@@ -255,9 +254,11 @@ public class ScrollUtils {
                     if (newValue) {
                         MFXAnimationFactory.FADE_IN.build(scrollBar, fadeSpeedMillis).play();
                     } else {
-                        PauseTransition pauseTransition = new PauseTransition(Duration.millis(hideAfterMillis));
-                        pauseTransition.setOnFinished(event -> MFXAnimationFactory.FADE_OUT.build(scrollBar, fadeSpeedMillis).play());
-                        pauseTransition.play();
+                        AnimationUtils.PauseBuilder.build()
+                                .setDuration(hideAfterMillis)
+                                .setOnFinished(event -> MFXAnimationFactory.FADE_OUT.build(scrollBar, fadeSpeedMillis).play())
+                                .getAnimation()
+                                .play();
                     }
                 });
             });

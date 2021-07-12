@@ -20,9 +20,8 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXDialog;
-import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
+import io.github.palexdev.materialfx.utils.AnimationUtils;
 import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.scene.Parent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -139,11 +138,12 @@ public class MFXDialog extends AbstractMFXDialog {
         if (animateIn.get()) {
             inAnimation.getChildren().setAll(inAnimationType.build(this, animationMillis.get()));
             if (scrimBackground.get()) {
-                Timeline fadeInScrim = MFXAnimationFactory.FADE_IN.build(scrimEffect.getScrimNode(), animationMillis.get());
-                fadeInScrim.getKeyFrames().add(0,
-                        new KeyFrame(Duration.ZERO, event -> scrimEffect.modalScrim((Pane) getParent(), this, scrimOpacity.get()))
+                inAnimation.getChildren().add(
+                        AnimationUtils.TimelineBuilder.build()
+                                .add(new KeyFrame(Duration.ZERO, event -> scrimEffect.modalScrim((Pane) getParent(), this, scrimOpacity.get())))
+                                .show(animationMillis.get(), scrimEffect.getScrimNode())
+                                .getAnimation()
                 );
-                inAnimation.getChildren().add(fadeInScrim);
             }
             inAnimation.setOnFinished(event -> fireDialogEvent(MFXDialogEvent.ON_OPENED_EVENT));
             setVisible(true);
@@ -168,9 +168,12 @@ public class MFXDialog extends AbstractMFXDialog {
         if (animateOut.get()) {
             outAnimation.getChildren().setAll(outAnimationType.build(this, animationMillis.get()));
             if (scrimBackground.get()) {
-                Timeline fadeOutScrim = MFXAnimationFactory.FADE_OUT.build(scrimEffect.getScrimNode(), animationMillis.get());
-                fadeOutScrim.setOnFinished(event -> scrimEffect.removeEffect((Pane) getParent()));
-                outAnimation.getChildren().add(fadeOutScrim);
+                outAnimation.getChildren().add(
+                        AnimationUtils.TimelineBuilder.build()
+                                .hide(animationMillis.get(), scrimEffect.getScrimNode())
+                                .setOnFinished(event -> scrimEffect.removeEffect((Pane) getParent()))
+                                .getAnimation()
+                );
             }
             outAnimation.setOnFinished(event -> {
                 setVisible(false);

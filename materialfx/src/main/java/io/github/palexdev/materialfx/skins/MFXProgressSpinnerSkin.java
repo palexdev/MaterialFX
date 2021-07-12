@@ -19,6 +19,7 @@
 package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
+import io.github.palexdev.materialfx.utils.AnimationUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -36,9 +37,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 /**
@@ -63,7 +62,7 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
     private final Rectangle fillRect;
     private final Text text;
 
-    private Timeline timeline;
+    private Timeline animation;
 
     //================================================================================
     // Constructors
@@ -146,9 +145,9 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
         MFXProgressSpinner spinner = getSkinnable();
 
         if (spinner.isIndeterminate()) {
-            if (timeline == null) {
-                createTransition();
-                timeline.play();
+            if (animation == null) {
+                createAnimation();
+                animation.play();
             }
         } else {
             clearAnimation();
@@ -161,10 +160,10 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
      * Clears the animation.
      */
     private void clearAnimation() {
-        if (timeline != null) {
-            timeline.stop();
-            timeline.getKeyFrames().clear();
-            timeline = null;
+        if (animation != null) {
+            animation.stop();
+            animation.getKeyFrames().clear();
+            animation = null;
         }
     }
 
@@ -177,17 +176,17 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
         final boolean isTreeVisible = spinner.isVisible() &&
                 spinner.getParent() != null &&
                 spinner.getScene() != null;
-        if (timeline != null) {
+        if (animation != null) {
             pauseTimeline(!isTreeVisible);
         } else if (isTreeVisible) {
-            createTransition();
+            createAnimation();
         }
     }
 
     /**
      * Creates the animation.
      */
-    private void createTransition() {
+    private void createAnimation() {
         MFXProgressSpinner spinner = getSkinnable();
 
         if (!spinner.isIndeterminate()) return;
@@ -200,23 +199,24 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
                 new KeyValue(arc.lengthProperty(), 5, Interpolator.LINEAR),
                 new KeyValue(arc.startAngleProperty(), 1845 + spinner.getStartingAngle(), Interpolator.LINEAR));
 
-        List<KeyFrame> allFrames = Stream.of(
+        KeyFrame[] allFrames = Stream.of(
                 getKeyFrames(0, 0, initialColor == null ? blueColor : initialColor),
                 getKeyFrames(450, 1.4, initialColor == null ? redColor : initialColor),
                 getKeyFrames(900, 2.8, initialColor == null ? yellowColor : initialColor),
-                getKeyFrames(1350, 4.2, initialColor == null ? greenColor : initialColor)
-        ).flatMap(Collection::stream).collect(Collectors.toList());
-        allFrames.add(endingFrame);
+                getKeyFrames(1350, 4.2, initialColor == null ? greenColor : initialColor),
+                new KeyFrame[] { endingFrame }
+        ).flatMap(Arrays::stream).toArray(KeyFrame[]::new);
 
-        if (timeline != null) {
-            timeline.stop();
-            timeline.getKeyFrames().clear();
+        if (animation != null) {
+            animation.stop();
+            animation.getKeyFrames().clear();
         }
-        timeline = new Timeline();
-        timeline.getKeyFrames().addAll(allFrames);
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.setDelay(Duration.ZERO);
-        timeline.playFromStart();
+        animation = AnimationUtils.TimelineBuilder.build()
+                .add(allFrames)
+                .setDelay(Duration.ZERO)
+                .setCycleCount(Timeline.INDEFINITE)
+                .getAnimation();
+        animation.playFromStart();
     }
 
     /**
@@ -226,13 +226,13 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
         MFXProgressSpinner spinner = getSkinnable();
 
         if (spinner.isIndeterminate()) {
-            if (timeline == null) {
-                createTransition();
+            if (animation == null) {
+                createAnimation();
             }
             if (pause) {
-                timeline.pause();
+                animation.pause();
             } else {
-                timeline.play();
+                animation.play();
             }
         }
     }
@@ -240,7 +240,7 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
     /**
      * Creates the needed key frames for the animation.
      */
-    private List<KeyFrame> getKeyFrames(double angle, double duration, Paint color) {
+    private KeyFrame[] getKeyFrames(double angle, double duration, Paint color) {
         MFXProgressSpinner spinner = getSkinnable();
 
         KeyFrame kf1 = new KeyFrame(Duration.seconds(duration),
@@ -260,7 +260,7 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
                 new KeyValue(arc.startAngleProperty(), angle + 435 + spinner.getStartingAngle(), Interpolator.LINEAR),
                 new KeyValue(arc.strokeProperty(), color, Interpolator.EASE_BOTH));
 
-        return List.of(kf1, kf2, kf3, kf4);
+        return new KeyFrame[] {kf1, kf2, kf3, kf4};
     }
 
     /**

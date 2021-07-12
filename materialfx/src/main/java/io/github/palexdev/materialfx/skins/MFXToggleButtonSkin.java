@@ -23,11 +23,10 @@ import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.effects.MFXDepthManager;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
+import io.github.palexdev.materialfx.utils.AnimationUtils;
+import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.Interpolator;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Cursor;
 import javafx.scene.control.skin.ToggleButtonSkin;
@@ -165,16 +164,11 @@ public class MFXToggleButtonSkin extends ToggleButtonSkin {
      * @param isSelected The control's state
      */
     private void buildAndPlayAnimation(boolean isSelected) {
-        KeyValue circleTranslateXKey;
-        KeyFrame circleTranslateXFrame;
-        KeyFrame rippleAnimationFrame;
-
-        circleTranslateXKey = new KeyValue(circle.translateXProperty(), computeTranslateX(isSelected), Interpolator.EASE_BOTH);
-
-        circleTranslateXFrame = new KeyFrame(Duration.millis(150), circleTranslateXKey);
-        rippleAnimationFrame = new KeyFrame(Duration.ZERO, event -> rippleGenerator.generateRipple(null));
-        Timeline timeline = new Timeline(circleTranslateXFrame, rippleAnimationFrame);
-        timeline.play();
+        AnimationUtils.TimelineBuilder.build()
+                .add(
+                        KeyFrames.of(Duration.ZERO, event -> rippleGenerator.generateRipple(null)),
+                        KeyFrames.of(150, circle.translateXProperty(), computeTranslateX(isSelected), Interpolator.EASE_BOTH)
+                ).getAnimation().play();
     }
 
     /**

@@ -20,15 +20,14 @@ package io.github.palexdev.materialfx.demo.controllers;
 
 import io.github.palexdev.materialfx.beans.MFXLoaderBean.Builder;
 import io.github.palexdev.materialfx.controls.*;
-import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.demo.MFXDemoResourcesLoader;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.materialfx.utils.AnimationUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.ScrollUtils;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.ParallelTransition;
-import javafx.animation.Timeline;
 import javafx.application.HostServices;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -182,26 +181,19 @@ public class DemoController implements Initializable {
     }
 
     private void initAnimations() {
-        Timeline fadeIn = MFXAnimationFactory.FADE_IN.build(navBar, 400);
-        Timeline show = new Timeline(
-                new KeyFrame(Duration.millis(300), new KeyValue(navBar.translateXProperty(), 5))
-        );
-        Timeline left = new Timeline(
-                new KeyFrame(Duration.millis(200), new KeyValue(opNavButton.rotateProperty(), -180))
-        );
+        openNav = (ParallelTransition) AnimationUtils.ParallelBuilder.build()
+                .show(400, navBar)
+                .add(new KeyFrame(Duration.millis(300), new KeyValue(navBar.translateXProperty(), 5)))
+                .add(new KeyFrame(Duration.millis(200), new KeyValue(opNavButton.rotateProperty(), -180)))
+                .setOnFinished(event -> isNavShown = true)
+                .getAnimation();
 
-        Timeline fadeOut = MFXAnimationFactory.FADE_OUT.build(navBar, 50);
-        Timeline close = new Timeline(
-                new KeyFrame(Duration.millis(300), new KeyValue(navBar.translateXProperty(), -240))
-        );
-        Timeline right = new Timeline(
-                new KeyFrame(Duration.millis(200), new KeyValue(opNavButton.rotateProperty(), 0))
-        );
-
-        openNav = new ParallelTransition(fadeIn, show, left);
-        openNav.setOnFinished(event -> isNavShown = true);
-        closeNav = new ParallelTransition(fadeOut, close, right);
-        closeNav.setOnFinished(event -> isNavShown = false);
+        closeNav = (ParallelTransition) AnimationUtils.ParallelBuilder.build()
+                .hide(50, navBar)
+                .add(new KeyFrame(Duration.millis(300), new KeyValue(navBar.translateXProperty(), -240)))
+                .add(new KeyFrame(Duration.millis(200), new KeyValue(opNavButton.rotateProperty(), 0)))
+                .setOnFinished(event -> isNavShown = false)
+                .getAnimation();
     }
 
     private void animate() {

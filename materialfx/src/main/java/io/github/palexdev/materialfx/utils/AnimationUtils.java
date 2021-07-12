@@ -23,6 +23,7 @@ import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import javafx.animation.*;
 import javafx.animation.Animation.Status;
 import javafx.beans.binding.BooleanExpression;
+import javafx.beans.value.WritableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -31,6 +32,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Window;
 import javafx.util.Duration;
 
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
@@ -233,9 +235,7 @@ public class AnimationUtils {
          * "main" animation by calling {@link #addAnimation(Animation)}.
          */
         public AbstractBuilder add(EventHandler<ActionEvent> onFinished, KeyFrame... keyFrames) {
-            Timeline timeline = new Timeline(keyFrames);
-            timeline.setOnFinished(onFinished);
-            addAnimation(timeline);
+            addAnimation(TimelineBuilder.build().add(keyFrames).setOnFinished(onFinished).getAnimation());
             return this;
         }
 
@@ -283,10 +283,7 @@ public class AnimationUtils {
          */
         public AbstractBuilder hide(Duration duration, Window... windows) {
             for (Window window : windows) {
-                Timeline timeline = new Timeline(
-                        new KeyFrame(duration, new KeyValue(window.opacityProperty(), 0))
-                );
-                addAnimation(timeline);
+                addAnimation(TimelineBuilder.build().add(KeyFrames.of(duration, window.opacityProperty(), 0)).getAnimation());
             }
             return this;
         }
@@ -306,7 +303,7 @@ public class AnimationUtils {
          */
         public AbstractBuilder hide(Duration duration, Node... nodes) {
             for (Node node : nodes) {
-                addAnimation(MFXAnimationFactory.FADE_OUT.build(node, duration.toMillis()));
+                addAnimation(TimelineBuilder.build().hide(duration, node).getAnimation());
             }
             return this;
         }
@@ -324,9 +321,7 @@ public class AnimationUtils {
          */
         public final AbstractBuilder hide(AnimationsData... data) {
             for (AnimationsData animData : data) {
-                Animation animation = MFXAnimationFactory.FADE_OUT.build(animData.node(), animData.duration().toMillis());
-                animation.setOnFinished(animData.onFinished());
-                addAnimation(animation);
+                addAnimation(TimelineBuilder.build().hide(animData).getAnimation());
             }
             return this;
         }
@@ -338,10 +333,7 @@ public class AnimationUtils {
          */
         public AbstractBuilder show(Duration duration, Window... windows) {
             for (Window window : windows) {
-                Timeline timeline = new Timeline(
-                        new KeyFrame(duration, new KeyValue(window.opacityProperty(), 1.0))
-                );
-                addAnimation(timeline);
+                addAnimation(TimelineBuilder.build().show(duration, window).getAnimation());
             }
             return this;
         }
@@ -361,7 +353,7 @@ public class AnimationUtils {
          */
         public AbstractBuilder show(Duration duration, Node... nodes) {
             for (Node node : nodes) {
-                addAnimation(MFXAnimationFactory.FADE_IN.build(node, duration.toMillis()));
+                addAnimation(TimelineBuilder.build().show(duration, node).getAnimation());
             }
             return this;
         }
@@ -379,9 +371,7 @@ public class AnimationUtils {
          */
         public final AbstractBuilder show(AnimationsData... data) {
             for (AnimationsData animData : data) {
-                Animation animation = MFXAnimationFactory.FADE_IN.build(animData.node(), animData.duration().toMillis());
-                animation.setOnFinished(animData.onFinished());
-                addAnimation(animation);
+                addAnimation(TimelineBuilder.build().show(animData).getAnimation());
             }
             return this;
         }
@@ -395,10 +385,34 @@ public class AnimationUtils {
         }
 
         /**
+         * Sets the "main" animation cycle count.
+         */
+        public AbstractBuilder setCycleCount(int cycleCount) {
+            animation.setCycleCount(cycleCount);
+            return this;
+        }
+
+        /**
          * Sets the "main" animation delay.
          */
         public AbstractBuilder setDelay(Duration delay) {
             animation.setDelay(delay);
+            return this;
+        }
+
+        /**
+         * Sets the "main" animation delay.
+         */
+        public AbstractBuilder setDelay(double millis) {
+            animation.setDelay(Duration.millis(millis));
+            return this;
+        }
+
+        /**
+         * Sets the "main" animation rate/speed.
+         */
+        public AbstractBuilder setRate(double rate) {
+            animation.setRate(rate);
             return this;
         }
     }
@@ -488,6 +502,185 @@ public class AnimationUtils {
     }
 
     /**
+     * Builder class to easily create a {@link Timeline} with fluent api.
+     */
+    public static class TimelineBuilder {
+        //================================================================================
+        // Properties
+        //================================================================================
+        private final Timeline timeline = new Timeline();
+
+        /**
+         * @return a new TimelineBuilder instance. Equivalent to calling the constructor,
+         * it's just a way to omit the new keyword
+         */
+        public static TimelineBuilder build() {
+            return new TimelineBuilder();
+        }
+
+        //================================================================================
+        // Methods
+        //================================================================================
+
+        /**
+         * Adds the specified KeyFrames to the timeline.
+         */
+        public TimelineBuilder add(KeyFrame... keyFrames) {
+            timeline.getKeyFrames().addAll(Arrays.asList(keyFrames));
+            return this;
+        }
+
+        /**
+         * Builds a KeyFrame to hide the given Window by fading it out.
+         *
+         * @param duration the fade animation speed
+         */
+        public TimelineBuilder hide(Duration duration, Window window) {
+            add(KeyFrames.of(duration, window.opacityProperty(), 0));
+            return this;
+        }
+
+        /**
+         * Calls {@link #hide(Duration, Window)} by converting the given millis value
+         * with {@link Duration#millis(double)}.
+         */
+        public TimelineBuilder hide(double millis, Window window) {
+            return hide(Duration.millis(millis), window);
+        }
+
+        /**
+         * Builds the KeyFrames to hide the given node by fading it out.
+         *
+         * @param duration the fade animation speed
+         */
+        public TimelineBuilder hide(Duration duration, Node node) {
+            add(
+                    KeyFrames.of(Duration.ZERO, node.opacityProperty(), 1.0, MFXAnimationFactory.getInterpolatorV1()),
+                    KeyFrames.of(duration, node.opacityProperty(), 0, MFXAnimationFactory.getInterpolatorV1())
+            );
+            return this;
+        }
+
+        /**
+         * Calls {@link #hide(Duration, Node)} by converting the given millis value
+         * with {@link Duration#millis(double)}.
+         */
+        public TimelineBuilder hide(double millis, Node node) {
+            return hide(Duration.millis(millis), node);
+        }
+
+        /**
+         * Builds the KeyFrames to hide the specified node in the AnimationsData bean, by fading it out.
+         */
+        public final TimelineBuilder hide(AnimationsData data) {
+            add(
+                    KeyFrames.of(Duration.ZERO, data.node().opacityProperty(), 1.0),
+                    KeyFrames.of(data.duration(), data.node().opacityProperty(), 0.0)
+            );
+            setOnFinished(data.onFinished());
+            return this;
+        }
+
+        /**
+         * Builds a KeyFrame to show the given Window by fading it in.
+         *
+         * @param duration the fade animation speed
+         */
+        public TimelineBuilder show(Duration duration, Window window) {
+            add(KeyFrames.of(duration, window.opacityProperty(), 1.0));
+            return this;
+        }
+
+        /**
+         * Calls {@link #show(Duration, Window)} by converting the given millis value
+         * with {@link Duration#millis(double)}.
+         */
+        public TimelineBuilder show(double millis, Window window) {
+            return show(Duration.millis(millis), window);
+        }
+
+        /**
+         * Builds the KeyFrames to show the given node by fading it in.
+         *
+         * @param duration the fade animation speed
+         */
+        public TimelineBuilder show(Duration duration, Node node) {
+            add(
+                    KeyFrames.of(Duration.ZERO, node.opacityProperty(), 0.0),
+                    KeyFrames.of(duration, node.opacityProperty(), 1.0)
+            );
+            return this;
+        }
+
+        /**
+         * Calls {@link #show(Duration, Node)} by converting the given millis value
+         * with {@link Duration#millis(double)}.
+         */
+        public TimelineBuilder show(double millis, Node node) {
+            return show(Duration.millis(millis), node);
+        }
+
+        /**
+         * Creates and adds a fade in animation for each given {@link AnimationsData}.
+         */
+        public final TimelineBuilder show(AnimationsData data) {
+            add(
+                    KeyFrames.of(Duration.ZERO, data.node().opacityProperty(), 0.0),
+                    KeyFrames.of(data.duration(), data.node().opacityProperty(), 1.0)
+            );
+            setOnFinished(data.onFinished());
+            return this;
+        }
+
+        /**
+         * Sets the timeline cycle count.
+         */
+        public TimelineBuilder setCycleCount(int cycleCount) {
+            timeline.setCycleCount(cycleCount);
+            return this;
+        }
+
+        /**
+         * Sets the timeline delay.
+         */
+        public TimelineBuilder setDelay(Duration delay) {
+            timeline.setDelay(delay);
+            return this;
+        }
+
+        /**
+         * Sets the timeline delay.
+         */
+        public TimelineBuilder setDelay(double millis) {
+            timeline.setDelay(Duration.millis(millis));
+            return this;
+        }
+
+        /**
+         * Sets the timeline rate/speed.
+         */
+        public TimelineBuilder setRate(double rate) {
+            timeline.setRate(rate);
+            return this;
+        }
+
+        /**
+         * Sets the action to perform when the timeline ends.
+         */
+        public TimelineBuilder setOnFinished(EventHandler<ActionEvent> onFinished) {
+            timeline.setOnFinished(onFinished);
+            return this;
+        }
+
+        /**
+         * @return the instance of the Timeline
+         */
+        public Timeline getAnimation() {
+            return timeline;
+        }
+    }
+
+    /**
      * Builder class to easily create a {@link PauseTransition} with fluent api.
      */
     public static class PauseBuilder {
@@ -515,8 +708,8 @@ public class AnimationUtils {
         /**
          * Sets the pause transition duration.
          */
-        public PauseBuilder setDuration(Duration value) {
-            pauseTransition.setDuration(value);
+        public PauseBuilder setDuration(Duration duration) {
+            pauseTransition.setDuration(duration);
             return this;
         }
 
@@ -532,8 +725,8 @@ public class AnimationUtils {
         /**
          * Sets the action to perform when the pause transition ends.
          */
-        public PauseBuilder setOnFinished(EventHandler<ActionEvent> value) {
-            pauseTransition.setOnFinished(value);
+        public PauseBuilder setOnFinished(EventHandler<ActionEvent> onFinished) {
+            pauseTransition.setOnFinished(onFinished);
             return this;
         }
 
@@ -587,6 +780,84 @@ public class AnimationUtils {
                 }
             });
             getAnimation().play();
+        }
+    }
+
+    /**
+     * Builder class for keyframes and keyvalues.
+     */
+    public static class KeyFrames {
+
+        //================================================================================
+        // Constructors
+        //================================================================================
+        private KeyFrames() {
+        }
+
+        //================================================================================
+        // Static Methods
+        //================================================================================
+
+        /**
+         * Returns a new KeyFrame with the given duration and action.
+         */
+        public static KeyFrame of(Duration duration, EventHandler<ActionEvent> action) {
+            return new KeyFrame(duration, action);
+        }
+
+        /**
+         * Calls {@link #of(Duration, EventHandler)} by converting the given millis value
+         * with {@link Duration#millis(double)}.
+         */
+        public static KeyFrame of(double millis, EventHandler<ActionEvent> action) {
+            return of(Duration.millis(millis), action);
+        }
+
+        /**
+         * Returns a new KeyFrame with the given duration and keyvalues.
+         */
+        public static KeyFrame of(Duration duration, KeyValue... keyValues) {
+            return new KeyFrame(duration, keyValues);
+        }
+
+        /**
+         * Calls {@link #of(Duration, KeyValue[])} by converting the given millis value
+         * with {@link Duration#millis(double)}.
+         */
+        public static KeyFrame of(double millis, KeyValue... keyValues) {
+            return of(Duration.millis(millis), keyValues);
+        }
+
+        /**
+         * Returns a new KeyFrame with the given duration and builds a new KeyValue for it
+         * with the given writable property and endValue.
+         */
+        public static <T> KeyFrame of(Duration duration, WritableValue<T> writableValue, T endValue) {
+            return of(duration, new KeyValue(writableValue, endValue));
+        }
+
+        /**
+         * Calls {@link #of(Duration, WritableValue, Object)} by converting the given millis value
+         * with {@link Duration#millis(double)}.
+         */
+        public static <T> KeyFrame of(double millis, WritableValue<T> writableValue, T endValue) {
+            return of(Duration.millis(millis), writableValue, endValue);
+        }
+
+        /**
+         * Returns a new KeyFrame with the given duration and builds a new KeyValue for it
+         * with the given writable property, endValue and interpolator.
+         */
+        public static <T> KeyFrame of(Duration duration, WritableValue<T> writableValue, T endValue, Interpolator interpolator) {
+            return of(duration, new KeyValue(writableValue, endValue, interpolator));
+        }
+
+        /**
+         * Calls {@link #of(Duration, WritableValue, Object, Interpolator)} by converting the given millis value
+         * with {@link Duration#millis(double)}.
+         */
+        public static <T> KeyFrame of(double millis, WritableValue<T> writableValue, T endValue, Interpolator interpolator) {
+            return of(Duration.millis(millis), writableValue, endValue, interpolator);
         }
     }
 }

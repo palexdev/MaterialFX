@@ -28,11 +28,10 @@ import io.github.palexdev.materialfx.controls.cell.MFXDateCell;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
-import io.github.palexdev.materialfx.utils.ColorUtils;
-import io.github.palexdev.materialfx.utils.NodeUtils;
-import io.github.palexdev.materialfx.utils.ScrollUtils;
-import io.github.palexdev.materialfx.utils.StringUtils;
-import javafx.animation.*;
+import io.github.palexdev.materialfx.utils.*;
+import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
+import javafx.animation.Animation;
+import javafx.animation.Interpolator;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -117,9 +116,9 @@ public class MFXDatePickerContent extends VBox {
     private MFXIconWrapper monthForwardButton;
     private MFXIconWrapper inputButton;
 
-    private Timeline yearsOpen;
-    private Timeline yearsClose;
-    private Timeline calendarTransition;
+    private Animation yearsOpen;
+    private Animation yearsClose;
+    private Animation calendarTransition;
 
     private final ObjectProperty<MFXDateCell> lastSelectedDayCell = new SimpleObjectProperty<>(null);
     private MFXDateCell lastSelectedYearCell = null;
@@ -688,23 +687,25 @@ public class MFXDatePickerContent extends VBox {
      * Builds the animations played when the years grid is opened/closed.
      */
     private void buildAnimations() {
-        yearsOpen = new Timeline(
-                new KeyFrame(Duration.ZERO, event -> {
-                    calendar.setVisible(false);
-                    yearsScroll.setVisible(true);
-                }),
-                new KeyFrame(Duration.millis(150), new KeyValue(yearsButton.rotateProperty(), -180, Interpolator.EASE_OUT)),
-                new KeyFrame(Duration.millis(400), new KeyValue(yearsScroll.opacityProperty(), 1.0, Interpolator.EASE_BOTH))
-        );
+        yearsOpen = AnimationUtils.TimelineBuilder.build()
+                .add(
+                        KeyFrames.of(Duration.ZERO, event -> {
+                            calendar.setVisible(false);
+                            yearsScroll.setVisible(true);
+                        }),
+                        KeyFrames.of(150, yearsButton.rotateProperty(), -180, Interpolator.EASE_OUT),
+                        KeyFrames.of(400, yearsScroll.opacityProperty(), 1.0, Interpolator.EASE_BOTH)
+                ).getAnimation();
 
-        yearsClose = new Timeline(
-                new KeyFrame(Duration.millis(150), new KeyValue(yearsButton.rotateProperty(), 0, Interpolator.EASE_OUT)),
-                new KeyFrame(Duration.millis(250), new KeyValue(yearsScroll.opacityProperty(), 0.0, Interpolator.EASE_BOTH))
-        );
-        yearsClose.setOnFinished(event -> {
-            yearsScroll.setVisible(false);
-            calendar.setVisible(true);
-        });
+        yearsClose = AnimationUtils.TimelineBuilder.build()
+                .add(
+                        KeyFrames.of(150, yearsButton.rotateProperty(), 0, Interpolator.EASE_OUT),
+                        KeyFrames.of(250, yearsScroll.opacityProperty(), 0.0, Interpolator.EASE_BOTH)
+                )
+                .setOnFinished(event -> {
+                    yearsScroll.setVisible(false);
+                    calendar.setVisible(true);
+                }).getAnimation();
     }
 
     /**
@@ -734,14 +735,14 @@ public class MFXDatePickerContent extends VBox {
         Rectangle clip = new Rectangle(img.getFitWidth(), img.getFitHeight());
         holder.setClip(clip);
 
-        calendarTransition = new Timeline(
-                new KeyFrame(Duration.millis(200),
-                        new KeyValue(img.translateXProperty(), offset * holder.getWidth(), Interpolator.EASE_OUT))
-        );
-        calendarTransition.setOnFinished(event -> {
-            holder.getChildren().remove(img);
-            holder.setClip(null);
-        });
+        calendarTransition = AnimationUtils.TimelineBuilder.build()
+                .add(
+                        KeyFrames.of(200, img.translateXProperty(), offset * holder.getWidth(), Interpolator.EASE_OUT)
+                )
+                .setOnFinished(event -> {
+                    holder.getChildren().remove(img);
+                    holder.setClip(null);
+                }).getAnimation();
         calendarTransition.play();
     }
 

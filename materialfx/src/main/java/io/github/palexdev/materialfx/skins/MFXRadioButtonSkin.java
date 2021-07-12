@@ -21,12 +21,12 @@ package io.github.palexdev.materialfx.skins;
 import io.github.palexdev.materialfx.controls.MFXRadioButton;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
+import io.github.palexdev.materialfx.utils.AnimationUtils;
+import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.Interpolator;
-import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.scene.Cursor;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.skin.RadioButtonSkin;
@@ -156,13 +156,15 @@ public class MFXRadioButtonSkin extends RadioButtonSkin {
         final MFXRadioButton radioButton = (MFXRadioButton) getSkinnable();
         final Duration duration = Duration.millis(200);
 
-        KeyValue keyValue1 = new KeyValue(dot.scaleXProperty(), radioButton.isSelected() ? 0.55 : 0, Interpolator.EASE_BOTH);
-        KeyValue keyValue2 = new KeyValue(dot.scaleYProperty(), radioButton.isSelected() ? 0.55 : 0, Interpolator.EASE_BOTH);
-        KeyValue keyValue3 = new KeyValue(radio.strokeProperty(), radioButton.isSelected() ? radioButton.getSelectedColor() : radioButton.getUnSelectedColor(), Interpolator.EASE_BOTH);
-
-        KeyFrame keyFrame = new KeyFrame(duration, keyValue1, keyValue2, keyValue3);
-        Timeline timeline = new Timeline(keyFrame);
-        timeline.play();
+        AnimationUtils.TimelineBuilder.build()
+                .add(
+                        KeyFrames.of(duration,
+                                new KeyValue(dot.scaleXProperty(), radioButton.isSelected() ? 0.55 : 0, Interpolator.EASE_BOTH),
+                                new KeyValue(dot.scaleYProperty(), radioButton.isSelected() ? 0.55 : 0, Interpolator.EASE_BOTH),
+                                new KeyValue(radio.strokeProperty(), radioButton.isSelected() ? radioButton.getSelectedColor() : radioButton.getUnSelectedColor(), Interpolator.EASE_BOTH)
+                        )
+                ).getAnimation()
+                .play();
     }
 
     private void removeRadio() {

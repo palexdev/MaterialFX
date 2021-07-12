@@ -19,6 +19,8 @@
 package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
+import io.github.palexdev.materialfx.utils.AnimationUtils;
+import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.*;
 import javafx.scene.Group;
@@ -171,34 +173,34 @@ public class MFXProgressBarSkin extends SkinBase<MFXProgressBar> {
         }
 
         final double width = progressBar.getWidth() - (snappedLeftInset() + snappedRightInset());
-        KeyFrame kf0 = new KeyFrame(Duration.ONE,
-                new KeyValue(bar1.scaleXProperty(), 0.7),
-                new KeyValue(bar1.layoutXProperty(), -width),
-                new KeyValue(bar1.widthProperty(), width / 2),
-                new KeyValue(bar2.layoutXProperty(), -width),
-                new KeyValue(bar2.widthProperty(), width / 2)
-        );
-        KeyFrame kf1 = new KeyFrame(Duration.millis(700),
-                new KeyValue(bar1.scaleXProperty(), 1.25, Interpolator.EASE_BOTH)
-        );
-        KeyFrame kf2 = new KeyFrame(Duration.millis(1300),
-                new KeyValue(bar1.layoutXProperty(), width, Interpolator.LINEAR)
-        );
-        KeyFrame kf3 = new KeyFrame(Duration.millis(1100),
-                new KeyValue(bar1.scaleXProperty(), 1.0, Interpolator.EASE_OUT)
-        );
-        KeyFrame kf4 = new KeyFrame(Duration.millis(1100),
-                new KeyValue(bar2.layoutXProperty(), width * 2, Interpolator.LINEAR),
-                new KeyValue(bar2.scaleXProperty(), 2, Interpolator.EASE_BOTH)
-        );
+        Animation bar1Animation = AnimationUtils.TimelineBuilder.build()
+                .add(
+                        KeyFrames.of(Duration.ONE,
+                                new KeyValue(bar1.scaleXProperty(), 0.7),
+                                new KeyValue(bar1.layoutXProperty(), -width),
+                                new KeyValue(bar1.widthProperty(), width / 2),
+                                new KeyValue(bar2.layoutXProperty(), -width),
+                                new KeyValue(bar2.widthProperty(), width / 2)
+                        ),
+                        KeyFrames.of(750, bar1.scaleXProperty(), 1.25, Interpolator.EASE_BOTH),
+                        KeyFrames.of(1300, bar1.layoutXProperty(), width, Interpolator.LINEAR),
+                        KeyFrames.of(1100, bar1.scaleXProperty(), 1.0, Interpolator.EASE_OUT)
+                ).getAnimation();
 
-        Timeline bar1Animation = new Timeline(kf0, kf1, kf2, kf3);
-        Timeline bar2Animation = new Timeline(kf4);
-        bar2Animation.setDelay(Duration.millis(1100));
+        Animation bar2Animation = AnimationUtils.TimelineBuilder.build()
+                .add(
+                        KeyFrames.of(1100,
+                                new KeyValue(bar2.layoutXProperty(), width * 2, Interpolator.LINEAR),
+                                new KeyValue(bar2.scaleXProperty(), 2, Interpolator.EASE_BOTH)
+                        )
+                ).setDelay(1100).getAnimation();
 
-        indeterminateAnimation = new ParallelTransition(bar1Animation, bar2Animation);
-        indeterminateAnimation.setCycleCount(Timeline.INDEFINITE);
-        indeterminateAnimation.setRate(progressBar.getAnimationSpeed());
+        indeterminateAnimation = (ParallelTransition) AnimationUtils.ParallelBuilder.build()
+                .add(bar1Animation)
+                .add(bar2Animation)
+                .setCycleCount(Timeline.INDEFINITE)
+                .setRate(progressBar.getAnimationSpeed())
+                .getAnimation();
         indeterminateAnimation.play();
     }
 

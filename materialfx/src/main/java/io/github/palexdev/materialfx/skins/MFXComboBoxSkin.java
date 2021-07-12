@@ -29,13 +29,13 @@ import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.selection.ComboSelectionModelMock;
+import io.github.palexdev.materialfx.utils.AnimationUtils;
+import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
 import io.github.palexdev.materialfx.utils.LabelUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
+import javafx.animation.Animation;
 import javafx.animation.ScaleTransition;
-import javafx.animation.Timeline;
 import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -73,7 +73,7 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
     private final Label validate;
     private final double padding = 11;
 
-    private Timeline arrowAnimation;
+    private Animation arrowAnimation;
 
     //================================================================================
     // Constructors
@@ -463,11 +463,10 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
     /**
      * Builds the animation for the combo box arrow.
      */
-    private Timeline buildAnimation(boolean isShowing) {
-        KeyFrame kf0 = new KeyFrame(Duration.millis(150),
-                new KeyValue(icon.rotateProperty(), (isShowing ? 180 : 0))
-        );
-        arrowAnimation = new Timeline(kf0);
+    private Animation buildAnimation(boolean isShowing) {
+        arrowAnimation = AnimationUtils.TimelineBuilder.build()
+                .add(KeyFrames.of(150, icon.rotateProperty(), (isShowing ? 180 : 0)))
+                .getAnimation();
         return arrowAnimation;
     }
 

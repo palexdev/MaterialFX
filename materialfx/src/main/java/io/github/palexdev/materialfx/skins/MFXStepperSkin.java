@@ -26,6 +26,7 @@ import io.github.palexdev.materialfx.controls.MFXStepperToggle.MFXStepperToggleE
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.controls.factories.RippleClipTypeFactory;
 import io.github.palexdev.materialfx.effects.ripple.RippleClipType;
+import io.github.palexdev.materialfx.utils.AnimationUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.*;
 import javafx.beans.InvalidationListener;
@@ -197,9 +198,11 @@ public class MFXStepperSkin extends SkinBase<MFXStepper> {
             stepperBar.getChildren().add(0, progressBarGroup);
             stepper.next();
 
-            PauseTransition pauseTransition = new PauseTransition(Duration.millis(250));
-            pauseTransition.setOnFinished(event -> stepper.requestLayout());
-            pauseTransition.play();
+            AnimationUtils.PauseBuilder.build()
+                    .setDuration(250)
+                    .setOnFinished(event -> stepper.requestLayout())
+                    .getAnimation()
+                    .play();
         });
         stepper.currentContentProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {

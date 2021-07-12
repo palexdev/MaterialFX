@@ -23,8 +23,11 @@ import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeCell;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.selection.TreeSelectionModel;
+import io.github.palexdev.materialfx.utils.AnimationUtils;
+import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
 import io.github.palexdev.materialfx.utils.NodeUtils;
-import javafx.animation.*;
+import javafx.animation.Animation;
+import javafx.animation.ParallelTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
@@ -35,7 +38,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -300,11 +302,11 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
     protected void buildAnimation(double fHeight) {
         MFXTreeItem<T> item = getSkinnable();
 
-        KeyValue expCollValue = new KeyValue(box.prefHeightProperty(), fHeight, MFXAnimationFactory.getInterpolatorV2());
-        KeyFrame expCollFrame = new KeyFrame(Duration.millis(item.getAnimationDuration()), expCollValue);
-        KeyValue disclosureValue = new KeyValue(cell.getDisclosureNode().rotateProperty(), (item.isExpanded() ? 90 : 0), MFXAnimationFactory.getInterpolatorV2());
-        KeyFrame disclosureFrame = new KeyFrame(Duration.millis(250), disclosureValue);
-        animation = new ParallelTransition(new Timeline(expCollFrame, disclosureFrame));
+        animation = (ParallelTransition) AnimationUtils.ParallelBuilder.build()
+                .add(
+                        KeyFrames.of(item.getAnimationDuration(), box.prefHeightProperty(), fHeight, MFXAnimationFactory.getInterpolatorV2()),
+                        KeyFrames.of(250, cell.getDisclosureNode().rotateProperty(), (item.isExpanded() ? 90 : 0), MFXAnimationFactory.getInterpolatorV2())
+                ).getAnimation();
 
         item.animationRunningProperty().bind(animation.statusProperty().isEqualTo(Animation.Status.RUNNING));
     }

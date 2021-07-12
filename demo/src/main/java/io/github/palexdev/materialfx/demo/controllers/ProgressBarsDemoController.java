@@ -20,10 +20,9 @@ package io.github.palexdev.materialfx.demo.controllers;
 
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.PauseTransition;
-import javafx.animation.Timeline;
+import io.github.palexdev.materialfx.utils.AnimationUtils;
+import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
+import javafx.animation.Animation;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -54,28 +53,33 @@ public class ProgressBarsDemoController implements Initializable {
                 progressLabel.textProperty()
         ));
 
-        Timeline timeline2 = new Timeline(
-                new KeyFrame(Duration.seconds(1), new KeyValue(determinate.progressProperty(), 0, MFXAnimationFactory.getInterpolatorV2()))
+        Animation a1 = AnimationUtils.TimelineBuilder.build()
+                .add(
+                        KeyFrames.of(2000, determinate.progressProperty(), 0.3, MFXAnimationFactory.getInterpolatorV1()),
+                        KeyFrames.of(4000, determinate.progressProperty(), 0.6, MFXAnimationFactory.getInterpolatorV1()),
+                        KeyFrames.of(6000, determinate.progressProperty(), 1.0, MFXAnimationFactory.getInterpolatorV1())
+                )
+                .getAnimation();
+
+        Animation a2 = AnimationUtils.TimelineBuilder.build()
+                .add(
+                        KeyFrames.of(1000, determinate.progressProperty(), 0, MFXAnimationFactory.getInterpolatorV2())
+                )
+                .getAnimation();
+
+        a1.setOnFinished(end -> AnimationUtils.PauseBuilder.build()
+                .setDuration(Duration.seconds(1))
+                .setOnFinished(event -> a2.playFromStart())
+                .getAnimation()
+                .play()
+        );
+        a2.setOnFinished(end -> AnimationUtils.PauseBuilder.build()
+                .setDuration(Duration.seconds(1))
+                .setOnFinished(event -> a1.playFromStart())
+                .getAnimation()
+                .play()
         );
 
-        Timeline timeline1 = new Timeline(
-                new KeyFrame(Duration.seconds(2), new KeyValue(determinate.progressProperty(), 0.3, MFXAnimationFactory.getInterpolatorV1())),
-                new KeyFrame(Duration.seconds(4), new KeyValue(determinate.progressProperty(), 0.6, MFXAnimationFactory.getInterpolatorV1())),
-                new KeyFrame(Duration.seconds(6), new KeyValue(determinate.progressProperty(), 1.0, MFXAnimationFactory.getInterpolatorV1()))
-        );
-
-        timeline1.setOnFinished(event -> {
-            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(1));
-            pauseTransition.setOnFinished(end -> timeline2.playFromStart());
-            pauseTransition.play();
-        });
-
-        timeline2.setOnFinished(event -> {
-            PauseTransition pauseTransition = new PauseTransition(Duration.seconds(1));
-            pauseTransition.setOnFinished(end -> timeline1.playFromStart());
-            pauseTransition.play();
-        });
-
-        timeline1.play();
+        a1.play();
     }
 }
