@@ -122,7 +122,9 @@ public class MFXPasswordField extends MFXTextField {
      * simply calling JavaFX methods.
      */
     @Override
-    protected void defaultContextMenu() {}
+    protected void defaultContextMenu() {
+        setMFXContextMenu(MFXContextMenu.Builder.build(this).install());
+    }
 
     /**
      * @return the un-masked text

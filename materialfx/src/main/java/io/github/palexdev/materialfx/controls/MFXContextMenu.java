@@ -358,10 +358,7 @@ public class MFXContextMenu extends VBox {
          * Adds a separator to the items list.
          */
         public Builder addSeparator() {
-            Line separator = new Line();
-            separator.getStyleClass().add("separator");
-            VBox.setMargin(separator, new Insets(4, 0, 3, 0));
-            items.add(separator);
+            items.add(getSeparator());
             return this;
         }
 
@@ -371,6 +368,16 @@ public class MFXContextMenu extends VBox {
         public MFXContextMenu install() {
             contextMenu.setItems(items);
             return contextMenu;
+        }
+
+        /**
+         * Builds a separator.
+         */
+        public static Line getSeparator() {
+            Line separator = new Line();
+            separator.getStyleClass().add("separator");
+            VBox.setMargin(separator, new Insets(4, 0, 3, 0));
+            return separator;
         }
     }
 }

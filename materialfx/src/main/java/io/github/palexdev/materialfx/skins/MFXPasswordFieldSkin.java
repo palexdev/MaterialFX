@@ -27,6 +27,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.scene.control.IndexRange;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.KeyCode;
@@ -316,16 +317,14 @@ public class MFXPasswordFieldSkin extends MFXTextFieldSkin {
                 .setAccelerator("Ctrl + A")
                 .setAction(event -> passwordField.selectAll());
 
-        passwordField.setMFXContextMenu(
-                MFXContextMenu.Builder.build(passwordField)
-                        .addMenuItem(copy)
-                        .addMenuItem(cut)
-                        .addMenuItem(paste)
-                        .addMenuItem(delete)
-                        .addSeparator()
-                        .addMenuItem(selectAll)
-                        .install()
-        );
+        passwordField.getMFXContextMenu().setItems(FXCollections.observableArrayList(
+                copy,
+                cut,
+                paste,
+                delete,
+                MFXContextMenu.Builder.getSeparator(),
+                selectAll
+        ));
     }
 
     /**
