@@ -1,31 +1,39 @@
 @import "MFXColors.css";
 
-#customSlider .track {
+#customSlider2 .track {
     -fx-fill: linear-gradient(to bottom right, #6A6AF8 0%, #C850C0 30%, darkorange 100%);
 }
 
-#customSlider .bar {
+#customSlider2 .bar {
     -fx-fill: linear-gradient(to bottom right, #F4D03F 0%, #10d7b4 100%);
 }
 
-#customSlider:min .thumb,
-#customSlider:min .track {
+#customSlider:range1 .thumb,
+#customSlider:range1 .track {
     -mfx-color: -mfx-red;
     -fx-fill: derive(-mfx-red, 85%)
 }
 
-#customSlider:val .thumb,
-#customSlider:val .track {
+#customSlider:range1 .bar {
+    -fx-fill: -mfx-red;
+}
+
+#customSlider:range2 .thumb,
+#customSlider:range2 .track {
     -mfx-color: -mfx-blue;
     -fx-fill: derive(-mfx-blue, 85%)
 }
 
-#customSlider:val .bar {
+#customSlider:range2 .bar {
     -fx-fill: -mfx-blue;
 }
 
-#customSlider:max .bar,
-#customSlider:max .thumb {
+#customSlider:range3 .bar,
+#customSlider:range3 .thumb {
     -mfx-color: -mfx-green;
     -fx-fill: -mfx-green;
+}
+
+#customSlider:range3 .track {
+    -fx-fill: derive(-mfx-green, 85%);
 }

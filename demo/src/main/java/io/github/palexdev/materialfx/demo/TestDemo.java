@@ -18,6 +18,7 @@
 
 package io.github.palexdev.materialfx.demo;
 
+import io.github.palexdev.materialfx.beans.NumberRange;
 import io.github.palexdev.materialfx.beans.properties.ResettableDoubleProperty;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
@@ -25,7 +26,6 @@ import io.github.palexdev.materialfx.controls.MFXSlider;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
-import io.github.palexdev.materialfx.controls.enums.SliderEnums;
 import io.github.palexdev.materialfx.controls.enums.SliderEnums.SliderPopupSide;
 import io.github.palexdev.materialfx.demo.model.FilterablePerson;
 import io.github.palexdev.materialfx.font.FontResources;
@@ -54,13 +54,17 @@ public class TestDemo extends Application {
         box.setAlignment(Pos.CENTER);
 
         MFXSlider slider = new MFXSlider();
-        slider.setSliderMode(SliderEnums.SliderMode.SNAP_TO_TICKS);
+        //slider.setSliderMode(SliderEnums.SliderMode.SNAP_TO_TICKS);
         slider.setBidirectional(false);
         slider.setPrefWidth(200);
         slider.setMin(10);
         slider.setMax(100);
         slider.setValue(-50);
         slider.setBidirectional(false);
+
+        slider.getRanges1().add(NumberRange.of(slider.getMin()));
+        slider.getRanges2().add(NumberRange.of(50.0));
+        slider.getRanges3().add(NumberRange.of(slider.getMax()));
 
         HBox bbox = new HBox(20);
         bbox.setAlignment(Pos.CENTER);

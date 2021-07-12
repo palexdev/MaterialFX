@@ -18,76 +18,73 @@
   ~ along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-
 <?import io.github.palexdev.materialfx.controls.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane prefHeight="400.0" prefWidth="750.0" stylesheets="@css/SlidersDemo.css" xmlns="http://javafx.com/javafx/16"
->
-    <Label id="customLabel" alignment="CENTER" layoutX="177.0" layoutY="24.0" prefHeight="26.0" prefWidth="266.0"
-           text="Sliders" AnchorPane.leftAnchor="167.0" AnchorPane.rightAnchor="167.0" AnchorPane.topAnchor="20.0"/>
-    <HBox layoutX="14.0" layoutY="60.0" prefHeight="207.0" prefWidth="100.0" AnchorPane.bottomAnchor="15.0"
-          AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="60.0">
+<AnchorPane prefHeight="400.0" prefWidth="750.0" stylesheets="@css/SlidersDemo.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.SlidersDemoController">
+    <Label id="customLabel" alignment="CENTER" layoutX="177.0" layoutY="24.0" prefHeight="26.0" prefWidth="266.0" text="Sliders" AnchorPane.leftAnchor="167.0" AnchorPane.rightAnchor="167.0" AnchorPane.topAnchor="20.0" />
+    <HBox alignment="CENTER" layoutX="14.0" layoutY="60.0" prefHeight="207.0" prefWidth="100.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="60.0">
         <VBox alignment="CENTER" prefHeight="325.0" prefWidth="250.0" spacing="50.0">
             <VBox alignment="CENTER" spacing="20.0">
                 <padding>
-                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                 </padding>
-                <Label text="Default"/>
-                <MFXSlider prefWidth="150.0"/>
+                <Label text="Default" />
+                <MFXSlider prefWidth="150.0" />
+            </VBox>
+            <VBox id="customSlider" alignment="CENTER" spacing="20.0">
+                <padding>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                </padding>
+                <Label text="Custom 1" />
+                <MFXSlider id="customSlider" fx:id="customSlider" popupSide="OTHER_SIDE" prefWidth="150.0" />
             </VBox>
             <VBox id="customSlider" alignment="CENTER" spacing="20.0">
                 <padding>
                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
                 </padding>
-                <Label text="Customized"/>
-                <MFXSlider id="customSlider" cssVal="50.0" popupSide="OTHER_SIDE" prefWidth="150.0"/>
+                <Label text="Custom 2"/>
+                <MFXSlider id="customSlider2" popupSide="OTHER_SIDE" prefWidth="150.0"/>
             </VBox>
             <VBox alignment="CENTER" spacing="20.0">
                 <padding>
-                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                 </padding>
-                <Label text="Disabled"/>
-                <MFXSlider disable="true" prefWidth="150.0"/>
+                <Label text="Disabled" />
+                <MFXSlider disable="true" prefWidth="150.0" />
             </VBox>
         </VBox>
         <VBox alignment="CENTER" prefHeight="325.0" prefWidth="250.0" spacing="50.0">
             <VBox alignment="CENTER" spacing="20.0">
                 <padding>
-                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                 </padding>
-                <Label text="Bidirectional"/>
-                <MFXSlider min="-50.0" prefWidth="150.0"/>
+                <Label text="Bidirectional" />
+                <MFXSlider min="-50.0" prefWidth="150.0" />
             </VBox>
             <VBox alignment="CENTER" spacing="20.0">
                 <padding>
-                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                 </padding>
-                <Label text="Ticks and Snap To Ticks"/>
-                <MFXSlider minorTicksCount="4" prefWidth="150.0" showMajorTicks="true" showMinorTicks="true"
-                           sliderMode="SNAP_TO_TICKS" tickUnit="20.0"/>
+                <Label text="Ticks and Snap To Ticks" />
+                <MFXSlider minorTicksCount="4" prefWidth="150.0" showMajorTicks="true" showMinorTicks="true" sliderMode="SNAP_TO_TICKS" tickUnit="20.0" />
             </VBox>
             <VBox alignment="CENTER" spacing="20.0">
                 <padding>
-                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                 </padding>
-                <Label text="Decimal Precision of 2"/>
-                <MFXSlider decimalPrecision="2" prefWidth="150.0"/>
+                <Label text="Decimal Precision of 2" />
+                <MFXSlider decimalPrecision="2" prefWidth="150.0" />
             </VBox>
         </VBox>
-        <AnchorPane maxWidth="-Infinity" minWidth="-Infinity" prefHeight="325.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
-            <MFXSlider layoutX="-33.0" layoutY="160.0" min="-100.0" orientation="VERTICAL" prefWidth="150.0"
-                       AnchorPane.leftAnchor="-50.0"/>
-            <MFXSlider disable="true" layoutX="128.0" layoutY="160.0" orientation="VERTICAL" prefWidth="150.0"
-                       AnchorPane.rightAnchor="-50.0"/>
-            <MFXSlider layoutX="35.0" layoutY="160.0" maxWidth="-Infinity" minWidth="-Infinity"
-                       orientation="VERTICAL" popupSide="OTHER_SIDE" prefWidth="150.0" AnchorPane.leftAnchor="50.0"
-                       AnchorPane.rightAnchor="50.0"/>
-            <Label alignment="CENTER" layoutX="114.0" layoutY="14.0" text="Vertical Sliders"
-                   AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="25.0">
+        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="250.0">
+            <MFXSlider layoutX="-33.0" layoutY="160.0" min="-100.0" orientation="VERTICAL" prefWidth="150.0" AnchorPane.leftAnchor="-50.0" />
+            <MFXSlider disable="true" layoutX="128.0" layoutY="160.0" orientation="VERTICAL" prefWidth="150.0" AnchorPane.rightAnchor="-50.0" />
+            <MFXSlider layoutX="35.0" layoutY="160.0" maxWidth="-Infinity" minWidth="-Infinity" orientation="VERTICAL" popupSide="OTHER_SIDE" prefWidth="150.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
+            <Label alignment="CENTER" layoutX="114.0" layoutY="14.0" text="Vertical Sliders" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="25.0">
                 <padding>
-                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </padding>
             </Label>
         </AnchorPane>

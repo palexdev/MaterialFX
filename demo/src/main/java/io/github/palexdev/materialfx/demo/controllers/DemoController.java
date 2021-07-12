@@ -23,6 +23,7 @@ import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.demo.MFXDemoResourcesLoader;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
+import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.ScrollUtils;
 import javafx.animation.KeyFrame;
@@ -35,12 +36,17 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -54,9 +60,13 @@ public class DemoController implements Initializable {
     private final Stage primaryStage;
     private final HostServices hostServices;
 
+    private MFXButton opNavButton;
     private ParallelTransition openNav;
     private ParallelTransition closeNav;
     private boolean isNavShown = false;
+
+    private final MediaPlayer m1;
+    private final MediaPlayer m2;
 
     @FXML
     private StackPane demoPane;
@@ -73,12 +83,31 @@ public class DemoController implements Initializable {
     @FXML
     private MFXVLoader vLoader;
 
-    private MFXButton opNavButton;
-
     @FXML
     private StackPane contentPane;
 
+    @FXML
+    private VBox logoPane;
+
+    @FXML
+    private ImageView logo;
+
+    @FXML
+    private Label splashLabel1;
+
+    @FXML
+    private Label splashLabel2;
+
+    @FXML
+    private Label splashLabel3;
+
     public DemoController(Stage primaryStage, HostServices hostServices) {
+        m1 = new MediaPlayer(new Media(MFXDemoResourcesLoader.load("assets/welcome1.wav")));
+        m2 = new MediaPlayer(new Media(MFXDemoResourcesLoader.load("assets/welcome2.wav")));
+
+        m1.setVolume(0.3);
+        m2.setVolume(0.2);
+
         this.primaryStage = primaryStage;
         this.hostServices = hostServices;
     }
@@ -110,6 +139,8 @@ public class DemoController implements Initializable {
         infoButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> showInfo());
 
         opNavButton = new MFXButton("");
+        opNavButton.setOpacity(0.0);
+        opNavButton.setDisable(true);
         opNavButton.setId("navButton");
         opNavButton.setPrefSize(25, 25);
         opNavButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
@@ -148,6 +179,7 @@ public class DemoController implements Initializable {
         vLoader.addItem("PROGRESS_SPINNERS", Builder.build(new MFXRectangleToggleNode("PROGRESS SPINNERS"), MFXDemoResourcesLoader.loadURL("ProgressSpinnersDemo.fxml")));
         vLoader.addItem("RADIOBUTTONS", Builder.build(new MFXRectangleToggleNode("RADIOBUTTONS"), MFXDemoResourcesLoader.loadURL("RadioButtonsDemo.fxml")));
         vLoader.addItem("SCROLLPANES", Builder.build(new MFXRectangleToggleNode("SCROLLPANES"), MFXDemoResourcesLoader.loadURL("ScrollPanesDemo.fxml")));
+        vLoader.addItem("SLIDERS", Builder.build(new MFXRectangleToggleNode("SLIDERS"), MFXDemoResourcesLoader.loadURL("SlidersDemo.fxml")));
         vLoader.addItem("STEPPER", Builder.build(new MFXRectangleToggleNode("STEPPER"), MFXDemoResourcesLoader.loadURL("StepperDemo.fxml")));
         vLoader.addItem("TABLEVIEWS", Builder.build(new MFXRectangleToggleNode("TABLEVIEWS"), MFXDemoResourcesLoader.loadURL("TableViewsDemo.fxml")));
         vLoader.addItem("TEXTFIELDS", Builder.build(new MFXRectangleToggleNode("TEXTFIELDS"), MFXDemoResourcesLoader.loadURL("TextFieldsDemo.fxml")));
@@ -178,6 +210,26 @@ public class DemoController implements Initializable {
         initAnimations();
 
         demoPane.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> demoPane.requestFocus());
+
+        primaryStage.setOnShown(event -> presentation());
+    }
+
+    private void presentation() {
+        AnimationUtils.SequentialBuilder.build()
+                .add(KeyFrames.of(Duration.ONE, event -> m1.play()))
+                .add(AnimationUtils.TimelineBuilder.build().show(1000, logo).getAnimation())
+                .add(AnimationUtils.TimelineBuilder.build().show(450, splashLabel1).setDelay(200).getAnimation())
+                .add(AnimationUtils.TimelineBuilder.build().show(450, splashLabel2).setDelay(50).getAnimation())
+                .add(AnimationUtils.TimelineBuilder.build().show(450, splashLabel3).setDelay(50).getAnimation())
+                .setOnFinished(event -> AnimationUtils.SequentialBuilder.build()
+                        .add(KeyFrames.of(300, end -> m2.play()))
+                        .add(AnimationUtils.TimelineBuilder.build().hide(300, logoPane).setOnFinished(end -> logoPane.setVisible(false)).getAnimation())
+                        .add(AnimationUtils.ParallelBuilder.build().show(800, contentPane, opNavButton).setOnFinished(end -> opNavButton.setDisable(false)).getAnimation())
+                        .setDelay(750)
+                        .getAnimation().play())
+                .setDelay(750)
+                .getAnimation().play();
+
     }
 
     private void initAnimations() {

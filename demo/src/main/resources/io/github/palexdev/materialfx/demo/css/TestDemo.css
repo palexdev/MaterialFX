@@ -16,14 +16,14 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-.mfx-slider:min .track {
+.mfx-slider:range1 .track {
     -fx-fill: red;
 }
 
-.mfx-slider:max .bar {
-    -fx-fill: green;
+.mfx-slider:range2 .track {
+    -fx-fill: gold;
 }
 
-.mfx-slider:val .track {
-    -fx-fill: gold;
+.mfx-slider:range3 .bar {
+    -fx-fill: green;
 }

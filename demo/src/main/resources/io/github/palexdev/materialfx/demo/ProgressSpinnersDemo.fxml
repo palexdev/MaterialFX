@@ -22,7 +22,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
-<StackPane prefHeight="400.0" prefWidth="600.0" stylesheets="@css/ProgressSpinnersDemo.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.ProgressSpinnersDemoController">
+<StackPane prefHeight="400.0" prefWidth="600.0" stylesheets="@css/ProgressSpinnersDemo.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.ProgressSpinnersDemoController">
     <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Progress Spinners" StackPane.alignment="TOP_CENTER">
         <StackPane.margin>
           <Insets top="20.0" />
@@ -58,7 +58,7 @@
           <Insets top="100.0" />
         </StackPane.margin>
     </Label>
-    <MFXProgressSpinner fx:id="progress1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="50.0" progress="0.0" startingAngle="-40.0" styleClass="progress1">
+    <MFXProgressSpinner id="determinate" fx:id="progress1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="50.0" progress="0.0" startingAngle="-40.0">
         <StackPane.margin>
           <Insets right="350.0" top="225.0" />
         </StackPane.margin>

@@ -18,6 +18,7 @@
 
 package io.github.palexdev.materialfx.demo.controllers;
 
+import io.github.palexdev.materialfx.beans.NumberRange;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
@@ -81,5 +82,9 @@ public class ProgressBarsDemoController implements Initializable {
         );
 
         a1.play();
+
+        determinate.getRanges1().add(NumberRange.of(0.0, 0.30));
+        determinate.getRanges2().add(NumberRange.of(0.31, 0.60));
+        determinate.getRanges3().add(NumberRange.of(0.61, 1.0));
     }
 }

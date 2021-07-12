@@ -241,6 +241,7 @@
 }
 
 #customLabel .text {
+    -fx-font-smoothing-type: gray;
     -fx-font-family: "Open Sans Bold";
     -fx-font-size: 12.5;
     -fx-fill: white;

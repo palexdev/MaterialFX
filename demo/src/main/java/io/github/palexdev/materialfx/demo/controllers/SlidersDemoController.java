@@ -16,41 +16,25 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import "MFXColors.css";
+package io.github.palexdev.materialfx.demo.controllers;
 
-#custom .track {
-    -fx-fill: derive(salmon, 70%);
-}
+import io.github.palexdev.materialfx.beans.NumberRange;
+import io.github.palexdev.materialfx.controls.MFXSlider;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 
-#custom .bar1,
-#custom:indeterminate .bar1 {
-    -fx-fill: linear-gradient(to bottom right, #6A6AF8 0%, #C850C0 30%, darkorange 100%);
-}
+import java.net.URL;
+import java.util.ResourceBundle;
 
-#custom:indeterminate .bar2 {
-    -fx-fill: linear-gradient(to bottom right, #F4D03F 0%, #10d7b4 100%);
-}
+public class SlidersDemoController implements Initializable {
 
-#determinate:range1 .bar1 {
-    -fx-fill: -mfx-red;
-}
+    @FXML
+    private MFXSlider customSlider;
 
-#determinate:range1 .track {
-    -fx-fill: derive(-mfx-red, 85%)
-}
-
-#determinate:range2 .bar1 {
-    -fx-fill: -mfx-blue;
-}
-
-#determinate:range2 .track {
-    -fx-fill: derive(-mfx-blue, 85%)
-}
-
-#determinate:range3 .bar1 {
-    -fx-fill: -mfx-green;
-}
-
-#determinate:range3 .track {
-    -fx-fill: derive(-mfx-green, 85%);
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        customSlider.getRanges1().add(NumberRange.of(customSlider.getMin(), 33.0));
+        customSlider.getRanges2().add(NumberRange.of(34.0, 66.0));
+        customSlider.getRanges3().add(NumberRange.of(67.0, customSlider.getMax()));
+    }
 }

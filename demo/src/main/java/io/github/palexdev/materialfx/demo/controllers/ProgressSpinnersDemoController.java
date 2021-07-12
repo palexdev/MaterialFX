@@ -18,6 +18,7 @@
 
 package io.github.palexdev.materialfx.demo.controllers;
 
+import io.github.palexdev.materialfx.beans.NumberRange;
 import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
 import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
@@ -60,5 +61,9 @@ public class ProgressSpinnersDemoController implements Initializable {
                 .setCycleCount(Timeline.INDEFINITE)
                 .getAnimation()
                 .play();
+
+        progress1.getRanges1().add(NumberRange.of(0.0, 0.30));
+        progress1.getRanges2().add(NumberRange.of(0.31, 0.60));
+        progress1.getRanges3().add(NumberRange.of(0.61, 1.0));
     }
 }

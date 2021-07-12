@@ -129,3 +129,13 @@
     -mfx-thumb-color: #b885ff;
     -mfx-thumb-hover-color: #9e47ff;
 }
+
+#splashLabel {
+    -fx-font-family: "Open Sans Bold";
+    -fx-font-size: 36;
+    -fx-text-fill: #6314A8;
+}
+
+#splashLabel .text {
+    -fx-font-smoothing-type: gray;
+}

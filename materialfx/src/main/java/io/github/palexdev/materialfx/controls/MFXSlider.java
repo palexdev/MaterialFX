@@ -19,6 +19,7 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.beans.NumberRange;
 import io.github.palexdev.materialfx.controls.enums.SliderEnums.SliderMode;
 import io.github.palexdev.materialfx.controls.enums.SliderEnums.SliderPopupSide;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
@@ -29,6 +30,9 @@ import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.NumberUtils;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.css.*;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -46,6 +50,8 @@ import javafx.scene.text.TextBoundsType;
 
 import java.util.List;
 import java.util.function.Supplier;
+
+import static io.github.palexdev.materialfx.utils.NodeUtils.isPseudoClassActive;
 
 /**
  * This is the implementation of a Slider following Google's material design guidelines.
@@ -86,9 +92,11 @@ import java.util.function.Supplier;
  * that if the minimum value is negative the bar will progress on the opposite side to zero.
  * <p></p>
  * MFXSlider introduces three new css pseudo classes:
- * <p> - ":min", activated when the slider reaches the minimum value specified by {@link #minProperty()}
- * <p> - ":max", activated when the slider reaches the maximum value specified by {@link #maxProperty()}
- * <p> - ":val", activated when the slider reaches the value specified by {@link #cssValProperty()}
+ * <p> - ":range1", activated when the slider value is contained in any of the ranges specified in here {@link #getRanges1()}
+ * <p> - ":range2", activated when the slider value is contained in any of the ranges specified in here {@link #getRanges2()}
+ * <p> - ":range3", activated when the slider value is contained in any of the ranges specified in here {@link #getRanges3()}
+ * <p>
+ * I know this may seem a strange approach, but it is much more flexible and allows for a lot more customization.
  * <p></p>
  * <b>WARNING!</b>
  * <p>
@@ -148,10 +156,12 @@ public class MFXSlider extends Control {
     private final IntegerProperty decimalPrecision = new SimpleIntegerProperty(0);
     private final BooleanProperty enableKeyboard = new SimpleBooleanProperty(true);
 
-    private final DoubleProperty cssVal = new SimpleDoubleProperty();
-    protected final PseudoClass MIN_PSEUDO_CLASS = PseudoClass.getPseudoClass("min");
-    protected final PseudoClass MAX_PSEUDO_CLASS = PseudoClass.getPseudoClass("max");
-    protected final PseudoClass VAL_PSEUDO_CLASS = PseudoClass.getPseudoClass("val");
+    private final ObservableList<NumberRange<Double>> ranges1 = FXCollections.observableArrayList();
+    private final ObservableList<NumberRange<Double>> ranges2 = FXCollections.observableArrayList();
+    private final ObservableList<NumberRange<Double>> ranges3 = FXCollections.observableArrayList();
+    protected final PseudoClass RANGE1_PSEUDO_CLASS = PseudoClass.getPseudoClass("range1");
+    protected final PseudoClass RANGE2_PSEUDO_CLASS = PseudoClass.getPseudoClass("range2");
+    protected final PseudoClass RANGE3_PSEUDO_CLASS = PseudoClass.getPseudoClass("range3");
 
     //================================================================================
     // Constructors
@@ -190,28 +200,30 @@ public class MFXSlider extends Control {
     }
 
     private void addListeners() {
-        min.addListener((observable, oldValue, newValue) -> handlePseudoClasses());
-        max.addListener((observable, oldValue, newValue) -> handlePseudoClasses());
+        ranges1.addListener((ListChangeListener<? super NumberRange<Double>>) c -> handlePseudoClasses());
+        ranges2.addListener((ListChangeListener<? super NumberRange<Double>>) c -> handlePseudoClasses());
+        ranges3.addListener((ListChangeListener<? super NumberRange<Double>>) c -> handlePseudoClasses());
         value.addListener((observable, oldValue, newValue) -> handlePseudoClasses());
-        cssVal.addListener((observable, oldValue, newValue) -> handlePseudoClasses());
     }
 
     /**
-     * Handles the ":min", ":max" and ":val" css pseudo classes when these properties change:
-     * {@link #minProperty()}, {@link #maxProperty()}, {@link #valueProperty()}, {@link #cssValProperty()}.
+     * Handles the ":range1", ":range2" and ":range3" css pseudo classes when these properties change:
+     * {@link #valueProperty()}, {@link #getRanges1()}, {@link #getRanges2()}, {@link #getRanges3()}.
      */
     private void handlePseudoClasses() {
-        pseudoClassStateChanged(MIN_PSEUDO_CLASS, false);
-        pseudoClassStateChanged(MAX_PSEUDO_CLASS, false);
-        pseudoClassStateChanged(VAL_PSEUDO_CLASS, false);
-
         double val = getValue();
-        if (val == getMin()) {
-            pseudoClassStateChanged(MIN_PSEUDO_CLASS, true);
-        } else if (val == getMax()) {
-            pseudoClassStateChanged(MAX_PSEUDO_CLASS, true);
-        } else if (val == getCssVal()) {
-            pseudoClassStateChanged(VAL_PSEUDO_CLASS, true);
+        if (!isPseudoClassActive(this, RANGE1_PSEUDO_CLASS) && NumberRange.inRangeOf(val, ranges1)) {
+            pseudoClassStateChanged(RANGE1_PSEUDO_CLASS, true);
+            pseudoClassStateChanged(RANGE2_PSEUDO_CLASS, false);
+            pseudoClassStateChanged(RANGE3_PSEUDO_CLASS, false);
+        } else if (!isPseudoClassActive(this, RANGE2_PSEUDO_CLASS) && NumberRange.inRangeOf(val, ranges2)) {
+            pseudoClassStateChanged(RANGE2_PSEUDO_CLASS, true);
+            pseudoClassStateChanged(RANGE1_PSEUDO_CLASS, false);
+            pseudoClassStateChanged(RANGE3_PSEUDO_CLASS, false);
+        } else if (!isPseudoClassActive(this, RANGE3_PSEUDO_CLASS) && NumberRange.inRangeOf(val, ranges3)) {
+            pseudoClassStateChanged(RANGE3_PSEUDO_CLASS, true);
+            pseudoClassStateChanged(RANGE1_PSEUDO_CLASS, false);
+            pseudoClassStateChanged(RANGE2_PSEUDO_CLASS, false);
         }
     }
 
@@ -447,19 +459,25 @@ public class MFXSlider extends Control {
         this.enableKeyboard.set(enableKeyboard);
     }
 
-    public double getCssVal() {
-        return cssVal.get();
+    /**
+     * Returns the first list of ranges.
+     */
+    public ObservableList<NumberRange<Double>> getRanges1() {
+        return ranges1;
     }
 
     /**
-     * Specifies the value at which the ":val" pseudo class should be activated.
+     * Returns the second list of ranges.
      */
-    public DoubleProperty cssValProperty() {
-        return cssVal;
+    public ObservableList<NumberRange<Double>> getRanges2() {
+        return ranges2;
     }
 
-    public void setCssVal(double cssVal) {
-        this.cssVal.set(cssVal);
+    /**
+     * Returns the third list of ranges.
+     */
+    public ObservableList<NumberRange<Double>> getRanges3() {
+        return ranges3;
     }
 
     //================================================================================

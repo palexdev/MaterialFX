@@ -20,6 +20,7 @@ package io.github.palexdev.materialfx.utils;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.css.PseudoClass;
 import javafx.event.Event;
 import javafx.geometry.*;
 import javafx.scene.Group;
@@ -360,6 +361,10 @@ public class NodeUtils {
                 }
             });
         }
+    }
+
+    public static boolean isPseudoClassActive(Control control, PseudoClass pseudoClass) {
+        return control.getPseudoClassStates().contains(pseudoClass);
     }
 
     //================================================================================
