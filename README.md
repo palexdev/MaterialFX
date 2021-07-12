@@ -251,7 +251,8 @@ implementation 'io.github.palexdev:materialfx:11.11.1'
 
 ## Roadmap
 
-See the [open issues](https://github.com/palexdev/MaterialFX/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/palexdev/MaterialFX/issues) for a list of proposed features (and known issues).  
+See the [ROADMAP](https://github.com/palexdev/MaterialFX/blob/main/ROADMAP.md) for a list of implemented and upcoming features.
 
 <!-- CONTRIBUTING -->
 
