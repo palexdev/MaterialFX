@@ -20,7 +20,7 @@ package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.controls.MFXLabel;
 import io.github.palexdev.materialfx.controls.MFXTextField;
-import io.github.palexdev.materialfx.controls.enums.Styles;
+import io.github.palexdev.materialfx.controls.enums.Styles.LabelStyles;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.utils.LabelUtils;
 import javafx.animation.ScaleTransition;
@@ -62,7 +62,7 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
     //================================================================================
     private final HBox container;
     private final Label textNode;
-    private boolean promptIsUsed = false;
+    private boolean promptIsUsed;
 
     private final Line unfocusedLine;
     private final Line focusedLine;
@@ -128,7 +128,7 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
             label.getTrailingIcon().addEventFilter(MouseEvent.MOUSE_PRESSED, iconEditorHandler);
         }
 
-        if (label.getLabelStyle() != Styles.LabelStyles.STYLE2) {
+        if (label.getLabelStyle() != LabelStyles.STYLE2) {
             getChildren().addAll(container, unfocusedLine, focusedLine);
         } else {
             getChildren().add(container);
@@ -150,7 +150,7 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
         MFXLabel label = getSkinnable();
 
         label.labelStyleProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == Styles.LabelStyles.STYLE2) {
+            if (newValue == LabelStyles.STYLE2) {
                 getChildren().removeAll(unfocusedLine, focusedLine);
             } else if (!getChildren().contains(focusedLine)) {
                 getChildren().addAll(unfocusedLine, focusedLine);
@@ -311,9 +311,9 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
         double editorWidth = containerWidth -
                 (
                         label.getContainerPadding().getLeft() +
-                                leadingWidth + label.getGraphicTextGap() +
-                                trailingWidth + label.getGraphicTextGap() +
-                                label.getContainerPadding().getRight()
+                        leadingWidth + label.getGraphicTextGap() +
+                        trailingWidth + label.getGraphicTextGap() +
+                        label.getContainerPadding().getRight()
                 );
         textNode.setPrefWidth(editorWidth);
         textField.resizeRelocate(posX, 0, editorWidth, containerHeight);
