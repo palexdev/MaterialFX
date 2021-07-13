@@ -55,6 +55,7 @@ public class MFXRectangleToggleNodeSkin extends SkinBase<MFXRectangleToggleNode>
         label = new MFXLabel();
         label.setId("textNode");
         label.textProperty().bind(toggleNode.textProperty());
+        label.graphicProperty().bind(toggleNode.graphicProperty());
         label.graphicTextGapProperty().bind(toggleNode.labelTextGapProperty());
         label.getStylesheets().setAll(toggleNode.getUserAgentStylesheet());
         label.setLeadingIcon(toggleNode.getLabelLeadingIcon());

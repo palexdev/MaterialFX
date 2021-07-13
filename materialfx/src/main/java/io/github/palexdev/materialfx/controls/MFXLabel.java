@@ -60,6 +60,7 @@ public class MFXLabel extends Control {
     private final ObjectProperty<Pos> labelAlignment = new SimpleObjectProperty<>(Pos.CENTER);
     private final ObjectProperty<Node> leadingIcon = new SimpleObjectProperty<>();
     private final ObjectProperty<Node> trailingIcon = new SimpleObjectProperty<>();
+    private final ObjectProperty<Node> graphic = new SimpleObjectProperty<>();
 
     private final ObjectProperty<Pos> alignment = new SimpleObjectProperty<>(Pos.CENTER);
 
@@ -212,6 +213,22 @@ public class MFXLabel extends Control {
 
     public void setAlignment(Pos alignment) {
         this.alignment.set(alignment);
+    }
+
+
+    public Node getGraphic() {
+        return graphic.get();
+    }
+
+    /**
+     * the graphic of the label
+     */
+    public ObjectProperty<Node> graphicProperty() {
+        return graphic;
+    }
+
+    public void setGraphic(Node node) {
+        graphic.set(node);
     }
 
     public boolean isEditorFocused() {

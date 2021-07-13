@@ -112,6 +112,7 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
         textNode.fontProperty().bind(label.fontProperty());
         textNode.textFillProperty().bind(label.textFillProperty());
         textNode.alignmentProperty().bind(label.labelAlignmentProperty());
+        textNode.graphicProperty().bind(label.graphicProperty());
 
         container = new HBox(textNode);
         container.alignmentProperty().bind(label.alignmentProperty());
@@ -310,9 +311,9 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
         double editorWidth = containerWidth -
                 (
                         label.getContainerPadding().getLeft() +
-                        leadingWidth + label.getGraphicTextGap() +
-                        trailingWidth + label.getGraphicTextGap() +
-                        label.getContainerPadding().getRight()
+                                leadingWidth + label.getGraphicTextGap() +
+                                trailingWidth + label.getGraphicTextGap() +
+                                label.getContainerPadding().getRight()
                 );
         textNode.setPrefWidth(editorWidth);
         textField.resizeRelocate(posX, 0, editorWidth, containerHeight);
