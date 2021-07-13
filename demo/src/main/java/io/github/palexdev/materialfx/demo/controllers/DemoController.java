@@ -209,7 +209,7 @@ public class DemoController implements Initializable {
         navBar.setVisible(false);
         initAnimations();
 
-        demoPane.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> demoPane.requestFocus());
+        demoPane.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> demoPane.requestFocus());
 
         primaryStage.setOnShown(event -> presentation());
     }
