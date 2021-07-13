@@ -81,125 +81,133 @@ To date MaterialFX offers not only restyled controls, but also: new and unique c
 
 ## Preview GIFs
 
-#### Imgur Link: [Gallery](https://imgur.com/gallery/J0HUrSZ)
+#### Imgur Link: [Gallery](https://gifyu.com/album/cU3)
 
 <i>
 <details>
 <summary>Buttons</summary>
 <br>
-<a href="https://imgur.com/n3bKDN9"><img src="https://i.imgur.com/n3bKDN9.gif" title="source: imgur.com" /></a>
+<img src="https://s6.gifyu.com/images/Buttons.gif" alt="Buttons" border="0">
 </details>
 <p></p>
 
 <details>
 <summary>CheckBoxes</summary>
 <br>
-<a href="https://imgur.com/gbf69gq"><img src="https://i.imgur.com/gbf69gq.gif" title="source: imgur.com" /></a>
+<img src="https://s6.gifyu.com/images/Checkboxes.gif" alt="Checkboxes" border="0">
 </details>
 <p></p>
 
 <details>
 <summary>ComboBoxes</summary>
 <br>
-<a href="https://imgur.com/uS8rwgS"><img src="https://i.imgur.com/uS8rwgS.gif" title="source: imgur.com" /></a>
+<img src="https://s6.gifyu.com/images/Comboboxes.gif" alt="Comboboxes" border="0">
 </details>
 <p></p>
 
 <details>
 <summary>DatePickers</summary>
 <br>
-<a href="https://imgur.com/QVOBaXG"><img src="https://imgur.com/QVOBaXG.gif" title="source: imgur.com" /></a>
+<img src="https://s6.gifyu.com/images/Datepickers.gif" alt="Datepickers" border="0">
 </details>
 <p></p>
 
 <details>
 <summary>Dialogs</summary>
 <br>
-<a href="https://imgur.com/ilKuKF9"><img src="https://imgur.com/ilKuKF9.gif" title="source: imgur.com" /></a>
+<img src="https://s6.gifyu.com/images/Dialogs843efeb715dfd031.gif" alt="Dialogs" border="0">
 </details>
 <p></p>
 
 <details>
 <summary>Labels</summary>
 <br>
-<a href="https://imgur.com/XWO40LR"><img src="https://imgur.com/XWO40LR.gif" title="source: imgur.com" /></a>
+<img src="https://s6.gifyu.com/images/Labels.gif" alt="Labels" border="0">
 </details>
 <p></p>
 
 <details>
 <summary>ListViews</summary>
 <br>
-<a href="https://imgur.com/WhYKgUI"><img src="https://imgur.com/WhYKgUI.gif" title="source: imgur.com" /></a>
+<img src="https://s6.gifyu.com/images/Listviews.gif" alt="Listviews" border="0">
 </details>
 <p></p>
 
 <details>
 <summary>Notifications</summary>
 <br>
-<a href="https://imgur.com/lT8zqzV"><img src="https://imgur.com/lT8zqzV.gif" title="source: imgur.com" /></a>
+<img src="https://s6.gifyu.com/images/Notifications.gif" alt="Notifications" border="0">
 </details>
 <p></p>
 
 <details>
 <summary>ProgressBars</summary>
 <br>
-<a href="https://imgur.com/8FEW5bt"><img src="https://imgur.com/8FEW5bt.gif" title="source: imgur.com" /></a>
+<img src="https://s6.gifyu.com/images/Progressbars.gif" alt="Progressbars" border="0">
 </details>
 <p></p>
 
 <details>
 <summary>ProgressSpinners</summary>
 <br>
-<a href="https://imgur.com/x0FiFXW"><img src="https://imgur.com/x0FiFXW.gif" title="source: imgur.com" /></a>
+<img src="https://s6.gifyu.com/images/Progressspinners.gif" alt="Progressspinners" border="0">
 </details>
 <p></p>
 
 <details>
 <summary>RadioButtons</summary>
 <br>
-<a href="https://imgur.com/i2fEmjB"><img src="https://imgur.com/i2fEmjB.gif" title="source: imgur.com" /></a>
+<img src="https://s6.gifyu.com/images/Radiobuttons.gif" alt="Radiobuttons" border="0">
 </details>
 <p></p>
 
 <details>
 <summary>ScrollPanes</summary>
 <br>
-<a href="https://imgur.com/bqRADeQ"><img src="https://imgur.com/bqRADeQ.gif" title="source: imgur.com" /></a>
+<img src="https://s6.gifyu.com/images/Scrollpanes.gif" alt="Scrollpanes" border="0">
 </details>
 <p></p>
 
 <details>
+<summary>Sliders</summary>
+<br>
+<img src="https://s6.gifyu.com/images/Sliders.gif" alt="Sliders" border="0">
+</details>
+<p></p>
+
+
+<details>
 <summary>Stepper</summary>
 <br>
-<a href="https://imgur.com/tNuAwF4"><img src="https://imgur.com/tNuAwF4.gif" title="source: imgur.com" /></a>
+<img src="https://s6.gifyu.com/images/Stepper.gif" alt="Stepper" border="0">
 </details>
 <p></p>
 
 <details>
 <summary>TableViews</summary>
 <br>
-<a href="https://imgur.com/GZYQtDT"><img src="https://imgur.com/GZYQtDT.gif" title="source: imgur.com" /></a>
+<img src="https://s6.gifyu.com/images/Tableviews.gif" alt="Tableviews" border="0">
 </details>
 <p></p>
 
 <details>
 <summary>TextFields</summary>
 <br>
-<a href="https://imgur.com/NYp8LJV"><img src="https://imgur.com/NYp8LJV.gif" title="source: imgur.com" /></a>
+<img src="https://s6.gifyu.com/images/Textfields.gif" alt="Textfields" border="0">
 </details>
 <p></p>
 
 <details>
 <summary>Toggles</summary>
 <br>
-<a href="https://imgur.com/HcXXi8q"><img src="https://imgur.com/HcXXi8q.gif" title="source: imgur.com" /></a>
+<img src="https://s6.gifyu.com/images/Toggles.gif" alt="Toggles" border="0">
 </details>
 <p></p>
 
 <details>
 <summary>FontResources</summary>
 <br>
-<a href="https://imgur.com/PkCZM0v"><img src="https://imgur.com/PkCZM0v.gif" title="source: imgur.com" /></a>
+<img src="https://s6.gifyu.com/images/Fontresources.gif" alt="Radiobuttons" border="0">
 </details>
 <p></p>
 </i>
@@ -297,6 +305,8 @@ donation here. [![Donate](https://img.shields.io/badge/$-support-green.svg?style
 (If you want your github page to be linked here and you didn't specify your username in the donation, feel free to contact me by email and tell me. Also contact me if for some some reason you don't want to be listed here)
 
 - Alex Hawk
+- Yiding He
+- Alaa Abu Zidan
 - *Your name can be here by supporting me at this link, [Support](https://bit.ly/31XB8zD)*
 
 Thank you very very much to all supporters, to all people who contribute to the project, to all people that thanked me, you really made my day
