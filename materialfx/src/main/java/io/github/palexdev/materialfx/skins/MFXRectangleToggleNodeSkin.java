@@ -71,6 +71,7 @@ public class MFXRectangleToggleNodeSkin extends SkinBase<MFXRectangleToggleNode>
         rippleGenerator = new MFXCircleRippleGenerator(toggleNode);
 
         container.getChildren().setAll(rippleGenerator, label);
+        handleGraphics();
 
         setupRippleGenerator();
         setListeners();
@@ -97,10 +98,8 @@ public class MFXRectangleToggleNodeSkin extends SkinBase<MFXRectangleToggleNode>
      * Adds listeners for:
      * <p>
      * <p> - {@link MFXRectangleToggleNode}: to update the ripple generator's clip supplier.
-     * <p></p>
-     * Adds bindings for:
-     * <p>
-     * <p> - Binds the {@link MFXLabel} icons properties to the corresponding toggle's properties.
+     * <p> - {@link MFXRectangleToggleNode#graphicProperty()}, {@link MFXRectangleToggleNode#labelLeadingIconProperty()},
+     * {@link MFXRectangleToggleNode#labelTrailingIconProperty()}, to properly handle the various settable icons, call to {@link #handleGraphics()}
      * <p></p>
      * Adds event filters/handlers for:
      * <p>
@@ -111,8 +110,15 @@ public class MFXRectangleToggleNodeSkin extends SkinBase<MFXRectangleToggleNode>
         MFXRectangleToggleNode toggleNode = getSkinnable();
 
         toggleNode.rippleClipTypeFactoryProperty().addListener((observable, oldValue, newValue) -> rippleGenerator.setClipSupplier(() -> newValue.build(container)));
-        label.leadingIconProperty().bind(toggleNode.labelLeadingIconProperty());
-        label.trailingIconProperty().bind(toggleNode.labelTrailingIconProperty());
+
+        toggleNode.graphicProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue != null) {
+                container.getChildren().remove(oldValue);
+            }
+            handleGraphics();
+        });
+        toggleNode.labelLeadingIconProperty().addListener((observable, oldValue, newValue) -> handleGraphics());
+        toggleNode.labelTrailingIconProperty().addListener((observable, oldValue, newValue) -> handleGraphics());
 
         container.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
             Node leadingIcon = label.getLeadingIcon();
@@ -143,6 +149,35 @@ public class MFXRectangleToggleNodeSkin extends SkinBase<MFXRectangleToggleNode>
 
             Event.fireEvent(toggleNode, event);
         });
+    }
+
+    /**
+     * Handles the various settable icons of this control.
+     * <p>
+     * Prioritizes the nodes coming from the {@link MFXRectangleToggleNode#graphicProperty()}, meaning that even
+     * if there is text, even if the leading or trailing icons are set, they will be hidden whenever the graphic property
+     * is not null.
+     */
+    protected void handleGraphics() {
+        MFXRectangleToggleNode toggleNode = getSkinnable();
+
+        Node graphic = toggleNode.getGraphic();
+        Node leading = toggleNode.getLabelLeadingIcon();
+        Node trailing = toggleNode.getLabelTrailingIcon();
+        label.setLeadingIcon(leading);
+        label.setTrailingIcon(trailing);
+        if (leading != null || trailing != null) {
+            label.setVisible(graphic == null);
+        }
+
+        if (graphic != null) {
+            label.setVisible(false);
+            if (!container.getChildren().contains(graphic)) {
+                container.getChildren().add(graphic);
+            }
+        } else {
+            label.setVisible(true);
+        }
     }
 
     //================================================================================

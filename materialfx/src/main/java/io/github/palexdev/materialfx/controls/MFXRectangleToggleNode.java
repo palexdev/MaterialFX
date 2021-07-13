@@ -34,7 +34,11 @@ import javafx.scene.control.ToggleButton;
  * <p></p>
  * Extends {@link ToggleButton} and redefines the style class to "mfx-toggle-node" for usage in CSS.
  * <p>
- * Allows to specify up to two icons for toggle's label.
+ * Allows to specify up to two icons for toggle's label. Also, if you want a toggle node without text but just with
+ * the icon, the property to set is the {@link #graphicProperty()}, setting the leading or the trailing in this case can lead to
+ * misaligned icons as those two icons are meant to be used with text. Note that whenever the graphic property is set to
+ * a not null value it will be prioritized over the other two icons and the label. The label will hidden and only the
+ * graphic property will be shown. Setting it back to null will show the label, leading and trailing icons back again.
  */
 public class MFXRectangleToggleNode extends AbstractMFXToggleNode {
     //================================================================================

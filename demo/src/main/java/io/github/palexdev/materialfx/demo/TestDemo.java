@@ -18,29 +18,23 @@
 
 package io.github.palexdev.materialfx.demo;
 
-import io.github.palexdev.materialfx.beans.NumberRange;
-import io.github.palexdev.materialfx.beans.properties.ResettableDoubleProperty;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
-import io.github.palexdev.materialfx.controls.MFXSlider;
+import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
-import io.github.palexdev.materialfx.controls.enums.SliderEnums.SliderPopupSide;
 import io.github.palexdev.materialfx.demo.model.FilterablePerson;
 import io.github.palexdev.materialfx.font.FontResources;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.ColorUtils;
-import io.github.palexdev.materialfx.utils.NumberUtils;
 import javafx.application.Application;
-import javafx.beans.binding.Bindings;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.scenicview.ScenicView;
 
 import java.util.Random;
 
@@ -53,67 +47,45 @@ public class TestDemo extends Application {
         VBox box = new VBox(100);
         box.setAlignment(Pos.CENTER);
 
-        MFXSlider slider = new MFXSlider();
-        //slider.setSliderMode(SliderEnums.SliderMode.SNAP_TO_TICKS);
-        slider.setBidirectional(false);
-        slider.setPrefWidth(200);
-        slider.setMin(10);
-        slider.setMax(100);
-        slider.setValue(-50);
-        slider.setBidirectional(false);
-
-        slider.getRanges1().add(NumberRange.of(slider.getMin()));
-        slider.getRanges2().add(NumberRange.of(50.0));
-        slider.getRanges3().add(NumberRange.of(slider.getMax()));
-
         HBox bbox = new HBox(20);
         bbox.setAlignment(Pos.CENTER);
 
-        ResettableDoubleProperty property = new ResettableDoubleProperty(0.0, 10.5);
-        property.setFireChangeOnReset(true);
+        MFXButton b1 = new MFXButton("Set Leading");
+        MFXButton b2 = new MFXButton("Set Trailing");
+        MFXButton b3 = new MFXButton("Set Graphic");
+        MFXButton b4 = new MFXButton("Remove Graphic");
+        MFXButton b5 = new MFXButton("Remove Label Graphic");
+        MFXRectangleToggleNode rtn = new MFXRectangleToggleNode("");
+        rtn.setPrefSize(32, 32);
+        rtn.setAlignment(Pos.CENTER);
 
-        MFXButton b1 = new MFXButton("Change Thumb");
-        MFXButton b2 = new MFXButton("Change Popup");
-        MFXButton b3 = new MFXButton("Change Min");
-        MFXButton b4 = new MFXButton("Change Max");
-        MFXButton b5 = new MFXButton("Change Value");
-
-        b1.setOnAction(event -> slider.setThumbSupplier(() -> {
-            MFXButton button = new MFXButton("Thumb");
-            button.setPrefSize(40, 30);
-            return button;
-        }));
-        b2.setOnAction(event -> slider.setPopupSupplier(() -> {
-            Label label = new Label();
-            label.textProperty().bind(Bindings.createStringBinding(
-                    () -> NumberUtils.formatToString(slider.getValue(), slider.getDecimalPrecision()),
-                    slider.valueProperty()
-            ));
-            label.setStyle("-fx-border-color: orange");
-            return label;
-        }));
+        b1.setOnAction(event -> {
+            rtn.setLabelLeadingIcon(MFXFontIcon.getRandomIcon(12, ColorUtils.getRandomColor()));
+        });
+        b2.setOnAction(event -> {
+            rtn.setLabelTrailingIcon(MFXFontIcon.getRandomIcon(12, ColorUtils.getRandomColor()));
+        });
         b3.setOnAction(event -> {
-            slider.setOrientation(slider.getOrientation() == Orientation.HORIZONTAL ? Orientation.VERTICAL : Orientation.HORIZONTAL);
+            rtn.setGraphic(MFXFontIcon.getRandomIcon(12, ColorUtils.getRandomColor()));
         });
         b4.setOnAction(event -> {
-            slider.setPopupSide(slider.getPopupSide() == SliderPopupSide.DEFAULT ? SliderPopupSide.OTHER_SIDE : SliderPopupSide.DEFAULT);
+            rtn.setGraphic(null);
         });
         b5.setOnAction(event -> {
-            property.reset();
+            rtn.setLabelLeadingIcon(null);
+            rtn.setLabelTrailingIcon(null);
         });
-
-        property.addListener((observable, oldValue, newValue) -> System.out.println(newValue));
 
         bbox.getChildren().addAll(b1, b2, b3, b4, b5);
 
-        box.getChildren().addAll(slider, bbox);
+        box.getChildren().addAll(rtn, bbox);
         box.getStylesheets().add(MFXDemoResourcesLoader.load("css/TestDemo.css"));
 
         Scene scene = new Scene(box, 800, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        //ScenicView.show(scene);
+        ScenicView.show(scene);
     }
 
     public static void main(String[] args) {
