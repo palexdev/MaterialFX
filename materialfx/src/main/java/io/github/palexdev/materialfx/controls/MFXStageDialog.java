@@ -1,19 +1,19 @@
 /*
- *     Copyright (C) 2021 Parisi Alessandro
- *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ * Copyright (C) 2021 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
- *     MaterialFX is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     MaterialFX is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package io.github.palexdev.materialfx.controls;
@@ -23,9 +23,9 @@ import io.github.palexdev.materialfx.controls.enums.DialogType;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.controls.factories.MFXStageDialogFactory;
 import io.github.palexdev.materialfx.effects.MFXScrimEffect;
+import io.github.palexdev.materialfx.utils.AnimationUtils;
 import javafx.animation.KeyFrame;
 import javafx.animation.ParallelTransition;
-import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
@@ -123,8 +123,12 @@ public class MFXStageDialog {
 
     /**
      * Shows the dialog by showing the stage, center the stage in its owner and plays animations if requested
+     * Common method to avoid duplicate code for {@link #show()} and {@link #showAndWait()}.
+     * <p>
+     * This is responsible for playing the show animation, add the scrim effect, and setting the stage position
+     * on screen.
      */
-    public void show() {
+    protected void showCommon() {
         if (dialogStage.getScene() == null) {
             throw new NullPointerException("The dialog has not been set!");
         }
@@ -138,11 +142,12 @@ public class MFXStageDialog {
                 throw new IllegalStateException("Scrim background is set to true but the dialog stage owner is null or modality is not set!!");
             }
             if (animate) {
-                Timeline fadeInScrim = MFXAnimationFactory.FADE_IN.build(scrimEffect.getScrimNode(), animationMillis);
-                fadeInScrim.getKeyFrames().add(
-                        new KeyFrame(Duration.ONE, event -> scrimEffect.scrimWindow(dialogStage.getOwner(), scrimOpacity))
+                inAnimation.getChildren().add(
+                        AnimationUtils.TimelineBuilder.build()
+                                .add(new KeyFrame(Duration.ZERO, event -> scrimEffect.scrimWindow(dialogStage.getOwner(), scrimOpacity)))
+                                .show(animationMillis, scrimEffect.getScrimNode())
+                                .getAnimation()
                 );
-                inAnimation.getChildren().add(fadeInScrim);
             } else {
                 scrimEffect.scrimWindow(dialogStage.getOwner(), scrimOpacity);
             }
@@ -161,8 +166,22 @@ public class MFXStageDialog {
             dialogStage.setX(manualX);
             dialogStage.setY(manualY);
         }
+    }
 
+    /**
+     * Calls {@link #showCommon()} and then {@link Stage#show()}.
+     */
+    public void show() {
+        showCommon();
         this.dialogStage.show();
+    }
+
+    /**
+     * Calls {@link #showCommon()} and then {@link Stage#showAndWait()}.
+     */
+    public void showAndWait() {
+        showCommon();
+        this.dialogStage.showAndWait();
     }
 
     /**
@@ -175,9 +194,12 @@ public class MFXStageDialog {
 
         if (scrimBackground) {
             if (animate) {
-                Timeline fadeOutScrim = MFXAnimationFactory.FADE_OUT.build(scrimEffect.getScrimNode(), animationMillis);
-                fadeOutScrim.setOnFinished(event -> scrimEffect.removeEffect(dialogStage.getOwner()));
-                outAnimation.getChildren().add(fadeOutScrim);
+                outAnimation.getChildren().add(
+                        AnimationUtils.TimelineBuilder.build()
+                                .hide(animationMillis, scrimEffect.getScrimNode())
+                                .setOnFinished(event -> scrimEffect.removeEffect(dialogStage.getOwner()))
+                                .getAnimation()
+                );
             } else {
                 scrimEffect.removeEffect(dialogStage.getOwner());
             }

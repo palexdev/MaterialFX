@@ -1,19 +1,19 @@
 /*
- *     Copyright (C) 2021 Parisi Alessandro
- *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ * Copyright (C) 2021 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
- *     MaterialFX is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     MaterialFX is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package io.github.palexdev.materialfx.skins;
@@ -27,12 +27,19 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.scene.control.IndexRange;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
+/**
+ * This is the {@code Skin} used by default by every {@link MFXPasswordField}.
+ * <p>
+ * Extends {@link MFXTextFieldSkin} and implements all the needed methods and fields
+ * needed to make it behave like a password field.
+ */
 public class MFXPasswordFieldSkin extends MFXTextFieldSkin {
     //================================================================================
     // Properties
@@ -105,8 +112,14 @@ public class MFXPasswordFieldSkin extends MFXTextFieldSkin {
 
         passwordField.addEventFilter(KeyEvent.KEY_TYPED, keyEvent -> {
             if (!isInvalidCharacter(keyEvent.getCharacter().charAt(0))) {
+
                 if (passwordField.getSelection().getLength() > 0) {
                     handleDeletion(passwordField.getText().length());
+                }
+
+                if (passwordField.getText().length() == passwordField.getTextLimit()) {
+                    keyEvent.consume();
+                    return;
                 }
 
                 sb.append(keyEvent.getCharacter());
@@ -304,16 +317,14 @@ public class MFXPasswordFieldSkin extends MFXTextFieldSkin {
                 .setAccelerator("Ctrl + A")
                 .setAction(event -> passwordField.selectAll());
 
-        passwordField.setMFXContextMenu(
-                MFXContextMenu.Builder.build(passwordField)
-                        .addMenuItem(copy)
-                        .addMenuItem(cut)
-                        .addMenuItem(paste)
-                        .addMenuItem(delete)
-                        .addSeparator()
-                        .addMenuItem(selectAll)
-                        .install()
-        );
+        passwordField.getMFXContextMenu().setItems(FXCollections.observableArrayList(
+                copy,
+                cut,
+                paste,
+                delete,
+                MFXContextMenu.Builder.getSeparator(),
+                selectAll
+        ));
     }
 
     /**

@@ -1,19 +1,19 @@
 /*
- *     Copyright (C) 2021 Parisi Alessandro
- *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ * Copyright (C) 2021 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
- *     MaterialFX is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     MaterialFX is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package io.github.palexdev.materialfx.controls;
@@ -21,24 +21,13 @@ package io.github.palexdev.materialfx.controls;
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.skins.MFXScrollPaneSkin;
 import io.github.palexdev.materialfx.utils.ColorUtils;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Skin;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.util.Duration;
-
-import java.util.function.Function;
 
 /**
  * This is the implementation of a scroll pane following Google's material design guidelines in JavaFX.
@@ -155,107 +144,16 @@ public class MFXScrollPane extends ScrollPane {
      */
     private void setColors() {
         StringBuilder sb = new StringBuilder();
-        sb.append("-mfx-track-color: ").append(ColorUtils.rgb((Color) trackColor.get()))
-                .append(";\n-mfx-thumb-color: ").append(ColorUtils.rgb((Color) thumbColor.get()))
-                .append(";\n-mfx-thumb-hover-color: ").append(ColorUtils.rgb((Color) thumbHoverColor.get()))
+        sb.append("-mfx-track-color: ").append(ColorUtils.toCss(trackColor.get()))
+                .append(";\n-mfx-thumb-color: ").append(ColorUtils.toCss(thumbColor.get()))
+                .append(";\n-mfx-thumb-hover-color: ").append(ColorUtils.toCss(thumbHoverColor.get()))
                 .append(";");
         setStyle(sb.toString());
     }
 
     //================================================================================
-    // Static Methods
-    //================================================================================
-    private static void customScrolling(ScrollPane scrollPane, DoubleProperty scrollDirection, Function<Bounds, Double> sizeFunc, int speed) {
-        final double[] frictions = {0.99, 0.1, 0.05, 0.04, 0.03, 0.02, 0.01, 0.04, 0.01, 0.008, 0.008, 0.008, 0.008, 0.0006, 0.0005, 0.00003, 0.00001};
-        final double[] pushes = {speed};
-        final double[] derivatives = new double[frictions.length];
-
-        Timeline timeline = new Timeline();
-        final EventHandler<MouseEvent> dragHandler = event -> timeline.stop();
-        final EventHandler<ScrollEvent> scrollHandler = event -> {
-            if (event.getEventType() == ScrollEvent.SCROLL) {
-                int direction = event.getDeltaY() > 0 ? -1 : 1;
-                for (int i = 0; i < pushes.length; i++) {
-                    derivatives[i] += direction * pushes[i];
-                }
-                if (timeline.getStatus() == Animation.Status.STOPPED) {
-                    timeline.play();
-                }
-                event.consume();
-            }
-        };
-        if (scrollPane.getContent().getParent() != null) {
-            scrollPane.getContent().getParent().addEventHandler(MouseEvent.DRAG_DETECTED, dragHandler);
-            scrollPane.getContent().getParent().addEventHandler(ScrollEvent.ANY, scrollHandler);
-        }
-        scrollPane.getContent().parentProperty().addListener((observable, oldValue, newValue) -> {
-            if (oldValue != null) {
-                oldValue.removeEventHandler(MouseEvent.DRAG_DETECTED, dragHandler);
-                oldValue.removeEventHandler(ScrollEvent.ANY, scrollHandler);
-            }
-            if (newValue != null) {
-                newValue.addEventHandler(MouseEvent.DRAG_DETECTED, dragHandler);
-                newValue.addEventHandler(ScrollEvent.ANY, scrollHandler);
-            }
-        });
-        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(3), (event) -> {
-            for (int i = 0; i < derivatives.length; i++) {
-                derivatives[i] *= frictions[i];
-            }
-            for (int i = 1; i < derivatives.length; i++) {
-                derivatives[i] += derivatives[i - 1];
-            }
-            double dy = derivatives[derivatives.length - 1];
-            double size = sizeFunc.apply(scrollPane.getContent().getLayoutBounds());
-            scrollDirection.set(Math.min(Math.max(scrollDirection.get() + dy / size, 0), 1));
-            if (Math.abs(dy) < 0.001) {
-                timeline.stop();
-            }
-        }));
-        timeline.setCycleCount(Animation.INDEFINITE);
-    }
-
-    /**
-     * Adds smooth vertical scrolling to the specified scroll pane.
-     * <p>
-     * <b>Note: not recommended for small scroll panes</b>
-     *
-     * @param speed regulates the speed of the scrolling
-     */
-    public static void smoothVScrolling(ScrollPane scrollPane, int speed) {
-        customScrolling(scrollPane, scrollPane.vvalueProperty(), Bounds::getHeight, speed);
-    }
-
-    /**
-     * Adds smooth horizontal scrolling to the specified scroll pane.
-     * <p>
-     * <b>Note: not recommended for small scroll panes</b>
-     *
-     * @param speed regulates the speed of the scrolling
-     */
-    public static void smoothHScrolling(ScrollPane scrollPane, int speed) {
-        customScrolling(scrollPane, scrollPane.hvalueProperty(), Bounds::getWidth, speed);
-    }
-
-    /**
-     * Calls {@link #smoothVScrolling(ScrollPane, int)} with a default speed modifier of 1.
-     */
-    public static void smoothVScrolling(ScrollPane scrollPane) {
-        smoothVScrolling(scrollPane, 1);
-    }
-
-    /**
-     * Calls {@link #smoothHScrolling(ScrollPane, int)} with a default speed modifier of 1.
-     */
-    public static void smoothHScrolling(ScrollPane scrollPane) {
-        smoothHScrolling(scrollPane, 1);
-    }
-
-
-    //================================================================================
     // Override Methods
     //================================================================================
-
     @Override
     protected Skin<?> createDefaultSkin() {
         return new MFXScrollPaneSkin(this);

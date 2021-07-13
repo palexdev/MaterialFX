@@ -1,29 +1,34 @@
 /*
- *     Copyright (C) 2021 Parisi Alessandro
- *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ * Copyright (C) 2021 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
- *     MaterialFX is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     MaterialFX is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package io.github.palexdev.materialfx.utils;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.css.PseudoClass;
 import javafx.event.Event;
 import javafx.geometry.*;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Control;
+import javafx.scene.control.Skin;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -175,31 +180,69 @@ public class NodeUtils {
     }
 
     /**
-     * Retrieves the region width if it isn't still laid out.
-     *
-     * @param region the Region of which to know the width
-     * @return the calculated width
-     */
-    public static double getNodeWidth(Region region) {
-        Group group = new Group(region);
-        Scene scene = new Scene(group);
-        group.applyCss();
-        group.layout();
-        return region.getWidth();
-    }
-
-    /**
      * Retrieves the region height if it isn't still laid out.
      *
      * @param region the Region of which to know the height
      * @return the calculated height
      */
-    public static double getNodeHeight(Region region) {
+    public static double getRegionHeight(Region region) {
         Group group = new Group(region);
         Scene scene = new Scene(group);
         group.applyCss();
         group.layout();
+
+        group.getChildren().clear();
         return region.getHeight();
+    }
+
+    /**
+     * Retrieves the region width if it isn't still laid out.
+     *
+     * @param region the Region of which to know the width
+     * @return the calculated width
+     */
+    public static double getRegionWidth(Region region) {
+        Group group = new Group(region);
+        Scene scene = new Scene(group);
+        group.applyCss();
+        group.layout();
+
+        group.getChildren().clear();
+        return region.getWidth();
+    }
+
+    /**
+     * Retrieves the node height if it isn't still laid out.
+     *
+     * @param node the Node of which to know the height
+     * @return the calculated height
+     */
+    public static double getNodeHeight(Node node) {
+        Group group = new Group(node);
+        Scene scene = new Scene(group);
+        group.applyCss();
+        group.layout();
+
+        double height = node.prefHeight(-1);
+        group.getChildren().clear();
+        return height;
+    }
+
+    /**
+     * Retrieves the node width if it isn't still laid out.
+     *
+     * @param node the Node of which to know the width
+     * @return the calculated width
+     */
+    public static double getNodeWidth(Node node) {
+        Group group = new Group(node);
+        Scene scene = new Scene(group);
+        group.applyCss();
+        group.layout();
+
+        double width = node.prefWidth(-1);
+        group.getChildren().clear();
+        return width;
     }
 
     /**
@@ -248,13 +291,89 @@ public class NodeUtils {
         for (Node node : parent.getChildrenUnmodifiable()) {
             nodes.add(node);
             if (node instanceof Parent)
-                addAllDescendents((Parent)node, nodes);
+                addAllDescendents((Parent) node, nodes);
         }
     }
 
+    /**
+     * Convenience method to execute a given action after that the given control
+     * has been laid out and its skin is not null anymore.
+     * <p></p>
+     * If the skin is not null when called, the action is executed immediately.
+     * <p>
+     * The listener is added only if the skin is null or the addListenerIfNotNull parameter is true.
+     *
+     * @param control              the control to check for skin initialization
+     * @param action               the action to perform when the skin is not null
+     * @param addListenerIfNotNull to specify if the listener should be added anyway even if the scene is not null
+     * @param isOneShot            to specify if the listener added to the skin property
+     *                             should be removed after it is not null anymore
+     */
+    public static void waitForSkin(Control control, Runnable action, boolean addListenerIfNotNull, boolean isOneShot) {
+        if (control.getSkin() != null) {
+            action.run();
+        }
+
+        if (control.getSkin() == null || addListenerIfNotNull) {
+            control.skinProperty().addListener(new ChangeListener<>() {
+                @Override
+                public void changed(ObservableValue<? extends Skin<?>> observable, Skin<?> oldValue, Skin<?> newValue) {
+                    if (newValue != null) {
+                        action.run();
+                        if (isOneShot) {
+                            control.skinProperty().removeListener(this);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * Convenience method to execute a given action after that the given control
+     * has been laid out and its scene is not null anymore.
+     * <p></p>
+     * If the scene is not null when called, the action is executed immediately.
+     * <p>
+     * The listener is added only if the scene is null or the addListenerIfNotNull parameter is true.
+     *
+     * @param control              the control to check for scene initialization
+     * @param action               the action to perform when the scene is not null
+     * @param addListenerIfNotNull to specify if the listener should be added anyway even if the scene is not null
+     * @param isOneShot            to specify if the listener added to the scene property
+     *                             should be removed after it is not null anymore
+     */
+    public static void waitForScene(Control control, Runnable action, boolean addListenerIfNotNull, boolean isOneShot) {
+        if (control.getScene() != null) {
+            action.run();
+        }
+
+        if (control.getScene() == null || addListenerIfNotNull) {
+            control.sceneProperty().addListener(new ChangeListener<>() {
+                @Override
+                public void changed(ObservableValue<? extends Scene> observable, Scene oldValue, Scene newValue) {
+                    if (newValue != null) {
+                        action.run();
+                        if (isOneShot) {
+                            control.sceneProperty().removeListener(this);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    public static boolean isPseudoClassActive(Control control, PseudoClass pseudoClass) {
+        return control.getPseudoClassStates().contains(pseudoClass);
+    }
+
+    //================================================================================
+    // JavaFX private methods
+    //================================================================================
     /* The following methods are copied from com.sun.javafx.scene.control.skin.Utils class
      * It's a private module, so to avoid adding exports and opens I copied them
      */
+
     public static double computeXOffset(double width, double contentWidth, HPos hpos) {
         switch (hpos) {
             case LEFT:

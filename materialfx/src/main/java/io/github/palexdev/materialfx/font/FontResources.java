@@ -1,25 +1,25 @@
 /*
- *     Copyright (C) 2021 Parisi Alessandro
- *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ * Copyright (C) 2021 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
- *     MaterialFX is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     MaterialFX is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package io.github.palexdev.materialfx.font;
 
 /**
- * Enumerator class for MaterialFX font resources. (Count: 81)
+ * Enumerator class for MaterialFX font resources. (Count: 95)
  */
 public enum FontResources {
     ANGLE_DOWN("mfx-angle-down", '\uE900'),
@@ -56,53 +56,67 @@ public enum FontResources {
     EXPAND("mfx-expand", '\uE91F'),
     EYE("mfx-eye", '\uE920'),
     EYE_SLASH("mfx-eye-slash", '\uE921'),
-    FILTER("mfx-filter", '\uE922'),
-    FILTER_ALT("mfx-filter-alt", '\uE923'),
-    FILTER_ALT_CLEAR("mfx-filter-alt-clear", '\uE924'),
-    FIRST_PAGE("mfx-first-page", '\uE925'),
-    FIT("mfx-fit", '\uE926'),
-    GEAR("mfx-gear", '\uE927'),
-    GOOGLE("mfx-google", '\uE928'),
-    GOOGLE_DRIVE("mfx-google-drive", '\uE929'),
-    HOME("mfx-home", '\uE92A'),
-    INFO("mfx-info", '\uE92B'),
-    INFO_CIRCLE("mfx-info-circle", '\uE92C'),
-    LAST_PAGE("mfx-last-page", '\uE92D'),
-    LEVEL_UP("mfx-level-up", '\uE92E'),
-    LOCK("mfx-lock", '\uE92F'),
-    LOCK_OPEN("mfx-lock-open", '\uE930'),
-    MINUS("mfx-minus", '\uE931'),
-    MINUS_CIRCLE("mfx-minus-circle", '\uE932'),
-    MODENA_MARK("mfx-modena-mark", '\uE933'),
-    NEXT("mfx-next", '\uE934'),
-    REDO("mfx-redo", '\uE935'),
-    RESTORE("mfx-restore", '\uE936'),
-    SEARCH("mfx-search", '\uE937'),
-    SEARCH_PLUS("mfx-search-plus", '\uE938'),
-    SELECT_ALL("mfx-select-all", '\uE939'),
-    SLIDERS("mfx-sliders", '\uE93A'),
-    STEP_BACKWARD("mfx-step-backward", '\uE93B'),
-    STEP_FORWARD("mfx-step-forward", '\uE93C'),
-    SYNC("mfx-sync", '\uE93D'),
-    SYNC_LIGHT("mfx-sync-light", '\uE93E'),
-    UNDO("mfx-undo", '\uE93F'),
-    USER("mfx-user", '\uE940'),
-    USERS("mfx-users", '\uE941'),
-    VARIANT10_MARK("mfx-variant10-mark", '\uE942'),
-    VARIANT11_MARK("mfx-variant11-mark", '\uE943'),
-    VARIANT12_MARK("mfx-variant12-mark", '\uE944'),
-    VARIANT3_MARK("mfx-variant3-mark", '\uE945'),
-    VARIANT4_MARK("mfx-variant4-mark", '\uE946'),
-    VARIANT5_MARK("mfx-variant5-mark", '\uE947'),
-    VARIANT6_MARK("mfx-variant6-mark", '\uE948'),
-    VARIANT7_MARK("mfx-variant7-mark", '\uE949'),
-    VARIANT8_MARK("mfx-variant8-mark", '\uE94A'),
-    VARIANT9_MARK("mfx-variant9-mark", '\uE94B'),
-    X("mfx-x", '\uE94C'),
-    X_ALT("mfx-x-alt", '\uE94D'),
-    X_CIRCLE("mfx-x-circle", '\uE94E'),
-    X_CIRCLE_LIGHT("mfx-x-circle-light", '\uE94F'),
-    X_LIGHT("mfx-x-light", '\uE950'),
+    FILE("mfx-file", '\uE922'),
+    FILTER("mfx-filter", '\uE923'),
+    FILTER_ALT("mfx-filter-alt", '\uE924'),
+    FILTER_ALT_CLEAR("mfx-filter-alt-clear", '\uE925'),
+    FIRST_PAGE("mfx-first-page", '\uE926'),
+    FIT("mfx-fit", '\uE927'),
+    FOLDER("mfx-folder", '\uE928'),
+    GEAR("mfx-gear", '\uE929'),
+    GOOGLE("mfx-google", '\uE92A'),
+    GOOGLE_DRAWING("mfx-google-drawing", '\uE92B'),
+    GOOGLE_DRIVE("mfx-google-drive", '\uE92C'),
+    GOOGLE_FORMS("mfx-google-forms", '\uE92D'),
+    GOOGLE_FUSION_TABLES("mfx-google-fusion-tables", '\uE92E'),
+    GOOGLE_PRESENTATION("mfx-google-presentation", '\uE92F'),
+    GOOGLE_SCRIPT("mfx-google-script", '\uE930'),
+    GOOGLE_SITES("mfx-google-sites", '\uE931'),
+    HOME("mfx-home", '\uE932'),
+    IMAGE("mfx-image", '\uE933'),
+    INFO("mfx-info", '\uE934'),
+    INFO_CIRCLE("mfx-info-circle", '\uE935'),
+    LAST_PAGE("mfx-last-page", '\uE936'),
+    LEVEL_UP("mfx-level-up", '\uE937'),
+    LOCK("mfx-lock", '\uE938'),
+    LOCK_OPEN("mfx-lock-open", '\uE939'),
+    MAP("mfx-map", '\uE93A'),
+    MINUS("mfx-minus", '\uE93B'),
+    MINUS_CIRCLE("mfx-minus-circle", '\uE93C'),
+    MODENA_MARK("mfx-modena-mark", '\uE93D'),
+    MUSIC("mfx-music", '\uE93E'),
+    NEXT("mfx-next", '\uE93F'),
+    REDO("mfx-redo", '\uE940'),
+    RESTORE("mfx-restore", '\uE941'),
+    SEARCH("mfx-search", '\uE942'),
+    SEARCH_PLUS("mfx-search-plus", '\uE943'),
+    SELECT_ALL("mfx-select-all", '\uE944'),
+    SHORTCUT("mfx-shortcut", '\uE945'),
+    SLIDERS("mfx-sliders", '\uE946'),
+    SPREADSHEET("mfx-spreadsheet", '\uE947'),
+    STEP_BACKWARD("mfx-step-backward", '\uE948'),
+    STEP_FORWARD("mfx-step-forward", '\uE949'),
+    SYNC("mfx-sync", '\uE94A'),
+    SYNC_LIGHT("mfx-sync-light", '\uE94B'),
+    UNDO("mfx-undo", '\uE94C'),
+    USER("mfx-user", '\uE94D'),
+    USERS("mfx-users", '\uE94E'),
+    VARIANT10_MARK("mfx-variant10-mark", '\uE94F'),
+    VARIANT11_MARK("mfx-variant11-mark", '\uE950'),
+    VARIANT12_MARK("mfx-variant12-mark", '\uE951'),
+    VARIANT3_MARK("mfx-variant3-mark", '\uE952'),
+    VARIANT4_MARK("mfx-variant4-mark", '\uE953'),
+    VARIANT5_MARK("mfx-variant5-mark", '\uE954'),
+    VARIANT6_MARK("mfx-variant6-mark", '\uE955'),
+    VARIANT7_MARK("mfx-variant7-mark", '\uE956'),
+    VARIANT8_MARK("mfx-variant8-mark", '\uE957'),
+    VARIANT9_MARK("mfx-variant9-mark", '\uE958'),
+    VIDEO("mfx-video", '\uE959'),
+    X("mfx-x", '\uE95A'),
+    X_ALT("mfx-x-alt", '\uE95B'),
+    X_CIRCLE("mfx-x-circle", '\uE95C'),
+    X_CIRCLE_LIGHT("mfx-x-circle-light", '\uE95D'),
+    X_LIGHT("mfx-x-light", '\uE95E'),
     ;
 
     public static FontResources findByDescription(String description) {

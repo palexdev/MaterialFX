@@ -1,19 +1,19 @@
 /*
- *     Copyright (C) 2021 Parisi Alessandro
- *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ * Copyright (C) 2021 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
- *     MaterialFX is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     MaterialFX is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package io.github.palexdev.materialfx.controls;
@@ -358,10 +358,7 @@ public class MFXContextMenu extends VBox {
          * Adds a separator to the items list.
          */
         public Builder addSeparator() {
-            Line separator = new Line();
-            separator.getStyleClass().add("separator");
-            VBox.setMargin(separator, new Insets(4, 0, 3, 0));
-            items.add(separator);
+            items.add(getSeparator());
             return this;
         }
 
@@ -371,6 +368,16 @@ public class MFXContextMenu extends VBox {
         public MFXContextMenu install() {
             contextMenu.setItems(items);
             return contextMenu;
+        }
+
+        /**
+         * Builds a separator.
+         */
+        public static Line getSeparator() {
+            Line separator = new Line();
+            separator.getStyleClass().add("separator");
+            VBox.setMargin(separator, new Insets(4, 0, 3, 0));
+            return separator;
         }
     }
 }

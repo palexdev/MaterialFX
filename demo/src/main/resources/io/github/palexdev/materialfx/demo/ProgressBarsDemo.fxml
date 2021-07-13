@@ -1,35 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--
+  ~ Copyright (C) 2021 Parisi Alessandro
+  ~ This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+  ~
+  ~ MaterialFX is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ MaterialFX is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+  -->
 
 <?import io.github.palexdev.materialfx.controls.MFXProgressBar?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-            prefWidth="600.0" stylesheets="@css/ProgressBarDemo.css" xmlns="http://javafx.com/javafx/16"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="io.github.palexdev.materialfx.demo.controllers.ProgressBarsDemoController">
-   <Label id="customLabel" alignment="CENTER" layoutX="167.0" layoutY="14.0" prefHeight="26.0" prefWidth="266.0"
-          text="Progress Bars" AnchorPane.leftAnchor="167.0" AnchorPane.rightAnchor="167.0"
-          AnchorPane.topAnchor="20.0"/>
-   <VBox alignment="TOP_CENTER" layoutX="250.0" layoutY="46.0" prefHeight="200.0" prefWidth="100.0" spacing="30.0"
-         AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0"
-         AnchorPane.topAnchor="80.0">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@css/ProgressBarDemo.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.ProgressBarsDemoController">
+   <Label id="customLabel" alignment="CENTER" layoutX="167.0" layoutY="14.0" prefHeight="26.0" prefWidth="266.0" text="Progress Bars" AnchorPane.leftAnchor="167.0" AnchorPane.rightAnchor="167.0" AnchorPane.topAnchor="20.0" />
+   <VBox alignment="TOP_CENTER" layoutX="250.0" layoutY="46.0" prefHeight="200.0" prefWidth="100.0" spacing="30.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="80.0">
       <padding>
-         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
       </padding>
       <HBox alignment="CENTER_LEFT" spacing="20.0">
-         <Label maxWidth="-Infinity" prefHeight="17.0" prefWidth="80.0" text="Indeterminate" HBox.hgrow="ALWAYS"/>
-         <MFXProgressBar prefWidth="300.0"/>
+         <Label maxWidth="-Infinity" prefHeight="17.0" prefWidth="80.0" text="Indeterminate" HBox.hgrow="ALWAYS" />
+         <MFXProgressBar prefWidth="300.0" />
       </HBox>
       <HBox alignment="CENTER_LEFT" spacing="20.0">
-         <Label maxWidth="-Infinity" prefHeight="17.0" prefWidth="80.0" text="Determinate" HBox.hgrow="ALWAYS"/>
-         <MFXProgressBar fx:id="determinate" prefWidth="300.0" progress="0.0"/>
-         <Label fx:id="progressLabel"/>
+         <Label maxWidth="-Infinity" prefHeight="17.0" prefWidth="80.0" text="Determinate" HBox.hgrow="ALWAYS" />
+         <MFXProgressBar id="determinate" fx:id="determinate" prefWidth="300.0" progress="0.0" />
+         <Label fx:id="progressLabel" />
       </HBox>
       <HBox alignment="CENTER_LEFT" spacing="20.0">
-         <Label maxWidth="-Infinity" prefHeight="17.0" prefWidth="80.0" text="Customized" HBox.hgrow="ALWAYS"/>
-         <MFXProgressBar id="custom" prefWidth="300.0"/>
+         <Label maxWidth="-Infinity" prefHeight="17.0" prefWidth="80.0" text="Customized" HBox.hgrow="ALWAYS" />
+         <MFXProgressBar id="custom" prefWidth="300.0" />
       </HBox>
    </VBox>
 </AnchorPane>

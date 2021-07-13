@@ -1,46 +1,35 @@
 /*
- *     Copyright (C) 2021 Parisi Alessandro
- *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ * Copyright (C) 2021 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
- *     MaterialFX is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     MaterialFX is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package io.github.palexdev.materialfx.controls.base;
 
-import io.github.palexdev.materialfx.controls.flowless.VirtualFlow;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
 import io.github.palexdev.materialfx.utils.ColorUtils;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.css.*;
-import javafx.event.EventHandler;
 import javafx.scene.control.Control;
-import javafx.scene.control.Skin;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.util.Duration;
-import org.reactfx.value.Var;
 
 import java.util.List;
 import java.util.function.Function;
@@ -118,86 +107,11 @@ public abstract class AbstractMFXFlowlessListView<T, C extends AbstractMFXFlowle
      */
     protected void setColors() {
         StringBuilder sb = new StringBuilder();
-        sb.append("-mfx-track-color: ").append(ColorUtils.rgb((Color) trackColor.get()))
-                .append(";\n-mfx-thumb-color: ").append(ColorUtils.rgb((Color) thumbColor.get()))
-                .append(";\n-mfx-thumb-hover-color: ").append(ColorUtils.rgb((Color) thumbHoverColor.get()))
+        sb.append("-mfx-track-color: ").append(ColorUtils.toCss(trackColor.get()))
+                .append(";\n-mfx-thumb-color: ").append(ColorUtils.toCss(thumbColor.get()))
+                .append(";\n-mfx-thumb-hover-color: ").append(ColorUtils.toCss(thumbHoverColor.get()))
                 .append(";");
         setStyle(sb.toString());
-    }
-
-    public static void setSmoothScrolling(AbstractMFXFlowlessListView<?, ?, ?> listView) {
-        setSmoothScrolling(listView, 1);
-    }
-
-    public static void setSmoothScrolling(AbstractMFXFlowlessListView<?, ?, ?> listView, int speed) {
-        if (listView.getScene() != null) {
-            VirtualFlow<?, ?> flow = (VirtualFlow<?, ?>) listView.lookup(".virtual-flow");
-            setSmoothScrolling(flow, flow.estimatedScrollYProperty(), speed);
-        } else {
-            listView.skinProperty().addListener(new ChangeListener<>() {
-                @Override
-                public void changed(ObservableValue<? extends Skin<?>> observable, Skin<?> oldValue, Skin<?> newValue) {
-                    if (newValue != null) {
-                        VirtualFlow<?, ?> flow = (VirtualFlow<?, ?>) listView.lookup(".virtual-flow");
-                        setSmoothScrolling(flow, flow.estimatedScrollYProperty(), speed);
-                        listView.skinProperty().removeListener(this);
-                    }
-                }
-            });
-        }
-    }
-
-    private static void setSmoothScrolling(VirtualFlow<?, ?> flow, Var<Double> scrollDirection, int speed) {
-        final double[] frictions = {0.99, 0.1, 0.05, 0.04, 0.03, 0.02, 0.01, 0.04, 0.01, 0.008, 0.008, 0.008, 0.008, 0.0006, 0.0005, 0.00003, 0.00001};
-        final double[] pushes = {speed};
-        final double[] derivatives = new double[frictions.length];
-
-        Timeline timeline = new Timeline();
-        final EventHandler<MouseEvent> dragHandler = event -> timeline.stop();
-
-        final EventHandler<ScrollEvent> scrollHandler = event -> {
-            if (event.getEventType() == ScrollEvent.SCROLL) {
-                int direction = event.getDeltaY() > 0 ? -1 : 1;
-                for (int i = 0; i < pushes.length; i++) {
-                    derivatives[i] += direction * pushes[i];
-                }
-                if (timeline.getStatus() == Animation.Status.STOPPED) {
-                    timeline.play();
-                }
-                event.consume();
-            }
-        };
-
-        if (flow.getParent() != null) {
-            flow.getParent().addEventFilter(MouseEvent.DRAG_DETECTED, dragHandler);
-        }
-       flow.parentProperty().addListener((observable, oldValue, newValue) -> {
-            if (oldValue != null) {
-                oldValue.removeEventFilter(MouseEvent.DRAG_DETECTED, dragHandler);
-            }
-            if (newValue != null) {
-                newValue.addEventFilter(MouseEvent.DRAG_DETECTED, dragHandler);
-            }
-        });
-        flow.addEventFilter(MouseEvent.DRAG_DETECTED, dragHandler);
-        flow.addEventFilter(ScrollEvent.ANY, scrollHandler);
-
-        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(3), (event) -> {
-            for (int i = 0; i < derivatives.length; i++) {
-                derivatives[i] *= frictions[i];
-            }
-            for (int i = 1; i < derivatives.length; i++) {
-                derivatives[i] += derivatives[i - 1];
-            }
-            double dy = derivatives[derivatives.length - 1];
-
-            scrollDirection.setValue(scrollDirection.getValue() + dy);
-
-            if (Math.abs(dy) < 0.001) {
-                timeline.stop();
-            }
-        }));
-        timeline.setCycleCount(Animation.INDEFINITE);
     }
 
     //================================================================================

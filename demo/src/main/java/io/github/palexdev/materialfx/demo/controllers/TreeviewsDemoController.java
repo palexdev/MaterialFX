@@ -1,26 +1,30 @@
 /*
- *     Copyright (C) 2021 Parisi Alessandro
- *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ * Copyright (C) 2021 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
- *     MaterialFX is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     MaterialFX is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package io.github.palexdev.materialfx.demo.controllers;
 
-import io.github.palexdev.materialfx.controls.*;
+import io.github.palexdev.materialfx.controls.MFXCheckTreeItem;
+import io.github.palexdev.materialfx.controls.MFXCheckTreeView;
+import io.github.palexdev.materialfx.controls.MFXTreeItem;
+import io.github.palexdev.materialfx.controls.MFXTreeView;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.ColorUtils;
+import io.github.palexdev.materialfx.utils.ScrollUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -61,9 +65,9 @@ public class TreeviewsDemoController implements Initializable {
 
         checkTreeView.setRoot(createCheckRoot());
 
-        MFXScrollPane.smoothVScrolling(treeView);
-        MFXScrollPane.smoothVScrolling(treeViewHide);
-        MFXScrollPane.smoothVScrolling(checkTreeView);
+        ScrollUtils.addSmoothScrolling(treeView);
+        ScrollUtils.addSmoothScrolling(treeViewHide);
+        ScrollUtils.addSmoothScrolling(checkTreeView);
 
         treeView.getSelectionModel().getSelectedItems().addListener(
                 (observable, oldValue, newValue) -> text1.setText("Selected Items Count: " + treeView.getSelectionModel().getSelectedItems().size()));

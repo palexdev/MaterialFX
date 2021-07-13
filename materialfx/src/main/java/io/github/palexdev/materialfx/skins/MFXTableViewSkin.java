@@ -1,19 +1,19 @@
 /*
- *     Copyright (C) 2021 Parisi Alessandro
- *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ * Copyright (C) 2021 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
- *     MaterialFX is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     MaterialFX is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package io.github.palexdev.materialfx.skins;
@@ -118,7 +118,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
     private final HBox pgcBox;
     private final Label rowsPerPageLabel;
     private final MFXComboBox<Integer> rowsPerPageCombo;
-    private final Label shownRows;
+    private final Label shownRowsLabel;
 
     private final ObjectProperty<IndexRange> shownRowsRange = new SimpleObjectProperty<>();
 
@@ -152,13 +152,15 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         VBox.setVgrow(rowsBox, Priority.ALWAYS);
 
         rowsPerPageLabel = new Label("Rows Per Page");
+        rowsPerPageLabel.setId("rowsPerPageLabel");
 
         rowsPerPageCombo = new MFXComboBox<>();
         rowsPerPageCombo.setComboStyle(Styles.ComboBoxStyles.STYLE2);
         rowsPerPageCombo.setMaxPopupHeight(100);
 
-        shownRows = new Label("Shown Rows: ");
-        shownRows.textProperty().bind(Bindings.createStringBinding(
+        shownRowsLabel = new Label("Shown Rows: ");
+        shownRowsLabel.setId("shownRowsLabel");
+        shownRowsLabel.textProperty().bind(Bindings.createStringBinding(
                 () -> {
                     if (getShownRowsRange() != null) {
                         return new StringBuilder()
@@ -231,11 +233,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
             }
         });
 
-        tableView.sceneProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                filterStageDialog.setOwner(newValue.getWindow());
-            }
-        });
+        NodeUtils.waitForScene(tableView, () -> filterStageDialog.setOwner(tableView.getScene().getWindow()), true, false);
 
         tableView.getItems().addListener((InvalidationListener) listInvalidated -> reset(false));
         tableView.itemsProperty().addListener(propertyInvalidated -> {
@@ -491,7 +489,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
 
         HBox pgcBox = new HBox(15,
                 filterIcon, clearFilterIcon, new Separator(Orientation.VERTICAL),
-                box1, new Separator(Orientation.VERTICAL), box2, new Separator(Orientation.VERTICAL), shownRows
+                box1, new Separator(Orientation.VERTICAL), box2, new Separator(Orientation.VERTICAL), shownRowsLabel
         );
         pgcBox.getStyleClass().setAll("pagination-controls-container");
         pgcBox.setAlignment(Pos.CENTER);
@@ -503,9 +501,9 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         pgcBox.setPrefWidth(Region.USE_COMPUTED_SIZE);
         pgcBox.setMaxWidth(Double.MAX_VALUE);
 
-        shownRows.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        shownRows.setPadding(new Insets(5));
-        HBox.setHgrow(shownRows, Priority.ALWAYS);
+        shownRowsLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        shownRowsLabel.setPadding(new Insets(5));
+        HBox.setHgrow(shownRowsLabel, Priority.ALWAYS);
 
         return pgcBox;
     }

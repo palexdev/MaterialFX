@@ -1,26 +1,24 @@
 /*
- *     Copyright (C) 2021 Parisi Alessandro
- *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ * Copyright (C) 2021 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
- *     MaterialFX is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     MaterialFX is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.enums.ButtonType;
-import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.effects.MFXDepthManager;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import javafx.scene.control.skin.ButtonSkin;
@@ -52,17 +50,8 @@ public class MFXButtonSkin extends ButtonSkin {
         MFXButton button = (MFXButton) getSkinnable();
         MFXCircleRippleGenerator rippleGenerator = button.getRippleGenerator();
 
-        button.depthLevelProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.equals(oldValue) && button.getButtonType().equals(ButtonType.RAISED)) {
-                button.setEffect(MFXDepthManager.shadowOf(newValue));
-            }
-        });
-
-        button.buttonTypeProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.equals(oldValue)) {
-                updateButtonType();
-            }
-        });
+        button.depthLevelProperty().addListener((observable, oldValue, newValue) -> updateButtonType());
+        button.buttonTypeProperty().addListener((observable, oldValue, newValue) -> updateButtonType());
 
         button.addEventFilter(MouseEvent.MOUSE_PRESSED, rippleGenerator::generateRipple);
     }
@@ -80,13 +69,15 @@ public class MFXButtonSkin extends ButtonSkin {
                 break;
             }
             case FLAT: {
-                button.setEffect(MFXDepthManager.shadowOf(DepthLevel.LEVEL0));
                 button.setPickOnBounds(true);
                 break;
             }
         }
     }
 
+    //================================================================================
+    // Override Methods
+    //================================================================================
     @Override
     protected void updateChildren() {
         super.updateChildren();

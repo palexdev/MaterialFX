@@ -6,6 +6,7 @@ module MaterialFX.Demo {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
+    requires javafx.media;
 
     requires fr.brouillard.oss.cssfx;
     requires org.kordamp.ikonli.javafx;

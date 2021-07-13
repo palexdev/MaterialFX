@@ -1,19 +1,19 @@
 /*
- *     Copyright (C) 2021 Parisi Alessandro
- *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ * Copyright (C) 2021 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
- *     MaterialFX is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     MaterialFX is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package io.github.palexdev.materialfx.controls.base;
@@ -180,7 +180,6 @@ public abstract class AbstractMFXDialog extends BorderPane {
         setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
         MFXButton button = new MFXButton("");
-        button.addEventHandler(MouseEvent.MOUSE_PRESSED, closeHandler);
         closeButtons.add(button);
     }
 
@@ -188,8 +187,11 @@ public abstract class AbstractMFXDialog extends BorderPane {
     // Abstract Methods
     //================================================================================
     public abstract void show();
+
     public abstract void close();
+
     public abstract AbstractMFXDialog setActions(HBox actionsBox);
+
     public abstract void computeSizeAndPosition();
 
     //================================================================================
@@ -258,14 +260,10 @@ public abstract class AbstractMFXDialog extends BorderPane {
      * @param buttons The new close button
      */
     public void setCloseButtons(Node... buttons) {
-        for (Node closeButton : closeButtons) {
-            closeButton.removeEventHandler(MouseEvent.MOUSE_PRESSED, closeHandler);
-        }
+        closeButtons.forEach(btn -> btn.removeEventHandler(MouseEvent.MOUSE_PRESSED, closeHandler));
         closeButtons.clear();
         closeButtons.addAll(List.of(buttons));
-        for (Node closeButton : closeButtons) {
-            closeButton.addEventHandler(MouseEvent.MOUSE_PRESSED, closeHandler);
-        }
+        closeButtons.forEach(btn -> btn.addEventHandler(MouseEvent.MOUSE_PRESSED, closeHandler));
     }
 
     public EventHandler<MouseEvent> getCloseHandler() {
@@ -280,10 +278,10 @@ public abstract class AbstractMFXDialog extends BorderPane {
      * @param newHandler The new close handler
      */
     public void setCloseHandler(EventHandler<MouseEvent> newHandler) {
-        for (Node closeButton : closeButtons) {
+        closeButtons.forEach(closeButton -> {
             closeButton.removeEventHandler(MouseEvent.MOUSE_PRESSED, closeHandler);
             closeButton.addEventHandler(MouseEvent.MOUSE_PRESSED, newHandler);
-        }
+        });
         this.closeHandler = newHandler;
     }
 
@@ -425,7 +423,7 @@ public abstract class AbstractMFXDialog extends BorderPane {
     /**
      * Events class for MFXDialogs.
      * <p>
-     *  Defines four new EvenTypes:
+     * Defines four new EvenTypes:
      * <p>
      * - BEFORE_OPEN_EVENT: should be fired at the start of the {@link #show()} method or even before. <p></p>
      * - ON_OPENED_EVENT : should be fired when the dialog is set to visible or at the end of the show animation. <p></p>

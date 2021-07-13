@@ -2,7 +2,8 @@
 
 - [ ] *MFXCard*
 - [ ] *MFXChipView(?)*
-- [ ] *MFXSlider*
+- [x] *MFXSlider*
+- [ ] *MFXRangeSlider* 
 - [ ] *MFXHighlighter(?)*
   <br></br>
 - [ ] *MFXColorPicker*

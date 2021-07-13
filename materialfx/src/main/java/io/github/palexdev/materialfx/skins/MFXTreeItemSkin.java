@@ -1,19 +1,19 @@
 /*
- *     Copyright (C) 2021 Parisi Alessandro
- *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ * Copyright (C) 2021 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
- *     MaterialFX is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     MaterialFX is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package io.github.palexdev.materialfx.skins;
@@ -23,8 +23,11 @@ import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeCell;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.selection.TreeSelectionModel;
+import io.github.palexdev.materialfx.utils.AnimationUtils;
+import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
 import io.github.palexdev.materialfx.utils.NodeUtils;
-import javafx.animation.*;
+import javafx.animation.Animation;
+import javafx.animation.ParallelTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
@@ -35,7 +38,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -109,7 +111,7 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
         box.setMinHeight(Region.USE_PREF_SIZE);
         box.setMaxHeight(Region.USE_PREF_SIZE);
 
-        item.setInitialHeight(NodeUtils.getNodeHeight(box));
+        item.setInitialHeight(NodeUtils.getRegionHeight(box));
         getChildren().add(box);
         box.setPrefHeight(item.getInitialHeight());
 
@@ -154,7 +156,7 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
                 item.fireEvent(new TreeItemEvent<>(TreeItemEvent.ADD_REMOVE_ITEM_EVENT, item, -value));
             }
             if (!tmpAdded.isEmpty() && (item.isExpanded() || item.isStartExpanded())) {
-                double value = tmpAdded.stream().mapToDouble(NodeUtils::getNodeHeight).sum();
+                double value = tmpAdded.stream().mapToDouble(NodeUtils::getRegionHeight).sum();
                 box.getChildren().addAll(tmpAdded);
                 FXCollections.sort(box.getChildren(), Comparator.comparingInt(item.getItems()::indexOf));
                 item.fireEvent(new TreeItemEvent<>(TreeItemEvent.ADD_REMOVE_ITEM_EVENT, item, value));
@@ -300,11 +302,11 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
     protected void buildAnimation(double fHeight) {
         MFXTreeItem<T> item = getSkinnable();
 
-        KeyValue expCollValue = new KeyValue(box.prefHeightProperty(), fHeight, MFXAnimationFactory.getInterpolatorV2());
-        KeyFrame expCollFrame = new KeyFrame(Duration.millis(item.getAnimationDuration()), expCollValue);
-        KeyValue disclosureValue = new KeyValue(cell.getDisclosureNode().rotateProperty(), (item.isExpanded() ? 90 : 0), MFXAnimationFactory.getInterpolatorV2());
-        KeyFrame disclosureFrame = new KeyFrame(Duration.millis(250), disclosureValue);
-        animation = new ParallelTransition(new Timeline(expCollFrame, disclosureFrame));
+        animation = (ParallelTransition) AnimationUtils.ParallelBuilder.build()
+                .add(
+                        KeyFrames.of(item.getAnimationDuration(), box.prefHeightProperty(), fHeight, MFXAnimationFactory.getInterpolatorV2()),
+                        KeyFrames.of(250, cell.getDisclosureNode().rotateProperty(), (item.isExpanded() ? 90 : 0), MFXAnimationFactory.getInterpolatorV2())
+                ).getAnimation();
 
         item.animationRunningProperty().bind(animation.statusProperty().isEqualTo(Animation.Status.RUNNING));
     }

@@ -1,19 +1,19 @@
 /*
- *     Copyright (C) 2021 Parisi Alessandro
- *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ * Copyright (C) 2021 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
- *     MaterialFX is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     MaterialFX is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package io.github.palexdev.materialfx.controls;
@@ -23,6 +23,7 @@ import io.github.palexdev.materialfx.controls.enums.DialogType;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.skins.MFXTextFieldSkin;
 import io.github.palexdev.materialfx.utils.ColorUtils;
+import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
 import io.github.palexdev.materialfx.validation.base.AbstractMFXValidator;
 import io.github.palexdev.materialfx.validation.base.Validated;
@@ -40,6 +41,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeLineCap;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -107,16 +110,15 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
             }
         });
 
-        sceneProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null)
-                if (isValidated()) {
-                    if (getValidator().isInitControlValidation()) {
-                        pseudoClassStateChanged(INVALID_PSEUDO_CLASS, !isValid());
-                    } else {
-                        pseudoClassStateChanged(INVALID_PSEUDO_CLASS, false);
-                    }
+        NodeUtils.waitForScene(this, () -> {
+            if (isValidated()) {
+                if (getValidator().isInitControlValidation()) {
+                    pseudoClassStateChanged(INVALID_PSEUDO_CLASS, !isValid());
+                } else {
+                    pseudoClassStateChanged(INVALID_PSEUDO_CLASS, false);
                 }
-        });
+            }
+        }, true, false);
     }
 
     @Override
@@ -529,12 +531,9 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
                 );
 
         static {
-            cssMetaDataList = List.of(
-                    TEXT_LIMIT,
-                    LINE_COLOR, UNFOCUSED_LINE_COLOR,
-                    LINE_STROKE_WIDTH, LINE_STROKE_CAP,
-                    IS_VALIDATED
-            );
+            List<CssMetaData<? extends Styleable, ?>> tefCssMetaData = new ArrayList<>(TextField.getClassCssMetaData());
+            Collections.addAll(tefCssMetaData, TEXT_LIMIT, LINE_COLOR, UNFOCUSED_LINE_COLOR, LINE_STROKE_WIDTH, LINE_STROKE_CAP, IS_VALIDATED);
+            cssMetaDataList = Collections.unmodifiableList(tefCssMetaData);
         }
 
     }

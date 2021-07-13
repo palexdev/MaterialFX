@@ -1,19 +1,19 @@
 /*
- *     Copyright (C) 2021 Parisi Alessandro
- *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ * Copyright (C) 2021 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
- *     MaterialFX is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     MaterialFX is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package io.github.palexdev.materialfx.skins;
@@ -29,15 +29,16 @@ import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.selection.ComboSelectionModelMock;
+import io.github.palexdev.materialfx.utils.AnimationUtils;
+import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
 import io.github.palexdev.materialfx.utils.LabelUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
+import javafx.animation.Animation;
 import javafx.animation.ScaleTransition;
-import javafx.animation.Timeline;
 import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
@@ -72,7 +73,7 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
     private final Label validate;
     private final double padding = 11;
 
-    private Timeline arrowAnimation;
+    private Animation arrowAnimation;
 
     //================================================================================
     // Constructors
@@ -325,7 +326,7 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
             }
         });
 
-        comboBox.skinProperty().addListener((observable, oldValue, newValue) -> comboBox.getScene().addEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler));
+        NodeUtils.waitForSkin(comboBox, () -> comboBox.getScene().addEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler), true, false);
         comboBox.sceneProperty().addListener((observable, oldValue, newValue) -> {
             if (oldValue != null && newValue != oldValue) {
                 oldValue.removeEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
@@ -366,6 +367,9 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
                 listView.setItems(FXCollections.observableArrayList());
             }
         });
+
+        NodeUtils.waitForScene(comboBox, () -> listView.getStylesheets().setAll(comboBox.getStylesheets()), true, true);
+        comboBox.getStylesheets().addListener((ListChangeListener<? super String>) changed -> listView.getStylesheets().setAll(comboBox.getStylesheets()));
     }
 
     /**
@@ -459,11 +463,10 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
     /**
      * Builds the animation for the combo box arrow.
      */
-    private Timeline buildAnimation(boolean isShowing) {
-        KeyFrame kf0 = new KeyFrame(Duration.millis(150),
-                new KeyValue(icon.rotateProperty(), (isShowing ? 180 : 0))
-        );
-        arrowAnimation = new Timeline(kf0);
+    private Animation buildAnimation(boolean isShowing) {
+        arrowAnimation = AnimationUtils.TimelineBuilder.build()
+                .add(KeyFrames.of(150, icon.rotateProperty(), (isShowing ? 180 : 0)))
+                .getAnimation();
         return arrowAnimation;
     }
 

@@ -1,11 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--
+  ~ Copyright (C) 2021 Parisi Alessandro
+  ~ This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+  ~
+  ~ MaterialFX is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ MaterialFX is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <?import io.github.palexdev.materialfx.controls.MFXScrollPane?>
 <?import io.github.palexdev.materialfx.controls.MFXVLoader?>
 <?import javafx.geometry.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 <StackPane id="demoPane" fx:id="demoPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="960.0" stylesheets="@css/Demo.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.DemoController">
-   <StackPane id="contentPane" fx:id="contentPane" prefHeight="500.0" prefWidth="441.0">
+   <StackPane id="contentPane" fx:id="contentPane" opacity="0.0" prefHeight="500.0" prefWidth="441.0">
       <StackPane.margin>
          <Insets bottom="15.0" left="20.0" right="20.0" top="15.0" />
       </StackPane.margin>
@@ -33,4 +56,30 @@
          <Insets left="10.0" right="-10.0" top="5.0" />
       </padding>
    </HBox>
+   <VBox fx:id="logoPane" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+      <ImageView fx:id="logo" cache="true" cacheHint="QUALITY" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+         <Image url="@assets/logo.png" />
+      </ImageView>
+      <HBox alignment="CENTER" prefHeight="100.0" spacing="50.0">
+         <Label id="splashLabel" fx:id="splashLabel1" text="Simple.">
+            <padding>
+               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+         </Label>
+         <Label id="splashLabel" fx:id="splashLabel2" text="Efficient.">
+            <padding>
+               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+         </Label>
+         <Label id="splashLabel" fx:id="splashLabel3" text="Material.">
+            <padding>
+               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+         </Label>
+      </HBox>
+      <TextFlow fx:id="version" maxWidth="-Infinity" minWidth="-Infinity" opacity="0.0" prefWidth="960.0" textAlignment="CENTER" translateY="75.0">
+         <Text id="textVer1" strokeType="OUTSIDE" strokeWidth="0.0" text="ver." translateX="-3.0" />
+         <Text id="textVer2" strokeType="OUTSIDE" strokeWidth="0.0" text="12.2.0" />
+      </TextFlow>
+   </VBox>
 </StackPane>

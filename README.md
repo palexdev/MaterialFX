@@ -169,6 +169,14 @@ To date MaterialFX offers not only restyled controls, but also: new and unique c
 <p></p>
 
 <details>
+<summary>Sliders</summary>
+<br>
+<img src="https://s6.gifyu.com/images/Sliders.gif" alt="Sliders" border="0">
+</details>
+<p></p>
+
+
+<details>
 <summary>Stepper</summary>
 <br>
 <img src="https://s6.gifyu.com/images/Stepper.gif" alt="Stepper" border="0">
@@ -233,7 +241,7 @@ repositories {
 }
 
 dependencies {
-implementation 'io.github.palexdev:materialfx:11.11.1'
+implementation 'io.github.palexdev:materialfx:11.12.0'
 }
 ```
 
@@ -243,7 +251,7 @@ implementation 'io.github.palexdev:materialfx:11.11.1'
 <dependency>
   <groupId>io.github.palexdev</groupId>
   <artifactId>materialfx</artifactId>
-  <version>11.11.1</version>
+  <version>11.12.0</version>
 </dependency>
 ```
 
@@ -251,7 +259,8 @@ implementation 'io.github.palexdev:materialfx:11.11.1'
 
 ## Roadmap
 
-See the [open issues](https://github.com/palexdev/MaterialFX/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/palexdev/MaterialFX/issues) for a list of proposed features (and known issues).  
+See the [ROADMAP](https://github.com/palexdev/MaterialFX/blob/main/ROADMAP.md) for a list of implemented and upcoming features.
 
 <!-- CONTRIBUTING -->
 
@@ -270,7 +279,7 @@ contributions you make are **greatly appreciated**.
 
 ## License
 
-Distributed under the GNU GPLv3 License. See `LICENSE` for more information.
+Distributed under the GNU LGPLv3 License. See `LICENSE` for more information.
 
 <!-- CONTACT -->
 
@@ -296,6 +305,8 @@ donation here. [![Donate](https://img.shields.io/badge/$-support-green.svg?style
 (If you want your github page to be linked here and you didn't specify your username in the donation, feel free to contact me by email and tell me. Also contact me if for some some reason you don't want to be listed here)
 
 - Alex Hawk
+- Yiding He
+- Alaa Abu Zidan
 - *Your name can be here by supporting me at this link, [Support](https://bit.ly/31XB8zD)*
 
 Thank you very very much to all supporters, to all people who contribute to the project, to all people that thanked me, you really made my day

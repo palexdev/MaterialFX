@@ -1,19 +1,19 @@
 /*
- *     Copyright (C) 2021 Parisi Alessandro
- *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ * Copyright (C) 2021 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
- *     MaterialFX is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     MaterialFX is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package io.github.palexdev.materialfx.skins;
@@ -28,12 +28,17 @@ import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.selection.ComboSelectionModelMock;
 import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
+import io.github.palexdev.materialfx.utils.AnimationUtils;
+import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
+import io.github.palexdev.materialfx.utils.AnimationUtils.PauseBuilder;
 import io.github.palexdev.materialfx.utils.LabelUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.StringUtils;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
-import javafx.animation.*;
+import javafx.animation.Animation;
+import javafx.animation.ScaleTransition;
 import javafx.beans.InvalidationListener;
+import javafx.beans.binding.BooleanExpression;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.EventHandler;
@@ -80,9 +85,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
     private FilteredList<T> filteredList;
     private MFXTextField searchField;
 
-    private Timeline arrowAnimation;
-
-    private int retryCount;
+    private Animation arrowAnimation;
 
     //================================================================================
     // Constructors
@@ -339,9 +342,9 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
             }
         });
 
-        comboBox.skinProperty().addListener((observable, oldValue, newValue) -> comboBox.getScene().addEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler));
+        NodeUtils.waitForSkin(comboBox, () -> comboBox.getScene().addEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler), true, false);
         comboBox.sceneProperty().addListener((observable, oldValue, newValue) -> {
-            if (oldValue != null && newValue != oldValue) {
+            if (oldValue != null) {
                 oldValue.removeEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
             }
             if (newValue != null) {
@@ -566,19 +569,22 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
      * a PauseTransition every n milliseconds (by default 100). If at the end of the transition the text field
      * is not focused yet the transition is played again.
      * <p>
-     * Since this may produce an unexpected behavior by running indefinitely for example I set a max
+     * Since this may produce an unexpected behavior by running indefinitely for example so I set a max
      * retry count of 10.
+     * <p>
+     * Uses the new utility {@link PauseBuilder#runWhile(BooleanExpression, Runnable, Runnable, int)}
      */
     protected void forceFieldFocus() {
-        PauseTransition transition = new PauseTransition(Duration.millis(100));
-        transition.setOnFinished(event -> {
-            if (searchField != null && !searchField.isFocused() && retryCount < 10) {
-                retryCount++;
-                searchField.requestFocus();
-                transition.playFromStart();
-            }
-        });
-        transition.play();
+        if (searchField != null && !searchField.isFocused()) {
+            PauseBuilder.build()
+                    .setDuration(100)
+                    .runWhile(
+                            searchField.focusedProperty(),
+                            () -> searchField.requestFocus(),
+                            () -> {},
+                            10
+                    );
+        }
     }
 
     /**
@@ -644,11 +650,10 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
     /**
      * Builds the animation for the combo box arrow.
      */
-    private Timeline buildAnimation(boolean isShowing) {
-        KeyFrame kf0 = new KeyFrame(Duration.millis(150),
-                new KeyValue(icon.rotateProperty(), (isShowing ? 180 : 0))
-        );
-        arrowAnimation = new Timeline(kf0);
+    private Animation buildAnimation(boolean isShowing) {
+        arrowAnimation = AnimationUtils.TimelineBuilder.build()
+                .add(KeyFrames.of(150, icon.rotateProperty(), (isShowing ? 180 : 0)))
+                .getAnimation();
         return arrowAnimation;
     }
 

@@ -1,0 +1,57 @@
+/*
+ * Copyright (C) 2021 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import "MFXColors.css";
+
+#customSlider2 .track {
+    -fx-fill: linear-gradient(to bottom right, #6A6AF8 0%, #C850C0 30%, darkorange 100%);
+}
+
+#customSlider2 .bar {
+    -fx-fill: linear-gradient(to bottom right, #F4D03F 0%, #10d7b4 100%);
+}
+
+#customSlider:range1 .thumb,
+#customSlider:range1 .track {
+    -mfx-color: -mfx-red;
+    -fx-fill: derive(-mfx-red, 85%)
+}
+
+#customSlider:range1 .bar {
+    -fx-fill: -mfx-red;
+}
+
+#customSlider:range2 .thumb,
+#customSlider:range2 .track {
+    -mfx-color: -mfx-blue;
+    -fx-fill: derive(-mfx-blue, 85%)
+}
+
+#customSlider:range2 .bar {
+    -fx-fill: -mfx-blue;
+}
+
+#customSlider:range3 .bar,
+#customSlider:range3 .thumb {
+    -mfx-color: -mfx-green;
+    -fx-fill: -mfx-green;
+}
+
+#customSlider:range3 .track {
+    -fx-fill: derive(-mfx-green, 85%);
+}

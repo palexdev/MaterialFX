@@ -1,19 +1,19 @@
 /*
- *     Copyright (C) 2021 Parisi Alessandro
- *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ * Copyright (C) 2021 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
- *     MaterialFX is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     MaterialFX is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package io.github.palexdev.materialfx.controls;
@@ -34,13 +34,17 @@ import javafx.scene.control.ToggleButton;
  * <p></p>
  * Extends {@link ToggleButton} and redefines the style class to "mfx-toggle-node" for usage in CSS.
  * <p>
- * Allows to specify up to two icons for toggle's label.
+ * Allows to specify up to two icons for toggle's label. Also, if you want a toggle node without text but just with
+ * the icon, the property to set is the {@link #graphicProperty()}, setting the leading or the trailing in this case can lead to
+ * misaligned icons as those two icons are meant to be used with text. Note that whenever the graphic property is set to
+ * a not null value it will be prioritized over the other two icons and the label. The label will hidden and only the
+ * graphic property will be shown. Setting it back to null will show the label, leading and trailing icons back again.
  */
 public class MFXRectangleToggleNode extends AbstractMFXToggleNode {
     //================================================================================
     // Properties
     //================================================================================
-    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXRectangleRoggleNode.css");
+    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXRectangleToggleNode.css");
     private final ObjectProperty<RippleClipTypeFactory> rippleClipTypeFactory = new SimpleObjectProperty<>();
 
     //================================================================================

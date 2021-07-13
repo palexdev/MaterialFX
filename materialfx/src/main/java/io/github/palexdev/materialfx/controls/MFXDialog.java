@@ -1,28 +1,27 @@
 /*
- *     Copyright (C) 2021 Parisi Alessandro
- *     This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ * Copyright (C) 2021 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
- *     MaterialFX is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     MaterialFX is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXDialog;
-import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
+import io.github.palexdev.materialfx.utils.AnimationUtils;
 import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.scene.Parent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -139,11 +138,12 @@ public class MFXDialog extends AbstractMFXDialog {
         if (animateIn.get()) {
             inAnimation.getChildren().setAll(inAnimationType.build(this, animationMillis.get()));
             if (scrimBackground.get()) {
-                Timeline fadeInScrim = MFXAnimationFactory.FADE_IN.build(scrimEffect.getScrimNode(), animationMillis.get());
-                fadeInScrim.getKeyFrames().add(0,
-                        new KeyFrame(Duration.ZERO, event -> scrimEffect.modalScrim((Pane) getParent(), this, scrimOpacity.get()))
+                inAnimation.getChildren().add(
+                        AnimationUtils.TimelineBuilder.build()
+                                .add(new KeyFrame(Duration.ZERO, event -> scrimEffect.modalScrim((Pane) getParent(), this, scrimOpacity.get())))
+                                .show(animationMillis.get(), scrimEffect.getScrimNode())
+                                .getAnimation()
                 );
-                inAnimation.getChildren().add(fadeInScrim);
             }
             inAnimation.setOnFinished(event -> fireDialogEvent(MFXDialogEvent.ON_OPENED_EVENT));
             setVisible(true);
@@ -168,9 +168,12 @@ public class MFXDialog extends AbstractMFXDialog {
         if (animateOut.get()) {
             outAnimation.getChildren().setAll(outAnimationType.build(this, animationMillis.get()));
             if (scrimBackground.get()) {
-                Timeline fadeOutScrim = MFXAnimationFactory.FADE_OUT.build(scrimEffect.getScrimNode(), animationMillis.get());
-                fadeOutScrim.setOnFinished(event -> scrimEffect.removeEffect((Pane) getParent()));
-                outAnimation.getChildren().add(fadeOutScrim);
+                outAnimation.getChildren().add(
+                        AnimationUtils.TimelineBuilder.build()
+                                .hide(animationMillis.get(), scrimEffect.getScrimNode())
+                                .setOnFinished(event -> scrimEffect.removeEffect((Pane) getParent()))
+                                .getAnimation()
+                );
             }
             outAnimation.setOnFinished(event -> {
                 setVisible(false);
