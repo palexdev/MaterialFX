@@ -234,10 +234,8 @@
 
 #customLabel {
     -fx-background-color: linear-gradient(to bottom right, #C01ADD 0%, #6A6AF8 100%);
-    -fx-background-radius: 7;
-    -fx-border-color: #7F0FFF;
-    -fx-border-radius: 5;
-    -fx-border-width: 2;
+    -fx-background-radius: 6;
+    -fx-border-color: transparent;
 }
 
 #customLabel .text {

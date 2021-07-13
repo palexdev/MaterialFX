@@ -30,28 +30,40 @@
                 <padding>
                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                 </padding>
-                <Label text="Default" />
+                <Label id="customLabel" alignment="CENTER" minWidth="150.0" text="Default">
+               <padding>
+                  <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+               </padding></Label>
                 <MFXSlider prefWidth="150.0" />
             </VBox>
             <VBox id="customSlider" alignment="CENTER" spacing="20.0">
                 <padding>
                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                 </padding>
-                <Label text="Custom 1" />
+                <Label id="customLabel" alignment="CENTER" minWidth="150.0" text="Custom 1">
+               <padding>
+                  <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+               </padding></Label>
                 <MFXSlider id="customSlider" fx:id="customSlider" popupSide="OTHER_SIDE" prefWidth="150.0" />
             </VBox>
             <VBox id="customSlider" alignment="CENTER" spacing="20.0">
                 <padding>
-                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                 </padding>
-                <Label text="Custom 2"/>
-                <MFXSlider id="customSlider2" popupSide="OTHER_SIDE" prefWidth="150.0"/>
+                <Label id="customLabel" alignment="CENTER" minWidth="150.0" text="Custom 2">
+               <padding>
+                  <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+               </padding></Label>
+                <MFXSlider id="customSlider2" popupSide="OTHER_SIDE" prefWidth="150.0" />
             </VBox>
             <VBox alignment="CENTER" spacing="20.0">
                 <padding>
                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                 </padding>
-                <Label text="Disabled" />
+                <Label id="customLabel" alignment="CENTER" minWidth="150.0" text="Disabled">
+               <padding>
+                  <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+               </padding></Label>
                 <MFXSlider disable="true" prefWidth="150.0" />
             </VBox>
         </VBox>
@@ -60,21 +72,30 @@
                 <padding>
                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                 </padding>
-                <Label text="Bidirectional" />
+                <Label id="customLabel" alignment="CENTER" minWidth="150.0" text="Bidirectional">
+               <padding>
+                  <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+               </padding></Label>
                 <MFXSlider min="-50.0" prefWidth="150.0" />
             </VBox>
             <VBox alignment="CENTER" spacing="20.0">
                 <padding>
                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                 </padding>
-                <Label text="Ticks and Snap To Ticks" />
+                <Label id="customLabel" alignment="CENTER" minWidth="150.0" text="Ticks and Snap To Ticks">
+               <padding>
+                  <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+               </padding></Label>
                 <MFXSlider minorTicksCount="4" prefWidth="150.0" showMajorTicks="true" showMinorTicks="true" sliderMode="SNAP_TO_TICKS" tickUnit="20.0" />
             </VBox>
             <VBox alignment="CENTER" spacing="20.0">
                 <padding>
                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                 </padding>
-                <Label text="Decimal Precision of 2" />
+                <Label id="customLabel" alignment="CENTER" minWidth="150.0" text="Decimal Precision of 2">
+               <padding>
+                  <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+               </padding></Label>
                 <MFXSlider decimalPrecision="2" prefWidth="150.0" />
             </VBox>
         </VBox>
@@ -82,9 +103,9 @@
             <MFXSlider layoutX="-33.0" layoutY="160.0" min="-100.0" orientation="VERTICAL" prefWidth="150.0" AnchorPane.leftAnchor="-50.0" />
             <MFXSlider disable="true" layoutX="128.0" layoutY="160.0" orientation="VERTICAL" prefWidth="150.0" AnchorPane.rightAnchor="-50.0" />
             <MFXSlider layoutX="35.0" layoutY="160.0" maxWidth="-Infinity" minWidth="-Infinity" orientation="VERTICAL" popupSide="OTHER_SIDE" prefWidth="150.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
-            <Label alignment="CENTER" layoutX="114.0" layoutY="14.0" text="Vertical Sliders" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="25.0">
+            <Label id="customLabel" alignment="CENTER" layoutX="114.0" layoutY="14.0" text="Vertical Sliders" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="25.0">
                 <padding>
-                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
                 </padding>
             </Label>
         </AnchorPane>

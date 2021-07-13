@@ -62,7 +62,6 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
     //================================================================================
     private final HBox container;
     private final Label textNode;
-    private boolean promptIsUsed = false;
 
     private final Line unfocusedLine;
     private final Line focusedLine;
@@ -100,15 +99,12 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
 
         textNode = new Label();
         textNode.getStyleClass().add("text-node");
-        textNode.textProperty().bind(Bindings.createStringBinding(() -> {
-            if (label.getText().isEmpty()) {
-                promptIsUsed = true;
-                return label.getPromptText();
-            } else {
-                promptIsUsed = false;
-                return label.getText();
-            }
-        }, label.textProperty(), label.promptTextProperty()));
+        textNode.textProperty().bind(
+                Bindings.createStringBinding(
+                        () -> label.getText().isEmpty() ? label.getPromptText() : label.getText(),
+                        label.textProperty(), label.promptTextProperty()
+                )
+        );
         textNode.fontProperty().bind(label.fontProperty());
         textNode.textFillProperty().bind(label.textFillProperty());
         textNode.alignmentProperty().bind(label.labelAlignmentProperty());
@@ -157,10 +153,6 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
         });
 
         label.promptTextShowingProperty().bind(textNode.textProperty().isEqualTo(label.getPromptText()));
-        label.promptTextShowingProperty().bind(Bindings.createBooleanBinding(
-                () -> textNode.getText().equals(label.getPromptText()) && promptIsUsed,
-                textNode.textProperty(), label.promptTextProperty()
-        ));
 
         label.leadingIconProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null) {
@@ -267,29 +259,25 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
 
         textField.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                removeEditor(textField);
+                removeEditor(textField, true);
                 label.requestFocus();
             } else if (event.getCode() == KeyCode.ESCAPE) {
-                removeEditor(textField);
+                removeEditor(textField, false);
                 label.requestFocus();
             }
         });
 
-        if (editorFocusListener == null) {
-            editorFocusListener = (observable, oldValue, newValue) -> {
-                if (!newValue) {
-                    label.setText(textField.getText());
-                    container.getChildren().remove(textField);
-                    textNode.setVisible(true);
-                    textNode.setPrefWidth(Region.USE_COMPUTED_SIZE);
-                }
-            };
-        }
+        editorFocusListener = (observable, oldValue, newValue) -> {
+            if (!newValue) {
+                removeEditor(textField, true);
+            }
+        };
         textField.focusedProperty().addListener(editorFocusListener);
 
         container.getChildren().add(textField);
         computeEditorPosition(textField);
         textField.requestFocus();
+        textField.positionCaret(textField.getText().length());
     }
 
     /**
@@ -310,9 +298,9 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
         double editorWidth = containerWidth -
                 (
                         label.getContainerPadding().getLeft() +
-                        leadingWidth + label.getGraphicTextGap() +
-                        trailingWidth + label.getGraphicTextGap() +
-                        label.getContainerPadding().getRight()
+                                leadingWidth + label.getGraphicTextGap() +
+                                trailingWidth + label.getGraphicTextGap() +
+                                label.getContainerPadding().getRight()
                 );
         textNode.setPrefWidth(editorWidth);
         textField.resizeRelocate(posX, 0, editorWidth, containerHeight);
@@ -332,11 +320,15 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
     /**
      * Removes the editor and sets its text as the label's text.
      */
-    private void removeEditor(MFXTextField textField) {
+    private void removeEditor(MFXTextField textField, boolean commitChanges) {
         MFXLabel label = getSkinnable();
 
-        textNode.setVisible(false);
-        label.setText(textField.getText());
+        textField.setVisible(false);
+        if (commitChanges) {
+            label.setText(textField.getText());
+        }
+        textNode.setPrefWidth(Region.USE_COMPUTED_SIZE);
+        textNode.setVisible(true);
 
         label.editorFocusedProperty().unbind();
         textField.focusedProperty().removeListener(editorFocusListener);
@@ -373,6 +365,7 @@ public class MFXLabelSkin extends SkinBase<MFXLabel> {
     public void dispose() {
         super.dispose();
         iconEditorHandler = null;
+        editorFocusListener = null;
     }
 
     @Override

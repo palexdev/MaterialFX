@@ -139,3 +139,18 @@
 #splashLabel .text {
     -fx-font-smoothing-type: gray;
 }
+
+#textVer1,
+#textVer2 {
+    -fx-font-smoothing-type: gray;
+    -fx-font-family: "Open Sans Bold";
+    -fx-fill: #6314A8;
+}
+
+#textVer1 {
+    -fx-font-size: 12;
+}
+
+#textVer2 {
+    -fx-font-size: 24;
+}

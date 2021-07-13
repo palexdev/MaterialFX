@@ -48,6 +48,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -100,6 +101,9 @@ public class DemoController implements Initializable {
 
     @FXML
     private Label splashLabel3;
+
+    @FXML
+    private TextFlow version;
 
     public DemoController(Stage primaryStage, HostServices hostServices) {
         m1 = new MediaPlayer(new Media(MFXDemoResourcesLoader.load("assets/welcome1.wav")));
@@ -217,7 +221,7 @@ public class DemoController implements Initializable {
     private void presentation() {
         AnimationUtils.SequentialBuilder.build()
                 .add(KeyFrames.of(Duration.ONE, event -> m1.play()))
-                .add(AnimationUtils.TimelineBuilder.build().show(1000, logo).getAnimation())
+                .add(AnimationUtils.ParallelBuilder.build().show(1000, logo, version).getAnimation())
                 .add(AnimationUtils.TimelineBuilder.build().show(450, splashLabel1).setDelay(200).getAnimation())
                 .add(AnimationUtils.TimelineBuilder.build().show(450, splashLabel2).setDelay(50).getAnimation())
                 .add(AnimationUtils.TimelineBuilder.build().show(450, splashLabel3).setDelay(50).getAnimation())
