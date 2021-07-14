@@ -116,17 +116,33 @@ public class PositionManager {
                     semaphore.acquire();
 
                     notifications.add(newNotification);
-                    repositionNotifications(newNotification);
+                    final CountDownLatch countDownLatch = repositionNotifications(newNotification);
 
                     newNotification.setOnHidden(event -> {
                         notifications.remove(newNotification);
                         semaphore.release();
                     });
+
                     newNotification.setOnShown(event -> {
-                        synchronized (pos) {
-                            pos.notify();
-                        }
+                        //there can use thread pool, size maybe equals 'MFXNotificationsThread' size
+                        final Thread thread = Executors.defaultThreadFactory().newThread(() -> {
+                            synchronized (pos) {
+                                if (countDownLatch != null) {
+                                    try {
+                                        if (!countDownLatch.await(3, TimeUnit.SECONDS)) {
+                                            //some reason cause transition cost more then 3 sec
+                                        }
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                pos.notify();
+                            }
+                        });
+                        thread.setDaemon(true);
+                        thread.start();
                     });
+
                     computePosition(newNotification);
                     Platform.runLater(() -> newNotification.show(owner, anchorX, anchorY));
 
@@ -157,8 +173,9 @@ public class PositionManager {
 
     /**
      * Repositions every notification in the list, except the most recent one, with a {@code Transition} animation.
+     * @return CountDownLatch for all notifications reposition transition
      */
-    private void repositionNotifications(MFXNotification newNotification) {
+    private CountDownLatch repositionNotifications(MFXNotification newNotification) {
         final List<Transition> transitionList = new ArrayList<>();
 
         for (int i = 0; i < notifications.indexOf(newNotification); i++) {
@@ -166,20 +183,14 @@ public class PositionManager {
             transitionList.add(buildRepositionAnimation(newNotification, oldNotification));
         }
 
-        if (transitionList.isEmpty()) return;
+        if (transitionList.isEmpty()) return null;
 
-        final CountDownLatch cdl = new CountDownLatch(transitionList.size());
+        final CountDownLatch countDownLatch = new CountDownLatch(transitionList.size());
         for (final Transition transition : transitionList) {
-            transition.setOnFinished(e -> cdl.countDown());
+            transition.setOnFinished(e -> countDownLatch.countDown());
             transition.play();
         }
-        try {
-            if (!cdl.await(3, TimeUnit.SECONDS)) {
-                //some reason cause transition cost most then 3 sec
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        return countDownLatch;
     }
 
     /**
