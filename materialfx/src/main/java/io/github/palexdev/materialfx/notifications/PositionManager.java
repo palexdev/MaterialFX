@@ -159,9 +159,26 @@ public class PositionManager {
      * Repositions every notification in the list, except the most recent one, with a {@code Transition} animation.
      */
     private void repositionNotifications(MFXNotification newNotification) {
+        final List<Transition> transitionList = new ArrayList<>();
+
         for (int i = 0; i < notifications.indexOf(newNotification); i++) {
             MFXNotification oldNotification = notifications.get(i);
-            buildRepositionAnimation(newNotification, oldNotification).play();
+            transitionList.add(buildRepositionAnimation(newNotification, oldNotification));
+        }
+
+        if (transitionList.isEmpty()) return;
+
+        final CountDownLatch cdl = new CountDownLatch(transitionList.size());
+        for (final Transition transition : transitionList) {
+            transition.setOnFinished(e -> cdl.countDown());
+            transition.play();
+        }
+        try {
+            if (!cdl.await(3, TimeUnit.SECONDS)) {
+                //some reason cause transition cost most then 3 sec
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
