@@ -112,19 +112,28 @@ public class PositionManager {
         Task<Void> showTask = new Task<>() {
             @Override
             protected Void call() throws Exception {
-                semaphore.acquire();
+                synchronized (pos) {
+                    semaphore.acquire();
 
-                notifications.add(newNotification);
-                repositionNotifications(newNotification);
+                    notifications.add(newNotification);
+                    repositionNotifications(newNotification);
 
-                newNotification.setOnHidden(event -> {
-                    notifications.remove(newNotification);
-                    semaphore.release();
-                });
-                computePosition(newNotification);
-                Platform.runLater(() -> newNotification.show(owner, anchorX, anchorY));
+                    newNotification.setOnHidden(event -> {
+                        notifications.remove(newNotification);
+                        semaphore.release();
+                    });
+                    newNotification.setOnShown(event -> {
+                        synchronized (pos) {
+                            pos.notify();
+                        }
+                    });
+                    computePosition(newNotification);
+                    Platform.runLater(() -> newNotification.show(owner, anchorX, anchorY));
 
-                return null;
+                    //avoid other notification frozen, only wait 2 sec
+                    pos.wait(2000);
+                    return null;
+                }
             }
         };
         showTask.setOnFailed(event -> {
