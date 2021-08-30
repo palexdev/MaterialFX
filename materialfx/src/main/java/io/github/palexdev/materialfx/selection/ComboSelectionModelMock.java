@@ -24,6 +24,7 @@ import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 
+// TODO update doc
 /**
  * Rather than recreating and adapting the entire JavaFX's selection model for usage
  * in {@link MFXComboBox} we "mock" it. The combo box listview selection model is bound to this one

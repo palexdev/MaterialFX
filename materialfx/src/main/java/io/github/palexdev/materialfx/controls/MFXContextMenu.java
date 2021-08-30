@@ -79,6 +79,8 @@ public class MFXContextMenu extends VBox {
         openHandler = event -> {
             if (event.getButton() == MouseButton.SECONDARY) {
                 show(event);
+            } else {
+                hide();
             }
         };
         ownerFocus = (observable, oldValue, newValue) -> {

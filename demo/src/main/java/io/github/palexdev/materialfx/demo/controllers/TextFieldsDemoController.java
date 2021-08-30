@@ -90,5 +90,6 @@ public class TextFieldsDemoController implements Initializable {
                 Bindings.createBooleanBinding(() -> StringUtils.containsAny(passwordValidated.getPassword(), "", "?", "!", "@", "(", ")", "[", "]", "{", "}", "-", "_"), passwordValidated.passwordProperty())),
                 "Must contain at least one among these: ?!@()[]{}-_"
         );
+        passwordValidated.setPassword("A Password");
     }
 }

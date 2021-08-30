@@ -18,10 +18,7 @@
 
 package io.github.palexdev.materialfx.demo;
 
-import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXIconWrapper;
-import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
-import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.demo.model.FilterablePerson;
@@ -34,13 +31,13 @@ import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.scenicview.ScenicView;
 
 import java.util.Random;
 
 @SuppressWarnings("All")
 public class TestDemo extends Application {
     private final Random random = new Random(System.currentTimeMillis());
+
 
     @Override
     public void start(Stage primaryStage) {
@@ -81,11 +78,11 @@ public class TestDemo extends Application {
         box.getChildren().addAll(rtn, bbox);
         box.getStylesheets().add(MFXDemoResourcesLoader.load("css/TestDemo.css"));
 
+        box.getChildren().add(new MFXPasswordField("APassword12"));
+
         Scene scene = new Scene(box, 800, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
-
-        ScenicView.show(scene);
     }
 
     public static void main(String[] args) {

@@ -20,13 +20,10 @@ package io.github.palexdev.materialfx.utils;
 
 import javafx.scene.paint.*;
 
-import java.util.Random;
-
 /**
  * Utils class for JavaFX's {@code Colors} and CSS.
  */
 public class ColorUtils {
-    private static final Random random = new Random(System.currentTimeMillis());
 
     private ColorUtils() {
     }
@@ -79,7 +76,11 @@ public class ColorUtils {
      * Generates a random {@code Color} using java.util.Random.
      */
     public static Color getRandomColor() {
-        return Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256));
+        return Color.rgb(
+                RandomInstance.random.nextInt(256),
+                RandomInstance.random.nextInt(256),
+                RandomInstance.random.nextInt(256)
+        );
     }
 
     /**

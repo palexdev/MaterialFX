@@ -23,8 +23,7 @@ import io.github.palexdev.materialfx.controls.MFXContextMenuItem;
 import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -45,33 +44,41 @@ public class MFXPasswordFieldSkin extends MFXTextFieldSkin {
     // Properties
     //================================================================================
     private final StringBuilder sb = new StringBuilder();
-    private final StringProperty fakeText = new SimpleStringProperty("");
-    private final StringProperty password;
+    private final StringBinding textBinding;
 
     //================================================================================
     // Constructors
     //================================================================================
-    public MFXPasswordFieldSkin(MFXPasswordField passwordField, StringProperty password) {
+    public MFXPasswordFieldSkin(MFXPasswordField passwordField) {
         super(passwordField);
-        this.password = password;
 
-        if (!passwordField.getText().isEmpty()) {
-            sb.append(passwordField.getText());
-            for (int i = 0; i < passwordField.getText().length(); i++) {
-                setFakeText(getFakeText().concat(passwordField.getHideCharacter()));
-                setPassword(sb.toString());
-            }
+        if (!getPassword().trim().isEmpty()) {
+            sb.append(getPassword());
+            boolean isShowing = passwordField.isShowPassword();
+            passwordField.setText(isShowing ? getPassword() : generateMaskedText());
+
             passwordField.selectedTextProperty().addListener(new ChangeListener<>() {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                     if (!newValue.isEmpty()) {
                         passwordField.deselect();
-                        passwordField.positionCaret(passwordField.getText().length());
+                        passwordField.positionCaret(getText().length());
                         passwordField.selectedTextProperty().removeListener(this);
                     }
                 }
             });
         }
+
+        textBinding = Bindings.createStringBinding(
+                () -> {
+                    boolean isShowing = passwordField.isShowPassword();
+                    if (!sb.toString().equals(getPassword())) {
+                        sb.setLength(0);
+                        sb.append(getPassword());
+                    }
+                    return isShowing ? getPassword() : generateMaskedText();
+                }, passwordField.passwordProperty(), passwordField.showPasswordProperty(), passwordField.hideCharacterProperty()
+        );
 
         setContextMenu();
         setListeners();
@@ -82,20 +89,16 @@ public class MFXPasswordFieldSkin extends MFXTextFieldSkin {
     //================================================================================
 
     /**
-     * Adds listeners for:
-     * <p>
-     * <p> - {@link MFXPasswordField#hideCharacterProperty()}: to change the mask character when changes.
-     * <p></p>
      * Adds bindings for:
      * <p>
-     * <p> - text property: to update the field text when {@link MFXPasswordField#showPasswordProperty()} changes
-     * and when the user inputs new characters.
+     * <p> - text property: to update the field text when {@link MFXPasswordField#showPasswordProperty()} changes,
+     * when the user inputs new characters, or when {@link MFXPasswordField#hideCharacterProperty()} changes.
      * <p></p>
      * Adds event filters/handlers for:
      * <p>
      * <p> - MOUSE_PRESSED: to select all the text when double click occurs, consumes the event.
      * <p> - KEY_TYPED: to listen to the input characters and update the password and the shown text.
-     * <p> - KEY_PRESSED: to allow "navigation" with arrows, and make all the shortcuts work.
+     * <p> - KEY_PRESSED: make all the shortcuts work.
      */
     private void setListeners() {
         MFXPasswordField passwordField = (MFXPasswordField) getSkinnable();
@@ -114,18 +117,17 @@ public class MFXPasswordFieldSkin extends MFXTextFieldSkin {
             if (!isInvalidCharacter(keyEvent.getCharacter().charAt(0))) {
 
                 if (passwordField.getSelection().getLength() > 0) {
-                    handleDeletion(passwordField.getText().length());
+                    handleDeletion(getText().length());
                 }
 
-                if (passwordField.getText().length() == passwordField.getTextLimit()) {
+                if (getText().length() == passwordField.getTextLimit()) {
                     keyEvent.consume();
                     return;
                 }
 
                 sb.append(keyEvent.getCharacter());
-                setFakeText(getFakeText().concat(passwordField.getHideCharacter()));
                 setPassword(sb.toString());
-                passwordField.positionCaret(passwordField.getText().length());
+                passwordField.positionCaret(getText().length());
             }
             keyEvent.consume();
         });
@@ -144,34 +146,6 @@ public class MFXPasswordFieldSkin extends MFXTextFieldSkin {
             }
 
             switch (code) {
-                case UP:
-                case END:
-                    passwordField.positionCaret(getPassword().length());
-                    break;
-                case DOWN:
-                case HOME:
-                    passwordField.positionCaret(0);
-                    break;
-                case LEFT:
-                    if (keyEvent.isShiftDown()) {
-                        passwordField.selectBackward();
-                    } else {
-                        passwordField.positionCaret(passwordField.getCaretPosition() - 1);
-                    }
-                    break;
-                case RIGHT:
-                    if (keyEvent.isShiftDown()) {
-                        passwordField.selectForward();
-                    } else {
-                        passwordField.positionCaret(passwordField.getCaretPosition() + 1);
-                    }
-                    break;
-                case A: {
-                    if (keyEvent.isControlDown()) {
-                        passwordField.selectAll();
-                    }
-                    break;
-                }
                 case C:
                     if (keyEvent.isControlDown() && passwordField.isAllowCopy()) {
                         passwordField.copy();
@@ -179,7 +153,7 @@ public class MFXPasswordFieldSkin extends MFXTextFieldSkin {
                     break;
                 case D:
                     if (keyEvent.isControlDown()) {
-                        handleDeletion(passwordField.getText().length());
+                        handleDeletion(getText().length());
                     }
                     break;
                 case V:
@@ -190,20 +164,14 @@ public class MFXPasswordFieldSkin extends MFXTextFieldSkin {
                 case X:
                     if (keyEvent.isControlDown() && passwordField.isAllowCut()) {
                         passwordField.cut();
-                        handleDeletion(passwordField.getText().length());
+                        handleDeletion(getText().length());
                     }
                 default:
                     break;
             }
-
-            keyEvent.consume();
         });
 
-        passwordField.textProperty().bind(Bindings.createStringBinding(
-                () -> passwordField.isShowPassword() ? getPassword() : getFakeText(),
-                passwordField.showPasswordProperty(), fakeText, password
-        ));
-        passwordField.hideCharacterProperty().addListener((observable, oldValue, newValue) -> fakeText.set(getFakeText().replace(oldValue, newValue)));
+        passwordField.textProperty().bind(textBinding);
     }
 
     /**
@@ -218,14 +186,13 @@ public class MFXPasswordFieldSkin extends MFXTextFieldSkin {
         String content = clipboard.getString();
         if (!content.trim().isEmpty()) {
             if (passwordField.getSelection().getLength() > 0) {
-                handleDeletion(passwordField.getText().length());
+                handleDeletion(getText().length());
             }
 
             int caretPos = passwordField.getCaretPosition();
             int end = caretPos + content.length();
             sb.insert(caretPos, content);
             for (int i = 0; i < content.length(); i++) {
-                setFakeText(getFakeText().concat(passwordField.getHideCharacter()));
                 setPassword(sb.toString());
             }
             passwordField.positionCaret(end);
@@ -244,16 +211,12 @@ public class MFXPasswordFieldSkin extends MFXTextFieldSkin {
             int end = range.getEnd();
 
             setPassword(sb.delete(start, end).toString());
-            StringBuilder tmp = new StringBuilder(getFakeText());
-            setFakeText(tmp.delete(start, end).toString());
-            passwordField.positionCaret(pos);
+            passwordField.positionCaret(pos + 1);
             return;
         }
 
         if (pos >= 0 && pos < getPassword().length()) {
             setPassword(sb.deleteCharAt(pos).toString());
-            StringBuilder tmp = new StringBuilder(getFakeText());
-            setFakeText(tmp.deleteCharAt(pos).toString());
             passwordField.positionCaret(pos);
         }
     }
@@ -261,11 +224,19 @@ public class MFXPasswordFieldSkin extends MFXTextFieldSkin {
     /**
      * Checks if the typed character is valid.
      */
-    private static boolean isInvalidCharacter(char c) {
+    private boolean isInvalidCharacter(char c) {
         if (c == 0x7F) return true;
         if (c == 0xA) return true;
         if (c == 0x9) return true;
         return c < 0x20;
+    }
+
+    /**
+     * Generates the masked text.
+     */
+    private String generateMaskedText() {
+        MFXPasswordField passwordField = (MFXPasswordField) getSkinnable();
+        return passwordField.getHideCharacter().repeat(sb.length());
     }
 
     /**
@@ -291,7 +262,7 @@ public class MFXPasswordFieldSkin extends MFXTextFieldSkin {
                 .setAction(event -> {
                     if (passwordField.isAllowCut()) {
                         passwordField.cut();
-                        handleDeletion(passwordField.getText().length());
+                        handleDeletion(getText().length());
                     }
                 });
 
@@ -309,7 +280,7 @@ public class MFXPasswordFieldSkin extends MFXTextFieldSkin {
                 .setIcon(new MFXFontIcon("mfx-delete-alt", 16))
                 .setText("Delete")
                 .setAccelerator("Ctrl + D")
-                .setAction(event -> handleDeletion(passwordField.getText().length()));
+                .setAction(event -> handleDeletion(getText().length()));
 
         MFXContextMenuItem selectAll = new MFXContextMenuItem()
                 .setIcon(new MFXFontIcon("mfx-select-all", 16))
@@ -328,30 +299,23 @@ public class MFXPasswordFieldSkin extends MFXTextFieldSkin {
     }
 
     /**
-     * @return the masked text
+     * Convenience method to get the field's text.
      */
-    public String getFakeText() {
-        return fakeText.get();
+    private String getText() {
+        return getSkinnable().getText();
     }
 
     /**
-     * Sets the masked text
+     * Convenience method to get password.
      */
-    public void setFakeText(String fakeText) {
-        this.fakeText.set(fakeText);
+    private String getPassword() {
+        return ((MFXPasswordField) getSkinnable()).getPassword();
     }
 
     /**
-     * @return the password/un-masked text
+     * Convenience method to set the password.
      */
-    public String getPassword() {
-        return password.get();
-    }
-
-    /**
-     * Sets the password
-     */
-    public void setPassword(String password) {
-        this.password.set(password);
+    private void setPassword(String password) {
+        ((MFXPasswordField) getSkinnable()).setPassword(password);
     }
 }

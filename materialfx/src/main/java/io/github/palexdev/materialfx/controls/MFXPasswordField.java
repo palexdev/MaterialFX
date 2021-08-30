@@ -23,7 +23,10 @@ import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.skins.MFXPasswordFieldSkin;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.control.Skin;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -36,7 +39,7 @@ import javafx.scene.paint.Color;
  * <p></p>
  * Specific features:
  * <p>
- * <p> - Allows to change the "mask" character, event at runtime
+ * <p> - Allows to change the "mask" character, even at runtime
  * <p> - Allows to show/hide the password. When the password is hidden the text field {@code getText()} method will return
  * the masked string so to get the password you must use {@link #getPassword()}. When the password is shown you can use both
  * <p> - Allows to quickly position the caret with all four arrows
@@ -47,7 +50,9 @@ import javafx.scene.paint.Color;
  * <p> - Allows to enable/disable copy, cut and paste at any time
  * <p> - Allows to delete the selected text with the shortcut (Ctrl + D)
  * <p></p>
- * Note: the context menu is redefined in the skin since some methods are private in the skin.
+ * Side notes:
+ * <p> - the context menu is redefined in the skin since some methods are private in the skin.
+ * <p> - see {@link #enableContextMenuTextSelectionFix(boolean)}.
  */
 public class MFXPasswordField extends MFXTextField {
     //================================================================================
@@ -56,7 +61,7 @@ public class MFXPasswordField extends MFXTextField {
     private final String STYLE_CLASS = "mfx-password-field";
     private final String STYLESHEET = MFXResourcesLoader.load("css/MFXPasswordField.css");
 
-    private final ReadOnlyStringWrapper password = new ReadOnlyStringWrapper("");
+    private final StringProperty password = new SimpleStringProperty("");
     private final BooleanProperty showPassword = new SimpleBooleanProperty(false);
     private final StringProperty hideCharacter = new SimpleStringProperty("\u25cf") {
         @Override
@@ -79,7 +84,7 @@ public class MFXPasswordField extends MFXTextField {
     }
 
     public MFXPasswordField(String text) {
-        setText(text);
+        setPassword(text);
         initialize();
     }
 
@@ -126,9 +131,6 @@ public class MFXPasswordField extends MFXTextField {
         setMFXContextMenu(MFXContextMenu.Builder.build(this).install());
     }
 
-    /**
-     * @return the un-masked text
-     */
     public String getPassword() {
         return password.get();
     }
@@ -136,23 +138,12 @@ public class MFXPasswordField extends MFXTextField {
     /**
      * Specifies the un-masked text property.
      */
-    public ReadOnlyStringWrapper passwordProperty() {
+    public StringProperty passwordProperty() {
         return password;
     }
 
-    public String getHideCharacter() {
-        return hideCharacter.get();
-    }
-
-    /**
-     * Specifies the character used to mask the text.
-     */
-    public StringProperty hideCharacterProperty() {
-        return hideCharacter;
-    }
-
-    public void setHideCharacter(char hideCharacter) {
-        this.hideCharacter.set(String.valueOf(hideCharacter));
+    public void setPassword(String password) {
+        this.password.set(password);
     }
 
     public boolean isShowPassword() {
@@ -168,6 +159,21 @@ public class MFXPasswordField extends MFXTextField {
 
     public void setShowPassword(boolean showPassword) {
         this.showPassword.set(showPassword);
+    }
+
+    public String getHideCharacter() {
+        return hideCharacter.get();
+    }
+
+    /**
+     * Specifies the character used to mask the text.
+     */
+    public StringProperty hideCharacterProperty() {
+        return hideCharacter;
+    }
+
+    public void setHideCharacter(char hideCharacter) {
+        this.hideCharacter.set(String.valueOf(hideCharacter));
     }
 
     public boolean isAllowCopy() {
@@ -220,7 +226,7 @@ public class MFXPasswordField extends MFXTextField {
     //================================================================================
     @Override
     protected Skin<?> createDefaultSkin() {
-        return new MFXPasswordFieldSkin(this, passwordProperty());
+        return new MFXPasswordFieldSkin(this);
     }
 
     @Override
