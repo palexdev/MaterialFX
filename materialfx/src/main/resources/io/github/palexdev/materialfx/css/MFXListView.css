@@ -108,11 +108,18 @@
     -fx-pref-height: 0;
 }
 
-.mfx-legacy-list-view .mfx-scroll-bar {
+.mfx-legacy-list-view .mfx-scroll-bar:vertical {
     -fx-background-color: transparent;
     -fx-pref-width: 12;
     -fx-pref-height: 12;
-    -fx-padding: 5 0.5 5 0.5;
+    -fx-padding: 5 0.5 20 0.5;
+}
+
+.mfx-legacy-list-view .mfx-scroll-bar:horizontal {
+    -fx-background-color: transparent;
+    -fx-pref-width: 12;
+    -fx-pref-height: 12;
+    -fx-padding: 0.5 20 0.5 5;
 }
 
 .mfx-legacy-list-view .mfx-scroll-bar:horizontal .thumb,

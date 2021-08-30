@@ -52,6 +52,17 @@ import java.util.function.Supplier;
  * <p>
  * This is the most basic ripple generator that generates circular ripples.
  * Accepted ripples are {@link CircleRipple} or subclasses.
+ * <p></p>
+ * Usage example:
+ * <pre>
+ * {@code
+ *      Region region = ...
+ *      MFXCircleRippleGenerator generator = new MFXCircleRippleGenerator(region) // It's needed to pass the region reference
+ *      generator.setRipplePositionFunction(mouseEvent -> ...) // This is needed to specify where the ripple should be placed when generated
+ *      region.getChildren().add(generator) // Ripples are added to the generator's container so the generator must be added to the region
+ *      region.addEventHandler(MouseEvent.MOUSE_PRESSED, generator::generateRipple)
+ * }
+ * </pre>
  */
 public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleRipple> {
     //================================================================================

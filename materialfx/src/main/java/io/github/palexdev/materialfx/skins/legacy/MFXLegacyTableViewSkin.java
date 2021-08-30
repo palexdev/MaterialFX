@@ -55,12 +55,10 @@ public class MFXLegacyTableViewSkin<T> extends TableViewSkin<T> {
         vBar.setManaged(false);
         vBar.setOrientation(Orientation.VERTICAL);
         vBar.getStyleClass().add("mfx-scroll-bar");
-        vBar.visibleProperty().bind(vBar.visibleAmountProperty().isNotEqualTo(0));
 
         hBar.setManaged(false);
         hBar.setOrientation(Orientation.HORIZONTAL);
         hBar.getStyleClass().add("mfx-scroll-bar");
-        hBar.visibleProperty().bind(hBar.visibleAmountProperty().isNotEqualTo(0));
     }
 
     private void bindScrollBars(TableView<?> tableView) {
@@ -84,6 +82,7 @@ public class MFXLegacyTableViewSkin<T> extends TableViewSkin<T> {
         scrollBarA.visibleAmountProperty().bindBidirectional(scrollBarB.visibleAmountProperty());
         scrollBarA.unitIncrementProperty().bindBidirectional(scrollBarB.unitIncrementProperty());
         scrollBarA.blockIncrementProperty().bindBidirectional(scrollBarB.blockIncrementProperty());
+        scrollBarA.visibleProperty().bind(scrollBarB.visibleProperty());
     }
 
     private double estimateHeight() {

@@ -58,8 +58,8 @@ public class TableViewsDemoController implements Initializable {
     private final ObjectProperty<Stage> tableStage = new SimpleObjectProperty<>();
     private final MFXLegacyTableView<Person> legacyTable;
     private final MFXTableView<Machine> tableView;
-    private final StackPane stackPane = new StackPane();
-    private final Scene scene = new Scene(stackPane, 800, 600);
+    private final StackPane pane = new StackPane();
+    private final Scene scene = new Scene(pane, 800, 600);
 
     @FXML
     private MFXButton showLegacy;
@@ -83,7 +83,7 @@ public class TableViewsDemoController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         showLegacy.setOnAction(event -> {
             getTableStage().close();
-            stackPane.getChildren().setAll(legacyTable);
+            pane.getChildren().setAll(legacyTable);
             getTableStage().setScene(scene);
             getTableStage().setTitle("Legacy TableView - Preview");
             getTableStage().show();
@@ -91,7 +91,7 @@ public class TableViewsDemoController implements Initializable {
 
         showNew.setOnAction(event -> {
             getTableStage().close();
-            stackPane.getChildren().setAll(tableView);
+            pane.getChildren().setAll(tableView);
             getTableStage().setScene(scene);
             getTableStage().setTitle("New TableView - Preview");
             getTableStage().show();
