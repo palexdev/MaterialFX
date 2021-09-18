@@ -18,79 +18,52 @@
 
 package io.github.palexdev.materialfx.skins;
 
-import io.github.palexdev.materialfx.controls.MFXListView;
+import io.github.palexdev.materialfx.controls.base.AbstractMFXListView;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.effects.MFXDepthManager;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
-import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
+import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
 import javafx.animation.Animation;
 import javafx.animation.KeyValue;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
-import javafx.scene.Node;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ScrollBar;
-import javafx.scene.control.skin.ListViewSkin;
-import javafx.scene.control.skin.VirtualFlow;
-import javafx.scene.layout.Region;
+import javafx.scene.control.SkinBase;
 import javafx.util.Duration;
 
-import java.util.Set;
-
 /**
- * This is the implementation of the {@code Skin} associated with every {@link MFXListView}.
- * <p>
- * The most important thing this skin does is replacing the default scrollbars with new ones,
- * this makes styling them a lot more easy.
+ * Implementation of the {@code Skin} used by all list views based on VirtualizedFX.
  */
-public class MFXListViewSkin<T> extends ListViewSkin<T> {
+public class MFXListViewSkin<T> extends SkinBase<AbstractMFXListView<T, ?>> {
     //================================================================================
     // Properties
     //================================================================================
-    private final VirtualFlow<?> virtualFlow;
-
-    private final ScrollBar vBar;
     private final ScrollBar hBar;
-
-    private final Animation hideBars;
-    private final Animation showBars;
+    private final ScrollBar vBar;
+    private Animation hideBars;
+    private Animation showBars;
 
     //================================================================================
     // Constructors
     //================================================================================
-    public MFXListViewSkin(final MFXListView<T> listView) {
+    public MFXListViewSkin(AbstractMFXListView<T, ?> listView, SimpleVirtualFlow<T, ?> virtualFlow) {
         super(listView);
-
-        virtualFlow = (VirtualFlow<?>) listView.lookup(".virtual-flow");
-        listView.setEffect(MFXDepthManager.shadowOf(listView.getDepthLevel()));
-
-        this.vBar = new ScrollBar();
-        this.hBar = new ScrollBar();
-        bindScrollBars(listView);
-        getChildren().addAll(vBar, hBar);
-
-        vBar.setManaged(false);
-        vBar.setOrientation(Orientation.VERTICAL);
-        vBar.getStyleClass().add("mfx-scroll-bar");
-
-        hBar.setManaged(false);
-        hBar.setOrientation(Orientation.HORIZONTAL);
-        hBar.getStyleClass().add("mfx-scroll-bar");
+        hBar = virtualFlow.getHBar();
+        vBar = virtualFlow.getVBar();
+        virtualFlow.getStylesheets().setAll(listView.getUserAgentStylesheet());
 
         hideBars = AnimationUtils.TimelineBuilder.build()
                 .add(
-                        KeyFrames.of(Duration.millis(400),
-                                new KeyValue(vBar.opacityProperty(), 0.0, MFXAnimationFactory.getInterpolatorV1()),
-                                new KeyValue(hBar.opacityProperty(), 0.0, MFXAnimationFactory.getInterpolatorV1()))
+                        AnimationUtils.KeyFrames.of(Duration.millis(400),
+                                new KeyValue(vBar.opacityProperty(), 0.0, MFXAnimationFactory.INTERPOLATOR_V1),
+                                new KeyValue(hBar.opacityProperty(), 0.0, MFXAnimationFactory.INTERPOLATOR_V1))
                 )
                 .getAnimation();
         showBars = AnimationUtils.TimelineBuilder.build()
                 .add(
-                        KeyFrames.of(Duration.millis(400),
-                                new KeyValue(vBar.opacityProperty(), 1.0, MFXAnimationFactory.getInterpolatorV1()),
-                                new KeyValue(hBar.opacityProperty(), 1.0, MFXAnimationFactory.getInterpolatorV1()))
+                        AnimationUtils.KeyFrames.of(Duration.millis(400),
+                                new KeyValue(vBar.opacityProperty(), 1.0, MFXAnimationFactory.INTERPOLATOR_V1),
+                                new KeyValue(hBar.opacityProperty(), 1.0, MFXAnimationFactory.INTERPOLATOR_V1))
                 )
                 .getAnimation();
 
@@ -98,7 +71,9 @@ public class MFXListViewSkin<T> extends ListViewSkin<T> {
             vBar.setOpacity(0.0);
             hBar.setOpacity(0.0);
         }
+        listView.setEffect(MFXDepthManager.shadowOf(listView.getDepthLevel()));
 
+        getChildren().setAll(virtualFlow);
         setListeners();
     }
 
@@ -107,10 +82,23 @@ public class MFXListViewSkin<T> extends ListViewSkin<T> {
     //================================================================================
 
     /**
-     * Adds listeners for: mouseExited, mouseEntered, hideScrollBars, and depthLevel properties.
+     * Calls {@link #setScrollBarHandlers()}, adds a listener to the list view's depth property.
      */
     private void setListeners() {
-        MFXListView<T> listView = (MFXListView<T>) getSkinnable();
+        AbstractMFXListView<T, ?> listView = getSkinnable();
+        setScrollBarHandlers();
+        listView.depthLevelProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.equals(oldValue)) {
+                listView.setEffect(MFXDepthManager.shadowOf(listView.getDepthLevel()));
+            }
+        });
+    }
+
+    /**
+     * Sets up the scroll bars behavior.
+     */
+    private void setScrollBarHandlers() {
+        AbstractMFXListView<T, ?> listView = getSkinnable();
 
         listView.setOnMouseExited(event -> {
             if (listView.isHideScrollBars()) {
@@ -168,83 +156,19 @@ public class MFXListViewSkin<T> extends ListViewSkin<T> {
                 hBar.setOpacity(0.0);
             }
         });
-
-        listView.depthLevelProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.equals(oldValue)) {
-                listView.setEffect(MFXDepthManager.shadowOf(listView.getDepthLevel()));
-            }
-        });
-    }
-
-    private void bindScrollBars(MFXListView<?> listView) {
-        final Set<Node> nodes = listView.lookupAll("VirtualScrollBar");
-        for (Node node : nodes) {
-            if (node instanceof ScrollBar) {
-                ScrollBar bar = (ScrollBar) node;
-                if (bar.getOrientation().equals(Orientation.VERTICAL)) {
-                    bindScrollBars(vBar, bar);
-                } else if (bar.getOrientation().equals(Orientation.HORIZONTAL)) {
-                    bindScrollBars(hBar, bar);
-                }
-            }
-        }
-    }
-
-    private void bindScrollBars(ScrollBar scrollBarA, ScrollBar scrollBarB) {
-        scrollBarA.valueProperty().bindBidirectional(scrollBarB.valueProperty());
-        scrollBarA.minProperty().bindBidirectional(scrollBarB.minProperty());
-        scrollBarA.maxProperty().bindBidirectional(scrollBarB.maxProperty());
-        scrollBarA.visibleAmountProperty().bindBidirectional(scrollBarB.visibleAmountProperty());
-        scrollBarA.unitIncrementProperty().bindBidirectional(scrollBarB.unitIncrementProperty());
-        scrollBarA.blockIncrementProperty().bindBidirectional(scrollBarB.blockIncrementProperty());
-        scrollBarA.visibleProperty().bind(scrollBarB.visibleProperty());
-    }
-
-    private double estimateHeight() {
-        double borderWidth = snapVerticalInsets();
-
-        double cellsHeight = 0;
-        for (int i = 0; i < virtualFlow.getCellCount(); i++) {
-            ListCell<?> cell = (ListCell<?>) virtualFlow.getCell(i);
-
-            cellsHeight += cell.getHeight();
-        }
-
-        return cellsHeight + borderWidth;
-    }
-
-    private double snapVerticalInsets() {
-        return getSkinnable().snappedBottomInset() + getSkinnable().snappedTopInset();
     }
 
     //================================================================================
     // Override Methods
     //================================================================================
     @Override
-    protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return 200;
+    protected double computePrefHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return topInset + 350 + bottomInset;
     }
 
     @Override
-    protected double computePrefHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-        final int itemsCount = getSkinnable().getItems().size();
-        if (getSkinnable().maxHeightProperty().isBound() || itemsCount <= 0) {
-            return super.computePrefHeight(width, topInset, rightInset, bottomInset, leftInset);
-        }
-
-        final double fixedCellSize = getSkinnable().getFixedCellSize();
-        double computedHeight = fixedCellSize != Region.USE_COMPUTED_SIZE ?
-                fixedCellSize * itemsCount + snapVerticalInsets() : estimateHeight();
-        double height = super.computePrefHeight(width, topInset, rightInset, bottomInset, leftInset);
-        if (height > computedHeight) {
-            height = computedHeight;
-        }
-
-        if (getSkinnable().getMaxHeight() > 0 && computedHeight > getSkinnable().getMaxHeight()) {
-            return getSkinnable().getMaxHeight();
-        }
-
-        return height;
+    protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return leftInset + 200 + rightInset;
     }
 
     @Override
@@ -258,14 +182,13 @@ public class MFXListViewSkin<T> extends ListViewSkin<T> {
     }
 
     @Override
-    protected void layoutChildren(double x, double y, double w, double h) {
-        super.layoutChildren(x, y, w, h);
-
-        Insets insets = getSkinnable().getInsets();
-        final double prefWidth = vBar.prefWidth(-1);
-        vBar.resizeRelocate(w - prefWidth - insets.getRight(), insets.getTop(), prefWidth, h - insets.getTop() - insets.getBottom());
-
-        final double prefHeight = hBar.prefHeight(-1);
-        hBar.resizeRelocate(insets.getLeft(), h - prefHeight - insets.getBottom(), w - insets.getLeft() - insets.getRight(), prefHeight);
+    public void dispose() {
+        super.dispose();
+        if (hideBars != null) {
+            hideBars = null;
+        }
+        if (showBars != null) {
+            showBars = null;
+        }
     }
 }

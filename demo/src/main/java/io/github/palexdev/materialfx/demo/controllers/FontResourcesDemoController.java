@@ -18,13 +18,14 @@
 
 package io.github.palexdev.materialfx.demo.controllers;
 
-import io.github.palexdev.materialfx.controls.MFXFlowlessListView;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXLabel;
-import io.github.palexdev.materialfx.controls.cell.MFXFlowlessListCell;
+import io.github.palexdev.materialfx.controls.MFXListView;
+import io.github.palexdev.materialfx.controls.cell.MFXListCell;
 import io.github.palexdev.materialfx.font.FontResources;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
-import io.github.palexdev.materialfx.utils.ScrollUtils;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -44,19 +45,20 @@ import java.util.stream.Collectors;
 public class FontResourcesDemoController implements Initializable {
 
     @FXML
-    private MFXFlowlessListView<HBox> list;
+    private MFXListView<HBox> list;
 
     @FXML
     private MFXLabel count;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        list.setCellFactory(hBox -> {
-            MFXFlowlessListCell<HBox> cell = new MFXFlowlessListCell<>(list, hBox);
-            cell.setFixedCellHeight(48);
-            return cell;
+        list.setCellFactory(hBox -> new MFXListCell<>(list, hBox) {
+            {
+                setPrefHeight(40);
+            }
         });
-        ScrollUtils.addSmoothScrolling(list, 5);
+        list.features().enableBounceEffect();
+        list.features().enableSmoothScrolling(1);
         populateList();
         count.setText(list.getItems().size() + " Icons");
     }
@@ -66,7 +68,9 @@ public class FontResourcesDemoController implements Initializable {
         fontResources.sort(Comparator.comparing(FontResources::name));
 
 
-        List<HBox> resBoxes = fontResources.stream().map(this::buildNode).collect(Collectors.toList());
+        ObservableList<HBox> resBoxes = fontResources.stream()
+                .map(this::buildNode)
+                .collect(Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList));
         list.setItems(resBoxes);
     }
 

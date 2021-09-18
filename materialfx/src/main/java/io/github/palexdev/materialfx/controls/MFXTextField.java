@@ -59,8 +59,6 @@ import java.util.function.Supplier;
  * replaces the default JavaFX context menu in favor of {@link MFXContextMenu}.
  * <p></p>
  * Defines a new PseudoClass: ":invalid" to specify the control's look when the validator's state is invalid.
- * <p></p>
- * Side notes: see {@link #enableContextMenuTextSelectionFix(boolean)}.
  */
 public class MFXTextField extends TextField implements Validated<MFXDialogValidator> {
     //================================================================================
@@ -74,7 +72,6 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
     private final ObjectProperty<Insets> iconInsets = new SimpleObjectProperty<>(new Insets(0, 0, 0, 9));
 
     private final ObjectProperty<MFXContextMenu> mfxContextMenu = new SimpleObjectProperty<>();
-    private boolean contextMenuSelectionFix = true;
 
     private MFXDialogValidator validator;
     protected static final PseudoClass INVALID_PSEUDO_CLASS = PseudoClass.getPseudoClass("invalid");
@@ -192,17 +189,18 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
             }
         });
 
-        EventDispatcher dispatcher = getEventDispatcher();
+        EventDispatcher original = getEventDispatcher();
         setEventDispatcher((event, tail) -> {
-            if (contextMenuSelectionFix && event instanceof MouseEvent) {
-                MouseEvent me = (MouseEvent) event;
+            if (getMFXContextMenu() != null
+                    && event instanceof MouseEvent &&
+                    ((MouseEvent) event).getButton() == MouseButton.SECONDARY &&
+                    !getSelectedText().isEmpty()
+            ) {
                 MFXContextMenu contextMenu = getMFXContextMenu();
-                if (me.getButton() == MouseButton.SECONDARY && contextMenu != null) {
-                    contextMenu.show(me);
-                    event.consume();
-                }
+                contextMenu.show((MouseEvent) event);
+                event.consume();
             }
-            return dispatcher.dispatchEvent(event, tail);
+            return original.dispatchEvent(event, tail);
         });
         addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
     }
@@ -317,43 +315,6 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
 
     public void setMFXContextMenu(MFXContextMenu mfxContextMenu) {
         this.mfxContextMenu.set(mfxContextMenu);
-    }
-
-    /**
-     * All MFXTextFields and subclasses have a bug with the context menu. If you select some text
-     * and then open the context menu with a right click the selection will be cleared, to fix this
-     * misbehavior we change the {@link EventDispatcher} to intercept all right clicks and consume the
-     * event. This fixes the selection being cleared but as a side effect you won't be able to do anything
-     * with right click other than opening the context menu anymore.
-     * <p>
-     * This flag allows you to enable/disable this fix.
-     * <p>
-     * If you still need this fix, but you also need to perform some other action on right click
-     * this is the code to "override" the event dispatcher:
-     * <pre>
-     * {@code
-     *         EventDispatcher dispatcher = getEventDispatcher();
-     *         setEventDispatcher((event, tail) -> {
-     *             if (contextMenuSelectionFix && event instanceof MouseEvent) {
-     *                 MouseEvent me = (MouseEvent) event;
-     *                 MFXContextMenu contextMenu = getMFXContextMenu();
-     *                 if (me.getButton() == MouseButton.SECONDARY && contextMenu != null) {
-     *                     // Perform your actions here!! //
-     *                     contextMenu.show(me);
-     *                     event.consume();
-     *                 }
-     *             }
-     *             return dispatcher.dispatchEvent(event, tail);
-     *         });
-     * }
-     * </pre>
-     * <p>
-     * Change the above code as needed! :)
-     * <p></p>
-     * By default the fix is enabled.
-     */
-    public void enableContextMenuTextSelectionFix(boolean enable) {
-        contextMenuSelectionFix = enable;
     }
 
     //================================================================================

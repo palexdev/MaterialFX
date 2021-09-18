@@ -18,72 +18,106 @@
 
 package io.github.palexdev.materialfx.demo;
 
-import io.github.palexdev.materialfx.controls.*;
+import io.github.palexdev.materialfx.controls.MFXIconWrapper;
+import io.github.palexdev.materialfx.controls.MFXListView;
+import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.demo.model.FilterablePerson;
 import io.github.palexdev.materialfx.font.FontResources;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.materialfx.selection.SingleSelectionModel;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.ListView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import org.scenicview.ScenicView;
 
+import java.util.List;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 @SuppressWarnings("All")
 public class TestDemo extends Application {
     private final Random random = new Random(System.currentTimeMillis());
+    private boolean indexBound;
 
 
     @Override
     public void start(Stage primaryStage) {
-        VBox box = new VBox(100);
+        StackPane stackPane = new StackPane();
+
+        ObservableList<String> strings = FXCollections.observableArrayList();
+        IntStream.range(0, 1000).forEach(value -> strings.add(String.valueOf(value)));
+
+        MFXListView<String> listView = new MFXListView<>(strings);
+        listView.setHideScrollBars(true);
+        ListView<String> flowlessListView = new ListView<>(strings);
+        HBox box = new HBox(50, listView, flowlessListView);
         box.setAlignment(Pos.CENTER);
 
-        HBox bbox = new HBox(20);
-        bbox.setAlignment(Pos.CENTER);
-
-        MFXButton b1 = new MFXButton("Set Leading");
-        MFXButton b2 = new MFXButton("Set Trailing");
-        MFXButton b3 = new MFXButton("Set Graphic");
-        MFXButton b4 = new MFXButton("Remove Graphic");
-        MFXButton b5 = new MFXButton("Remove Label Graphic");
-        MFXRectangleToggleNode rtn = new MFXRectangleToggleNode("");
-        rtn.setPrefSize(32, 32);
-        rtn.setAlignment(Pos.CENTER);
-
-        b1.setOnAction(event -> {
-            rtn.setLabelLeadingIcon(MFXFontIcon.getRandomIcon(12, ColorUtils.getRandomColor()));
-        });
-        b2.setOnAction(event -> {
-            rtn.setLabelTrailingIcon(MFXFontIcon.getRandomIcon(12, ColorUtils.getRandomColor()));
-        });
-        b3.setOnAction(event -> {
-            rtn.setGraphic(MFXFontIcon.getRandomIcon(12, ColorUtils.getRandomColor()));
-        });
-        b4.setOnAction(event -> {
-            rtn.setGraphic(null);
-        });
-        b5.setOnAction(event -> {
-            rtn.setLabelLeadingIcon(null);
-            rtn.setLabelTrailingIcon(null);
+        listView.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            if (event.getButton() == MouseButton.SECONDARY) {
+                strings.set(0, "90");
+            }
         });
 
-        bbox.getChildren().addAll(b1, b2, b3, b4, b5);
+        listView.getSelectionModel().getSelection().addListener((MapChangeListener<? super Integer, ? super String>) change -> System.out.println(change));
 
-        box.getChildren().addAll(rtn, bbox);
-        box.getStylesheets().add(MFXDemoResourcesLoader.load("css/TestDemo.css"));
+        stackPane.getChildren().addAll(box);
 
-        box.getChildren().add(new MFXPasswordField("APassword12"));
-
-        Scene scene = new Scene(box, 800, 600);
+        Scene scene = new Scene(stackPane, 800, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        ScenicView.show(scene);
     }
+
+/*    @Override
+    public void start(Stage primaryStage) {
+        VBox box = new VBox(100);
+        box.setAlignment(Pos.CENTER);
+        Scene mainScene = new Scene(box, 800, 600);
+
+        mainScene.getStylesheets().clear();
+        mainScene.getStylesheets().add("/mfx/light.css");
+
+        box.getChildren().add(new Label("MFXComboBox"));
+        var nmfx = new MFXComboBox<>();
+        nmfx.getItems().add("a");
+        nmfx.getItems().add("b");
+        nmfx.getItems().add("c");
+        box.getChildren().add(nmfx);
+
+        nmfx.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            if (event.getButton() == MouseButton.SECONDARY) {
+                System.out.println(nmfx.getSelectionModel().getSelectedIndex());
+            }
+        });
+
+        MFXComboBox<String> bind = new MFXComboBox<>();
+        bind.getItems().add("a");
+        bind.getItems().add("b");
+        bind.getItems().add("c");
+        box.getChildren().add(bind);
+
+        nmfx.getSelectionModel().bind(bind.getSelectionModel().selectedItemProperty());
+        nmfx.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> System.out.println("I: " + newValue));
+
+
+
+        primaryStage.setScene(mainScene);
+        primaryStage.show();
+    }*/
 
     public static void main(String[] args) {
         launch(args);
@@ -125,5 +159,35 @@ public class TestDemo extends Application {
                 .limit(targetStringLength)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
+    }
+
+    private void selectNext(SingleSelectionModel<String> selectionModel) {
+        int index = selectionModel.getSelectedIndex();
+        List<String> items = selectionModel.getUnmodifiableItems();
+        if (index >= (items.size())) {
+            return;
+        }
+
+        if (!indexBound) {
+            String item = items.get(index + 1);
+            selectionModel.selectItem(item);
+            return;
+        }
+        selectionModel.selectIndex(index + 1);
+    }
+
+    private void selectPrevious(SingleSelectionModel<String> selectionModel) {
+        int index = selectionModel.getSelectedIndex();
+        List<String> items = selectionModel.getUnmodifiableItems();
+        if (index == 0) {
+            return;
+        }
+
+        if (!indexBound) {
+            String item = items.get(index - 1);
+            selectionModel.selectItem(item);
+            return;
+        }
+        selectionModel.selectIndex(index - 1);
     }
 }

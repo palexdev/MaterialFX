@@ -22,7 +22,7 @@ import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
 import io.github.palexdev.materialfx.controls.enums.DialogType;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
-import io.github.palexdev.materialfx.selection.ComboSelectionModelMock;
+import io.github.palexdev.materialfx.selection.ComboBoxSelectionModel;
 import io.github.palexdev.materialfx.skins.MFXComboBoxSkin;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
@@ -56,7 +56,7 @@ import static io.github.palexdev.materialfx.controls.enums.Styles.ComboBoxStyles
  * </b>
  *
  * @param <T> The type of the value that has been selected
- * @see ComboSelectionModelMock
+ * @see ComboBoxSelectionModel
  */
 public class MFXComboBox<T> extends Control implements Validated<MFXDialogValidator> {
     //================================================================================
@@ -75,7 +75,7 @@ public class MFXComboBox<T> extends Control implements Validated<MFXDialogValida
     private final DoubleProperty popupXOffset = new SimpleDoubleProperty(0);
     private final DoubleProperty popupYOffset = new SimpleDoubleProperty(2);
 
-    private final ComboSelectionModelMock<T> mockSelection;
+    private final ComboBoxSelectionModel<T> selectionModel = new ComboBoxSelectionModel<>(items);
 
     private MFXDialogValidator validator;
     protected static final PseudoClass INVALID_PSEUDO_CLASS = PseudoClass.getPseudoClass("invalid");
@@ -92,7 +92,6 @@ public class MFXComboBox<T> extends Control implements Validated<MFXDialogValida
     public MFXComboBox(ObservableList<T> items) {
         this.STYLESHEET = MFXResourcesLoader.load(getComboStyle().getStyleSheetPath());
         this.items.set(items);
-        this.mockSelection = new ComboSelectionModelMock<>(this);
 
         initialize();
     }
@@ -200,27 +199,27 @@ public class MFXComboBox<T> extends Control implements Validated<MFXDialogValida
         MFXContextMenuItem selectFirst = new MFXContextMenuItem()
                 .setIcon(new MFXFontIcon("mfx-first-page", 16))
                 .setText("Select First")
-                .setAction(event -> mockSelection.selectFirst());
+                .setAction(event -> selectionModel.selectFirst());
 
         MFXContextMenuItem selectNext = new MFXContextMenuItem()
                 .setIcon(new MFXFontIcon("mfx-next", 18))
                 .setText("Select Next")
-                .setAction(event -> mockSelection.selectNext());
+                .setAction(event -> selectionModel.selectNext());
 
         MFXContextMenuItem selectPrevious = new MFXContextMenuItem()
                 .setIcon(new MFXFontIcon("mfx-back", 18))
                 .setText("Select Previous")
-                .setAction(event -> mockSelection.selectPrevious());
+                .setAction(event -> selectionModel.selectPrevious());
 
         MFXContextMenuItem selectLast = new MFXContextMenuItem()
                 .setIcon(new MFXFontIcon("mfx-last-page", 16))
                 .setText("Select Last")
-                .setAction(event -> mockSelection.selectLast());
+                .setAction(event -> selectionModel.selectLast());
 
         MFXContextMenuItem resetSelection = new MFXContextMenuItem()
                 .setIcon(new MFXFontIcon("mfx-x", 16))
                 .setText("Clear Selection")
-                .setAction(event -> mockSelection.clearSelection());
+                .setAction(event -> selectionModel.clearSelection());
 
         setMFXContextMenu(
                 MFXContextMenu.Builder.build(this)
@@ -339,8 +338,8 @@ public class MFXComboBox<T> extends Control implements Validated<MFXDialogValida
     /**
      * @return the selection model associated to this combo box
      */
-    public ComboSelectionModelMock<T> getSelectionModel() {
-        return mockSelection;
+    public ComboBoxSelectionModel<T> getSelectionModel() {
+        return selectionModel;
     }
 
     //================================================================================

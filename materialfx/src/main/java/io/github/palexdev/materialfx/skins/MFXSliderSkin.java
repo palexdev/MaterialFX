@@ -393,11 +393,11 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
             wasSnapping = false;
             AnimationUtils.ParallelBuilder.build()
                     .add(
-                            new KeyFrame(Duration.millis(200), new KeyValue(bar.layoutXProperty(), layoutData.barX, MFXAnimationFactory.getInterpolatorV1()))
+                            new KeyFrame(Duration.millis(200), new KeyValue(bar.layoutXProperty(), layoutData.barX, MFXAnimationFactory.INTERPOLATOR_V1))
                     )
                     .add(
-                            new KeyFrame(Duration.millis(200), new KeyValue(thumb.layoutXProperty(), layoutData.thumbX, MFXAnimationFactory.getInterpolatorV1())),
-                            new KeyFrame(Duration.millis(200), new KeyValue(bar.widthProperty(), Math.abs(layoutData.barW), MFXAnimationFactory.getInterpolatorV1()))
+                            new KeyFrame(Duration.millis(200), new KeyValue(thumb.layoutXProperty(), layoutData.thumbX, MFXAnimationFactory.INTERPOLATOR_V1)),
+                            new KeyFrame(Duration.millis(200), new KeyValue(bar.widthProperty(), Math.abs(layoutData.barW), MFXAnimationFactory.INTERPOLATOR_V1))
                     )
                     .getAnimation()
                     .play();

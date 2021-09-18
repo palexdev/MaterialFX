@@ -21,7 +21,6 @@ package io.github.palexdev.materialfx.controls.legacy;
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
-import io.github.palexdev.materialfx.controls.cell.MFXListCell;
 import io.github.palexdev.materialfx.controls.enums.DialogType;
 import io.github.palexdev.materialfx.skins.legacy.MFXLegacyComboBoxSkin;
 import io.github.palexdev.materialfx.utils.NodeUtils;
@@ -191,7 +190,7 @@ public class MFXLegacyComboBox<T> extends ComboBox<T> implements Validated<MFXDi
     //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
-        setCellFactory(listCell -> new MFXListCell<>() {
+        setCellFactory(listCell -> new MFXLegacyListCell<>() {
             @Override
             protected void updateItem(T item, boolean empty) {
                 super.updateItem(item, empty);

@@ -224,7 +224,7 @@ public class NumberUtils {
     }
 
     /**
-     * Returns the given value as a string the the specified number of decimal places.
+     * Returns the given value as a string the specified number of decimal places.
      */
     public static String formatToString(double value, int decimalPrecision) {
         return String.format("%." + decimalPrecision + "f", value);

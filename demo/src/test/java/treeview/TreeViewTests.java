@@ -8,9 +8,11 @@ import javafx.collections.FXCollections;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxRobot;
-import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.framework.junit5.ApplicationExtension;
+import org.testfx.framework.junit5.Start;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,17 +21,18 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class TreeViewTests extends ApplicationTest {
+@ExtendWith(ApplicationExtension.class)
+public class TreeViewTests {
     private final FxRobot robot = new FxRobot();
     private final String desktopPath = System.getProperty("user.home") + "/Desktop";
     private MFXTreeView<String> treeView;
     private MFXTreeView<String> expandedTreeView;
     private MFXTreeView<String> complexTreeView;
 
-    @Override
+    @Start
     public void start(Stage stage) {
         buildTreeViews();
         StackPane stackPane = new StackPane(

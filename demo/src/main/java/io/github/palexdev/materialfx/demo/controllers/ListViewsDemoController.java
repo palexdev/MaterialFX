@@ -18,7 +18,11 @@
 
 package io.github.palexdev.materialfx.demo.controllers;
 
-import io.github.palexdev.materialfx.controls.*;
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXCheckListView;
+import io.github.palexdev.materialfx.controls.MFXLabel;
+import io.github.palexdev.materialfx.controls.MFXListView;
+import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import javafx.beans.property.ObjectProperty;
@@ -32,12 +36,13 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.net.URL;
-import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.stream.IntStream;
 
 public class ListViewsDemoController implements Initializable {
     private final Random random = new Random(System.currentTimeMillis());
@@ -55,31 +60,31 @@ public class ListViewsDemoController implements Initializable {
     private HBox newBox;
 
     @FXML
-    private MFXListView<String> stringView;
+    private MFXLegacyListView<String> stringView;
 
     @FXML
-    private MFXListView<Label> labelView;
+    private MFXLegacyListView<Label> labelView;
 
     @FXML
-    private MFXListView<HBox> hBoxView;
+    private MFXLegacyListView<HBox> hBoxView;
 
     @FXML
-    private MFXListView<String> cssView;
+    private MFXLegacyListView<String> cssView;
 
     @FXML
-    private MFXFlowlessListView<String> stringViewNew;
+    private MFXListView<String> stringViewNew;
 
     @FXML
-    private MFXFlowlessListView<MFXLabel> labelViewNew;
+    private MFXListView<MFXLabel> labelViewNew;
 
     @FXML
-    private MFXFlowlessListView<HBox> hBoxViewNew;
+    private MFXListView<HBox> hBoxViewNew;
 
     @FXML
-    private MFXFlowlessCheckListView<String> checkList;
+    private MFXCheckListView<String> checkList;
 
     @FXML
-    private MFXFlowlessListView<String> cssViewNew;
+    private MFXListView<String> cssViewNew;
 
     @FXML
     private MFXButton swapButton;
@@ -92,9 +97,6 @@ public class ListViewsDemoController implements Initializable {
 
     @FXML
     private Label mulLabel;
-
-    @FXML
-    private MFXCheckbox allowSelection;
 
     private ObservableList<String> stringList;
     private ObservableList<Label> labelsList;
@@ -119,8 +121,6 @@ public class ListViewsDemoController implements Initializable {
             }
         });
 
-        checkList.getSelectionModel().allowsSelectionProperty().bind(allowSelection.selectedProperty());
-
         //  LEGACY //
         stringView.setItems(stringList);
         labelView.setItems(labelsList);
@@ -142,60 +142,22 @@ public class ListViewsDemoController implements Initializable {
     }
 
     private void initLists() {
-        stringList = FXCollections.observableArrayList(List.of(
-                "String 0",
-                "String 1",
-                "String 2",
-                "String 3",
-                "String 4",
-                "String 5",
-                "String 6",
-                "String 7"
-        ));
+        stringList = FXCollections.observableArrayList();
+        IntStream.rangeClosed(0, 100_000).forEach(i -> stringList.add("String " + i));
 
         // LEGACY //
-        labelsList = FXCollections.observableArrayList(List.of(
-                createLegacyLabel("Label 0", "fas-home"),
-                createLegacyLabel("Label 1", "fas-star"),
-                createLegacyLabel("Label 2", "fas-heart"),
-                createLegacyLabel("Label 3", "fas-cocktail"),
-                createLegacyLabel("Label 4", "fas-anchor"),
-                createLegacyLabel("Label 5", "fas-apple-alt"),
-                createLegacyLabel("Label 6", "fas-bug"),
-                createLegacyLabel("Label 7", "fas-beer")
-        ));
-        hBoxesList = FXCollections.observableArrayList(List.of(
-                createHBox(0),
-                createHBox(1),
-                createHBox(2),
-                createHBox(3),
-                createHBox(4),
-                createHBox(5),
-                createHBox(6),
-                createHBox(7)
-        ));
+        labelsList = FXCollections.observableArrayList();
+        IntStream.rangeClosed(0, 100).forEach(i -> labelsList.add(createLegacyLabel("Label " + i, getRandomIcon())));
+
+        hBoxesList = FXCollections.observableArrayList();
+        IntStream.rangeClosed(0, 100).forEach(i -> hBoxesList.add(createHBox(i)));
 
         // NEW //
-        labelsListNew = FXCollections.observableArrayList(List.of(
-                createLabel("Label 0", "fas-home"),
-                createLabel("Label 1", "fas-star"),
-                createLabel("Label 2", "fas-heart"),
-                createLabel("Label 3", "fas-cocktail"),
-                createLabel("Label 4", "fas-anchor"),
-                createLabel("Label 5", "fas-apple-alt"),
-                createLabel("Label 6", "fas-bug"),
-                createLabel("Label 7", "fas-beer")
-        ));
-        hBoxesListNew = FXCollections.observableArrayList(List.of(
-                createHBox(0),
-                createHBox(1),
-                createHBox(2),
-                createHBox(3),
-                createHBox(4),
-                createHBox(5),
-                createHBox(6),
-                createHBox(7)
-        ));
+        labelsListNew = FXCollections.observableArrayList();
+        IntStream.rangeClosed(0, 100).forEach(i -> labelsListNew.add(createLabel("Label " + i, getRandomIcon())));
+
+        hBoxesListNew = FXCollections.observableArrayList();
+        IntStream.rangeClosed(0, 100).forEach(i -> hBoxesListNew.add(createHBox(i)));
     }
 
     private MFXLabel createLabel(String text, String iconDescription) {
@@ -227,7 +189,6 @@ public class ListViewsDemoController implements Initializable {
     private HBox createHBox(int index) {
         HBox hBox = new HBox(20);
         hBox.setPadding(new Insets(0, 10, 0, 10));
-        hBox.setPrefSize(200, 30);
 
         FontIcon city = new FontIcon("fas-city");
         city.setIconColor(Color.GOLD);
@@ -269,5 +230,11 @@ public class ListViewsDemoController implements Initializable {
             cssViewNew.setThumbColor(ColorUtils.getRandomColor());
             cssViewNew.setThumbHoverColor(ColorUtils.getRandomColor());
         }
+    }
+
+    private String getRandomIcon() {
+        FontAwesomeSolid[] resources = FontAwesomeSolid.values();
+        int random = (int) (Math.random() * resources.length);
+        return resources[random].getDescription();
     }
 }

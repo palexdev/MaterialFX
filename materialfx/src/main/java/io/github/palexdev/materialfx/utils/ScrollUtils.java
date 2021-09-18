@@ -18,9 +18,7 @@
 
 package io.github.palexdev.materialfx.utils;
 
-import io.github.palexdev.materialfx.controls.base.AbstractMFXFlowlessListView;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
-import io.github.palexdev.materialfx.controls.flowless.VirtualFlow;
 import javafx.animation.Animation;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
@@ -33,7 +31,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.util.Duration;
-import org.reactfx.value.Var;
 
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
@@ -41,7 +38,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * Utility class for ScrollPanes and MFXFlowlessListViews.
+ * Utility class for ScrollPanes.
  */
 public class ScrollUtils {
 
@@ -52,6 +49,10 @@ public class ScrollUtils {
 
         ScrollDirection(int intDirection) {
             this.intDirection = intDirection;
+        }
+
+        public int intDirection() {
+            return intDirection;
         }
     }
 
@@ -263,99 +264,5 @@ public class ScrollUtils {
                 });
             });
         }, true, true);
-    }
-
-    //================================================================================
-    // ListViews
-    //================================================================================
-
-    /**
-     * Adds a smooth scrolling effect to the given scroll pane,
-     * calls {@link #addSmoothScrolling(ScrollPane, double)} with a
-     * default speed value of 1.
-     */
-    public static void addSmoothScrolling(AbstractMFXFlowlessListView<?, ?, ?> listView) {
-        addSmoothScrolling(listView, 1);
-    }
-
-    /**
-     * Adds a smooth scrolling effect to the given scroll pane with the given scroll speed.
-     * Calls {@link #addSmoothScrolling(ScrollPane, double, double)}
-     * with a default trackPadAdjustment of 7.
-     */
-    public static void addSmoothScrolling(AbstractMFXFlowlessListView<?, ?, ?> listView, double speed) {
-        addSmoothScrolling(listView, speed, 7);
-    }
-
-    /**
-     * Adds a smooth scrolling effect to the given scroll pane with the given
-     * scroll speed and the given trackPadAdjustment.
-     * <p></p>
-     * The trackPadAdjustment is a value used to slow down the scrolling if a trackpad is used.
-     * This is kind of a workaround and it's not perfect, but at least it's way better than before.
-     * The default value is 7, tested up to 10, further values can cause scrolling misbehavior.
-     */
-    public static void addSmoothScrolling(AbstractMFXFlowlessListView<?, ?, ?> listView, double speed, double trackPadAdjustment) {
-        NodeUtils.waitForSkin(listView, () -> {
-            VirtualFlow<?, ?> flow = (VirtualFlow<?, ?>) listView.lookup(".virtual-flow");
-            smoothScroll(flow, speed, trackPadAdjustment);
-        }, true, true);
-    }
-
-    private static void smoothScroll(VirtualFlow<?, ?> flow, double speed, double trackPadAdjustment) {
-        final double[] frictions = {0.99, 0.1, 0.05, 0.04, 0.03, 0.02, 0.01, 0.04, 0.01, 0.008, 0.008, 0.008, 0.008, 0.0006, 0.0005, 0.00003, 0.00001};
-        final double[] derivatives = new double[frictions.length];
-        AtomicReference<Double> atomicSpeed = new AtomicReference<>(speed);
-
-        Timeline timeline = new Timeline();
-        AtomicReference<ScrollDirection> scrollDirection = new AtomicReference<>();
-        final EventHandler<MouseEvent> mouseHandler = event -> timeline.stop();
-        final EventHandler<ScrollEvent> scrollHandler = event -> {
-            if (event.getEventType() == ScrollEvent.SCROLL) {
-                scrollDirection.set(determineScrollDirection(event));
-                if (isTrackPad(event, scrollDirection.get())) {
-                    atomicSpeed.set(speed / trackPadAdjustment);
-                } else {
-                    atomicSpeed.set(speed);
-                }
-                derivatives[0] += scrollDirection.get().intDirection * atomicSpeed.get();
-                if (timeline.getStatus() == Animation.Status.STOPPED) {
-                    timeline.play();
-                }
-                event.consume();
-            }
-        };
-
-        if (flow.getParent() != null) {
-            flow.getParent().addEventFilter(MouseEvent.MOUSE_PRESSED, mouseHandler);
-        }
-        flow.parentProperty().addListener((observable, oldValue, newValue) -> {
-            if (oldValue != null) {
-                oldValue.removeEventFilter(MouseEvent.MOUSE_PRESSED, mouseHandler);
-            }
-            if (newValue != null) {
-                newValue.addEventFilter(MouseEvent.MOUSE_PRESSED, mouseHandler);
-            }
-        });
-        flow.addEventFilter(MouseEvent.MOUSE_PRESSED, mouseHandler);
-        flow.addEventFilter(ScrollEvent.ANY, scrollHandler);
-
-        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(3), (event) -> {
-            for (int i = 0; i < derivatives.length; i++) {
-                derivatives[i] *= frictions[i];
-            }
-            for (int i = 1; i < derivatives.length; i++) {
-                derivatives[i] += derivatives[i - 1];
-            }
-
-            double dy = derivatives[derivatives.length - 1];
-            Var<Double> scrollVar = (scrollDirection.get() == ScrollDirection.UP || scrollDirection.get() == ScrollDirection.DOWN) ? flow.estimatedScrollYProperty() : flow.estimatedScrollXProperty();
-            scrollVar.setValue(scrollVar.getValue() + dy);
-
-            if (Math.abs(dy) < 0.001) {
-                timeline.stop();
-            }
-        }));
-        timeline.setCycleCount(Animation.INDEFINITE);
     }
 }

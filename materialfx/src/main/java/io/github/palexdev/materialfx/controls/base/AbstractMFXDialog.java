@@ -109,7 +109,7 @@ public abstract class AbstractMFXDialog extends BorderPane {
     protected EventHandler<MouseEvent> closeHandler = event -> close();
 
     private final EventHandler<MouseEvent> overlayCloseHandler = mouseEvent -> {
-        if (!NodeUtils.inHierarchy(mouseEvent.getPickResult().getIntersectedNode(), AbstractMFXDialog.this)) {
+        if (!NodeUtils.inHierarchy(mouseEvent, AbstractMFXDialog.this)) {
             close();
         }
     };

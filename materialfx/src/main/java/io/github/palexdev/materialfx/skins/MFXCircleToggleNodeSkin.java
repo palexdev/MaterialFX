@@ -136,20 +136,20 @@ public class MFXCircleToggleNodeSkin extends SkinBase<MFXCircleToggleNode> {
         MFXCircleToggleNode toggleNode = getSkinnable();
 
         toggleNode.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            if (!NodeUtils.inHierarchy(event.getPickResult().getIntersectedNode(), circle)) {
+            if (!NodeUtils.inHierarchy(event, circle)) {
                 return;
             }
 
             Node leadingIcon = label.getLeadingIcon();
             Node trailingIcon = label.getTrailingIcon();
 
-            if (leadingIcon != null && NodeUtils.inHierarchy(event.getPickResult().getIntersectedNode(), leadingIcon)) {
+            if (leadingIcon != null && NodeUtils.inHierarchy(event, leadingIcon)) {
                 return;
             }
-            if (trailingIcon != null && NodeUtils.inHierarchy(event.getPickResult().getIntersectedNode(), trailingIcon)) {
+            if (trailingIcon != null && NodeUtils.inHierarchy(event, trailingIcon)) {
                 return;
             }
-            if (NodeUtils.inHierarchy(event.getPickResult().getIntersectedNode(), label)) {
+            if (NodeUtils.inHierarchy(event, label)) {
                 return;
             }
 

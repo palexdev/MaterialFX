@@ -31,6 +31,7 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.PickResult;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
@@ -139,6 +140,22 @@ public class NodeUtils {
             node = node.getParent();
         }
         return false;
+    }
+
+    // TODO to replace ALL!
+
+    /**
+     * Checks if the pressed node is in the hierarchy of the specified node, {@link PickResult#getIntersectedNode()}.
+     */
+    public static boolean inHierarchy(Node node, MouseEvent event) {
+        return inHierarchy(node, event.getPickResult().getIntersectedNode());
+    }
+
+    /**
+     * Checks if the specified node is in hierarchy of the pressed node, {@link PickResult#getIntersectedNode()}.
+     */
+    public static boolean inHierarchy(MouseEvent event, Node node) {
+        return inHierarchy(event.getPickResult().getIntersectedNode(), node);
     }
 
     /**
@@ -330,32 +347,32 @@ public class NodeUtils {
     }
 
     /**
-     * Convenience method to execute a given action after that the given control
+     * Convenience method to execute a given action after that the given node
      * has been laid out and its scene is not null anymore.
      * <p></p>
      * If the scene is not null when called, the action is executed immediately.
      * <p>
      * The listener is added only if the scene is null or the addListenerIfNotNull parameter is true.
      *
-     * @param control              the control to check for scene initialization
+     * @param node                 the node to check for scene initialization
      * @param action               the action to perform when the scene is not null
      * @param addListenerIfNotNull to specify if the listener should be added anyway even if the scene is not null
      * @param isOneShot            to specify if the listener added to the scene property
      *                             should be removed after it is not null anymore
      */
-    public static void waitForScene(Control control, Runnable action, boolean addListenerIfNotNull, boolean isOneShot) {
-        if (control.getScene() != null) {
+    public static void waitForScene(Node node, Runnable action, boolean addListenerIfNotNull, boolean isOneShot) {
+        if (node.getScene() != null) {
             action.run();
         }
 
-        if (control.getScene() == null || addListenerIfNotNull) {
-            control.sceneProperty().addListener(new ChangeListener<>() {
+        if (node.getScene() == null || addListenerIfNotNull) {
+            node.sceneProperty().addListener(new ChangeListener<>() {
                 @Override
                 public void changed(ObservableValue<? extends Scene> observable, Scene oldValue, Scene newValue) {
                     if (newValue != null) {
                         action.run();
                         if (isOneShot) {
-                            control.sceneProperty().removeListener(this);
+                            node.sceneProperty().removeListener(this);
                         }
                     }
                 }

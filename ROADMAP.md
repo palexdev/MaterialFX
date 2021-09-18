@@ -15,3 +15,4 @@
   <br></br>
 - [ ] *MFXToastNotification*
 - [ ] *Improve Notification System(?)*
+- [ ] *Introduce StringConverters for listviews' cells too?*

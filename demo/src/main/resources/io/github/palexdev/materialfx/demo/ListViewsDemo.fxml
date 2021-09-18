@@ -18,6 +18,7 @@
   ~ along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
+<?import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView?>
 <?import io.github.palexdev.materialfx.controls.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -31,7 +32,7 @@
                <Insets top="10.0" />
             </VBox.margin>
          </Label>
-         <MFXListView fx:id="stringView" depthLevel="LEVEL0" prefHeight="200.0" />
+         <MFXLegacyListView fx:id="stringView" depthLevel="LEVEL0" prefHeight="200.0" />
       </VBox>
       <VBox alignment="TOP_CENTER" spacing="10.0">
          <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="Labels">
@@ -39,7 +40,7 @@
                <Insets top="10.0" />
             </VBox.margin>
          </Label>
-         <MFXListView fx:id="labelView" depthLevel="LEVEL0" prefHeight="200.0" />
+         <MFXLegacyListView fx:id="labelView" depthLevel="LEVEL0" prefHeight="200.0" />
       </VBox>
       <VBox alignment="TOP_CENTER" spacing="10.0">
          <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="HBoxes">
@@ -47,7 +48,7 @@
                <Insets top="10.0" />
             </VBox.margin>
          </Label>
-         <MFXListView fx:id="hBoxView" depthLevel="LEVEL0" prefHeight="200.0" prefWidth="250.0" />
+         <MFXLegacyListView fx:id="hBoxView" depthLevel="LEVEL0" prefHeight="200.0" prefWidth="250.0" />
       </VBox>
       <VBox alignment="TOP_CENTER" spacing="10.0">
          <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="Customized and CSS">
@@ -55,7 +56,7 @@
                <Insets top="10.0" />
             </VBox.margin>
          </Label>
-         <MFXListView id="customView" fx:id="cssView" depthLevel="LEVEL0" prefHeight="200.0" />
+         <MFXLegacyListView id="customView" fx:id="cssView" depthLevel="LEVEL0" prefHeight="200.0" />
       </VBox>
    </HBox>
    <HBox fx:id="newBox" alignment="CENTER" layoutX="-5.0" layoutY="58.0" spacing="10.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="60.0">
@@ -65,7 +66,7 @@
                <Insets top="10.0" />
             </VBox.margin>
          </Label>
-         <MFXFlowlessListView fx:id="stringViewNew" prefHeight="220.0" prefWidth="150.0" />
+         <MFXListView fx:id="stringViewNew" prefHeight="250.0" prefWidth="150.0" />
          <Label fx:id="mulLabel" text="Multiple Selection On" />
       </VBox>
       <VBox alignment="TOP_CENTER" spacing="10.0">
@@ -74,7 +75,7 @@
                <Insets top="10.0" />
             </VBox.margin>
          </Label>
-         <MFXFlowlessListView fx:id="labelViewNew" prefHeight="220.0" prefWidth="150.0" />
+         <MFXListView fx:id="labelViewNew" prefHeight="250.0" prefWidth="150.0" />
       </VBox>
       <VBox alignment="TOP_CENTER" spacing="10.0">
          <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="HBoxes">
@@ -82,7 +83,7 @@
                <Insets top="10.0" />
             </VBox.margin>
          </Label>
-         <MFXFlowlessListView fx:id="hBoxViewNew" prefHeight="220.0" prefWidth="250.0" />
+         <MFXListView fx:id="hBoxViewNew" prefHeight="250.0" prefWidth="300.0" />
       </VBox>
       <VBox alignment="TOP_CENTER" spacing="10.0">
          <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="CheckListView">
@@ -90,8 +91,7 @@
                <Insets top="10.0" />
             </VBox.margin>
          </Label>
-         <MFXFlowlessCheckListView fx:id="checkList" prefHeight="220.0" prefWidth="150.0" />
-         <MFXCheckbox fx:id="allowSelection" markType="mfx-variant7-mark" text="Allow Selection" />
+         <MFXCheckListView fx:id="checkList" minHeight="250.0" prefHeight="250.0" prefWidth="150.0" />
       </VBox>
       <VBox alignment="TOP_CENTER" spacing="10.0">
          <Label id="label" alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="Customized and CSS">
@@ -99,7 +99,7 @@
                <Insets top="10.0" />
             </VBox.margin>
          </Label>
-         <MFXFlowlessListView id="customViewNew" fx:id="cssViewNew" prefHeight="220.0" prefWidth="150.0" />
+         <MFXListView fx:id="cssViewNew" prefHeight="250.0" prefWidth="150.0" />
       </VBox>
    </HBox>
    <MFXButton fx:id="swapButton" buttonType="RAISED" depthLevel="LEVEL1" layoutX="385.0" layoutY="461.0" prefWidth="150.0" text="Swap" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="385.0" AnchorPane.rightAnchor="385.0" />

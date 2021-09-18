@@ -52,7 +52,7 @@ public class CircularQueue<E> extends LinkedList<E> {
      */
     public void setSize(int size) {
         if (size == 0) {
-            throw new IllegalArgumentException("Size cannot be 0!!");
+            throw new IllegalArgumentException("Size cannot be 0!");
         }
 
         if (size < super.size()) {

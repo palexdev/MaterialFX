@@ -36,7 +36,7 @@ import java.util.function.Supplier;
  * Even if the {@link MFXContextMenu} builder allows to add any node to the items list, this
  * control is the recommended item to use when building {@code MFXContextMenus}.
  * <p></p>
- * Extends {@code Control} and defines its own skin. It allows to specify not only the text but also
+ * Extends {@code Control} and defines its own skin. It allows specifying not only the text but also
  * the accelerator string and an icon. Each of them has separate properties like: alignment, width and insets/padding.
  * <p></p>
  * Defines a property, {@link #actionProperty()} to allow the user to specify what to do when the mouse is pressed
@@ -44,7 +44,7 @@ import java.util.function.Supplier;
  * <p>
  * It also allows to specify a {@link Tooltip} by defining a tooltip supplier property.
  * <p></p>
- * An no-arg constructor is defines because this control is design with fluent api in mind, all the setters
+ * A no-arg constructor is defined because this control is design with fluent api in mind, all the setters
  * return the context menu item.
  * <p></p>
  * An example:
@@ -63,6 +63,11 @@ import java.util.function.Supplier;
  * A little note on the icon, please please don't use big nodes like buttons, it won't work,
  * the context menu item is not made to support such things. The icon should be a small node like
  * font icons.
+ * <p></p>
+ * A little note on the accelerator, the accelerator property is just a string property it won't add the needed
+ * event handler to the control, I think this is the best solution since handlers may also have some complex logic defined
+ * by the user (see MFXPasswordFieldSkin for example). A solution could be to give the opportunity of specifying an event handler supplier, but this would also
+ * mean that potentially for each menu item an event handler will be added to the node which is not a great idea for performance.
  */
 public class MFXContextMenuItem extends Control {
     //================================================================================

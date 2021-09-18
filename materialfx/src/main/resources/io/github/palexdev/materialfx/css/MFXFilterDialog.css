@@ -39,3 +39,8 @@
 .mfx-filter-dialog .mfx-button .mfx-ripple-generator {
     -mfx-ripple-color: derive(-mfx-base-color, 150%)
 }
+
+.mfx-filter-dialog .mfx-list-view .mfx-list-cell:hover {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}

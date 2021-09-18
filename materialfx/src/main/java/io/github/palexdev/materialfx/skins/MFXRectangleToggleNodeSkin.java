@@ -124,10 +124,10 @@ public class MFXRectangleToggleNodeSkin extends SkinBase<MFXRectangleToggleNode>
             Node leadingIcon = label.getLeadingIcon();
             Node trailingIcon = label.getTrailingIcon();
 
-            if (leadingIcon != null && NodeUtils.inHierarchy(event.getPickResult().getIntersectedNode(), leadingIcon)) {
+            if (leadingIcon != null && NodeUtils.inHierarchy(event, leadingIcon)) {
                 return;
             }
-            if (trailingIcon != null && NodeUtils.inHierarchy(event.getPickResult().getIntersectedNode(), trailingIcon)) {
+            if (trailingIcon != null && NodeUtils.inHierarchy(event, trailingIcon)) {
                 return;
             }
 
@@ -140,10 +140,10 @@ public class MFXRectangleToggleNodeSkin extends SkinBase<MFXRectangleToggleNode>
             Node trailingIcon = label.getTrailingIcon();
 
 
-            if (leadingIcon != null && NodeUtils.inHierarchy(event.getPickResult().getIntersectedNode(), leadingIcon)) {
+            if (leadingIcon != null && NodeUtils.inHierarchy(event, leadingIcon)) {
                 return;
             }
-            if (trailingIcon != null && NodeUtils.inHierarchy(event.getPickResult().getIntersectedNode(), trailingIcon)) {
+            if (trailingIcon != null && NodeUtils.inHierarchy(event, trailingIcon)) {
                 return;
             }
 

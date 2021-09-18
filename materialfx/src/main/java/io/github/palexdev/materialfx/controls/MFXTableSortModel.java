@@ -85,7 +85,7 @@ public class MFXTableSortModel<T> {
      */
     public void sortBy(MFXTableColumn<T> column, SortState sortState) {
         if (!tableColumns.contains(column)) {
-            throw new IllegalArgumentException("The specified column is not present in the TableView's columns list!!");
+            throw new IllegalArgumentException("The specified column is not present in the TableView's columns list!");
         }
 
         sortedColumn.set(new Pair<>(column, sortState));

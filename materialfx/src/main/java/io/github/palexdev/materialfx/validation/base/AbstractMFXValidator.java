@@ -18,7 +18,7 @@
 
 package io.github.palexdev.materialfx.validation.base;
 
-import io.github.palexdev.materialfx.beans.binding.BooleanListBinding;
+import io.github.palexdev.materialfx.bindings.BooleanListBinding;
 import io.github.palexdev.materialfx.utils.StringUtils;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.BooleanBinding;
@@ -82,7 +82,7 @@ public abstract class AbstractMFXValidator implements IMFXValidator {
      * Updates the {@link #validProperty()} value as follows:
      * <p>
      * Unbinds the property, then defines a new {@link BooleanBinding} variable
-     * instantiated as the {@link BooleanListBinding}, ({@code BooleanBinding binding = listBinding}),
+     * instantiated as the {@link BooleanListBinding}, ({@code BooleanBinding bindings = listBinding}),
      * then for each dependency applies the {@link BooleanBinding#and(ObservableBooleanValue)} method on
      * that variable with the dependency valid property as the argument.
      * <p>

@@ -139,7 +139,7 @@ public class MFXStageDialog {
 
         if (scrimBackground) {
             if (dialogStage.getOwner() == null || dialogStage.getModality().equals(Modality.NONE)) {
-                throw new IllegalStateException("Scrim background is set to true but the dialog stage owner is null or modality is not set!!");
+                throw new IllegalStateException("Scrim background is set to true but the dialog stage owner is null or modality is not set!");
             }
             if (animate) {
                 inAnimation.getChildren().add(
@@ -158,7 +158,7 @@ public class MFXStageDialog {
         }
         if (centerInOwner.get()) {
             if (dialogStage.getOwner() == null) {
-                throw new NullPointerException("Center in owner is set to true but dialog stage owner is null!!");
+                throw new NullPointerException("Center in owner is set to true but dialog stage owner is null!");
             }
         }
 

@@ -302,7 +302,7 @@ public class MFXStepperSkin extends SkinBase<MFXStepper> {
             return;
         }
 
-        KeyFrame kf = new KeyFrame(Duration.millis(stepper.getAnimationDuration()), new KeyValue(bar.widthProperty(), width, MFXAnimationFactory.getInterpolatorV2()));
+        KeyFrame kf = new KeyFrame(Duration.millis(stepper.getAnimationDuration()), new KeyValue(bar.widthProperty(), width, MFXAnimationFactory.INTERPOLATOR_V2));
         progressAnimation.getKeyFrames().setAll(kf);
         progressAnimation.playFromStart();
     }

@@ -555,8 +555,8 @@ public class AnimationUtils {
          */
         public TimelineBuilder hide(Duration duration, Node node) {
             add(
-                    KeyFrames.of(Duration.ZERO, node.opacityProperty(), 1.0, MFXAnimationFactory.getInterpolatorV1()),
-                    KeyFrames.of(duration, node.opacityProperty(), 0, MFXAnimationFactory.getInterpolatorV1())
+                    KeyFrames.of(Duration.ZERO, node.opacityProperty(), 1.0, MFXAnimationFactory.INTERPOLATOR_V1),
+                    KeyFrames.of(duration, node.opacityProperty(), 0, MFXAnimationFactory.INTERPOLATOR_V1)
             );
             return this;
         }

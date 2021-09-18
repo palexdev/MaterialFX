@@ -27,6 +27,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.scenicview.ScenicView;
 
 import java.io.IOException;
 
@@ -57,6 +58,8 @@ public class Demo extends Application {
         scene.setFill(Color.TRANSPARENT);
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        ScenicView.show(scene);
     }
 
     public static void main(String[] args) {

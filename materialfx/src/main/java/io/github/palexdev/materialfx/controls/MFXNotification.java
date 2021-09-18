@@ -178,7 +178,7 @@ public class MFXNotification extends Popup {
     @Override
     public void show(Window ownerWindow, double anchorX, double anchorY) {
         if (content == null) {
-            throw new NullPointerException("Notification content is null!!");
+            throw new NullPointerException("Notification content is null!");
         }
 
         if (animate) {

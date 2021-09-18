@@ -18,21 +18,20 @@
 
 package io.github.palexdev.materialfx.controls.base;
 
-import io.github.palexdev.materialfx.selection.base.IListSelectionModel;
+import io.github.palexdev.materialfx.selection.base.IMultipleSelectionModel;
+import io.github.palexdev.virtualizedfx.cell.Cell;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 
-import java.util.List;
 import java.util.function.Function;
 
 /**
- * Interface that defines the public api for all the list views based on Flowless.
+ * Interface that defines the public API for all the listviews based on VirtualizedFX.
  *
  * @param <T> the type of data within the ListView
  * @param <C> the type of cells that will be used
- * @param <S> the type of selection model
  */
-public interface IListView<T, C extends AbstractMFXFlowlessListCell<T>, S extends IListSelectionModel<T>> {
+public interface IListView<T, C extends Cell<T>> {
 
     /**
      * @return the items observable list
@@ -40,9 +39,14 @@ public interface IListView<T, C extends AbstractMFXFlowlessListCell<T>, S extend
     ObservableList<T> getItems();
 
     /**
-     * Set all the items to the specified list.
+     * The items list property.
      */
-    void setItems(List<T> items);
+    ObjectProperty<ObservableList<T>> itemsProperty();
+
+    /**
+     * Replaces the items list with the given one.
+     */
+    void setItems(ObservableList<T> items);
 
     /**
      * @return the function used to build the list cells
@@ -60,17 +64,7 @@ public interface IListView<T, C extends AbstractMFXFlowlessListCell<T>, S extend
     void setCellFactory(Function<T, C> cellFactory);
 
     /**
-     * @return the list view selection model
+     * @return the listview selection model
      */
-    S getSelectionModel();
-
-    /**
-     * @return the list view selection model property
-     */
-    ObjectProperty<S> selectionModelProperty();
-
-    /**
-     * Replaces the selection model with the given one.
-     */
-    void setSelectionModel(S selectionModel);
+    IMultipleSelectionModel<T> getSelectionModel();
 }

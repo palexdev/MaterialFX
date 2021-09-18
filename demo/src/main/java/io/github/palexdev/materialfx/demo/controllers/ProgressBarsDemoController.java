@@ -56,15 +56,15 @@ public class ProgressBarsDemoController implements Initializable {
 
         Animation a1 = AnimationUtils.TimelineBuilder.build()
                 .add(
-                        KeyFrames.of(2000, determinate.progressProperty(), 0.3, MFXAnimationFactory.getInterpolatorV1()),
-                        KeyFrames.of(4000, determinate.progressProperty(), 0.6, MFXAnimationFactory.getInterpolatorV1()),
-                        KeyFrames.of(6000, determinate.progressProperty(), 1.0, MFXAnimationFactory.getInterpolatorV1())
+                        KeyFrames.of(2000, determinate.progressProperty(), 0.3, MFXAnimationFactory.INTERPOLATOR_V1),
+                        KeyFrames.of(4000, determinate.progressProperty(), 0.6, MFXAnimationFactory.INTERPOLATOR_V1),
+                        KeyFrames.of(6000, determinate.progressProperty(), 1.0, MFXAnimationFactory.INTERPOLATOR_V1)
                 )
                 .getAnimation();
 
         Animation a2 = AnimationUtils.TimelineBuilder.build()
                 .add(
-                        KeyFrames.of(1000, determinate.progressProperty(), 0, MFXAnimationFactory.getInterpolatorV2())
+                        KeyFrames.of(1000, determinate.progressProperty(), 0, MFXAnimationFactory.INTERPOLATOR_V2)
                 )
                 .getAnimation();
 

@@ -34,6 +34,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
@@ -91,19 +92,23 @@ public class MFXFilterDialog<T> extends MFXDialog {
         StackPane stackPane = new StackPane();
         stackPane.setPadding(new Insets(10.0));
 
-        MFXListView<MFXEvaluationBox> listView = new MFXListView<>();
+        MFXListView<MFXEvaluationBox> listView = new MFXListView<>(evaluationBoxes);
+        listView.getStylesheets().add(STYLESHEET);
         listView.setDepthLevel(DepthLevel.LEVEL0);
         listView.setHideScrollBars(true);
-        listView.setItems(evaluationBoxes);
         listView.setCellFactory(box -> {
-            MFXListCell<MFXEvaluationBox> cell = new MFXListCell<>() {
+            box.setMaxWidth(Double.MAX_VALUE);
+            MFXListCell<MFXEvaluationBox> cell = new MFXListCell<>(listView, box) {
+                @Override protected void setupRippleGenerator() {}
+
                 @Override
-                protected void setupRippleGenerator() {
+                protected void render(MFXEvaluationBox data) {
+                    if (data != null) {
+                        getChildren().setAll(data);
+                    }
                 }
             };
             cell.addEventHandler(MouseEvent.MOUSE_PRESSED, Event::consume);
-            cell.setHoverColor(Color.WHITE);
-            cell.setSelectedColor(Color.WHITE);
             return cell;
         });
         listView.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -210,6 +215,7 @@ public class MFXFilterDialog<T> extends MFXDialog {
      */
     private void addFilterBox(EvaluationMode mode) {
         MFXEvaluationBox evaluationBox = new MFXEvaluationBox(mode);
+        HBox.setHgrow(evaluationBox, Priority.ALWAYS);
         evaluationBox.getRemoveIcon().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> evaluationBoxes.remove(evaluationBox));
         evaluationBoxes.add(evaluationBox);
     }

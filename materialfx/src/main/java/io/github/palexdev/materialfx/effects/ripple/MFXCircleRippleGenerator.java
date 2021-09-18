@@ -158,7 +158,7 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
      */
     protected Animation getBackgroundAnimation() {
         if (getClipSupplier() == null || getClipSupplier().get() == null) {
-            throw new NullPointerException("RippleGenerator cannot animate background because clip supplier is null!!");
+            throw new NullPointerException("RippleGenerator cannot animate background because clip supplier is null!");
         }
 
         Shape shape = getClipSupplier().get();
@@ -372,7 +372,7 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
             .add(
                     KeyFrames.of(150, radiusProperty(), getRippleRadius()),
                     KeyFrames.of(400, radiusProperty(), (getRippleRadius() * mul)),
-                    KeyFrames.of(1200, opacityProperty(), 0, MFXAnimationFactory.getInterpolatorV2()),
+                    KeyFrames.of(1200, opacityProperty(), 0, MFXAnimationFactory.INTERPOLATOR_V2),
                     KeyFrames.of(500, event -> animationsStack.pop())
             ).getAnimation();
         }

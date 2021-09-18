@@ -145,7 +145,7 @@ public class LoaderUtils {
      */
     public static void checkFxmlFile(URL fxmlFile) {
         if (!fxmlFile.toString().endsWith(".fxml")) {
-            throw new IllegalArgumentException("The URL is invalid, doesn't end with '.fxml'!!");
+            throw new IllegalArgumentException("The URL is invalid, doesn't end with '.fxml'!");
         }
     }
 

@@ -19,262 +19,229 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.controls.base.AbstractMFXListView;
 import io.github.palexdev.materialfx.controls.cell.MFXListCell;
-import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.skins.MFXListViewSkin;
-import io.github.palexdev.materialfx.utils.ColorUtils;
+import io.github.palexdev.materialfx.utils.ListChangeProcessor;
+import io.github.palexdev.virtualizedfx.beans.NumberRange;
+import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
+import io.github.palexdev.virtualizedfx.utils.ListChangeHelper;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.css.*;
-import javafx.scene.control.ListView;
+import javafx.geometry.Orientation;
 import javafx.scene.control.Skin;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.util.Duration;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
- * This is the implementation of a ListView restyled to comply with modern standards.
+ * Implementation of a check listview based on VirtualizedFX.
  * <p>
- * Extends {@code ListView}, redefines the style class to "mfx-list-view for usage in CSS,
- * for cells it uses {@link MFXListCell} by default.
+ * Extends {@link AbstractMFXListView}.
+ * <p></p>
+ * Default cell: {@link MFXListCell}.
+ * <p>
+ * Default skin: {@link MFXListViewSkin}.
+ * <p></p>
+ * Holds the reference to the VirtualFlow used by the list, this allows to expose some
+ * methods from it as delegate method thus allowing to:
+ * <p> - Manually scroll by a certain amount of pixels
+ * <p> - Manually scroll to a given index (also first and last)
+ * <p> - Manually scroll to the given pixel value
+ * <p> - Set the scrollbar's speed
+ * <p> - Get the vertical or horizontal position of the list
+ * <p> - Configure extra features of the VirtualFlow, {@link #features()}
+ * <p> - Get the currently shown cells, or a specific cell by index
+ * <p></p>
+ * It's also responsible for updating the selection model in case the items list property
+ * changes, or changes occur in the items list.
  */
-public class MFXListView<T> extends ListView<T> {
+public class MFXListView<T> extends AbstractMFXListView<T, MFXListCell<T>> {
     //================================================================================
     // Properties
     //================================================================================
-    private static final StyleablePropertyFactory<MFXListView<?>> FACTORY = new StyleablePropertyFactory<>(ListView.getClassCssMetaData());
-    private final String STYLE_CLASS = "mfx-legacy-list-view";
+    private final String STYLE_CLASS = "mfx-list-view";
     private final String STYLESHEET = MFXResourcesLoader.load("css/MFXListView.css");
+    private final SimpleVirtualFlow<T, MFXListCell<T>> virtualFlow;
+    private final ListChangeListener<? super T> itemsChanged = this::itemsChanged;
 
     //================================================================================
     // Constructors
     //================================================================================
     public MFXListView() {
+        virtualFlow = SimpleVirtualFlow.Builder.create(
+                itemsProperty(),
+                null,
+                Orientation.VERTICAL
+        );
         initialize();
     }
 
-    public MFXListView(ObservableList<T> observableList) {
-        super(observableList);
+    public MFXListView(ObservableList<T> items) {
+        super(items);
+        virtualFlow = SimpleVirtualFlow.Builder.create(
+                itemsProperty(),
+                null,
+                Orientation.VERTICAL
+        );
         initialize();
     }
 
     //================================================================================
     // Methods
     //================================================================================
-    private void initialize() {
-        getStyleClass().add(STYLE_CLASS);
-        setCellFactory(cell -> new MFXListCell<>());
-        addListeners();
-    }
-
-    /**
-     * Adds listeners for colors change to the scrollbars and calls setColors().
-     */
-    private void addListeners() {
-        this.trackColor.addListener((observable, oldValue, newValue) -> {
-            if (!newValue.equals(oldValue)) {
-                setColors();
-            }
+    @Override
+    protected void initialize() {
+        super.initialize();
+        getStyleClass().setAll(STYLE_CLASS);
+        items.addListener((observable, oldValue, newValue) -> {
+            oldValue.removeListener(itemsChanged);
+            newValue.addListener(itemsChanged);
         });
-
-        this.thumbColor.addListener((observable, oldValue, newValue) -> {
-            if (!newValue.equals(oldValue)) {
-                setColors();
-            }
-        });
-
-        this.thumbHoverColor.addListener((observable, oldValue, newValue) -> {
-            if (!newValue.equals(oldValue)) {
-                setColors();
-            }
-        });
+        getItems().addListener(this::itemsChanged);
     }
 
-    /**
-     * Sets the CSS looked-up colors
-     */
-    private void setColors() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("-mfx-track-color: ").append(ColorUtils.toCss(trackColor.get()))
-                .append(";\n-mfx-thumb-color: ").append(ColorUtils.toCss(thumbColor.get()))
-                .append(";\n-mfx-thumb-hover-color: ").append(ColorUtils.toCss(thumbHoverColor.get()))
-                .append(";");
-        setStyle(sb.toString());
-    }
+    protected void itemsChanged(ListChangeListener.Change<? extends T> change) {
+        if (getSelectionModel().getSelection().isEmpty()) return;
 
-    //================================================================================
-    // ScrollBars Properties
-    //================================================================================
-
-    /**
-     * Specifies the color of the scrollbars' track.
-     */
-    private final ObjectProperty<Paint> trackColor = new SimpleObjectProperty<>(Color.rgb(132, 132, 132));
-
-    /**
-     * Specifies the color of the scrollbars' thumb.
-     */
-    private final ObjectProperty<Paint> thumbColor = new SimpleObjectProperty<>(Color.rgb(137, 137, 137));
-
-    /**
-     * Specifies the color of the scrollbars' thumb when mouse hover.
-     */
-    private final ObjectProperty<Paint> thumbHoverColor = new SimpleObjectProperty<>(Color.rgb(89, 88, 91));
-
-    /**
-     * Specifies the time after which the scrollbars are hidden.
-     */
-    private final ObjectProperty<Duration> hideAfter = new SimpleObjectProperty<>(Duration.seconds(1));
-
-    //================================================================================
-    // Styleable Properties
-    //================================================================================
-
-    /**
-     * Specifies if the scrollbars should be hidden when the mouse is not on the list.
-     */
-    private final StyleableBooleanProperty hideScrollBars = new SimpleStyleableBooleanProperty(
-            StyleableProperties.HIDE_SCROLLBARS,
-            this,
-            "hideScrollBars",
-            false
-    );
-
-    /**
-     * Specifies the shadow strength around the control.
-     */
-    private final StyleableObjectProperty<DepthLevel> depthLevel = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.DEPTH_LEVEL,
-            this,
-            "depthLevel",
-            DepthLevel.LEVEL2
-    );
-
-    public Paint getTrackColor() {
-        return trackColor.get();
-    }
-
-    public ObjectProperty<Paint> trackColorProperty() {
-        return trackColor;
-    }
-
-    public void setTrackColor(Paint trackColor) {
-        this.trackColor.set(trackColor);
-    }
-
-    public Paint getThumbColor() {
-        return thumbColor.get();
-    }
-
-    public ObjectProperty<Paint> thumbColorProperty() {
-        return thumbColor;
-    }
-
-    public void setThumbColor(Paint thumbColor) {
-        this.thumbColor.set(thumbColor);
-    }
-
-    public Paint getThumbHoverColor() {
-        return thumbHoverColor.get();
-    }
-
-    public ObjectProperty<Paint> thumbHoverColorProperty() {
-        return thumbHoverColor;
-    }
-
-    public void setThumbHoverColor(Paint thumbHoverColor) {
-        this.thumbHoverColor.set(thumbHoverColor);
-    }
-
-    public Duration getHideAfter() {
-        return hideAfter.get();
-    }
-
-    public ObjectProperty<Duration> hideAfterProperty() {
-        return hideAfter;
-    }
-
-    public void setHideAfter(Duration hideAfter) {
-        this.hideAfter.set(hideAfter);
-    }
-
-    public boolean isHideScrollBars() {
-        return hideScrollBars.get();
-    }
-
-    public StyleableBooleanProperty hideScrollBarsProperty() {
-        return hideScrollBars;
-    }
-
-    public void setHideScrollBars(boolean hideScrollBars) {
-        this.hideScrollBars.set(hideScrollBars);
-    }
-
-    public DepthLevel getDepthLevel() {
-        return depthLevel.get();
-    }
-
-    public StyleableObjectProperty<DepthLevel> depthLevelProperty() {
-        return depthLevel;
-    }
-
-    public void setDepthLevel(DepthLevel depthLevel) {
-        this.depthLevel.set(depthLevel);
-    }
-
-    //================================================================================
-    // CssMetaData
-    //================================================================================
-    private static class StyleableProperties {
-        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
-
-        private static final CssMetaData<MFXListView<?>, Boolean> HIDE_SCROLLBARS =
-                FACTORY.createBooleanCssMetaData(
-                        "-mfx-hide-scrollbars",
-                        MFXListView::hideScrollBarsProperty,
-                        false
-                );
-
-        private static final CssMetaData<MFXListView<?>, DepthLevel> DEPTH_LEVEL =
-                FACTORY.createEnumCssMetaData(
-                        DepthLevel.class,
-                        "-mfx-depth-level",
-                        MFXListView::depthLevelProperty,
-                        DepthLevel.LEVEL2
-                );
-
-        static {
-            List<CssMetaData<? extends Styleable, ?>> lsvCssMetaData = new ArrayList<>(ListView.getClassCssMetaData());
-            Collections.addAll(lsvCssMetaData, HIDE_SCROLLBARS, DEPTH_LEVEL);
-            cssMetaDataList = Collections.unmodifiableList(lsvCssMetaData);
+        if (change.getList().isEmpty()) {
+            getSelectionModel().clearSelection();
+            return;
         }
 
+        ListChangeHelper.Change c = ListChangeHelper.processChange(change, NumberRange.of(0, Integer.MAX_VALUE));
+        ListChangeProcessor updater = new ListChangeProcessor(new HashSet<>(getSelectionModel().getSelection().keySet()));
+        c.processReplacement((changed, removed) -> getSelectionModel().replaceSelection(changed.toArray(new Integer[0])));
+        c.processAddition((from, to, added) -> {
+            updater.computeAddition(added.size(), from);
+            getSelectionModel().replaceSelection(updater.getIndexes().toArray(new Integer[0]));
+        });
+        c.processRemoval((from, to, removed) -> {
+            updater.computeRemoval(removed, from);
+            getSelectionModel().replaceSelection(updater.getIndexes().toArray(new Integer[0]));
+        });
     }
 
-    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
-        return StyleableProperties.cssMetaDataList;
+    //================================================================================
+    // Delegate Methods
+    //================================================================================
+
+    /**
+     * Delegate method for {@link SimpleVirtualFlow#getCell(int)}.
+     */
+    public MFXListCell<T> getCell(int index) {
+        return virtualFlow.getCell(index);
+    }
+
+    /**
+     * Delegate method for {@link SimpleVirtualFlow#getCells()}.
+     */
+    public Map<Integer, MFXListCell<T>> getCells() {
+        return virtualFlow.getCells();
+    }
+
+    /**
+     * Delegate method for {@link SimpleVirtualFlow#scrollBy(double)}.
+     */
+    public void scrollBy(double pixels) {
+        virtualFlow.scrollBy(pixels);
+    }
+
+    /**
+     * Delegate method for {@link SimpleVirtualFlow#scrollTo(int)}.
+     */
+    public void scrollTo(int index) {
+        virtualFlow.scrollTo(index);
+    }
+
+    /**
+     * Delegate method for {@link SimpleVirtualFlow#scrollToFirst()}.
+     */
+    public void scrollToFirst() {
+        virtualFlow.scrollToFirst();
+    }
+
+    /**
+     * Delegate method for {@link SimpleVirtualFlow#scrollToLast()}.
+     */
+    public void scrollToLast() {
+        virtualFlow.scrollToLast();
+    }
+
+    /**
+     * Delegate method for {@link SimpleVirtualFlow#scrollToPixel(double)}.
+     */
+    public void scrollToPixel(double pixel) {
+        virtualFlow.scrollToPixel(pixel);
+    }
+
+    /**
+     * Delegate method for {@link SimpleVirtualFlow#setHSpeed(double, double)}.
+     */
+    public void setHSpeed(double unit, double block) {
+        virtualFlow.setHSpeed(unit, block);
+    }
+
+    /**
+     * Delegate method for {@link SimpleVirtualFlow#setVSpeed(double, double)}.
+     */
+    public void setVSpeed(double unit, double block) {
+        virtualFlow.setVSpeed(unit, block);
+    }
+
+    /**
+     * Delegate method for {@link SimpleVirtualFlow#getVerticalPosition()}.
+     */
+    public double getVerticalPosition() {
+        return virtualFlow.getVerticalPosition();
+    }
+
+    /**
+     * Delegate method for {@link SimpleVirtualFlow#getHorizontalPosition()}.
+     */
+    public double getHorizontalPosition() {
+        return virtualFlow.getHorizontalPosition();
+    }
+
+    /**
+     * Delegate method for {@link SimpleVirtualFlow#features()}.
+     */
+    public SimpleVirtualFlow<T, MFXListCell<T>>.Features features() {
+        return virtualFlow.features();
     }
 
     //================================================================================
     // Override Methods
     //================================================================================
     @Override
+    protected void setDefaultCellFactory() {
+        setCellFactory(item -> new MFXListCell<>(this, item));
+    }
+
+    @Override
+    public Function<T, MFXListCell<T>> getCellFactory() {
+        return virtualFlow.getCellFactory();
+    }
+
+    @Override
+    public ObjectProperty<Function<T, MFXListCell<T>>> cellFactoryProperty() {
+        return virtualFlow.cellFactoryProperty();
+    }
+
+    @Override
+    public void setCellFactory(Function<T, MFXListCell<T>> cellFactory) {
+        virtualFlow.setCellFactory(cellFactory);
+    }
+
+    @Override
     protected Skin<?> createDefaultSkin() {
-        return new MFXListViewSkin<>(this);
+        return new MFXListViewSkin<>(this, virtualFlow);
     }
 
     @Override
     public String getUserAgentStylesheet() {
         return STYLESHEET;
-    }
-
-    @Override
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return MFXListView.getControlCssMetaDataList();
     }
 }

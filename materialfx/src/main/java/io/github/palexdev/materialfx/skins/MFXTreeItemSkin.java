@@ -262,7 +262,7 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
                 return;
             }
 
-            if (!NodeUtils.inHierarchy(event.getPickResult().getIntersectedNode(), cell.getDisclosureNode())) {
+            if (!NodeUtils.inHierarchy(event, cell.getDisclosureNode())) {
                 item.getSelectionModel().select(item, event);
             }
         });
@@ -304,8 +304,8 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
 
         animation = (ParallelTransition) AnimationUtils.ParallelBuilder.build()
                 .add(
-                        KeyFrames.of(item.getAnimationDuration(), box.prefHeightProperty(), fHeight, MFXAnimationFactory.getInterpolatorV2()),
-                        KeyFrames.of(250, cell.getDisclosureNode().rotateProperty(), (item.isExpanded() ? 90 : 0), MFXAnimationFactory.getInterpolatorV2())
+                        KeyFrames.of(item.getAnimationDuration(), box.prefHeightProperty(), fHeight, MFXAnimationFactory.INTERPOLATOR_V2),
+                        KeyFrames.of(250, cell.getDisclosureNode().rotateProperty(), (item.isExpanded() ? 90 : 0), MFXAnimationFactory.INTERPOLATOR_V2)
                 ).getAnimation();
 
         item.animationRunningProperty().bind(animation.statusProperty().isEqualTo(Animation.Status.RUNNING));

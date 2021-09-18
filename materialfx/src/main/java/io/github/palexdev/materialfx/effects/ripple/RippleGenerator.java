@@ -288,7 +288,7 @@ public class RippleGenerator extends Group {
             }
 
             sequentialTransition.getChildren().addAll(inAnimation, outAnimation);
-            parallelTransition.setInterpolator(MFXAnimationFactory.getInterpolatorV2());
+            parallelTransition.setInterpolator(MFXAnimationFactory.INTERPOLATOR_V2);
             parallelTransition.getChildren().add(sequentialTransition);
         }
     }

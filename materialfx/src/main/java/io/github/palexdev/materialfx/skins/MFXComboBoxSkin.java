@@ -20,15 +20,16 @@ package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
-import io.github.palexdev.materialfx.controls.MFXFlowlessListView;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXLabel;
+import io.github.palexdev.materialfx.controls.MFXListView;
+import io.github.palexdev.materialfx.controls.cell.MFXListCell;
 import io.github.palexdev.materialfx.controls.enums.Styles;
 import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
-import io.github.palexdev.materialfx.selection.ComboSelectionModelMock;
+import io.github.palexdev.materialfx.selection.ComboBoxSelectionModel;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
 import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
 import io.github.palexdev.materialfx.utils.LabelUtils;
@@ -40,7 +41,6 @@ import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
-import javafx.event.EventHandler;
 import javafx.geometry.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
@@ -65,8 +65,7 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
 
     private final MFXIconWrapper icon;
     private final PopupControl popup;
-    private final MFXFlowlessListView<T> listView;
-    private final EventHandler<MouseEvent> popupHandler;
+    private final MFXListView<T> listView;
 
     private final Line unfocusedLine;
     private final Line focusedLine;
@@ -122,16 +121,18 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         container = new HBox(20, valueLabel);
         container.setAlignment(Pos.CENTER_LEFT);
 
-        listView = new MFXFlowlessListView<>();
-        listView.getStylesheets().add(comboBox.getUserAgentStylesheet());
-        listView.getSelectionModel().setAllowsMultipleSelection(false);
-        popup = buildPopup();
-
-        popupHandler = event -> {
-            if (popup.isShowing() && !NodeUtils.inHierarchy(event.getPickResult().getIntersectedNode(), comboBox)) {
-                popup.hide();
+        listView = new MFXListView<>();
+        listView.setCellFactory(item -> new MFXListCell<>(listView, item) {
+            @Override
+            protected void updateSelection(MouseEvent event) {
+                if (comboBox.getSelectionModel().isBound() || comboBox.selectedValueProperty().isBound()) return;
+                super.updateSelection(event);
             }
-        };
+        });
+        listView.getSelectionModel().setAllowsMultipleSelection(false);
+        listView.getStylesheets().add(comboBox.getUserAgentStylesheet());
+
+        popup = buildPopup();
 
         if (comboBox.getComboStyle() != Styles.ComboBoxStyles.STYLE2) {
             getChildren().addAll(container, icon, unfocusedLine, focusedLine, validate);
@@ -153,11 +154,11 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
     /**
      * Initialized the combo box value if the selected index specified by the selection model is not -1.
      *
-     * @see ComboSelectionModelMock
+     * @see ComboBoxSelectionModel
      */
     private void initSelection() {
         MFXComboBox<T> comboBox = getSkinnable();
-        ComboSelectionModelMock<T> selectionModel = comboBox.getSelectionModel();
+        ComboBoxSelectionModel<T> selectionModel = comboBox.getSelectionModel();
 
         if (selectionModel.getSelectedIndex() != -1 && comboBox.getItems().isEmpty()) {
             selectionModel.clearSelection();
@@ -167,10 +168,7 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         if (selectionModel.getSelectedIndex() != -1) {
             int index = selectionModel.getSelectedIndex();
             if (index < comboBox.getItems().size()) {
-                T item = comboBox.getItems().get(index);
-                selectionModel.selectItem(item);
-                listView.getSelectionModel().select(index, item, null);
-                comboBox.setSelectedValue(item);
+                listView.getSelectionModel().selectIndex(index);
             } else {
                 comboBox.getSelectionModel().clearSelection();
             }
@@ -273,23 +271,23 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
      */
     private void selectionBehavior() {
         MFXComboBox<T> comboBox = getSkinnable();
-        ComboSelectionModelMock<T> selectionModel = comboBox.getSelectionModel();
+        ComboBoxSelectionModel<T> selectionModel = comboBox.getSelectionModel();
 
-        selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                listView.getSelectionModel().select(selectionModel.getSelectedIndex(), newValue, null);
+        selectionModel.selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.intValue() != -1) {
+                listView.getSelectionModel().selectIndex(newValue.intValue());
             } else {
                 listView.getSelectionModel().clearSelection();
             }
-            if (oldValue != newValue) {
-                comboBox.setSelectedValue(newValue);
-            }
+            comboBox.setSelectedValue(selectionModel.getSelectedItem());
         });
 
-        listView.getSelectionModel().selectedItemsProperty().addListener((MapChangeListener<? super Integer, ? super T>) change -> {
-            T item = change.getValueAdded();
-            if (item != null) {
-                selectionModel.selectItem(item);
+        listView.getSelectionModel().selectionProperty().addListener((MapChangeListener<? super Integer, ? super T>) change -> {
+            if (change.wasRemoved() || selectionModel.isBound() || comboBox.selectedValueProperty().isBound()) return;
+
+            Integer index = change.getKey();
+            if (index != -1) {
+                selectionModel.selectIndex(index);
             }
         });
 
@@ -304,9 +302,7 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
     }
 
     /**
-     * Specifies the behavior for maxPopupHeight and maxPopupWidth properties, also adds the
-     * {@link #popupHandler} to the scene to close the popup in case it is open and the mouse is not
-     * pressed on the combo box.
+     * Specifies the behavior for maxPopupHeight and maxPopupWidth properties.
      */
     private void popupBehavior() {
         MFXComboBox<T> comboBox = getSkinnable();
@@ -323,16 +319,6 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
                 listView.maxWidthProperty().unbind();
             } else {
                 listView.maxWidthProperty().bind(comboBox.maxPopupWidthProperty());
-            }
-        });
-
-        NodeUtils.waitForSkin(comboBox, () -> comboBox.getScene().addEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler), true, false);
-        comboBox.sceneProperty().addListener((observable, oldValue, newValue) -> {
-            if (oldValue != null && newValue != oldValue) {
-                oldValue.removeEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
-            }
-            if (newValue != null) {
-                newValue.addEventFilter(MouseEvent.MOUSE_PRESSED, popupHandler);
             }
         });
     }
@@ -420,6 +406,7 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
         MFXComboBox<T> comboBox = getSkinnable();
 
         PopupControl popupControl = new PopupControl();
+        popupControl.setAutoHide(true);
 
         listView.setItems(comboBox.getItems());
         popupControl.getScene().setRoot(listView);
@@ -482,7 +469,7 @@ public class MFXComboBoxSkin<T> extends SkinBase<MFXComboBox<T>> {
             scaleTransition.setFromX(1.0);
             scaleTransition.setToX(0.0);
         }
-        scaleTransition.setInterpolator(MFXAnimationFactory.getInterpolatorV2());
+        scaleTransition.setInterpolator(MFXAnimationFactory.INTERPOLATOR_V2);
         scaleTransition.play();
     }
 

@@ -41,7 +41,7 @@ public class BindingUtils {
     }
 
     /**
-     * Creates a new {@link IntegerProperty} and binds it to the given binding/expression.
+     * Creates a new {@link IntegerProperty} and binds it to the given bindings/expression.
      */
     public static IntegerProperty toProperty(IntegerExpression expression) {
         if (expression == null) {
@@ -53,7 +53,7 @@ public class BindingUtils {
     }
 
     /**
-     * Creates a new {@link LongProperty} and binds it to the given binding/expression.
+     * Creates a new {@link LongProperty} and binds it to the given bindings/expression.
      */
     public static LongProperty toProperty(LongExpression expression) {
         if (expression == null) {
@@ -65,7 +65,7 @@ public class BindingUtils {
     }
 
     /**
-     * Creates a new {@link FloatProperty} and binds it to the given binding/expression.
+     * Creates a new {@link FloatProperty} and binds it to the given bindings/expression.
      */
     public static FloatProperty toProperty(FloatExpression expression) {
         if (expression == null) {
@@ -77,7 +77,7 @@ public class BindingUtils {
     }
 
     /**
-     * Creates a new {@link DoubleProperty} and binds it to the given binding/expression.
+     * Creates a new {@link DoubleProperty} and binds it to the given bindings/expression.
      */
     public static DoubleProperty toProperty(DoubleExpression expression) {
         if (expression == null) {
@@ -89,7 +89,7 @@ public class BindingUtils {
     }
 
     /**
-     * Creates a new {@link BooleanProperty} and binds it to the given binding/expression.
+     * Creates a new {@link BooleanProperty} and binds it to the given bindings/expression.
      */
     public static BooleanProperty toProperty(BooleanExpression expression) {
         if (expression == null) {
@@ -101,7 +101,7 @@ public class BindingUtils {
     }
 
     /**
-     * Creates a new {@link StringProperty} and binds it to the given binding/expression.
+     * Creates a new {@link StringProperty} and binds it to the given bindings/expression.
      */
     public static StringProperty toProperty(StringExpression expression) {
         if (expression == null) {

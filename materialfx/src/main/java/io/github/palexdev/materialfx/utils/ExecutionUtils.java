@@ -28,6 +28,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
 /**
  * Utils class to help with concurrency and callables.
@@ -42,8 +44,8 @@ public class ExecutionUtils {
      * Invokes a Runnable on the JavaFX Application Thread and waits for it to finish.
      *
      * @param run The Runnable that has to be called on JFX thread.
-     * @throws InterruptedException f the execution is interrupted.
-     * @throws ExecutionException   If a exception is occurred in the run method of the Runnable
+     * @throws InterruptedException If the execution is interrupted.
+     * @throws ExecutionException   If an exception is occurred in the run method of the Runnable
      */
     public static void runAndWaitEx(final Runnable run)
             throws InterruptedException, ExecutionException {
@@ -118,6 +120,44 @@ public class ExecutionUtils {
         } catch (Exception ignored) {
             return null;
         }
+    }
+
+    /**
+     * Executes the given {@link BiConsumer} action when the given {@link ObservableValue} changes.
+     * <p>
+     * The consumer inputs are the oldValue and the newValue of the observable.
+     * <p>
+     * If executeNow is true the consumer action is immediately executed with null as the oldValue
+     * and the current value as newValue, the listener is added anyway.
+     * <p>
+     * The executeCondition {@link BiFunction} is used to specify on what conditions the action can be executed,
+     * the inputs of the function are the oldValue and newValue of the observable.
+     * <p>
+     * The isOneShot flag is to specify if the added listener should be removed after the first time the observable changes.
+     *
+     * @param property           the observable to listen to
+     * @param consumer           the action to perform on change
+     * @param executeNow         to specify if the given action should be immediately executed
+     * @param executionCondition to specify on what conditions the action should be executed
+     * @param isOneShot          to specify if the added listener should be removed after the first time the observable changes
+     * @param <T>                the value type of the property
+     */
+    public static <T> void executeWhen(ObservableValue<? extends T> property, BiConsumer<T, T> consumer, boolean executeNow, BiFunction<T, T, Boolean> executionCondition, boolean isOneShot) {
+        if (executeNow) {
+            consumer.accept(null, property.getValue());
+        }
+
+        property.addListener(new ChangeListener<T>() {
+            @Override
+            public void changed(ObservableValue<? extends T> observable, T oldValue, T newValue) {
+                if (executionCondition.apply(oldValue, newValue)) {
+                    consumer.accept(oldValue, newValue);
+                    if (isOneShot) {
+                        property.removeListener(this);
+                    }
+                }
+            }
+        });
     }
 
     /**

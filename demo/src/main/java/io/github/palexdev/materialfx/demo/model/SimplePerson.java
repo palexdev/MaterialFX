@@ -18,11 +18,55 @@
 
 package io.github.palexdev.materialfx.demo.model;
 
+import io.github.palexdev.materialfx.beans.properties.synced.SynchronizedIntegerProperty;
+import io.github.palexdev.materialfx.beans.properties.synced.SynchronizedObjectProperty;
+import io.github.palexdev.materialfx.bindings.BindingHelper;
+import io.github.palexdev.materialfx.selection.SingleSelectionModel;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+
+import java.util.Objects;
+import java.util.function.Function;
+
 public class SimplePerson {
     private final String name;
 
     public SimplePerson(String name) {
         this.name = name;
+
+        SingleSelectionModel<String> sm = new SingleSelectionModel<>(new SimpleObjectProperty<>(FXCollections.observableArrayList())) {
+            @Override
+            public void bindIndex(ObservableValue<? extends Number> source, Function<Integer, String> indexConverter) {
+                SynchronizedIntegerProperty selectedIndex = selectionManager.selectedIndexProperty();
+                SynchronizedObjectProperty<String> selectedItem = selectionManager.selectedItemProperty();
+                selectedIndex.provideHelperFactory(property -> new BindingHelper<>() {
+                    @Override
+                    protected void updateBound(Number newValue) {
+                        String item = indexConverter.apply(newValue.intValue());
+                        selectedIndex.setAndWait(newValue.intValue(), selectedItem);
+                        selectedItem.set(item);
+                    }
+                });
+            }
+        };
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SimplePerson that = (SimplePerson) o;
+        return name.equals(that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 
     @Override
