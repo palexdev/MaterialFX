@@ -144,12 +144,10 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
          * then the center of the ripple is set to the width and/or height of container
          */
         checkBox.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-            if (!event, checkBox)) {
-                return;
+            if (!NodeUtils.inHierarchy(event.getPickResult().getIntersectedNode(), checkBox)) {
+                rippleGenerator.generateRipple(event);
+                checkBox.fire();
             }
-
-            rippleGenerator.generateRipple(event);
-            checkBox.fire();
         });
 
         /*
