@@ -19,9 +19,9 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.controls.base.AbstractMFXDialog;
-import io.github.palexdev.materialfx.controls.enums.DialogType;
-import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
-import io.github.palexdev.materialfx.controls.factories.MFXStageDialogFactory;
+import io.github.palexdev.materialfx.enums.DialogType;
+import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
+import io.github.palexdev.materialfx.factories.MFXStageDialogFactory;
 import io.github.palexdev.materialfx.effects.MFXScrimEffect;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
 import javafx.animation.KeyFrame;

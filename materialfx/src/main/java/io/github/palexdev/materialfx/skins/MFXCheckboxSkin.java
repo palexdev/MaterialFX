@@ -21,7 +21,7 @@ package io.github.palexdev.materialfx.skins;
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
+import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.geometry.Insets;
@@ -68,9 +68,9 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
         rippleGenerator.setCheckBounds(false);
         rippleGenerator.setClipSupplier(() -> null);
         rippleGenerator.setRipplePositionFunction(event -> {
-            RipplePosition position = new RipplePosition();
-            position.setXPosition(Math.min(event.getX(), rippleContainer.getWidth()));
-            position.setYPosition(Math.min(event.getY(), rippleContainer.getHeight()));
+            PositionBean position = new PositionBean();
+            position.setX(Math.min(event.getX(), rippleContainer.getWidth()));
+            position.setY(Math.min(event.getY(), rippleContainer.getHeight()));
             return position;
         });
         rippleGenerator.setRippleRadius(16);
@@ -144,7 +144,7 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
          * then the center of the ripple is set to the width and/or height of container
          */
         checkBox.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-            if (!event, checkBox)) {
+            if (!NodeUtils.inHierarchy(event, checkBox)) {
                 return;
             }
 

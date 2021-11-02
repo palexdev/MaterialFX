@@ -18,13 +18,14 @@
 
 package io.github.palexdev.materialfx.demo.model;
 
-import io.github.palexdev.materialfx.filter.IFilterable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Machine implements IFilterable {
+
+// TODO review?
+public class Machine {
 
     public enum State {
         ONLINE, OFFLINE
@@ -88,10 +89,5 @@ public class Machine implements IFilterable {
 
     public void setState(State state) {
         this.state.set(state);
-    }
-
-    @Override
-    public String toFilterString() {
-        return getName() + " " + getIp() + " " + getOwner() + " " + getState().name();
     }
 }

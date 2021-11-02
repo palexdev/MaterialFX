@@ -21,8 +21,8 @@ package io.github.palexdev.materialfx.utils;
 import io.github.palexdev.materialfx.controls.MFXDialog;
 import io.github.palexdev.materialfx.controls.MFXExceptionDialog;
 import io.github.palexdev.materialfx.controls.MFXStageDialog;
-import io.github.palexdev.materialfx.controls.enums.DialogType;
-import io.github.palexdev.materialfx.controls.factories.MFXDialogFactory;
+import io.github.palexdev.materialfx.enums.DialogType;
+import io.github.palexdev.materialfx.factories.MFXDialogFactory;
 import javafx.stage.Modality;
 import javafx.stage.Window;
 

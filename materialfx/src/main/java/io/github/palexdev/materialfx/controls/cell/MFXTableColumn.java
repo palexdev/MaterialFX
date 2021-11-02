@@ -21,7 +21,7 @@ package io.github.palexdev.materialfx.controls.cell;
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXTableView;
-import io.github.palexdev.materialfx.controls.enums.SortState;
+import io.github.palexdev.materialfx.enums.SortState;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.skins.MFXTableColumnSkin;
 import io.github.palexdev.materialfx.skins.MFXTableViewSkin;

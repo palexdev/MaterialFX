@@ -1,0 +1,172 @@
+@import "MFXColors.css";
+@import "Fonts.css";
+
+.mfx-filter-pane {
+    -mfx-main: #7A0ED9;
+    -mfx-main-light: #B47BC2;
+    -mfx-main-lighter: #F5F2F7;
+    -mfx-gray: #6b6b6b;
+
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 7 14 7 14;
+}
+
+.mfx-filter-pane .header {
+    -fx-padding: 0 0 7 0;
+}
+
+.mfx-filter-pane .header .header-label {
+    -fx-font-family: "Open Sans SemiBold";
+    -fx-font-size: 14;
+    -fx-text-fill: -mfx-gray;
+    -fx-font-smoothing-type: gray;
+    -fx-padding: 5;
+}
+
+.mfx-filter-pane .header #filterIcon .mfx-ripple-generator {
+    -mfx-ripple-radius: 20;
+    -mfx-ripple-color: derive(-mfx-main, 120%);
+}
+
+.mfx-filter-pane .header #resetIcon .mfx-ripple-generator {
+    -mfx-ripple-radius: 20;
+    -mfx-ripple-color: derive(-mfx-red, 60%);
+}
+
+.mfx-filter-pane .header #filterIcon .mfx-font-icon,
+.mfx-filter-pane .header #resetIcon .mfx-font-icon {
+    -mfx-color: -mfx-gray;
+}
+
+.mfx-filter-pane .header #filterIcon:hover {
+    -fx-background-color: derive(-mfx-main, 150%);
+}
+
+.mfx-filter-pane .header #resetIcon:hover {
+    -fx-background-color: derive(-mfx-red, 90%);
+}
+
+.mfx-filter-pane .header #filterIcon:hover .mfx-font-icon {
+    -mfx-color: -mfx-main;
+}
+
+.mfx-filter-pane .header #resetIcon:hover .mfx-font-icon {
+    -mfx-color: -mfx-red
+}
+
+.mfx-filter-pane .mfx-combo-box .focused-line,
+.mfx-filter-pane .mfx-combo-box .unfocused-line {
+    -fx-stroke: transparent;
+}
+
+.mfx-filter-pane .mfx-combo-box {
+    -mfx-animate-lines: false;
+
+    -fx-background-color: -mfx-main-lighter;
+    -fx-background-radius: 30;
+    -fx-border-color: lightgray;
+    -fx-border-width: 0.5;
+    -fx-border-radius: 30;
+    -fx-padding: 0 3 0 5; /* TODO FIX */
+}
+
+.mfx-filter-pane .filter-combo {
+    -fx-min-height: 36;
+    -fx-min-width: 120;
+}
+
+.mfx-filter-pane .predicates-combo {
+    -fx-min-height: 36;
+    -fx-min-width: 180;
+}
+
+.mfx-filter-pane .mfx-combo-box:focused {
+    -fx-background-color: -mfx-main;
+}
+
+.mfx-filter-pane .mfx-combo-box .mfx-label {
+    -mfx-font-family: "Open Sans SemiBold";
+    -mfx-text-fill: -mfx-charcoal;
+}
+
+.mfx-filter-pane .mfx-combo-box:focused .mfx-label {
+    -mfx-text-fill: white;
+}
+
+.mfx-filter-pane .mfx-combo-box .mfx-icon-wrapper .mfx-font-icon {
+    -mfx-color: gray;
+}
+
+.mfx-filter-pane .mfx-combo-box:focused .mfx-icon-wrapper .mfx-font-icon {
+    -mfx-color: white;
+}
+
+.mfx-filter-pane .mfx-combo-box .mfx-icon-wrapper .mfx-ripple-generator {
+    -mfx-ripple-color: -mfx-main-lighter;
+}
+
+/* TODO fix */
+.mfx-filter-pane .mfx-combo-box .mfx-list-view {
+    -fx-background-color: red;
+}
+
+.mfx-filter-pane .mfx-combo-box .mfx-list-view .mfx-list-cell:selected {
+    -fx-background-color: transparent;
+}
+
+.mfx-filter-pane .mfx-text-field {
+    -fx-min-width: 180;
+    -fx-min-height: 36;
+    -mfx-animate-lines: false;
+    -fx-background-color: transparent;
+    -fx-border-color: lightgray;
+    -fx-border-width: 0.7;
+    -fx-border-radius: 100%;
+    -fx-padding: 7 8 7 8;
+}
+
+.mfx-filter-pane .mfx-text-field .focused-line,
+.mfx-filter-pane .mfx-text-field .unfocused-line {
+    -fx-stroke: transparent;
+}
+
+.mfx-filter-pane .mfx-button {
+    -fx-pref-width: 135;
+    -fx-pref-height: 36;
+    -fx-background-color: #7915D9;
+    -fx-background-radius: 30;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.mfx-filter-pane .mfx-button .mfx-ripple-generator {
+    -mfx-ripple-color: rgba(250, 250, 250, 0.6);
+    -mfx-ripple-radius: 45;
+}
+
+.mfx-filter-pane .active-filter {
+    -fx-min-height: 30;
+    -fx-background-color: #B379C1;
+    -fx-background-radius: 30;
+    -fx-padding: 0 20 0 20;
+}
+
+.mfx-filter-pane .active-filter .mfx-font-icon {
+    -mfx-color: white;
+}
+
+.mfx-filter-pane .active-filter .label {
+    -fx-font-family: "Open Sans Regular";
+    -fx-text-fill: white;
+}
+
+.mfx-filter-pane .active-filter .function-text {
+    -fx-font-family: "Open Sans Bold";
+}
+
+.mfx-filter-pane .and-or-text {
+    -fx-font-family: "Open Sans Bold";
+    -fx-font-size: 14;
+    -fx-fill: -mfx-gray;
+}

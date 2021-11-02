@@ -20,7 +20,7 @@ package io.github.palexdev.materialfx.controls.legacy;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
+import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.css.*;
 import javafx.geometry.Insets;
@@ -68,7 +68,7 @@ public class MFXLegacyTableRow<T> extends TableRow<T> {
 
     private void setupRippleGenerator() {
         rippleGenerator.setRippleColor(Color.rgb(50, 150, 255));
-        rippleGenerator.setRipplePositionFunction(event -> new RipplePosition(event.getX(), event.getY()));
+        rippleGenerator.setRipplePositionFunction(event -> PositionBean.of(event.getX(), event.getY()));
         addEventFilter(MouseEvent.MOUSE_PRESSED, rippleGenerator::generateRipple);
     }
 

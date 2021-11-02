@@ -18,7 +18,7 @@
 
 package io.github.palexdev.materialfx.utils;
 
-import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
+import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
 import javafx.animation.Animation;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;

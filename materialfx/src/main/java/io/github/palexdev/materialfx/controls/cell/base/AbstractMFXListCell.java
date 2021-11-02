@@ -166,7 +166,7 @@ public abstract class AbstractMFXListCell<T> extends HBox implements Cell<T> {
     }
 
     /**
-     * Index property of the cell.
+     * Specifies the cell's index.
      */
     public ReadOnlyIntegerProperty indexProperty() {
         return index.getReadOnlyProperty();
@@ -181,7 +181,7 @@ public abstract class AbstractMFXListCell<T> extends HBox implements Cell<T> {
     }
 
     /**
-     * The selection state property of the cell.
+     * Specifies the selection state of the cell.
      */
     public ReadOnlyBooleanProperty selectedProperty() {
         return selected.getReadOnlyProperty();

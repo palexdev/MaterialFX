@@ -19,17 +19,13 @@
 package io.github.palexdev.materialfx.demo.controllers;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXNotification;
 import io.github.palexdev.materialfx.controls.MFXStageDialog;
-import io.github.palexdev.materialfx.controls.SimpleMFXNotificationPane;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXDialog;
-import io.github.palexdev.materialfx.controls.enums.ButtonType;
-import io.github.palexdev.materialfx.controls.enums.DialogType;
-import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
-import io.github.palexdev.materialfx.controls.factories.MFXDialogFactory;
 import io.github.palexdev.materialfx.effects.DepthLevel;
-import io.github.palexdev.materialfx.notifications.NotificationPos;
-import io.github.palexdev.materialfx.notifications.NotificationsManager;
+import io.github.palexdev.materialfx.enums.ButtonType;
+import io.github.palexdev.materialfx.enums.DialogType;
+import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
+import io.github.palexdev.materialfx.factories.MFXDialogFactory;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -37,9 +33,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.stage.Modality;
-import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -270,25 +264,15 @@ public class DialogsController implements Initializable {
         action3.setDepthLevel(DepthLevel.LEVEL1);
         close.setDepthLevel(DepthLevel.LEVEL1);
 
-        action1.setOnAction(event -> NotificationsManager.send(NotificationPos.BOTTOM_RIGHT, createNotification("Action 1 Performed")));
+        // TODO remake
+/*        action1.setOnAction(event -> NotificationsManager.send(NotificationPos.BOTTOM_RIGHT, createNotification("Action 1 Performed")));
         action2.setOnAction(event -> NotificationsManager.send(NotificationPos.BOTTOM_RIGHT, createNotification("Action 2 Performed")));
-        action3.setOnAction(event -> NotificationsManager.send(NotificationPos.BOTTOM_RIGHT, createNotification("Action 3 Performed")));
+        action3.setOnAction(event -> NotificationsManager.send(NotificationPos.BOTTOM_RIGHT, createNotification("Action 3 Performed")));*/
         dialog.addCloseButton(close);
 
         HBox box = new HBox(20, action1, action2, action3, close);
         box.setAlignment(Pos.CENTER);
         box.setPadding(new Insets(20, 5, 20, 5));
         return box;
-    }
-
-    private MFXNotification createNotification(String text) {
-        Region notificationPane = new SimpleMFXNotificationPane(
-                "Dialogs Actions Test",
-                "",
-                text
-        );
-        MFXNotification notification = new MFXNotification(notificationPane, true, true);
-        notification.setHideAfterDuration(Duration.seconds(3));
-        return notification;
     }
 }

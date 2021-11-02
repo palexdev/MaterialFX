@@ -19,10 +19,10 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.controls.enums.ButtonType;
+import io.github.palexdev.materialfx.enums.ButtonType;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
+import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.skins.MFXButtonSkin;
 import javafx.beans.property.*;
 import javafx.css.*;
@@ -119,7 +119,7 @@ public class MFXButton extends Button {
         setRippleColor(Color.rgb(190, 190, 190));
         setRippleRadius(25);
         setComputeRadiusMultiplier(true);
-        rippleGenerator.setRipplePositionFunction(event -> new RipplePosition(event.getX(), event.getY()));
+        rippleGenerator.setRipplePositionFunction(event -> PositionBean.of(event.getX(), event.getY()));
     }
 
     public boolean isComputeRadiusMultiplier() {

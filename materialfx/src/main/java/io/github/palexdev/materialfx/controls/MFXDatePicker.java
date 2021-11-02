@@ -20,7 +20,7 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
+import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.skins.MFXDatePickerContent;
 import io.github.palexdev.materialfx.utils.NodeUtils;
@@ -145,12 +145,10 @@ public class MFXDatePicker extends VBox {
         rippleGenerator.setClipSupplier(() -> null);
         rippleGenerator.setRadiusMultiplier(1.7);
         rippleGenerator.setRippleColor(Color.rgb(98, 0, 238, 0.3));
-        rippleGenerator.setRipplePositionFunction(event -> {
-            RipplePosition ripplePosition = new RipplePosition();
-            ripplePosition.setXPosition(calendar.getBoundsInParent().getCenterX());
-            ripplePosition.setYPosition(calendar.getBoundsInParent().getCenterY());
-            return ripplePosition;
-        });
+        rippleGenerator.setRipplePositionFunction(event -> PositionBean.of(
+                calendar.getBoundsInParent().getCenterX(),
+                calendar.getBoundsInParent().getCenterY()
+        ));
         getChildren().add(0, rippleGenerator);
     }
 

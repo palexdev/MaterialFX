@@ -22,7 +22,7 @@ import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.MFXListView;
 import io.github.palexdev.materialfx.controls.cell.base.AbstractMFXListCell;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
+import io.github.palexdev.materialfx.beans.PositionBean;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
@@ -83,7 +83,7 @@ public class MFXListCell<T> extends AbstractMFXListCell<T> {
      */
     protected void setupRippleGenerator() {
         rippleGenerator.setManaged(false);
-        rippleGenerator.setRipplePositionFunction(event -> new RipplePosition(event.getX(), event.getY()));
+        rippleGenerator.setRipplePositionFunction(event -> PositionBean.of(event.getX(), event.getY()));
         rippleGenerator.rippleRadiusProperty().bind(widthProperty().divide(2.0));
         addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
             if (event.getButton() == MouseButton.PRIMARY) {

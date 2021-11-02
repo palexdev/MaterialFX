@@ -365,9 +365,9 @@ public class MFXContextMenu extends VBox {
         }
 
         /**
-         * Installs the added items in the context menu.
+         * Installs the added items in the context menu and returns it.
          */
-        public MFXContextMenu install() {
+        public MFXContextMenu installAndGet() {
             contextMenu.setItems(items);
             return contextMenu;
         }

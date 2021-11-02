@@ -34,7 +34,7 @@ import javafx.scene.text.Font;
 
 import java.util.List;
 
-import static io.github.palexdev.materialfx.controls.enums.Styles.LabelStyles;
+import static io.github.palexdev.materialfx.enums.Styles.LabelStyles;
 
 /**
  * This is the implementation of a label following Google's material design guidelines in JavaFX.

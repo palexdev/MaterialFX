@@ -22,11 +22,9 @@ import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.MFXTableView.MFXTableViewEvent;
 import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
-import io.github.palexdev.materialfx.controls.enums.SortState;
-import io.github.palexdev.materialfx.controls.enums.Styles;
-import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
-import io.github.palexdev.materialfx.filter.IFilterable;
-import io.github.palexdev.materialfx.filter.MFXFilterDialog;
+import io.github.palexdev.materialfx.enums.SortState;
+import io.github.palexdev.materialfx.enums.Styles;
+import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.selection.TableSelectionModel;
 import io.github.palexdev.materialfx.selection.base.ITableSelectionModel;
@@ -61,7 +59,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Modality;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
@@ -70,6 +67,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// TODO review
 /**
  * This is the implementation of the {@code Skin} associated with every {@link MFXTableView}.
  * <p>
@@ -125,8 +123,8 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
     private SortedList<T> sortedList;
     private SortedList<T> filteredList;
 
-    private final MFXFilterDialog<T> filterDialog;
-    private final MFXStageDialog filterStageDialog;
+    //private final MFXFilterDialog<T> filterDialog;
+    //private final MFXStageDialog filterStageDialog;
     private final BooleanProperty tableFiltered = new SimpleBooleanProperty(false);
 
     //================================================================================
@@ -178,12 +176,12 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
 
         pgcBox = buildPaginationControls();
 
-        filterDialog = new MFXFilterDialog<>();
+/*        filterDialog = new MFXFilterDialog<>();
         filterDialog.getFilterButton().setOnAction(event -> filterTable());
         filterStageDialog = new MFXStageDialog(filterDialog);
         filterStageDialog.setOwner(tableView.getScene() != null ? tableView.getScene().getWindow() : null);
         filterStageDialog.setCenterInOwner(true);
-        filterStageDialog.setModality(Modality.WINDOW_MODAL);
+        filterStageDialog.setModality(Modality.WINDOW_MODAL);*/
 
         container.getChildren().setAll(header, columnsBox, rowsBox, pgcBox);
         getChildren().setAll(container);
@@ -233,7 +231,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
             }
         });
 
-        NodeUtils.waitForScene(tableView, () -> filterStageDialog.setOwner(tableView.getScene().getWindow()), true, false);
+        //NodeUtils.waitForScene(tableView, () -> filterStageDialog.setOwner(tableView.getScene().getWindow()), true, false);
 
         tableView.getItems().addListener((InvalidationListener) listInvalidated -> reset(false));
         tableView.itemsProperty().addListener(propertyInvalidated -> {
@@ -428,7 +426,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
         );
         filterIcon.disableProperty().bind(tableFiltered.or(listEmpty));
         clearFilterIcon.disableProperty().bind(tableFiltered.not().or(listEmpty));
-        filterIcon.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> filterStageDialog.show());
+        //filterIcon.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> filterStageDialog.show());
         clearFilterIcon.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
             if (tableFiltered.get()) {
                 tableFiltered.set(false);
@@ -600,12 +598,12 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
      * <b>N.B: if the toString method is not overridden or does not contain any useful information for filtering it won't work.</b>
      */
     protected void filterTable() {
-        ObservableList<T> list = filterDialog.filter(sortedList);
+/*        ObservableList<T> list = filterDialog.filter(sortedList);
         filteredList = new SortedList<>(list);
         filteredList.comparatorProperty().bind(sortedList.comparatorProperty());
         tableFiltered.set(true);
         buildRows();
-        filterStageDialog.close();
+        filterStageDialog.close();*/
     }
 
     /**
@@ -661,7 +659,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
                 .addSeparator()
                 .addMenuItem(lockSize)
                 .addMenuItem(unlockSize)
-                .install();
+                .installAndGet();
     }
 
     /**

@@ -39,6 +39,10 @@ public class MultipleSelectionModel<T> extends AbstractMultipleSelectionModel<T>
     //================================================================================
     // Constructors
     //================================================================================
+    public MultipleSelectionModel(ObservableList<T> items) {
+        super(items);
+    }
+
     public MultipleSelectionModel(ObjectProperty<ObservableList<T>> items) {
         super(items);
     }

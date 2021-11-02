@@ -18,19 +18,8 @@
 
 package io.github.palexdev.materialfx.demo.controllers;
 
-import io.github.palexdev.materialfx.controls.MFXDialog;
-import io.github.palexdev.materialfx.controls.MFXNotification;
-import io.github.palexdev.materialfx.controls.SimpleMFXNotificationPane;
-import io.github.palexdev.materialfx.controls.base.AbstractMFXDialog;
-import io.github.palexdev.materialfx.controls.enums.DialogType;
-import io.github.palexdev.materialfx.controls.factories.MFXDialogFactory;
-import io.github.palexdev.materialfx.notifications.NotificationPos;
-import io.github.palexdev.materialfx.notifications.NotificationsManager;
+import io.github.palexdev.materialfx.enums.NotificationPos;
 import javafx.fxml.FXML;
-import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
-import javafx.util.Duration;
-import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.util.Random;
 
@@ -83,27 +72,10 @@ public class NotificationsController {
     }
 
     private void showNotification(NotificationPos pos) {
-        MFXNotification notification = buildNotification();
-        NotificationsManager.send(pos, notification);
+       // TODO remake
     }
 
-    private MFXNotification buildNotification() {
-        Region template = getRandomTemplate();
-        MFXNotification notification = new MFXNotification(template, true, true);
-        notification.setHideAfterDuration(Duration.seconds(3));
-
-        if (template instanceof SimpleMFXNotificationPane) {
-            SimpleMFXNotificationPane pane = (SimpleMFXNotificationPane) template;
-            pane.setCloseHandler(closeEvent -> notification.hideNotification());
-        } else {
-            MFXDialog dialog = (MFXDialog) template;
-            dialog.setCloseHandler(closeEvent -> notification.hideNotification());
-        }
-
-        return notification;
-    }
-
-    private Region getRandomTemplate() {
+/*    private Region getRandomTemplate() {
         final int rand = random.nextInt(4);
 
         switch (rand) {
@@ -144,5 +116,5 @@ public class NotificationsController {
             default:
                 return null;
         }
-    }
+    }*/
 }

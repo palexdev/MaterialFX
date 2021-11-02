@@ -19,7 +19,7 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.controls.enums.DialogType;
+import io.github.palexdev.materialfx.enums.DialogType;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.skins.MFXTextFieldSkin;
 import io.github.palexdev.materialfx.utils.ColorUtils;
@@ -262,7 +262,7 @@ public class MFXTextField extends TextField implements Validated<MFXDialogValida
                         .addSeparator()
                         .addMenuItem(redo)
                         .addMenuItem(undo)
-                        .install()
+                        .installAndGet()
         );
     }
 

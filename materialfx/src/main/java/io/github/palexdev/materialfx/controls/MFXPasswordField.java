@@ -52,7 +52,6 @@ import javafx.scene.paint.Color;
  * <p></p>
  * Side notes:
  * <p> - the context menu is redefined in the skin since some methods are private in the skin.
- * <p> - see {@link #enableContextMenuTextSelectionFix(boolean)}.
  */
 public class MFXPasswordField extends MFXTextField {
     //================================================================================
@@ -128,7 +127,7 @@ public class MFXPasswordField extends MFXTextField {
      */
     @Override
     protected void defaultContextMenu() {
-        setMFXContextMenu(MFXContextMenu.Builder.build(this).install());
+        setMFXContextMenu(MFXContextMenu.Builder.build(this).installAndGet());
     }
 
     public String getPassword() {

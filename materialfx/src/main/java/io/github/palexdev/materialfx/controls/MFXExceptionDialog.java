@@ -18,7 +18,7 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.controls.enums.ButtonType;
+import io.github.palexdev.materialfx.enums.ButtonType;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.ExceptionUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;

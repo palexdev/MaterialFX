@@ -24,7 +24,7 @@ dependencies {
     implementation 'org.kordamp.ikonli:ikonli-core:12.2.0'
     implementation 'org.kordamp.ikonli:ikonli-javafx:12.2.0'
     implementation 'org.kordamp.ikonli:ikonli-fontawesome5-pack:12.2.0'
-    implementation 'io.github.palexdev:virtualizedfx:11.1.3'
+    implementation 'io.github.palexdev:virtualizedfx:11.2.1'
     implementation project(':materialfx')
 }
 

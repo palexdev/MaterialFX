@@ -22,7 +22,7 @@ import io.github.palexdev.materialfx.controls.MFXToggleButton;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.effects.MFXDepthManager;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
+import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
 import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
 import io.github.palexdev.materialfx.utils.NodeUtils;
@@ -144,12 +144,12 @@ public class MFXToggleButtonSkin extends ToggleButtonSkin {
         rippleGenerator.setClipSupplier(() -> null);
         rippleGenerator.setRippleColor(toggleButton.isSelected() ? toggleButton.getUnToggleLineColor() : toggleButton.getToggleLineColor());
         rippleGenerator.setRipplePositionFunction(mouseEvent -> {
-            RipplePosition position = new RipplePosition();
-            position.xPositionProperty().bind(Bindings.createDoubleBinding(
+            PositionBean position = new PositionBean();
+            position.xProperty().bind(Bindings.createDoubleBinding(
                     () -> circle.getBoundsInParent().getCenterX(),
                     circle.boundsInParentProperty()
             ));
-            position.yPositionProperty().bind(Bindings.createDoubleBinding(
+            position.yProperty().bind(Bindings.createDoubleBinding(
                     () -> circle.localToParent(circle.getLayoutBounds()).getCenterY(),
                     circle.layoutBoundsProperty()
             ));

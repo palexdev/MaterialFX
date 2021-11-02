@@ -19,7 +19,8 @@
 package io.github.palexdev.materialfx.utils;
 
 import io.github.palexdev.materialfx.beans.AnimationsData;
-import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
+import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
+import io.github.palexdev.materialfx.effects.Interpolators;
 import javafx.animation.*;
 import javafx.animation.Animation.Status;
 import javafx.beans.binding.BooleanExpression;
@@ -143,6 +144,10 @@ public class AnimationUtils {
      */
     public static boolean isPaused(Animation animation) {
         return animation.getStatus() == Status.PAUSED;
+    }
+
+    public static boolean isStopped(Animation animation) {
+        return animation.getStatus() == Status.STOPPED;
     }
 
     //================================================================================
@@ -705,6 +710,16 @@ public class AnimationUtils {
         // Methods
         //================================================================================
 
+        public AnimationUtils.PauseBuilder setDelay(Duration duration) {
+            pauseTransition.setDelay(duration);
+            return this;
+        }
+
+        public AnimationUtils.PauseBuilder setDelay(double millis) {
+            pauseTransition.setDelay(Duration.millis(millis));
+            return this;
+        }
+
         /**
          * Sets the pause transition duration.
          */
@@ -858,6 +873,22 @@ public class AnimationUtils {
          */
         public static <T> KeyFrame of(double millis, WritableValue<T> writableValue, T endValue, Interpolator interpolator) {
             return of(Duration.millis(millis), writableValue, endValue, interpolator);
+        }
+
+        /**
+         * Returns a new KeyFrame with the given duration and builds a new KeyValue for it
+         * with the given writable property, endValue and interpolator.
+         */
+        public static <T> KeyFrame of(Duration duration, WritableValue<T> writableValue, T endValue, Interpolators interpolator) {
+            return of(duration, new KeyValue(writableValue, endValue, interpolator.toInterpolator()));
+        }
+
+        /**
+         * Calls {@link #of(Duration, WritableValue, Object, Interpolators)} by converting the given millis value
+         * with {@link Duration#millis(double)}.
+         */
+        public static <T> KeyFrame of(double millis, WritableValue<T> writableValue, T endValue, Interpolators interpolator) {
+            return of(Duration.millis(millis), writableValue, endValue, interpolator.toInterpolator());
         }
     }
 }

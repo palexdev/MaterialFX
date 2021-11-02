@@ -18,8 +18,8 @@
 
 package io.github.palexdev.materialfx.effects.ripple;
 
-import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
-import io.github.palexdev.materialfx.controls.factories.RippleClipTypeFactory;
+import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
+import io.github.palexdev.materialfx.factories.RippleClipTypeFactory;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import javafx.animation.*;
 import javafx.beans.property.ObjectProperty;

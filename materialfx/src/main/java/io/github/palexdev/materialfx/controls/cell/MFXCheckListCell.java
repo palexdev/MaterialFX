@@ -19,11 +19,11 @@
 package io.github.palexdev.materialfx.controls.cell;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.controls.MFXCheckListView;
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.cell.base.AbstractMFXListCell;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Node;
@@ -90,7 +90,7 @@ public class MFXCheckListCell<T> extends AbstractMFXListCell<T> {
      */
     protected void setupRippleGenerator() {
         rippleGenerator.setManaged(false);
-        rippleGenerator.setRipplePositionFunction(event -> new RipplePosition(event.getX(), event.getY()));
+        rippleGenerator.setRipplePositionFunction(event -> PositionBean.of(event.getX(), event.getY()));
         rippleGenerator.rippleRadiusProperty().bind(widthProperty().divide(2.0));
         addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
             if (NodeUtils.inHierarchy(event, checkbox)) {

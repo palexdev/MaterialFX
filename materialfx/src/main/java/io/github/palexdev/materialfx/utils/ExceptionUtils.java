@@ -25,7 +25,6 @@ import java.io.StringWriter;
  * Little utils class to convert a throwable stack trace to a String.
  */
 public class ExceptionUtils {
-    private static final StringWriter sw = new StringWriter();
 
     private ExceptionUtils() {}
 
@@ -34,6 +33,7 @@ public class ExceptionUtils {
      * by using a {@link StringWriter} and a {@link PrintWriter}.
      */
     public static String getStackTraceString(Throwable ex) {
+        StringWriter sw = new StringWriter();
         sw.flush();
         ex.printStackTrace(new PrintWriter(sw));
         return sw.toString();

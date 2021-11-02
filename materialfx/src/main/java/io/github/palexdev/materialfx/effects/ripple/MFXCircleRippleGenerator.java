@@ -18,8 +18,9 @@
 
 package io.github.palexdev.materialfx.effects.ripple;
 
-import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
-import io.github.palexdev.materialfx.controls.factories.RippleClipTypeFactory;
+import io.github.palexdev.materialfx.beans.PositionBean;
+import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
+import io.github.palexdev.materialfx.factories.RippleClipTypeFactory;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.effects.MFXDepthManager;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator.CircleRipple;
@@ -123,12 +124,12 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
         }
         setClip(getClipSupplier().get());
 
-        RipplePosition position = getRipplePositionFunction().apply(event);
+        PositionBean position = getRipplePositionFunction().apply(event);
 
         CircleRipple ripple = getRippleSupplier().get();
-        ripple.setXPosition(position.getXPosition());
-        ripple.centerXProperty().bind(position.xPositionProperty());
-        ripple.centerYProperty().bind(position.yPositionProperty());
+        ripple.setXPosition(position.getX());
+        ripple.centerXProperty().bind(position.xProperty());
+        ripple.centerYProperty().bind(position.yProperty());
         ripple.setFill(getRippleColor());
 
         Animation rippleAnimation = ripple.getAnimation();
@@ -319,16 +320,16 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
 
     @Override
     public void defaultPositionFunction() {
-        setRipplePositionFunction(event -> new RipplePosition());
+        setRipplePositionFunction(event -> new PositionBean());
     }
 
     @Override
-    public Function<MouseEvent, RipplePosition> getRipplePositionFunction() {
+    public Function<MouseEvent, PositionBean> getRipplePositionFunction() {
         return positionFunction;
     }
 
     @Override
-    public void setRipplePositionFunction(Function<MouseEvent, RipplePosition> positionFunction) {
+    public void setRipplePositionFunction(Function<MouseEvent, PositionBean> positionFunction) {
         super.positionFunction = positionFunction;
     }
 

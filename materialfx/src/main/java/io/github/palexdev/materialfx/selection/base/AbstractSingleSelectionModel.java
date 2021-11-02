@@ -44,6 +44,10 @@ public abstract class AbstractSingleSelectionModel<T> implements ISingleSelectio
     //================================================================================
     // Constructors
     //================================================================================
+    protected AbstractSingleSelectionModel(ObservableList<T> items) {
+        this.items.set(items);
+    }
+
     protected AbstractSingleSelectionModel(ObservableValue<? extends ObservableList<T>> items) {
         this.items.bind(items);
     }

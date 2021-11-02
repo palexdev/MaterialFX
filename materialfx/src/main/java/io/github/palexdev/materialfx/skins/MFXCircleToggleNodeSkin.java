@@ -20,9 +20,9 @@ package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.controls.MFXCircleToggleNode;
 import io.github.palexdev.materialfx.controls.MFXLabel;
-import io.github.palexdev.materialfx.controls.enums.TextPosition;
+import io.github.palexdev.materialfx.enums.TextPosition;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
+import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.utils.LabelUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.beans.binding.Bindings;
@@ -112,7 +112,7 @@ public class MFXCircleToggleNodeSkin extends SkinBase<MFXCircleToggleNode> {
             ));
             return clip;
         });
-        rippleGenerator.setRipplePositionFunction(event -> new RipplePosition(event.getX(), event.getY()));
+        rippleGenerator.setRipplePositionFunction(event -> new PositionBean(event.getX(), event.getY()));
         rippleGenerator.rippleRadiusProperty().bind(circle.radiusProperty().add(5));
     }
 

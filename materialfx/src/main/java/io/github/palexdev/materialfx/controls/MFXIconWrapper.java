@@ -19,7 +19,7 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
+import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.effects.ripple.base.IRippleGenerator;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
@@ -63,6 +63,8 @@ public class MFXIconWrapper extends StackPane {
         setSize(size);
     }
 
+    // TODO add constructor with MFXFontIcon description and replace everywhere
+
     //================================================================================
     // Methods
     //================================================================================
@@ -87,7 +89,7 @@ public class MFXIconWrapper extends StackPane {
      */
     public MFXIconWrapper defaultRippleGeneratorBehavior() {
         addRippleGenerator();
-        rippleGenerator.setRipplePositionFunction(event -> new RipplePosition(event.getX(), event.getY()));
+        rippleGenerator.setRipplePositionFunction(event -> PositionBean.of(event.getX(), event.getY()));
         addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
                 rippleGenerator.generateRipple(event);
@@ -103,7 +105,7 @@ public class MFXIconWrapper extends StackPane {
      * @see IRippleGenerator
      * @see MFXCircleRippleGenerator
      */
-    public MFXIconWrapper rippleGeneratorBehavior(Function<MouseEvent, RipplePosition> positionFunction) {
+    public MFXIconWrapper rippleGeneratorBehavior(Function<MouseEvent, PositionBean> positionFunction) {
         addRippleGenerator();
         rippleGenerator.setRipplePositionFunction(positionFunction);
         addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {

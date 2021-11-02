@@ -19,7 +19,7 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
-import io.github.palexdev.materialfx.controls.enums.SortState;
+import io.github.palexdev.materialfx.enums.SortState;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.ListChangeListener;

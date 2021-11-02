@@ -21,7 +21,7 @@ package io.github.palexdev.materialfx.controls.legacy;
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
-import io.github.palexdev.materialfx.controls.enums.DialogType;
+import io.github.palexdev.materialfx.enums.DialogType;
 import io.github.palexdev.materialfx.skins.legacy.MFXLegacyComboBoxSkin;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;

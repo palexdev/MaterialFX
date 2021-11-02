@@ -20,9 +20,9 @@ package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.beans.NumberRange;
 import io.github.palexdev.materialfx.controls.MFXSlider;
-import io.github.palexdev.materialfx.controls.enums.SliderEnums.SliderMode;
-import io.github.palexdev.materialfx.controls.enums.SliderEnums.SliderPopupSide;
-import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
+import io.github.palexdev.materialfx.enums.SliderEnums.SliderMode;
+import io.github.palexdev.materialfx.enums.SliderEnums.SliderPopupSide;
+import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
 import io.github.palexdev.materialfx.utils.AnimationUtils.PauseBuilder;

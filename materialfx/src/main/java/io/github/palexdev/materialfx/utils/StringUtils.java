@@ -168,6 +168,29 @@ public class StringUtils {
     }
 
     /**
+     * A useful method to convert a given elapsed time in seconds to a
+     * String.
+     * <p></p>
+     * <p> - "Just now" if elapsed is less than 60 seconds
+     * <p> - minutes + " minutes ago" if the elapsed seconds is greater than 60 seconds
+     * <p> - hours + " minutes ago" if the elapsed minutes are greater than 60 minutes
+     * <p> - days + " days ago" if the elapsed hours are greater than 24
+     */
+    public static String timeToHumanReadable(long elapsedSeconds) {
+        if (elapsedSeconds < 60) {
+            return "Just now";
+        } else {
+            long minutes = elapsedSeconds / 60;
+            if (minutes < 60) {
+                return minutes + " min ago";
+            } else {
+                long hours = minutes / 60;
+                return hours < 24 ? hours + " hours ago" : hours / 24 + " days ago";
+            }
+        }
+    }
+
+    /**
      * Generates a random alphabetic string of given length
      */
     public static String randAlphabetic(int length) {

@@ -18,13 +18,13 @@
 
 package io.github.palexdev.materialfx.demo.model;
 
-import io.github.palexdev.materialfx.filter.IFilterable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class FilterablePerson implements IFilterable {
+// TODO remove?
+public class FilterablePerson {
     private final StringProperty firstName = new SimpleStringProperty();
     private final StringProperty lastName = new SimpleStringProperty();
     private final StringProperty address = new SimpleStringProperty();
@@ -83,11 +83,6 @@ public class FilterablePerson implements IFilterable {
 
     public void setAge(int age) {
         this.age.set(age);
-    }
-
-    @Override
-    public String toFilterString() {
-        return getFirstName() + getLastName() + getAddress() + getAge();
     }
 
     @Override

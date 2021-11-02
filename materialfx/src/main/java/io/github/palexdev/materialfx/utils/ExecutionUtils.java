@@ -19,6 +19,8 @@
 package io.github.palexdev.materialfx.utils;
 
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.binding.BooleanExpression;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -30,6 +32,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 /**
  * Utils class to help with concurrency and callables.
@@ -154,6 +157,38 @@ public class ExecutionUtils {
                     consumer.accept(oldValue, newValue);
                     if (isOneShot) {
                         property.removeListener(this);
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Executes the given action when the given {@link Observable} changes.
+     * <p>
+     * If executeNow is true the action is immediately executed.
+     * <p>
+     * Adds a listener to the observable and executes the given action every time the observable changes and the
+     * execution condition is met or just once if the isOneShot parameter is true.
+     *
+     * @param observable         the observable to listen to
+     * @param action             the action to execute when the observable changes
+     * @param executeNow         to specify if the given action should be immediately executed
+     * @param executionCondition to specify on what conditions the action should be executed
+     * @param isOneShot          to specify if the added listener should be removed after the first time the observable changes
+     */
+    public static void executeWhen(Observable observable, Runnable action, boolean executeNow, Supplier<Boolean> executionCondition, boolean isOneShot) {
+        if (executeNow) {
+            action.run();
+        }
+
+        observable.addListener(new InvalidationListener() {
+            @Override
+            public void invalidated(Observable observable) {
+                if (executionCondition.get()) {
+                    action.run();
+                    if (isOneShot) {
+                        observable.removeListener(this);
                     }
                 }
             }

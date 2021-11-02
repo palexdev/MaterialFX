@@ -20,7 +20,7 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXToggleNode;
-import io.github.palexdev.materialfx.controls.enums.TextPosition;
+import io.github.palexdev.materialfx.enums.TextPosition;
 import io.github.palexdev.materialfx.skins.MFXCircleToggleNodeSkin;
 import javafx.css.*;
 import javafx.scene.Node;

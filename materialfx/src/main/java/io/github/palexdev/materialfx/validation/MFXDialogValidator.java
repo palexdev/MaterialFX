@@ -19,8 +19,8 @@
 package io.github.palexdev.materialfx.validation;
 
 import io.github.palexdev.materialfx.controls.MFXStageDialog;
-import io.github.palexdev.materialfx.controls.enums.DialogType;
-import io.github.palexdev.materialfx.controls.factories.MFXDialogFactory;
+import io.github.palexdev.materialfx.enums.DialogType;
+import io.github.palexdev.materialfx.factories.MFXDialogFactory;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;

@@ -21,7 +21,7 @@ package io.github.palexdev.materialfx.skins;
 import io.github.palexdev.materialfx.controls.MFXLabel;
 import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
+import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.utils.LabelUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.event.Event;
@@ -90,7 +90,7 @@ public class MFXRectangleToggleNodeSkin extends SkinBase<MFXRectangleToggleNode>
 
         rippleGenerator.setAnimateBackground(false);
         rippleGenerator.setClipSupplier(() -> toggleNode.getRippleClipTypeFactory().build(container));
-        rippleGenerator.setRipplePositionFunction(event -> new RipplePosition(event.getX(), event.getY()));
+        rippleGenerator.setRipplePositionFunction(event -> new PositionBean(event.getX(), event.getY()));
         rippleGenerator.rippleRadiusProperty().bind(toggleNode.widthProperty().divide(2.0));
     }
 

@@ -44,6 +44,10 @@ public abstract class AbstractMultipleSelectionModel<T> implements IMultipleSele
     //================================================================================
     // Constructors
     //================================================================================
+    protected AbstractMultipleSelectionModel(ObservableList<T> items) {
+        this.items.set(items);
+    }
+
     protected AbstractMultipleSelectionModel(ObservableValue<? extends ObservableList<T>> items) {
         this.items.bind(items);
     }

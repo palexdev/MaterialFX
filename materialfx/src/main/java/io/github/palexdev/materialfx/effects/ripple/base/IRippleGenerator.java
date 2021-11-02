@@ -18,8 +18,8 @@
 
 package io.github.palexdev.materialfx.effects.ripple.base;
 
-import io.github.palexdev.materialfx.controls.factories.RippleClipTypeFactory;
-import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
+import io.github.palexdev.materialfx.factories.RippleClipTypeFactory;
+import io.github.palexdev.materialfx.beans.PositionBean;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Shape;
@@ -68,7 +68,7 @@ public interface IRippleGenerator<T extends IRipple> {
     /**
      * @return the current generator's position function
      */
-    Function<MouseEvent, RipplePosition> getRipplePositionFunction();
+    Function<MouseEvent, PositionBean> getRipplePositionFunction();
 
     /**
      * Sets the generator's ripple position function to the specified one.
@@ -76,9 +76,9 @@ public interface IRippleGenerator<T extends IRipple> {
      * This {@link Function} is responsible for computing the ripple's x and y
      * coordinates before the animation is played. The function takes a MouseEvent as the input
      * (since in most controls the coordinates are the x and y coordinates of the mouse event)
-     * and returns a {@link RipplePosition} bean.
+     * and returns a {@link PositionBean} bean.
      */
-    void setRipplePositionFunction(Function<MouseEvent, RipplePosition> positionFunction);
+    void setRipplePositionFunction(Function<MouseEvent, PositionBean> positionFunction);
 
     /**
      * Every ripple generator should have a default ripple supplier.

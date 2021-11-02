@@ -20,7 +20,7 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
-import io.github.palexdev.materialfx.controls.enums.DialogType;
+import io.github.palexdev.materialfx.enums.DialogType;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.selection.ComboBoxSelectionModel;
 import io.github.palexdev.materialfx.skins.MFXComboBoxSkin;
@@ -41,7 +41,7 @@ import javafx.scene.paint.Paint;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static io.github.palexdev.materialfx.controls.enums.Styles.ComboBoxStyles;
+import static io.github.palexdev.materialfx.enums.Styles.ComboBoxStyles;
 
 /**
  * This is the implementation of a combo box following Google's material design guidelines in JavaFX.
@@ -229,7 +229,7 @@ public class MFXComboBox<T> extends Control implements Validated<MFXDialogValida
                         .addMenuItem(selectLast)
                         .addSeparator()
                         .addMenuItem(resetSelection)
-                        .install()
+                        .installAndGet()
         );
     }
 

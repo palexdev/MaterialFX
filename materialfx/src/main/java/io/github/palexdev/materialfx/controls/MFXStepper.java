@@ -20,7 +20,7 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle.MFXStepperToggleEvent;
-import io.github.palexdev.materialfx.controls.enums.StepperToggleState;
+import io.github.palexdev.materialfx.enums.StepperToggleState;
 import io.github.palexdev.materialfx.skins.MFXStepperSkin;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.validation.base.AbstractMFXValidator;

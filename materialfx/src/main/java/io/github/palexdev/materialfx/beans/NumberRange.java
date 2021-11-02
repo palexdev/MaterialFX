@@ -18,7 +18,8 @@
 
 package io.github.palexdev.materialfx.beans;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.IntStream;
 
 /**
  * Simple bean to represent a range of values from min to max.
@@ -43,14 +44,38 @@ public class NumberRange<T extends Number> {
     //================================================================================
     // Methods
     //================================================================================
+
+    /**
+     * @return the lower bound
+     */
     public T getMin() {
         return min;
     }
 
+    /**
+     * @return the upper bound
+     */
     public T getMax() {
         return max;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NumberRange<?> that = (NumberRange<?>) o;
+        return Objects.equals(min, that.min) && Objects.equals(max, that.max);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(min, max);
+    }
+
+    @Override
+    public String toString() {
+        return "Min[" + min + "], Max[" + max + "]";
+    }
     //================================================================================
     // Static Methods
     //================================================================================
@@ -123,5 +148,19 @@ public class NumberRange<T extends Number> {
      */
     public static boolean inRangeOf(long val, List<NumberRange<Long>> ranges) {
         return ranges.stream().anyMatch(range -> inRangeOf(val, range));
+    }
+
+    /**
+     * Expands a range of integers to a List of integers.
+     */
+    public static List<Integer> expandRange(NumberRange<Integer> range) {
+        return IntStream.rangeClosed(range.getMin(), range.getMax()).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+    }
+
+    /**
+     * Expands a range of integers to a Set of integers.
+     */
+    public static Set<Integer> expandRangeToSet(NumberRange<Integer> range) {
+        return IntStream.rangeClosed(range.getMin(), range.getMax()).collect(HashSet::new, HashSet::add, HashSet::addAll);
     }
 }

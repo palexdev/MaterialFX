@@ -18,7 +18,7 @@
 
 package io.github.palexdev.materialfx.selection;
 
-import javafx.beans.value.ObservableValue;
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 
 /**
@@ -29,7 +29,11 @@ public class ComboBoxSelectionModel<T> extends SingleSelectionModel<T> {
     //================================================================================
     // Constructors
     //================================================================================
-    public ComboBoxSelectionModel(ObservableValue<? extends ObservableList<T>> items) {
+    public ComboBoxSelectionModel(ObservableList<T> items) {
+        super(items);
+    }
+
+    public ComboBoxSelectionModel(ObjectProperty<ObservableList<T>> items) {
         super(items);
     }
 

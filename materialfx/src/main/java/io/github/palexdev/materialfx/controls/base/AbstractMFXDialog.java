@@ -20,8 +20,8 @@ package io.github.palexdev.materialfx.controls.base;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXDialog;
-import io.github.palexdev.materialfx.controls.enums.DialogType;
-import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
+import io.github.palexdev.materialfx.enums.DialogType;
+import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.effects.MFXScrimEffect;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.ParallelTransition;

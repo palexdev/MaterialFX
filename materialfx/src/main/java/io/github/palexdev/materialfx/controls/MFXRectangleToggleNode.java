@@ -20,7 +20,7 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXToggleNode;
-import io.github.palexdev.materialfx.controls.factories.RippleClipTypeFactory;
+import io.github.palexdev.materialfx.factories.RippleClipTypeFactory;
 import io.github.palexdev.materialfx.effects.ripple.RippleClipType;
 import io.github.palexdev.materialfx.skins.MFXRectangleToggleNodeSkin;
 import javafx.beans.property.ObjectProperty;

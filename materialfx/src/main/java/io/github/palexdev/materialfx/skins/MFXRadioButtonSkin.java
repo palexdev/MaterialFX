@@ -20,7 +20,7 @@ package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.controls.MFXRadioButton;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
+import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
 import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
 import io.github.palexdev.materialfx.utils.ColorUtils;
@@ -78,9 +78,9 @@ public class MFXRadioButtonSkin extends RadioButtonSkin {
         rippleGenerator.setAnimationSpeed(2);
         rippleGenerator.setClipSupplier(() -> null);
         rippleGenerator.setRipplePositionFunction(event -> {
-            RipplePosition position = new RipplePosition();
-            position.setXPosition(dot.getBoundsInParent().getCenterX());
-            position.setYPosition(dot.getBoundsInParent().getCenterY());
+            PositionBean position = new PositionBean();
+            position.setX(dot.getBoundsInParent().getCenterX());
+            position.setY(dot.getBoundsInParent().getCenterY());
             return position;
         });
         rippleGenerator.setRippleRadius(radius);

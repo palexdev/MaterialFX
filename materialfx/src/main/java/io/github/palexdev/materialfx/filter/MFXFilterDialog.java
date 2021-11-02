@@ -18,35 +18,14 @@
 
 package io.github.palexdev.materialfx.filter;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.controls.*;
-import io.github.palexdev.materialfx.controls.cell.MFXListCell;
-import io.github.palexdev.materialfx.controls.enums.Styles;
-import io.github.palexdev.materialfx.controls.factories.RippleClipTypeFactory;
-import io.github.palexdev.materialfx.effects.DepthLevel;
-import io.github.palexdev.materialfx.effects.ripple.RippleClipType;
-import io.github.palexdev.materialfx.font.MFXFontIcon;
-import javafx.beans.binding.Bindings;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.Event;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
+// TODO remake?
 /**
  * This dialog provides a graphical way of filtering a given list of T items based
  * on the conditions specified by the added evaluation boxes.
  *
  * @see MFXEvaluationBox
  */
+/*
 public class MFXFilterDialog<T> extends MFXDialog {
     //================================================================================
     // Properties
@@ -154,9 +133,11 @@ public class MFXFilterDialog<T> extends MFXDialog {
         setBehavior();
     }
 
-    /**
+    */
+/**
      * Sets the buttons behavior
-     */
+     *//*
+
     private void setBehavior() {
         addEventFilter(MouseEvent.MOUSE_PRESSED, event -> requestFocus());
 
@@ -165,7 +146,8 @@ public class MFXFilterDialog<T> extends MFXDialog {
         clear.setOnAction(event -> evaluationBoxes.clear());
     }
 
-    /**
+    */
+/**
      * Filters the given list and returns an observable filtered list.
      * <p></p>
      * Calls {@link #filter(String)} on each item for filtering.
@@ -173,7 +155,8 @@ public class MFXFilterDialog<T> extends MFXDialog {
      * <b>N.B:</b> The evaluation is done by calling the item's toString method or, if the item implements {@link IFilterable},
      * by calling {@link IFilterable#toFilterString()}. If the toString method is not overridden
      * or does not contain any useful information for filtering it won't work.
-     */
+     *//*
+
     public ObservableList<T> filter(List<T> list) {
         return list.stream()
                 .filter(item -> {
@@ -187,9 +170,11 @@ public class MFXFilterDialog<T> extends MFXDialog {
                 .collect(Collectors.toCollection(FXCollections::observableArrayList));
     }
 
-    /**
+    */
+/**
      * Tests all the evaluation boxes conditions on the given string.
-     */
+     *//*
+
     private boolean filter(String filterString) {
         Boolean expression = null;
         for (MFXEvaluationBox box : evaluationBoxes) {
@@ -210,9 +195,11 @@ public class MFXFilterDialog<T> extends MFXDialog {
         return expression != null ? expression : false;
     }
 
-    /**
+    */
+/**
      * Adds a new {@link MFXEvaluationBox} with the specified {@link EvaluationMode} to the dialog.
-     */
+     *//*
+
     private void addFilterBox(EvaluationMode mode) {
         MFXEvaluationBox evaluationBox = new MFXEvaluationBox(mode);
         HBox.setHgrow(evaluationBox, Priority.ALWAYS);
@@ -220,9 +207,11 @@ public class MFXFilterDialog<T> extends MFXDialog {
         evaluationBoxes.add(evaluationBox);
     }
 
-    /**
+    */
+/**
      * @return the filter button instance
-     */
+     *//*
+
     public MFXButton getFilterButton() {
         return filterButton;
     }
@@ -245,3 +234,4 @@ public class MFXFilterDialog<T> extends MFXDialog {
         closeIcon.resizeRelocate(ciX, ciY, ciSize, ciSize);
     }
 }
+*/

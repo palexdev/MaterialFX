@@ -26,7 +26,7 @@ import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.cell.MFXDateCell;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
+import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.*;
 import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
@@ -489,7 +489,7 @@ public class MFXDatePickerContent extends VBox {
     private void buildButtons() {
         MFXFontIcon chevronDown = new MFXFontIcon("mfx-chevron-down", 13);
         yearsButton = new MFXIconWrapper(chevronDown, 20).rippleGeneratorBehavior(event ->
-                new RipplePosition(yearsButton.getWidth() / 2, yearsButton.getHeight() / 2)
+                new PositionBean(yearsButton.getWidth() / 2, yearsButton.getHeight() / 2)
         );
         yearsButton.getStyleClass().add("years-button");
         NodeUtils.makeRegionCircular(yearsButton);
@@ -501,7 +501,7 @@ public class MFXDatePickerContent extends VBox {
 
         MFXFontIcon chevronLeft = new MFXFontIcon("mfx-chevron-left", 13);
         monthBackButton = new MFXIconWrapper(chevronLeft, 20).rippleGeneratorBehavior(event ->
-                new RipplePosition(monthBackButton.getWidth() / 2, monthBackButton.getHeight() / 2)
+                new PositionBean(monthBackButton.getWidth() / 2, monthBackButton.getHeight() / 2)
         );
         monthBackButton.getStyleClass().add("month-back-button");
         NodeUtils.makeRegionCircular(monthBackButton);
@@ -509,7 +509,7 @@ public class MFXDatePickerContent extends VBox {
 
         MFXFontIcon chevronRight = new MFXFontIcon("mfx-chevron-right", 13);
         monthForwardButton = new MFXIconWrapper(chevronRight, 20).rippleGeneratorBehavior(event ->
-                new RipplePosition(monthForwardButton.getWidth() / 2, monthForwardButton.getHeight() / 2)
+                new PositionBean(monthForwardButton.getWidth() / 2, monthForwardButton.getHeight() / 2)
         );
         monthForwardButton.getStyleClass().add("month-forward-button");
         NodeUtils.makeRegionCircular(monthForwardButton);
@@ -517,7 +517,7 @@ public class MFXDatePickerContent extends VBox {
 
         MFXFontIcon calendar = new MFXFontIcon("mfx-calendar-semi-black", 17);
         inputButton = new MFXIconWrapper(calendar, 35).rippleGeneratorBehavior(event ->
-                new RipplePosition(inputButton.getWidth() / 2, inputButton.getHeight() / 2)
+                new PositionBean(inputButton.getWidth() / 2, inputButton.getHeight() / 2)
         );
         inputButton.getStyleClass().add("change-input-button");
         Tooltip tooltip = new Tooltip("Switches between mouse input and keyboard input");

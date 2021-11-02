@@ -21,6 +21,7 @@ package io.github.palexdev.materialfx.selection;
 import io.github.palexdev.materialfx.selection.base.AbstractSingleSelectionModel;
 import io.github.palexdev.materialfx.selection.base.ISingleSelectionModel;
 import io.github.palexdev.materialfx.utils.others.TriConsumer;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -40,7 +41,11 @@ public class SingleSelectionModel<T> extends AbstractSingleSelectionModel<T> {
     //================================================================================
     // Constructors
     //================================================================================
-    public SingleSelectionModel(ObservableValue<? extends ObservableList<T>> items) {
+    public SingleSelectionModel(ObservableList<T> items) {
+        super(items);
+    }
+
+    public SingleSelectionModel(ObjectProperty<ObservableList<T>> items) {
         super(items);
     }
 

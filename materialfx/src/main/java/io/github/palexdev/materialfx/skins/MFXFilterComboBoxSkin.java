@@ -21,10 +21,10 @@ package io.github.palexdev.materialfx.skins;
 import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXListCell;
-import io.github.palexdev.materialfx.controls.enums.Styles;
-import io.github.palexdev.materialfx.controls.factories.MFXAnimationFactory;
+import io.github.palexdev.materialfx.enums.Styles;
+import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
+import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.selection.ComboBoxSelectionModel;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
@@ -379,7 +379,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
      */
     private void iconBehavior() {
         icon.rippleGeneratorBehavior(event ->
-                new RipplePosition(icon.getWidth() / 2, icon.getHeight() / 2)
+                new PositionBean(icon.getWidth() / 2, icon.getHeight() / 2)
         );
 
         MFXCircleRippleGenerator rg = icon.getRippleGenerator();

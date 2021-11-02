@@ -20,7 +20,7 @@ package io.github.palexdev.materialfx.effects.ripple.base;
 
 import io.github.palexdev.materialfx.collections.ObservableStack;
 import io.github.palexdev.materialfx.effects.DepthLevel;
-import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
+import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.skins.MFXCheckboxSkin;
 import javafx.animation.Animation;
 import javafx.beans.property.*;
@@ -60,7 +60,7 @@ public abstract class AbstractMFXRippleGenerator<T extends IRipple> extends Regi
     protected final Region region;
     protected Supplier<Shape> clipSupplier;
     protected Supplier<T> rippleSupplier;
-    protected Function<MouseEvent, RipplePosition> positionFunction;
+    protected Function<MouseEvent, PositionBean> positionFunction;
 
     protected final BooleanProperty animateBackground = new SimpleBooleanProperty(true);
     protected final BooleanProperty animateShadow = new SimpleBooleanProperty(false);
