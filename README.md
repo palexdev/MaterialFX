@@ -308,6 +308,8 @@ donation here. [![Donate](https://img.shields.io/badge/$-support-green.svg?style
 - Yiding He
 - Alaa Abu Zidan
 - Ultraviolet-Ninja
+- Sourabh Bhat
+- Yahia Rehab
 - *Your name can be here by supporting me at this link, [Support](https://bit.ly/31XB8zD)*
 
 Thank you very very much to all supporters, to all people who contribute to the project, to all people that thanked me, you really made my day
