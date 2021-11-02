@@ -80,4 +80,18 @@ task removeBnd(type: Delete) {
     }
 }
 
+publishing {
+    publications {
+        main(MavenPublication) {
+            pom.withXml {
+                asNode().dependencies.'*'.findAll {
+                    it.groupId.text() == 'org.openjfx'
+                }.each {
+                    it.parent().remove(it)
+                }
+            }
+        }
+    }
+}
+
 build.dependsOn copyJar, removeBnd
