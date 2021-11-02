@@ -2,7 +2,6 @@ package io.github.palexdev.materialfx.beans;
 
 import javafx.animation.Transition;
 
-// TODO documentation
 /**
  * This is an extension of {@link PositionBean} to be used
  * with {@link Transition}s that start from a point P(x, y) and

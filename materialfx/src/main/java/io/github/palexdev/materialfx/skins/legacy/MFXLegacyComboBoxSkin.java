@@ -19,9 +19,8 @@
 package io.github.palexdev.materialfx.skins.legacy;
 
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
-import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyComboBox;
-import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.utils.LabelUtils;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
 import javafx.animation.ScaleTransition;
@@ -88,8 +87,7 @@ public class MFXLegacyComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
         focusedLine.setScaleX(0.0);
         focusedLine.setManaged(false);
 
-        MFXFontIcon warnIcon = new MFXFontIcon("mfx-exclamation-triangle", Color.RED);
-        MFXIconWrapper warnWrapper = new MFXIconWrapper(warnIcon, 10);
+        MFXIconWrapper warnWrapper = new MFXIconWrapper("mfx-exclamation-triangle", 10, Color.RED, 10);
 
         validate = new Label();
         validate.setGraphic(warnWrapper);

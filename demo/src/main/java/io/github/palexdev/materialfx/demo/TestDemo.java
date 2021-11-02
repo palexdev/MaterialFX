@@ -25,7 +25,6 @@ import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.demo.model.FilterablePerson;
 import io.github.palexdev.materialfx.font.FontResources;
-import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.selection.SingleSelectionModel;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import javafx.application.Application;
@@ -133,7 +132,7 @@ public class TestDemo extends Application {
     public MFXIconWrapper getRandomIcon(double size) {
         FontResources[] resources = FontResources.values();
         String desc = resources[random.nextInt(resources.length)].getDescription();
-        return new MFXIconWrapper(new MFXFontIcon(desc, size, ColorUtils.getRandomColor()), size * 1.5);
+        return new MFXIconWrapper(desc, size, ColorUtils.getRandomColor(), size * 1.5);
     }
 
     private void setupTable(MFXTableView<FilterablePerson> tableView) {

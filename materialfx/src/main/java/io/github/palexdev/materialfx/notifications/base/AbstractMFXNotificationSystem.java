@@ -72,7 +72,6 @@ public abstract class AbstractMFXNotificationSystem implements INotificationSyst
 
     protected final ResettableBooleanProperty showing = new ResettableBooleanProperty(false, false);
     protected final ResettableBooleanProperty closing = new ResettableBooleanProperty(false, false);
-    protected boolean init = false;
 
     //================================================================================
     // Constructors

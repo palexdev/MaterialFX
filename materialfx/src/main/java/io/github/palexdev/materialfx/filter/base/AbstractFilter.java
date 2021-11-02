@@ -1,9 +1,9 @@
 package io.github.palexdev.materialfx.filter.base;
 
 import io.github.palexdev.materialfx.beans.BiPredicateBean;
+import io.github.palexdev.materialfx.beans.FilterBean;
 import io.github.palexdev.materialfx.controls.MFXFilterPane;
 import io.github.palexdev.materialfx.enums.ChainMode;
-import io.github.palexdev.materialfx.beans.FilterBean;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
@@ -82,6 +82,7 @@ public abstract class AbstractFilter<T, U> {
     /**
      * Allows to add some extra {@link BiPredicateBean}s alongside the default ones.
      */
+    @SuppressWarnings("unchecked")
     protected abstract AbstractFilter<T, U> extend(BiPredicateBean<U, U>... predicateBeans);
 
     //================================================================================
@@ -120,7 +121,6 @@ public abstract class AbstractFilter<T, U> {
         return t -> predicates.get(index).predicate().test(extractor.apply(t), convertedInput);
     }
 
-    // TODO can be used but warn
     /**
      * Produces a {@link Predicate} from the given input and {@link BiPredicate}.
      * <p></p>

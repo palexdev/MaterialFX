@@ -19,10 +19,10 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.factories.RippleClipTypeFactory;
+import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.effects.ripple.RippleClipType;
-import io.github.palexdev.materialfx.beans.PositionBean;
+import io.github.palexdev.materialfx.factories.RippleClipTypeFactory;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.css.PseudoClass;
@@ -89,7 +89,7 @@ public class MFXTableRow<T> extends HBox {
         rippleGenerator.setClipSupplier(() -> new RippleClipTypeFactory(RippleClipType.RECTANGLE).setOffsetW(10).build(this));
         rippleGenerator.setComputeRadiusMultiplier(true);
         rippleGenerator.setManaged(false);
-        rippleGenerator.setRipplePositionFunction(event -> new PositionBean(event.getX(), event.getY()));
+        rippleGenerator.setRipplePositionFunction(event -> PositionBean.of(event.getX(), event.getY()));
         rippleGenerator.setTranslateX(-5);
         rippleGenerator.rippleRadiusProperty().bind(widthProperty().divide(2.0));
         addEventFilter(MouseEvent.MOUSE_PRESSED, rippleGenerator::generateRipple);

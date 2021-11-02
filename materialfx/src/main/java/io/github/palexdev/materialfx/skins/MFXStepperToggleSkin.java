@@ -25,7 +25,6 @@ import io.github.palexdev.materialfx.controls.MFXStepperToggle;
 import io.github.palexdev.materialfx.enums.DialogType;
 import io.github.palexdev.materialfx.enums.StepperToggleState;
 import io.github.palexdev.materialfx.enums.TextPosition;
-import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.DialogUtils;
 import io.github.palexdev.materialfx.utils.LabelUtils;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
@@ -69,9 +68,7 @@ public class MFXStepperToggleSkin extends SkinBase<MFXStepperToggle> {
         label.setUnfocusedLineColor(Color.TRANSPARENT);
         label.setManaged(false);
 
-        errorIcon = new MFXIconWrapper(
-                new MFXFontIcon("mfx-exclamation-triangle", Color.web("#EF6E6B")), 16
-        );
+        errorIcon = new MFXIconWrapper("mfx-exclamation-triangle", 10, Color.web("#EF6E6B"), 16);
         errorIcon.setId("errorIcon");
         errorIcon.setVisible(false);
         errorIcon.setManaged(false);

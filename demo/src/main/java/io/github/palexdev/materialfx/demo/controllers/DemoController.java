@@ -119,26 +119,22 @@ public class DemoController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Icons
-        MFXFontIcon xIcon = new MFXFontIcon("mfx-x-circle", 16);
-        MFXFontIcon minusIcon = new MFXFontIcon("mfx-minus-circle", 16);
-        MFXFontIcon expandIcon = new MFXFontIcon("mfx-expand", 12.5);
-        MFXFontIcon infoIcon = new MFXFontIcon("mfx-info-circle", 30, Color.rgb(75, 181, 255));
         MFXFontIcon angleIcon = new MFXFontIcon("mfx-angle-right", 20);
 
         // Buttons
-        MFXIconWrapper closeButton = new MFXIconWrapper(xIcon, 22);
+        MFXIconWrapper closeButton = new MFXIconWrapper("mfx-x-circle", 16, 22);
         closeButton.setId("closeButton");
         closeButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> primaryStage.close());
 
-        MFXIconWrapper minimizeButton = new MFXIconWrapper(minusIcon, 22);
+        MFXIconWrapper minimizeButton = new MFXIconWrapper("mfx-minus-circle", 16, 22);
         minimizeButton.setId("minimizeButton");
         minimizeButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> primaryStage.setIconified(true));
 
-        MFXIconWrapper expandButton = new MFXIconWrapper(expandIcon, 22);
+        MFXIconWrapper expandButton = new MFXIconWrapper("mfx-expand", 12.5, 22);
         expandButton.setId("expandButton");
         expandButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> primaryStage.setFullScreen(!primaryStage.isFullScreen()));
 
-        MFXIconWrapper infoButton = new MFXIconWrapper(infoIcon, 30).defaultRippleGeneratorBehavior();
+        MFXIconWrapper infoButton = new MFXIconWrapper("mfx-info-circle", 30, Color.rgb(75, 181, 255), 30).defaultRippleGeneratorBehavior();
         infoButton.setId("infoButton");
         infoButton.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> showInfo());
 
@@ -276,8 +272,7 @@ public class DemoController implements Initializable {
         // Close Button
         StackPane header = (StackPane) infoDialog.lookup("#headerNode");
 
-        MFXFontIcon xIcon = new MFXFontIcon("mfx-x", 8);
-        MFXIconWrapper closeButton = new MFXIconWrapper(xIcon, 22).defaultRippleGeneratorBehavior();
+        MFXIconWrapper closeButton = new MFXIconWrapper("mfx-x", 8, 22).defaultRippleGeneratorBehavior();
         closeButton.setId("closeButton");
         StackPane.setAlignment(closeButton, Pos.TOP_RIGHT);
         StackPane.setMargin(closeButton, new Insets(4, 4, 0, 0));

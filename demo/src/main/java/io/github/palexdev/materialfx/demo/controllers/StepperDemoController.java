@@ -68,7 +68,7 @@ public class StepperDemoController implements Initializable {
         loginField.setPromptText("Username...");
         loginField.getValidator().add(BindingUtils.toProperty(loginField.textProperty().length().greaterThanOrEqualTo(6)), "The username must be at least 6 characters long");
         loginField.setValidated(true);
-        loginField.setIcon(new MFXIconWrapper(new MFXFontIcon("mfx-user", 16, Color.web("#4D4D4D")), 24));
+        loginField.setIcon(new MFXIconWrapper("mfx-user", 16, Color.web("#4D4D4D"), 24));
         passwordField.setPromptText("Password...");
         passwordField.getValidator().add(BindingUtils.toProperty(passwordField.passwordProperty().length().greaterThanOrEqualTo(8)), "The password must be at least 8 characters long");
         passwordField.setValidated(true);

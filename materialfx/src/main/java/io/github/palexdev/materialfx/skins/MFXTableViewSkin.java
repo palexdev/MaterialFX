@@ -736,7 +736,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
      * using the specified description and size.
      */
     private MFXIconWrapper buildIcon(String description, double size) {
-        return new MFXIconWrapper(new MFXFontIcon(description, size), 24).defaultRippleGeneratorBehavior();
+        return new MFXIconWrapper(description, size, 24).defaultRippleGeneratorBehavior();
     }
 
     @Override

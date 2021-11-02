@@ -18,11 +18,11 @@
 
 package io.github.palexdev.materialfx.skins;
 
+import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.controls.cell.MFXDateCell;
-import io.github.palexdev.materialfx.factories.RippleClipTypeFactory;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.effects.ripple.RippleClipType;
-import io.github.palexdev.materialfx.beans.PositionBean;
+import io.github.palexdev.materialfx.factories.RippleClipTypeFactory;
 import javafx.scene.control.skin.DateCellSkin;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -47,7 +47,7 @@ public class MFXDateCellSkin extends DateCellSkin {
         rippleGenerator = new MFXCircleRippleGenerator(dateCell);
         rippleGenerator.setClipSupplier(() -> new RippleClipTypeFactory(RippleClipType.ROUNDED_RECTANGLE).setArcs(15).build(dateCell));
         rippleGenerator.setRippleColor(Color.rgb(220, 220, 220, 0.6));
-        rippleGenerator.setRipplePositionFunction(event -> new PositionBean(event.getX(), event.getY()));
+        rippleGenerator.setRipplePositionFunction(event -> PositionBean.of(event.getX(), event.getY()));
         dateCell.addEventFilter(MouseEvent.MOUSE_PRESSED, rippleGenerator::generateRipple);
 
         updateChildren();

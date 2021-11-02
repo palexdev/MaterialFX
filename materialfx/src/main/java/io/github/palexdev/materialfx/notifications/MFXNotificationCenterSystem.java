@@ -100,7 +100,6 @@ public class MFXNotificationCenterSystem extends AbstractMFXNotificationSystem {
         PositionBean positionBean = computePosition();
         popup.setX(positionBean.getX());
         popup.setY(positionBean.getY());
-        init = true; // TODO remove?
     }
 
     /**

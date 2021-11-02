@@ -1,16 +1,16 @@
 package io.github.palexdev.materialfx.skins;
 
+import io.github.palexdev.materialfx.beans.BiPredicateBean;
+import io.github.palexdev.materialfx.beans.FilterBean;
 import io.github.palexdev.materialfx.controls.*;
+import io.github.palexdev.materialfx.effects.ripple.RippleClipType;
+import io.github.palexdev.materialfx.enums.ChainMode;
 import io.github.palexdev.materialfx.factories.InsetsFactory;
 import io.github.palexdev.materialfx.factories.RippleClipTypeFactory;
-import io.github.palexdev.materialfx.effects.ripple.RippleClipType;
 import io.github.palexdev.materialfx.filter.BooleanFilter;
-import io.github.palexdev.materialfx.enums.ChainMode;
 import io.github.palexdev.materialfx.filter.EnumFilter;
 import io.github.palexdev.materialfx.filter.base.AbstractFilter;
 import io.github.palexdev.materialfx.filter.base.NumberFilter;
-import io.github.palexdev.materialfx.beans.BiPredicateBean;
-import io.github.palexdev.materialfx.beans.FilterBean;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.beans.InvalidationListener;
@@ -39,6 +39,7 @@ import javafx.stage.Modality;
  * <p> - A label which acts as a separator
  * <p> - A {@link FlowPane} to show the currently built active filters
  */
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
     //================================================================================
     // Properties
@@ -167,8 +168,8 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
         headerLabel.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(headerLabel, Priority.ALWAYS);
 
-        MFXIconWrapper filter = new MFXIconWrapper(new MFXFontIcon("mfx-variant7-mark", 16), 28).defaultRippleGeneratorBehavior();
-        MFXIconWrapper reset = new MFXIconWrapper(new MFXFontIcon("mfx-undo", 16), 28).defaultRippleGeneratorBehavior();
+        MFXIconWrapper filter = new MFXIconWrapper("mfx-variant7-mark", 16, 28).defaultRippleGeneratorBehavior();
+        MFXIconWrapper reset = new MFXIconWrapper("mfx-undo", 16, 28).defaultRippleGeneratorBehavior();
 
         filter.setId("filterIcon");
         reset.setId("resetIcon");
@@ -176,7 +177,7 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
         NodeUtils.makeRegionCircular(filter);
         NodeUtils.makeRegionCircular(reset);
 
-        filter.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> filterPane.getOnFilter().handle(event)); // TODO action
+        filter.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> filterPane.getOnFilter().handle(event));
         reset.addEventHandler(MouseEvent.MOUSE_CLICKED, this::reset);
 
         HBox box = new HBox(5, headerLabel, filter, reset);
@@ -248,7 +249,7 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
 
                 if (queryValidation(selected)) {
                     filterPane.getActiveFilters().add(predicate);
-                };
+                }
             }
         });
         addButton.getRippleGenerator().setClipSupplier(() -> new RippleClipTypeFactory(RippleClipType.ROUNDED_RECTANGLE).setArcs(30).build(addButton));

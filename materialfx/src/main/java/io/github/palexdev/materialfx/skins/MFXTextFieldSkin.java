@@ -21,7 +21,6 @@ package io.github.palexdev.materialfx.skins;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
-import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.LabelUtils;
 import io.github.palexdev.materialfx.validation.MFXDialogValidator;
 import javafx.animation.ScaleTransition;
@@ -97,8 +96,7 @@ public class MFXTextFieldSkin extends TextFieldSkin {
         focusedLine.setScaleX(0.0);
         focusedLine.setSmooth(true);
 
-        MFXFontIcon warnIcon = new MFXFontIcon("mfx-exclamation-triangle", Color.RED);
-        MFXIconWrapper warnWrapper = new MFXIconWrapper(warnIcon, 10);
+        MFXIconWrapper warnWrapper = new MFXIconWrapper("mfx-exclamation-triangle", 10, Color.RED, 10);
 
         validate = new Label();
         validate.setGraphic(warnWrapper);

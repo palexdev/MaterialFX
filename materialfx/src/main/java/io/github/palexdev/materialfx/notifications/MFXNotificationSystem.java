@@ -87,7 +87,6 @@ public class MFXNotificationSystem extends AbstractMFXNotificationSystem {
     protected void init() {
         PositionBean position = computePosition();
         popup.show(dummyStage, position.getX(), position.getY());
-        init = true; // TODO remove?
     }
 
     /**

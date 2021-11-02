@@ -23,7 +23,6 @@ import io.github.palexdev.materialfx.controls.MFXLabel;
 import io.github.palexdev.materialfx.controls.MFXListView;
 import io.github.palexdev.materialfx.controls.cell.MFXListCell;
 import io.github.palexdev.materialfx.font.FontResources;
-import io.github.palexdev.materialfx.font.MFXFontIcon;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -75,7 +74,6 @@ public class FontResourcesDemoController implements Initializable {
     }
 
     private HBox buildNode(FontResources fontResource) {
-        MFXFontIcon icon = new MFXFontIcon(fontResource.getDescription(), 20);
         MFXLabel l1 = new MFXLabel();
         l1.setLineColor(Color.TRANSPARENT);
         l1.setUnfocusedLineColor(Color.TRANSPARENT);
@@ -98,7 +96,7 @@ public class FontResourcesDemoController implements Initializable {
         s2.setStyle("-fx-fill: white");
 
 
-        HBox box = new HBox(10, new MFXIconWrapper(icon, 24), s1, l1, s2, l2);
+        HBox box = new HBox(10, new MFXIconWrapper(fontResource.getDescription(), 20, 24), s1, l1, s2, l2);
         box.setPadding(new Insets(5));
         box.setAlignment(Pos.CENTER_LEFT);
         return box;

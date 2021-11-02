@@ -18,9 +18,10 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.beans.PositionBean;
+import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.effects.ripple.base.IRippleGenerator;
+import io.github.palexdev.materialfx.font.MFXFontIcon;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -31,6 +32,7 @@ import javafx.scene.Node;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 
 import java.util.function.Function;
 
@@ -63,7 +65,19 @@ public class MFXIconWrapper extends StackPane {
         setSize(size);
     }
 
-    // TODO add constructor with MFXFontIcon description and replace everywhere
+    public MFXIconWrapper(String description, double iconSize, double wrapperSize) {
+        initialize();
+
+        setIcon(new MFXFontIcon(description, iconSize));
+        setSize(wrapperSize);
+    }
+
+    public MFXIconWrapper(String description, double iconSize, Color iconColor, double wrapperSize) {
+        initialize();
+
+        setIcon(new MFXFontIcon(description, iconSize, iconColor));
+        setSize(wrapperSize);
+    }
 
     //================================================================================
     // Methods

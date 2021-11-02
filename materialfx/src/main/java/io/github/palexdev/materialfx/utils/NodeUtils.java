@@ -142,8 +142,6 @@ public class NodeUtils {
         return false;
     }
 
-    // TODO to replace ALL!
-
     /**
      * Checks if the pressed node is in the hierarchy of the specified node, {@link PickResult#getIntersectedNode()}.
      */
@@ -416,6 +414,7 @@ public class NodeUtils {
         }
     }
 
+    // TODO replace all popups with MFXPopup
     public static Point2D pointRelativeTo(Node parent, Node node, HPos hpos,
                                           VPos vpos, double dx, double dy, boolean reposition) {
         final double nodeWidth = node.getLayoutBounds().getWidth();

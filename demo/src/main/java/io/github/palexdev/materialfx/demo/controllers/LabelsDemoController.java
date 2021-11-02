@@ -21,7 +21,6 @@ package io.github.palexdev.materialfx.demo.controllers;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXLabel;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -37,8 +36,8 @@ public class LabelsDemoController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        MFXIconWrapper leading = new MFXIconWrapper(new MFXFontIcon("mfx-filter", 15), 22).defaultRippleGeneratorBehavior();
-        MFXIconWrapper trailing = new MFXIconWrapper(new MFXFontIcon("mfx-info-circle", 15), 22).defaultRippleGeneratorBehavior();
+        MFXIconWrapper leading = new MFXIconWrapper("mfx-filter", 15, 22).defaultRippleGeneratorBehavior();
+        MFXIconWrapper trailing = new MFXIconWrapper("mfx-info-circle", 15, 22).defaultRippleGeneratorBehavior();
 
         NodeUtils.makeRegionCircular(leading);
         NodeUtils.makeRegionCircular(trailing);

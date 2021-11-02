@@ -3,10 +3,9 @@ package io.github.palexdev.materialfx.skins;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.MFXPopup.MFXPopupEvent;
 import io.github.palexdev.materialfx.controls.cell.MFXNotificationCell;
-import io.github.palexdev.materialfx.factories.InsetsFactory;
 import io.github.palexdev.materialfx.enums.NotificationCounterStyle;
 import io.github.palexdev.materialfx.enums.NotificationState;
-import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.materialfx.factories.InsetsFactory;
 import io.github.palexdev.materialfx.notifications.base.INotification;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
@@ -43,8 +42,7 @@ public class MFXNotificationCenterSkin extends SkinBase<MFXNotificationCenter> {
     public MFXNotificationCenterSkin(MFXNotificationCenter notificationCenter, SimpleVirtualFlow<INotification, MFXNotificationCell> virtualFlow) {
         super(notificationCenter);
 
-        MFXFontIcon bell = new MFXFontIcon("mfx-bell-alt", 36);
-        bellWrapped = new MFXIconWrapper(bell, 56);
+        bellWrapped = new MFXIconWrapper("mfx-bell-alt", 36, 56);
         bellWrapped.getStyleClass().add("notifications-icon");
 
         counter = new NotificationsCounter();
@@ -65,10 +63,10 @@ public class MFXNotificationCenterSkin extends SkinBase<MFXNotificationCenter> {
         header.getStyleClass().add("header");
         header.setAlignment(Pos.CENTER_LEFT);
 
-        MFXIconWrapper select = new MFXIconWrapper(new MFXFontIcon("mfx-variant13-mark", 24), 36).defaultRippleGeneratorBehavior();
-        MFXIconWrapper markAsRead = new MFXIconWrapper(new MFXFontIcon("mfx-eye", 20), 36).defaultRippleGeneratorBehavior();
-        MFXIconWrapper markAsUnread = new MFXIconWrapper(new MFXFontIcon("mfx-eye-slash", 20), 36).defaultRippleGeneratorBehavior();
-        MFXIconWrapper dismiss = new MFXIconWrapper(new MFXFontIcon("mfx-delete", 20), 36).defaultRippleGeneratorBehavior();
+        MFXIconWrapper select = new MFXIconWrapper("mfx-variant13-mark", 24, 36).defaultRippleGeneratorBehavior();
+        MFXIconWrapper markAsRead = new MFXIconWrapper("mfx-eye", 20, 36).defaultRippleGeneratorBehavior();
+        MFXIconWrapper markAsUnread = new MFXIconWrapper("mfx-eye-slash", 20, 36).defaultRippleGeneratorBehavior();
+        MFXIconWrapper dismiss = new MFXIconWrapper("mfx-delete", 20, 36).defaultRippleGeneratorBehavior();
 
         select.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> notificationCenter.setSelectionMode(!notificationCenter.isSelectionMode()));
         markAsRead.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> notificationCenter.markSelectedNotificationsAs(NotificationState.READ));

@@ -20,10 +20,10 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.NumberRange;
+import io.github.palexdev.materialfx.beans.PositionBean;
+import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.enums.SliderEnums.SliderMode;
 import io.github.palexdev.materialfx.enums.SliderEnums.SliderPopupSide;
-import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.skins.MFXSliderSkin;
 import io.github.palexdev.materialfx.utils.NodeUtils;
@@ -264,7 +264,7 @@ public class MFXSlider extends Control {
             rippleGenerator.setMouseTransparent(true);
             rippleGenerator.setRadiusMultiplier(2.5);
             rippleGenerator.setRippleRadius(6);
-            rippleGenerator.setRipplePositionFunction(mouseEvent -> new PositionBean(stackPane.getWidth() / 2, stackPane.getHeight() / 2));
+            rippleGenerator.setRipplePositionFunction(mouseEvent -> PositionBean.of(stackPane.getWidth() / 2, stackPane.getHeight() / 2));
             stackPane.addEventFilter(MouseEvent.MOUSE_PRESSED, rippleGenerator::generateRipple);
             stackPane.getChildren().add(rippleGenerator);
 

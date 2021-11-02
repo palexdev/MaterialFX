@@ -19,12 +19,12 @@
 package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
+import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXListCell;
+import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.enums.Styles;
 import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
-import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.selection.ComboBoxSelectionModel;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
@@ -143,8 +143,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
 
         valueLabel = buildLabel();
 
-        MFXFontIcon fontIcon = new MFXFontIcon("mfx-caret-down", 12);
-        icon = new MFXIconWrapper(fontIcon, 24);
+        icon = new MFXIconWrapper("mfx-caret-down", 12, 24);
         icon.setManaged(false);
         icon.getStylesheets().addAll(comboBox.getUserAgentStylesheet());
         NodeUtils.makeRegionCircular(icon, 10);
@@ -378,9 +377,7 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
      * the popup handling when the mouse is pressed.
      */
     private void iconBehavior() {
-        icon.rippleGeneratorBehavior(event ->
-                new PositionBean(icon.getWidth() / 2, icon.getHeight() / 2)
-        );
+        icon.rippleGeneratorBehavior(event -> PositionBean.of(icon.getWidth() / 2, icon.getHeight() / 2));
 
         MFXCircleRippleGenerator rg = icon.getRippleGenerator();
         rg.setAnimationSpeed(1.3);

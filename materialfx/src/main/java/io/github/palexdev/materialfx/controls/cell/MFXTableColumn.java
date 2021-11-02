@@ -22,7 +22,6 @@ import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.enums.SortState;
-import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.skins.MFXTableColumnSkin;
 import io.github.palexdev.materialfx.skins.MFXTableViewSkin;
 import io.github.palexdev.materialfx.utils.NodeUtils;
@@ -118,7 +117,7 @@ public class MFXTableColumn<T> extends Control {
         addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> dragged.set(true));
         addEventFilter(MouseEvent.MOUSE_RELEASED, event -> dragged.set(false));
 
-        sortIcon = new MFXIconWrapper(new MFXFontIcon("mfx-caret-up", 14), 18);
+        sortIcon = new MFXIconWrapper("mfx-caret-up", 14, 18);
         sortIcon.setManaged(false);
         sortIcon.setVisible(false);
         NodeUtils.makeRegionCircular(sortIcon);
