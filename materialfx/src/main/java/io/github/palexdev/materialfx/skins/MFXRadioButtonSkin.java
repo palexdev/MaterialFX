@@ -1,52 +1,30 @@
-/*
- * Copyright (C) 2021 Parisi Alessandro
- * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
- *
- * MaterialFX is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * MaterialFX is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.palexdev.materialfx.skins;
 
-import io.github.palexdev.materialfx.controls.MFXRadioButton;
-import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.beans.PositionBean;
-import io.github.palexdev.materialfx.utils.AnimationUtils;
+import io.github.palexdev.materialfx.controls.LabeledControlWrapper;
+import io.github.palexdev.materialfx.controls.MFXRadioButton;
+import io.github.palexdev.materialfx.effects.Interpolators;
+import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
-import io.github.palexdev.materialfx.utils.ColorUtils;
+import io.github.palexdev.materialfx.utils.AnimationUtils.TimelineBuilder;
 import io.github.palexdev.materialfx.utils.NodeUtils;
-import javafx.animation.Interpolator;
 import javafx.animation.KeyValue;
-import javafx.scene.Cursor;
+import javafx.geometry.Insets;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.skin.RadioButtonSkin;
+import javafx.scene.control.SkinBase;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
-import javafx.util.Duration;
 
-/**
- * This is the implementation of the {@code Skin} associated with every {@link MFXRadioButton}.
- */
-public class MFXRadioButtonSkin extends RadioButtonSkin {
+public class MFXRadioButtonSkin extends SkinBase<MFXRadioButton> {
     //================================================================================
     // Properties
     //================================================================================
     private final StackPane container;
     private final Circle radio;
     private final Circle dot;
-    private final double padding = 8;
+    private final LabeledControlWrapper text;
 
     private final MFXCircleRippleGenerator rippleGenerator;
 
@@ -56,42 +34,35 @@ public class MFXRadioButtonSkin extends RadioButtonSkin {
     public MFXRadioButtonSkin(MFXRadioButton radioButton) {
         super(radioButton);
 
-        final double radius = 8;
-        radio = new Circle(radius);
-        radio.getStyleClass().setAll("radio");
-        radio.setStrokeWidth(2);
-        radio.setFill(Color.web("#f4f4f4"));
+        radio = new Circle();
+        radio.getStyleClass().add("radio");
+        radio.radiusProperty().bind(radioButton.radiusProperty());
         radio.setSmooth(true);
 
-        dot = new Circle(radius);
-        dot.getStyleClass().setAll("dot");
-        dot.fillProperty().bind(radioButton.selectedColorProperty());
+        dot = new Circle();
+        dot.getStyleClass().add("dot");
+        dot.radiusProperty().bind(radioButton.radiusProperty());
         dot.setScaleX(0);
         dot.setScaleY(0);
         dot.setSmooth(true);
 
-        container = new StackPane();
-        container.getStyleClass().add("radio-container");
+        text = new LabeledControlWrapper(radioButton);
 
-        rippleGenerator = new MFXCircleRippleGenerator(container);
+        container = new StackPane(radio, dot);
+        container.setManaged(false);
+
+        rippleGenerator = new MFXCircleRippleGenerator(radioButton);
         rippleGenerator.setAnimateBackground(false);
-        rippleGenerator.setAnimationSpeed(2);
         rippleGenerator.setClipSupplier(() -> null);
         rippleGenerator.setRipplePositionFunction(event -> {
             PositionBean position = new PositionBean();
-            position.setX(dot.getBoundsInParent().getCenterX());
-            position.setY(dot.getBoundsInParent().getCenterY());
+            position.setX(container.getBoundsInParent().getCenterX());
+            position.setY(container.getBoundsInParent().getCenterY());
             return position;
         });
-        rippleGenerator.setRippleRadius(radius);
 
-        container.getChildren().addAll(rippleGenerator, radio, dot);
-
-        radioButton.setCursor(Cursor.HAND);
-        updateChildren();
-        updateColors();
-        radio.setStroke(radioButton.isSelected() ? radioButton.getSelectedColor() : radioButton.getUnSelectedColor());
-        setListeners();
+        getChildren().setAll(rippleGenerator, container, text);
+        addListeners();
     }
 
     //================================================================================
@@ -100,122 +71,169 @@ public class MFXRadioButtonSkin extends RadioButtonSkin {
 
     /**
      * Adds a listener to the selected property for animations, colors and ripples.
+     * Also handles {@link RadioButton#arm()}
      */
-    private void setListeners() {
-        MFXRadioButton radioButton = (MFXRadioButton) getSkinnable();
+    private void addListeners() {
+        MFXRadioButton radioButton = getSkinnable();
 
-        radioButton.selectedColorProperty().addListener((observable, oldValue, newValue) -> updateColors());
-        radioButton.selectedTextColorProperty().addListener((observable, oldValue, newValue) -> updateColors());
-        radioButton.unSelectedColorProperty().addListener((observable, oldValue, newValue) -> updateColors());
-        radioButton.unSelectedTextColorProperty().addListener((observable, oldValue, newValue) -> updateColors());
-
-        radioButton.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
-            buildAndPlayAnimation();
-            updateColors();
+        radioButton.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> radioButton.fire());
+        radioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            animate(newValue);
             rippleGenerator.generateRipple(null);
         });
 
-        /*
-         * Workaround
-         * When the control is created the Skin is still null, so if the RadioButton is set
-         * to be selected the animation won't be played. To fix this add a listener to the
-         * control's skinProperty, when the skin is not null and the RadioButton isSelected,
-         * play the animation.
-         */
         NodeUtils.waitForSkin(radioButton, () -> {
-            if (radioButton.isSelected()) {
-                buildAndPlayAnimation();
-            }
-        }, true, false);
+            if (radioButton.isSelected()) animate(true);
+        }, false, false);
     }
 
-    /**
-     * Changes the ripples color according to the selected property and
-     * the text color if {@code changeTextColor} property is true.
-     */
-    private void updateColors() {
-        final MFXRadioButton radioButton = (MFXRadioButton) getSkinnable();
-        Color selectedColor = (Color) radioButton.getSelectedColor();
-        Color unSelectedColor = (Color) radioButton.getUnSelectedColor();
-        rippleGenerator.setRippleColor(radioButton.isSelected() ? selectedColor : unSelectedColor);
-
-        if (radioButton.isChangeTextColor()) {
-            Color selectedTextColor = (Color) radioButton.getSelectedTextColor();
-            Color unSelectedTextColor = (Color) radioButton.getUnSelectedTextColor();
-
-            Text text = (Text) radioButton.lookup(".text");
-            String color = radioButton.isSelected() ? ColorUtils.rgb(selectedTextColor) : ColorUtils.rgb(unSelectedTextColor);
-            text.setStyle("-fx-fill: " + color + ";\n");
-        }
-    }
-
-    /**
-     * Builds and play the animation to show/hide the radio dot and change the stroke color.
-     */
-    private void buildAndPlayAnimation() {
-        final MFXRadioButton radioButton = (MFXRadioButton) getSkinnable();
-        final Duration duration = Duration.millis(200);
-
-        AnimationUtils.TimelineBuilder.build()
-                .add(
-                        KeyFrames.of(duration,
-                                new KeyValue(dot.scaleXProperty(), radioButton.isSelected() ? 0.55 : 0, Interpolator.EASE_BOTH),
-                                new KeyValue(dot.scaleYProperty(), radioButton.isSelected() ? 0.55 : 0, Interpolator.EASE_BOTH),
-                                new KeyValue(radio.strokeProperty(), radioButton.isSelected() ? radioButton.getSelectedColor() : radioButton.getUnSelectedColor(), Interpolator.EASE_BOTH)
-                        )
-                ).getAnimation()
+    private void animate(boolean selected) {
+        TimelineBuilder.build()
+                .add(KeyFrames.of(
+                        100,
+                        new KeyValue(dot.scaleXProperty(), selected ? 0.55 : 0, Interpolators.EASE_OUT.toInterpolator()),
+                        new KeyValue(dot.scaleYProperty(), selected ? 0.55 : 0, Interpolators.EASE_OUT.toInterpolator())
+                ))
+                .getAnimation()
                 .play();
     }
 
-    private void removeRadio() {
-        getChildren().removeIf(node -> node.getStyleClass().contains("radio"));
-    }
-
     //================================================================================
-    // Override Methods
+    // Overridden Methods
     //================================================================================
-    @Override
-    protected void updateChildren() {
-        super.updateChildren();
-        if (radio != null) {
-            removeRadio();
-            getChildren().addAll(rippleGenerator, container);
-        }
-    }
-
     @Override
     protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return super.computeMinWidth(height,
-                topInset,
-                rightInset,
-                bottomInset,
-                leftInset) + snapSizeX(radio.minWidth(-1)) + padding;
+        MFXRadioButton radioButton = getSkinnable();
+        ContentDisplay disposition = radioButton.getContentDisposition();
+        double gap = radioButton.getGap();
+
+        double minW;
+        switch (disposition) {
+            case LEFT:
+            case RIGHT:
+            case TEXT_ONLY:
+                minW = leftInset + container.prefWidth(-1) + gap + text.prefWidth(-1) + rightInset;
+                break;
+            case TOP:
+            case BOTTOM:
+                minW = leftInset + Math.max(container.prefWidth(-1), text.prefWidth(-1)) + rightInset;
+                break;
+            case CENTER:
+            case GRAPHIC_ONLY:
+                minW = leftInset + container.prefWidth(-1) + rightInset;
+                break;
+            default:
+                minW = super.computeMinWidth(height, topInset, rightInset, bottomInset, leftInset);
+        }
+        return minW;
     }
 
     @Override
-    protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return super.computePrefWidth(height,
-                topInset,
-                rightInset,
-                bottomInset,
-                leftInset) + snapSizeX(radio.prefWidth(-1)) + padding;
+    protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+        MFXRadioButton radioButton = getSkinnable();
+        ContentDisplay disposition = radioButton.getContentDisposition();
+        double gap = radioButton.getGap();
+
+        double minH;
+        switch (disposition) {
+            case LEFT:
+            case RIGHT:
+            case TEXT_ONLY:
+                minH = topInset + Math.max(container.prefHeight(-1), text.prefHeight(-1)) + bottomInset;
+                break;
+            case TOP:
+            case BOTTOM:
+                minH = topInset + container.prefHeight(-1) + gap + text.prefHeight(-1) + bottomInset;
+                break;
+            case CENTER:
+            case GRAPHIC_ONLY:
+                minH = leftInset + container.prefHeight(-1) + rightInset;
+                break;
+            default:
+                minH = super.computeMinHeight(width, topInset, rightInset, bottomInset, leftInset);
+        }
+        return minH;
     }
 
     @Override
-    protected void layoutChildren(final double x, final double y, final double w, final double h) {
-        final RadioButton radioButton = getSkinnable();
+    protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return getSkinnable().prefWidth(-1);
+    }
 
-        final double contWidth = container.prefWidth(-1);
-        final double contHeight = container.prefHeight(-1);
-        final double computeWidth = Math.max(radioButton.prefWidth(-1), radioButton.minWidth(-1));
-        final double labelWidth = Math.min(computeWidth - contWidth, w - snapSizeX(contWidth));
-        final double labelHeight = Math.min(radioButton.prefHeight(labelWidth), h);
-        final double maxHeight = Math.max(contHeight, labelHeight);
-        final double xOffset = NodeUtils.computeXOffset(w, labelWidth + computeWidth, radioButton.getAlignment().getHpos()) + x;
-        final double yOffset = NodeUtils.computeYOffset(h, maxHeight, radioButton.getAlignment().getVpos()) + y;
+    @Override
+    protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return getSkinnable().prefHeight(-1);
+    }
 
-        layoutLabelInArea(xOffset + contWidth + padding, yOffset, labelWidth, maxHeight, radioButton.getAlignment());
-        container.resize(snapSizeX(contWidth), snapSizeY(contHeight));
-        positionInArea(container, xOffset, yOffset, contWidth, maxHeight, 0, radioButton.getAlignment().getHpos(), radioButton.getAlignment().getVpos());
+    @Override
+    protected void layoutChildren(double contentX, double contentY, double contentWidth, double contentHeight) {
+        MFXRadioButton radioButton = getSkinnable();
+        ContentDisplay disposition = radioButton.getContentDisposition();
+        Insets padding = radioButton.getPadding();
+        double gap = radioButton.getGap();
+
+        double rcW = container.prefWidth(-1);
+        double rcH = container.prefHeight(-1);
+        double rcX = 0;
+        double rcY = 0;
+
+
+        double txW = text.prefWidth(-1);
+        double txH = text.prefHeight(-1);
+        double txX = 0;
+        double txY = 0;
+
+        switch (disposition) {
+            case TOP: {
+                rcX = (contentWidth / 2) - (rcW / 2);
+                rcY = 0;
+                txX = (contentWidth / 2) - (txW / 2);
+                txY = rcH + gap;
+                break;
+            }
+            case RIGHT: {
+                rcX = contentWidth - rcW;
+                rcY = (contentHeight / 2) - (rcH / 2);
+                txX = rcX - txW - gap;
+                txY = (contentHeight / 2) - (txH / 2);
+                break;
+            }
+            case BOTTOM: {
+                txX = (contentWidth / 2) - (txW / 2);
+                txY = 0;
+                rcX = (contentWidth / 2) - (rcW / 2);
+                rcY = txH + gap;
+                break;
+            }
+            case TEXT_ONLY:
+            case LEFT: {
+                rcX = 0;
+                rcY = (contentHeight / 2) - (rcH / 2);
+                txX = rcW + gap;
+                txY = (contentHeight / 2) - (txH / 2);
+                break;
+            }
+            case CENTER:
+            case GRAPHIC_ONLY: {
+                rcX = (contentWidth / 2) - (rcW / 2);
+                rcY = (contentHeight / 2) - (rcH / 2);
+                txW = 0;
+                txH = 0;
+                break;
+            }
+        }
+
+        container.resizeRelocate(
+                snapPositionX(rcX + padding.getLeft()),
+                snapPositionY(rcY + padding.getTop()),
+                rcW,
+                rcH
+        );
+        text.resizeRelocate(
+                snapPositionX(txX + padding.getLeft()),
+                snapPositionY(txY + padding.getTop()),
+                txW,
+                txH
+        );
     }
 }

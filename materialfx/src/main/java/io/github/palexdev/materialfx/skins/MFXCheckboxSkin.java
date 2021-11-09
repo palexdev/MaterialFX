@@ -106,12 +106,14 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
     protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
         MFXCheckbox checkbox = getSkinnable();
         ContentDisplay disposition = checkbox.getContentDisposition();
+        double gap = checkbox.getGap();
+
         double minW;
         switch (disposition) {
             case LEFT:
             case RIGHT:
             case TEXT_ONLY:
-                minW = leftInset + rippleContainer.prefWidth(-1) + getSkinnable().getGap() + text.prefWidth(-1) + rightInset;
+                minW = leftInset + rippleContainer.prefWidth(-1) + gap + text.prefWidth(-1) + rightInset;
                 break;
             case TOP:
             case BOTTOM:
@@ -131,6 +133,8 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
     protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
         MFXCheckbox checkbox = getSkinnable();
         ContentDisplay disposition = checkbox.getContentDisposition();
+        double gap = checkbox.getGap();
+
         double minH;
         switch (disposition) {
             case LEFT:
@@ -140,7 +144,7 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
                 break;
             case TOP:
             case BOTTOM:
-                minH = topInset + rippleContainer.prefHeight(-1) + getSkinnable().getGap() + text.prefHeight(-1) + bottomInset;
+                minH = topInset + rippleContainer.prefHeight(-1) + gap + text.prefHeight(-1) + bottomInset;
                 break;
             case CENTER:
             case GRAPHIC_ONLY:

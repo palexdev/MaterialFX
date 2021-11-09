@@ -20,8 +20,6 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.skins.MFXCheckboxSkin;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.css.*;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContentDisplay;
@@ -45,8 +43,6 @@ public class MFXCheckbox extends CheckBox {
     private final String STYLE_CLASS = "mfx-checkbox";
     private final String STYLESHEET = MFXResourcesLoader.load("css/MFXCheckBox.css");
 
-    private final ObjectProperty<ContentDisplay> contentDisposition = new SimpleObjectProperty<>(ContentDisplay.LEFT);
-
     //================================================================================
     // Constructors
     //================================================================================
@@ -66,24 +62,20 @@ public class MFXCheckbox extends CheckBox {
         getStyleClass().add(STYLE_CLASS);
     }
 
-    public ContentDisplay getContentDisposition() {
-        return contentDisposition.get();
-    }
-
-    /**
-     * Specifies how the checkbox is positioned relative to the text.
-     */
-    public ObjectProperty<ContentDisplay> contentDispositionProperty() {
-        return contentDisposition;
-    }
-
-    public void setContentDisposition(ContentDisplay contentDisposition) {
-        this.contentDisposition.set(contentDisposition);
-    }
-
     //================================================================================
     // Stylesheet properties
     //================================================================================
+    private final StyleableObjectProperty<ContentDisplay> contentDisposition = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.CONTENT_DISPOSITION,
+            this,
+            "contentDisposition",
+            ContentDisplay.LEFT
+    ) {
+        @Override
+        public StyleOrigin getStyleOrigin() {
+            return StyleOrigin.USER_AGENT;
+        }
+    };
 
     private final StyleableDoubleProperty gap = new SimpleStyleableDoubleProperty(
             StyleableProperties.GAP,
@@ -91,6 +83,21 @@ public class MFXCheckbox extends CheckBox {
             "gap",
             8.0
     );
+
+    public ContentDisplay getContentDisposition() {
+        return contentDisposition.get();
+    }
+
+    /**
+     * Specifies how the checkbox is positioned relative to the text.
+     */
+    public StyleableObjectProperty<ContentDisplay> contentDispositionProperty() {
+        return contentDisposition;
+    }
+
+    public void setContentDisposition(ContentDisplay contentDisposition) {
+        this.contentDisposition.set(contentDisposition);
+    }
 
     public double getGap() {
         return gap.get();
@@ -113,6 +120,14 @@ public class MFXCheckbox extends CheckBox {
     private static class StyleableProperties {
         private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
+        private static final CssMetaData<MFXCheckbox, ContentDisplay> CONTENT_DISPOSITION =
+                FACTORY.createEnumCssMetaData(
+                        ContentDisplay.class,
+                        "-mfx-content-disposition",
+                        MFXCheckbox::contentDispositionProperty,
+                        ContentDisplay.LEFT
+                );
+
         private static final CssMetaData<MFXCheckbox, Number> GAP =
                 FACTORY.createSizeCssMetaData(
                         "-mfx-gap",
@@ -122,7 +137,7 @@ public class MFXCheckbox extends CheckBox {
 
         static {
             List<CssMetaData<? extends Styleable, ?>> ckbCssMetaData = new ArrayList<>(CheckBox.getClassCssMetaData());
-            Collections.addAll(ckbCssMetaData, GAP);
+            Collections.addAll(ckbCssMetaData, CONTENT_DISPOSITION, GAP);
             cssMetaDataList = Collections.unmodifiableList(ckbCssMetaData);
         }
     }
