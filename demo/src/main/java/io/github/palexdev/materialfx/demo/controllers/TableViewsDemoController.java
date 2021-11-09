@@ -41,7 +41,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -49,7 +48,6 @@ import java.net.URL;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.Callable;
 
 import static io.github.palexdev.materialfx.demo.model.Machine.State.OFFLINE;
 import static io.github.palexdev.materialfx.demo.model.Machine.State.ONLINE;
@@ -166,7 +164,7 @@ public class TableViewsDemoController implements Initializable {
             rowCell.setGraphicTextGap(4);
             MFXFontIcon icon = new MFXFontIcon("mfx-circle", 6);
             icon.colorProperty().bind(Bindings.createObjectBinding(
-                    (Callable<Paint>) () -> machine.getState() == ONLINE ? Color.LIMEGREEN : Color.SALMON,
+                    () -> machine.getState() == ONLINE ? Color.LIMEGREEN : Color.SALMON,
                     machine.stateProperty())
             );
             rowCell.setLeadingGraphic(icon);

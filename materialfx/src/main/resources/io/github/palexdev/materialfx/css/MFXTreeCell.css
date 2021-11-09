@@ -21,6 +21,11 @@
     -fx-background-radius: 7px;
 }
 
+.mfx-tree-cell .mfx-checkbox .box .mark {
+    -mfx-description: "mfx-variant3-mark";
+    -mfx-size: 8;
+}
+
 .mfx-tree-cell .mfx-ripple-generator {
     -mfx-ripple-color: rgba(0, 190, 0, 0.3);
 }

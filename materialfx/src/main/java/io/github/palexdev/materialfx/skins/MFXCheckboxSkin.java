@@ -18,20 +18,18 @@
 
 package io.github.palexdev.materialfx.skins;
 
+import io.github.palexdev.materialfx.beans.PositionBean;
+import io.github.palexdev.materialfx.controls.LabeledControlWrapper;
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
-import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.SkinBase;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
+import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Circle;
 
 /**
  * This is the implementation of the {@code Skin} associated with every {@link MFXCheckbox}.
@@ -40,13 +38,11 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
     //================================================================================
     // Properties
     //================================================================================
-    private final HBox container;
-    private final Label label;
     private final MFXIconWrapper box;
-    private final double boxSize = 27;
+    private final LabeledControlWrapper text;
 
-    private final AnchorPane rippleContainer;
-    private final double rippleContainerSize = 31;
+    private final StackPane rippleContainer;
+    private final Circle rippleContainerClip;
     private final MFXCircleRippleGenerator rippleGenerator;
 
     //================================================================================
@@ -55,16 +51,15 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
     public MFXCheckboxSkin(MFXCheckbox checkbox) {
         super(checkbox);
 
-        // Contains the ripple generator and the box
-        rippleContainer = new AnchorPane();
-        rippleContainer.setPrefSize(rippleContainerSize, rippleContainerSize);
-        rippleContainer.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-        rippleContainer.getStyleClass().setAll("ripple-container");
-        NodeUtils.makeRegionCircular(rippleContainer);
+        MFXFontIcon mark = new MFXFontIcon();
+        mark.getStyleClass().add("mark");
+        box = new MFXIconWrapper(mark, -1);
+        box.getStyleClass().add("box");
 
+        rippleContainer = new StackPane();
         rippleGenerator = new MFXCircleRippleGenerator(rippleContainer);
+        rippleGenerator.setManaged(false);
         rippleGenerator.setAnimateBackground(false);
-        rippleGenerator.setAnimationSpeed(1.5);
         rippleGenerator.setCheckBounds(false);
         rippleGenerator.setClipSupplier(() -> null);
         rippleGenerator.setRipplePositionFunction(event -> {
@@ -73,180 +68,173 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
             position.setY(Math.min(event.getY(), rippleContainer.getHeight()));
             return position;
         });
-        rippleGenerator.setRippleRadius(16);
-
-        // Contains the mark
-        MFXFontIcon icon = new MFXFontIcon(checkbox.getMarkType(), checkbox.getMarkSize(), Color.WHITE);
-        icon.getStyleClass().add("mark");
-        box = new MFXIconWrapper(icon, boxSize);
-        box.getStyleClass().add("box");
-
-        box.setBorder(new Border(new BorderStroke(
-                checkbox.getUncheckedColor(),
-                BorderStrokeStyle.SOLID,
-                new CornerRadii(2.5),
-                new BorderWidths(1.8)
-        )));
-        box.setBackground(new Background(new BackgroundFill(
-                Color.TRANSPARENT,
-                new CornerRadii(2.5),
-                Insets.EMPTY
-        )));
-
-        label = new Label();
-        label.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-        label.textProperty().bind(checkbox.textProperty());
-
 
         rippleContainer.getChildren().addAll(rippleGenerator, box);
-        container = new HBox(10, rippleContainer, label);
-        container.setAlignment(Pos.CENTER_LEFT);
-        getChildren().add(container);
+        rippleContainer.getStyleClass().add("ripple-container");
+        rippleContainer.setManaged(false);
 
-        updateMarkType();
-        setListeners();
+        rippleContainerClip = new Circle();
+        rippleContainerClip.centerXProperty().bind(rippleContainer.widthProperty().divide(2.0));
+        rippleContainerClip.centerYProperty().bind(rippleContainer.heightProperty().divide(2.0));
+        rippleContainer.setClip(rippleContainerClip);
+
+        text = new LabeledControlWrapper(checkbox);
+
+        getChildren().setAll(rippleContainer, text);
+        addListeners();
     }
 
     //================================================================================
     // Methods
     //================================================================================
+    private void addListeners() {
+        MFXCheckbox checkbox = getSkinnable();
 
-    /**
-     * Adds listeners for: markType, selected, indeterminate, checked and unchecked coloros properties.
-     */
-    private void setListeners() {
-        MFXCheckbox checkBox = getSkinnable();
-
-        checkBox.markTypeProperty().addListener(
-                (observable, oldValue, newValue) -> updateMarkType()
-        );
-
-        checkBox.markSizeProperty().addListener(
-                (observable, oldValue, newValue) -> ((MFXFontIcon) box.getIcon()).setFont(Font.font(newValue.doubleValue())));
-
-        checkBox.selectedProperty().addListener(
-                (observable, oldValue, newValue) -> updateColors()
-        );
-
-        checkBox.indeterminateProperty().addListener(
-                (observable, oldValue, newValue) -> updateColors()
-        );
-
-        checkBox.checkedColorProperty().addListener(
-                (observable, oldValue, newValue) -> updateColors()
-        );
-
-        checkBox.uncheckedColorProperty().addListener(
-                (observable, oldValue, newValue) -> updateColors()
-        );
-
-        /* Listener on control but if the coordinates of the event are greater than then ripple container size
-         * then the center of the ripple is set to the width and/or height of container
-         */
-        checkBox.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-            if (!NodeUtils.inHierarchy(event, checkBox)) {
-                return;
-            }
-
+        checkbox.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
             rippleGenerator.generateRipple(event);
-            checkBox.fire();
+            checkbox.fire();
         });
 
-        /*
-         * Workaround
-         * When the control is created the Skin is still null, so if the CheckBox is set
-         * to be selected/indeterminate the animation won't be played. To fix this add a listener to the
-         * control's skinProperty, when the skin is not null and the CheckBox isSelected/isIndeterminate,
-         * play the animation.
-         */
-        NodeUtils.waitForSkin(checkBox, this::updateColors, true, false);
-    }
-
-
-    /**
-     * This method is called whenever one of the following properties changes:
-     * {@code selectedProperty}, {@code indeterminateProperty}, {@code checkedColor} and {@code uncheckedColor} properties
-     *
-     * @see NodeUtils
-     */
-    private void updateColors() {
-        MFXCheckbox checkbox = getSkinnable();
-
-        final BorderStroke borderStroke = box.getBorder().getStrokes().get(0);
-        if (checkbox.isIndeterminate()) {
-            NodeUtils.updateBackground(box, checkbox.getCheckedColor(), new Insets(3.2));
-            box.getIcon().setVisible(false);
-        } else if (checkbox.isSelected()) {
-            NodeUtils.updateBackground(box, checkbox.getCheckedColor(), Insets.EMPTY);
-            box.getIcon().setVisible(true);
-            box.setBorder(new Border(new BorderStroke(
-                    checkbox.getCheckedColor(),
-                    borderStroke.getTopStyle(),
-                    borderStroke.getRadii(),
-                    borderStroke.getWidths()
-            )));
-        } else {
-            NodeUtils.updateBackground(box, Color.TRANSPARENT);
-            box.getIcon().setVisible(false);
-            box.setBorder(new Border(new BorderStroke(
-                    checkbox.getUncheckedColor(),
-                    borderStroke.getTopStyle(),
-                    borderStroke.getRadii(),
-                    borderStroke.getWidths()
-            )));
-        }
-    }
-
-    /**
-     * This method is called whenever the {@code markType} property changes.
-     */
-    private void updateMarkType() {
-        MFXCheckbox checkbox = getSkinnable();
-
-        MFXFontIcon icon = new MFXFontIcon(checkbox.getMarkType(), checkbox.getMarkSize(), Color.WHITE);
-        box.setIcon(icon);
-    }
-
-    /**
-     * Centers the box in the ripple container
-     */
-    private void centerBox() {
-        final double offsetPercentage = 3;
-        final double vInset = ((rippleContainerSize - boxSize) / 2) * offsetPercentage;
-        final double hInset = ((rippleContainerSize - boxSize) / 2) * offsetPercentage;
-        AnchorPane.setTopAnchor(box, vInset);
-        AnchorPane.setRightAnchor(box, hInset);
-        AnchorPane.setBottomAnchor(box, vInset);
-        AnchorPane.setLeftAnchor(box, hInset);
+        checkbox.contentDispositionProperty().addListener(invalidated -> checkbox.requestLayout());
+        checkbox.gapProperty().addListener(invalidated -> checkbox.requestLayout());
     }
 
     //================================================================================
-    // Override Methods
+    // Overridden Methods
     //================================================================================
-    @Override
-    protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return rippleContainer.getHeight();
-    }
-
     @Override
     protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return rippleContainer.getWidth() + label.getWidth() + container.getSpacing();
+        MFXCheckbox checkbox = getSkinnable();
+        ContentDisplay disposition = checkbox.getContentDisposition();
+        double minW;
+        switch (disposition) {
+            case LEFT:
+            case RIGHT:
+            case TEXT_ONLY:
+                minW = leftInset + rippleContainer.prefWidth(-1) + getSkinnable().getGap() + text.prefWidth(-1) + rightInset;
+                break;
+            case TOP:
+            case BOTTOM:
+                minW = leftInset + Math.max(rippleContainer.prefWidth(-1), text.prefWidth(-1)) + rightInset;
+                break;
+            case CENTER:
+            case GRAPHIC_ONLY:
+                minW = leftInset + rippleContainer.prefWidth(-1) + rightInset;
+                break;
+            default:
+                minW = super.computeMinWidth(height, topInset, rightInset, bottomInset, leftInset);
+        }
+        return minW;
     }
 
     @Override
-    protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return rippleContainer.getHeight();
+    protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+        MFXCheckbox checkbox = getSkinnable();
+        ContentDisplay disposition = checkbox.getContentDisposition();
+        double minH;
+        switch (disposition) {
+            case LEFT:
+            case RIGHT:
+            case TEXT_ONLY:
+                minH = topInset + Math.max(rippleContainer.prefHeight(-1), text.prefHeight(-1)) + bottomInset;
+                break;
+            case TOP:
+            case BOTTOM:
+                minH = topInset + rippleContainer.prefHeight(-1) + getSkinnable().getGap() + text.prefHeight(-1) + bottomInset;
+                break;
+            case CENTER:
+            case GRAPHIC_ONLY:
+                minH = leftInset + rippleContainer.prefHeight(-1) + rightInset;
+                break;
+            default:
+                minH = super.computeMinHeight(width, topInset, rightInset, bottomInset, leftInset);
+        }
+        return minH;
     }
 
     @Override
     protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return getSkinnable().prefWidth(height);
+        return getSkinnable().prefWidth(-1);
+    }
+
+    @Override
+    protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return getSkinnable().prefHeight(-1);
     }
 
     @Override
     protected void layoutChildren(double contentX, double contentY, double contentWidth, double contentHeight) {
-        super.layoutChildren(contentX, contentY, contentWidth, contentHeight);
+        MFXCheckbox checkbox = getSkinnable();
+        ContentDisplay disposition = checkbox.getContentDisposition();
+        Insets padding = checkbox.getPadding();
+        double gap = checkbox.getGap();
 
-        centerBox();
+        double rcW = rippleContainer.prefWidth(-1);
+        double rcH = rippleContainer.prefHeight(-1);
+        double rcX = 0;
+        double rcY = 0;
+
+        double txW = text.prefWidth(-1);
+        double txH = text.prefHeight(-1);
+        double txX = 0;
+        double txY = 0;
+
+        switch (disposition) {
+            case TOP: {
+                rcX = (contentWidth / 2) - (rcW / 2);
+                rcY = 0;
+                txX = (contentWidth / 2) - (txW / 2);
+                txY = rcH + gap;
+                break;
+            }
+            case RIGHT: {
+                rcX = contentWidth - rcW;
+                rcY = (contentHeight / 2) - (rcH / 2);
+                txX = rcX - txW - gap;
+                txY = (contentHeight / 2) - (txH / 2);
+                break;
+            }
+            case BOTTOM: {
+                txX = (contentWidth / 2) - (txW / 2);
+                txY = 0;
+                rcX = (contentWidth / 2) - (rcW / 2);
+                rcY = txH + gap;
+                break;
+            }
+            case TEXT_ONLY:
+            case LEFT: {
+                rcX = 0;
+                rcY = (contentHeight / 2) - (rcH / 2);
+                txX = rcW + gap;
+                txY = (contentHeight / 2) - (txH / 2);
+                break;
+            }
+            case CENTER:
+            case GRAPHIC_ONLY: {
+                rcX = (contentWidth / 2) - (rcW / 2);
+                rcY = (contentHeight / 2) - (rcH / 2);
+                txW = 0;
+                txH = 0;
+                break;
+            }
+        }
+
+        rippleContainer.resizeRelocate(
+                snapPositionX(rcX + padding.getLeft()),
+                snapPositionY(rcY + padding.getTop()),
+                rcW,
+                rcH
+        );
+        text.resizeRelocate(
+                snapPositionX(txX + padding.getLeft()),
+                snapPositionY(txY + padding.getTop()),
+                txW,
+                txH
+        );
+
+        double boxSize = box.getSize();
+        Insets boxPadding = box.getPadding();
+        double boxClipRadius = boxPadding.getLeft() + boxSize / 2 + boxPadding.getRight();
+        rippleContainerClip.setRadius(boxClipRadius);
     }
 }
