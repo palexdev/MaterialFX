@@ -77,8 +77,6 @@ public class StepperDemoController implements Initializable {
         lastNameField.setPromptText("Last Name...");
         genderCombo.setItems(FXCollections.observableArrayList("Male", "Female", "Other"));
 
-        checkbox.setMarkType("mfx-variant7-mark");
-
         List<MFXStepperToggle> stepperToggles = createSteps();
         stepper.getStepperToggles().addAll(stepperToggles);
 

@@ -48,7 +48,6 @@ public class MFXNotificationCell extends HBox implements Cell<INotification> {
 
         checkbox = new MFXCheckbox("");
         checkbox.setId("check");
-        checkbox.setMarkType("mfx-variant7-mark");
 
         container = new StackPane(checkbox);
         container.setMinWidth(USE_PREF_SIZE);

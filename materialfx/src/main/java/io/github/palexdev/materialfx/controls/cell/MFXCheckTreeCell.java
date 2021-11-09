@@ -75,8 +75,6 @@ public class MFXCheckTreeCell<T> extends MFXSimpleTreeCell<T> {
         addListeners();
         checked.bind(item.checkedProperty());
         indeterminate.bind(item.indeterminateProperty());
-        checkbox.setMarkType("mfx-variant3-mark");
-        checkbox.setMarkSize(8);
     }
 
     /**

@@ -18,13 +18,15 @@
 
 package io.github.palexdev.materialfx.font;
 
+import javafx.beans.binding.Bindings;
 import javafx.css.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -41,7 +43,7 @@ public class MFXFontIcon extends Text {
     // Constructors
     //================================================================================
     public MFXFontIcon() {
-        initialize();
+        this(null);
     }
 
     public MFXFontIcon(String description) {
@@ -53,17 +55,14 @@ public class MFXFontIcon extends Text {
     }
 
     public MFXFontIcon(String description, double size) {
-        this(description, size, Color.rgb(117, 117, 117));
+        this(description, size, Color.web("#454545"));
     }
 
     public MFXFontIcon(String description, double size, Color color) {
         initialize();
-
         setDescription(description);
-        setSize(size);
+        setFont(Font.font(getFont().getFamily(), size));
         setColor(color);
-
-        setText(String.valueOf(FontHandler.getCode(description)));
     }
 
     //================================================================================
@@ -74,19 +73,24 @@ public class MFXFontIcon extends Text {
         setFont(FontHandler.getResources());
         setFontSmoothingType(FontSmoothingType.GRAY);
 
-        sizeProperty().addListener((observable, oldValue, newValue) -> {
-            Font font = getFont();
-            setFont(Font.font(font.getFamily(), newValue.doubleValue()));
-        });
+        textProperty().bind(Bindings.createStringBinding(
+                () -> {
+                    String desc = getDescription();
+                    return desc != null && !desc.isBlank() ? descriptionToString(desc) : "";
+                }, description
+        ));
 
-        colorProperty().addListener((observable, oldValue, newValue) -> setFill(newValue));
+        fillProperty().bind(colorProperty());
+        sizeProperty().addListener((observable, oldValue, newValue) -> setFontSize(newValue.doubleValue()));
+    }
 
-        descriptionProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                final char character = FontHandler.getCode(newValue);
-                setText(String.valueOf(character));
-            }
-        });
+    private String descriptionToString(String desc) {
+        return String.valueOf(FontHandler.getCode(desc));
+    }
+
+    private void setFontSize(double size) {
+        String fontFamily = getFont().getFamily();
+        setFont(Font.font(fontFamily, size));
     }
 
     /**
@@ -102,25 +106,55 @@ public class MFXFontIcon extends Text {
     //================================================================================
     // Styleable Properties
     //================================================================================
+    private final StyleableObjectProperty<Color> color = new SimpleStyleableObjectProperty<>(
+            StyleableProperties.COLOR,
+            this,
+            "color",
+            Color.web("#454545")
+    ) {
+        @Override
+        public StyleOrigin getStyleOrigin() {
+            return StyleOrigin.USER_AGENT;
+        }
+    };
+
     private final StyleableStringProperty description = new SimpleStyleableStringProperty(
             StyleableProperties.DESCRIPTION,
             this,
             "description"
-    );
+    ) {
+        @Override
+        public StyleOrigin getStyleOrigin() {
+            return StyleOrigin.USER_AGENT;
+        }
+    };
 
     private final StyleableDoubleProperty size = new SimpleStyleableDoubleProperty(
             StyleableProperties.SIZE,
             this,
             "size",
             10.0
-    );
+    ) {
+        @Override
+        public StyleOrigin getStyleOrigin() {
+            return StyleOrigin.USER_AGENT;
+        }
+    };
 
-    private final StyleableObjectProperty<Paint> color = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.COLOR,
-            this,
-            "color",
-            Color.rgb(117, 117, 117)
-    );
+    public Color getColor() {
+        return color.get();
+    }
+
+    /**
+     * Specifies the color of the icon.
+     */
+    public StyleableObjectProperty<Color> colorProperty() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color.set(color);
+    }
 
     public String getDescription() {
         return description.get();
@@ -152,30 +186,22 @@ public class MFXFontIcon extends Text {
         this.size.set(size);
     }
 
-    public Paint getColor() {
-        return color.get();
-    }
-
-    /**
-     * Specifies the color of the icon.
-     */
-    public StyleableObjectProperty<Paint> colorProperty() {
-        return color;
-    }
-
-    public void setColor(Paint color) {
-        this.color.set(color);
-    }
-
     //================================================================================
     // CssMetaData
     //================================================================================
     public static class StyleableProperties {
         private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
+        private static final CssMetaData<MFXFontIcon, Color> COLOR =
+                FACTORY.createColorCssMetaData(
+                        "-mfx-color",
+                        MFXFontIcon::colorProperty,
+                        Color.web("#454545")
+                );
+
         private static final CssMetaData<MFXFontIcon, String> DESCRIPTION =
                 FACTORY.createStringCssMetaData(
-                        "-mfx-icon-code",
+                        "-mfx-description",
                         MFXFontIcon::descriptionProperty
                 );
 
@@ -186,15 +212,10 @@ public class MFXFontIcon extends Text {
                         10
                 );
 
-        private static final CssMetaData<MFXFontIcon, Paint> COLOR =
-                FACTORY.createPaintCssMetaData(
-                        "-mfx-color",
-                        MFXFontIcon::colorProperty,
-                        Color.rgb(117, 117, 117)
-                );
-
         static {
-            cssMetaDataList = List.of(DESCRIPTION, SIZE, COLOR);
+            List<CssMetaData<? extends Styleable, ?>> txtCssMetaData = new ArrayList<>(Text.getClassCssMetaData());
+            Collections.addAll(txtCssMetaData, COLOR, DESCRIPTION, SIZE);
+            cssMetaDataList = Collections.unmodifiableList(txtCssMetaData);
         }
     }
 

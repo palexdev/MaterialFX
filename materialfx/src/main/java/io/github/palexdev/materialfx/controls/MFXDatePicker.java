@@ -19,8 +19,8 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.beans.PositionBean;
+import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.skins.MFXDatePickerContent;
 import io.github.palexdev.materialfx.utils.NodeUtils;
@@ -108,7 +108,7 @@ public class MFXDatePicker extends VBox {
         value.setMinWidth(64);
         calendar = new MFXFontIcon("mfx-calendar-semi-black");
         calendar.getStyleClass().add("calendar-icon");
-        calendar.setColor(getPickerColor());
+        calendar.setColor((Color) getPickerColor());
         calendar.setSize(20);
         stackPane = new StackPane(value, calendar);
         stackPane.setPadding(new Insets(5, -2.5, 5, 5));
@@ -247,7 +247,7 @@ public class MFXDatePicker extends VBox {
                 calendar.setColor(Color.LIGHTGRAY);
             } else {
                 line.setStroke(getLineColor());
-                calendar.setColor(getPickerColor());
+                calendar.setColor((Color) getPickerColor());
             }
         });
 

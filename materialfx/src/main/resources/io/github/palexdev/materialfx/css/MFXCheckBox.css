@@ -16,15 +16,53 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*================================================================================*/
-/* Ripple
-/*================================================================================*/
 .mfx-checkbox {
-    -fx-border-insets: -1 -3 -1 -1;
-    -fx-background-insets: -1 -3 -1 -1;
+    -mfx-main: #6200EE;
+    -mfx-gray: #424242;
+}
+
+.mfx-checkbox .box {
+    -fx-background-color: transparent;
+    -fx-background-radius: 2;
+
+    -fx-border-color: -mfx-gray;
+    -fx-border-radius: 2;
+    -fx-border-width: 1.5;
+
+    -fx-padding: 4;
+}
+
+.mfx-checkbox .box .mark {
+    visibility: hidden;
+    -mfx-color: white;
+    -mfx-description: "mfx-variant7-mark";
+    -mfx-size: 12;
 }
 
 .mfx-checkbox .ripple-container .mfx-ripple-generator {
-    -mfx-ripple-color: rgb(190, 190, 190);
+    -mfx-animation-speed: 1.5;
+    -mfx-ripple-color: derive(-mfx-main, 110%);
+    -mfx-ripple-radius: 16;
+}
+
+.mfx-checkbox:selected .box,
+.mfx-checkbox:indeterminate .box {
+    -fx-background-color: -mfx-main;
+    -fx-border-color: -mfx-main;
+}
+
+.mfx-checkbox:selected .box .mark {
+    visibility: visible;
+}
+
+.mfx-checkbox:selected:disabled .box,
+.mfx-checkbox:indeterminate:disabled .box {
+    -fx-background-color: -mfx-gray;
+    -fx-border-color: -mfx-gray;
+}
+
+.mfx-checkbox:indeterminate .box .mark {
+    visibility: visible;
+    -mfx-description: "mfx-minus";
 }
 
