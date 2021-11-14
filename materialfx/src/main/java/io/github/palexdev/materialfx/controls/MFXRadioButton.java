@@ -19,6 +19,7 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.controls.base.MFXLabeled;
 import io.github.palexdev.materialfx.skins.MFXRadioButtonSkin;
 import javafx.css.*;
 import javafx.scene.control.ContentDisplay;
@@ -42,7 +43,7 @@ import java.util.List;
  * <p> - {@link #radiusProperty()}: to control the circles' radius
  * <p> - {@link #textExpandProperty()}: to control the text size and the checkbox layout (see documentation)
  */
-public class MFXRadioButton extends RadioButton {
+public class MFXRadioButton extends RadioButton implements MFXLabeled {
     //================================================================================
     // Properties
     //================================================================================
@@ -121,9 +122,6 @@ public class MFXRadioButton extends RadioButton {
         return contentDisposition.get();
     }
 
-    /**
-     * Specifies how the radio button is positioned relative to the text.
-     */
     public StyleableObjectProperty<ContentDisplay> contentDispositionProperty() {
         return contentDisposition;
     }
@@ -136,9 +134,6 @@ public class MFXRadioButton extends RadioButton {
         return gap.get();
     }
 
-    /**
-     * Specifies the gap between the radio button and the text.
-     */
     public StyleableDoubleProperty gapProperty() {
         return gap;
     }
@@ -181,15 +176,6 @@ public class MFXRadioButton extends RadioButton {
         return textExpand.get();
     }
 
-    /**
-     * When setting a specific size for the control (by using setPrefSize for example, and this
-     * is true for SceneBuilder too), this flag will tell the control's label to take all the
-     * space available.
-     * <p>
-     * This allows, in combination with the {@link #contentDispositionProperty()}, to layout
-     * the control's content in many interesting ways. When the text is expanded (this property is true)
-     * use {@link #alignmentProperty()} to position the text.
-     */
     public StyleableBooleanProperty textExpandProperty() {
         return textExpand;
     }

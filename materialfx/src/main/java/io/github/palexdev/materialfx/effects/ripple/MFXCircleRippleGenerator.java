@@ -19,13 +19,13 @@
 package io.github.palexdev.materialfx.effects.ripple;
 
 import io.github.palexdev.materialfx.beans.PositionBean;
-import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
-import io.github.palexdev.materialfx.factories.RippleClipTypeFactory;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.effects.MFXDepthManager;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator.CircleRipple;
 import io.github.palexdev.materialfx.effects.ripple.base.AbstractMFXRippleGenerator;
 import io.github.palexdev.materialfx.effects.ripple.base.IRipple;
+import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
+import io.github.palexdev.materialfx.factories.RippleClipTypeFactory;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
 import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
 import javafx.animation.*;
@@ -131,6 +131,7 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
         ripple.centerXProperty().bind(position.xProperty());
         ripple.centerYProperty().bind(position.yProperty());
         ripple.setFill(getRippleColor());
+        ripple.setOpacity(getRippleOpacity());
 
         Animation rippleAnimation = ripple.getAnimation();
         rippleAnimation.setOnFinished(end -> getChildren().remove(ripple));
@@ -392,11 +393,19 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
             "animationSpeed",
             1.0
     );
+
     private final StyleableObjectProperty<Paint> rippleColor = new SimpleStyleableObjectProperty<>(
             StyleableProperties.RIPPLE_COLOR,
             this,
             "rippleColor",
             Color.LIGHTGRAY
+    );
+
+    private final StyleableDoubleProperty rippleOpacity = new SimpleStyleableDoubleProperty(
+            StyleableProperties.RIPPLE_OPACITY,
+            this,
+            "rippleOpacity",
+            1.0
     );
 
     private final StyleableDoubleProperty backgroundOpacity = new SimpleStyleableDoubleProperty(
@@ -448,6 +457,21 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
         return backgroundOpacity.get();
     }
 
+    public double getRippleOpacity() {
+        return rippleOpacity.get();
+    }
+
+    /**
+     * Specifies the initial ripple's opacity.
+     */
+    public StyleableDoubleProperty rippleOpacityProperty() {
+        return rippleOpacity;
+    }
+
+    public void setRippleOpacity(double rippleOpacity) {
+        this.rippleOpacity.set(rippleOpacity);
+    }
+
     /**
      * Specifies the strength of the background animation.
      */
@@ -494,6 +518,13 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
                         10.0
                 );
 
+        private static final CssMetaData<MFXCircleRippleGenerator, Number> RIPPLE_OPACITY =
+                FACTORY.createSizeCssMetaData(
+                        "-mfx-ripple-opacity",
+                        MFXCircleRippleGenerator::rippleOpacityProperty,
+                        1.0
+                );
+
         private static final CssMetaData<MFXCircleRippleGenerator, Number> BACKGROUND_OPACITY =
                 FACTORY.createSizeCssMetaData(
                         "-mfx-background-opacity",
@@ -510,7 +541,7 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
 
 
         static {
-            cssMetaDataList = List.of(RIPPLE_COLOR, RIPPLE_RADIUS, BACKGROUND_OPACITY, ANIMATION_SPEED);
+            cssMetaDataList = List.of(RIPPLE_COLOR, RIPPLE_RADIUS, RIPPLE_OPACITY, BACKGROUND_OPACITY, ANIMATION_SPEED);
         }
     }
 

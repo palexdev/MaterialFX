@@ -18,7 +18,7 @@
 
 .mfx-toggle-button {
     -mfx-main: #6200EE;
-    -mfx-gray: #424242;
+    -mfx-secondary: #424242;
 
     -fx-padding: 10;
 }
@@ -26,21 +26,23 @@
 .mfx-toggle-button .mfx-ripple-generator {
     -mfx-animation-speed: 1.5;
     -mfx-ripple-radius: 10;
-    -mfx-ripple-color: derive(-mfx-gray, 110%)
+    -mfx-ripple-color: -mfx-main;
+    -mfx-ripple-opacity: 0.4;
 }
 
 .mfx-toggle-button .circle {
     -fx-stroke: transparent;
-    -fx-fill: -mfx-gray;
+    -fx-fill: -mfx-secondary;
 }
 
 .mfx-toggle-button .line {
     -fx-stroke-line-cap: ROUND;
-    -fx-stroke: derive(-mfx-gray, 110%);
+    -fx-stroke: -mfx-secondary;
+    -fx-opacity: 0.3;
 }
 
 .mfx-toggle-button:selected .mfx-ripple-generator {
-    -mfx-ripple-color: derive(-mfx-main, 110%);
+    -mfx-ripple-color: -mfx-secondary;
 }
 
 .mfx-toggle-button:selected .circle {
@@ -48,5 +50,5 @@
 }
 
 .mfx-toggle-button:selected .line {
-    -fx-stroke: derive(-mfx-main, 110%);
+    -fx-stroke: -mfx-main;
 }

@@ -31,6 +31,7 @@ module MaterialFX {
     exports io.github.palexdev.materialfx.selection;
     exports io.github.palexdev.materialfx.selection.base;
     exports io.github.palexdev.materialfx.skins;
+    exports io.github.palexdev.materialfx.skins.base;
     exports io.github.palexdev.materialfx.skins.legacy;
     exports io.github.palexdev.materialfx.utils;
     exports io.github.palexdev.materialfx.utils.others;

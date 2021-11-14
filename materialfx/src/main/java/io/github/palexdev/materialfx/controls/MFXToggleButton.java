@@ -1,7 +1,9 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.controls.base.MFXLabeled;
 import io.github.palexdev.materialfx.skins.MFXToggleButtonSkin;
+import io.github.palexdev.materialfx.utils.ColorUtils;
 import io.github.palexdev.materialfx.utils.ToggleButtonsUtil;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -13,6 +15,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,8 +24,8 @@ import java.util.List;
 /**
  * This is the implementation of a toggle button following Google's material design guidelines in JavaFX.
  * <p>
- * Extends {@code ToggleButton}, redefines the style class to "mfx-toggle-button" for usage in CSS and
- * includes a {@code RippleGenerator}(in the Skin) to generate ripple effect when toggled/un-toggled.
+ * Extends {@link Labeled} and implements {@link Toggle} and {@link MFXLabeled}, its CSS selector is "-mfx-toggle-button",
+ * includes a {@code RippleGenerator}(in the Skin) to generate ripple effect when selected/unselected.
  * <p></p>
  * It also introduces some new features like:
  * <p> - {@link #contentDispositionProperty()}: to control the toggle position
@@ -31,7 +34,7 @@ import java.util.List;
  * <p> - {@link #radiusProperty()}: to control the toggle's circle radius
  * <p> - {@link #textExpandProperty()}: to control the text size and the checkbox layout (see documentation)
  */
-public class MFXToggleButton extends Labeled implements Toggle {
+public class MFXToggleButton extends Labeled implements Toggle, MFXLabeled {
     //================================================================================
     // Properties
     //================================================================================
@@ -99,6 +102,9 @@ public class MFXToggleButton extends Labeled implements Toggle {
         });
     }
 
+    /**
+     * Changes the state of the toggle button if not disabled.
+     */
     public void fire() {
         if (!isDisabled()) {
             setSelected(!isSelected());
@@ -140,6 +146,9 @@ public class MFXToggleButton extends Labeled implements Toggle {
         return onAction.get();
     }
 
+    /**
+     * Specifies the action to perform when the toggle button is selected/unselected.
+     */
     public ObjectProperty<EventHandler<ActionEvent>> onActionProperty() {
         return onAction;
     }
@@ -190,9 +199,6 @@ public class MFXToggleButton extends Labeled implements Toggle {
         return contentDisposition.get();
     }
 
-    /**
-     * Specifies how the toggle button is positioned relative to the text.
-     */
     public StyleableObjectProperty<ContentDisplay> contentDispositionProperty() {
         return contentDisposition;
     }
@@ -205,9 +211,6 @@ public class MFXToggleButton extends Labeled implements Toggle {
         return gap.get();
     }
 
-    /**
-     * Specifies the gap between the toggle button and the text.
-     */
     public StyleableDoubleProperty gapProperty() {
         return gap;
     }
@@ -250,21 +253,32 @@ public class MFXToggleButton extends Labeled implements Toggle {
         return textExpand.get();
     }
 
-    /**
-     * When setting a specific size for the control (by using setPrefSize for example, and this
-     * is true for SceneBuilder too), this flag will tell the control's label to take all the
-     * space available.
-     * <p>
-     * This allows, in combination with the {@link #contentDispositionProperty()}, to layout
-     * the control's content in many interesting ways. When the text is expanded (this property is true)
-     * use {@link #alignmentProperty()} to position the text.
-     */
     public StyleableBooleanProperty textExpandProperty() {
         return textExpand;
     }
 
     public void setTextExpand(boolean textExpand) {
         this.textExpand.set(textExpand);
+    }
+
+    /**
+     * Sets the colors of the toggle button when selected.
+     * <p>
+     * The color is set inline by using {@link Node#setStyle(String)}, the
+     * set CSS value is the "-mfx-main" property.
+     */
+    public void setMainColor(Color color) {
+        setStyle("-mfx-main: " + ColorUtils.toCss(color) + ";\n");
+    }
+
+    /**
+     * Sets the colors of the toggle button when not selected.
+     * <p>
+     * The color is set inline by using {@link Node#setStyle(String)}, the
+     * set CSS value is the "-mfx-secondary" property.
+     */
+    public void setSecondaryColor(Color color) {
+        setStyle("-mfx-secondary: " + ColorUtils.toCss(color) + ";\n");
     }
 
     //================================================================================

@@ -19,6 +19,7 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.controls.base.MFXLabeled;
 import io.github.palexdev.materialfx.skins.MFXCheckboxSkin;
 import javafx.css.*;
 import javafx.scene.control.CheckBox;
@@ -40,7 +41,7 @@ import java.util.List;
  * <p> - {@link #gapProperty()}: to control the gap between the checkbox and the text
  * <p> - {@link #textExpandProperty()}: to control the text size and the checkbox layout (see documentation)
  */
-public class MFXCheckbox extends CheckBox {
+public class MFXCheckbox extends CheckBox implements MFXLabeled {
     //================================================================================
     // Properties
     //================================================================================
@@ -100,9 +101,6 @@ public class MFXCheckbox extends CheckBox {
         return contentDisposition.get();
     }
 
-    /**
-     * Specifies how the checkbox is positioned relative to the text.
-     */
     public StyleableObjectProperty<ContentDisplay> contentDispositionProperty() {
         return contentDisposition;
     }
@@ -115,9 +113,6 @@ public class MFXCheckbox extends CheckBox {
         return gap.get();
     }
 
-    /**
-     * Specifies the spacing between the checkbox and the text.
-     */
     public StyleableDoubleProperty gapProperty() {
         return gap;
     }
@@ -130,15 +125,6 @@ public class MFXCheckbox extends CheckBox {
         return textExpand.get();
     }
 
-    /**
-     * When setting a specific size for the control (by using setPrefSize for example, and this
-     * is true for SceneBuilder too), this flag will tell the control's label to take all the
-     * space available.
-     * <p>
-     * This allows, in combination with the {@link #contentDispositionProperty()}, to layout
-     * the control's content in many interesting ways. When the text is expanded (this property is true)
-     * use {@link #alignmentProperty()} to position the text.
-     */
     public StyleableBooleanProperty textExpandProperty() {
         return textExpand;
     }

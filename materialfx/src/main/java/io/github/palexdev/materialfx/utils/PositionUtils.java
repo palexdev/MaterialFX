@@ -11,6 +11,9 @@ public class PositionUtils {
     private PositionUtils() {
     }
 
+    //================================================================================
+    // POS
+    //================================================================================
     public static boolean isTop(Pos pos) {
         return pos == Pos.TOP_LEFT || pos == Pos.TOP_CENTER || pos == Pos.TOP_RIGHT;
     }
@@ -31,6 +34,9 @@ public class PositionUtils {
         return pos == Pos.TOP_RIGHT || pos == Pos.CENTER_RIGHT || pos == Pos.BOTTOM_RIGHT;
     }
 
+    //================================================================================
+    // NotificationPos
+    //================================================================================
     public static boolean isTop(NotificationPos pos) {
         return pos == NotificationPos.TOP_LEFT || pos == NotificationPos.TOP_CENTER || pos == NotificationPos.TOP_RIGHT;
     }

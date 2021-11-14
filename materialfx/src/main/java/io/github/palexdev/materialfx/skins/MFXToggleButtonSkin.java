@@ -1,39 +1,39 @@
 package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.beans.PositionBean;
-import io.github.palexdev.materialfx.controls.LabeledControlWrapper;
 import io.github.palexdev.materialfx.controls.MFXToggleButton;
 import io.github.palexdev.materialfx.effects.DepthLevel;
+import io.github.palexdev.materialfx.effects.Interpolators;
 import io.github.palexdev.materialfx.effects.MFXDepthManager;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.materialfx.factories.InsetsFactory;
+import io.github.palexdev.materialfx.skins.base.MFXLabeledSkinBase;
 import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
 import io.github.palexdev.materialfx.utils.AnimationUtils.TimelineBuilder;
 import io.github.palexdev.materialfx.utils.NodeUtils;
-import io.github.palexdev.materialfx.utils.PositionUtils;
-import javafx.animation.Interpolator;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.SkinBase;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
-public class MFXToggleButtonSkin extends SkinBase<MFXToggleButton> {
+/**
+ * This is the implementation of the {@code Skin} associated with every {@link MFXToggleButton}.
+ */
+public class MFXToggleButtonSkin extends MFXLabeledSkinBase<MFXToggleButton> {
     //================================================================================
     // Properties
     //================================================================================
-    private final BorderPane container;
     private final StackPane toggleContainer;
     private final Circle circle;
     private final Line line;
-    private final LabeledControlWrapper text;
 
     private final MFXCircleRippleGenerator rippleGenerator;
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXToggleButtonSkin(MFXToggleButton toggleButton) {
         super(toggleButton);
 
@@ -75,117 +75,49 @@ public class MFXToggleButtonSkin extends SkinBase<MFXToggleButton> {
         });
         toggleContainer.getChildren().add(0, rippleGenerator);
 
-        text = new LabeledControlWrapper(toggleButton);
-        if (toggleButton.isTextExpand()) text.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-
         // Control's top container
-        container = new BorderPane();
-        initPane();
         updateAlignment();
+        initContainer();
 
-        getChildren().setAll(container);
+        getChildren().setAll(topContainer);
         addListeners();
     }
 
-    private void addListeners() {
+    //================================================================================
+    // Methods
+    //================================================================================
+    private void buildAndPlayAnimation(boolean selection) {
+        double endX = selection ? line.getBoundsInParent().getMaxX() - circle.getRadius() * 2 : 0;
+        TimelineBuilder.build()
+                .add(
+                        KeyFrames.of(0, event -> rippleGenerator.generateRipple(null)),
+                        KeyFrames.of(150, circle.translateXProperty(), endX, Interpolators.INTERPOLATOR_V1)
+                )
+                .getAnimation().play();
+    }
+
+    //================================================================================
+    // Overridden Methods
+    //================================================================================
+    @Override
+    protected void addListeners() {
+        super.addListeners();
         MFXToggleButton toggleButton = getSkinnable();
 
         toggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> buildAndPlayAnimation(newValue));
-        toggleButton.alignmentProperty().addListener(invalidated -> updateAlignment());
-        toggleButton.contentDispositionProperty().addListener((invalidated) -> initPane());
-        toggleButton.gapProperty().addListener(invalidated -> initPane());
-        toggleButton.textExpandProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                text.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-            } else {
-                text.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
-            }
-        });
-
         NodeUtils.waitForSkin(
                 toggleButton,
                 () -> {
                     double endX = toggleButton.isSelected() ? line.getLayoutBounds().getWidth() - circle.getRadius() * 2 : 0;
-                    TimelineBuilder.build().add(KeyFrames.of(150, circle.translateXProperty(), endX, Interpolator.EASE_BOTH)).getAnimation().play();
+                    TimelineBuilder.build().add(KeyFrames.of(150, circle.translateXProperty(), endX, Interpolators.INTERPOLATOR_V1)).getAnimation().play();
                 },
                 false,
                 true
         );
     }
 
-    protected void initPane() {
-        MFXToggleButton toggleButton = getSkinnable();
-        ContentDisplay disposition = toggleButton.getContentDisposition();
-        double gap = toggleButton.getGap();
-
-        container.getChildren().clear();
-        container.setCenter(text);
-        switch (disposition) {
-            case TOP: {
-                container.setTop(toggleContainer);
-                BorderPane.setMargin(text, InsetsFactory.top(gap));
-                break;
-            }
-            case RIGHT: {
-                container.setRight(toggleContainer);
-                BorderPane.setMargin(text, InsetsFactory.right(gap));
-                break;
-            }
-            case BOTTOM: {
-                container.setBottom(toggleContainer);
-                BorderPane.setMargin(text, InsetsFactory.bottom(gap));
-                break;
-            }
-            case TEXT_ONLY:
-            case LEFT: {
-                container.setLeft(toggleContainer);
-                BorderPane.setMargin(text, InsetsFactory.left(gap));
-                break;
-            }
-            case GRAPHIC_ONLY:
-            case CENTER: {
-                container.setCenter(toggleContainer);
-                BorderPane.setMargin(text, InsetsFactory.none());
-                break;
-            }
-        }
-    }
-
-    protected void updateAlignment() {
-        MFXToggleButton toggleButton = getSkinnable();
-        Pos alignment = toggleButton.getAlignment();
-
-        if (PositionUtils.isTop(alignment)) {
-            BorderPane.setAlignment(toggleContainer, Pos.TOP_CENTER);
-        } else if (PositionUtils.isCenter(alignment)) {
-            BorderPane.setAlignment(toggleContainer, Pos.CENTER);
-        } else if (PositionUtils.isBottom(alignment)) {
-            BorderPane.setAlignment(toggleContainer, Pos.BOTTOM_CENTER);
-        }
-    }
-
-    private void buildAndPlayAnimation(boolean selection) {
-        double endX = selection ? line.getBoundsInParent().getMaxX() - circle.getRadius() * 2 : 0;
-        TimelineBuilder.build()
-                .add(
-                        KeyFrames.of(0, event -> rippleGenerator.generateRipple(null)),
-                        KeyFrames.of(150, circle.translateXProperty(), endX, Interpolator.EASE_BOTH)
-                )
-                .getAnimation().play();
-    }
-
     @Override
-    protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return leftInset + Math.max(toggleContainer.prefWidth(-1), text.prefWidth(-1)) + rightInset;
-    }
-
-    @Override
-    protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return getSkinnable().prefWidth(-1);
-    }
-
-    @Override
-    protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return getSkinnable().prefHeight(-1);
+    protected Pane getControlContainer() {
+        return toggleContainer;
     }
 }
