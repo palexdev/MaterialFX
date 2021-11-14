@@ -1,11 +1,14 @@
 package io.github.palexdev.materialfx.collections;
 
+import io.github.palexdev.materialfx.beans.properties.functional.ComparatorProperty;
+import io.github.palexdev.materialfx.beans.properties.functional.PredicateProperty;
 import javafx.beans.InvalidationListener;
-import javafx.beans.property.ObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.function.Predicate;
 
 @SuppressWarnings({"unchecked", "NullableProblems"})
@@ -134,27 +137,27 @@ public class TransformableListWrapper<T> extends AbstractList<T> implements Obse
         return transformableList.getPredicate();
     }
 
-    public ObjectProperty<Predicate<? super T>> predicateProperty() {
+    public PredicateProperty<T> predicateProperty() {
         return transformableList.predicateProperty();
     }
 
-    public void setPredicate(Predicate<? super T> predicate) {
+    public void setPredicate(Predicate<T> predicate) {
         transformableList.setPredicate(predicate);
     }
 
-    public Comparator<? super T> getComparator() {
+    public Comparator<T> getComparator() {
         return transformableList.getComparator();
     }
 
-    public ObjectProperty<Comparator<? super T>> comparatorProperty() {
+    public ComparatorProperty<T> comparatorProperty() {
         return transformableList.comparatorProperty();
     }
 
-    public void setComparator(Comparator<? super T> comparator) {
+    public void setComparator(Comparator<T> comparator) {
         transformableList.setComparator(comparator);
     }
 
-    public void setComparator(Comparator<? super T> sorter, boolean reversed) {
+    public void setComparator(Comparator<T> sorter, boolean reversed) {
         transformableList.setComparator(sorter, reversed);
     }
 

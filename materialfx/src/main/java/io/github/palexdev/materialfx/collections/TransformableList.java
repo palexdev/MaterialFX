@@ -1,8 +1,8 @@
 package io.github.palexdev.materialfx.collections;
 
+import io.github.palexdev.materialfx.beans.properties.functional.ComparatorProperty;
+import io.github.palexdev.materialfx.beans.properties.functional.PredicateProperty;
 import io.github.palexdev.materialfx.collections.NonIterableChange.GenericAddRemoveChange;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -64,14 +64,14 @@ public class TransformableList<T> extends TransformationList<T, T> {
     private final List<Integer> indexes = new ArrayList<>();
     private boolean reversed = false;
 
-    private final ObjectProperty<Predicate<? super T>> predicate = new SimpleObjectProperty<>() {
+    private final PredicateProperty<T> predicate = new PredicateProperty<>() {
         @Override
         protected void invalidated() {
             update();
         }
     };
 
-    private final ObjectProperty<Comparator<? super T>> comparator = new SimpleObjectProperty<>() {
+    private final ComparatorProperty<T> comparator = new ComparatorProperty<>() {
         @Override
         protected void invalidated() {
             update();
@@ -85,11 +85,11 @@ public class TransformableList<T> extends TransformationList<T, T> {
         this(source, null);
     }
 
-    public TransformableList(ObservableList<? extends T> source, Predicate<? super T> predicate) {
+    public TransformableList(ObservableList<? extends T> source, Predicate<T> predicate) {
         this(source, predicate, null);
     }
 
-    public TransformableList(ObservableList<? extends T> source, Predicate<? super T> predicate, Comparator<? super T> comparator) {
+    public TransformableList(ObservableList<? extends T> source, Predicate<T> predicate, Comparator<T> comparator) {
         super(source);
         setPredicate(predicate);
         setComparator(comparator);
@@ -162,15 +162,15 @@ public class TransformableList<T> extends TransformationList<T, T> {
     /**
      * Specifies the predicate used to filter the source list.
      */
-    public ObjectProperty<Predicate<? super T>> predicateProperty() {
+    public PredicateProperty<T> predicateProperty() {
         return this.predicate;
     }
 
-    public void setPredicate(Predicate<? super T> predicate) {
+    public void setPredicate(Predicate<T> predicate) {
         this.predicate.set(predicate);
     }
 
-    public Comparator<? super T> getComparator() {
+    public Comparator<T> getComparator() {
         return this.comparator.get();
     }
 
@@ -179,11 +179,11 @@ public class TransformableList<T> extends TransformationList<T, T> {
      *
      * @see #setComparator(Comparator, boolean)
      */
-    public ObjectProperty<Comparator<? super T>> comparatorProperty() {
+    public ComparatorProperty<T> comparatorProperty() {
         return this.comparator;
     }
 
-    public void setComparator(Comparator<? super T> comparator) {
+    public void setComparator(Comparator<T> comparator) {
         this.reversed = false;
         this.comparator.set(comparator);
     }
@@ -192,7 +192,7 @@ public class TransformableList<T> extends TransformationList<T, T> {
      * This method is NECESSARY if using a reversed comparator,
      * a special flag is set to true and {@link #sourceToView(int)} behaves accordingly.
      */
-    public void setComparator(Comparator<? super T> sorter, boolean reversed) {
+    public void setComparator(Comparator<T> sorter, boolean reversed) {
         this.reversed = reversed;
         this.comparator.set(sorter);
     }

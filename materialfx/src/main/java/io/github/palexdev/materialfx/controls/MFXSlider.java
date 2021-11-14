@@ -21,6 +21,7 @@ package io.github.palexdev.materialfx.controls;
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.NumberRange;
 import io.github.palexdev.materialfx.beans.PositionBean;
+import io.github.palexdev.materialfx.beans.properties.functional.SupplierProperty;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.enums.SliderEnums.SliderMode;
 import io.github.palexdev.materialfx.enums.SliderEnums.SliderPopupSide;
@@ -140,7 +141,7 @@ public class MFXSlider extends Control {
             super.set(NumberUtils.formatTo(clamped, getDecimalPrecision()));
         }
     };
-    private final ObjectProperty<Supplier<Node>> thumbSupplier = new SimpleObjectProperty<>() {
+    private final SupplierProperty<Node> thumbSupplier = new SupplierProperty<>() {
         @Override
         public void set(Supplier<Node> newValue) {
             Node node = newValue.get();
@@ -151,7 +152,7 @@ public class MFXSlider extends Control {
             }
         }
     };
-    private final ObjectProperty<Supplier<Region>> popupSupplier = new SimpleObjectProperty<>();
+    private final SupplierProperty<Region> popupSupplier = new SupplierProperty<>();
     private final DoubleProperty popupPadding = new SimpleDoubleProperty(5.0);
     private final IntegerProperty decimalPrecision = new SimpleIntegerProperty(0);
     private final BooleanProperty enableKeyboard = new SimpleBooleanProperty(true);
@@ -389,7 +390,7 @@ public class MFXSlider extends Control {
      * <p>
      * Attempting to set or return a null value will fallback to the {@link #defaultThumbSupplier()}.
      */
-    public ObjectProperty<Supplier<Node>> thumbSupplierProperty() {
+    public SupplierProperty<Node> thumbSupplierProperty() {
         return thumbSupplier;
     }
 
@@ -406,7 +407,7 @@ public class MFXSlider extends Control {
      * <p>
      * You can also set or return null to remove the popup.
      */
-    public ObjectProperty<Supplier<Region>> popupSupplierProperty() {
+    public SupplierProperty<Region> popupSupplierProperty() {
         return popupSupplier;
     }
 

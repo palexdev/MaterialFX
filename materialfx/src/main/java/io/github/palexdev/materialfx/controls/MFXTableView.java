@@ -19,6 +19,7 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.beans.properties.functional.SupplierProperty;
 import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
 import io.github.palexdev.materialfx.selection.TableSelectionModel;
 import io.github.palexdev.materialfx.selection.base.ITableSelectionModel;
@@ -65,7 +66,7 @@ public class MFXTableView<T> extends Control {
     private final ObservableList<MFXTableColumn<T>> tableColumns = FXCollections.observableArrayList();
     private final MFXTableSortModel<T> sortModel;
 
-    private final ObjectProperty<Supplier<Region>> headerSupplier = new SimpleObjectProperty<>();
+    private final SupplierProperty<Region> headerSupplier = new SupplierProperty<>();
     private final DoubleProperty headerHeight = new SimpleDoubleProperty(48);
     private final StringProperty headerText = new SimpleStringProperty("");
     private final ObjectProperty<Node> headerIcon = new SimpleObjectProperty<>();
@@ -260,7 +261,7 @@ public class MFXTableView<T> extends Control {
      * <p> - {@link #headerTextProperty()}
      * <p> - {@link #headerIconProperty()}
      */
-    public ObjectProperty<Supplier<Region>> headerSupplierProperty() {
+    public SupplierProperty<Region> headerSupplierProperty() {
         return headerSupplier;
     }
 

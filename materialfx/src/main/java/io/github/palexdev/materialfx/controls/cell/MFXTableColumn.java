@@ -19,6 +19,8 @@
 package io.github.palexdev.materialfx.controls.cell;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.beans.properties.functional.FunctionProperty;
+import io.github.palexdev.materialfx.beans.properties.functional.SupplierProperty;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.enums.SortState;
@@ -67,14 +69,14 @@ public class MFXTableColumn<T> extends Control {
 
     private final StringProperty text = new SimpleStringProperty();
     private final ObjectProperty<Pos> columnAlignment = new SimpleObjectProperty<>(Pos.CENTER_LEFT);
-    private final ObjectProperty<Function<T, MFXTableRowCell>> rowCellFunction = new SimpleObjectProperty<>();
+    private final FunctionProperty<T, MFXTableRowCell> rowCellFunction = new FunctionProperty<>();
 
     private final ObjectProperty<SortState> sortState = new SimpleObjectProperty<>(SortState.UNSORTED);
     private MFXIconWrapper sortIcon;
     private Comparator<T> comparator;
 
     private final BooleanProperty showLockIcon = new SimpleBooleanProperty(true);
-    private final ObjectProperty<Supplier<Tooltip>> tooltipSupplier = new SimpleObjectProperty<>();
+    private final SupplierProperty<Tooltip> tooltipSupplier = new SupplierProperty<>();
 
     protected static final PseudoClass RESIZABLE_PSEUDO_CLASS = PseudoClass.getPseudoClass("resizable");
     protected static final PseudoClass DRAG_PSEUDO_CLASS = PseudoClass.getPseudoClass("dragged");
@@ -203,7 +205,7 @@ public class MFXTableColumn<T> extends Control {
     /**
      * Specifies the function responsible for building the table row cells.
      */
-    public ObjectProperty<Function<T, MFXTableRowCell>> rowCellFunctionProperty() {
+    public FunctionProperty<T, MFXTableRowCell> rowCellFunctionProperty() {
         return rowCellFunction;
     }
 
@@ -269,7 +271,7 @@ public class MFXTableColumn<T> extends Control {
     /**
      * Specifies the supplier used to build the column's tooltip.
      */
-    public ObjectProperty<Supplier<Tooltip>> tooltipSupplierProperty() {
+    public SupplierProperty<Tooltip> tooltipSupplierProperty() {
         return tooltipSupplier;
     }
 

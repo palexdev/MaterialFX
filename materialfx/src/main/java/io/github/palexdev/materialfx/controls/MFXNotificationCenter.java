@@ -245,7 +245,7 @@ public class MFXNotificationCenter extends Control {
             MFXContextMenuItem reverseSort = new MFXContextMenuItem("Reverse Sort");
             reverseSort.setAction(event -> {
                 if (notifications.getComparator() == null) return;
-                Comparator<? super INotification> comparator = notifications.getComparator();
+                Comparator<INotification> comparator = notifications.getComparator();
                 notifications.setComparator(comparator.reversed());
             });
 

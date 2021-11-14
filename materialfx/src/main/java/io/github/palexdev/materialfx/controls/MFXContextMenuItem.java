@@ -19,6 +19,7 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.beans.properties.functional.SupplierProperty;
 import io.github.palexdev.materialfx.skins.MFXContextMenuItemSkin;
 import javafx.beans.property.*;
 import javafx.event.EventHandler;
@@ -86,7 +87,7 @@ public class MFXContextMenuItem extends Control {
     private final ObjectProperty<Pos> acceleratorAlignment = new SimpleObjectProperty<>(Pos.CENTER_RIGHT);
     private final ObjectProperty<Insets> textInsets = new SimpleObjectProperty<>(new Insets(5, 0, 5, 10));
     private final ObjectProperty<Insets> acceleratorInsets = new SimpleObjectProperty<>(new Insets(5, 10, 5, 0));
-    private final ObjectProperty<Supplier<Tooltip>> tooltipSupplier = new SimpleObjectProperty<>();
+    private final SupplierProperty<Tooltip> tooltipSupplier = new SupplierProperty<>();
     private final ObjectProperty<EventHandler<MouseEvent>> action = new SimpleObjectProperty<>() {
         @Override
         protected void invalidated() {
@@ -301,7 +302,7 @@ public class MFXContextMenuItem extends Control {
      * <p>
      * Set it to null to disable it.
      */
-    public ObjectProperty<Supplier<Tooltip>> tooltipSupplierProperty() {
+    public SupplierProperty<Tooltip> tooltipSupplierProperty() {
         return tooltipSupplier;
     }
 
