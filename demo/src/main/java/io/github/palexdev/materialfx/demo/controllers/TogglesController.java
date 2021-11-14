@@ -49,7 +49,10 @@ public class TogglesController implements Initializable {
 
     @FXML
     private void handleButtonClick() {
-        toggleButton.setToggleColor(ColorUtils.getRandomColor());
+        // TODO check, maybe make specific method
+        // TODO needs to be better in CSS, maybe not use derive()
+        toggleButton.setStyle("-mfx-main: " + ColorUtils.toCss(ColorUtils.getRandomColor()));
+        //toggleButton.setToggleColor(ColorUtils.getRandomColor()); // TODO change, or reimplement
         toggleButton.setSelected(false);
     }
 }

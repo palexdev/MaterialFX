@@ -34,6 +34,13 @@ import java.util.List;
  * <p>
  * Extends {@code RadioButton}, redefines the style class to "mfx-radio-button" for usage in CSS and
  * includes a {@code RippleGenerator} to generate ripple effects on click.
+ * <p></p>
+ * It also introduces some new features like:
+ * <p> - {@link #contentDispositionProperty()}: to control the radio position
+ * <p> - {@link #gapProperty()}: to control the gap between the radio button and the text
+ * <p> - {@link #radioGapProperty()}: to control the gap between the outer and inner circle
+ * <p> - {@link #radiusProperty()}: to control the circles' radius
+ * <p> - {@link #textExpandProperty()}: to control the text size and the checkbox layout (see documentation)
  */
 public class MFXRadioButton extends RadioButton {
     //================================================================================
@@ -84,11 +91,30 @@ public class MFXRadioButton extends RadioButton {
             8.0
     );
 
+    private final StyleableDoubleProperty radioGap = new SimpleStyleableDoubleProperty(
+            StyleableProperties.RADIO_GAP,
+            this,
+            "radioGap",
+            3.5
+    ) {
+        @Override
+        public StyleOrigin getStyleOrigin() {
+            return StyleOrigin.USER_AGENT;
+        }
+    };
+
     private final StyleableDoubleProperty radius = new SimpleStyleableDoubleProperty(
             StyleableProperties.RADIUS,
             this,
             "radius",
             8.0
+    );
+
+    private final StyleableBooleanProperty textExpand = new SimpleStyleableBooleanProperty(
+            StyleableProperties.TEXT_EXPAND,
+            this,
+            "textExpand",
+            false
     );
 
     public ContentDisplay getContentDisposition() {
@@ -121,6 +147,21 @@ public class MFXRadioButton extends RadioButton {
         this.gap.set(gap);
     }
 
+    public double getRadioGap() {
+        return radioGap.get();
+    }
+
+    /**
+     * Specifies the gap between the outer and the inner circles of the radio button.
+     */
+    public StyleableDoubleProperty radioGapProperty() {
+        return radioGap;
+    }
+
+    public void setRadioGap(double radioGap) {
+        this.radioGap.set(radioGap);
+    }
+
     public double getRadius() {
         return radius.get();
     }
@@ -134,6 +175,27 @@ public class MFXRadioButton extends RadioButton {
 
     public void setRadius(double radius) {
         this.radius.set(radius);
+    }
+
+    public boolean isTextExpand() {
+        return textExpand.get();
+    }
+
+    /**
+     * When setting a specific size for the control (by using setPrefSize for example, and this
+     * is true for SceneBuilder too), this flag will tell the control's label to take all the
+     * space available.
+     * <p>
+     * This allows, in combination with the {@link #contentDispositionProperty()}, to layout
+     * the control's content in many interesting ways. When the text is expanded (this property is true)
+     * use {@link #alignmentProperty()} to position the text.
+     */
+    public StyleableBooleanProperty textExpandProperty() {
+        return textExpand;
+    }
+
+    public void setTextExpand(boolean textExpand) {
+        this.textExpand.set(textExpand);
     }
 
     //================================================================================
@@ -157,6 +219,13 @@ public class MFXRadioButton extends RadioButton {
                         8.0
                 );
 
+        private static final CssMetaData<MFXRadioButton, Number> RADIO_GAP =
+                FACTORY.createSizeCssMetaData(
+                        "-mfx-radio-gap",
+                        MFXRadioButton::radioGapProperty,
+                        3.5
+                );
+
         private static final CssMetaData<MFXRadioButton, Number> RADIUS =
                 FACTORY.createSizeCssMetaData(
                         "-mfx-radius",
@@ -164,9 +233,16 @@ public class MFXRadioButton extends RadioButton {
                         8.0
                 );
 
+        private static final CssMetaData<MFXRadioButton, Boolean> TEXT_EXPAND =
+                FACTORY.createBooleanCssMetaData(
+                        "-mfx-text-expand",
+                        MFXRadioButton::textExpandProperty,
+                        false
+                );
+
         static {
             List<CssMetaData<? extends Styleable, ?>> rdbCssMetaData = new ArrayList<>(RadioButton.getClassCssMetaData());
-            Collections.addAll(rdbCssMetaData, CONTENT_DISPOSITION, GAP, RADIUS);
+            Collections.addAll(rdbCssMetaData, CONTENT_DISPOSITION, GAP, RADIO_GAP, RADIUS, TEXT_EXPAND);
             cssMetaDataList = Collections.unmodifiableList(rdbCssMetaData);
         }
 

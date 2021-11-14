@@ -282,7 +282,7 @@ public class MFXNotificationCenter extends Control {
             ExecutionUtils.executeWhen(
                     getStylesheets(),
                     () -> {
-                        String base = contextMenu.getUserAgentStylesheet(); // TODO change if making THAT change
+                        String base = contextMenu.getUserAgentStylesheet(); // TODO change if making THAT change. Can't be made, MFXContextMenu needs to be rewritten as a MFXPopup
                         List<String> stylesheets = new ArrayList<>(List.of(base));
                         stylesheets.addAll(getStylesheets());
                         contextMenu.getStylesheets().setAll(stylesheets);

@@ -14,17 +14,5 @@ public enum NotificationPos {
     TOP_RIGHT,
     BOTTOM_CENTER,
     BOTTOM_LEFT,
-    BOTTOM_RIGHT;
-
-    public boolean isTop() {
-        return this == TOP_LEFT || this == TOP_CENTER || this == TOP_RIGHT;
-    }
-
-    public boolean isCenter() {
-        return this == TOP_CENTER || this == BOTTOM_CENTER;
-    }
-
-    public boolean isRight() {
-        return this == TOP_RIGHT || this == BOTTOM_RIGHT;
-    }
+    BOTTOM_RIGHT
 }

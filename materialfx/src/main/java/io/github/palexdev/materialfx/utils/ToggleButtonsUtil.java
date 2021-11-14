@@ -58,4 +58,20 @@ public class ToggleButtonsUtil {
         });
         toggleGroup.getToggles().forEach(ToggleButtonsUtil::addConsumeMouseEventFilter);
     }
+
+    /**
+     * Copied from {@link ToggleGroup}. It's a package-private method that is used in Toggles
+     * when the selection state changes and a toggle group is set.
+     */
+    public static void clearSelectedToggle(ToggleGroup toggleGroup) {
+        Toggle selectedToggle = toggleGroup.getSelectedToggle();
+        if (!selectedToggle.isSelected()) {
+            for (Toggle toggle : toggleGroup.getToggles()) {
+                if (toggle.isSelected()) {
+                    return;
+                }
+            }
+        }
+        toggleGroup.selectToggle(null);
+    }
 }

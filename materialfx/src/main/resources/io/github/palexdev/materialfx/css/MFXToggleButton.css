@@ -16,36 +16,37 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-.mfx-toggle-button,
-.mfx-toggle-button:armed,
-.mfx-toggle-button:hover,
-.mfx-toggle-button:focused,
-.mfx-toggle-button:selected,
-.mfx-toggle-button:focused:selected {
-    -fx-background-color: TRANSPARENT, TRANSPARENT, TRANSPARENT, TRANSPARENT;
-    -fx-background-radius: 3px;
-    -fx-background-insets: 0px;
+.mfx-toggle-button {
+    -mfx-main: #6200EE;
+    -mfx-gray: #424242;
 
-    -mfx-toggle-color: #009688;
-    -mfx-untoggle-color: #FAFAFA;
-    -mfx-toggle-line-color: derive(-mfx-toggle-color, 65%);
-    -mfx-untoggle-line-color: #999999;
-    -mfx-size: 10px;
+    -fx-padding: 10;
 }
 
-
-.mfx-toggle-button Line {
-    -fx-stroke: -mfx-untoggle-line-color;
+.mfx-toggle-button .mfx-ripple-generator {
+    -mfx-animation-speed: 1.5;
+    -mfx-ripple-radius: 10;
+    -mfx-ripple-color: derive(-mfx-gray, 110%)
 }
 
-.mfx-toggle-button:selected Line {
-    -fx-stroke: -mfx-toggle-line-color;
+.mfx-toggle-button .circle {
+    -fx-stroke: transparent;
+    -fx-fill: -mfx-gray;
 }
 
-.mfx-toggle-button Circle {
-    -fx-fill: -mfx-untoggle-color;
+.mfx-toggle-button .line {
+    -fx-stroke-line-cap: ROUND;
+    -fx-stroke: derive(-mfx-gray, 110%);
 }
 
-.mfx-toggle-button:selected Circle {
-    -fx-fill: -mfx-toggle-color;
+.mfx-toggle-button:selected .mfx-ripple-generator {
+    -mfx-ripple-color: derive(-mfx-main, 110%);
+}
+
+.mfx-toggle-button:selected .circle {
+    -fx-fill: -mfx-main;
+}
+
+.mfx-toggle-button:selected .line {
+    -fx-stroke: derive(-mfx-main, 110%);
 }

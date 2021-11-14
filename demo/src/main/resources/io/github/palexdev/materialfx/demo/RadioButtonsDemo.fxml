@@ -24,55 +24,55 @@
 <?import javafx.scene.layout.*?>
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
            prefWidth="600.0" stylesheets="@css/RadioButtonsDemo.css" xmlns="http://javafx.com/javafx/11.0.1">
-   <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Radio Buttons"
-          StackPane.alignment="TOP_CENTER">
-      <StackPane.margin>
-         <Insets top="16.0"/>
-      </StackPane.margin>
-   </Label>
-   <MFXRadioButton text="Standard" StackPane.alignment="TOP_CENTER">
-      <StackPane.margin>
-         <Insets right="100.0" top="60.0"/>
-      </StackPane.margin>
-   </MFXRadioButton>
-   <MFXRadioButton disable="true" text="Disabled" StackPane.alignment="TOP_CENTER">
-      <StackPane.margin>
-         <Insets left="100.0" top="60.0"/>
-      </StackPane.margin>
-   </MFXRadioButton>
-   <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Customization"
-          StackPane.alignment="TOP_CENTER">
-      <StackPane.margin>
-         <Insets top="100.0"/>
-      </StackPane.margin>
-   </Label>
-   <MFXRadioButton selectedColor="#6bc4ff" selectedTextColor="BLACK" text="Colors 1" unSelectedColor="#ff8f8f"
-                   StackPane.alignment="TOP_CENTER">
-      <StackPane.margin>
-         <Insets right="350.0" top="145.0"/>
-      </StackPane.margin>
-   </MFXRadioButton>
-   <MFXRadioButton selectedColor="#6bc4ff" selectedTextColor="#6bc4ff" text="Colors 2" unSelectedColor="#ff8f8f"
-                   unSelectedTextColor="#ff8f8f" StackPane.alignment="TOP_CENTER">
-      <StackPane.margin>
-         <Insets right="180.0" top="145.0"/>
-      </StackPane.margin>
-   </MFXRadioButton>
-   <MFXRadioButton selectedColor="#6bc4ff" selectedTextColor="#6bc4ff" text="Colors 3" unSelectedColor="#ffffff00"
-                   unSelectedTextColor="#ff8f8f" StackPane.alignment="TOP_CENTER">
-      <StackPane.margin>
-         <Insets top="145.0"/>
-      </StackPane.margin>
-   </MFXRadioButton>
-   <MFXRadioButton selectedColor="#33d348" selectedTextColor="BLACK" text="Colors 4" unSelectedColor="#c67aff"
-                   unSelectedTextColor="#f2f2f2" StackPane.alignment="TOP_CENTER">
-      <StackPane.margin>
-         <Insets left="180.0" top="145.0"/>
-      </StackPane.margin>
-   </MFXRadioButton>
-   <MFXRadioButton id="cssButton" text="CSS" StackPane.alignment="TOP_CENTER">
-      <StackPane.margin>
-         <Insets left="350.0" top="145.0"/>
-      </StackPane.margin>
-   </MFXRadioButton>
+    <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Radio Buttons"
+           StackPane.alignment="TOP_CENTER">
+        <StackPane.margin>
+            <Insets top="16.0"/>
+        </StackPane.margin>
+    </Label>
+    <MFXRadioButton text="Standard" StackPane.alignment="TOP_CENTER">
+        <StackPane.margin>
+            <Insets right="100.0" top="60.0"/>
+        </StackPane.margin>
+    </MFXRadioButton>
+    <MFXRadioButton disable="true" text="Disabled" StackPane.alignment="TOP_CENTER">
+        <StackPane.margin>
+            <Insets left="100.0" top="60.0"/>
+        </StackPane.margin>
+    </MFXRadioButton>
+    <Label id="customLabel" alignment="CENTER" prefHeight="26.0" prefWidth="266.0" text="Customization"
+           StackPane.alignment="TOP_CENTER">
+        <StackPane.margin>
+            <Insets top="100.0"/>
+        </StackPane.margin>
+    </Label>
+    <MFXRadioButton text="Colors 1"
+                    StackPane.alignment="TOP_CENTER">
+        <StackPane.margin>
+            <Insets right="350.0" top="145.0"/>
+        </StackPane.margin>
+    </MFXRadioButton>
+    <MFXRadioButton text="Colors 2"
+                    StackPane.alignment="TOP_CENTER">
+        <StackPane.margin>
+            <Insets right="180.0" top="145.0"/>
+        </StackPane.margin>
+    </MFXRadioButton>
+    <MFXRadioButton text="Colors 3"
+                    StackPane.alignment="TOP_CENTER">
+        <StackPane.margin>
+            <Insets top="145.0"/>
+        </StackPane.margin>
+    </MFXRadioButton>
+    <MFXRadioButton text="Colors 4"
+                    StackPane.alignment="TOP_CENTER">
+        <StackPane.margin>
+            <Insets left="180.0" top="145.0"/>
+        </StackPane.margin>
+    </MFXRadioButton>
+    <MFXRadioButton id="cssButton" text="CSS" StackPane.alignment="TOP_CENTER">
+        <StackPane.margin>
+            <Insets left="350.0" top="145.0"/>
+        </StackPane.margin>
+    </MFXRadioButton>
 </StackPane>

@@ -31,20 +31,21 @@
    </Label>
    <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" spacing="30.0" StackPane.alignment="TOP_CENTER">
       <StackPane.margin>
-         <Insets top="50.0" />
+         <Insets top="50.0"/>
       </StackPane.margin>
-      <MFXToggleButton />
-      <MFXToggleButton toggleColor="#008f1b" toggleLineColor="#aaff00" />
-      <MFXToggleButton toggleColor="#b200ff" toggleLineColor="#ff00f6" unToggleColor="#797979" unToggleLineColor="#bfbfbf" />
+      <MFXToggleButton/>
+      <MFXToggleButton/>
+      <MFXToggleButton/>
    </HBox>
    <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" spacing="15.0" StackPane.alignment="TOP_CENTER">
       <StackPane.margin>
-         <Insets top="120.0" />
+         <Insets top="120.0"/>
       </StackPane.margin>
-      <MFXButton buttonType="RAISED" depthLevel="LEVEL1" onAction="#handleButtonClick" rippleColor="#0096ed" rippleRadius="30.0" text="Change color" />
-      <MFXToggleButton fx:id="toggleButton" automaticColorAdjustment="true" text="Automatic Colors" toggleColor="#006aff" />
-      <MFXToggleButton id="customRippleRadius" automaticColorAdjustment="true" text="RippleRadiusCss" toggleColor="#0095c2" />
-      <MFXToggleButton id="customRippleRadius" automaticColorAdjustment="true" disable="true" text="Disabled" toggleColor="#0095c2" />
+      <MFXButton buttonType="RAISED" depthLevel="LEVEL1" onAction="#handleButtonClick" rippleColor="#0096ed"
+                 rippleRadius="30.0" text="Change color"/>
+      <MFXToggleButton fx:id="toggleButton" text="Automatic Colors"/>
+      <MFXToggleButton id="customRippleRadius" text="RippleRadiusCss"/>
+      <MFXToggleButton id="customRippleRadius" disable="true" text="Disabled"/>
    </HBox>
    <Label id="customLabel" alignment="CENTER" maxWidth="266.0" prefHeight="26.0" text="Toggle Nodes">
       <StackPane.margin>

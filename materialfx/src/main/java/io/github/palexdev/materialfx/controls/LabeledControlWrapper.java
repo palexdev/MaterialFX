@@ -3,6 +3,12 @@ package io.github.palexdev.materialfx.controls;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 
+/**
+ * This is a special Label which has all its main properties bound to
+ * another {@link Labeled} control. This is especially useful for custom
+ * controls and skins that have text, as the text properties are set on the control
+ * and not on the text node itself, and that's why all properties are bound.
+ */
 public class LabeledControlWrapper extends Label {
 
     public LabeledControlWrapper(Labeled labeled) {
@@ -21,6 +27,7 @@ public class LabeledControlWrapper extends Label {
         setGraphicTextGap(labeled.getGraphicTextGap());
         setContentDisplay(labeled.getContentDisplay());
         setGraphic(labeled.getGraphic());
+        setAlignment(labeled.getAlignment());
 
         // Bindings
         textProperty().bind(labeled.textProperty());
@@ -35,5 +42,6 @@ public class LabeledControlWrapper extends Label {
         graphicTextGapProperty().bind(labeled.graphicTextGapProperty());
         contentDisplayProperty().bind(labeled.contentDisplayProperty());
         graphicProperty().bind(labeled.graphicProperty());
+        alignmentProperty().bind(labeled.alignmentProperty());
     }
 }

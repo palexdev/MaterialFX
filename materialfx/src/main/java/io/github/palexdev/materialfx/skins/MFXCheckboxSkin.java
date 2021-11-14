@@ -23,11 +23,16 @@ import io.github.palexdev.materialfx.controls.LabeledControlWrapper;
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
+import io.github.palexdev.materialfx.factories.InsetsFactory;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.materialfx.utils.PositionUtils;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.SkinBase;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 
@@ -38,6 +43,7 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
     //================================================================================
     // Properties
     //================================================================================
+    private final BorderPane container;
     private final MFXIconWrapper box;
     private final LabeledControlWrapper text;
 
@@ -71,7 +77,6 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
 
         rippleContainer.getChildren().addAll(rippleGenerator, box);
         rippleContainer.getStyleClass().add("ripple-container");
-        rippleContainer.setManaged(false);
 
         rippleContainerClip = new Circle();
         rippleContainerClip.centerXProperty().bind(rippleContainer.widthProperty().divide(2.0));
@@ -79,8 +84,13 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
         rippleContainer.setClip(rippleContainerClip);
 
         text = new LabeledControlWrapper(checkbox);
+        if (checkbox.isTextExpand()) text.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
-        getChildren().setAll(rippleContainer, text);
+        container = new BorderPane();
+        initPane();
+        updateAlignment();
+
+        getChildren().setAll(container);
         addListeners();
     }
 
@@ -95,8 +105,67 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
             checkbox.fire();
         });
 
-        checkbox.contentDispositionProperty().addListener(invalidated -> checkbox.requestLayout());
-        checkbox.gapProperty().addListener(invalidated -> checkbox.requestLayout());
+        checkbox.alignmentProperty().addListener((observable, oldValue, newValue) -> updateAlignment());
+        checkbox.contentDispositionProperty().addListener(invalidated -> initPane());
+        checkbox.gapProperty().addListener(invalidated -> initPane());
+        checkbox.textExpandProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                text.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+            } else {
+                text.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+            }
+        });
+    }
+
+    protected void initPane() {
+        MFXCheckbox checkbox = getSkinnable();
+        ContentDisplay disposition = checkbox.getContentDisposition();
+        double gap = checkbox.getGap();
+
+        container.getChildren().clear();
+        container.setCenter(text);
+        switch (disposition) {
+            case TOP: {
+                container.setTop(rippleContainer);
+                BorderPane.setMargin(text, InsetsFactory.top(gap));
+                break;
+            }
+            case RIGHT: {
+                container.setRight(rippleContainer);
+                BorderPane.setMargin(text, InsetsFactory.right(gap));
+                break;
+            }
+            case BOTTOM: {
+                container.setBottom(rippleContainer);
+                BorderPane.setMargin(text, InsetsFactory.bottom(gap));
+                break;
+            }
+            case TEXT_ONLY:
+            case LEFT: {
+                container.setLeft(rippleContainer);
+                BorderPane.setMargin(text, InsetsFactory.left(gap));
+                break;
+            }
+            case GRAPHIC_ONLY:
+            case CENTER: {
+                container.setCenter(rippleContainer);
+                BorderPane.setMargin(text, InsetsFactory.none());
+                break;
+            }
+        }
+    }
+
+    protected void updateAlignment() {
+        MFXCheckbox checkbox = getSkinnable();
+        Pos alignment = checkbox.getAlignment();
+
+        if (PositionUtils.isTop(alignment)) {
+            BorderPane.setAlignment(rippleContainer, Pos.TOP_CENTER);
+        } else if (PositionUtils.isCenter(alignment)) {
+            BorderPane.setAlignment(rippleContainer, Pos.CENTER);
+        } else if (PositionUtils.isBottom(alignment)) {
+            BorderPane.setAlignment(rippleContainer, Pos.BOTTOM_CENTER);
+        }
     }
 
     //================================================================================
@@ -104,56 +173,7 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
     //================================================================================
     @Override
     protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        MFXCheckbox checkbox = getSkinnable();
-        ContentDisplay disposition = checkbox.getContentDisposition();
-        double gap = checkbox.getGap();
-
-        double minW;
-        switch (disposition) {
-            case LEFT:
-            case RIGHT:
-            case TEXT_ONLY:
-                minW = leftInset + rippleContainer.prefWidth(-1) + gap + text.prefWidth(-1) + rightInset;
-                break;
-            case TOP:
-            case BOTTOM:
-                minW = leftInset + Math.max(rippleContainer.prefWidth(-1), text.prefWidth(-1)) + rightInset;
-                break;
-            case CENTER:
-            case GRAPHIC_ONLY:
-                minW = leftInset + rippleContainer.prefWidth(-1) + rightInset;
-                break;
-            default:
-                minW = super.computeMinWidth(height, topInset, rightInset, bottomInset, leftInset);
-        }
-        return minW;
-    }
-
-    @Override
-    protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-        MFXCheckbox checkbox = getSkinnable();
-        ContentDisplay disposition = checkbox.getContentDisposition();
-        double gap = checkbox.getGap();
-
-        double minH;
-        switch (disposition) {
-            case LEFT:
-            case RIGHT:
-            case TEXT_ONLY:
-                minH = topInset + Math.max(rippleContainer.prefHeight(-1), text.prefHeight(-1)) + bottomInset;
-                break;
-            case TOP:
-            case BOTTOM:
-                minH = topInset + rippleContainer.prefHeight(-1) + gap + text.prefHeight(-1) + bottomInset;
-                break;
-            case CENTER:
-            case GRAPHIC_ONLY:
-                minH = leftInset + rippleContainer.prefHeight(-1) + rightInset;
-                break;
-            default:
-                minH = super.computeMinHeight(width, topInset, rightInset, bottomInset, leftInset);
-        }
-        return minH;
+        return leftInset + Math.max(rippleContainer.prefWidth(-1), text.prefWidth(-1)) + rightInset;
     }
 
     @Override
@@ -168,73 +188,7 @@ public class MFXCheckboxSkin extends SkinBase<MFXCheckbox> {
 
     @Override
     protected void layoutChildren(double contentX, double contentY, double contentWidth, double contentHeight) {
-        MFXCheckbox checkbox = getSkinnable();
-        ContentDisplay disposition = checkbox.getContentDisposition();
-        Insets padding = checkbox.getPadding();
-        double gap = checkbox.getGap();
-
-        double rcW = rippleContainer.prefWidth(-1);
-        double rcH = rippleContainer.prefHeight(-1);
-        double rcX = 0;
-        double rcY = 0;
-
-        double txW = text.prefWidth(-1);
-        double txH = text.prefHeight(-1);
-        double txX = 0;
-        double txY = 0;
-
-        switch (disposition) {
-            case TOP: {
-                rcX = (contentWidth / 2) - (rcW / 2);
-                rcY = 0;
-                txX = (contentWidth / 2) - (txW / 2);
-                txY = rcH + gap;
-                break;
-            }
-            case RIGHT: {
-                rcX = contentWidth - rcW;
-                rcY = (contentHeight / 2) - (rcH / 2);
-                txX = rcX - txW - gap;
-                txY = (contentHeight / 2) - (txH / 2);
-                break;
-            }
-            case BOTTOM: {
-                txX = (contentWidth / 2) - (txW / 2);
-                txY = 0;
-                rcX = (contentWidth / 2) - (rcW / 2);
-                rcY = txH + gap;
-                break;
-            }
-            case TEXT_ONLY:
-            case LEFT: {
-                rcX = 0;
-                rcY = (contentHeight / 2) - (rcH / 2);
-                txX = rcW + gap;
-                txY = (contentHeight / 2) - (txH / 2);
-                break;
-            }
-            case CENTER:
-            case GRAPHIC_ONLY: {
-                rcX = (contentWidth / 2) - (rcW / 2);
-                rcY = (contentHeight / 2) - (rcH / 2);
-                txW = 0;
-                txH = 0;
-                break;
-            }
-        }
-
-        rippleContainer.resizeRelocate(
-                snapPositionX(rcX + padding.getLeft()),
-                snapPositionY(rcY + padding.getTop()),
-                rcW,
-                rcH
-        );
-        text.resizeRelocate(
-                snapPositionX(txX + padding.getLeft()),
-                snapPositionY(txY + padding.getTop()),
-                txW,
-                txH
-        );
+        super.layoutChildren(contentX, contentY, contentWidth, contentHeight);
 
         double boxSize = box.getSize();
         Insets boxPadding = box.getPadding();

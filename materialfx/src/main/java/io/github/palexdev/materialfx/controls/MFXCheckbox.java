@@ -34,6 +34,11 @@ import java.util.List;
  * <p>
  * Extends {@code CheckBox}, redefines the style class to "mfx-checkbox" for usage in CSS and
  * includes a {@code RippleGenerator}(in the Skin) to generate ripple effect on click.
+ * <p></p>
+ * It also introduces some new features like:
+ * <p> - {@link #contentDispositionProperty()}: to control the checkbox position
+ * <p> - {@link #gapProperty()}: to control the gap between the checkbox and the text
+ * <p> - {@link #textExpandProperty()}: to control the text size and the checkbox layout (see documentation)
  */
 public class MFXCheckbox extends CheckBox {
     //================================================================================
@@ -84,6 +89,13 @@ public class MFXCheckbox extends CheckBox {
             8.0
     );
 
+    private final StyleableBooleanProperty textExpand = new SimpleStyleableBooleanProperty(
+            StyleableProperties.TEXT_EXPAND,
+            this,
+            "textExpand",
+            false
+    );
+
     public ContentDisplay getContentDisposition() {
         return contentDisposition.get();
     }
@@ -114,6 +126,27 @@ public class MFXCheckbox extends CheckBox {
         this.gap.set(gap);
     }
 
+    public boolean isTextExpand() {
+        return textExpand.get();
+    }
+
+    /**
+     * When setting a specific size for the control (by using setPrefSize for example, and this
+     * is true for SceneBuilder too), this flag will tell the control's label to take all the
+     * space available.
+     * <p>
+     * This allows, in combination with the {@link #contentDispositionProperty()}, to layout
+     * the control's content in many interesting ways. When the text is expanded (this property is true)
+     * use {@link #alignmentProperty()} to position the text.
+     */
+    public StyleableBooleanProperty textExpandProperty() {
+        return textExpand;
+    }
+
+    public void setTextExpand(boolean textExpand) {
+        this.textExpand.set(textExpand);
+    }
+
     //================================================================================
     // CssMetaData
     //================================================================================
@@ -135,9 +168,16 @@ public class MFXCheckbox extends CheckBox {
                         8.0
                 );
 
+        private static final CssMetaData<MFXCheckbox, Boolean> TEXT_EXPAND =
+                FACTORY.createBooleanCssMetaData(
+                        "-mfx-text-expand",
+                        MFXCheckbox::textExpandProperty,
+                        false
+                );
+
         static {
             List<CssMetaData<? extends Styleable, ?>> ckbCssMetaData = new ArrayList<>(CheckBox.getClassCssMetaData());
-            Collections.addAll(ckbCssMetaData, CONTENT_DISPOSITION, GAP);
+            Collections.addAll(ckbCssMetaData, CONTENT_DISPOSITION, GAP, TEXT_EXPAND);
             cssMetaDataList = Collections.unmodifiableList(ckbCssMetaData);
         }
     }

@@ -21,6 +21,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 
+import static io.github.palexdev.materialfx.utils.PositionUtils.*;
+
 /**
  * Implementation of an {@link AbstractMFXNotificationSystem} which makes use of a {@link MFXNotificationCenter}
  * to show the notifications.
@@ -242,7 +244,7 @@ public class MFXNotificationCenterSystem extends AbstractMFXNotificationSystem {
         CustomBounds centerBounds = getBounds();
         double counterWidth = centerBounds.getMaxX() - centerBounds.getMinX();
 
-        if (position.isTop()) {
+        if (isTop(position)) {
             y = screenBounds.getMinY() + spacing.getTop();
             endY = y;
         } else {
@@ -250,10 +252,10 @@ public class MFXNotificationCenterSystem extends AbstractMFXNotificationSystem {
             endY = screenBounds.getMaxY() - centerBounds.getHeight() - spacing.getBottom();
         }
 
-        if (position.isCenter()) {
+        if (isCenter(position)) {
             x = (screenBounds.getMaxX() / 2) - (counterWidth / 2);
             endX = x;
-        } else if (position.isRight()) {
+        } else if (isRight(position)) {
             x = screenBounds.getMaxX() - counterWidth - spacing.getRight();
             endX = screenBounds.getMaxX() - centerBounds.getMaxX() - spacing.getRight();
         } else {
@@ -307,7 +309,7 @@ public class MFXNotificationCenterSystem extends AbstractMFXNotificationSystem {
      * Returns the instance of the notification center used by this notification system.
      * <p></p>
      * <b>WARN:</b> do not mess around too much with it since the notification system is highly
-     * dependant on the notification center. For this reason I also warn you that
+     * dependent on the notification center. For this reason I also warn you that
      * this method could be deprecated and removed in the future, maybe replaced by delegates methods
      * to expose only a few features.
      */

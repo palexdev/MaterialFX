@@ -1,6 +1,5 @@
 package io.github.palexdev.materialfx.notifications;
 
-import io.github.palexdev.materialfx.beans.CustomBounds;
 import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.beans.TransitionPositionBean;
 import io.github.palexdev.materialfx.collections.CircularQueue;
@@ -26,9 +25,11 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.github.palexdev.materialfx.utils.PositionUtils.*;
+
 /**
  * Simple implementation of an {@link AbstractMFXNotificationSystem} which makes use of
- * a {@link CircularQueue} to keep an history of the shown notifications (by default max size is 100),
+ * a {@link CircularQueue} to keep a history of the shown notifications (by default max size is 100),
  * and a list to keep a reference to queued notifications that can't be shown at the moment of {@link #publish(INotification)}
  * and that will be sent to {@link #scheduleReopen(INotification)} instead.
  */
@@ -223,7 +224,7 @@ public class MFXNotificationSystem extends AbstractMFXNotificationSystem {
         Rectangle2D screenBounds = screen.getVisualBounds();
         Bounds containerBounds = notificationContainer.getLayoutBounds();
 
-        if (position.isTop()) {
+        if (isTop(position)) {
             y = -containerBounds.getMaxY() - spacing.getTop();
             endY = screenBounds.getMinY() + spacing.getTop();
         } else {
@@ -231,10 +232,10 @@ public class MFXNotificationSystem extends AbstractMFXNotificationSystem {
             endY = screenBounds.getMaxY() - containerBounds.getMaxY() - spacing.getBottom();
         }
 
-        if (position.isCenter()) {
+        if (isCenter(position)) {
             x = (screenBounds.getMaxX() / 2) - (containerBounds.getMaxX() / 2);
             endX = x;
-        } else if (position.isRight()) {
+        } else if (isRight(position)) {
             x = screenBounds.getMaxX() + spacing.getRight();
             endX = screenBounds.getMaxX() - containerBounds.getMaxX() - spacing.getRight();
         } else {
@@ -251,26 +252,6 @@ public class MFXNotificationSystem extends AbstractMFXNotificationSystem {
             super.owner = null;
         }
         return this;
-    }
-
-    //================================================================================
-    // Methods
-    //================================================================================
-
-    /**
-     * Computes the bounds of the notification container.
-     * These bounds always have the maxY 0.
-     */
-    private CustomBounds getBounds() {
-        Bounds bounds = notificationContainer.getBoundsInParent();
-        return new CustomBounds(
-                bounds.getMinX(),
-                bounds.getMinY(),
-                bounds.getMaxX(),
-                0,
-                bounds.getWidth(),
-                bounds.getHeight()
-        );
     }
 
     //================================================================================
