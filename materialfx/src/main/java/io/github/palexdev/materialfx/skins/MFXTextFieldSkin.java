@@ -1,276 +1,305 @@
-/*
- * Copyright (C) 2021 Parisi Alessandro
- * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
- *
- * MaterialFX is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * MaterialFX is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.palexdev.materialfx.skins;
 
-import io.github.palexdev.materialfx.controls.MFXIconWrapper;
+import io.github.palexdev.materialfx.controls.BoundTextField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
-import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
-import io.github.palexdev.materialfx.utils.LabelUtils;
-import io.github.palexdev.materialfx.validation.MFXDialogValidator;
-import javafx.animation.ScaleTransition;
-import javafx.beans.binding.Bindings;
-import javafx.scene.Cursor;
+import io.github.palexdev.materialfx.effects.Interpolators;
+import io.github.palexdev.materialfx.enums.FloatMode;
+import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
+import io.github.palexdev.materialfx.utils.AnimationUtils.PauseBuilder;
+import io.github.palexdev.materialfx.utils.AnimationUtils.TimelineBuilder;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.css.PseudoClass;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.IndexRange;
 import javafx.scene.control.Label;
-import javafx.scene.control.skin.TextFieldSkin;
-import javafx.scene.input.MouseButton;
+import javafx.scene.control.SkinBase;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
-import javafx.util.Duration;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.transform.Scale;
+import javafx.scene.transform.Transform;
+import javafx.scene.transform.Translate;
 
-/**
- * This is the implementation of the {@code Skin} associated with every {@link MFXTextField}.
- * <p></p>
- * A little note on the icon positioning and the text field width.
- * If you use the control in SceneBuilder you will immediately notice that the width of the text field doesn't take into
- * account the icon. The icon is placed "outside" the control because otherwise the input text would end under the icon,
- * and that's not a pleasant view.
- * <p>
- * Another solution would be to entirely recreate the TextFieldSkin using an HBox to contain the field and the icon,
- * but I don't think it's necessary since this strategy seems to work fine. Also don't forget that you can position the icon manually,
- * you should be able to put the icon "inside" the control by specifying a right inset equal to the icon's width, see {@link MFXTextField#iconInsetsProperty()}.
- */
-public class MFXTextFieldSkin extends TextFieldSkin {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final double padding = 11;
+// TODO documentation
+public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
+	private final HBox container;
+	private final StackPane textContainer;
+	private final Label floatingText;
+	private final BoundTextField field;
 
-    private final Line unfocusedLine;
-    private final Line focusedLine;
-    private final Label validate;
-    private IndexRange prev = null;
+	private static final PseudoClass FOCUSED_PSEUDO_CLASS = PseudoClass.getPseudoClass("focused");
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXTextFieldSkin(MFXTextField textField) {
-        super(textField);
+	private final ReadOnlyBooleanWrapper floating;
+	private final double scaleMultiplier = 0.85;
+	private final Scale scale = Transform.scale(1, 1, 0, 0);
+	private final Translate translate = Transform.translate(0, 0);
+	private boolean init = false;
 
-        unfocusedLine = new Line();
-        unfocusedLine.getStyleClass().add("unfocused-line");
-        unfocusedLine.endXProperty().bind(Bindings.createDoubleBinding(() -> {
-            Node icon = textField.getIcon();
-            if (icon != null) {
-                return textField.getWidth() + icon.getLayoutBounds().getWidth() +
-                        textField.getIconInsets().getLeft() - textField.getIconInsets().getRight();
-            }
-            return textField.getWidth();
-        }, textField.widthProperty(), textField.iconProperty()));
-        unfocusedLine.strokeLineCapProperty().bind(textField.lineStrokeCapProperty());
-        unfocusedLine.strokeWidthProperty().bind(textField.lineStrokeWidthProperty());
-        unfocusedLine.setManaged(false);
-        unfocusedLine.setSmooth(true);
+	public MFXTextFieldSkin(MFXTextField textField, ReadOnlyBooleanWrapper floating) {
+		super(textField);
+		this.floating = floating;
 
-        focusedLine = new Line();
-        focusedLine.getStyleClass().add("focused-line");
-        focusedLine.endXProperty().bind(Bindings.createDoubleBinding(() -> {
-            Node icon = textField.getIcon();
-            if (icon != null) {
-                return textField.getWidth() + icon.getLayoutBounds().getWidth() +
-                        textField.getIconInsets().getLeft() - textField.getIconInsets().getRight();
-            }
-            return textField.getWidth();
-        }, textField.widthProperty(), textField.iconProperty()));
-        focusedLine.strokeLineCapProperty().bind(textField.lineStrokeCapProperty());
-        focusedLine.strokeWidthProperty().bind(textField.lineStrokeWidthProperty());
-        focusedLine.setManaged(false);
-        focusedLine.setScaleX(0.0);
-        focusedLine.setSmooth(true);
+		floatingText = new Label();
+		floatingText.textProperty().bind(textField.floatingTextProperty());
+		floatingText.getStyleClass().setAll("floating-text");
+		floatingText.getTransforms().addAll(scale, translate);
 
-        MFXIconWrapper warnWrapper = new MFXIconWrapper("mfx-exclamation-triangle", 10, Color.RED, 10);
+		field = new BoundTextField(textField);
+		if (textField.getFloatMode() == FloatMode.INLINE) {
+			StackPane.setAlignment(field, Pos.BOTTOM_LEFT);
+		} else if (textField.getFloatMode() == FloatMode.DISABLED) {
+			floatingText.setVisible(false);
+		}
 
-        validate = new Label();
-        validate.setGraphic(warnWrapper);
-        validate.getStyleClass().add("validate-label");
-        validate.textProperty().bind(textField.getValidator().validatorMessageProperty());
-        validate.setGraphicTextGap(padding);
-        validate.setVisible(false);
-        validate.setManaged(false);
+		textContainer = new StackPane(floatingText, field) {
+			@Override
+			protected void layoutChildren() {
+				super.layoutChildren();
+				double floatingTextY = floatingText.getBoundsInParent().getMinY();
+				if (!init && floatingTextY >= 0) initText();
+			}
+		};
+		textContainer.setAlignment(Pos.CENTER_LEFT);
 
-        if (textField.isValidated() && textField.getValidator().isInitControlValidation()) {
-            validate.setVisible(!textField.isValid());
-        }
+		container = new HBox(textContainer);
+		container.setAlignment(Pos.CENTER_LEFT);
+		container.spacingProperty().bind(textField.graphicTextGapProperty());
+		if (textField.getLeadingIcon() != null) container.getChildren().add(0, textField.getLeadingIcon());
+		if (textField.getTrailingIcon() != null) container.getChildren().add(textField.getTrailingIcon());
 
-        getChildren().addAll(unfocusedLine, focusedLine, validate);
-        Node icon = textField.getIcon();
-        if (icon != null) {
-            icon.addEventFilter(MouseEvent.MOUSE_ENTERED, event -> icon.setCursor(Cursor.DEFAULT));
-            getChildren().add(icon);
-        }
+		getChildren().add(container);
+		addListeners();
+	}
 
-        setListeners();
-    }
+	private void addListeners() {
+		MFXTextField textField = getSkinnable();
 
-    //================================================================================
-    // Methods
-    //================================================================================
+		textField.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+			field.requestFocus();
+			field.deselect();
+		});
+		field.focusedProperty().addListener((observable, oldValue, newValue) -> {
+			pseudoClassStateChanged(FOCUSED_PSEUDO_CLASS, newValue);
+			if (shouldFloat()) positionText();
+		});
+		field.selectedTextProperty().addListener((observable, oldValue, newValue) -> {
+			if (!textField.isSelectable() && !newValue.isEmpty()) field.deselect();
+		});
+		field.textProperty().addListener((observable, oldValue, newValue) -> {
+			int limit = textField.getTextLimit();
+			if (limit == -1) return;
 
-    /**
-     * Adds listeners for: selection, icon, icon insets, line, focus, disabled and validator properties.
-     * <p>
-     * Validator: when the control is not focused, and of course if {@code isValidated} is true,
-     * all the conditions in the validator are evaluated and if one is false the {@code validate} label is shown.
-     * The label text is bound to the {@code validatorMessage} property so if you want to change it you can do it
-     * by getting the instance with {@code getValidator()}.
-     * <p>
-     * There's also another listener to keep track of validator changes.
-     */
-    private void setListeners() {
-        MFXTextField textField = (MFXTextField) getSkinnable();
-        MFXDialogValidator validator = textField.getValidator();
+			if (newValue.length() > limit) {
+				String s = newValue.substring(0, limit);
+				field.setText(s);
+			}
+		});
 
-        textField.selectionProperty().addListener((observable, oldValue, newValue) ->{
-            if (prev == null) {
-                prev = newValue;
-            } else {
-                prev = oldValue;
-            }
-        });
+		textField.promptTextProperty().addListener((observable, oldValue, newValue) -> {
+			if (!textField.getText().isEmpty()) return;
+			if (!isFloating() && !textField.isFocused() && !field.isFocused() && !newValue.isEmpty()) positionText();
+		});
 
-        textField.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            if (prev != null && event.getButton() == MouseButton.SECONDARY) {
-                textField.selectRange(prev.getStart(), prev.getEnd());
-            }
-        });
+		textField.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (!isFloating() && !textField.isFocused() && !field.isFocused() && !newValue.isEmpty()) positionText();
+		});
 
-        textField.iconProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                getChildren().remove(oldValue);
-            } else {
-                getChildren().remove(oldValue);
-                newValue.addEventFilter(MouseEvent.MOUSE_ENTERED, event -> newValue.setCursor(Cursor.DEFAULT));
-                getChildren().add(newValue);
-            }
-        });
+		textField.disabledProperty().addListener((observable, oldValue, newValue) -> handleDisabled(newValue));
 
-        textField.iconInsetsProperty().addListener(invalidated -> textField.requestLayout());
+		textField.borderSpacingProperty().addListener(invalidated -> repositionText());
+		textField.floatModeProperty().addListener((observable, oldValue, newValue) -> {
+			switch (newValue) {
+				case DISABLED:
+					floatingText.setVisible(false);
+					StackPane.setAlignment(field, Pos.CENTER_LEFT);
+					break;
+				case INLINE: {
+					StackPane.setAlignment(field, Pos.BOTTOM_LEFT);
+					repositionText();
+					break;
+				}
+				case BORDER: {
+					StackPane.setAlignment(field, Pos.CENTER_LEFT);
+					repositionText();
+					break;
+				}
+			}
+		});
+		textField.gapProperty().addListener(invalidated -> repositionText());
 
-        textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue && textField.isValidated()) {
-                textField.getValidator().update();
-                validate.setVisible(!textField.isValid());
-            }
+		textField.leadingIconProperty().addListener((observable, oldValue, newValue) -> {
+			if (oldValue != null) container.getChildren().remove(oldValue);
+			if (newValue != null) container.getChildren().add(0, newValue);
+		});
+		textField.trailingIconProperty().addListener((observable, oldValue, newValue) -> {
+			if (oldValue != null) container.getChildren().remove(oldValue);
+			if (newValue != null) container.getChildren().add(newValue);
+		});
+	}
 
-            if (textField.isAnimateLines()) {
-                buildAndPlayAnimation(newValue);
-                return;
-            }
+	protected void initText() {
+		MFXTextField textField = getSkinnable();
+		if (textField.getFloatMode() == FloatMode.DISABLED) {
+			init = true;
+			return;
+		}
 
-            if (newValue) {
-                focusedLine.setScaleX(1.0);
-            } else {
-                focusedLine.setScaleX(0.0);
-            }
-        });
+		if (textField.isDisabled()) {
+			floatingText.setVisible(false);
+			positionText();
+			handleDisabled(true);
+		} else if (!isFloating() && !shouldFloat()) {
+			positionText();
+		}
+		init = true;
+	}
 
-        textField.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            if (textField.isAnimateLines() && focusedLine.getScaleX() != 1.0) {
-                buildAndPlayAnimation(true);
-                return;
-            }
+	protected void positionText() {
+		MFXTextField textField = getSkinnable();
+		if (textField.getFloatMode() == FloatMode.DISABLED) return;
 
-            focusedLine.setScaleX(1.0);
-        });
+		double targetScale = isFloating() ? 1 : scaleMultiplier;
+		double targetX = computeTargetX();
+		double targetY = computeTargetY();
+		switchFloating();
 
-        textField.isValidatedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) {
-                validate.setVisible(false);
-            }
-        });
+		if (textField.isAnimated()) {
+			TimelineBuilder.build()
+					.add(
+							KeyFrames.of(150, scale.xProperty(), targetScale, Interpolators.INTERPOLATOR_V1),
+							KeyFrames.of(150, scale.yProperty(), targetScale, Interpolators.INTERPOLATOR_V1),
+							KeyFrames.of(150, translate.xProperty(), targetX, Interpolators.INTERPOLATOR_V1),
+							KeyFrames.of(150, translate.yProperty(), targetY, Interpolators.INTERPOLATOR_V1)
+					)
+					.getAnimation()
+					.play();
+		} else {
+			scale.setX(targetScale);
+			scale.setY(targetScale);
+			translate.setX(targetX);
+			translate.setY(targetY);
+		}
+	}
 
-        textField.disabledProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                validate.setVisible(!textField.isValid());
-            }
-        });
+	protected void repositionText() {
+		floatingText.setVisible(false);
+		setFloating(false);
 
-        validator.addListener(invalidated -> {
-            if (textField.isValidated()) {
-                validate.setVisible(!textField.isValid());
-            }
-        });
+		scale.setX(1);
+		scale.setY(1);
+		translate.setX(0);
+		translate.setY(0);
 
-        validate.textProperty().addListener(invalidated -> textField.requestLayout());
-        validate.addEventFilter(MouseEvent.MOUSE_ENTERED, event -> validate.setCursor(Cursor.DEFAULT));
-        validate.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> validator.showModal(textField.getScene().getWindow()));
-    }
+		// Delay the actual reposition, so that coordinates are settled
+		// Also, don't use position text, better not use any animation
+		PauseBuilder.build()
+				.setDuration(300)
+				.setOnFinished(event -> {
+					double targetScale = isFloating() ? 1 : scaleMultiplier;
+					double targetX = computeTargetX();
+					double targetY = computeTargetY();
+					switchFloating();
+					scale.setX(targetScale);
+					scale.setY(targetScale);
+					translate.setX(targetX);
+					translate.setY(targetY);
+					floatingText.setVisible(true);
+				})
+				.getAnimation()
+				.play();
+	}
 
-    /**
-     * Builds and play the lines animation if {@code animateLines} is true.
-     */
-    private void buildAndPlayAnimation(boolean focused) {
-        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(350), focusedLine);
-        if (focused) {
-            scaleTransition.setFromX(0.0);
-            scaleTransition.setToX(1.0);
-        } else {
-            scaleTransition.setFromX(1.0);
-            scaleTransition.setToX(0.0);
-        }
-        scaleTransition.setInterpolator(MFXAnimationFactory.INTERPOLATOR_V2);
-        scaleTransition.play();
-    }
+	protected double computeTargetX() {
+		MFXTextField textField = getSkinnable();
+		double targetX = 0;
+		if (isFloating() || textField.getFloatMode() == FloatMode.INLINE) return targetX;
 
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return Math.max(super.computeMinWidth(height, topInset, rightInset, bottomInset, leftInset), 120);
-    }
+		if (!isFloating()) {
+			double iconWidth = textField.getLeadingIcon() != null ? textField.getLeadingIcon().prefWidth(-1) : 0;
+			targetX = textField.getBorderSpacing() - iconWidth - textField.getGraphicTextGap();
+		}
+		return snapPositionX(targetX);
+	}
 
-    @Override
-    protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return getSkinnable().prefWidth(height);
-    }
+	protected double computeTargetY() {
+		MFXTextField textField = getSkinnable();
+		double targetY = 0;
+		if (textField.getFloatMode() == FloatMode.INLINE) {
+			if (!isFloating()) {
+				targetY = -floatingText.getLayoutY();
+			}
+		} else {
+			if (!isFloating()) {
+				double zeroPos = -textContainer.getLayoutY() - (floatingText.getLayoutY() * scaleMultiplier);
+				targetY = zeroPos - (floatingText.prefHeight(-1));
+			}
+		}
+		return snapPositionY(targetY);
+	}
 
-    @Override
-    protected void layoutChildren(double x, double y, double w, double h) {
-        super.layoutChildren(x, y, w, h);
-        MFXTextField textField = (MFXTextField) getSkinnable();
+	private boolean shouldFloat() {
+		MFXTextField textField = getSkinnable();
+		return textField.getText().isEmpty() && textField.getPromptText().isEmpty();
+	}
 
-        double lw = snapSizeX(LabelUtils.computeLabelWidth(validate));
-        double lh = snapSizeY(LabelUtils.computeTextHeight(validate.getFont(), validate.getText()));
-        double lx = 0;
-        double ly = h + lh;
+	protected void handleDisabled(boolean disabled) {
+		if (disabled) {
+			if (isFloating()) {
+				if (shouldFloat()) {
+					repositionText();
+				} else {
+					floatingText.setVisible(false);
+				}
+			}
+		}
+	}
 
-        validate.resizeRelocate(lx, ly, lw, lh);
-        focusedLine.relocate(0, h + padding * 0.7);
-        unfocusedLine.relocate(0, h + padding * 0.7);
+	public boolean isFloating() {
+		return floating.get();
+	}
 
-        Node icon = textField.getIcon();
-        if (icon != null) {
-            icon.setManaged(false);
+	public void setFloating(boolean floating) {
+		this.floating.set(floating);
+	}
 
-            double iX = snapPositionX(w +
-                    textField.getIconInsets().getLeft() -
-                    textField.getIconInsets().getRight()
-            );
-            double iY = snapPositionY(h - (icon.getLayoutBounds().getHeight() / 2.0) +
-                    textField.getIconInsets().getTop() -
-                    textField.getIconInsets().getBottom() -
-                    padding * 0.7
-            );
-            icon.relocate(iX, iY);
-        }
-    }
+	public void switchFloating() {
+		this.floating.set(!isFloating());
+	}
+
+	@Override
+	protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+		MFXTextField textField = getSkinnable();
+		Node leadingIcon = textField.getLeadingIcon();
+		Node trailingIcon = textField.getLeadingIcon();
+		double spacing = textField.getGraphicTextGap();
+
+		return leftInset +
+				(leadingIcon != null ? leadingIcon.prefWidth(-1) : 0) +
+				(leadingIcon != null ? spacing : 0) +
+				Math.max(floatingText.prefWidth(-1), field.prefWidth(-1)) +
+				(trailingIcon != null ? spacing : 0) +
+				(trailingIcon != null ? trailingIcon.prefWidth(-1) : 0) +
+				rightInset;
+	}
+
+	@Override
+	protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+		MFXTextField textField = getSkinnable();
+		double height = topInset +
+				floatingText.prefHeight(-1) +
+				field.prefHeight(-1) +
+				bottomInset;
+		if (textField.getFloatMode() == FloatMode.INLINE) height += textField.getGap();
+		return height;
+	}
+
+	@Override
+	protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+		return getSkinnable().prefWidth(-1);
+	}
+
+	@Override
+	protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+		return getSkinnable().prefHeight(-1);
+	}
 }

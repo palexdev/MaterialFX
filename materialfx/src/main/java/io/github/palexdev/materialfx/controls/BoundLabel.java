@@ -9,9 +9,9 @@ import javafx.scene.control.Labeled;
  * controls and skins that have text, as the text properties are set on the control
  * and not on the text node itself, and that's why all properties are bound.
  */
-public class LabeledControlWrapper extends Label {
+public class BoundLabel extends Label {
 
-    public LabeledControlWrapper(Labeled labeled) {
+    public BoundLabel(Labeled labeled) {
         super();
 
         // Init

@@ -2,6 +2,8 @@ package io.github.palexdev.materialfx.effects;
 
 import javafx.animation.Interpolator;
 import javafx.animation.Transition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.util.Duration;
 
 import java.util.function.Consumer;
@@ -29,65 +31,74 @@ public class ConsumerTransition extends Transition {
         return this;
     }
 
-    /**
-     * Sets the transition duration in milliseconds.
-     */
-    public ConsumerTransition setDuration(double millis) {
-        this.setCycleDuration(Duration.millis(millis));
-        return this;
-    }
+	/**
+	 * Sets the transition duration in milliseconds.
+	 */
+	public ConsumerTransition setDuration(double millis) {
+		this.setCycleDuration(Duration.millis(millis));
+		return this;
+	}
 
-    /**
-     * Sets the consumer used by the {@link #interpolate(double)} method.
-     */
-    public ConsumerTransition setInterpolateConsumer(Consumer<Double> interpolateConsumer) {
-        this.interpolateConsumer = interpolateConsumer;
-        return this;
-    }
+	/**
+	 * Sets the consumer used by the {@link #interpolate(double)} method.
+	 */
+	public ConsumerTransition setInterpolateConsumer(Consumer<Double> interpolateConsumer) {
+		this.interpolateConsumer = interpolateConsumer;
+		return this;
+	}
 
-    /**
-     * Sets the transition's interpolator.
-     */
-    public ConsumerTransition setInterpolatorFluent(Interpolator interpolator) {
-        this.setInterpolator(interpolator);
-        return this;
-    }
+	/**
+	 * Sets the transition's interpolator.
+	 */
+	public ConsumerTransition setInterpolatorFluent(Interpolator interpolator) {
+		this.setInterpolator(interpolator);
+		return this;
+	}
 
-    /**
-     * Sets the transition's delay.
-     */
-    public ConsumerTransition setDelayFluent(Duration duration) {
-        this.setDelay(duration);
-        return this;
-    }
+	public ConsumerTransition setInterpolatorFluent(Interpolators interpolator) {
+		return setInterpolatorFluent(interpolator.toInterpolator());
+	}
 
-    /**
-     * Calls {@link #setInterpolateConsumer(Consumer)} and then starts the animation.
-     */
-    public void playWithConsumer(Consumer<Double> interpolateConsumer) {
-        setInterpolateConsumer(interpolateConsumer);
-        this.play();
-    }
+	/**
+	 * Sets the transition's delay.
+	 */
+	public ConsumerTransition setDelayFluent(Duration duration) {
+		this.setDelay(duration);
+		return this;
+	}
 
-    //================================================================================
-    // Overridden Methods
-    //================================================================================
+	public ConsumerTransition setOnFinishedFluent(EventHandler<ActionEvent> handler) {
+		setOnFinished(handler);
+		return this;
+	}
 
-    /**
-     * {@inheritDoc}
-     * <p></p>
-     * Implementation to make use of a {@link Consumer}.
-     */
-    @Override
-    protected void interpolate(double frac) {
-        this.interpolateConsumer.accept(frac);
-    }
+	/**
+	 * Calls {@link #setInterpolateConsumer(Consumer)} and then starts the animation.
+	 */
+	public void playWithConsumer(Consumer<Double> interpolateConsumer) {
+		setInterpolateConsumer(interpolateConsumer);
+		this.play();
+	}
 
-    //================================================================================
-    // Static Methods
-    //================================================================================
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
 
-    /**
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Implementation to make use of a {@link Consumer}.
+	 */
+	@Override
+	protected void interpolate(double frac) {
+		this.interpolateConsumer.accept(frac);
+	}
+
+	//================================================================================
+	// Static Methods
+	//================================================================================
+
+	/**
      * Creates a new {@code ConsumerTransition} with the given consumer.
      */
     public static ConsumerTransition of(Consumer<Double> interpolateConsumer) {

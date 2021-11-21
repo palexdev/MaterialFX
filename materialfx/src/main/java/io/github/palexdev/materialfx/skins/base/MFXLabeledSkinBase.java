@@ -1,6 +1,6 @@
 package io.github.palexdev.materialfx.skins.base;
 
-import io.github.palexdev.materialfx.controls.LabeledControlWrapper;
+import io.github.palexdev.materialfx.controls.BoundLabel;
 import io.github.palexdev.materialfx.controls.base.MFXLabeled;
 import io.github.palexdev.materialfx.factories.InsetsFactory;
 import io.github.palexdev.materialfx.utils.PositionUtils;
@@ -22,7 +22,7 @@ public abstract class MFXLabeledSkinBase<C extends Labeled & MFXLabeled> extends
     // Properties
     //================================================================================
     protected final BorderPane topContainer;
-    protected final LabeledControlWrapper text;
+    protected final BoundLabel text;
 
     //================================================================================
     // Constructors
@@ -30,7 +30,7 @@ public abstract class MFXLabeledSkinBase<C extends Labeled & MFXLabeled> extends
     protected MFXLabeledSkinBase(C labeled) {
         super(labeled);
         topContainer = new BorderPane();
-        text = new LabeledControlWrapper(labeled);
+        text = new BoundLabel(labeled);
         if (labeled.isTextExpand()) text.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
     }
 

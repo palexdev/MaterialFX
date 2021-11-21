@@ -16,74 +16,72 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+@import "Fonts.css";
+@import "MFXColors.css";
+
 .mfx-text-field {
-    -fx-prompt-text-fill: #61606C;
-    -fx-padding: 0.333333em 0 0.333333em 0;
-    -mfx-line-color: rgb(50, 150, 220);
-    -mfx-unfocused-line-color: rgb(77, 77, 77);
+	-mfx-main: #6200EE;
+
+	-fx-background-color: white;
+	-fx-background-radius: 5;
+	-fx-border-color: lightgray;
+	-fx-border-radius: 5;
+	-fx-cursor: text;
+	-fx-padding: 5;
+
+	-fx-font-family: "Open Sans Regular";
 }
 
-.mfx-text-field,
+.mfx-text-field:readonly,
+.mfx-text-field:readonly .text-field {
+	-fx-cursor: default;
+}
+
+.mfx-text-field .text-field {
+	-fx-highlight-fill: #ECE0FD;            /* Selected text highlight */
+	-fx-highlight-text-fill: -mfx-text-he;  /* Selected text color */
+	-fx-text-inner-color: -mfx-text-he;     /* JavaFX's TextFields use this property instead of -fx-text-fill */
+	-fx-prompt-text-fill: -mfx-text-me;     /* Prompt text color */
+}
+
 .mfx-text-field:focused {
-    -fx-background-color: TRANSPARENT, TRANSPARENT, TRANSPARENT;
+	-fx-background-insets: 2;
+	-fx-border-color: -mfx-main;
+	-fx-border-insets: 1.5;
 }
 
-.mfx-text-field .validate-label {
-    -fx-background-color: transparent;
-    -fx-font-family: "Open Sans SemiBold";
-    -fx-font-size: 11;
-    -fx-text-fill: #EF6E6B;
+.mfx-text-field .floating-text {
+	-fx-font-family: "Open Sans Regular";
+	-fx-text-fill: -mfx-text-he;
 }
 
-.mfx-text-field:invalid {
-    -fx-text-fill: #EF6E6B;
-    -fx-prompt-text-fill: #EF6E6B;
+.mfx-text-field:floating .floating-text {
+	-fx-background-color: white;
 }
 
-.mfx-text-field .unfocused-line {
-    -fx-stroke: -mfx-unfocused-line-color;
+.mfx-text-field:focused .floating-text {
+	-fx-text-fill: -mfx-main;
 }
 
-.mfx-text-field .focused-line {
-    -fx-stroke: -mfx-line-color;
+.mfx-text-field .text-field {
+	-fx-text-box-border: transparent;
+	-fx-background-color: transparent;
+	-fx-padding: 0;
 }
 
-.mfx-text-field:invalid .unfocused-line {
-    -fx-stroke: #EF6E6B;
+.mfx-text-field .text-field:focused {
+	-fx-focus-color: transparent;
+	-fx-faint-focus-color: transparent;
 }
 
-.mfx-text-field:invalid .focused-line {
-    -fx-stroke: #EF6E6B;
+.mfx-text-field:disabled {
+	-fx-border-color: rgba(0, 0, 0, 0.1);
 }
 
-.mfx-text-field .unfocused-line {
-    -fx-stroke: -mfx-unfocused-line-color;
+.mfx-text-field:disabled .floating-text {
+	-fx-text-fill: -mfx-text-disabled;
 }
 
-.mfx-text-field .focused-line {
-    -fx-stroke: -mfx-line-color;
-}
-
-.mfx-text-field:invalid .unfocused-line {
-    -fx-stroke: #EF6E6B;
-}
-
-.mfx-text-field:invalid .focused-line {
-    -fx-stroke: #EF6E6B;
-}
-
-.mfx-text-field .unfocused-line {
-    -fx-stroke: -mfx-unfocused-line-color;
-}
-
-.mfx-text-field .focused-line {
-    -fx-stroke: -mfx-line-color;
-}
-
-.mfx-text-field:invalid .unfocused-line {
-    -fx-stroke: #EF6E6B;
-}
-
-.mfx-text-field:invalid .focused-line {
-    -fx-stroke: #EF6E6B;
+.mfx-text-field:disabled .text-field {
+	-fx-text-inner-color: -mfx-text-disabled;
 }
