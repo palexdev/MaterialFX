@@ -18,6 +18,7 @@
 
 package io.github.palexdev.materialfx.utils;
 
+import io.github.palexdev.materialfx.beans.SizeBean;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.css.PseudoClass;
@@ -258,6 +259,23 @@ public class NodeUtils {
         double width = node.prefWidth(-1);
         group.getChildren().clear();
         return width;
+    }
+
+    /**
+     * Retrieves the node's width and height if it isn't still laid out
+     *
+     * @param node the Node of which to know the sizes
+     * @return the computed width and height as a {@link SizeBean}
+     */
+    public static SizeBean getNodeSizes(Node node) {
+        Group group = new Group(node);
+        Scene scene = new Scene(group);
+        group.applyCss();
+        group.layout();
+
+        SizeBean sizes = SizeBean.of(node.prefWidth(-1), node.prefHeight(-1));
+        group.getChildren().clear();
+        return sizes;
     }
 
     /**
