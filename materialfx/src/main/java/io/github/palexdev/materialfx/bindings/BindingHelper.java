@@ -18,154 +18,159 @@
 
 package io.github.palexdev.materialfx.bindings;
 
-import javafx.beans.value.ChangeListener;
+import io.github.palexdev.materialfx.bindings.base.AbstractBindingHelper;
 import javafx.beans.value.ObservableValue;
 
+import java.util.function.BiConsumer;
+
 /**
- * Helper class to manage unidirectional bindings.
+ * Binding helper for unidirectional bindings.
  * <p></p>
- * A bindings is basically a listener attached to an observable which acts as "source",
- * when the source changes the bound property is updated.
+ * Bindings are syntactical sugar, because basically it's a listener attached to an observable value
+ * which acts as a 'source', when it changes the target is updated.
  * <p></p>
- * This raises an issue though, in JavaFX if a property is bound the value cannot be changed
- * with the `set(...)` method as it would throw an exception. Unfortunately there's no way to avoid the check unless you override
- * the 'isBound()' method, let's see an example:
+ * The issue though is that this 'syntactical sugar' mechanism is managed by JavaFX, some functionalities are
+ * private, unchangeable. For example, JavaFX properties are not settable when they are bound because an internal
+ * flag doesn't allow it. To replicate this behavior the only way is to override the property's 'isBound' method
+ * to use the {@link BindingManager}, an example:
  * <p></p>
  * <pre>
  * {@code
- *         BindingManager<Number> bindingManager = new BindingManager<>();
+ *         BindingManager bindingManager = BindingManager.instance();
  *         IntegerProperty property = new SimpleIntegerProperty() {
  *             @Override
  *             public boolean isBound() {
- *                 return super.isBound() && !bindingManager.isIgnoreBound();
+ *                 return bindingManager.isBound(this) && !bindingManager.isIgnoreBinding(this);
  *             }
  *         };
  *         IntegerProperty source = new SimpleIntegerProperty();
  *
- *         bindingManager.provideHelperFactory(other -> new BindingHelper<>() {
- *             @Override protected void updateBound(Number newValue) { property.set(newValue.intValue()); }
- *         });
- *         bindingManager.getBindingHelper(source).bind(source);
+ *         bindingManager.bind(property).to(source).create();
  *         source.set(8);
  * }
  * </pre>
- * <p>
- * There's also another correlated issue. When you bind a JavaFX property it stores a reference to the observable, the isBound()
- * method simply checks if that reference is not null. Since it's a private variable we have no way to set it so the above code should be changed a little:
- * <pre>
- * {@code
- *      // The only thing to change is the isBound() override...
- *      IntegerProperty property = new SimpleIntegerProperty() {
- *          @Override
- *          public boolean isBound() {
- *              return bindingManager.isBound() && !bindingManager.isIgnoreBound();
- *          }
- *      };
- * }
- * </pre>
  * <p></p>
- * The "bound" and "ignoreBound" flags are managed by default by these methods {@link #afterBind()}, {@link #afterUnbind()}.
- * {@link #beforeUpdate()}, {@link #afterUpdate()}.
- * <p></p>
- * I know, it's not the most elegant solution, but it works. Maybe another way would be to override the {@link #beforeUpdate()} and
- * {@link #afterUpdate()} int the "provideFactory" call to unbind the property temporarily and re-bind it immediately after the update,
- * but the above method is the recommended one though.
- * <p></p>
- * So this helper has a change listener that will be attached to the source property which calls {@link #beforeUpdate()} before calling
- * {@link #updateBound(Object)} and then calls {@link #afterUpdate()} immediately after. This way a property which has its "isBound()" method overridden like the
- * above one, will call {@link BindingManager#isIgnoreBound()} which is a delegate to this method {@link #isIgnoreBound()} and bypass the bound check.
+ * The 'ignoreBinding' flag is necessary because when the updateTarget is triggered we must tell
+ * the property to allow the modification because it is caused by the binding helper.
  *
  * @param <T> the properties' value type
  */
-public abstract class BindingHelper<T> {
+public class BindingHelper<T> extends AbstractBindingHelper<T> {
     //================================================================================
     // Properties
     //================================================================================
-    private final ChangeListener<? super T> listener = (observable, oldValue, newValue) -> {
-        beforeUpdate();
-        updateBound(newValue);
-        afterUpdate();
-    };
-    protected boolean bound;
-    protected boolean ignoreBound;
-    private ObservableValue<? extends T> observedValue;
-
-    //================================================================================
-    // Abstract Methods
-    //================================================================================
-
-    /**
-     * Abstract method, it's needed to implement this in order to specify the way the bound property will be updated.
-     * <p></p>
-     * A simple implementation could just be {@code property.set(newValue);}.
-     */
-    protected abstract void updateBound(T newValue);
+    private ObservableValue<? extends T> source;
+    protected boolean ignoreBinding;
 
     //================================================================================
     // Methods
     //================================================================================
 
     /**
-     * Stores the reference of the given property and adds the listener to it.
-     * <p>
-     * At the end calls {@link #afterBind()}.
+     * Sets the target to the specified one.
      */
-    public void bind(ObservableValue<? extends T> source) {
-        observedValue = source;
-        observedValue.addListener(listener);
-        afterBind();
+    public BindingHelper<T> bind(ObservableValue<? extends T> target) {
+        this.target = target;
+        return this;
     }
 
     /**
-     * Removes the listener from the source property and then sets the reference to null.
+     * Sets the targetUpdater {@link BiConsumer}.
+     */
+    @Override
+    public BindingHelper<T> with(BiConsumer<T, T> targetUpdater) {
+        this.targetUpdater = targetUpdater;
+        return this;
+    }
+
+    /**
+     * Sets the binding source to the given one.
      * <p>
-     * Calls {@link #afterUnbind()} at the end.
+     * Also calls {@link #beforeBind()} and {@link #afterBind()}.
+     */
+    public BindingHelper<T> to(ObservableValue<? extends T> source) {
+        this.source = source;
+        beforeBind();
+        source.addListener(sourceListener);
+        afterBind();
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p></p>
+     * Sets the 'ignoreBinding' flag to true then calls the super method.
+     * <p>
+     * The whole process is wrapped in a try-finally block since it's as important that the flag
+     * is reset at the end.
+     */
+    @Override
+    protected void updateTarget(ObservableValue<? extends T> source, T oldValue, T newValue) {
+        try {
+            ignoreBinding = true;
+            super.updateTarget(source, oldValue, newValue);
+        } finally {
+            ignoreBinding = false;
+        }
+    }
+
+    /**
+     * Causes the target to update with the current source's value.
+     * <p></p>
+     * This is necessary to 'simulate' the JavaFX's eager evaluation of bindings.
+     */
+    public void invalidate() {
+        T value = source.getValue();
+        updateTarget(source, value, value);
+    }
+
+    /**
+     * Removes the sourceListener from the source, then
+     * sets the source to null.
+     * <p>
+     * This means that the helper won't be usable anymore until {@link #to(ObservableValue)} is called again.
+     * <p></p>
+     * Also calls {@link #beforeUnbind()}, {@link #afterUnbind()}.
      */
     public void unbind() {
-        observedValue.removeListener(listener);
-        observedValue = null;
+        beforeUnbind();
+        source.removeListener(sourceListener);
+        source = null;
         afterUnbind();
     }
 
     /**
-     * @return the "bound" flag state
+     * Calls {@link #unbind()} and in addition to that
+     * also the target is set to null.
+     * <p>
+     * This means that the helper won't be usable anymore until {@link #bind(ObservableValue)} and
+     * {@link #to(ObservableValue)} are called again.
+     */
+    public void dispose() {
+        unbind();
+        target = null;
+    }
+
+    /**
+     * Asks the {@link BindingManager} to check if this helper's target
+     * is bound.
      */
     public boolean isBound() {
-        return bound;
+        return BindingManager.instance().isBound(target);
     }
 
     /**
-     * @return the "ignoreBound" flag state
+     * Checks if the binding should be ignored.
      */
-    public boolean isIgnoreBound() {
-        return ignoreBound;
+    public boolean isIgnoreBinding() {
+        return ignoreBinding;
     }
 
     /**
-     * By default sets the "ignoreBound" flag to false.
+     * Checks if the helper has been disposed before.
      */
-    protected void afterUpdate() {
-        ignoreBound = false;
-    }
-
-    /**
-     * By default sets the "ignoreBound" flag to true.
-     */
-    protected void beforeUpdate() {
-        ignoreBound = true;
-    }
-
-    /**
-     * By default sets the "bound" flag to true.
-     */
-    protected void afterBind() {
-        bound = true;
-    }
-
-    /**
-     * By default sets the "bound" flag to false.
-     */
-    protected void afterUnbind() {
-        bound = false;
+    @Override
+    public boolean isDispose() {
+        return target == null;
     }
 }
