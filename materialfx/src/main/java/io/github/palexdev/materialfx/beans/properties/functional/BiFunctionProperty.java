@@ -12,4 +12,20 @@ import java.util.function.BiFunction;
  * @param <U> the function's second argument
  * @param <R> the function's return type
  */
-public class BiFunctionProperty<T, U, R> extends SimpleObjectProperty<BiFunction<T, U, R>> {}
+public class BiFunctionProperty<T, U, R> extends SimpleObjectProperty<BiFunction<T, U, R>> {
+
+	public BiFunctionProperty() {
+	}
+
+	public BiFunctionProperty(BiFunction<T, U, R> initialValue) {
+		super(initialValue);
+	}
+
+	public BiFunctionProperty(Object bean, String name) {
+		super(bean, name);
+	}
+
+	public BiFunctionProperty(Object bean, String name, BiFunction<T, U, R> initialValue) {
+		super(bean, name, initialValue);
+	}
+}

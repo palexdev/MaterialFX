@@ -11,4 +11,19 @@ import java.util.Comparator;
  * @param <T> the type of objects that may be compared by the comparator
  */
 public class ComparatorProperty<T> extends SimpleObjectProperty<Comparator<T>> {
+
+	public ComparatorProperty() {
+	}
+
+	public ComparatorProperty(Comparator<T> initialValue) {
+		super(initialValue);
+	}
+
+	public ComparatorProperty(Object bean, String name) {
+		super(bean, name);
+	}
+
+	public ComparatorProperty(Object bean, String name, Comparator<T> initialValue) {
+		super(bean, name, initialValue);
+	}
 }

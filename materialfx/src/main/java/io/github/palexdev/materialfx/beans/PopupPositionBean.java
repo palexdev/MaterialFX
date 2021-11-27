@@ -21,20 +21,18 @@ public class PopupPositionBean {
     private final Node owner;
     private final Bounds ownerBounds;
     private final PositionBean positionBean;
-    private final HPos hPos;
-    private final VPos vPos;
+    private final Alignment alignment;
     private final double xOffset;
     private final double yOffset;
 
     //================================================================================
     // Constructors
     //================================================================================
-    public PopupPositionBean(Node owner, PositionBean positionBean, HPos hPos, VPos vPos, double xOffset, double yOffset) {
+    public PopupPositionBean(Node owner, PositionBean positionBean, Alignment alignment, double xOffset, double yOffset) {
         this.owner = owner;
         this.ownerBounds = owner.getLayoutBounds();
         this.positionBean = positionBean;
-        this.hPos = hPos;
-        this.vPos = vPos;
+        this.alignment = alignment;
         this.xOffset = xOffset;
         this.yOffset = yOffset;
     }
@@ -91,18 +89,22 @@ public class PopupPositionBean {
         return positionBean.getY();
     }
 
+    public Alignment getAlignment() {
+        return alignment;
+    }
+
     /**
      * @return the specified {@link HPos}
      */
     public HPos getHPos() {
-        return hPos;
+        return alignment.getHPos();
     }
 
     /**
      * @return the specified {@link VPos}
      */
     public VPos getVPos() {
-        return vPos;
+        return alignment.getVPos();
     }
 
     /**

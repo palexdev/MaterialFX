@@ -12,4 +12,20 @@ import java.util.function.Function;
  * @param <T> the function's input type
  * @param <R> the function's return type
  */
-public class FunctionProperty<T, R> extends SimpleObjectProperty<Function<T, R>> {}
+public class FunctionProperty<T, R> extends SimpleObjectProperty<Function<T, R>> {
+
+	public FunctionProperty() {
+	}
+
+	public FunctionProperty(Function<T, R> initialValue) {
+		super(initialValue);
+	}
+
+	public FunctionProperty(Object bean, String name) {
+		super(bean, name);
+	}
+
+	public FunctionProperty(Object bean, String name, Function<T, R> initialValue) {
+		super(bean, name, initialValue);
+	}
+}

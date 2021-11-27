@@ -18,15 +18,15 @@
 
 package io.github.palexdev.materialfx.beans.properties.base;
 
-import io.github.palexdev.materialfx.bindings.BidirectionalBindingHelper;
+import io.github.palexdev.materialfx.bindings.BiBindingHelper;
 import io.github.palexdev.materialfx.bindings.BindingHelper;
+import io.github.palexdev.materialfx.utils.ExecutionUtils;
+import javafx.beans.Observable;
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.value.ObservableValue;
 
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Public API of every synchronized property.
@@ -84,16 +84,16 @@ import java.util.function.Function;
  * }
  * </pre>
  * <p></p>
- * SynchronizedProperties override the bindings mechanism as well because for some reason the default JavaFX implementation doesn't work
+ * SynchronizedProperties override the binding mechanism as well because for some reason the default JavaFX implementation doesn't work
  * properly for them and also because the new mechanism is a lot more flexible, a bit more complex though, but you just need to read the
- * new classes' documentation, {@link BindingHelper}, {@link BidirectionalBindingHelper}.
+ * new classes' documentation, {@link BindingHelper}, {@link BiBindingHelper}.
  *
  * @param <T> the type of the wrapped value
  */
 public interface SynchronizedProperty<T> extends Property<T> {
 
     /**
-     * Sets this property's state to "waiting" then uses {@link io.github.palexdev.materialfx.utils.ExecutionUtils#executeWhen(ObservableValue, BiConsumer, boolean, BiFunction, boolean)}
+     * Sets this property's state to "waiting" then uses {@link ExecutionUtils#executeWhen(Observable, Runnable, boolean, Supplier, boolean)}
      * to "awake" the property when the given observable changes.
      * <p></p>
      * Just like JavaFX properties if the new value is the same as the current value the method returns and does nothing.
@@ -124,16 +124,6 @@ public interface SynchronizedProperty<T> extends Property<T> {
      * are probably doing something wrong.
      */
     void awake();
-
-    /**
-     * Sets the function used to build a {@link BindingHelper}.
-     */
-    void provideHelperFactory(Function<ObservableValue<? extends T>, BindingHelper<T>> factory);
-
-    /**
-     * Sets the function used to build a {@link BidirectionalBindingHelper}.
-     */
-    void provideBidirectionalHelperFactory(Function<Property<T>, BidirectionalBindingHelper<T>> factory);
 
     /**
      * Helper class to avoid code duplication.

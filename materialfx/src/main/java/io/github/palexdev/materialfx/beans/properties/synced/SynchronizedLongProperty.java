@@ -19,8 +19,7 @@
 package io.github.palexdev.materialfx.beans.properties.synced;
 
 import io.github.palexdev.materialfx.beans.properties.base.SynchronizedProperty;
-import io.github.palexdev.materialfx.bindings.BidirectionalBindingHelper;
-import io.github.palexdev.materialfx.bindings.BindingHelper;
+import io.github.palexdev.materialfx.bindings.BiBindingManager;
 import io.github.palexdev.materialfx.bindings.BindingManager;
 import io.github.palexdev.materialfx.utils.ExecutionUtils;
 import javafx.beans.binding.BooleanExpression;
@@ -30,8 +29,6 @@ import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.value.ObservableValue;
 
-import java.util.function.Function;
-
 /**
  * Implementation of {@link SynchronizedProperty} for long values.
  */
@@ -40,7 +37,6 @@ public class SynchronizedLongProperty extends SimpleLongProperty implements Sync
     // Properties
     //================================================================================
     private final ReadOnlyBooleanWrapper waiting = new ReadOnlyBooleanWrapper();
-    protected final BindingManager<Number> bindingManager = new BindingManager<>();
 
     //================================================================================
     // Constructors
@@ -71,9 +67,6 @@ public class SynchronizedLongProperty extends SimpleLongProperty implements Sync
     /**
      * Adds a listener to the property by calling {@link ExecutionUtils#executeWhen(BooleanExpression, Runnable, Runnable, boolean, boolean, boolean, boolean)}
      * to call {@link #fireValueChangedEvent()} when the property is awakened, {@link #awake()}.
-     * <p></p>
-     * Also provides default factories for {@link BindingHelper} and {@link BidirectionalBindingHelper},
-     * see {@link #provideHelperFactory(Function)}, {@link SynchronizedProperty#provideBidirectionalHelperFactory(Function)}.
      */
     private void initialize() {
         ExecutionUtils.executeWhen(
@@ -85,20 +78,6 @@ public class SynchronizedLongProperty extends SimpleLongProperty implements Sync
                 false,
                 false
         );
-
-        provideHelperFactory(property -> new BindingHelper<>() {
-            @Override protected void updateBound(Number newValue) {
-                set(newValue.longValue());
-            }
-        });
-        provideBidirectionalHelperFactory((property) -> new BidirectionalBindingHelper<>(property) {
-            @Override protected void updateThis(Number newValue) {
-                set(newValue.longValue());
-            }
-            @Override protected void updateOther(Property<Number> other, Number newValue) {
-                other.setValue(newValue);
-            }
-        });
     }
 
     //================================================================================
@@ -115,9 +94,9 @@ public class SynchronizedLongProperty extends SimpleLongProperty implements Sync
         waiting.set(true);
         ExecutionUtils.executeWhen(
                 observable,
-                (oldValue, newValue) -> awake(),
+                this::awake,
                 false,
-                (oldValue, newValue) -> true,
+                () -> true,
                 true
         );
         set(value.longValue());
@@ -164,14 +143,12 @@ public class SynchronizedLongProperty extends SimpleLongProperty implements Sync
 
     /**
      * Creates a unidirectional bindings with the given observable.
-     * <p>
-     * Creates the bindings helper, {@link BindingManager#getBindingHelper(ObservableValue)}, and then
-     * creates the bind {@link BindingHelper#bind(ObservableValue)}.
+     * The binding is created using the new {@link BindingManager} mechanism.
      * <p></p>
      * If the property is already bound it is automatically unbound before bindings to the new observable.
      *
      * @throws IllegalArgumentException if the given observable is the property itself
-     * @see BindingHelper
+     * @see BindingManager
      */
     @Override
     public void bind(ObservableValue<? extends Number> source) {
@@ -180,14 +157,13 @@ public class SynchronizedLongProperty extends SimpleLongProperty implements Sync
         }
 
         if (isBound()) unbind();
-        bindingManager.getBindingHelper(source).bind(source);
+        BindingManager.instance().bind(this).to(source).create();
     }
 
     /**
      * Creates a bidirectional bindings between this property and the given property.
      * <p>
-     * Creates the bindings helper, {@link BindingManager#getBidirectionalBindingHelper(Property)},
-     * and then creates the bind {@link BidirectionalBindingHelper#bind(Property)}.
+     * The binding is created using the new {@link BiBindingManager} mechanism.
      * <p></p>
      * If the property is already bound unidirectionally it is automatically unbound.
      * <p>
@@ -195,7 +171,7 @@ public class SynchronizedLongProperty extends SimpleLongProperty implements Sync
      * this way you can have multiple bidirectional bindings
      *
      * @throws IllegalArgumentException if the given observable is the property itself
-     * @see BidirectionalBindingHelper
+     * @see BiBindingManager
      */
     @Override
     public void bindBidirectional(Property<Number> other) {
@@ -203,56 +179,40 @@ public class SynchronizedLongProperty extends SimpleLongProperty implements Sync
             throw new IllegalArgumentException("Cannot bind to itself!");
         }
 
-        if (isBound()) unbind();
-        bindingManager.getBidirectionalBindingHelper(this).bind(other);
+        if (isBound()) unbind(); // TODO check, may be unnecessary
+        BiBindingManager.instance().bindBidirectional(this).to(other).create();
     }
 
     /**
-     * Overridden to call {@link BindingManager#unbind()}.
+     * Overridden to call {@link BindingManager#unbind(ObservableValue)}.
      */
     @Override
     public void unbind() {
-        bindingManager.unbind();
+        BindingManager.instance().unbind(this);
     }
 
     /**
-     * Overridden to call {@link BindingManager#unbindBidirectional(Property)}.
+     * Overridden to call {@link BiBindingManager#unbind(ObservableValue, ObservableValue)}.
      */
     @Override
     public void unbindBidirectional(Property<Number> other) {
-        bindingManager.unbindBidirectional(other);
+        BiBindingManager.instance().unbind(this, other);
     }
 
     /**
-     * Delegate method for {@link BindingManager#clearBidirectional()}.
+     * Delegate method for {@link BiBindingManager#disposeFor(ObservableValue)}.
      */
     public void clearBidirectional() {
-        bindingManager.clearBidirectional();
+        BiBindingManager.instance().disposeFor(this);
     }
 
     /**
-     * Overridden to check the {@link BindingManager#isBound()} and {@link BindingManager#isIgnoreBound()}.
+     * Overridden to check the {@link BindingManager#isBound(ObservableValue)} and {@link BindingManager#isIgnoreBinding(ObservableValue)}.
      *
      * @return true only if `BindingManager.isBound()` is true and `isIgnoreBound()` is false
      */
     @Override
     public boolean isBound() {
-        return bindingManager.isBound() && !bindingManager.isIgnoreBound();
-    }
-
-    /**
-     * Delegate method for {@link BindingManager#provideHelperFactory(Function)}.
-     */
-    @Override
-    public void provideHelperFactory(Function<ObservableValue<? extends Number>, BindingHelper<Number>> factory) {
-        bindingManager.provideHelperFactory(factory);
-    }
-
-    /**
-     * Delegate method for {@link BindingManager#provideBidirectionalHelperFactory(Function)}.
-     */
-    @Override
-    public void provideBidirectionalHelperFactory(Function<Property<Number>, BidirectionalBindingHelper<Number>> factory) {
-        bindingManager.provideBidirectionalHelperFactory(factory);
+        return BindingManager.instance().isBound(this) && !BindingManager.instance().isIgnoreBinding(this);
     }
 }

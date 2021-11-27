@@ -10,4 +10,20 @@ import java.util.function.Consumer;
  *
  * @param <T> the consumer's input type
  */
-public class ConsumerProperty<T> extends SimpleObjectProperty<Consumer<T>> {}
+public class ConsumerProperty<T> extends SimpleObjectProperty<Consumer<T>> {
+
+	public ConsumerProperty() {
+	}
+
+	public ConsumerProperty(Consumer<T> initialValue) {
+		super(initialValue);
+	}
+
+	public ConsumerProperty(Object bean, String name) {
+		super(bean, name);
+	}
+
+	public ConsumerProperty(Object bean, String name, Consumer<T> initialValue) {
+		super(bean, name, initialValue);
+	}
+}
