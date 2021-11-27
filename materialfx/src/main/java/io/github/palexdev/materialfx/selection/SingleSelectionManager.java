@@ -21,8 +21,8 @@ package io.github.palexdev.materialfx.selection;
 import io.github.palexdev.materialfx.beans.properties.base.SynchronizedProperty;
 import io.github.palexdev.materialfx.beans.properties.synced.SynchronizedIntegerProperty;
 import io.github.palexdev.materialfx.beans.properties.synced.SynchronizedObjectProperty;
-import io.github.palexdev.materialfx.bindings.BidirectionalBindingHelper;
-import io.github.palexdev.materialfx.bindings.BindingHelper;
+import io.github.palexdev.materialfx.bindings.BiBindingManager;
+import io.github.palexdev.materialfx.bindings.BindingManager;
 import io.github.palexdev.materialfx.selection.base.AbstractSingleSelectionModel;
 import io.github.palexdev.materialfx.utils.others.TriConsumer;
 import javafx.beans.property.Property;
@@ -43,376 +43,348 @@ import java.util.function.Function;
  * use {@link #clearSelection()}, a boolean flag will be set to true thus allowing setting the aforementioned values.
  */
 public class SingleSelectionManager<T> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final AbstractSingleSelectionModel<T> selectionModel;
-    private final SynchronizedIntegerProperty selectedIndex = new SynchronizedIntegerProperty(-1);
-    private final SynchronizedObjectProperty<T> selectedItem = new SynchronizedObjectProperty<>(null);
-    private boolean clearing;
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final AbstractSingleSelectionModel<T> selectionModel;
+	private final SynchronizedIntegerProperty selectedIndex = new SynchronizedIntegerProperty(-1);
+	private final SynchronizedObjectProperty<T> selectedItem = new SynchronizedObjectProperty<>(null);
+	private boolean clearing;
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public SingleSelectionManager(AbstractSingleSelectionModel<T> selectionModel) {
-        this.selectionModel = selectionModel;
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public SingleSelectionManager(AbstractSingleSelectionModel<T> selectionModel) {
+		this.selectionModel = selectionModel;
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
+	//================================================================================
+	// Methods
+	//================================================================================
 
-    /**
-     * Sets the index to -1 and item to null by using {@link SynchronizedProperty#setAndWait(Object, ObservableValue)}.
-     *
-     * @throws IllegalStateException if the selection model is bound, {@link #isBound()}
-     */
-    public void clearSelection() {
-        if (isBound()) {
-            throw new IllegalStateException("Cannot clear the selection as this selection model is bound to some other property");
-        }
+	/**
+	 * Sets the index to -1 and item to null by using {@link SynchronizedProperty#setAndWait(Object, ObservableValue)}.
+	 *
+	 * @throws IllegalStateException if the selection model is bound, {@link #isBound()}
+	 */
+	public void clearSelection() {
+		if (isBound()) {
+			throw new IllegalStateException("Cannot clear the selection as this selection model is bound to some other property");
+		}
 
-        clearing = true;
-        selectedIndex.setAndWait(-1, selectedItem);
-        selectedItem.set(null);
-        selectedIndex.awake();
-        clearing = false;
-    }
+		clearing = true;
+		selectedIndex.setAndWait(-1, selectedItem);
+		selectedItem.set(null);
+		selectedIndex.awake();
+		clearing = false;
+	}
 
-    /**
-     * Updates the selection with the given index (and the retrieved item) by using
-     * {@link SynchronizedProperty#setAndWait(Object, ObservableValue)}.
-     *
-     * @throws IllegalStateException if the selection model is bound, {@link #isBound()}
-     */
-    public void updateSelection(int index) {
-        if (isBound()) {
-            throw new IllegalStateException("Cannot set the selected index as this selection model is bound to some other property");
-        }
+	/**
+	 * Updates the selection with the given index (and the retrieved item) by using
+	 * {@link SynchronizedProperty#setAndWait(Object, ObservableValue)}.
+	 *
+	 * @throws IllegalStateException if the selection model is bound, {@link #isBound()}
+	 */
+	public void updateSelection(int index) {
+		if (isBound()) {
+			throw new IllegalStateException("Cannot set the selected index as this selection model is bound to some other property");
+		}
 
-        if (clearing) {
-            clearSelection();
-            return;
-        }
+		if (clearing) {
+			clearSelection();
+			return;
+		}
 
-        T item = selectionModel.getUnmodifiableItems().get(index);
-        selectedIndex.setAndWait(index, selectedItem);
-        selectedItem.set(item);
-    }
+		T item = selectionModel.getUnmodifiableItems().get(index);
+		selectedIndex.setAndWait(index, selectedItem);
+		selectedItem.set(item);
+		if (selectedIndex.isWaiting()) selectedIndex.awake();
+	}
 
-    /**
-     * Updates the selection with the given item (and the retrieved index) by using
-     * {@link SynchronizedProperty#setAndWait(Object, ObservableValue)}.
-     *
-     * @throws IllegalStateException if the selection model is bound, {@link #isBound()}
-     */
-    public void updateSelection(T item) {
-        if (isBound()) {
-            throw new IllegalStateException("Cannot set the selected item as this selection model is bound to some other property");
-        }
+	/**
+	 * Updates the selection with the given item (and the retrieved index) by using
+	 * {@link SynchronizedProperty#setAndWait(Object, ObservableValue)}.
+	 *
+	 * @throws IllegalStateException if the selection model is bound, {@link #isBound()}
+	 */
+	public void updateSelection(T item) {
+		if (isBound()) {
+			throw new IllegalStateException("Cannot set the selected item as this selection model is bound to some other property");
+		}
 
-        if (clearing) {
-            clearSelection();
-            return;
-        }
+		if (clearing) {
+			clearSelection();
+			return;
+		}
 
-        int index = selectionModel.getUnmodifiableItems().indexOf(item);
-        if (index == -1) {
-            throw new IllegalArgumentException("The given item is not present is this selection model's list");
-        }
-        selectedItem.setAndWait(item, selectedIndex);
-        selectedIndex.set(index);
-    }
+		int index = selectionModel.getUnmodifiableItems().indexOf(item);
+		if (index == -1) {
+			throw new IllegalArgumentException("The given item is not present is this selection model's list");
+		}
+		selectedItem.setAndWait(item, selectedIndex);
+		selectedIndex.set(index);
+		if (selectedItem.isWaiting()) selectedItem.awake();
+	}
 
-    //================================================================================
-    // Getters/Setters
-    //================================================================================
+	//================================================================================
+	// Getters/Setters
+	//================================================================================
 
-    /**
-     * @return the current selected index
-     */
-    public int getSelectedIndex() {
-        return selectedIndex.get();
-    }
+	/**
+	 * @return the current selected index
+	 */
+	public int getSelectedIndex() {
+		return selectedIndex.get();
+	}
 
-    /**
-     * The selected index property.
-     */
-    public SynchronizedIntegerProperty selectedIndexProperty() {
-        return selectedIndex;
-    }
+	/**
+	 * The selected index property.
+	 */
+	public SynchronizedIntegerProperty selectedIndexProperty() {
+		return selectedIndex;
+	}
 
-    /**
-     * @return the current selected item
-     */
-    public T getSelectedItem() {
-        return selectedItem.get();
-    }
+	/**
+	 * @return the current selected item
+	 */
+	public T getSelectedItem() {
+		return selectedItem.get();
+	}
 
-    /**
-     * The selected item property.
-     */
-    public SynchronizedObjectProperty<T> selectedItemProperty() {
-        return selectedItem;
-    }
+	/**
+	 * The selected item property.
+	 */
+	public SynchronizedObjectProperty<T> selectedItemProperty() {
+		return selectedItem;
+	}
 
-    /**
-     * Flag to specify that updateSelection should be ignored as {@link #clearSelection()} was invoked.
-     */
-    public void setClearing(boolean clearing) {
-        this.clearing = clearing;
-    }
+	/**
+	 * Flag to specify that updateSelection should be ignored as {@link #clearSelection()} was invoked.
+	 */
+	public void setClearing(boolean clearing) {
+		this.clearing = clearing;
+	}
 
-    //================================================================================
-    // Bindings
-    //================================================================================
+	//================================================================================
+	// Bindings
+	//================================================================================
 
-    /**
-     * Binds the index property to given source {@link ObservableValue}.
-     * The indexConverter function is used to convert the index values to an item
-     * of the selection model.
-     * <p></p>
-     * By default uses this {@link BindingHelper}:
-     * <pre>
-     * {@code
-     *         selectedIndex.provideHelperFactory(property -> new BindingHelper<>() {
-     *             @Override
-     *             protected void updateBound(Number newValue) {
-     *                 T item = indexConverter.apply(newValue.intValue());
-     *                 selectedIndex.setAndWait(newValue.intValue(), selectedItem);
-     *                 selectedItem.set(item);
-     *             }
-     *         });
-     * }
-     * </pre>
-     * To change it you should override the {@link SingleSelectionModel} method.
-     */
-    public void bindIndex(ObservableValue<? extends Number> source, Function<Integer, T> indexConverter) {
-        selectedIndex.provideHelperFactory(property -> new BindingHelper<>() {
-            @Override
-            protected void updateBound(Number newValue) {
-                T item = indexConverter.apply(newValue.intValue());
-                selectedIndex.setAndWait(newValue.intValue(), selectedItem);
-                selectedItem.set(item);
-            }
-        });
-        selectedIndex.bind(source);
-    }
+	/**
+	 * Binds the index property to given source {@link ObservableValue}.
+	 * The indexConverter function is used to convert the index values to an item
+	 * of the selection model.
+	 * <p></p>
+	 * By default creates this binding:
+	 * <pre>
+	 * {@code
+	 *      BindingManager.instance().bind(selectedIndex)
+	 *          .with((oldValue, newValue) -> {
+	 *              T item = indexConverter.apply(newValue.intValue());
+	 *              selectedIndex.setAndWait(newValue.intValue(), selectedItem);
+	 *              selectedItem.set(item);
+	 *          })
+	 *          .to(source)
+	 *          .create();
+	 * }
+	 * </pre>
+	 * To change it you should override the {@link SingleSelectionModel} method.
+	 */
+	public void bindIndex(ObservableValue<? extends Number> source, Function<Integer, T> indexConverter) {
+		if (selectedIndex.isBound()) selectedIndex.unbind();
+		BindingManager.instance().bind(selectedIndex)
+				.with((oldValue, newValue) -> {
+					T item = indexConverter.apply(newValue.intValue());
+					selectedIndex.setAndWait(newValue.intValue(), selectedItem);
+					selectedItem.set(item);
+				})
+				.to(source)
+				.create();
+	}
 
-    /**
-     * Binds the index property bidirectionally to given other {@link Property}.
-     * The indexConverter function is used to convert the index from the other property
-     * to an item of the selection model.
-     * <p>
-     * The updateOther {@link TriConsumer} is used to customize the way the other
-     * property is updated, the first parameter is the clearing flag of the selection manager,
-     * the second parameter is the new index, the third parameter is the other property reference.
-     * <p></p>
-     * By default uses this {@link BidirectionalBindingHelper}:
-     * <pre>
-     * {@code
-     *         selectedIndex.provideBidirectionalHelperFactory((property) -> new BidirectionalBindingHelper<>(property) {
-     *             @Override
-     *             protected void updateThis(Number newValue) {
-     *                 if (newValue.intValue() == selectedIndex.getValue()) {
-     *                     return;
-     *                 }
-     *                 T item = indexConverter.apply(newValue.intValue());
-     *                 selectedIndex.setAndWait(newValue.intValue(), selectedItem);
-     *                 selectedItem.set(item);
-     *             }
-     *
-     *             @Override
-     *             protected void updateOther(Property<Number> other, Number newValue) {
-     *                 updateOther.accept(clearing, newValue.intValue(), other);
-     *             }
-     *
-     *             @Override
-     *             protected void afterUpdateThis() {}
-     *
-     *             @Override
-     *             protected void beforeUpdateThis() {}
-     *         });
-     * }
-     * </pre>
-     * To change it you should override the {@link SingleSelectionModel} method.
-     */
-    public void bindIndexBidirectional(Property<Number> other, Function<Integer, T> indexConverter, TriConsumer<Boolean, Integer, Property<Number>> updateOther) {
-        selectedIndex.provideBidirectionalHelperFactory((property) -> new BidirectionalBindingHelper<>(property) {
-            @Override
-            protected void updateThis(Number newValue) {
-                if (newValue.intValue() == selectedIndex.getValue()) {
-                    return;
-                }
-                T item = indexConverter.apply(newValue.intValue());
-                selectedIndex.setAndWait(newValue.intValue(), selectedItem);
-                selectedItem.set(item);
-            }
+	/**
+	 * Binds the index property bidirectionally to given other {@link Property}.
+	 * The indexConverter function is used to convert the index from the other property
+	 * to an item of the selection model.
+	 * <p>
+	 * The updateOther {@link TriConsumer} is used to customize the way the other
+	 * property is updated, the first parameter is the clearing flag of the selection manager,
+	 * the second parameter is the new index, the third parameter is the other property reference.
+	 * <p></p>
+	 * By default creates this binding:
+	 * <pre>
+	 * {@code
+	 *      BiBindingManager.instance().bindBidirectional(selectedIndex)
+	 *          .with((oldValue, newValue) -> {
+	 *              if (newValue.intValue() == -1) {
+	 *                  clearSelection();
+	 *                  return;
+	 *              }
+	 *
+	 *              if (newValue.intValue() == selectedIndex.getValue()) {
+	 *                  return;
+	 *              }
+	 *          T item = indexConverter.apply(newValue.intValue());
+	 *          selectedIndex.setAndWait(newValue.intValue(), selectedItem);
+	 *          selectedItem.set(item);
+	 *      })
+	 *      .to(other, (oldValue, newValue) -> updateOther.accept(clearing, newValue.intValue(), other))
+	 *      .create();
+	 * }
+	 * </pre>
+	 * To change it you should override the {@link SingleSelectionModel} method.
+	 */
+	public void bindIndexBidirectional(Property<Number> other, Function<Integer, T> indexConverter, TriConsumer<Boolean, Integer, Property<Number>> updateOther) {
+		if (selectedIndex.isBound()) selectedIndex.unbind();
+		BiBindingManager.instance().bindBidirectional(selectedIndex)
+				.with((oldValue, newValue) -> {
+					if (newValue.intValue() == -1) {
+						clearSelection();
+						return;
+					}
 
-            @Override
-            protected void updateOther(Property<Number> other, Number newValue) {
-                updateOther.accept(clearing, newValue.intValue(), other);
-            }
+					if (newValue.intValue() == selectedIndex.getValue()) {
+						return;
+					}
+					T item = indexConverter.apply(newValue.intValue());
+					selectedIndex.setAndWait(newValue.intValue(), selectedItem);
+					selectedItem.set(item);
+				})
+				.to(other, (oldValue, newValue) -> updateOther.accept(clearing, newValue.intValue(), other))
+				.create();
+	}
 
-            @Override
-            protected void afterUpdateThis() {}
+	/**
+	 * Binds the item property to given source {@link ObservableValue}.
+	 * The itemConverter function is used to convert the item values to an index
+	 * of the selection model.
+	 * <p></p>
+	 * By default creates this binding:
+	 * <pre>
+	 * {@code
+	 *      BindingManager.instance().bind(selectedItem)
+	 *          .with((oldValue, newValue) -> {
+	 *              if (!selectionModel.getUnmodifiableItems().contains(newValue)) {
+	 *                  throw new IllegalArgumentException("The given item is not present is this selection model's list");
+	 *              }
+	 *              int index = itemConverter.apply(newValue);
+	 *              selectedItem.setAndWait(newValue, selectedIndex);
+	 *              selectedIndex.set(index);
+	 *          })
+	 *          .to(source)
+	 *          .create();
+	 * }
+	 * </pre>
+	 * To change it you should override the {@link SingleSelectionModel} method.
+	 */
+	public void bindItem(ObservableValue<? extends T> source, Function<T, Integer> itemConverter) {
+		if (selectedItem.isBound()) selectedItem.unbind();
+		BindingManager.instance().bind(selectedItem)
+				.with((oldValue, newValue) -> {
+					if (!selectionModel.getUnmodifiableItems().contains(newValue)) {
+						throw new IllegalArgumentException("The given item is not present is this selection model's list");
+					}
+					int index = itemConverter.apply(newValue);
+					selectedItem.setAndWait(newValue, selectedIndex);
+					selectedIndex.set(index);
+				})
+				.to(source)
+				.create();
+	}
 
-            @Override
-            protected void beforeUpdateThis() {}
-        });
-        selectedIndex.bindBidirectional(other);
-    }
+	/**
+	 * Binds the item property bidirectionally to given other {@link Property}.
+	 * The itemConverter function is used to convert the item from the other property
+	 * to an index of the selection model.
+	 * <p>
+	 * The updateOther {@link TriConsumer} is used to customize the way the other
+	 * property is updated, the first parameter is the clearing flag of the selection manager,
+	 * the second parameter is the new item, the third parameter is the other property reference.
+	 * <p></p>
+	 * By default creates this binding:
+	 * <pre>
+	 * {@code
+	 *      BiBindingManager.instance().bindBidirectional(selectedItem)
+	 *          .with((oldValue, newValue) -> {
+	 *              if (newValue == null) {
+	 *                  clearSelection();
+	 *                  return;
+	 *              }
+	 *
+	 *              if (!selectionModel.getUnmodifiableItems().contains(newValue)) {
+	 *                  throw new IllegalArgumentException("The given item is not present is this selection model's list");
+	 *              }
+	 *
+	 *              int index = itemConverter.apply(newValue);
+	 *              selectedItem.setAndWait(newValue, selectedIndex);
+	 *              selectedIndex.set(index);
+	 *          })
+	 *          .to(other, (oldValue, newValue) -> updateOther.accept(clearing, newValue, other))
+	 *          .create();
+	 * }
+	 * </pre>
+	 * To change it you should override the {@link SingleSelectionModel} method.
+	 */
+	public void bindItemBidirectional(Property<T> other, Function<T, Integer> itemConverter, TriConsumer<Boolean, T, Property<T>> updateOther) {
+		if (selectedItem.isBound()) selectedItem.unbind();
+		BiBindingManager.instance().bindBidirectional(selectedItem)
+				.with((oldValue, newValue) -> {
+					if (newValue == null) {
+						clearSelection();
+						return;
+					}
 
-    /**
-     * Binds the item property to given source {@link ObservableValue}.
-     * The itemConverter function is used to convert the item values to an index
-     * of the selection model.
-     * <p></p>
-     * By default uses this {@link BindingHelper}:
-     * <pre>
-     * {@code
-     *         selectedItem.provideHelperFactory(property -> new BindingHelper<>() {
-     *             @Override
-     *             protected void updateBound(T newValue) {
-     *                 if (!selectionModel.getUnmodifiableItems().contains(newValue)) {
-     *                     throw new IllegalArgumentException("The given item is not present is this selection model's list");
-     *                 }
-     *                 int index = itemConverter.apply(newValue);
-     *                 selectedItem.setAndWait(newValue, selectedIndex);
-     *                 selectedIndex.set(index);
-     *             }
-     *         });
-     * }
-     * </pre>
-     * To change it you should override the {@link SingleSelectionModel} method.
-     */
-    public void bindItem(ObservableValue<? extends T> source, Function<T, Integer> itemConverter) {
-        selectedItem.provideHelperFactory(property -> new BindingHelper<>() {
-            @Override
-            protected void updateBound(T newValue) {
-                if (!selectionModel.getUnmodifiableItems().contains(newValue)) {
-                    throw new IllegalArgumentException("The given item is not present is this selection model's list");
-                }
-                int index = itemConverter.apply(newValue);
-                selectedItem.setAndWait(newValue, selectedIndex);
-                selectedIndex.set(index);
-            }
-        });
-        selectedItem.bind(source);
-    }
+					if (!selectionModel.getUnmodifiableItems().contains(newValue)) {
+						throw new IllegalArgumentException("The given item is not present is this selection model's list");
+					}
 
-    /**
-     * Binds the item property bidirectionally to given other {@link Property}.
-     * The itemConverter function is used to convert the item from the other property
-     * to an index of the selection model.
-     * <p>
-     * The updateOther {@link TriConsumer} is used to customize the way the other
-     * property is updated, the first parameter is the clearing flag of the selection manager,
-     * the second parameter is the new item, the third parameter is the other property reference.
-     * <p></p>
-     * By default uses this {@link BidirectionalBindingHelper}:
-     * <pre>
-     * {@code
-     *         selectedItem.provideBidirectionalHelperFactory((property) -> new BidirectionalBindingHelper<>(property) {
-     *             @Override
-     *             protected void updateThis(T newValue) {
-     *                 if (newValue == null) return;
-     *                 if (!selectionModel.getUnmodifiableItems().contains(newValue)) {
-     *                     throw new IllegalArgumentException("The given item is not present is this selection model's list");
-     *                 }
-     *
-     *                 int index = itemConverter.apply(newValue);
-     *                 selectedItem.setAndWait(newValue, selectedIndex);
-     *                 selectedIndex.set(index);
-     *             }
-     *
-     *             @Override
-     *             protected void updateOther(Property<T> other, T newValue) {
-     *                 updateOther.accept(clearing, newValue, other);
-     *             }
-     *
-     *             @Override
-     *             protected void afterUpdateThis() {
-     *             }
-     *
-     *             @Override
-     *             protected void beforeUpdateThis() {
-     *             }
-     *         });
-     * }
-     * </pre>
-     * To change it you should override the {@link SingleSelectionModel} method.
-     */
-    public void bindItemBidirectional(Property<T> other, Function<T, Integer> itemConverter, TriConsumer<Boolean, T, Property<T>> updateOther) {
-        selectedItem.provideBidirectionalHelperFactory((property) -> new BidirectionalBindingHelper<>(property) {
-            @Override
-            protected void updateThis(T newValue) {
-                if (newValue == null) return;
-                if (!selectionModel.getUnmodifiableItems().contains(newValue)) {
-                    throw new IllegalArgumentException("The given item is not present is this selection model's list");
-                }
+					int index = itemConverter.apply(newValue);
+					selectedItem.setAndWait(newValue, selectedIndex);
+					selectedIndex.set(index);
+				})
+				.to(other, (oldValue, newValue) -> updateOther.accept(clearing, newValue, other))
+				.create();
+	}
 
-                int index = itemConverter.apply(newValue);
-                selectedItem.setAndWait(newValue, selectedIndex);
-                selectedIndex.set(index);
-            }
+	/**
+	 * Unbinds the selection.
+	 */
+	public void unbind() {
+		if (selectedIndex.isBound()) {
+			selectedIndex.unbind();
+		}
+		if (selectedItem.isBound()) {
+			selectedItem.unbind();
+		}
+	}
 
-            @Override
-            protected void updateOther(Property<T> other, T newValue) {
-                updateOther.accept(clearing, newValue, other);
-            }
+	/**
+	 * Removes the bidirectional binding between the index property and the given other property.
+	 */
+	public void unbindIndexBidirectional(Property<Number> other) {
+		selectedIndex.unbindBidirectional(other);
+	}
 
-            @Override
-            protected void afterUpdateThis() {
-            }
+	/**
+	 * Removes the bidirectional binding between the item property and the given other property.
+	 */
+	public void unbindItemBidirectional(Property<T> other) {
+		selectedItem.unbindBidirectional(other);
+	}
 
-            @Override
-            protected void beforeUpdateThis() {
-            }
-        });
-        selectedItem.bindBidirectional(other);
-    }
+	/**
+	 * Removes all bidirectional bindings.
+	 */
+	public void unbindBidirectional() {
+		selectedIndex.clearBidirectional();
+		selectedItem.clearBidirectional();
+	}
 
-    /**
-     * Unbinds the selection.
-     */
-    public void unbind() {
-        if (selectedIndex.isBound()) {
-            selectedIndex.unbind();
-        }
-        if (selectedItem.isBound()) {
-            selectedItem.unbind();
-        }
-    }
-
-    /**
-     * Removes the bidirectional binding between the index property and the given other property.
-     */
-    public void unbindIndexBidirectional(Property<Number> other) {
-        selectedIndex.unbindBidirectional(other);
-    }
-
-    /**
-     * Removes the bidirectional binding between the item property and the given other property.
-     */
-    public void unbindItemBidirectional(Property<T> other) {
-        selectedItem.unbindBidirectional(other);
-    }
-
-    /**
-     * Removes all bidirectional bindings.
-     */
-    public void unbindBidirectional() {
-        selectedIndex.clearBidirectional();
-        selectedItem.clearBidirectional();
-    }
-
-    /**
-     * Returns true if the selected index or item properties are bound
-     * unidirectionally.
-     */
-    public boolean isBound() {
-        return selectedIndex.isBound() || selectedItem.isBound();
-    }
+	/**
+	 * Returns true if the selected index or item properties are bound
+	 * unidirectionally.
+	 */
+	public boolean isBound() {
+		return selectedIndex.isBound() || selectedItem.isBound();
+	}
 }
 
