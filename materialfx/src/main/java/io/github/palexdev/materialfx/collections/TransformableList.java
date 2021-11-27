@@ -93,6 +93,7 @@ public class TransformableList<T> extends TransformationList<T, T> {
         super(source);
         setPredicate(predicate);
         setComparator(comparator);
+        update();
     }
 
     //================================================================================
