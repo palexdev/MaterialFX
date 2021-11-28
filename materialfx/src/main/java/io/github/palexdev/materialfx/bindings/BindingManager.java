@@ -179,6 +179,13 @@ public class BindingManager {
 	}
 
 	/**
+	 * Checks if {@link #size()} is 0;
+	 */
+	public boolean isEmpty() {
+		return size() == 0;
+	}
+
+	/**
 	 * Checks if there's an existing binding for the given target and the
 	 * associated {@link BindingHelper}'s ignoreBinding state.
 	 */

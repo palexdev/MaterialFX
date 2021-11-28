@@ -238,6 +238,13 @@ public class BiBindingManager {
 	}
 
 	/**
+	 * Checks if {@link #size()} is 0;
+	 */
+	public boolean isEmpty() {
+		return size() == 0;
+	}
+
+	/**
 	 * Checks if the given target is bound unidirectionally and unbinds it!
 	 */
 	private <T> void bindingCheck(ObservableValue<? extends T> target) {

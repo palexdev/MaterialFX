@@ -107,6 +107,37 @@ public class MFXTextField extends TextField {
         initialize();
     }
 
+    /**
+     * Calls {@link #asLabel(String)} with empty text.
+     */
+    public static MFXTextField asLabel() {
+        return asLabel("");
+    }
+
+    /**
+     * Calls {@link #asLabel(String, String)} with empty promptText.
+     */
+    private static MFXTextField asLabel(String text) {
+        return asLabel(text, "");
+    }
+
+    /**
+     * Calls {@link #asLabel(String, String, String)} with empty floatingText.
+     */
+    private static MFXTextField asLabel(String text, String promptText) {
+        return asLabel(text, promptText, "");
+    }
+
+    /**
+     * Creates a text field that is not editable nor selectable to act just like a label.
+     */
+    private static MFXTextField asLabel(String text, String promptText, String floatingText) {
+        MFXTextField textField = new MFXTextField(text, promptText, floatingText);
+        textField.setEditable(false);
+        textField.setSelectable(false);
+        return textField;
+    }
+
     //================================================================================
     // Methods
     //================================================================================

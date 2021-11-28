@@ -1,10 +1,7 @@
 package io.github.palexdev.materialfx.bindings;
 
 import java.lang.ref.WeakReference;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -58,12 +55,29 @@ public class BindingsMap<K, V> extends WeakHashMap<K, V> {
 		size();
 	}
 
+	@SafeVarargs
+	private void updateKeysList(K... keys) {
+		LinkedHashSet<K> uniqueKeys = orderedKeys.stream().map(WeakReference::get).collect(Collectors.toCollection(LinkedHashSet::new));
+		uniqueKeys.addAll(Arrays.asList(keys));
+		orderedKeys = uniqueKeys.stream().map(WeakReference::new).collect(Collectors.toCollection(LinkedList::new));
+		clearReferences();
+	}
+
+	@SafeVarargs
+	private void updateKeysList(Map.Entry<K, V>... entries) {
+		LinkedHashSet<K> uniqueKeys = orderedKeys.stream().map(WeakReference::get).collect(Collectors.toCollection(LinkedHashSet::new));
+		List<K> keys = Stream.of(entries).map(Map.Entry::getKey).collect(Collectors.toList());
+		uniqueKeys.addAll(keys);
+		orderedKeys = uniqueKeys.stream().map(WeakReference::new).collect(Collectors.toCollection(LinkedList::new));
+		clearReferences();
+	}
+
+
 	/**
 	 * Allows to combine the given {@code BindingsMap} to this one.
 	 * <p>
 	 * This method exists to ensure that insertion order is kept with the {@link LinkedList} but most
 	 * importantly ensures that there are no duplicates in the list by using a {@link LinkedHashSet}.
-	 * // TODO OTHER METHODS MUST BE CHANGED TOO!!
 	 */
 	public void combine(BindingsMap<K, V> source) {
 		LinkedHashSet<K> uniqueKeys = Stream.concat(orderedKeys.stream(), source.orderedKeys.stream())
@@ -82,14 +96,14 @@ public class BindingsMap<K, V> extends WeakHashMap<K, V> {
 	 */
 	@Override
 	public V put(K key, V value) {
-		orderedKeys.addLast(new WeakReference<>(key));
-		clearReferences();
+		updateKeysList(key);
 		return super.put(key, value);
 	}
 
 	/**
 	 * Overridden to call {@link #putAll(Map.Entry[])}.
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void putAll(Map<? extends K, ? extends V> m) {
 		putAll(m.entrySet().toArray(Map.Entry[]::new));
@@ -102,11 +116,10 @@ public class BindingsMap<K, V> extends WeakHashMap<K, V> {
 	 */
 	@SafeVarargs
 	public final void putAll(Map.Entry<K, V>... entries) {
+		updateKeysList(entries);
 		for (Map.Entry<K, V> entry : entries) {
-			orderedKeys.addLast(new WeakReference<>(entry.getKey()));
 			super.put(entry.getKey(), entry.getValue());
 		}
-		clearReferences();
 	}
 
 	/**
