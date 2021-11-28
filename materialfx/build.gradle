@@ -23,7 +23,7 @@ dependencies {
     testImplementation('junit:junit:4.13.2')
     implementation 'com.vanniktech:gradle-maven-publish-plugin:0.18.0'
 
-    implementation 'io.github.palexdev:virtualizedfx:11.2.1'
+    implementation 'io.github.palexdev:virtualizedfx:11.2.2'
 }
 
 javadoc {
@@ -70,7 +70,7 @@ jar {
 shadowJar {
     mergeServiceFiles()
     dependencies {
-        include(dependency('io.github.palexdev:virtualizedfx:11.2.1'))
+        include(dependency('io.github.palexdev:virtualizedfx:11.2.2'))
     }
 }
 
