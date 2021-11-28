@@ -20,8 +20,19 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 
-// TODO documentation
+/**
+ * Skin associated with every {@link MFXTextField} by default.
+ * <p>
+ * This skin is mainly responsible for managing features such as the
+ * leading and trailing icons, the floating text and the characters limit.
+ * <p></p>
+ * To avoid reinventing the whole text field from scratch this skin makes use of
+ * {@link BoundTextField}, so it is basically a wrapper for a JavaFX's TextField.
+ */
 public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
+	//================================================================================
+	// Properties
+	//================================================================================
 	private final HBox container;
 	private final StackPane textContainer;
 	private final Label floatingText;
@@ -35,6 +46,9 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 	private final Translate translate = Transform.translate(0, 0);
 	private boolean init = false;
 
+	//================================================================================
+	// Constructors
+	//================================================================================
 	public MFXTextFieldSkin(MFXTextField textField, ReadOnlyBooleanWrapper floating) {
 		super(textField);
 		this.floating = floating;
@@ -71,6 +85,14 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 		addListeners();
 	}
 
+	//================================================================================
+	// Methods
+	//================================================================================
+
+	/**
+	 * Handles the focus, the floating text, the selected text, the character limit,
+	 * the icons, and the disabled state.
+	 */
 	private void addListeners() {
 		MFXTextField textField = getSkinnable();
 
@@ -97,11 +119,11 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 
 		textField.promptTextProperty().addListener((observable, oldValue, newValue) -> {
 			if (!textField.getText().isEmpty()) return;
-			if (!isFloating() && !textField.isFocused() && !field.isFocused() && !newValue.isEmpty()) positionText();
+			if (!isFloating() && !newValue.isEmpty()) positionText();
 		});
 
 		textField.textProperty().addListener((observable, oldValue, newValue) -> {
-			if (!isFloating() && !textField.isFocused() && !field.isFocused() && !newValue.isEmpty()) positionText();
+			if (!isFloating() && !newValue.isEmpty()) positionText();
 		});
 
 		textField.disabledProperty().addListener((observable, oldValue, newValue) -> handleDisabled(newValue));
@@ -137,6 +159,10 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 		});
 	}
 
+	/**
+	 * When the control is laid out it's needed to initialize the position of the floating text,
+	 * and this is needed only the first time, as sizes and bounds are computed for the first time.
+	 */
 	protected void initText() {
 		MFXTextField textField = getSkinnable();
 		if (textField.getFloatMode() == FloatMode.DISABLED) {
@@ -154,6 +180,9 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 		init = true;
 	}
 
+	/**
+	 * Responsible for positioning the floating text node.
+	 */
 	protected void positionText() {
 		MFXTextField textField = getSkinnable();
 		if (textField.getFloatMode() == FloatMode.DISABLED) return;
@@ -181,6 +210,11 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 		}
 	}
 
+	/**
+	 * Responsible for repositioning the floating text node when needed.
+	 * For example this is called when the gap changes, the border spacing changes or
+	 * when the {@link FloatMode} changes.
+	 */
 	protected void repositionText() {
 		floatingText.setVisible(false);
 		setFloating(false);
@@ -209,6 +243,9 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 				.play();
 	}
 
+	/**
+	 * Computes the x coordinate at which the floating text node will be positioned.
+	 */
 	protected double computeTargetX() {
 		MFXTextField textField = getSkinnable();
 		double targetX = 0;
@@ -221,6 +258,9 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 		return snapPositionX(targetX);
 	}
 
+	/**
+	 * Computes the y coordinate at which the floating text node will be positioned.
+	 */
 	protected double computeTargetY() {
 		MFXTextField textField = getSkinnable();
 		double targetY = 0;
@@ -237,11 +277,17 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 		return snapPositionY(targetY);
 	}
 
+	/**
+	 * Computes whether the floating text node must float or not.
+	 */
 	private boolean shouldFloat() {
 		MFXTextField textField = getSkinnable();
 		return textField.getText().isEmpty() && textField.getPromptText().isEmpty();
 	}
 
+	/**
+	 * When the control is disabled the floating text may be hidden in some cases.
+	 */
 	protected void handleDisabled(boolean disabled) {
 		if (disabled) {
 			if (isFloating()) {
@@ -266,6 +312,9 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 		this.floating.set(!isFloating());
 	}
 
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
 	@Override
 	protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
 		MFXTextField textField = getSkinnable();
@@ -285,12 +334,27 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 	@Override
 	protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
 		MFXTextField textField = getSkinnable();
-		double height = topInset +
-				floatingText.prefHeight(-1) +
-				field.prefHeight(-1) +
-				bottomInset;
-		if (textField.getFloatMode() == FloatMode.INLINE) height += textField.getGap();
-		return height;
+		Node leadingIcon = textField.getLeadingIcon();
+		Node trailingIcon = textField.getTrailingIcon();
+		FloatMode floatMode = textField.getFloatMode();
+
+		double iconsHeight = Math.max(leadingIcon != null ? leadingIcon.prefHeight(-1) : 0, trailingIcon != null ? trailingIcon.prefHeight(-1) : 0);
+		double textNodesHeight = 0;
+		switch (floatMode) {
+			case INLINE: {
+				textNodesHeight += textField.getGap() + floatingText.prefHeight(-1) + field.prefHeight(-1);
+				break;
+			}
+			case BORDER: {
+				textNodesHeight += floatingText.prefHeight(-1) + field.prefHeight(-1);
+				break;
+			}
+			case DISABLED: {
+				textNodesHeight = field.prefHeight(-1);
+				break;
+			}
+		}
+		return topInset + Math.max(iconsHeight, textNodesHeight) + bottomInset;
 	}
 
 	@Override

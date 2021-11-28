@@ -16,19 +16,40 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import "MFXComboBoxStyle3.css";
+@import "MFXComboBoxStyle1.css";
+@import "MFXColors.css";
 
-#search-field {
-    -fx-prompt-text-fill: grey;
+.mfx-filter-combo-box {
+    -mfx-caret-animated: true;
 }
 
-#search-field .focused-line,
-#search-field .unfocused-line {
-    -fx-stroke: transparent;
+.mfx-filter-combo-box:popup {
+    -mfx-caret-animated: false;
+    -mfx-editable: false;
 }
 
-#validationIcon {
-    -mfx-color: #EF6E6B;
+.popup .virtual-flow {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
 }
 
+.popup .search-container {
+    -fx-background-color: white;
+    -fx-background-radius: 5;
+    -fx-padding: 10 5 5 5;
+}
+
+.popup .search-field {
+    -mfx-gap: 0;
+    -mfx-float-mode: disabled;
+    -fx-padding: 5;
+    -fx-display-caret: false;
+}
+
+.popup .search-field,
+.popup .search-field:focused {
+    -fx-border-width: 1;
+    -fx-background-insets: 0;
+    -fx-border-color: lightgray;
+}
 

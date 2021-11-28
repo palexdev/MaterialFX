@@ -1,5 +1,6 @@
 package io.github.palexdev.materialfx.skins;
 
+import io.github.palexdev.materialfx.beans.Alignment;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.MFXPopup.MFXPopupEvent;
 import io.github.palexdev.materialfx.controls.cell.MFXNotificationCell;
@@ -24,9 +25,6 @@ import javafx.scene.text.Text;
  * This is the skin associated with every {@link MFXNotificationCenter}.
  * <p></p>
  * It is composed by an icon, which is a bell, that opens a {@link MFXPopup} to show the notification center.
- * <p></p>
- * As of now there's a bug that I can't fix because of JavaFX internal API, if the popup is open and the
- * icon has been clicked again the popup won't open but will stay open. I'll see what I can do... // TODO fix
  */
 public class MFXNotificationCenterSkin extends SkinBase<MFXNotificationCenter> {
     //================================================================================
@@ -107,7 +105,7 @@ public class MFXNotificationCenterSkin extends SkinBase<MFXNotificationCenter> {
             }
         };
         popup.setAnimated(false);
-        popup.setConsumeAutoHidingEvents(false); // TODO can't fix as of now, JavaFX 17.0.1
+        popup.setConsumeAutoHidingEvents(true);
         popup.getStyleClass().addAll(getSkinnable().getStyleClass());
 
         getChildren().setAll(bellWrapped, counter);
@@ -140,7 +138,7 @@ public class MFXNotificationCenterSkin extends SkinBase<MFXNotificationCenter> {
             popup.hide();
             return;
         }
-        popup.show(bellWrapped, HPos.CENTER, VPos.BOTTOM);
+        popup.show(bellWrapped, Alignment.of(HPos.CENTER, VPos.BOTTOM));
     }
 
     //================================================================================

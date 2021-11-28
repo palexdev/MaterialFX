@@ -19,10 +19,11 @@
 package io.github.palexdev.materialfx.controls.cell;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.controls.MFXListView;
 import io.github.palexdev.materialfx.controls.cell.base.AbstractMFXListCell;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.materialfx.beans.PositionBean;
+import javafx.beans.binding.ObjectExpression;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
@@ -34,6 +35,9 @@ import javafx.scene.input.MouseEvent;
  * <p></p>
  * The label used to display the data is built in the constructor
  * only if the given T data is not a Node, otherwise it's null.
+ * <p></p>
+ * The label's text is bound to the data property and converted to a String
+ * using {@link ObjectExpression#asString()}.
  */
 public class MFXListCell<T> extends AbstractMFXListCell<T> {
     //================================================================================
@@ -100,18 +104,17 @@ public class MFXListCell<T> extends AbstractMFXListCell<T> {
      * Responsible for rendering the cell's content.
      * <p>
      * If the given data type is a Node, it is added to the children list,
-     * otherwise a label is used to display the data by calling toString() on it.
+     * otherwise a label is used to display the data.
      * <p>
      * At the end adds a ripple generator at index 0.
      */
     @Override
     protected void render(T data) {
         if (data instanceof Node) {
-            getChildren().setAll((Node) data);
+            getChildren().setAll(rippleGenerator, (Node) data);
         } else {
-            getChildren().setAll(label);
+            getChildren().setAll(rippleGenerator, label);
         }
-        getChildren().add(0, rippleGenerator);
     }
 
     /**

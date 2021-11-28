@@ -26,6 +26,7 @@ import io.github.palexdev.materialfx.controls.cell.base.AbstractMFXListCell;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectExpression;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -36,6 +37,9 @@ import javafx.scene.input.MouseEvent;
  * <p></p>
  * The label used to display the data is built in the constructor
  * only if the given T data is not a Node, otherwise it's null.
+ * <p></p>
+ * The label's text is bound to the data property and converted to a String
+ * using {@link ObjectExpression#asString()}.
  */
 public class MFXCheckListCell<T> extends AbstractMFXListCell<T> {
     //================================================================================
@@ -138,18 +142,17 @@ public class MFXCheckListCell<T> extends AbstractMFXListCell<T> {
      * Responsible for rendering the cell's content.
      * <p>
      * If the given data type is a Node, it is added to the children list,
-     * otherwise a label is used to display the data by calling toString() on it.
+     * otherwise a label is used to display the data.
      * <p>
      * At the end adds a ripple generator at index 0.
      */
     @Override
     protected void render(T data) {
         if (data instanceof Node) {
-            getChildren().setAll(checkbox, (Node) data);
+            getChildren().setAll(rippleGenerator, checkbox, (Node) data);
         } else {
-            getChildren().setAll(checkbox, label);
+            getChildren().setAll(rippleGenerator, checkbox, label);
         }
-        getChildren().add(0, rippleGenerator);
     }
 
     /**

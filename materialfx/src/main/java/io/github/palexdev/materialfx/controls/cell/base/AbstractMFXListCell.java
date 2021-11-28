@@ -172,7 +172,7 @@ public abstract class AbstractMFXListCell<T> extends HBox implements Cell<T> {
         return index.getReadOnlyProperty();
     }
 
-    public void setIndex(int index) {
+    protected void setIndex(int index) {
         this.index.set(index);
     }
 
@@ -187,7 +187,7 @@ public abstract class AbstractMFXListCell<T> extends HBox implements Cell<T> {
         return selected.getReadOnlyProperty();
     }
 
-    public void setSelected(boolean selected) {
+    protected void setSelected(boolean selected) {
         this.selected.set(selected);
     }
 }

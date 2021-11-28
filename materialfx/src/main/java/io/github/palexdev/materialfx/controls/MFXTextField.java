@@ -19,8 +19,58 @@ import javafx.scene.control.TextField;
 
 import java.util.List;
 
-// TODO documentation
+/**
+ * A modern text field restyled to follow material design principles and with many
+ * new features.
+ * <p>
+ * Unlike Swing and JavaFX (which copied Swing duh), I followed Google's Material Design guidelines.
+ * They do not have anything like a Label but only TextFields. After all, a TextField has all the features a
+ * Label has and even more.
+ * <p>
+ * {@code MFXTextField} allows you to make it behave like a Label by setting the {@link #editableProperty()} and
+ * the {@link #selectableProperty()} to false.
+ * <p>
+ * Also allows you to specify up to two icons (leading and trailing) and the gap between the them and the text.
+ * <p>
+ * But... the most important and requested feature is the floating text. You can decide between
+ * three modes: DISABLED (no floating text), INLINE (the floating text is inside the field), BORDER
+ * (the floating text is placed on the field's border.
+ * <p>
+ * You can also specify the distance between the text and the floating text (for INLINE mode) and
+ * the distance from the x origin (for BORDER mode). The floating text is animated by default but
+ * you can also disable it.
+ * <p></p>
+ * {@code MFXTextField} now also introduces a new PseudoClass, ":floating" that activates
+ * when the floating text node is floating.
+ * <p>
+ * As with the previous MFXTextField it's also possible to specify the maximum number of characters for the text.
+ * <p></p>
+ * Some little side notes on the floating text:
+ * <p>
+ * Please note that because of the extra node to show the floating text, {@code MFXTextField} now takes more space.
+ * There are several things you can do to make it more compact:
+ * <p> 1) You can lower the {@link #gapProperty()} (for INLINE mode)
+ * <p> 2) You can lower the padding (set in CSS) but I would not recommend it to be honest, a little
+ * bit of padding makes the control more appealing
+ * <p> 3) You can switch mode. The DISABLED mode requires the least space of course. The BORDER mode
+ * requires some more space, and the INLINE mode is the one that requires the most space (because it acts
+ * as a VBox)
+ * <p></p>
+ * Also, note that while it is allowed, it's highly discouraged to switch mode at runtime.
+ * I put a lot of effort in making the layout as stable as possible in every condition but, as
+ * I always said floating text is a quite hard to implement feature so, just be careful with that.
+ * <p></p>
+ * Last but not least... Keep in mind that in case of BORDER mode to make it really work as intended
+ * a condition must be met. The background colors of the text field, the floating text and the parent
+ * container of the field must be the same. You see, on the material.io website you can see the floating
+ * text cut the field's borders but that's not what it is happening. If you look more carefully the
+ * demo background is white, and the field's background as well. The floating text just sits on top of the
+ * field's border and has the same background color, creating that 'cut' effect.
+ */
 public class MFXTextField extends TextField {
+    //================================================================================
+    // Properties
+    //================================================================================
     private final String STYLE_CLASS = "mfx-text-field";
     private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTextField.css");
 
@@ -35,6 +85,9 @@ public class MFXTextField extends TextField {
     protected final ReadOnlyBooleanWrapper floating = new ReadOnlyBooleanWrapper(false);
     private static final PseudoClass FLOATING_PSEUDO_CLASS = PseudoClass.getPseudoClass("floating");
 
+    //================================================================================
+    // Constructors
+    //================================================================================
     public MFXTextField() {
         this("");
     }
@@ -54,9 +107,13 @@ public class MFXTextField extends TextField {
         initialize();
     }
 
+    //================================================================================
+    // Methods
+    //================================================================================
     private void initialize() {
         getStyleClass().setAll(STYLE_CLASS);
         floating.addListener(invalidated -> pseudoClassStateChanged(FLOATING_PSEUDO_CLASS, floating.get()));
+        allowEditProperty().bindBidirectional(editableProperty());
 
         // TODO may be useful for context menu
 /*        EventDispatcher original = getEventDispatcher();
@@ -75,10 +132,16 @@ public class MFXTextField extends TextField {
         addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);*/
     }
 
+    //================================================================================
+    // Getters/Setters
+    //================================================================================
     public boolean isSelectable() {
         return selectable.get();
     }
 
+    /**
+     * Specifies whether selection is allowed.
+     */
     public BooleanProperty selectableProperty() {
         return selectable;
     }
@@ -91,6 +154,9 @@ public class MFXTextField extends TextField {
         return leadingIcon.get();
     }
 
+    /**
+     * Specifies the icon placed before the input field.
+     */
     public ObjectProperty<Node> leadingIconProperty() {
         return leadingIcon;
     }
@@ -103,6 +169,9 @@ public class MFXTextField extends TextField {
         return trailingIcon.get();
     }
 
+    /**
+     * Specifies the icon placed after the input field.
+     */
     public ObjectProperty<Node> trailingIconProperty() {
         return trailingIcon;
     }
@@ -115,6 +184,9 @@ public class MFXTextField extends TextField {
         return floatingText.get();
     }
 
+    /**
+     * Specifies the text of the floating text node.
+     */
     public StringProperty floatingTextProperty() {
         return floatingText;
     }
@@ -127,10 +199,16 @@ public class MFXTextField extends TextField {
         return floating.get();
     }
 
+    /**
+     * Specifies if the floating text node is currently floating or not.
+     */
     public ReadOnlyBooleanProperty floatingProperty() {
         return floating.getReadOnlyProperty();
     }
 
+    //================================================================================
+    // Styleable Properties
+    //================================================================================
     private final StyleableBooleanProperty animated = new StyleableBooleanProperty(
             StyleableProperties.ANIMATED,
             this,
@@ -143,6 +221,20 @@ public class MFXTextField extends TextField {
             this,
             "borderSpacing",
             10.0
+    );
+
+    private final StyleableBooleanProperty caretVisible = new StyleableBooleanProperty(
+            StyleableProperties.CARET_VISIBLE,
+            this,
+            "caretAnimated",
+            true
+    );
+
+    private final StyleableBooleanProperty allowEdit = new StyleableBooleanProperty(
+            StyleableProperties.EDITABLE,
+            this,
+            "allowEdit",
+            true
     );
 
     private final StyleableObjectProperty<FloatMode> floatMode = new StyleableObjectProperty<>(
@@ -177,6 +269,9 @@ public class MFXTextField extends TextField {
         return animated.get();
     }
 
+    /**
+     * Specifies whether the floating text positioning is animated.
+     */
     public StyleableBooleanProperty animatedProperty() {
         return animated;
     }
@@ -189,6 +284,10 @@ public class MFXTextField extends TextField {
         return borderSpacing.get();
     }
 
+    /**
+     * For {@link FloatMode#BORDER} mode, this specifies the distance from
+     * the control's x origin (padding not included).
+     */
     public StyleableDoubleProperty borderSpacingProperty() {
         return borderSpacing;
     }
@@ -197,10 +296,46 @@ public class MFXTextField extends TextField {
         this.borderSpacing.set(borderSpacing);
     }
 
+    public boolean getCaretVisible() {
+        return caretVisible.get();
+    }
+
+    /**
+     * Specifies whether the caret should be visible.
+     */
+    public StyleableBooleanProperty caretVisibleProperty() {
+        return caretVisible;
+    }
+
+    public void setCaretVisible(boolean caretVisible) {
+        this.caretVisible.set(caretVisible);
+    }
+
+    public boolean isAllowEdit() {
+        return allowEdit.get();
+    }
+
+    /**
+     * Specifies whether the field is editable.
+     * <p>
+     * This property is bound bidirectionally to {@link TextField#editableProperty()},
+     * it's here just to be set via CSS.
+     */
+    public StyleableBooleanProperty allowEditProperty() {
+        return allowEdit;
+    }
+
+    public void setAllowEdit(boolean allowEdit) {
+        this.allowEdit.set(allowEdit);
+    }
+
     public FloatMode getFloatMode() {
         return floatMode.get();
     }
 
+    /**
+     * Specifies how the floating text is positioned when floating.
+     */
     public StyleableObjectProperty<FloatMode> floatModeProperty() {
         return floatMode;
     }
@@ -213,6 +348,10 @@ public class MFXTextField extends TextField {
         return gap.get();
     }
 
+    /**
+     * For {@link FloatMode#INLINE} mode, this specifies the gap between
+     * the floating text node and the input field node.
+     */
     public StyleableDoubleProperty gapProperty() {
         return gap;
     }
@@ -225,6 +364,9 @@ public class MFXTextField extends TextField {
         return graphicTextGap.get();
     }
 
+    /**
+     * Specifies the gap between the input field and the icons.
+     */
     public StyleableDoubleProperty graphicTextGapProperty() {
         return graphicTextGap;
     }
@@ -237,6 +379,9 @@ public class MFXTextField extends TextField {
         return textLimit.get();
     }
 
+    /**
+     * Specifies the maximum number of characters the field's text can have.
+     */
     public StyleableIntegerProperty textLimitProperty() {
         return textLimit;
     }
@@ -245,6 +390,9 @@ public class MFXTextField extends TextField {
         this.textLimit.set(textLimit);
     }
 
+    //================================================================================
+    // CssMetaData
+    //================================================================================
     private static class StyleableProperties {
         private static final StyleablePropertyFactory<MFXTextField> FACTORY = new StyleablePropertyFactory<>(TextField.getClassCssMetaData());
         private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
@@ -261,6 +409,20 @@ public class MFXTextField extends TextField {
                         "-mfx-border-spacing",
                         MFXTextField::borderSpacingProperty,
                         10.0
+                );
+
+        private static final CssMetaData<MFXTextField, Boolean> CARET_VISIBLE =
+                FACTORY.createBooleanCssMetaData(
+                        "-mfx-caret-animated",
+                        MFXTextField::caretVisibleProperty,
+                        true
+                );
+
+        private static final CssMetaData<MFXTextField, Boolean> EDITABLE =
+                FACTORY.createBooleanCssMetaData(
+                        "-mfx-editable",
+                        MFXTextField::allowEditProperty,
+                        true
                 );
 
         private static final CssMetaData<MFXTextField, FloatMode> FLOAT_MODE =
@@ -295,7 +457,7 @@ public class MFXTextField extends TextField {
         static {
             cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
                     TextField.getClassCssMetaData(),
-                    ANIMATED, BORDER_SPACING, FLOAT_MODE, GAP, GRAPHIC_TEXT_GAP, TEXT_LIMIT
+                    ANIMATED, BORDER_SPACING, CARET_VISIBLE, EDITABLE, FLOAT_MODE, GAP, GRAPHIC_TEXT_GAP, TEXT_LIMIT
             );
         }
     }
@@ -304,6 +466,9 @@ public class MFXTextField extends TextField {
         return StyleableProperties.cssMetaDataList;
     }
 
+    //================================================================================
+    // Overridden Methods
+    //================================================================================
     @Override
     protected Skin<?> createDefaultSkin() {
         return new MFXTextFieldSkin(this, floating);

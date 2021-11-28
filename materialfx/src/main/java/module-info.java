@@ -11,6 +11,7 @@ module MaterialFX {
     exports io.github.palexdev.materialfx.beans.properties.base;
     exports io.github.palexdev.materialfx.beans.properties.functional;
     exports io.github.palexdev.materialfx.beans.properties.resettable;
+    exports io.github.palexdev.materialfx.beans.properties.styleable;
     exports io.github.palexdev.materialfx.beans.properties.synced;
     exports io.github.palexdev.materialfx.bindings;
     exports io.github.palexdev.materialfx.collections;

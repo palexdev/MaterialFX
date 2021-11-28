@@ -26,7 +26,6 @@
 	-fx-background-radius: 5;
 	-fx-border-color: lightgray;
 	-fx-border-radius: 5;
-	-fx-cursor: text;
 	-fx-padding: 5;
 
 	-fx-font-family: "Open Sans Regular";
@@ -47,7 +46,8 @@
 .mfx-text-field:focused {
 	-fx-background-insets: 2;
 	-fx-border-color: -mfx-main;
-	-fx-border-insets: 1.5;
+	-fx-border-width: 1.5;
+	-fx-border-insets: -0.5;
 }
 
 .mfx-text-field .floating-text {

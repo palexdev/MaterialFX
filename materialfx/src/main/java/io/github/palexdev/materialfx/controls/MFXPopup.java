@@ -1,7 +1,9 @@
 package io.github.palexdev.materialfx.controls;
 
+import io.github.palexdev.materialfx.beans.Alignment;
 import io.github.palexdev.materialfx.beans.PopupPositionBean;
 import io.github.palexdev.materialfx.beans.PositionBean;
+import io.github.palexdev.materialfx.controls.base.MFXStyleablePopup;
 import io.github.palexdev.materialfx.effects.Interpolators;
 import io.github.palexdev.materialfx.skins.MFXPopupSkin;
 import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
@@ -11,6 +13,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ObservableList;
 import javafx.css.PseudoClass;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -19,6 +22,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.PopupControl;
 import javafx.scene.control.Skin;
 import javafx.scene.input.MouseEvent;
@@ -40,8 +44,11 @@ import java.util.function.BiFunction;
  * <p></p>
  * Also allows to reposition the popup on demand by calling {@link #reposition()} and also
  * offers a new {@link EventType}.
+ * <p></p>
+ * Now implements {@link MFXStyleablePopup} to make the popup customizable with CSS.
+ * Please check the interface's documentation on how to use the functionality.
  */
-public class MFXPopup extends PopupControl {
+public class MFXPopup extends PopupControl implements MFXStyleablePopup {
     //================================================================================
     // Properties
     //================================================================================
@@ -67,6 +74,9 @@ public class MFXPopup extends PopupControl {
     private final EventHandler<MouseEvent> entered = event -> setHover(true);
     private final EventHandler<MouseEvent> exited = event -> setHover(false);
 
+    private Parent styleableParent;
+    private final MFXStyleablePopup.CSSBridge bridge = new MFXStyleablePopup.CSSBridge(this);
+
     //================================================================================
     // Constructors
     //================================================================================
@@ -76,9 +86,8 @@ public class MFXPopup extends PopupControl {
                 .add(KeyFrames.of(150,
                         scale.xProperty(), 1, Interpolators.INTERPOLATOR_V2
                 ))
-                .add(KeyFrames.of(200,
+                .add(KeyFrames.of(150,
                         scale.yProperty(), 1, Interpolators.INTERPOLATOR_V2
-
                 ))
                 .getAnimation();
         initialize();
@@ -91,9 +100,8 @@ public class MFXPopup extends PopupControl {
                 .add(KeyFrames.of(150,
                         scale.xProperty(), 1, Interpolators.INTERPOLATOR_V2
                 ))
-                .add(KeyFrames.of(200,
+                .add(KeyFrames.of(150,
                         scale.yProperty(), 1, Interpolators.INTERPOLATOR_V2
-
                 ))
                 .getAnimation();
         initialize();
@@ -113,19 +121,19 @@ public class MFXPopup extends PopupControl {
     /**
      * Shows the popup at the BOTTOM_RIGHT of the specified node.
      * <p></p>
-     * Calls {@link #show(Node, HPos, VPos, double, double)}.
+     * Calls {@link #show(Node, Alignment, double, double)}.
      */
     public void show(Node node) {
-        show(node, HPos.RIGHT, VPos.BOTTOM, 0, 0);
+        show(node, Alignment.of(HPos.RIGHT, VPos.BOTTOM), 0, 0);
     }
 
     /**
      * Shows the popup at the given positions.
      * <p></p>
-     * Calls {@link #show(Node, HPos, VPos, double, double)}.
+     * Calls {@link #show(Node, Alignment, double, double)}.
      */
-    public void show(Node node, HPos hPos, VPos vPos) {
-        show(node, hPos, vPos, 0, 0);
+    public void show(Node node, Alignment alignment) {
+        show(node, alignment, 0, 0);
     }
 
     /**
@@ -140,14 +148,14 @@ public class MFXPopup extends PopupControl {
      * position bean are not reliable, because they do not take into account the adjustments applied
      * by the skin. (as of now, maybe will be improved in the future)
      */
-    public void show(Node node, HPos hPos, VPos vPos, double xOffset, double yOffset) {
+    public void show(Node node, Alignment alignment, double xOffset, double yOffset) {
         if (node.getScene() == null || node.getScene().getWindow() == null) {
                 throw new IllegalStateException("Cannot show the popup. The node must be attached to a scene/window!");
             }
 
         Window window = node.getScene().getWindow();
-        PositionBean position = computePosition(node, window, hPos, vPos);
-        this.position = new PopupPositionBean(node, position, hPos, vPos, xOffset, yOffset);
+        PositionBean position = computePosition(node, window, alignment, xOffset, yOffset);
+        this.position = new PopupPositionBean(node, position, alignment, xOffset, yOffset);
         show(window, position.getX(), position.getY());
     }
 
@@ -159,78 +167,69 @@ public class MFXPopup extends PopupControl {
      * <p>
      * This should be called when the owner's position changes.
      *
-     * @see #show(Node, HPos, VPos, double, double)
+     * @see #show(Node, Alignment, double, double)
      * @see PopupPositionBean
      */
     public void reposition() {
         if (!isShowing() || position == null) return;
-        position = computeReposition();
-        double containerW = getContent().prefWidth(-1);
-        double containerH = getContent().prefHeight(-1);
-        HPos hPos = position.getHPos();
-        VPos vPos = position.getVPos();
-        double xOffset = position.getXOffset();
-        double yOffset = position.getYOffset();
-
-        double tx = 0;
-        double ty = 0;
-        switch (hPos) {
-            case CENTER: {
-                tx = -(Math.abs(containerW - position.getOwnerWidth()) / 2) + xOffset;
-                break;
-            }
-            case LEFT: {
-                tx = -containerW + xOffset;
-                break;
-            }
-            case RIGHT: {
-                tx = xOffset;
-                break;
-            }
-        }
-        switch (vPos) {
-            case BOTTOM: {
-                ty = yOffset;
-                break;
-            }
-            case CENTER: {
-                ty = -(Math.abs(containerH - position.getOwnerHeight()) / 2) + yOffset;
-                break;
-            }
-            case TOP: {
-                ty = -containerH + yOffset;
-                break;
-            }
-        }
-
-        setX(position.getX() + tx);
-        setY(position.getY() + ty);
+        position = computePosition();
+        setX(position.getX());
+        setY(position.getY());
     }
 
     /**
      * Computes the initial (x, y) coordinates for the given parameters.
      * These will be "refined" in the skin.
      */
-    private PositionBean computePosition(Node node, Window window, HPos hPos, VPos vPos) {
+    private PositionBean computePosition(Node node, Window window, Alignment alignment, double xOffset, double yOffset) {
         Point2D origin = node.localToScene(0, 0);
 
-        double nodeWidth = node.prefWidth(-1);
-        double nodeHeight = node.prefHeight(-1);
-        double x = window.getX() + origin.getX() + node.getScene().getX() + (hPos == HPos.LEFT ? nodeWidth : 0);
-        double y = window.getY() + origin.getY() + node.getScene().getY() + (vPos == VPos.BOTTOM ? nodeHeight : 0);
+        HPos hPos = alignment.getHPos();
+        VPos vPos = alignment.getVPos();
+        double x = window.getX() + origin.getX() + node.getScene().getX() + computeHPos(node, hPos, xOffset);
+        double y = window.getY() + origin.getY() + node.getScene().getY() + computeVPos(node, vPos, yOffset);
         return PositionBean.of(x, y);
     }
 
     /**
      * Used to compute the new position of the popup when repositioning.
      */
-    private PopupPositionBean computeReposition() {
+    public PopupPositionBean computePosition() {
         Node node = position.getOwner();
         Window window = node.getScene().getWindow();
-        HPos hPos = position.getHPos();
-        VPos vPos = position.getVPos();
-        PositionBean positionBean = computePosition(node, window, hPos, vPos);
-        return new PopupPositionBean(node, positionBean, hPos, vPos, position.getXOffset(), position.getYOffset());
+        Alignment alignment = position.getAlignment();
+        PositionBean reposition = computePosition(node, window, alignment, position.getXOffset(), position.getYOffset());
+        return new PopupPositionBean(node, reposition, alignment, position.getXOffset(), position.getYOffset());
+    }
+
+    /**
+     * Computes the x coordinate shifting according to the given {@link HPos} and x offset.
+     */
+    private double computeHPos(Node node, HPos hPos, double xOffset) {
+        double x;
+        double contentWidth = getContent().prefWidth(-1);
+        double ownerWidth = node.getLayoutBounds().getWidth();
+        switch (hPos) {
+            case LEFT:
+                x = -Math.abs((contentWidth - ownerWidth));
+                break;
+            case CENTER: {
+                x = -Math.abs(ownerWidth / 2 - contentWidth / 2);
+                break;
+            }
+            default: {
+                x = 0;
+                break;
+            }
+        }
+        return x + xOffset;
+    }
+
+    /**
+     * Computes the y coordinate shift according to the given {@link VPos} and y offset.
+     */
+    private double computeVPos(Node node, VPos vPos, double yOffset) {
+        return (vPos == VPos.BOTTOM ? node.getLayoutBounds().getHeight() : 0) + yOffset;
     }
 
     //================================================================================
@@ -332,6 +331,23 @@ public class MFXPopup extends PopupControl {
     @Override
     protected Skin<?> createDefaultSkin() {
         return new MFXPopupSkin(this);
+    }
+
+    @Override
+    public Parent getPopupStyleableParent() {
+        return styleableParent;
+    }
+
+    @Override
+    public void setPopupStyleableParent(Parent parent) {
+        bridge.dispose();
+        this.styleableParent = parent;
+        bridge.initializeStylesheets();
+    }
+
+    @Override
+    public ObservableList<String> getStyleSheets() {
+        return bridge.getStylesheets();
     }
 
     //================================================================================

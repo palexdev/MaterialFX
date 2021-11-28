@@ -1,108 +1,107 @@
-/*
- * Copyright (C) 2021 Parisi Alessandro
- * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
- *
- * MaterialFX is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * MaterialFX is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.beans.properties.functional.FunctionProperty;
+import io.github.palexdev.materialfx.collections.TransformableList;
+import io.github.palexdev.materialfx.collections.TransformableListWrapper;
+import io.github.palexdev.materialfx.controls.cell.MFXComboBoxCell;
+import io.github.palexdev.materialfx.controls.cell.MFXFilterComboBoxCell;
 import io.github.palexdev.materialfx.skins.MFXFilterComboBoxSkin;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import io.github.palexdev.materialfx.utils.StringUtils;
+import javafx.beans.InvalidationListener;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.css.PseudoClass;
 import javafx.scene.control.Skin;
 
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 /**
- * This combo box allows to filter the items shown in the popup's listview.
+ * Extends {@link MFXComboBox} and changes the popup's content slightly to
+ * allow filtering the items list.
  * <p>
- * Extends {@code MFXComboBox} and redefines the style class to "mfx-filter-combo-box".
- *
- * @param <T> The type of the value that has been selected
- * @see MFXComboBox
+ * In addition to the base class futures this adds:
+ * <p> - Uses a {@link TransformableListWrapper} to filter the items. You could even sort them by
+ * retrieving the list instance and setting a comparator, {@link TransformableList#comparatorProperty()}.
+ * Beware to this though, {@link TransformableList#setReversed(boolean)}, it's really important to specify that
+ * the comparator is in reverse order otherwise indexes will be inconsistent.
+ * <p> - A function that takes the typed search text as an input and builds a {@link Predicate} as a result to
+ * filter the list. This means that the user can fully customize how the list is filtered.
+ * <p></p>
+ * Note: this combo box do not uses {@link MFXComboBoxCell} and while it does allow it it should never be used.
+ * Use {@link MFXFilterComboBoxCell} instead for consistent selection behavior.
  */
 public class MFXFilterComboBox<T> extends MFXComboBox<T> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final String STYLE_CLASS = "mfx-filter-combo-box";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXFilterComboBox.css");
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final String STYLECLASS = "mfx-filter-combo-box";
+	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXFilterComboBox.css");
+	private final TransformableListWrapper<T> filterList = new TransformableListWrapper<>(FXCollections.observableArrayList());
+	private final FunctionProperty<String, Predicate<T>> filterFunction = new FunctionProperty<>(s -> t -> StringUtils.containsIgnoreCase(t.toString(), s));
 
-    private static final PseudoClass EDITOR_FOCUSED_PSEUDO_CLASS = PseudoClass.getPseudoClass("editor");
-    private final BooleanProperty editorFocused = new SimpleBooleanProperty();
+	private final InvalidationListener itemsChanged = invalidated -> filterList.setAll(getItems());
 
-    /**
-     * When the popup is shown and the text field is added to the scene the text field is not focused,
-     * to change this behavior and force it to be focused you can set this boolean to true.
-     * <p>
-     * For more details see {@link MFXFilterComboBoxSkin}
-     */
-    private boolean forceFieldFocusOnShow = false;
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXFilterComboBox() {
+		super();
+	}
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXFilterComboBox() {
-        initialize();
-    }
+	public MFXFilterComboBox(ObservableList<T> items) {
+		super(items);
+		initialize();
+	}
 
-    public MFXFilterComboBox(ObservableList<T> items) {
-        super(items);
-        initialize();
-    }
+	//================================================================================
+	// Methods
+	//================================================================================
+	private void initialize() {
+		getStyleClass().add(STYLECLASS);
+		setCellFactory(t -> new MFXFilterComboBoxCell<>(this, getFilterList(), t));
 
-    //================================================================================
-    // Methods
-    //================================================================================
-    private void initialize() {
-        getStyleClass().add(STYLE_CLASS);
-        editorFocused.addListener(invalidated -> pseudoClassStateChanged(EDITOR_FOCUSED_PSEUDO_CLASS, editorFocused.get()));
-    }
+		filterList.setAll(getItems());
+		itemsProperty().addListener((observable, oldValue, newValue) -> {
+			oldValue.removeListener(itemsChanged);
+			newValue.addListener(itemsChanged);
+		});
+		getItems().addListener(itemsChanged);
+	}
 
-    public boolean isForceFieldFocusOnShow() {
-        return forceFieldFocusOnShow;
-    }
+	//================================================================================
+	// Getters/Setters
+	//================================================================================
+	public TransformableList<T> getFilterList() {
+		return filterList.getTransformableList();
+	}
 
-    public void setForceFieldFocusOnShow(boolean forceFieldFocusOnShow) {
-        this.forceFieldFocusOnShow = forceFieldFocusOnShow;
-    }
+	public Function<String, Predicate<T>> getFilterFunction() {
+		return filterFunction.get();
+	}
 
-    public boolean isEditorFocused() {
-        return editorFocused.get();
-    }
+	/**
+	 * Specifies the function used to build a {@link Predicate} from the typed search text, the
+	 * predicate is then used to filter the list.
+	 */
+	public FunctionProperty<String, Predicate<T>> filterFunctionProperty() {
+		return filterFunction;
+	}
 
-    /**
-     * Bound to the editor focus property. This allows to keep the focused style specified
-     * by css when the focus is acquired by the editor. The PseudoClass to use in css is ":editor"
-     */
-    public BooleanProperty editorFocusedProperty() {
-        return editorFocused;
-    }
+	public void setFilterFunction(Function<String, Predicate<T>> filterFunction) {
+		this.filterFunction.set(filterFunction);
+	}
 
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        return new MFXFilterComboBoxSkin<>(this);
-    }
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
+	@Override
+	protected Skin<?> createDefaultSkin() {
+		return new MFXFilterComboBoxSkin<>(this, floating);
+	}
 
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
-
+	@Override
+	public String getUserAgentStylesheet() {
+		return STYLESHEET;
+	}
 }

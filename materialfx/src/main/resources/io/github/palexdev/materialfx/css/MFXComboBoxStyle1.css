@@ -17,135 +17,22 @@
  */
 
 @import "Fonts.css";
+@import "MFXTextField.css";
 
 .mfx-combo-box {
-    -fx-background-color: rgb(232, 232, 232);
-    -fx-background-radius: 3 3 0 0;
-    -fx-border-width: 1.5;
-    -mfx-line-color: rgb(82, 0, 237);
-    -mfx-unfocused-line-color: rgb(159, 159, 159);
+    -mfx-gap: 0;
+    -fx-padding: 3 5 3 5;
 }
 
-.mfx-combo-box .label {
-    -fx-padding: 0 0 0 5;
-    -fx-font-family: "Open Sans Regular";
-    -fx-font-smoothing-type: grey;
+.mfx-combo-box .caret .mfx-ripple-generator {
+    -mfx-ripple-color: rgba(98, 0, 238, 0.1);
+    -mfx-ripple-radius: 14;
 }
 
-.mfx-combo-box .mfx-icon-wrapper .mfx-ripple-generator {
-    -mfx-ripple-color: rgba(76, 0, 225, 0.3);
+.mfx-combo-box:focused .caret .mfx-font-icon {
+    -mfx-color: -mfx-main;
 }
 
-.mfx-combo-box .mfx-icon-wrapper .mfx-font-icon {
-    -mfx-color: black;
-}
-
-.mfx-combo-box:focused .mfx-icon-wrapper .mfx-font-icon {
-    -mfx-color: rgb(76, 0, 225);
-}
-
-.mfx-combo-box:editor .mfx-icon-wrapper .mfx-font-icon {
-    -mfx-color: rgb(76, 0, 225);
-}
-
-.mfx-list-view {
-    -fx-background-color: white;
-    -fx-border-color: #A4B1B6;
-    -fx-background-insets: 0 -1 0 -1;
-    -fx-border-insets: 0 -1 0 -1;
-
-    -mfx-track-color: transparent;
-    -mfx-thumb-color: rgba(76, 0, 225, 0.1);
-    -mfx-thumb-hover-color: rgb(158, 107, 255);
-}
-
-.mfx-list-view .mfx-list-cell:hover {
-    -fx-background-color: rgb(242, 242, 242);
-    -fx-border-color: rgb(242, 242, 242);
-}
-
-.mfx-list-view .mfx-list-cell:selected {
-    -fx-background-color: rgb(185, 152, 255);
-    -fx-border-color: rgb(185, 152, 255);
-}
-
-/* VALIDATION */
-.mfx-combo-box:invalid {
-    -mfx-line-color: #EF6E6B;
-    -mfx-unfocused-line-color: #EF6E6B;
-}
-
-.mfx-combo-box:invalid .mfx-icon-wrapper .mfx-font-icon{
-    -mfx-color: #EF6E6B;
-}
-
-.mfx-combo-box:focused:invalid .mfx-icon-wrapper .mfx-font-icon{
-    -mfx-color: #EF6E6B;
-}
-
-.mfx-combo-box:focused:editor:invalid .mfx-icon-wrapper .mfx-font-icon{
-    -mfx-color: #EF6E6B;
-}
-
-.mfx-combo-box:invalid .mfx-label {
-    -mfx-text-fill: #EF6E6B;
-}
-
-.mfx-combo-box:invalid .mfx-label:prompt {
-    -mfx-text-fill: #EF6E6B;
-}
-
-.mfx-combo-box .validate-label {
-    -fx-background-color: transparent;
-    -fx-font-family: "Open Sans SemiBold";
-    -fx-font-size: 11;
-    -fx-text-fill: #EF6E6B;
-}
-
-.mfx-combo-box .unfocused-line {
-    -fx-stroke: -mfx-unfocused-line-color;
-}
-
-.mfx-combo-box .focused-line {
-    -fx-stroke: -mfx-line-color;
-}
-
-.mfx-combo-box:invalid .unfocused-line {
-    -fx-stroke: #EF6E6B;
-}
-
-.mfx-combo-box:invalid .focused-line {
-    -fx-stroke: #EF6E6B;
-}
-
-.mfx-combo-box .unfocused-line {
-    -fx-stroke: -mfx-unfocused-line-color;
-}
-
-.mfx-combo-box .focused-line {
-    -fx-stroke: -mfx-line-color;
-}
-
-.mfx-combo-box:invalid .unfocused-line {
-    -fx-stroke: #EF6E6B;
-}
-
-.mfx-combo-box:invalid .focused-line {
-    -fx-stroke: #EF6E6B;
-}
-
-.mfx-combo-box .unfocused-line {
-    -fx-stroke: -mfx-unfocused-line-color;
-}
-
-.mfx-combo-box .focused-line {
-    -fx-stroke: -mfx-line-color;
-}
-
-.mfx-combo-box:invalid .unfocused-line {
-    -fx-stroke: #EF6E6B;
-}
-
-.mfx-combo-box:invalid .focused-line {
-    -fx-stroke: #EF6E6B;
+.popup .virtual-flow {
+    -fx-background-radius: 5;
 }

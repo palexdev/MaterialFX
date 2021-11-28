@@ -41,7 +41,7 @@ public interface FunctionalStringConverter<T> {
         return new StringConverter<>() {
             @Override
             public String toString(T t) {
-                return tsFunction.apply(t);
+                return t != null ? tsFunction.apply(t) : "";
             }
 
             @Override
