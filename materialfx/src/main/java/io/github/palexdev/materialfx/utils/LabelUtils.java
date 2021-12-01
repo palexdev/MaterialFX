@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.utils;
 
-import io.github.palexdev.materialfx.controls.MFXLabel;
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -135,27 +134,6 @@ public class LabelUtils {
         group.applyCss();
         group.layout();
         return helper.getLayoutBounds().getHeight();
-    }
-
-    /**
-     * Computes the min width for the specified {@link MFXLabel} so that all the text is visible.
-     * <p>
-     * Uses {@link #computeTextWidth(Font, String)}, but also takes into account the label's
-     * icons bounds (if not null), the {@link MFXLabel#graphicTextGapProperty()} multiplied by 2,
-     * and the container's padding {@link MFXLabel#containerPaddingProperty()}.
-     * <p></p>
-     * Note: this works only after the label has been laid out.
-     */
-    public static double computeMFXLabelWidth(MFXLabel label) {
-        Node leading = label.getLeadingIcon();
-        Node trailing = label.getTrailingIcon();
-        return label.snappedLeftInset() +
-                (leading != null ? leading.getBoundsInParent().getWidth() : 0) +
-                LabelUtils.computeTextWidth(label.getFont(), (label.getText().isEmpty() ? label.getPromptText() : label.getText())) +
-                (trailing != null ? trailing.getBoundsInParent().getWidth() : 0) +
-                label.snappedRightInset() +
-                (2 * label.getGraphicTextGap()) +
-                label.getContainerPadding().getLeft() + label.getContainerPadding().getLeft();
     }
 
     /**

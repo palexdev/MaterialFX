@@ -22,14 +22,12 @@ import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXToggleNode;
 import io.github.palexdev.materialfx.enums.TextPosition;
 import io.github.palexdev.materialfx.skins.MFXCircleToggleNodeSkin;
+import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import javafx.css.*;
 import javafx.scene.Node;
 import javafx.scene.control.Skin;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.shape.StrokeType;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,184 +38,166 @@ import java.util.List;
  * Allows to specify up to three icons: one icon for the toggle, and tho other two for the toggle's label.
  */
 public class MFXCircleToggleNode extends AbstractMFXToggleNode {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private static final StyleablePropertyFactory<MFXCircleToggleNode> FACTORY = new StyleablePropertyFactory<>(AbstractMFXToggleNode.getControlCssMetaDataList());
-    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXCircleToggleNode.css");
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final String STYLE_CLASS = "mfx-circle-toggle-node";
+	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXCircleToggleNode.css");
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXCircleToggleNode() {
-        this("");
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXCircleToggleNode() {
+		this("");
+	}
 
-    public MFXCircleToggleNode(String text) {
-        this(text, null);
-    }
+	public MFXCircleToggleNode(String text) {
+		this(text, null);
+	}
 
-    public MFXCircleToggleNode(String text, Node icon) {
-        super(text, icon);
-    }
+	public MFXCircleToggleNode(String text, Node icon) {
+		this(text, icon, null, null);
+	}
 
-    public MFXCircleToggleNode(String text, Node icon, Node leadingIcon, Node trailingIcon) {
-        super(text, icon);
-        setLabelLeadingIcon(leadingIcon);
-        setLabelTrailingIcon(trailingIcon);
-    }
+	public MFXCircleToggleNode(String text, Node icon, Node leadingIcon, Node trailingIcon) {
+		super(text, icon);
+		setLabelLeadingIcon(leadingIcon);
+		setLabelTrailingIcon(trailingIcon);
+		initialize();
+	}
 
-    //================================================================================
-    // Styleable Properties
-    //================================================================================
-    private final StyleableDoubleProperty size = new SimpleStyleableDoubleProperty(
-            StyleableProperties.SIZE,
-            this,
-            "size",
-            32.0
-    );
+	//================================================================================
+	// Methods
+	//================================================================================
+	private void initialize() {
+		getStyleClass().add(STYLE_CLASS);
+	}
 
-    private final StyleableObjectProperty<TextPosition> textPosition = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.TEXT_POSITION,
-            this,
-            "textPosition",
-            TextPosition.BOTTOM
-    );
+	//================================================================================
+	// Styleable Properties
+	//================================================================================
+	private final StyleableDoubleProperty gap = new SimpleStyleableDoubleProperty(
+			StyleableProperties.GAP,
+			this,
+			"gap",
+			5.0
+	);
 
-    private final StyleableDoubleProperty strokeWidth = new SimpleStyleableDoubleProperty(
-            StyleableProperties.STROKE_WIDTH,
-            this,
-            "strokeWidth",
-            1.5
-    );
+	private final StyleableDoubleProperty size = new SimpleStyleableDoubleProperty(
+			StyleableProperties.SIZE,
+			this,
+			"size",
+			32.0
+	);
 
-    private final StyleableObjectProperty<StrokeType> strokeType = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.STROKE_TYPE,
-            this,
-            "strokeType",
-            StrokeType.CENTERED
-    );
+	private final StyleableObjectProperty<TextPosition> textPosition = new SimpleStyleableObjectProperty<>(
+			StyleableProperties.TEXT_POSITION,
+			this,
+			"textPosition",
+			TextPosition.BOTTOM
+	);
 
-    public double getSize() {
-        return size.get();
-    }
+	public double getGap() {
+		return gap.get();
+	}
 
-    /**
-     * Specifies the toggle's radius.
-     */
-    public StyleableDoubleProperty sizeProperty() {
-        return size;
-    }
+	/**
+	 * Specifies the gap between the toggle and its text.
+	 */
+	public StyleableDoubleProperty gapProperty() {
+		return gap;
+	}
 
-    public void setSize(double size) {
-        this.size.set(size);
-    }
+	public void setGap(double gap) {
+		this.gap.set(gap);
+	}
 
-    public TextPosition getTextPosition() {
-        return textPosition.get();
-    }
+	public double getSize() {
+		return size.get();
+	}
 
-    /**
-     * Specifies the position of the label, above or underneath the toggle's circle.
-     */
-    public StyleableObjectProperty<TextPosition> textPositionProperty() {
-        return textPosition;
-    }
+	/**
+	 * Specifies the toggle's radius.
+	 */
+	public StyleableDoubleProperty sizeProperty() {
+		return size;
+	}
 
-    public void setTextPosition(TextPosition textPosition) {
-        this.textPosition.set(textPosition);
-    }
+	public void setSize(double size) {
+		this.size.set(size);
+	}
 
-    public double getStrokeWidth() {
-        return strokeWidth.get();
-    }
+	public TextPosition getTextPosition() {
+		return textPosition.get();
+	}
 
-    /**
-     * Specifies the stroke width of the toggle.
-     */
-    public StyleableDoubleProperty strokeWidthProperty() {
-        return strokeWidth;
-    }
+	/**
+	 * Specifies the position of the label, above or underneath the toggle's circle.
+	 */
+	public StyleableObjectProperty<TextPosition> textPositionProperty() {
+		return textPosition;
+	}
 
-    public void setStrokeWidth(double strokeWidth) {
-        this.strokeWidth.set(strokeWidth);
-    }
+	public void setTextPosition(TextPosition textPosition) {
+		this.textPosition.set(textPosition);
+	}
 
-    public StrokeType getStrokeType() {
-        return strokeType.get();
-    }
+	//================================================================================
+	// CssMetaData
+	//================================================================================
+	private static class StyleableProperties {
+		private static final StyleablePropertyFactory<MFXCircleToggleNode> FACTORY = new StyleablePropertyFactory<>(ToggleButton.getClassCssMetaData());
+		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
-    public StyleableObjectProperty<StrokeType> strokeTypeProperty() {
-        return strokeType;
-    }
+		private static final CssMetaData<MFXCircleToggleNode, Number> GAP =
+				FACTORY.createSizeCssMetaData(
+						"-mfx-gap",
+						MFXCircleToggleNode::gapProperty,
+						5.0
+				);
 
-    public void setStrokeType(StrokeType strokeType) {
-        this.strokeType.set(strokeType);
-    }
+		private static final CssMetaData<MFXCircleToggleNode, Number> SIZE =
+				FACTORY.createSizeCssMetaData(
+						"-mfx-size",
+						MFXCircleToggleNode::sizeProperty,
+						32.0
+				);
 
-    //================================================================================
-    // CssMetaData
-    //================================================================================
-    private static class StyleableProperties {
-        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+		private static final CssMetaData<MFXCircleToggleNode, TextPosition> TEXT_POSITION =
+				FACTORY.createEnumCssMetaData(
+						TextPosition.class,
+						"-mfx-text-position",
+						MFXCircleToggleNode::textPositionProperty,
+						TextPosition.BOTTOM
+				);
 
-        private static final CssMetaData<MFXCircleToggleNode, Number> SIZE =
-                FACTORY.createSizeCssMetaData(
-                        "-mfx-size",
-                        MFXCircleToggleNode::sizeProperty,
-                        32.0
-                );
+		static {
+			cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(ToggleButton.getClassCssMetaData(),
+					GAP, SIZE, TEXT_POSITION
+			);
+		}
 
-        private static final CssMetaData<MFXCircleToggleNode, TextPosition> TEXT_POSITION =
-                FACTORY.createEnumCssMetaData(
-                        TextPosition.class,
-                        "-mfx-text-position",
-                        MFXCircleToggleNode::textPositionProperty,
-                        TextPosition.BOTTOM
-                );
+	}
 
-        private static final CssMetaData<MFXCircleToggleNode, Number> STROKE_WIDTH =
-                FACTORY.createSizeCssMetaData(
-                        "-mfx-stroke-width",
-                        MFXCircleToggleNode::strokeWidthProperty,
-                        1.5
-                );
+	public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
+		return StyleableProperties.cssMetaDataList;
+	}
 
-        private static final CssMetaData<MFXCircleToggleNode, StrokeType> STROKE_TYPE =
-                FACTORY.createEnumCssMetaData(
-                        StrokeType.class,
-                        "-mfx-stroke-type",
-                        MFXCircleToggleNode::strokeTypeProperty,
-                        StrokeType.CENTERED
-                );
+	//================================================================================
+	// Override Methods
+	//================================================================================
+	@Override
+	protected Skin<?> createDefaultSkin() {
+		return new MFXCircleToggleNodeSkin(this);
+	}
 
-        static {
-            List<CssMetaData<? extends Styleable, ?>> mfxTonCssMetaData = new ArrayList<>(AbstractMFXToggleNode.getClassCssMetaData());
-            Collections.addAll(mfxTonCssMetaData, SIZE, TEXT_POSITION, STROKE_WIDTH, STROKE_TYPE);
-            cssMetaDataList = Collections.unmodifiableList(mfxTonCssMetaData);
-        }
+	@Override
+	public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+		return getControlCssMetaDataList();
+	}
 
-    }
-
-    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
-        return MFXCircleToggleNode.StyleableProperties.cssMetaDataList;
-    }
-
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        return new MFXCircleToggleNodeSkin(this);
-    }
-
-    @Override
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return getControlCssMetaDataList();
-    }
-
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
+	@Override
+	public String getUserAgentStylesheet() {
+		return STYLESHEET;
+	}
 }

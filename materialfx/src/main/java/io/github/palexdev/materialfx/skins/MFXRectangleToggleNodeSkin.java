@@ -19,31 +19,25 @@
 package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.beans.PositionBean;
-import io.github.palexdev.materialfx.controls.MFXLabel;
 import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.materialfx.utils.LabelUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.scene.control.SkinBase;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 
 /**
  * This is the default skin for every {@link MFXRectangleToggleNode}.
- * <p></p>
- * The base container is a {@link StackPane} which contains: a {@link MFXLabel} to show the toggle's text.
- * <p></p>
- * Includes a {@link MFXCircleRippleGenerator} to generate ripple effects on mouse pressed.
  */
 public class MFXRectangleToggleNodeSkin extends SkinBase<MFXRectangleToggleNode> {
     //================================================================================
     // Properties
     //================================================================================
     private final StackPane container;
-    private final MFXLabel label;
+    private final MFXTextField label;
     private final MFXCircleRippleGenerator rippleGenerator;
 
     //================================================================================
@@ -52,23 +46,23 @@ public class MFXRectangleToggleNodeSkin extends SkinBase<MFXRectangleToggleNode>
     public MFXRectangleToggleNodeSkin(MFXRectangleToggleNode toggleNode) {
         super(toggleNode);
 
-        label = new MFXLabel();
-        label.setId("textNode");
+        label = new MFXTextField() {
+            @Override
+            public String getUserAgentStylesheet() {
+                return toggleNode.getUserAgentStylesheet();
+            }
+        };
+        label.fontProperty().bind(toggleNode.fontProperty());
         label.textProperty().bind(toggleNode.textProperty());
-        label.graphicTextGapProperty().bind(toggleNode.labelTextGapProperty());
-        label.getStylesheets().setAll(toggleNode.getUserAgentStylesheet());
         label.setLeadingIcon(toggleNode.getLabelLeadingIcon());
         label.setTrailingIcon(toggleNode.getLabelTrailingIcon());
+        label.setEditable(false);
+        label.setSelectable(false);
 
         container = new StackPane();
-        container.getStyleClass().setAll("container");
-        container.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-        container.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         container.alignmentProperty().bind(toggleNode.alignmentProperty());
-        container.prefWidthProperty().bind(toggleNode.widthProperty());
-        container.prefHeightProperty().bind(toggleNode.heightProperty());
-
-        rippleGenerator = new MFXCircleRippleGenerator(toggleNode);
+        rippleGenerator = new MFXCircleRippleGenerator(container);
+        rippleGenerator.setManaged(false);
 
         container.getChildren().setAll(rippleGenerator, label);
         handleGraphics();
@@ -184,22 +178,12 @@ public class MFXRectangleToggleNodeSkin extends SkinBase<MFXRectangleToggleNode>
     // Override Methods
     //================================================================================
     @Override
-    protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return computePrefWidth(height, topInset, rightInset, bottomInset, leftInset);
-    }
-
-    @Override
-    protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return leftInset + LabelUtils.computeMFXLabelWidth(label) + rightInset;
-    }
-
-    @Override
     protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return computePrefWidth(height, topInset, rightInset, bottomInset, leftInset);
+        return getSkinnable().prefWidth(-1);
     }
 
     @Override
     protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return super.computePrefHeight(width, topInset, rightInset, bottomInset, leftInset);
+        return getSkinnable().prefHeight(-1);
     }
 }

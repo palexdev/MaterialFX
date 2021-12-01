@@ -5,7 +5,6 @@ import javafx.beans.property.SimpleObjectProperty;
 
 import java.util.function.Function;
 
-// TODO use these properties everywhere
 /**
  * Simply an {@link ObjectProperty} that wraps a {@link Function}.
  *

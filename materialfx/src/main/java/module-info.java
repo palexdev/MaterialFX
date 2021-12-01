@@ -1,8 +1,8 @@
 module MaterialFX {
-    requires javafx.controls;
-    requires javafx.fxml;
-    requires javafx.graphics;
-    requires java.desktop;
+    requires transitive javafx.controls;
+    requires transitive javafx.fxml;
+    requires transitive javafx.graphics;
+    requires transitive java.desktop;
 
     requires virtualizedfx;
 
@@ -19,6 +19,7 @@ module MaterialFX {
     exports io.github.palexdev.materialfx.controls.base;
     exports io.github.palexdev.materialfx.controls.cell;
     exports io.github.palexdev.materialfx.controls.legacy;
+    exports io.github.palexdev.materialfx.css;
     exports io.github.palexdev.materialfx.effects;
     exports io.github.palexdev.materialfx.effects.ripple;
     exports io.github.palexdev.materialfx.effects.ripple.base;

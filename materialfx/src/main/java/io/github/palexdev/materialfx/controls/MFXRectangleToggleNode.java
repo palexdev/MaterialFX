@@ -20,8 +20,8 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXToggleNode;
-import io.github.palexdev.materialfx.factories.RippleClipTypeFactory;
 import io.github.palexdev.materialfx.effects.ripple.RippleClipType;
+import io.github.palexdev.materialfx.factories.RippleClipTypeFactory;
 import io.github.palexdev.materialfx.skins.MFXRectangleToggleNodeSkin;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -37,13 +37,14 @@ import javafx.scene.control.ToggleButton;
  * Allows to specify up to two icons for toggle's label. Also, if you want a toggle node without text but just with
  * the icon, the property to set is the {@link #graphicProperty()}, setting the leading or the trailing in this case can lead to
  * misaligned icons as those two icons are meant to be used with text. Note that whenever the graphic property is set to
- * a not null value it will be prioritized over the other two icons and the label. The label will hidden and only the
+ * a not null value it will be prioritized over the other two icons and the label. The label will be hidden and only the
  * graphic property will be shown. Setting it back to null will show the label, leading and trailing icons back again.
  */
 public class MFXRectangleToggleNode extends AbstractMFXToggleNode {
     //================================================================================
     // Properties
     //================================================================================
+    private final String STYLE_CLASS = "mfx-rectangle-toggle-node";
     private final String STYLESHEET = MFXResourcesLoader.load("css/MFXRectangleToggleNode.css");
     private final ObjectProperty<RippleClipTypeFactory> rippleClipTypeFactory = new SimpleObjectProperty<>();
 
@@ -73,8 +74,7 @@ public class MFXRectangleToggleNode extends AbstractMFXToggleNode {
     // Methods
     //================================================================================
     private void initialize() {
-        setMinSize(USE_PREF_SIZE, USE_PREF_SIZE);
-        setPrefSize(145, 45);
+        getStyleClass().add(STYLE_CLASS);
         setRippleClipTypeFactory(
                 new RippleClipTypeFactory(RippleClipType.ROUNDED_RECTANGLE)
                 .setArcs(15)

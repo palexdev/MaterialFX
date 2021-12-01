@@ -3,7 +3,8 @@ package io.github.palexdev.materialfx.controls;
 import io.github.palexdev.materialfx.beans.Alignment;
 import io.github.palexdev.materialfx.beans.PopupPositionBean;
 import io.github.palexdev.materialfx.beans.PositionBean;
-import io.github.palexdev.materialfx.controls.base.MFXStyleablePopup;
+import io.github.palexdev.materialfx.css.MFXCSSBridge;
+import io.github.palexdev.materialfx.css.MFXStyleablePopup;
 import io.github.palexdev.materialfx.effects.Interpolators;
 import io.github.palexdev.materialfx.skins.MFXPopupSkin;
 import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
@@ -74,8 +75,7 @@ public class MFXPopup extends PopupControl implements MFXStyleablePopup {
     private final EventHandler<MouseEvent> entered = event -> setHover(true);
     private final EventHandler<MouseEvent> exited = event -> setHover(false);
 
-    private Parent styleableParent;
-    private final MFXStyleablePopup.CSSBridge bridge = new MFXStyleablePopup.CSSBridge(this);
+    private final MFXCSSBridge bridge = new MFXCSSBridge(null);
 
     //================================================================================
     // Constructors
@@ -335,13 +335,13 @@ public class MFXPopup extends PopupControl implements MFXStyleablePopup {
 
     @Override
     public Parent getPopupStyleableParent() {
-        return styleableParent;
+        return bridge.getParent();
     }
 
     @Override
     public void setPopupStyleableParent(Parent parent) {
         bridge.dispose();
-        this.styleableParent = parent;
+        bridge.setParent(parent);
         bridge.initializeStylesheets();
     }
 
