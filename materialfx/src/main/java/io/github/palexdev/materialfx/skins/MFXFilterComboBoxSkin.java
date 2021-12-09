@@ -170,6 +170,10 @@ public class MFXFilterComboBoxSkin<T> extends SkinBase<MFXFilterComboBox<T>> {
     // Methods
     //================================================================================
 
+    public MFXTextField getEditor() {
+        return searchField;
+    }
+
     /**
      * Initialized the combo box value if the selected index specified by the selection model is not -1.
      *

@@ -44,6 +44,7 @@ public class MFXFilterComboBox<T> extends MFXComboBox<T> {
     private static final PseudoClass EDITOR_FOCUSED_PSEUDO_CLASS = PseudoClass.getPseudoClass("editor");
     private final BooleanProperty editorFocused = new SimpleBooleanProperty();
 
+    private final MFXFilterComboBoxSkin<T> mfxFilterComboBoxSkin = new MFXFilterComboBoxSkin<>(this);
     /**
      * When the popup is shown and the text field is added to the scene the text field is not focused,
      * to change this behavior and force it to be focused you can set this boolean to true.
@@ -51,7 +52,6 @@ public class MFXFilterComboBox<T> extends MFXComboBox<T> {
      * For more details see {@link MFXFilterComboBoxSkin}
      */
     private boolean forceFieldFocusOnShow = false;
-
     //================================================================================
     // Constructors
     //================================================================================
@@ -84,6 +84,9 @@ public class MFXFilterComboBox<T> extends MFXComboBox<T> {
         return editorFocused.get();
     }
 
+    public MFXFilterComboBoxSkin<T> getComboBoxSkin() {
+        return mfxFilterComboBoxSkin;
+    }
     /**
      * Bound to the editor focus property. This allows to keep the focused style specified
      * by css when the focus is acquired by the editor. The PseudoClass to use in css is ":editor"
@@ -97,7 +100,7 @@ public class MFXFilterComboBox<T> extends MFXComboBox<T> {
     //================================================================================
     @Override
     protected Skin<?> createDefaultSkin() {
-        return new MFXFilterComboBoxSkin<>(this);
+        return mfxFilterComboBoxSkin;
     }
 
     @Override
