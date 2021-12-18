@@ -46,7 +46,7 @@ public class MFXNotificationCenterSkin extends SkinBase<MFXNotificationCenter> {
         counter = new NotificationsCounter();
         counter.setManaged(false);
 
-        MFXLabel headerLabel = new MFXLabel();
+        MFXTextField headerLabel = MFXTextField.asLabel();
         headerLabel.textProperty().bind(notificationCenter.headerTextPropertyProperty());
         headerLabel.setAlignment(Pos.CENTER_LEFT);
         headerLabel.setMaxWidth(Double.MAX_VALUE);

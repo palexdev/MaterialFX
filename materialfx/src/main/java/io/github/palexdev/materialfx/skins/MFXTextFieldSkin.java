@@ -7,6 +7,7 @@ import io.github.palexdev.materialfx.enums.FloatMode;
 import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
 import io.github.palexdev.materialfx.utils.AnimationUtils.PauseBuilder;
 import io.github.palexdev.materialfx.utils.AnimationUtils.TimelineBuilder;
+import io.github.palexdev.materialfx.utils.ColorUtils;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
@@ -16,6 +17,7 @@ import javafx.scene.control.SkinBase;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
@@ -82,6 +84,7 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 		if (textField.getTrailingIcon() != null) container.getChildren().add(textField.getTrailingIcon());
 
 		getChildren().add(container);
+		updateTextColor(textField.getTextFill());
 		addListeners();
 	}
 
@@ -157,6 +160,7 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 			if (oldValue != null) container.getChildren().remove(oldValue);
 			if (newValue != null) container.getChildren().add(newValue);
 		});
+		textField.textFillProperty().addListener((observable, oldValue, newValue) -> updateTextColor(newValue));
 	}
 
 	/**
@@ -282,7 +286,11 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 	 */
 	private boolean shouldFloat() {
 		MFXTextField textField = getSkinnable();
-		return textField.getText().isEmpty() && textField.getPromptText().isEmpty();
+		return !textField.getFloatingText().isBlank() &&
+				textField.getText() != null &&
+				textField.getText().isEmpty() &&
+				textField.getPromptText() != null &&
+				textField.getPromptText().isEmpty();
 	}
 
 	/**
@@ -298,6 +306,20 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Responsible for updating the text's color.
+	 * <p>
+	 * Simply sets inline styles for "-fx-text-inner-color" and
+	 * "-fx-highlight-text-fill" on the actual TextField.
+	 */
+	protected void updateTextColor(Color color) {
+		String colorString = ColorUtils.rgba(color);
+		field.setStyle(
+				"-fx-text-inner-color: " + colorString + ";\n" +
+						"-fx-highlight-text-fill: " + colorString + ";\n"
+		);
 	}
 
 	public boolean isFloating() {

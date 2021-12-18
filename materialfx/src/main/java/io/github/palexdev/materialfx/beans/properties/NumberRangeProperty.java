@@ -11,26 +11,43 @@ import javafx.beans.property.SimpleObjectProperty;
  */
 public class NumberRangeProperty<T extends Number> extends SimpleObjectProperty<NumberRange<T>> {
 
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public NumberRangeProperty() {
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
+	public NumberRangeProperty(NumberRange<T> initialValue) {
+		super(initialValue);
+	}
 
-    /**
-     * Convenience method to get the range's lower bound.
-     * Null if the range is null.
-     */
-    public T getMin() {
-        return get() == null ? null : get().getMin();
-    }
+	public NumberRangeProperty(Object bean, String name) {
+		super(bean, name);
+	}
 
-    /**
-     * Convenience method to get the range's upper bound.
-     * Null if the range is null.
-     */
-    public T getMax() {
-        return get() == null ? null : get().getMin();
-    }
+	public NumberRangeProperty(Object bean, String name, NumberRange<T> initialValue) {
+		super(bean, name, initialValue);
+	}
+
+	//================================================================================
+	// Methods
+	//================================================================================
+
+	/**
+	 * Convenience method to get the range's lower bound.
+	 * Null if the range is null.
+	 */
+	public T getMin() {
+		return get() == null ? null : get().getMin();
+	}
+
+	/**
+	 * Convenience method to get the range's upper bound.
+	 * Null if the range is null.
+	 */
+	public T getMax() {
+		return get() == null ? null : get().getMin();
+	}
 
     /**
      * Convenience method to set a range with both min and max equal.

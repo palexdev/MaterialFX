@@ -20,6 +20,7 @@ package io.github.palexdev.materialfx.effects;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -62,6 +63,22 @@ public class MFXScrimEffect {
         scrim.setBlendMode(BlendMode.SRC_ATOP);
 
         pane.getChildren().add(0, scrim);
+    }
+
+    /**
+     * Same as {@link #scrim(Pane, double)} but the effect is placed at
+     * the end of the children list, covering all the pane's nodes
+     *
+     * @param pane    The pane to which add the effect
+     * @param opacity The effect opacity/strength
+     */
+    public void modalScrim(Pane pane, double opacity) {
+        scrim.widthProperty().bind(pane.widthProperty());
+        scrim.heightProperty().bind(pane.heightProperty());
+        scrim.setFill(Color.rgb(0, 0, 0, opacity));
+        scrim.setBlendMode(BlendMode.SRC_ATOP);
+
+        pane.getChildren().add(scrim);
     }
 
     /**
@@ -110,13 +127,15 @@ public class MFXScrimEffect {
      * @param opacity The desired opacity
      */
     public void scrimWindow(Window window, double opacity) {
-        Pane root = (Pane) window.getScene().getRoot();
-        scrim.widthProperty().bind(root.widthProperty());
-        scrim.heightProperty().bind(root.heightProperty());
-        scrim.setFill(Color.rgb(0, 0, 0, opacity));
-        scrim.setBlendMode(BlendMode.SRC_ATOP);
-
-        root.getChildren().add(scrim);
+        Parent root = window.getScene().getRoot();
+        if (root instanceof Pane) {
+            Pane pane = (Pane) root;
+            scrim.widthProperty().bind(pane.widthProperty());
+            scrim.heightProperty().bind(pane.heightProperty());
+            scrim.setFill(Color.rgb(0, 0, 0, opacity));
+            scrim.setBlendMode(BlendMode.SRC_ATOP);
+            pane.getChildren().add(scrim);
+        }
     }
 
     /**
@@ -135,9 +154,11 @@ public class MFXScrimEffect {
      * @param window The window to which remove the effect.
      */
     public void removeEffect(Window window) {
-        Pane root = (Pane) window.getScene().getRoot();
-        removeEffect(root);
-        unbindResizing();
+        Parent root = window.getScene().getRoot();
+        if (root instanceof Pane) {
+            removeEffect((Pane) root);
+            unbindResizing();
+        }
     }
 
     /**

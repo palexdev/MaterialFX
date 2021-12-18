@@ -33,10 +33,10 @@ public class EnumStringConverter<E extends Enum<E>> extends StringConverter<E> {
     }
 
     /**
-     * Uses {@link Enum#valueOf(Class, String)} to convert the given String to an enumeration.
+     * Uses {@link EnumUtils#valueOfIgnoreCase(Class, String)} to convert the given String to an enumeration.
      */
     @Override
     public E fromString(String string) {
-        return E.valueOf(type, string);
+        return EnumUtils.valueOfIgnoreCase(type, string);
     }
 }

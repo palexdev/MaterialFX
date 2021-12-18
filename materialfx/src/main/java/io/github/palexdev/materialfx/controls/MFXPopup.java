@@ -16,6 +16,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.css.PseudoClass;
+import javafx.css.Styleable;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -343,6 +344,14 @@ public class MFXPopup extends PopupControl implements MFXStyleablePopup {
         bridge.dispose();
         bridge.setParent(parent);
         bridge.initializeStylesheets();
+    }
+
+    @Override
+    public Styleable getStyleableParent() {
+        if (bridge != null && bridge.getParent() != null) {
+            return bridge.getParent();
+        }
+        return super.getStyleableParent();
     }
 
     @Override

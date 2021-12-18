@@ -16,7 +16,7 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import "MFXComboBoxStyle1.css";
+@import "MFXComboBox.css";
 @import "MFXColors.css";
 
 .mfx-filter-combo-box {
@@ -28,26 +28,27 @@
     -mfx-editable: false;
 }
 
-.popup .virtual-flow {
+.mfx-filter-combo-box .combo-popup .virtual-flow {
     -fx-background-color: transparent;
     -fx-background-radius: 0;
+    -fx-max-height: 200;
 }
 
-.popup .search-container {
+.mfx-filter-combo-box .combo-popup .search-container {
     -fx-background-color: white;
     -fx-background-radius: 5;
     -fx-padding: 10 5 5 5;
 }
 
-.popup .search-field {
+.mfx-filter-combo-box .combo-popup .search-field {
     -mfx-gap: 0;
     -mfx-float-mode: disabled;
     -fx-padding: 5;
     -fx-display-caret: false;
 }
 
-.popup .search-field,
-.popup .search-field:focused {
+.mfx-filter-combo-box .combo-popup .search-field,
+.mfx-filter-combo-box .combo-popup .search-field:focused {
     -fx-border-width: 1;
     -fx-background-insets: 0;
     -fx-border-color: lightgray;

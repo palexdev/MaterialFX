@@ -20,7 +20,7 @@
 @import "MFXColors.css";
 
 .mfx-text-field {
-	-mfx-main: #6200EE;
+	-mfx-main: -mfx-purple;
 
 	-fx-background-color: white;
 	-fx-background-radius: 5;
@@ -37,10 +37,12 @@
 }
 
 .mfx-text-field .text-field {
-	-fx-highlight-fill: #ECE0FD;            /* Selected text highlight */
-	-fx-highlight-text-fill: -mfx-text-he;  /* Selected text color */
-	-fx-text-inner-color: -mfx-text-he;     /* JavaFX's TextFields use this property instead of -fx-text-fill */
-	-fx-prompt-text-fill: -mfx-text-me;     /* Prompt text color */
+	-fx-highlight-fill: #ECE0FD; /* Selected text highlight */
+	-fx-prompt-text-fill: -mfx-text-me; /* Prompt text color */
+}
+
+.mfx-text-field .text-field .text {
+	-fx-font-smoothing-type: lcd;
 }
 
 .mfx-text-field:focused {

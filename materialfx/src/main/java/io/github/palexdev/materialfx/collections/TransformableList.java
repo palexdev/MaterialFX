@@ -193,9 +193,9 @@ public class TransformableList<T> extends TransformationList<T, T> {
      * This method is NECESSARY if using a reversed comparator,
      * a special flag is set to true and {@link #sourceToView(int)} behaves accordingly.
      */
-    public void setComparator(Comparator<T> sorter, boolean reversed) {
+    public void setComparator(Comparator<T> comparator, boolean reversed) {
         this.reversed = reversed;
-        this.comparator.set(sorter);
+        this.comparator.set(comparator);
     }
 
     /**

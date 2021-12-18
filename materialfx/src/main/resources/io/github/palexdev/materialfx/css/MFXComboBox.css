@@ -20,19 +20,20 @@
 @import "MFXTextField.css";
 
 .mfx-combo-box {
-    -mfx-gap: 0;
-    -fx-padding: 3 5 3 5;
+	-mfx-gap: 0;
+	-fx-padding: 3 5 3 5;
 }
 
 .mfx-combo-box .caret .mfx-ripple-generator {
-    -mfx-ripple-color: rgba(98, 0, 238, 0.1);
-    -mfx-ripple-radius: 14;
+	-mfx-ripple-color: rgba(98, 0, 238, 0.1);
+	-mfx-ripple-radius: 14;
 }
 
 .mfx-combo-box:focused .caret .mfx-font-icon {
-    -mfx-color: -mfx-main;
+	-mfx-color: -mfx-main;
 }
 
-.popup .virtual-flow {
-    -fx-background-radius: 5;
+.mfx-combo-box .combo-popup .virtual-flow {
+	-fx-background-radius: 5;
+	-fx-max-height: 200;
 }

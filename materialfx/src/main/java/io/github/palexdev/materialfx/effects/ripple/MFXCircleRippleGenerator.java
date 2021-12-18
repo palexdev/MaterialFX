@@ -19,6 +19,9 @@
 package io.github.palexdev.materialfx.effects.ripple;
 
 import io.github.palexdev.materialfx.beans.PositionBean;
+import io.github.palexdev.materialfx.beans.properties.styleable.StyleableBooleanProperty;
+import io.github.palexdev.materialfx.beans.properties.styleable.StyleableDoubleProperty;
+import io.github.palexdev.materialfx.beans.properties.styleable.StyleableObjectProperty;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.effects.MFXDepthManager;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator.CircleRipple;
@@ -28,15 +31,21 @@ import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.factories.RippleClipTypeFactory;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
 import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
+import io.github.palexdev.materialfx.utils.NodeUtils;
+import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import javafx.animation.*;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.css.*;
+import javafx.css.CssMetaData;
+import javafx.css.Styleable;
+import javafx.css.StyleablePropertyFactory;
 import javafx.geometry.Bounds;
+import javafx.scene.Node;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -69,8 +78,6 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
     //================================================================================
     // Properties
     //================================================================================
-    private static final StyleablePropertyFactory<MFXCircleRippleGenerator> FACTORY = new StyleablePropertyFactory<>(AbstractMFXRippleGenerator.getClassCssMetaData());
-
     private final BooleanProperty computeRadiusMultiplier = new SimpleBooleanProperty(false);
     private final DoubleProperty radiusMultiplier = new SimpleDoubleProperty(2.0);
 
@@ -101,7 +108,7 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
      * Generates a ripple.
      * <p></p>
      * <p> - If {@link #checkBoundsProperty()} is true calls {@link #isWithinBounds(MouseEvent)}. Exits if returns false.
-     * <p> - Sets the generator clip/bounds by calling {@link #getClipSupplier()}.
+     * <p> - Sets the generator clip/bounds by calling {@link #buildClip()}.
      * <p> - Computes the ripple coordinates by calling {@link #getRipplePositionFunction()} applied on the passed mouse event.
      * <p> - Creates the ripple by calling {@link #getRippleSupplier()}. Sets the center and fill properties of the ripple.
      * <p> - Creates the animations by calling {@link CircleRipple#getAnimation()}
@@ -122,7 +129,7 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
         if (getClip() != null) {
             setClip(null);
         }
-        setClip(getClipSupplier().get());
+        setClip(buildClip());
 
         PositionBean position = getRipplePositionFunction().apply(event);
 
@@ -249,6 +256,24 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
 
         double finalRadius = getRippleRadius() + Math.abs(xCoordinate - nearestBound);
         return finalRadius / getRippleRadius();
+    }
+
+    /**
+     * Responsible for building the ripple generator's clip,
+     * which avoids ripple ending outside the region.
+     *
+     * @see NodeUtils#parseCornerRadius(Region)
+     * @see NodeUtils#setBackground(Region, Paint, CornerRadii)
+     */
+    protected Node buildClip() {
+        if (isAutoClip()) {
+            CornerRadii radius = NodeUtils.parseCornerRadius(region);
+            Region clip = new Region();
+            clip.resizeRelocate(0, 0, region.getWidth(), region.getHeight());
+            NodeUtils.setBackground(clip, Color.WHITE, radius);
+            return clip;
+        }
+        return getClipSupplier().get();
     }
 
     public boolean isComputeRadiusMultiplier() {
@@ -387,35 +412,42 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
     //================================================================================
     // Styleable Properties
     //================================================================================
-    private final StyleableDoubleProperty animationSpeed = new SimpleStyleableDoubleProperty(
+    private final StyleableDoubleProperty animationSpeed = new StyleableDoubleProperty(
             StyleableProperties.ANIMATION_SPEED,
             this,
             "animationSpeed",
             1.0
     );
 
-    private final StyleableObjectProperty<Paint> rippleColor = new SimpleStyleableObjectProperty<>(
+    private final StyleableBooleanProperty autoClip = new StyleableBooleanProperty(
+            StyleableProperties.AUTO_CLIP,
+            this,
+            "autoClip",
+            false
+    );
+
+    private final StyleableObjectProperty<Paint> rippleColor = new StyleableObjectProperty<>(
             StyleableProperties.RIPPLE_COLOR,
             this,
             "rippleColor",
             Color.LIGHTGRAY
     );
 
-    private final StyleableDoubleProperty rippleOpacity = new SimpleStyleableDoubleProperty(
+    private final StyleableDoubleProperty rippleOpacity = new StyleableDoubleProperty(
             StyleableProperties.RIPPLE_OPACITY,
             this,
             "rippleOpacity",
             1.0
     );
 
-    private final StyleableDoubleProperty backgroundOpacity = new SimpleStyleableDoubleProperty(
+    private final StyleableDoubleProperty backgroundOpacity = new StyleableDoubleProperty(
             StyleableProperties.BACKGROUND_OPACITY,
             this,
             "backgroundOpacity",
             0.3
     );
 
-    private final StyleableDoubleProperty rippleRadius = new SimpleStyleableDoubleProperty(
+    private final StyleableDoubleProperty rippleRadius = new StyleableDoubleProperty(
             StyleableProperties.RIPPLE_RADIUS,
             this,
             "radius",
@@ -436,6 +468,18 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
 
     public void setAnimationSpeed(double animationSpeed) {
         this.animationSpeed.set(animationSpeed);
+    }
+
+    public boolean isAutoClip() {
+        return autoClip.get();
+    }
+
+    public StyleableBooleanProperty autoClipProperty() {
+        return autoClip;
+    }
+
+    public void setAutoClip(boolean autoClip) {
+        this.autoClip.set(autoClip);
     }
 
     public Paint getRippleColor() {
@@ -502,6 +546,7 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
     // CssMetaData
     //================================================================================
     private static class StyleableProperties {
+        private static final StyleablePropertyFactory<MFXCircleRippleGenerator> FACTORY = new StyleablePropertyFactory<>(AbstractMFXRippleGenerator.getClassCssMetaData());
         private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
         private static final CssMetaData<MFXCircleRippleGenerator, Paint> RIPPLE_COLOR =
@@ -509,6 +554,13 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
                         "-mfx-ripple-color",
                         MFXCircleRippleGenerator::rippleColorProperty,
                         Color.LIGHTGRAY
+                );
+
+        private static final CssMetaData<MFXCircleRippleGenerator, Boolean> AUTO_CLIP =
+                FACTORY.createBooleanCssMetaData(
+                        "-mfx-auto-clip",
+                        MFXCircleRippleGenerator::autoClipProperty,
+                        false
                 );
 
         private static final CssMetaData<MFXCircleRippleGenerator, Number> RIPPLE_RADIUS =
@@ -541,7 +593,11 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
 
 
         static {
-            cssMetaDataList = List.of(RIPPLE_COLOR, RIPPLE_RADIUS, RIPPLE_OPACITY, BACKGROUND_OPACITY, ANIMATION_SPEED);
+            cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
+                    AbstractMFXRippleGenerator.getClassCssMetaData(),
+                    ANIMATION_SPEED, AUTO_CLIP, BACKGROUND_OPACITY,
+                    RIPPLE_COLOR, RIPPLE_OPACITY, RIPPLE_RADIUS
+            );
         }
     }
 

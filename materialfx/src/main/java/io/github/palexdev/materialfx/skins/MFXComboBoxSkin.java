@@ -43,7 +43,7 @@ public class MFXComboBoxSkin<T> extends MFXTextFieldSkin {
 		super(comboBox, floating);
 
 		popup = new MFXPopup();
-		popup.getStyleClass().add("popup");
+		popup.getStyleClass().add("combo-popup");
 		popup.setPopupStyleableParent(comboBox);
 		popup.setAutoHide(true);
 		popup.setConsumeAutoHidingEvents(true);
@@ -54,6 +54,11 @@ public class MFXComboBoxSkin<T> extends MFXTextFieldSkin {
 
 		initialize();
 		setBehavior();
+
+		T selectedItem = comboBox.getSelectionModel().getSelectedItem();
+		if (selectedItem != null) {
+			comboBox.setValue(selectedItem);
+		}
 	}
 
 	//================================================================================
@@ -189,7 +194,6 @@ public class MFXComboBoxSkin<T> extends MFXTextFieldSkin {
 		);
 		virtualFlow.cellFactoryProperty().bind(comboBox.cellFactoryProperty());
 		virtualFlow.prefWidthProperty().bind(comboBox.widthProperty());
-		virtualFlow.prefHeightProperty().bind(comboBox.maxPopupHeightProperty());
 		virtualFlow.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 			if (popup.isShowing()) popup.hide();
 		});

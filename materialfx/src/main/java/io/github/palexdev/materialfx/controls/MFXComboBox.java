@@ -51,7 +51,7 @@ import java.util.function.Function;
  * <p>
  * The major features of this new combo are:
  * <p> - Floating text (inherited from {@link MFXTextField})
- * <p> - Allows to fully control the popup (offset, height, alignment)
+ * <p> - Allows to fully control the popup (offset, alignment)
  * <p> - Automatically handles selection when the item's list is modified
  * <p> - Allows to set the combo as editable or not, and in case of changed text
  * to commit the change (pressing enter by default) and specify how to treat the
@@ -63,11 +63,10 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-combo-box";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXComboBoxStyle1.css");
+	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXComboBox.css");
 
 	private final ReadOnlyBooleanWrapper showing = new ReadOnlyBooleanWrapper(false);
 	private final ObjectProperty<Alignment> popupAlignment = new SimpleObjectProperty<>(Alignment.of(HPos.CENTER, VPos.BOTTOM));
-	private final DoubleProperty maxPopupHeight = new SimpleDoubleProperty(200);
 	private final DoubleProperty popupOffsetX = new SimpleDoubleProperty(0);
 	private final DoubleProperty popupOffsetY = new SimpleDoubleProperty(3);
 	private final BiFunctionProperty<Node, Boolean, Animation> animationProvider = new BiFunctionProperty<>();
@@ -94,7 +93,6 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 
 	public MFXComboBox(ObservableList<T> items) {
 		setItems(items);
-		setFloatingText("ComboBox");
 		initialize();
 	}
 
@@ -108,6 +106,8 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 	 */
 	private void initialize() {
 		getStyleClass().add(STYLE_CLASS);
+		setAllowEdit(false);
+		setSelectable(false);
 
 		// Icon
 		MFXIconWrapper icon = new MFXIconWrapper("mfx-caret-down", 12, 24);
@@ -122,7 +122,7 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 
 		// Default animation
 		setAnimationProvider((node, showing) -> {
-			RotateTransition transition = new RotateTransition(Duration.millis(150), node);
+			RotateTransition transition = new RotateTransition(Duration.millis(200), node);
 			transition.setInterpolator(Interpolator.EASE_OUT);
 			transition.setToAngle(showing ? 180 : 0);
 			return transition;
@@ -231,21 +231,6 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 
 	public void setPopupAlignment(Alignment popupAlignment) {
 		this.popupAlignment.set(popupAlignment);
-	}
-
-	public double getMaxPopupHeight() {
-		return maxPopupHeight.get();
-	}
-
-	/**
-	 * Specifies the max popup's height.
-	 */
-	public DoubleProperty maxPopupHeightProperty() {
-		return maxPopupHeight;
-	}
-
-	public void setMaxPopupHeight(double maxPopupHeight) {
-		this.maxPopupHeight.set(maxPopupHeight);
 	}
 
 	public double getPopupOffsetX() {

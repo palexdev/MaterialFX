@@ -36,8 +36,8 @@ public class MFXPopupSkin implements Skin<MFXPopup> {
     public MFXPopupSkin(MFXPopup popup) {
         this.popup = popup;
 
-        container = new StackPane(popup.getContent());
         scale = new Scale(0.1, 0.1, 0, 0);
+        container = new StackPane(popup.getContent());
         container.getTransforms().setAll(scale);
 
         initHandler = event -> {

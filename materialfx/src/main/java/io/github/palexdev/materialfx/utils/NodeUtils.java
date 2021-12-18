@@ -114,7 +114,47 @@ public class NodeUtils {
      * Sets the background of the given region to the given color.
      */
     public static void setBackground(Region region, Paint fill) {
-        region.setBackground(new Background(new BackgroundFill(fill, CornerRadii.EMPTY, Insets.EMPTY)));
+        setBackground(region, fill, CornerRadii.EMPTY, Insets.EMPTY);
+    }
+
+    /**
+     * Sets the background of the given region to the given color, with the given radius.
+     */
+    public static void setBackground(Region region, Paint fill, CornerRadii radius) {
+        setBackground(region, fill, radius, Insets.EMPTY);
+    }
+
+    /**
+     * Sets the background of the given region to the given color, with the given radius and insets.
+     */
+    public static void setBackground(Region region, Paint fill, CornerRadii radius, Insets insets) {
+        region.setBackground(new Background(new BackgroundFill(fill, radius, insets)));
+    }
+
+    /**
+     * Tries to parse tje given Region's corner radius.
+     * <p>
+     * To be more precise it tries to parse both the background and the
+     * border radius. The background radius is prioritized over the border one
+     * but in case the background is null or empty then the border one is used.
+     * <p>
+     * In case of both null or empty returns {@link  CornerRadii#EMPTY}.
+     */
+    public static CornerRadii parseCornerRadius(Region region) {
+        CornerRadii backRadius = CornerRadii.EMPTY;
+        CornerRadii bordRadius = CornerRadii.EMPTY;
+
+        Background background = region.getBackground();
+        if (background != null && !background.isEmpty()) {
+            backRadius = background.getFills().get(0).getRadii();
+        }
+
+        Border border = region.getBorder();
+        if (border != null && !border.isEmpty()) {
+            bordRadius = border.getStrokes().get(0).getRadii();
+        }
+
+        return !backRadius.equals(CornerRadii.EMPTY) ? backRadius : bordRadius;
     }
 
     /**
@@ -642,6 +682,7 @@ public class NodeUtils {
         }
     }
 
+    @Deprecated(forRemoval = true, since = "11.13.0")
     public static boolean hasFullScreenStage(final Screen screen) {
         final List<Window> allWindows = AccessController.doPrivileged(
                 (PrivilegedAction<List<Window>>) Window::getWindows,

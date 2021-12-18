@@ -28,10 +28,6 @@
     -fx-background-color: white;
 }
 
-.mfx-scroll-pane * {
-    -fx-background-color: white;
-}
-
 .mfx-scroll-pane:focused {
     -fx-background-color: white;
 }

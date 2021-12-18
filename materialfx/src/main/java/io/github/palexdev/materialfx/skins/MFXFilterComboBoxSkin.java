@@ -91,7 +91,6 @@ public class MFXFilterComboBoxSkin<T> extends MFXComboBoxSkin<T> {
 		);
 		virtualFlow.cellFactoryProperty().bind(comboBox.cellFactoryProperty());
 		virtualFlow.prefWidthProperty().bind(comboBox.widthProperty());
-		virtualFlow.prefHeightProperty().bind(comboBox.maxPopupHeightProperty());
 		virtualFlow.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 			if (popup.isShowing()) {
 				popup.hide();

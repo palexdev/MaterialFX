@@ -1,9 +1,9 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.beans.FilterBean;
 import io.github.palexdev.materialfx.enums.ChainMode;
 import io.github.palexdev.materialfx.filter.base.AbstractFilter;
-import io.github.palexdev.materialfx.beans.FilterBean;
 import io.github.palexdev.materialfx.skins.MFXFilterPaneSkin;
 import io.github.palexdev.materialfx.utils.PredicateUtils;
 import javafx.beans.property.SimpleStringProperty;
@@ -141,7 +141,6 @@ public class MFXFilterPane<T> extends Control {
     //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
-        getStylesheets().add(STYLESHEET);
     }
 
     /**
@@ -236,5 +235,10 @@ public class MFXFilterPane<T> extends Control {
     @Override
     protected Skin<?> createDefaultSkin() {
         return new MFXFilterPaneSkin<>(this);
+    }
+
+    @Override
+    public String getUserAgentStylesheet() {
+        return STYLESHEET;
     }
 }

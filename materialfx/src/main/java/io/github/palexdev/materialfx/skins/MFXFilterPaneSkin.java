@@ -5,6 +5,7 @@ import io.github.palexdev.materialfx.beans.FilterBean;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.effects.ripple.RippleClipType;
 import io.github.palexdev.materialfx.enums.ChainMode;
+import io.github.palexdev.materialfx.enums.FloatMode;
 import io.github.palexdev.materialfx.factories.InsetsFactory;
 import io.github.palexdev.materialfx.factories.RippleClipTypeFactory;
 import io.github.palexdev.materialfx.filter.BooleanFilter;
@@ -46,11 +47,13 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
     //================================================================================
     private final VBox container;
     private final Region filterBuilder;
+    private final MFXScrollPane filtersContainer;
     private final FlowPane activeFiltersPane;
 
     private final MFXExceptionDialog exceptionDialog = new MFXExceptionDialog();
     private final MFXStageDialog errorDialog = new MFXStageDialog(exceptionDialog);
     private final StringProperty query = new SimpleStringProperty();
+    private boolean avoidQueryReset = false;
 
     //================================================================================
     // Constructors
@@ -71,7 +74,16 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
         filterBuilder = buildFilterBuilder();
         activeFiltersPane = buildActiveFilters();
 
-        container = new VBox(10, header, filterBuilder, filtersLabel, activeFiltersPane);
+        filtersContainer = new MFXScrollPane(activeFiltersPane) {
+            @Override
+            public String getUserAgentStylesheet() {
+                return filterPane.getUserAgentStylesheet();
+            }
+        };
+        filtersContainer.setFitToWidth(true);
+        filtersContainer.maxWidthProperty().bind(filterPane.widthProperty());
+
+        container = new VBox(10, header, filterBuilder, filtersLabel, filtersContainer);
         getChildren().setAll(container);
         addListeners();
     }
@@ -194,56 +206,96 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
 
         ListProperty<BiPredicateBean<?, ?>> predicates = new SimpleListProperty<>(FXCollections.observableArrayList());
 
-        MFXTextField searchField = new MFXTextField();
+        MFXTextField searchField = new MFXTextField() {
+            @Override
+            public String getUserAgentStylesheet() {
+                return filterPane.getUserAgentStylesheet();
+            }
+        };
+        searchField.setFloatMode(FloatMode.DISABLED);
         searchField.setPromptText("Type in your filter value...");
         searchField.textProperty().bindBidirectional(query);
 
-        MFXComboBox<Object> enumsCombo = new MFXComboBox<>();
-        enumsCombo.selectedValueProperty().addListener((observable, oldValue, newValue) -> setQuery(newValue.toString()));
+        MFXComboBox<Object> enumsCombo = new MFXComboBox<>() {
+            @Override
+            public String getUserAgentStylesheet() {
+                return filterPane.getUserAgentStylesheet();
+            }
+        };
+        enumsCombo.setFloatMode(FloatMode.DISABLED);
+        enumsCombo.valueProperty().addListener((observable, oldValue, newValue) -> setQuery(newValue.toString()));
         enumsCombo.setManaged(false);
         enumsCombo.setVisible(false);
 
-        MFXComboBox<Boolean> booleansCombo = new MFXComboBox<>(FXCollections.observableArrayList(true, false));
-        booleansCombo.selectedValueProperty().addListener((observable, oldValue, newValue) -> setQuery(newValue.toString()));
+        MFXComboBox<Boolean> booleansCombo = new MFXComboBox<>(FXCollections.observableArrayList(true, false)) {
+            @Override
+            public String getUserAgentStylesheet() {
+                return filterPane.getUserAgentStylesheet();
+            }
+        };
+        booleansCombo.setFloatMode(FloatMode.DISABLED);
+        booleansCombo.valueProperty().addListener((observable, oldValue, newValue) -> setQuery(newValue.toString()));
         booleansCombo.setManaged(false);
         booleansCombo.setVisible(false);
 
-        MFXComboBox<AbstractFilter<T, ?>> filterCombo = new MFXComboBox<>(filterPane.getFilters());
-        filterCombo.getSelectionModel().selectFirst();
+        MFXComboBox<BiPredicateBean<?, ?>> predicatesCombo = new MFXComboBox<>(predicates) {
+            @Override
+            public String getUserAgentStylesheet() {
+                return filterPane.getUserAgentStylesheet();
+            }
+        };
+        predicatesCombo.setFloatMode(FloatMode.DISABLED);
+        predicatesCombo.getStyleClass().add("predicates-combo");
+
+        MFXComboBox<AbstractFilter<T, ?>> filterCombo = new MFXComboBox<>(filterPane.getFilters()) {
+            @Override
+            public String getUserAgentStylesheet() {
+                return filterPane.getUserAgentStylesheet();
+            }
+        };
+        filterCombo.setFloatMode(FloatMode.DISABLED);
         filterCombo.getStyleClass().add("filter-combo");
-        filterCombo.selectedValueProperty().addListener((observable, oldValue, newValue) -> {
+        filterCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
             setQuery("");
+            predicatesCombo.getSelectionModel().selectFirst();
             predicates.setAll(newValue.getPredicates());
 
             if (newValue instanceof EnumFilter) {
-                EnumFilter enumFilter = (EnumFilter) filterCombo.getSelectedValue();
+                avoidQueryReset = true;
+                EnumFilter enumFilter = (EnumFilter) filterCombo.getValue();
                 enumsCombo.setItems(FXCollections.observableArrayList(enumFilter.getEnumType().getEnumConstants()));
                 enumsCombo.setVisible(true);
                 booleansCombo.setVisible(false);
                 searchField.setVisible(false);
             } else if (newValue instanceof BooleanFilter) {
+                avoidQueryReset = true;
                 booleansCombo.setVisible(true);
                 enumsCombo.setVisible(false);
                 searchField.setVisible(false);
             } else {
+                avoidQueryReset = false;
                 enumsCombo.setVisible(false);
                 booleansCombo.setVisible(false);
                 searchField.setVisible(true);
             }
         });
+        filterCombo.getSelectionModel().selectFirst();
 
         // TODO FIX COMBO BOX ICON EMPTY LIST
         // TODO FIX SELECTION
-        MFXComboBox<BiPredicateBean<?, ?>> predicatesCombo = new MFXComboBox<>(predicates);
-        predicatesCombo.getStyleClass().add("predicates-combo");
 
-        MFXButton addButton = new MFXButton("Add filter");
+        MFXButton addButton = new MFXButton("Add filter") {
+            @Override
+            public String getUserAgentStylesheet() {
+                return filterPane.getUserAgentStylesheet();
+            }
+        };
         addButton.setOnAction(event -> {
             if (filterCombo.getSelectionModel().getSelectedItem() != null
                     && predicatesCombo.getSelectionModel().getSelectedItem() != null
                     && !searchField.getText().isEmpty()
             ) {
-                AbstractFilter<T, ?> selected = filterCombo.getSelectedValue();
+                AbstractFilter<T, ?> selected = filterCombo.getValue();
                 selected.setSelectedPredicateIndex(predicatesCombo.getSelectionModel().getSelectedIndex());
                 FilterBean<T, ?> predicate = selected.toFilterBean(getQuery());
 
@@ -315,7 +367,7 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
      */
     protected void reset(MouseEvent event) {
         MFXFilterPane<T> filterPane = getSkinnable();
-        setQuery("");
+        if (!avoidQueryReset) setQuery("");
         filterPane.getActiveFilters().clear();
         filterPane.getOnReset().handle(event);
     }

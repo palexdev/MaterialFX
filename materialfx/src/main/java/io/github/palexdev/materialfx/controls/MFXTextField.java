@@ -16,6 +16,7 @@ import javafx.css.StyleablePropertyFactory;
 import javafx.scene.Node;
 import javafx.scene.control.Skin;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 
 import java.util.List;
 
@@ -30,7 +31,9 @@ import java.util.List;
  * {@code MFXTextField} allows you to make it behave like a Label by setting the {@link #editableProperty()} and
  * the {@link #selectableProperty()} to false.
  * <p>
- * Also allows you to specify up to two icons (leading and trailing) and the gap between the them and the text.
+ * Allows you to specify up to two icons (leading and trailing) and the gap between them and the text.
+ * <p>
+ * Unlike JavaFX's TextField, it also allows to easily change the text color (even with CSS).
  * <p>
  * But... the most important and requested feature is the floating text. You can decide between
  * three modes: DISABLED (no floating text), INLINE (the floating text is inside the field), BORDER
@@ -73,6 +76,8 @@ public class MFXTextField extends TextField {
     //================================================================================
     private final String STYLE_CLASS = "mfx-text-field";
     private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTextField.css");
+
+    public static final Color DEFAULT_TEXT_COLOR = Color.rgb(0, 0, 0, 0.87);
 
     private final BooleanProperty selectable = new SimpleBooleanProperty(true);
     private final ObjectProperty<Node> leadingIcon = new SimpleObjectProperty<>();
@@ -289,6 +294,13 @@ public class MFXTextField extends TextField {
             10.0
     );
 
+    private final StyleableObjectProperty<Color> textFill = new StyleableObjectProperty<>(
+            StyleableProperties.TEXT_FILL,
+            this,
+            "textFill",
+            DEFAULT_TEXT_COLOR
+    );
+
     private final StyleableIntegerProperty textLimit = new StyleableIntegerProperty(
             StyleableProperties.TEXT_LIMIT,
             this,
@@ -406,6 +418,21 @@ public class MFXTextField extends TextField {
         this.graphicTextGap.set(graphicTextGap);
     }
 
+    public Color getTextFill() {
+        return textFill.get();
+    }
+
+    /**
+     * Specifies the text color.
+     */
+    public StyleableObjectProperty<Color> textFillProperty() {
+        return textFill;
+    }
+
+    public void setTextFill(Color textFill) {
+        this.textFill.set(textFill);
+    }
+
     public int getTextLimit() {
         return textLimit.get();
     }
@@ -478,6 +505,13 @@ public class MFXTextField extends TextField {
                         10.0
                 );
 
+        private static final CssMetaData<MFXTextField, Color> TEXT_FILL =
+                FACTORY.createColorCssMetaData(
+                        "-fx-text-fill",
+                        MFXTextField::textFillProperty,
+                        DEFAULT_TEXT_COLOR
+                );
+
         private static final CssMetaData<MFXTextField, Number> TEXT_LIMIT =
                 FACTORY.createSizeCssMetaData(
                         "-mfx-text-limit",
@@ -488,7 +522,9 @@ public class MFXTextField extends TextField {
         static {
             cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
                     TextField.getClassCssMetaData(),
-                    ANIMATED, BORDER_SPACING, CARET_VISIBLE, EDITABLE, FLOAT_MODE, GAP, GRAPHIC_TEXT_GAP, TEXT_LIMIT
+                    ANIMATED, BORDER_SPACING, CARET_VISIBLE,
+                    EDITABLE, FLOAT_MODE, GAP, GRAPHIC_TEXT_GAP,
+                    TEXT_FILL, TEXT_LIMIT
             );
         }
     }
