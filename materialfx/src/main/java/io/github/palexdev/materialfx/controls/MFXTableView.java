@@ -1,50 +1,34 @@
-/*
- * Copyright (C) 2021 Parisi Alessandro
- * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
- *
- * MaterialFX is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * MaterialFX is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.beans.properties.functional.SupplierProperty;
-import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
-import io.github.palexdev.materialfx.selection.TableSelectionModel;
-import io.github.palexdev.materialfx.selection.base.ITableSelectionModel;
+import io.github.palexdev.materialfx.beans.properties.functional.FunctionProperty;
+import io.github.palexdev.materialfx.collections.TransformableList;
+import io.github.palexdev.materialfx.collections.TransformableListWrapper;
+import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import io.github.palexdev.materialfx.filter.base.AbstractFilter;
+import io.github.palexdev.materialfx.selection.MultipleSelectionModel;
+import io.github.palexdev.materialfx.selection.base.IMultipleSelectionModel;
 import io.github.palexdev.materialfx.skins.MFXTableViewSkin;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.*;
+import io.github.palexdev.materialfx.utils.ListChangeProcessor;
+import io.github.palexdev.virtualizedfx.beans.NumberRange;
+import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
+import io.github.palexdev.virtualizedfx.utils.ListChangeHelper;
+import javafx.beans.InvalidationListener;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import javafx.event.Event;
-import javafx.event.EventType;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
+import javafx.geometry.Orientation;
 import javafx.scene.control.Control;
-import javafx.scene.control.Label;
 import javafx.scene.control.Skin;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Supplier;
-import java.util.stream.IntStream;
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * This is the implementation of a table view following Google's material design guidelines in JavaFX.
@@ -55,340 +39,312 @@ import java.util.stream.IntStream;
  * @see MFXTableViewSkin
  */
 public class MFXTableView<T> extends Control {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final String STYLE_CLASS = "mfx-table-view";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTableView.css");
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final String STYLE_CLASS = "mfx-table-view";
+	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTableView.css");
+	protected final SimpleVirtualFlow<T, MFXTableRow<T>> rowsFlow;
 
-    private final ObjectProperty<ObservableList<T>> items = new SimpleObjectProperty<>(FXCollections.observableArrayList());
-    private final ObjectProperty<ITableSelectionModel<T>> selectionModel = new SimpleObjectProperty<>();
-    private final ObservableList<MFXTableColumn<T>> tableColumns = FXCollections.observableArrayList();
-    private final MFXTableSortModel<T> sortModel;
+	private final ObjectProperty<ObservableList<T>> items = new SimpleObjectProperty<>();
+	private final ListChangeListener<? super T> itemsChanged = this::itemsChanged;
 
-    private final SupplierProperty<Region> headerSupplier = new SupplierProperty<>();
-    private final DoubleProperty headerHeight = new SimpleDoubleProperty(48);
-    private final StringProperty headerText = new SimpleStringProperty("");
-    private final ObjectProperty<Node> headerIcon = new SimpleObjectProperty<>();
+	private final IMultipleSelectionModel<T> selectionModel = new MultipleSelectionModel<>(items);
+	private final ObservableList<MFXTableColumn<T>> tableColumns = FXCollections.observableArrayList();
+	private final FunctionProperty<T, MFXTableRow<T>> tableRowFactory = new FunctionProperty<>(item -> new MFXTableRow<>(this, item));
 
-    private final DoubleProperty fixedRowsHeight = new SimpleDoubleProperty(30);
-    private final IntegerProperty maxRowsPerPage = new SimpleIntegerProperty(20);
+	private final TransformableListWrapper<T> transformableList = new TransformableListWrapper<>(FXCollections.observableArrayList());
+	private final ObservableList<AbstractFilter<T, ?>> filters = FXCollections.observableArrayList();
+	private final InvalidationListener itemsInvalid = invalidated -> transformableList.setAll(getItems());
+	private final BooleanProperty footerVisible = new SimpleBooleanProperty(true);
 
-    private final ListChangeListener<? super T> changeListener;
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXTableView() {
+		this(FXCollections.observableArrayList());
+	}
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXTableView() {
-        this(FXCollections.observableArrayList());
-    }
+	public MFXTableView(ObservableList<T> items) {
+		setItems(items);
+		rowsFlow = new SimpleVirtualFlow<>(
+				transformableList,
+				getTableRowFactory(),
+				Orientation.VERTICAL
+		) {
+			@Override
+			public String getUserAgentStylesheet() {
+				return MFXTableView.this.getUserAgentStylesheet();
+			}
+		};
+		VBox.setVgrow(rowsFlow, Priority.ALWAYS);
 
-    public MFXTableView(ObservableList<T> items) {
-        setItems(items);
+		initialize();
+	}
 
-        sortModel = new MFXTableSortModel<>(tableColumns);
+	//================================================================================
+	// Methods
+	//================================================================================
+	private void initialize() {
+		getStyleClass().add(STYLE_CLASS);
 
-        changeListener = change -> {
-            if (getSelectionModel().getSelectedItems().isEmpty()) {
-                return;
-            }
-            if (change.getList().isEmpty()) {
-                getSelectionModel().clearSelection();
-                return;
-            }
+		transformableList.setAll(getItems());
+		itemsProperty().addListener((observable, oldValue, newValue) -> {
+			if (oldValue != null) {
+				oldValue.removeListener(itemsChanged);
+				oldValue.removeListener(itemsInvalid);
+			}
+			if (newValue != null) {
+				newValue.addListener(itemsChanged);
+				newValue.addListener(itemsInvalid);
+			}
+		});
 
-            getSelectionModel().setUpdating(true);
-            Map<Integer, Integer> addedOffsets = new HashMap<>();
-            Map<Integer, Integer> removedOffsets = new HashMap<>();
+		getItems().addListener(itemsChanged);
+		getItems().addListener(itemsInvalid);
+	}
 
-            while (change.next()) {
-                if (change.wasAdded()) {
-                    int from = change.getFrom();
-                    int to = change.getTo();
-                    int offset = to - from;
-                    addedOffsets.put(from, offset);
-                }
-                if (change.wasRemoved()) {
-                    int from = change.getFrom();
-                    int offset = change.getRemovedSize();
-                    IntStream.range(from, from + offset)
-                            .filter(getSelectionModel()::containSelected)
-                            .forEach(getSelectionModel()::clearSelectedItem);
-                    removedOffsets.put(from, offset);
-                }
-            }
-            updateSelection(addedOffsets, removedOffsets);
-        };
+	/**
+	 * Responsible for updating the selection when the items list changes.
+	 */
+	protected void itemsChanged(ListChangeListener.Change<? extends T> change) {
+		IMultipleSelectionModel<T> selectionModel = getSelectionModel();
+		if (selectionModel.getSelection().isEmpty()) return;
 
-        getItems().addListener(changeListener);
-        initialize();
-    }
+		if (change.getList().isEmpty()) {
+			selectionModel.clearSelection();
+			return;
+		}
 
-    //================================================================================
-    // Methods
-    //================================================================================
-    private void initialize() {
-        getStyleClass().setAll(STYLE_CLASS);
-        defaultHeaderSupplier();
-        defaultSelectionModel();
+		ListChangeHelper.Change c = ListChangeHelper.processChange(change, NumberRange.of(0, Integer.MAX_VALUE));
+		ListChangeProcessor updater = new ListChangeProcessor(new HashSet<>(selectionModel.getSelection().keySet()));
+		c.processReplacement((changed, removed) -> selectionModel.replaceSelection(changed.toArray(Integer[]::new)));
+		c.processAddition((from, to, added) -> {
+			updater.computeAddition(added.size(), from);
+			selectionModel.replaceSelection(updater.getIndexes().toArray(Integer[]::new));
+		});
+		c.processRemoval((from, to, removed) -> {
+			updater.computeRemoval(removed, from);
+			getSelectionModel().replaceSelection(updater.getIndexes().toArray(Integer[]::new));
+		});
+	}
 
-        items.addListener((observable, oldValue, newValue) -> {
-            getSelectionModel().clearSelection();
-            if (oldValue != null) {
-                oldValue.removeListener(changeListener);
-            }
-            if (newValue != null) {
-                newValue.addListener(changeListener);
-            }
-        });
-    }
+	/**
+	 * Allows to programmatically update the table.
+	 * <p>
+	 * Uses {@link MFXTableRow#updateRow()} on the currently built rows, {@link SimpleVirtualFlow#getCells()}.
+	 */
+	public void update() {
+		rowsFlow.getCells().values().forEach(MFXTableRow::updateRow);
+	}
 
-    /**
-     * Installs the default selection model in this table view.
-     *
-     * @see #selectionModelProperty()
-     */
-    protected void defaultSelectionModel() {
-        TableSelectionModel<T> selectionModel = new TableSelectionModel<>();
-        selectionModel.setAllowsMultipleSelection(true);
-        setSelectionModel(selectionModel);
-    }
+	/**
+	 * Autosize all the table columns.
+	 */
+	public void autosizeColumns() {
+		tableColumns.forEach(this::autosizeColumn);
+	}
 
-    /**
-     * Installs the default header supplier in this table view.
-     *
-     * @see #headerSupplierProperty()
-     */
-    protected void defaultHeaderSupplier() {
-        setHeaderSupplier(() -> {
-            Label header = new Label();
-            header.getStyleClass().add("header");
-            header.setMinHeight(Region.USE_PREF_SIZE);
-            header.prefHeightProperty().bind(Bindings.createDoubleBinding(
-                    () -> getHeaderText().isEmpty() ? 0 : getHeaderHeight(),
-                    headerText, headerHeight
-            ));
-            header.setMaxWidth(Double.MAX_VALUE);
-            header.textProperty().bind(headerText);
-            header.graphicProperty().bind(headerIcon);
-            VBox.setMargin(header, new Insets(5, 10, 0, 10));
+	/**
+	 * Autosizes the column at the given index.
+	 * <p>
+	 * This method fails silently if it can not get the column at index.
+	 */
+	public void autosizeColumn(int index) {
+		try {
+			MFXTableColumn<T> column = tableColumns.get(index);
+			autosizeColumn(column);
+		} catch (Exception ignored) {
+		}
+	}
 
-            return header;
-        });
-    }
+	/**
+	 * Autosizes the given column.
+	 */
+	public void autosizeColumn(MFXTableColumn<T> column) {
+		int index = tableColumns.indexOf(column);
+		if (index == -1) return;
 
-    protected void updateSelection(Map<Integer, Integer> addedOffsets, Map<Integer, Integer> removedOffsets) {
-        MapProperty<Integer, T> selectedItems = getSelectionModel().selectedItemsProperty();
-        ObservableMap<Integer, T> updatedMap = FXCollections.observableHashMap();
-        selectedItems.forEach((key, value) -> {
-            int sum = addedOffsets.entrySet().stream()
-                    .filter(entry -> entry.getKey() <= key)
-                    .mapToInt(Map.Entry::getValue)
-                    .sum();
-            int diff = removedOffsets.entrySet().stream()
-                    .filter(entry -> entry.getKey() < key)
-                    .mapToInt(Map.Entry::getValue)
-                    .sum();
-            int shift = sum - diff;
-            updatedMap.put(key + shift, value);
-        });
-        if (!selectedItems.equals(updatedMap)) {
-            selectedItems.set(updatedMap);
-        }
-        getSelectionModel().setUpdating(false);
-    }
+		Collection<MFXTableRow<T>> rows = rowsFlow.getCells().values();
+		List<Double> minSizes = new ArrayList<>();
+		minSizes.add(column.getWidth());
+		rows.forEach(row -> {
+			ObservableList<MFXTableRowCell<T, ?>> rowCells = row.getCells();
+			if (rowCells.isEmpty()) return;
+			MFXTableRowCell<T, ?> rowCell = rowCells.get(index);
+			rowCell.requestLayout();
+			minSizes.add(rowCell.computePrefWidth(-1));
+		});
+		double max = minSizes.stream().max(Double::compareTo).orElse(-1.0);
+		if (max != -1.0) {
+			column.setMinWidth(max);
+		}
+	}
 
-    public ObservableList<T> getItems() {
-        return items.get();
-    }
+	//================================================================================
+	// Delegate Methods
+	//================================================================================
 
-    /**
-     * Specifies the items observable list for the table.
-     */
-    public ObjectProperty<ObservableList<T>> itemsProperty() {
-        return items;
-    }
+	/**
+	 * Delegate for {@link SimpleVirtualFlow#getCell(int)}.
+	 */
+	public MFXTableRow<T> getCell(int index) {
+		return rowsFlow.getCell(index);
+	}
 
-    public void setItems(ObservableList<T> items) {
-        this.items.set(items);
-    }
+	/**
+	 * Delegate for {@link SimpleVirtualFlow#getCells()}.
+	 */
+	public Map<Integer, MFXTableRow<T>> getCells() {
+		return rowsFlow.getCells();
+	}
 
-    public ITableSelectionModel<T> getSelectionModel() {
-        return selectionModel.get();
-    }
+	/**
+	 * Delegate for {@link SimpleVirtualFlow#scrollBy(double)}.
+	 */
+	public void scrollBy(double pixels) {
+		rowsFlow.scrollBy(pixels);
+	}
 
-    /**
-     * Specifies the selection model to be used.
-     */
-    public ObjectProperty<ITableSelectionModel<T>> selectionModelProperty() {
-        return selectionModel;
-    }
+	/**
+	 * Delegate for {@link SimpleVirtualFlow#scrollTo(int)}.
+	 */
+	public void scrollTo(int index) {
+		rowsFlow.scrollTo(index);
+	}
 
-    public void setSelectionModel(ITableSelectionModel<T> selectionModel) {
-        this.selectionModel.set(selectionModel);
-    }
+	/**
+	 * Delegate for {@link SimpleVirtualFlow#scrollToFirst()}.
+	 */
+	public void scrollToFirst() {
+		rowsFlow.scrollToFirst();
+	}
 
-    /**
-     * @return the table columns observable list
-     */
-    public ObservableList<MFXTableColumn<T>> getTableColumns() {
-        return tableColumns;
-    }
+	/**
+	 * Delegate for {@link SimpleVirtualFlow#scrollToLast()}.
+	 */
+	public void scrollToLast() {
+		rowsFlow.scrollToLast();
+	}
 
-    /**
-     * Replaces the table columns with the given list.
-     */
-    public void setTableColumns(List<MFXTableColumn<T>> columns) {
-        tableColumns.setAll(columns);
-    }
+	/**
+	 * Delegate for {@link SimpleVirtualFlow#scrollToPixel(double)}.
+	 */
+	public void scrollToPixel(double pixel) {
+		rowsFlow.scrollToPixel(pixel);
+	}
 
-    /**
-     * @return this table sort model instance.
-     */
-    public MFXTableSortModel<T> getSortModel() {
-        return sortModel;
-    }
+	/**
+	 * Delegate for {@link SimpleVirtualFlow#setHSpeed(double, double)}.
+	 */
+	public void setHSpeed(double unit, double block) {
+		rowsFlow.setHSpeed(unit, block);
+	}
 
-    public Supplier<Region> getHeaderSupplier() {
-        return headerSupplier.get();
-    }
+	/**
+	 * Delegate for {@link SimpleVirtualFlow#setVSpeed(double, double)}.
+	 */
+	public void setVSpeed(double unit, double block) {
+		rowsFlow.setVSpeed(unit, block);
+	}
 
-    /**
-     * Specifies the supplier used in the table skin to build the column header region.
-     * <p>
-     * The default supplier makes use of the following properties as well:
-     * <p> - {@link #headerHeightProperty()}
-     * <p> - {@link #headerTextProperty()}
-     * <p> - {@link #headerIconProperty()}
-     */
-    public SupplierProperty<Region> headerSupplierProperty() {
-        return headerSupplier;
-    }
+	/**
+	 * Delegate for {@link SimpleVirtualFlow#features()}.
+	 */
+	public SimpleVirtualFlow<T, MFXTableRow<T>>.Features features() {
+		return rowsFlow.features();
+	}
 
-    public void setHeaderSupplier(Supplier<Region> headerSupplier) {
-        this.headerSupplier.set(headerSupplier);
-    }
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
+	@Override
+	protected Skin<?> createDefaultSkin() {
+		return new MFXTableViewSkin<>(this, rowsFlow);
+	}
 
-    public double getHeaderHeight() {
-        return headerHeight.get();
-    }
+	@Override
+	public String getUserAgentStylesheet() {
+		return STYLESHEET;
+	}
 
-    /**
-     * Specifies the header height.
-     */
-    public DoubleProperty headerHeightProperty() {
-        return headerHeight;
-    }
+	//================================================================================
+	// Getters/Setters
+	//================================================================================
+	public ObservableList<T> getItems() {
+		return items.get();
+	}
 
-    public void setHeaderHeight(double headerHeight) {
-        this.headerHeight.set(headerHeight);
-    }
+	/**
+	 * Specifies the table's {@link ObservableList} containing the items.
+	 */
+	public ObjectProperty<ObservableList<T>> itemsProperty() {
+		return items;
+	}
 
-    public String getHeaderText() {
-        return headerText.get();
-    }
+	public void setItems(ObservableList<T> items) {
+		this.items.set(items);
+	}
 
-    /**
-     * Specifies the header text.
-     */
-    public StringProperty headerTextProperty() {
-        return headerText;
-    }
+	/**
+	 * @return the selection model used by the table to handle row selection
+	 */
+	public IMultipleSelectionModel<T> getSelectionModel() {
+		return selectionModel;
+	}
 
-    public void setHeaderText(String headerText) {
-        this.headerText.set(headerText);
-    }
+	/**
+	 * @return the list containing the table's columns
+	 */
+	public ObservableList<MFXTableColumn<T>> getTableColumns() {
+		return tableColumns;
+	}
 
-    public Node getHeaderIcon() {
-        return headerIcon.get();
-    }
+	public Function<T, MFXTableRow<T>> getTableRowFactory() {
+		return tableRowFactory.get();
+	}
 
-    /**
-     * Specifies the header icon.
-     */
-    public ObjectProperty<Node> headerIconProperty() {
-        return headerIcon;
-    }
+	/**
+	 * Specifies the {@link Function} used to generate the table rows.
+	 */
+	public FunctionProperty<T, MFXTableRow<T>> tableRowFactoryProperty() {
+		return tableRowFactory;
+	}
 
-    public void setHeaderIcon(Node headerIcon) {
-        this.headerIcon.set(headerIcon);
-    }
+	public void setTableRowFactory(Function<T, MFXTableRow<T>> tableRowFactory) {
+		this.tableRowFactory.set(tableRowFactory);
+	}
 
-    public double getFixedRowsHeight() {
-        return fixedRowsHeight.get();
-    }
+	/**
+	 * @return the list that is effectively used by the {@link SimpleVirtualFlow} (which contains the table rows).
+	 * This list is capable of filtering and sorting.
+	 * @see TransformableListWrapper
+	 * @see TransformableList
+	 */
+	public TransformableListWrapper<T> getTransformableList() {
+		return transformableList;
+	}
 
-    /**
-     * Specifies the height of the rows.
-     */
-    public DoubleProperty fixedRowsHeightProperty() {
-        return fixedRowsHeight;
-    }
+	/**
+	 * @return the list containing the filters' information used by the
+	 * {@link  MFXFilterPane} to filter the table
+	 */
+	public ObservableList<AbstractFilter<T, ?>> getFilters() {
+		return filters;
+	}
 
-    public void setFixedRowsHeight(double fixedRowsHeight) {
-        this.fixedRowsHeight.set(fixedRowsHeight);
-    }
+	public boolean isFooterVisible() {
+		return footerVisible.get();
+	}
 
-    public int getMaxRowsPerPage() {
-        return maxRowsPerPage.get();
-    }
+	/**
+	 * Specifies if the whether the footer is visible.
+	 */
+	public BooleanProperty footerVisibleProperty() {
+		return footerVisible;
+	}
 
-    /**
-     * Specifies the max number of rows that can be shown in a single page.
-     * This value is used by the table combo box.
-     * <p></p>
-     * <b>
-     * N.B: Values must be multiples of 5/10 otherwise the navigation system will break.
-     * </b>
-     */
-    public IntegerProperty maxRowsPerPageProperty() {
-        return maxRowsPerPage;
-    }
-
-    public void setMaxRowsPerPage(int maxRowsPerPage) {
-        this.maxRowsPerPage.set(maxRowsPerPage);
-    }
-
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        return new MFXTableViewSkin<>(this);
-    }
-
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
-
-    //================================================================================
-    // Events
-    //================================================================================
-
-    /**
-     * Events class for the table view.
-     * <p>
-     * Defines a new EventTypes:
-     * <p>
-     * - FORCE_UPDATE_EVENT: used to manually update the table <p></p>
-     */
-    public static class MFXTableViewEvent extends Event {
-
-        public static final EventType<MFXTableViewEvent> FORCE_UPDATE_EVENT = new EventType<>(ANY, "FORCE_UPDATE_EVENT");
-
-        public MFXTableViewEvent(EventType<? extends Event> eventType) {
-            super(eventType);
-        }
-    }
-
-    /**
-     * Forces the table to update
-     * <p>
-     * This is especially useful when the model is not built with
-     * JavaFX properties so when it changes the table must be updated manually
-     */
-    public void updateTable() {
-        Event.fireEvent(this, new MFXTableViewEvent(MFXTableViewEvent.FORCE_UPDATE_EVENT));
-    }
+	public void setFooterVisible(boolean footerVisible) {
+		this.footerVisible.set(footerVisible);
+	}
 }

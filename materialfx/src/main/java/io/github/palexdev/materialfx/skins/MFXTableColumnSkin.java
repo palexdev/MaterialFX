@@ -1,172 +1,150 @@
-/*
- * Copyright (C) 2021 Parisi Alessandro
- * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
- *
- * MaterialFX is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * MaterialFX is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.palexdev.materialfx.skins;
 
+import io.github.palexdev.materialfx.controls.BoundLabel;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
-import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
-import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.materialfx.controls.MFXTableColumn;
+import io.github.palexdev.materialfx.controls.MFXTableColumn.MFXTableColumnEvent;
+import io.github.palexdev.materialfx.enums.SortState;
+import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.utils.DragResizer;
+import io.github.palexdev.materialfx.utils.DragResizer.Direction;
 import io.github.palexdev.materialfx.utils.NodeUtils;
-import javafx.beans.binding.Bindings;
-import javafx.geometry.Insets;
+import io.github.palexdev.materialfx.utils.PositionUtils;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
+import javafx.scene.control.Control;
 import javafx.scene.control.SkinBase;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.util.Duration;
+
+import java.util.Comparator;
 
 /**
  * This is the implementation of the {@code Skin} associated with every {@link MFXTableColumn}.
  * <p></p>
- * Simply an HBox with a label, an icon for sorting and an icon for locking/unlocking the column's width,
- * both positioned manually based on the column's alignment.
- * It also has support for resizing the column on drag.
+ * Simply an HBox with a label, an icon for sorting. It also has support for resizing the column on drag.
  */
 public class MFXTableColumnSkin<T> extends SkinBase<MFXTableColumn<T>> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final HBox container;
-    private final Label label;
-    private final MFXIconWrapper lockIcon;
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final HBox container;
+	private final BoundLabel label;
+	private final MFXIconWrapper sortIcon;
+	private final DragResizer dragResizer;
 
-    private final DragResizer dragResizer;
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXTableColumnSkin(MFXTableColumn<T> column) {
+		super(column);
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXTableColumnSkin(MFXTableColumn<T> column) {
-        super(column);
+		label = new BoundLabel(column);
+		label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		HBox.setHgrow(label, Priority.ALWAYS);
 
-        label = new Label();
-        label.textProperty().bind(column.textProperty());
+		sortIcon = new MFXIconWrapper("mfx-caret-up", 14, 18).defaultRippleGeneratorBehavior();
+		NodeUtils.makeRegionCircular(sortIcon);
 
-        MFXFontIcon icon = new MFXFontIcon(column.isResizable() ? "mfx-lock" : "mfx-lock-open", 12);
-        icon.descriptionProperty().bind(Bindings.createStringBinding(
-                () -> column.isResizable() ? "mfx-lock" : "mfx-lock-open",
-                column.resizableProperty()
-        ));
-        lockIcon = new MFXIconWrapper(icon, 20).defaultRippleGeneratorBehavior();
-        lockIcon.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                column.setResizable(!column.isResizable());
-            }
-            event.consume();
-        });
-        lockIcon.visibleProperty().bind(Bindings.createBooleanBinding(
-                () -> column.isShowLockIcon() && (column.isHover() || !column.isResizable()),
-                column.showLockIconProperty(), column.hoverProperty(), column.resizableProperty()
-        ));
-        lockIcon.setManaged(false);
-        NodeUtils.makeRegionCircular(lockIcon);
+		container = new HBox(label);
+		container.setMinWidth(Region.USE_PREF_SIZE);
+		positionIcon(column.getAlignment());
 
-        container = new HBox(label, column.getSortIcon(), lockIcon);
-        container.setMinWidth(Region.USE_PREF_SIZE);
-        container.setPadding(new Insets(0,10, 0, 0));
-        container.alignmentProperty().bind(column.columnAlignmentProperty());
-        container.boundsInParentProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.getMinX() <= 0) {
-                container.relocate(1, 1);
-            }
-        });
+		dragResizer = new DragResizer(column, Direction.RIGHT)
+				.setWidthConstraintFunction(region ->
+						region.snappedLeftInset() +
+								region.prefWidth(-1) +
+								region.snappedRightInset()
+				);
+		if (column.isColumnResizable()) dragResizer.makeResizable();
 
-        dragResizer = new DragResizer(column, DragResizer.RIGHT);
+		getChildren().setAll(container);
+		addListeners();
+	}
 
-        if (column.isResizable()) {
-            dragResizer.makeResizable();
-        }
+	//================================================================================
+	// Methods
+	//================================================================================
 
-        setListeners();
+	/**
+	 * Specifies the behavior for the following changes/events:
+	 * <p> - the column's alignment, to position the icon, {@link #positionIcon(Pos)}
+	 * <p> - the column's sort state, to animate the icon, {@link #animateIcon(SortState)}
+	 * <p> - the column's resizable property, {@link MFXTableColumn#columnResizableProperty()}, to
+	 * install/uninstall the {@link DragResizer}
+	 * <p>
+	 * It's also responsible for initializing the column if the initial sort state is not {@link SortState#UNSORTED},
+	 * done by using a one-shot(no scope :D) listener {@link NodeUtils#waitForSkin(Control, Runnable, boolean, boolean)}.
+	 */
+	private void addListeners() {
+		MFXTableColumn<T> column = getSkinnable();
 
-        getChildren().setAll(container);
-    }
+		column.alignmentProperty().addListener((observable, oldValue, newValue) -> positionIcon(newValue));
+		column.sortStateProperty().addListener((observable, oldValue, newValue) -> animateIcon(newValue));
+		column.columnResizableProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue) {
+				dragResizer.uninstall();
+			} else {
+				dragResizer.makeResizable();
+			}
+		});
 
-    //================================================================================
-    // Methods
-    //================================================================================
+		NodeUtils.waitForSkin(column, () -> {
+			SortState sortState = column.getSortState();
+			animateIcon(sortState);
+			if (sortState == SortState.UNSORTED) return;
 
-    /**
-     * Adds listeners for:
-     * <p>
-     * <p> - {@link MFXTableColumn#resizableProperty()} ()}: to enable/disable this column {@link DragResizer} by calling
-     * {@link DragResizer#makeResizable()} or {@link DragResizer#uninstall()} depending on its value.
-     */
-    private void setListeners() {
-        MFXTableColumn<T> tableColumn = getSkinnable();
+			Comparator<T> comparator = (sortState == SortState.DESCENDING) ? column.getComparator().reversed() : column.getComparator();
+			column.fireEvent(new MFXTableColumnEvent<>(MFXTableColumnEvent.SORTING_EVENT, column, comparator, sortState));
+		}, false, true);
+	}
 
-        tableColumn.resizableProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) {
-                dragResizer.uninstall();
-            } else {
-                dragResizer.makeResizable();
-            }
-        });
-    }
+	/**
+	 * Responsible for animating the icon according to the given sort state.
+	 */
+	private void animateIcon(SortState sortState) {
+		Timeline animation = new Timeline();
+		switch (sortState) {
+			case ASCENDING: {
+				sortIcon.setVisible(true);
+				animation = MFXAnimationFactory.FADE_IN.build(sortIcon, 250);
+				break;
+			}
+			case DESCENDING: {
+				sortIcon.setVisible(true);
+				KeyFrame kf = new KeyFrame(Duration.millis(150),
+						new KeyValue(sortIcon.rotateProperty(), 180)
+				);
+				animation = new Timeline(kf);
+				break;
+			}
+			case UNSORTED: {
+				animation = MFXAnimationFactory.FADE_OUT.build(sortIcon, 250);
+				animation.setOnFinished(event -> {
+					sortIcon.setVisible(false);
+					sortIcon.setRotate(0.0);
+				});
+				break;
+			}
+		}
+		animation.play();
+	}
 
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        double computed;
-        MFXTableColumn<T> column = getSkinnable();
-        if (NodeUtils.isRightAlignment(column.getColumnAlignment())) {
-            computed = leftInset + label.getWidth() + column.getSortIcon().getSize() + lockIcon.getSize() + rightInset + 20;
-        } else {
-            computed = leftInset + label.getWidth() + column.getSortIcon().getSize() + lockIcon.getSize() + rightInset + 10;
-        }
-        return computed;
-    }
-
-    @Override
-    protected void layoutChildren(double x, double y, double w, double h) {
-        super.layoutChildren(x, y, w, h);
-
-        // SORT ICON
-        MFXTableColumn<T> column = getSkinnable();
-        MFXIconWrapper sortIcon = column.getSortIcon();
-        Pos alignment = column.getColumnAlignment();
-
-        double sortSize = sortIcon.getSize();
-        double sX;
-        double iconsY = snapPositionY((h / 2) - (sortSize / 2));
-
-        if (!NodeUtils.isRightAlignment(alignment)) {
-            sX = snapPositionX(w - sortSize - 5);
-        } else {
-            sX = 5;
-        }
-
-        sortIcon.resizeRelocate(sX, iconsY, sortSize, sortSize);
-
-        // LOCK ICON
-        double lockSize = lockIcon.getSize();
-        double lX;
-
-        if (!NodeUtils.isRightAlignment(alignment)) {
-            lX = snapPositionX(w - sortSize - lockSize - 10);
-        } else {
-            lX = 10 + sortSize;
-        }
-
-        lockIcon.resizeRelocate(lX, iconsY, lockSize, lockSize);
-    }
+	/**
+	 * Responsible for positioning the icon according to the column's alignment.
+	 * <p>
+	 * Left if the column is right-aligned. Right if the column is left-aligned.
+	 */
+	private void positionIcon(Pos alignment) {
+		container.getChildren().remove(sortIcon);
+		if (PositionUtils.isRight(alignment)) {
+			container.getChildren().add(0, sortIcon);
+			return;
+		}
+		container.getChildren().add(sortIcon);
+	}
 }

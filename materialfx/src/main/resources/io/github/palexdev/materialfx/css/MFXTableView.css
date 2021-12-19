@@ -1,32 +1,171 @@
-/*
- * Copyright (C) 2021 Parisi Alessandro
- * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
- *
- * MaterialFX is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * MaterialFX is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 .mfx-table-view {
-    -fx-background-color: white;
-    -fx-background-radius: 5;
-    -fx-border-color: lightgray;
-    -fx-border-radius: 5;
+	-fx-background-color: white;
+	-fx-background-radius: 5;
+	-fx-border-color: lightgray;
+	-fx-border-radius: 5;
+	-fx-padding: 0 0 2 0;
 }
 
-.mfx-table-view #columns-container {
-    -fx-border-color: transparent transparent lightgray transparent;
+.mfx-table-view .columns-container {
+	-fx-border-color: transparent transparent lightgray transparent;
 }
 
-.mfx-table-view .pagination-controls-container {
-    -fx-border-color: lightgray transparent transparent transparent;
+.mfx-table-view .default-footer {
+	-fx-border-color: lightgray transparent transparent transparent;
+	-fx-padding: 10;
+}
+
+.mfx-table-view .default-footer .mfx-icon-wrapper .mfx-ripple-generator {
+	-mfx-ripple-radius: 18;
+}
+
+/********************
+Table Columns
+********************/
+.mfx-table-column {
+	-fx-border-color: transparent white transparent transparent;
+	-fx-padding: 10 15 10 15;
+}
+
+.mfx-table-column:hover,
+.mfx-table-column:dragged {
+	-fx-border-color: transparent lightgray transparent transparent;
+}
+
+/********************
+Table Rows
+********************/
+.mfx-table-row {
+	-fx-background-color: transparent;
+}
+
+.mfx-table-row:hover {
+	-fx-background-color: #F5F5F5;
+}
+
+.mfx-table-row:selected {
+	-fx-background-color: #E1E1E1;
+}
+
+.mfx-table-row .mfx-ripple-generator {
+	-mfx-ripple-radius: 30;
+	-mfx-ripple-color: #C8C8C8;
+}
+
+/********************
+Table Row Cells
+********************/
+.mfx-table-row-cell {
+	-fx-background-color: transparent;
+	-fx-padding: 5 15 5 15;
+}
+
+.mfx-table-row-cell,
+.mfx-table-row-cell:focused {
+	-fx-border-color: transparent;
+}
+
+/********************
+Virtual Flow
+********************/
+.virtual-flow {
+	-fx-background-color: transparent;
+
+	-track-color: rgb(230, 230, 230);
+	-thumb-color: rgb(137, 137, 137);
+	-thumb-hover-color: rgb(89, 88, 91);
+}
+
+/* Remove JavaFX crap */
+.scroll-bar,
+.scroll-bar .decrement-arrow,
+.scroll-bar .increment-arrow {
+	-fx-pref-width: 0;
+	-fx-pref-height: 0;
+}
+
+
+.scroll-bar:horizontal .increment-button,
+.scroll-bar:horizontal .decrement-button {
+	-fx-background-color: transparent;
+	-fx-background-radius: 0.0em;
+	-fx-padding: 0.0 0.0 10.0 0.0;
+}
+
+.scroll-bar:vertical .increment-button,
+.scroll-bar:vertical .decrement-button {
+	-fx-background-color: transparent;
+	-fx-background-radius: 0.0em;
+	-fx-padding: 0.0 10.0 0.0 0.0;
+
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+	-fx-shape: " ";
+	-fx-padding: 0.15em 0.0;
+}
+
+.scroll-bar:horizontal .increment-arrow,
+.scroll-bar:horizontal .decrement-arrow {
+	-fx-shape: " ";
+	-fx-padding: 0.0 0.05em;
+}
+
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow {
+	-fx-shape: " ";
+	-fx-padding: 0.0 0.05em;
+}
+
+/* Customize ScrollBars */
+
+.scroll-bar:horizontal .track {
+	-fx-background-color: -track-color;
+	-fx-border-color: transparent;
+	-fx-background-radius: 2.0em;
+	-fx-border-radius: 2.0em;
+	-fx-background-insets: 3;
+}
+
+.scroll-bar:vertical .track {
+	-fx-background-color: -track-color;
+	-fx-border-color: transparent;
+	-fx-background-radius: 2.0em;
+	-fx-border-radius: 2.0em;
+	-fx-background-insets: 3;
+}
+
+.scroll-bar .decrement-arrow,
+.scroll-bar .increment-arrow {
+	-fx-pref-width: 0;
+	-fx-pref-height: 0;
+}
+
+.scroll-bar:vertical {
+	-fx-background-color: transparent;
+	-fx-pref-width: 12;
+	-fx-pref-height: 12;
+	-fx-padding: 5 0.5 5 0.5;
+}
+
+.scroll-bar:horizontal {
+	-fx-background-color: transparent;
+	-fx-pref-width: 12;
+	-fx-pref-height: 12;
+	-fx-padding: 0.5 5 0.5 5;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+	-fx-background-color: -thumb-color;
+	-fx-background-insets: 2.0, 0.0, 0.0;
+	-fx-background-radius: 2.0em;
+}
+
+.scroll-bar:horizontal .thumb:hover,
+.scroll-bar:vertical .thumb:hover {
+	-fx-background-color: -thumb-hover-color;
+	-fx-background-insets: 1.5, 0.0, 0.0;
+	-fx-background-radius: 2.0em;
 }
