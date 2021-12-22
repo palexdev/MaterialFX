@@ -10,7 +10,7 @@ import javafx.event.EventHandler;
  *
  * @param <T> the type of {@link Event}
  */
-public class EventHandlerProperty<T extends Event> extends SimpleObjectProperty<EventHandler<T>> { // TODO replace everywhere
+public class EventHandlerProperty<T extends Event> extends SimpleObjectProperty<EventHandler<T>> {
 
 	//================================================================================
 	// Constructors

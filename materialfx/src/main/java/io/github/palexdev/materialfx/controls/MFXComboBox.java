@@ -3,6 +3,7 @@ package io.github.palexdev.materialfx.controls;
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.Alignment;
 import io.github.palexdev.materialfx.beans.PositionBean;
+import io.github.palexdev.materialfx.beans.properties.EventHandlerProperty;
 import io.github.palexdev.materialfx.beans.properties.functional.BiFunctionProperty;
 import io.github.palexdev.materialfx.beans.properties.functional.ConsumerProperty;
 import io.github.palexdev.materialfx.beans.properties.functional.FunctionProperty;
@@ -366,25 +367,25 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 	public static final EventType<Event> ON_HIDING = new EventType<>(Event.ANY, "ON_HIDING");
 	public static final EventType<Event> ON_HIDDEN = new EventType<>(Event.ANY, "ON_HIDDEN");
 
-	private final ObjectProperty<EventHandler<Event>> onShowing = new SimpleObjectProperty<>() {
+	private final EventHandlerProperty<Event> onShowing = new EventHandlerProperty<>() {
 		@Override
 		protected void invalidated() {
 			setEventHandler(ON_SHOWING, get());
 		}
 	};
-	private final ObjectProperty<EventHandler<Event>> onShown = new SimpleObjectProperty<>() {
+	private final EventHandlerProperty<Event> onShown = new EventHandlerProperty<>() {
 		@Override
 		protected void invalidated() {
 			setEventHandler(ON_SHOWN, get());
 		}
 	};
-	private final ObjectProperty<EventHandler<Event>> onHiding = new SimpleObjectProperty<>() {
+	private final EventHandlerProperty<Event> onHiding = new EventHandlerProperty<>() {
 		@Override
 		protected void invalidated() {
 			setEventHandler(ON_HIDING, get());
 		}
 	};
-	private final ObjectProperty<EventHandler<Event>> onHidden = new SimpleObjectProperty<>() {
+	private final EventHandlerProperty<Event> onHidden = new EventHandlerProperty<>() {
 		@Override
 		protected void invalidated() {
 			setEventHandler(ON_HIDDEN, get());
@@ -397,7 +398,7 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 	}
 
 	@Override
-	public ObjectProperty<EventHandler<Event>> onShowingProperty() {
+	public EventHandlerProperty<Event> onShowingProperty() {
 		return onShowing;
 	}
 
@@ -412,7 +413,7 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 	}
 
 	@Override
-	public ObjectProperty<EventHandler<Event>> onShownProperty() {
+	public EventHandlerProperty<Event> onShownProperty() {
 		return onShown;
 	}
 
@@ -426,7 +427,7 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 	}
 
 	@Override
-	public ObjectProperty<EventHandler<Event>> onHidingProperty() {
+	public EventHandlerProperty<Event> onHidingProperty() {
 		return onHiding;
 	}
 
@@ -440,7 +441,7 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 	}
 
 	@Override
-	public ObjectProperty<EventHandler<Event>> onHiddenProperty() {
+	public EventHandlerProperty<Event> onHiddenProperty() {
 		return onHidden;
 	}
 

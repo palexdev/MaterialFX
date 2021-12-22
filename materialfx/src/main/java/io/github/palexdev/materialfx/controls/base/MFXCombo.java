@@ -1,5 +1,6 @@
 package io.github.palexdev.materialfx.controls.base;
 
+import io.github.palexdev.materialfx.beans.properties.EventHandlerProperty;
 import io.github.palexdev.materialfx.beans.properties.functional.ConsumerProperty;
 import io.github.palexdev.materialfx.selection.base.ISingleSelectionModel;
 import io.github.palexdev.virtualizedfx.cell.Cell;
@@ -122,7 +123,7 @@ public interface MFXCombo<T> {
 	/**
 	 * Specifies the action when the popup is showing.
 	 */
-	ObjectProperty<EventHandler<Event>> onShowingProperty();
+	EventHandlerProperty<Event> onShowingProperty();
 
 	void setOnShowing(EventHandler<Event> onShowing);
 
@@ -131,7 +132,7 @@ public interface MFXCombo<T> {
 	/**
 	 * Specifies the action when the popup is shown.
 	 */
-	ObjectProperty<EventHandler<Event>> onShownProperty();
+	EventHandlerProperty<Event> onShownProperty();
 
 	void setOnShown(EventHandler<Event> onShown);
 
@@ -140,7 +141,7 @@ public interface MFXCombo<T> {
 	/**
 	 * Specifies the action when the popup is hiding.
 	 */
-	ObjectProperty<EventHandler<Event>> onHidingProperty();
+	EventHandlerProperty<Event> onHidingProperty();
 
 	void setOnHiding(EventHandler<Event> onHiding);
 
@@ -149,7 +150,7 @@ public interface MFXCombo<T> {
 	/**
 	 * Specifies the action when the popup is hidden.
 	 */
-	ObjectProperty<EventHandler<Event>> onHiddenProperty();
+	EventHandlerProperty<Event> onHiddenProperty();
 
 	void setOnHidden(EventHandler<Event> onHidden);
 }

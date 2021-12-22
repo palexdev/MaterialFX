@@ -18,12 +18,16 @@
 
 package io.github.palexdev.materialfx.effects.ripple.base;
 
+import io.github.palexdev.materialfx.beans.PositionBean;
+import io.github.palexdev.materialfx.beans.properties.EventHandlerProperty;
 import io.github.palexdev.materialfx.collections.ObservableStack;
 import io.github.palexdev.materialfx.effects.DepthLevel;
-import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.skins.MFXCheckboxSkin;
 import javafx.animation.Animation;
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ListChangeListener;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -215,7 +219,7 @@ public abstract class AbstractMFXRippleGenerator<T extends IRipple> extends Regi
         }
     }
 
-    public final ObjectProperty<EventHandler<RippleGeneratorEvent>> onAnimationFinished = new SimpleObjectProperty<>() {
+    public final EventHandlerProperty<RippleGeneratorEvent> onAnimationFinished = new EventHandlerProperty<>() {
         @Override
         protected void invalidated() {
             setEventHandler(RippleGeneratorEvent.ANIMATION_FINISHED_EVENT, get());
@@ -231,7 +235,7 @@ public abstract class AbstractMFXRippleGenerator<T extends IRipple> extends Regi
      *
      * @see RippleGeneratorEvent
      */
-    public ObjectProperty<EventHandler<RippleGeneratorEvent>> onAnimationFinishedProperty() {
+    public EventHandlerProperty<RippleGeneratorEvent> onAnimationFinishedProperty() {
         return onAnimationFinished;
     }
 

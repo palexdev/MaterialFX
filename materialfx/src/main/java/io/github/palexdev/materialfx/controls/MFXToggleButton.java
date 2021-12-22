@@ -1,6 +1,7 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.beans.properties.EventHandlerProperty;
 import io.github.palexdev.materialfx.controls.base.MFXLabeled;
 import io.github.palexdev.materialfx.skins.MFXToggleButtonSkin;
 import io.github.palexdev.materialfx.utils.ColorUtils;
@@ -46,7 +47,7 @@ public class MFXToggleButton extends Labeled implements Toggle, MFXLabeled {
     private final BooleanProperty selected = new SimpleBooleanProperty(false);
     protected static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
 
-    private final ObjectProperty<EventHandler<ActionEvent>> onAction = new SimpleObjectProperty<>() {
+    private final EventHandlerProperty<ActionEvent> onAction = new EventHandlerProperty<>() {
         @Override
         protected void invalidated() {
             setEventHandler(ActionEvent.ACTION, get());
@@ -149,7 +150,7 @@ public class MFXToggleButton extends Labeled implements Toggle, MFXLabeled {
     /**
      * Specifies the action to perform when the toggle button is selected/unselected.
      */
-    public ObjectProperty<EventHandler<ActionEvent>> onActionProperty() {
+    public EventHandlerProperty<ActionEvent> onActionProperty() {
         return onAction;
     }
 
