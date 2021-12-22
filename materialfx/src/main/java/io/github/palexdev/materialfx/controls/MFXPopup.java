@@ -9,10 +9,11 @@ import io.github.palexdev.materialfx.effects.Interpolators;
 import io.github.palexdev.materialfx.skins.MFXPopupSkin;
 import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
 import io.github.palexdev.materialfx.utils.AnimationUtils.TimelineBuilder;
+import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.Animation;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.css.PseudoClass;
@@ -22,6 +23,7 @@ import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.HPos;
 import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -30,8 +32,10 @@ import javafx.scene.control.Skin;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.transform.Scale;
+import javafx.stage.Screen;
 import javafx.stage.Window;
 
+import java.util.WeakHashMap;
 import java.util.function.BiFunction;
 
 /**
@@ -54,6 +58,8 @@ public class MFXPopup extends PopupControl implements MFXStyleablePopup {
     //================================================================================
     // Properties
     //================================================================================
+    private static final WeakHashMap<MFXPopup, Boolean> configMap = new WeakHashMap<>();
+
     private PopupPositionBean position;
     private final ObjectProperty<Node> content = new SimpleObjectProperty<>() {
         @Override
@@ -72,7 +78,7 @@ public class MFXPopup extends PopupControl implements MFXStyleablePopup {
     private boolean animated = true;
 
     private final PseudoClass HOVER_PSEUDO_CLASS = PseudoClass.getPseudoClass("popup-hover");
-    private final BooleanProperty hover = new SimpleBooleanProperty(false);
+    private final ReadOnlyBooleanWrapper hover = new ReadOnlyBooleanWrapper(false);
     private final EventHandler<MouseEvent> entered = event -> setHover(true);
     private final EventHandler<MouseEvent> exited = event -> setHover(false);
 
@@ -117,6 +123,12 @@ public class MFXPopup extends PopupControl implements MFXStyleablePopup {
         setHideOnEscape(true);
 
         hover.addListener(invalidated -> pseudoClassStateChanged(HOVER_PSEUDO_CLASS, hover.get()));
+    }
+
+    @Override
+    public void show(Node ownerNode, double anchorX, double anchorY) {
+        position = new PopupPositionBean(ownerNode, PositionBean.of(anchorX, anchorY), null, 0, 0);
+        super.show(ownerNode, anchorX, anchorY);
     }
 
     /**
@@ -167,6 +179,9 @@ public class MFXPopup extends PopupControl implements MFXStyleablePopup {
      * the previous stored info.
      * <p>
      * This should be called when the owner's position changes.
+     * <p></p>
+     * This is also responsible for fixing the coordinates if the
+     * popup would end outside the screen
      *
      * @see #show(Node, Alignment, double, double)
      * @see PopupPositionBean
@@ -174,6 +189,30 @@ public class MFXPopup extends PopupControl implements MFXStyleablePopup {
     public void reposition() {
         if (!isShowing() || position == null) return;
         position = computePosition();
+
+        double x = position.getX();
+        double y = position.getY();
+
+        if (isFixPosition(this)) {
+            double contentWith = getContent().prefWidth(-1);
+            double contentHeight = getContent().prefHeight(-1);
+            double endX = x + contentWith;
+            double endY = y + contentHeight;
+
+            Screen nodeScreen = NodeUtils.getScreenFor(position.getOwner());
+            if (nodeScreen != null) {
+                Rectangle2D screenBounds = nodeScreen.getBounds();
+                if (endX > screenBounds.getMaxX()) {
+                    x -= (endX - screenBounds.getMaxX());
+                }
+                if (endY > screenBounds.getMaxY()) {
+                    y -= (endY - screenBounds.getMaxY());
+                }
+            }
+            position.setX(x);
+            position.setY(y);
+        }
+
         setX(position.getX());
         setY(position.getY());
     }
@@ -185,11 +224,17 @@ public class MFXPopup extends PopupControl implements MFXStyleablePopup {
     private PositionBean computePosition(Node node, Window window, Alignment alignment, double xOffset, double yOffset) {
         Point2D origin = node.localToScene(0, 0);
 
-        HPos hPos = alignment.getHPos();
-        VPos vPos = alignment.getVPos();
-        double x = window.getX() + origin.getX() + node.getScene().getX() + computeHPos(node, hPos, xOffset);
-        double y = window.getY() + origin.getY() + node.getScene().getY() + computeVPos(node, vPos, yOffset);
-        return PositionBean.of(x, y);
+        if (alignment != null) {
+            HPos hPos = alignment.getHPos();
+            VPos vPos = alignment.getVPos();
+            double x = window.getX() + origin.getX() + node.getScene().getX() + computeHPos(node, hPos, xOffset);
+            double y = window.getY() + origin.getY() + node.getScene().getY() + computeVPos(node, vPos, yOffset);
+            return PositionBean.of(x, y);
+        }
+
+        // If not null probably an overridden method was used to show the popup,
+        // as a fallback return an "empty" position.
+        return position != null ? position.getPositionBean() : PositionBean.of(0, 0);
     }
 
     /**
@@ -231,6 +276,76 @@ public class MFXPopup extends PopupControl implements MFXStyleablePopup {
      */
     private double computeVPos(Node node, VPos vPos, double yOffset) {
         return (vPos == VPos.BOTTOM ? node.getLayoutBounds().getHeight() : 0) + yOffset;
+    }
+
+    //================================================================================
+    // Override Methods
+    //================================================================================
+
+    /**
+     * {@inheritDoc}
+     * <p></p>
+     * Overridden to set the stored {@link PopupPositionBean} to null.
+     */
+    @Override
+    public void hide() {
+        position = null;
+        super.hide();
+    }
+
+    @Override
+    protected Skin<?> createDefaultSkin() {
+        return new MFXPopupSkin(this);
+    }
+
+    @Override
+    public Parent getPopupStyleableParent() {
+        return bridge.getParent();
+    }
+
+    @Override
+    public void setPopupStyleableParent(Parent parent) {
+        bridge.dispose();
+        bridge.setParent(parent);
+        bridge.initializeStylesheets();
+    }
+
+    @Override
+    public Styleable getStyleableParent() {
+        if (bridge != null && bridge.getParent() != null) {
+            return bridge.getParent();
+        }
+        return super.getStyleableParent();
+    }
+
+    @Override
+    public ObservableList<String> getStyleSheets() {
+        return bridge.getStylesheets();
+    }
+
+    @Override
+    public String getUserAgentStylesheet() {
+        return null;
+    }
+
+    //================================================================================
+    // Static Methods
+    //================================================================================
+
+    /**
+     * Tells the given popup to recompute its position if it would
+     * end outside the screen.
+     */
+    public static void fixPosition(MFXPopup popup, boolean fix) {
+        configMap.put(popup, fix);
+    }
+
+    /**
+     * @return whether the given popup is configured to reposition
+     * itself if ending outside the screen
+     */
+    public static boolean isFixPosition(MFXPopup popup) {
+        return configMap.getOrDefault(popup, false);
     }
 
     //================================================================================
@@ -306,57 +421,12 @@ public class MFXPopup extends PopupControl implements MFXStyleablePopup {
     /**
      * Specifies if the mouse is on the popup's content.
      */
-    public BooleanProperty hoverProperty() {
-        return hover;
+    public ReadOnlyBooleanProperty hoverProperty() {
+        return hover.getReadOnlyProperty();
     }
 
-    public void setHover(boolean hover) {
+    protected void setHover(boolean hover) {
         this.hover.set(hover);
-    }
-
-    //================================================================================
-    // Override Methods
-    //================================================================================
-
-    /**
-     * {@inheritDoc}
-     * <p></p>
-     * Overridden to set the stored {@link PopupPositionBean} to null.
-     */
-    @Override
-    public void hide() {
-        position = null;
-        super.hide();
-    }
-
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        return new MFXPopupSkin(this);
-    }
-
-    @Override
-    public Parent getPopupStyleableParent() {
-        return bridge.getParent();
-    }
-
-    @Override
-    public void setPopupStyleableParent(Parent parent) {
-        bridge.dispose();
-        bridge.setParent(parent);
-        bridge.initializeStylesheets();
-    }
-
-    @Override
-    public Styleable getStyleableParent() {
-        if (bridge != null && bridge.getParent() != null) {
-            return bridge.getParent();
-        }
-        return super.getStyleableParent();
-    }
-
-    @Override
-    public ObservableList<String> getStyleSheets() {
-        return bridge.getStylesheets();
     }
 
     //================================================================================

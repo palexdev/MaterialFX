@@ -472,6 +472,20 @@ public class NodeUtils {
         }
     }
 
+    /**
+     * Attempts to get the {@link Screen} instance on which
+     * the given {@link Node} is shown.
+     * If the screen is not found for any reason, returns null.
+     */
+    public static Screen getScreenFor(Node node) {
+        Bounds nodeBounds = node.localToScreen(node.getLayoutBounds());
+        Rectangle2D boundsToRect = new Rectangle2D(nodeBounds.getMinX(), nodeBounds.getMinY(), nodeBounds.getWidth(), nodeBounds.getHeight());
+        return Screen.getScreens().stream()
+                .filter(screen -> screen.getBounds().contains(boundsToRect))
+                .findFirst()
+                .orElse(null);
+    }
+
     // TODO replace all popups with MFXPopup
     public static Point2D pointRelativeTo(Node parent, Node node, HPos hpos,
                                           VPos vpos, double dx, double dy, boolean reposition) {

@@ -19,15 +19,18 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.beans.PositionBean;
+import io.github.palexdev.materialfx.beans.properties.styleable.StyleableDoubleProperty;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.effects.ripple.base.IRippleGenerator;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
-import javafx.beans.property.DoubleProperty;
+import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.css.CssMetaData;
+import javafx.css.Styleable;
+import javafx.css.StyleablePropertyFactory;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.input.MouseButton;
@@ -35,12 +38,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
+import java.util.List;
 import java.util.function.Function;
 
 /**
  * Convenience class for creating icons wrapped in a StackPane.
  * <p>
- * The size is equal and fixed both for height and width.
+ * The size is equal and fixed both for height and width, can be changed via CSS.
  */
 public class MFXIconWrapper extends StackPane {
     //================================================================================
@@ -49,7 +53,6 @@ public class MFXIconWrapper extends StackPane {
     private final String STYLE_CLASS = "mfx-icon-wrapper";
 
     private final ObjectProperty<Node> icon = new SimpleObjectProperty<>();
-    private final DoubleProperty size = new SimpleDoubleProperty();
     private final MFXCircleRippleGenerator rippleGenerator = new MFXCircleRippleGenerator(this);
 
     //================================================================================
@@ -168,50 +171,6 @@ public class MFXIconWrapper extends StackPane {
         }
     }
 
-    /**
-     * @return the RippleGenerator instance.
-     */
-    public MFXCircleRippleGenerator getRippleGenerator() {
-        return rippleGenerator;
-    }
-
-    public Node getIcon() {
-        return icon.get();
-    }
-
-    /**
-     * Contains the reference to the icon.
-     */
-    public ObjectProperty<Node> iconProperty() {
-        return icon;
-    }
-
-    public void setIcon(Node icon) {
-        this.icon.set(icon);
-    }
-
-    /**
-     * Removes the icon node.
-     */
-    public void removeIcon() {
-        setIcon(null);
-    }
-
-    public double getSize() {
-        return size.get();
-    }
-
-    /**
-     * Specifies the size of the container.
-     */
-    public DoubleProperty sizeProperty() {
-        return size;
-    }
-
-    public void setSize(double size) {
-        this.size.set(size);
-    }
-
     //================================================================================
     // Override Methods
     //================================================================================
@@ -228,13 +187,102 @@ public class MFXIconWrapper extends StackPane {
     protected void layoutChildren() {
         super.layoutChildren();
 
-        if (getSize() == -1) {
-            Node icon = getIcon();
-            double iW = icon.prefWidth(-1);
-            double iH = icon.prefHeight(-1);
-            Insets padding = getPadding();
-            double size = Math.max(padding.getLeft() + iW + padding.getRight(), padding.getTop() + iH + padding.getBottom());
-            setSize(size);
-        }
+	    if (getSize() == -1) {
+		    Node icon = getIcon();
+		    double iW = icon.prefWidth(-1);
+		    double iH = icon.prefHeight(-1);
+		    Insets padding = getPadding();
+		    double size = Math.max(padding.getLeft() + iW + padding.getRight(), padding.getTop() + iH + padding.getBottom());
+		    setSize(size);
+	    }
     }
+
+	//================================================================================
+	// Styleable Properties
+	//================================================================================
+	private final StyleableDoubleProperty size = new StyleableDoubleProperty(
+			StyleableProperties.SIZE,
+			this,
+			"size",
+			-1.0
+	);
+
+	public double getSize() {
+		return size.get();
+	}
+
+	/**
+	 * Specifies the size of the container.
+	 */
+	public StyleableDoubleProperty sizeProperty() {
+		return size;
+	}
+
+	public void setSize(double size) {
+		this.size.set(size);
+	}
+
+	//================================================================================
+	// CssMetaData
+	//================================================================================
+	private static class StyleableProperties {
+		private static final StyleablePropertyFactory<MFXIconWrapper> FACTORY = new StyleablePropertyFactory<>(StackPane.getClassCssMetaData());
+		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+
+		private static final CssMetaData<MFXIconWrapper, Number> SIZE =
+				FACTORY.createSizeCssMetaData(
+						"-mfx-size",
+						MFXIconWrapper::sizeProperty,
+						-1.0
+				);
+
+		static {
+			cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
+					StackPane.getClassCssMetaData(),
+					SIZE
+			);
+		}
+	}
+
+	public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
+		return StyleableProperties.cssMetaDataList;
+	}
+
+	@Override
+	public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
+		return MFXIconWrapper.getClassCssMetaData();
+	}
+
+	//================================================================================
+	// Getters/Setters
+	//================================================================================
+
+	/**
+	 * @return the RippleGenerator instance.
+	 */
+	public MFXCircleRippleGenerator getRippleGenerator() {
+		return rippleGenerator;
+	}
+
+	public Node getIcon() {
+		return icon.get();
+	}
+
+	/**
+	 * Contains the reference to the icon.
+	 */
+	public ObjectProperty<Node> iconProperty() {
+		return icon;
+	}
+
+	public void setIcon(Node icon) {
+		this.icon.set(icon);
+	}
+
+	/**
+	 * Removes the icon node.
+	 */
+	public void removeIcon() {
+		setIcon(null);
+	}
 }

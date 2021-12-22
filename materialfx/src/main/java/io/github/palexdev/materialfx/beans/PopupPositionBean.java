@@ -72,32 +72,46 @@ public class PopupPositionBean {
      * @return the initial computed coordinates of the popup
      */
     public PositionBean getPositionBean() {
-        return positionBean;
+	    return positionBean;
     }
 
-    /**
-     * Delegate for {@link #getPositionBean()}.getX().
-     */
-    public double getX() {
-        return positionBean.getX();
-    }
+	/**
+	 * Delegate for {@link #getPositionBean()}.getX().
+	 */
+	public double getX() {
+		return positionBean.getX();
+	}
 
-    /**
-     * Delegate for {@link #getPositionBean()}.getY().
-     */
-    public double getY() {
-        return positionBean.getY();
-    }
+	/**
+	 * Delegate for {@link #getPositionBean()}.setX().
+	 */
+	public void setX(double xPosition) {
+		positionBean.setX(xPosition);
+	}
 
-    public Alignment getAlignment() {
-        return alignment;
-    }
+	/**
+	 * Delegate for {@link #getPositionBean()}.getY().
+	 */
+	public double getY() {
+		return positionBean.getY();
+	}
 
-    /**
-     * @return the specified {@link HPos}
-     */
-    public HPos getHPos() {
-        return alignment.getHPos();
+	/**
+	 * Delegate for {@link #getPositionBean()}.setY().
+	 */
+	public void setY(double yPosition) {
+		positionBean.setY(yPosition);
+	}
+
+	public Alignment getAlignment() {
+		return alignment;
+	}
+
+	/**
+	 * @return the specified {@link HPos}
+	 */
+	public HPos getHPos() {
+		return alignment.getHPos();
     }
 
     /**

@@ -18,7 +18,10 @@ import javafx.geometry.VPos;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.SkinBase;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 
 /**
@@ -41,6 +44,7 @@ public class MFXNotificationCenterSkin extends SkinBase<MFXNotificationCenter> {
         super(notificationCenter);
 
         bellWrapped = new MFXIconWrapper("mfx-bell-alt", 36, 56);
+        bellWrapped.getIcon().setMouseTransparent(true);
         bellWrapped.getStyleClass().add("notifications-icon");
 
         counter = new NotificationsCounter();
@@ -85,28 +89,22 @@ public class MFXNotificationCenterSkin extends SkinBase<MFXNotificationCenter> {
         borderPane.setCenter(virtualFlow);
         borderPane.setBottom(actions);
         borderPane.getStyleClass().add("notifications-container");
-        VBox.setVgrow(borderPane, Priority.ALWAYS);
 
-        VBox popupContent = new VBox(borderPane);
-        popupContent.setAlignment(Pos.TOP_CENTER);
-        popupContent.paddingProperty().bind(Bindings.createObjectBinding(
-                () -> InsetsFactory.top(notificationCenter.getPopupSpacing()),
-                notificationCenter.popupSpacingProperty()
-        ));
-        popupContent.setMinHeight(Region.USE_PREF_SIZE);
-        popupContent.setMaxHeight(Region.USE_PREF_SIZE);
-        popupContent.prefWidthProperty().bind(notificationCenter.popupWidthProperty());
-        popupContent.prefHeightProperty().bind(notificationCenter.popupHeightProperty());
+        borderPane.setMinHeight(Region.USE_PREF_SIZE);
+        borderPane.setMaxHeight(Region.USE_PREF_SIZE);
+        borderPane.prefWidthProperty().bind(notificationCenter.popupWidthProperty());
+        borderPane.prefHeightProperty().bind(notificationCenter.popupHeightProperty());
+        BorderPane.setMargin(virtualFlow, InsetsFactory.all(5));
 
-        popup = new MFXPopup(popupContent) {
+        popup = new MFXPopup(borderPane) {
             @Override
             public Styleable getStyleableParent() {
                 return MFXNotificationCenterSkin.this.getSkinnable();
             }
         };
+        popup.getStyleClass().add("popup");
         popup.setAnimated(false);
         popup.setConsumeAutoHidingEvents(true);
-        popup.getStyleClass().addAll(getSkinnable().getStyleClass());
 
         getChildren().setAll(bellWrapped, counter);
         addListeners();
@@ -121,13 +119,13 @@ public class MFXNotificationCenterSkin extends SkinBase<MFXNotificationCenter> {
         popup.showingProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue && notificationCenter.isShowing()) notificationCenter.setShowing(false);
         });
-        bellWrapped.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            bellWrapped.requestFocus();
-            notificationCenter.getOnIconClicked().handle(event);
-        });
+        bellWrapped.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> notificationCenter.getOnIconClicked().handle(event));
         notificationCenter.showingProperty().addListener((observable, oldValue, newValue) -> managePopup(newValue));
         notificationCenter.addEventFilter(MFXPopupEvent.REPOSITION_EVENT, event -> popup.reposition());
-        notificationCenter.popupHoverProperty().bind(popup.hoverProperty());
+        notificationCenter.popupHoverProperty().bind(Bindings.createBooleanBinding(
+                () -> popup.isHover() || notificationCenter.getMFXContextMenu().isShowing(),
+                popup.hoverProperty(), notificationCenter.getMFXContextMenu().showingProperty()
+        ));
     }
 
     /**
@@ -138,7 +136,7 @@ public class MFXNotificationCenterSkin extends SkinBase<MFXNotificationCenter> {
             popup.hide();
             return;
         }
-        popup.show(bellWrapped, Alignment.of(HPos.CENTER, VPos.BOTTOM));
+        popup.show(bellWrapped, Alignment.of(HPos.CENTER, VPos.BOTTOM), 0, getSkinnable().getPopupSpacing());
     }
 
     //================================================================================
@@ -200,6 +198,7 @@ public class MFXNotificationCenterSkin extends SkinBase<MFXNotificationCenter> {
                     () -> notificationCenter.getCounterStyle() == NotificationCounterStyle.NUMBER ? Long.toString(notificationCenter.getUnreadCount()) : "",
                     notificationCenter.unreadCountProperty(), notificationCenter.counterStyleProperty()
             ));
+            counterText.setMouseTransparent(true);
 
             getStyleClass().add("counter");
             visibleProperty().bind(notificationCenter.unreadCountProperty().greaterThan(0));

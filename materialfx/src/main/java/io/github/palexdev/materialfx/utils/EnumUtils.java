@@ -30,4 +30,13 @@ public class EnumUtils {
 
 		return enumeration;
 	}
+
+	/**
+	 * Given an enumerator (as a class) retrieves a random constant
+	 * using {@link Class#getEnumConstants()}.
+	 */
+	public static <E extends Enum<E>> E randomEnum(Class<E> clazz) {
+		E[] values = clazz.getEnumConstants();
+		return values[RandomInstance.random.nextInt(values.length)];
+	}
 }

@@ -37,7 +37,12 @@ public class MFXPopupSkin implements Skin<MFXPopup> {
         this.popup = popup;
 
         scale = new Scale(0.1, 0.1, 0, 0);
-        container = new StackPane(popup.getContent());
+        container = new StackPane(popup.getContent()) {
+            @Override
+            public String getUserAgentStylesheet() {
+                return popup.getUserAgentStylesheet();
+            }
+        };
         container.getTransforms().setAll(scale);
 
         initHandler = event -> {
@@ -76,21 +81,26 @@ public class MFXPopupSkin implements Skin<MFXPopup> {
         PopupPositionBean position = popup.getPosition();
         if (position == null) return;
 
-        double containerW = container.prefWidth(-1);
-        double containerH = container.prefHeight(-1);
-        HPos hPos = position.getHPos();
-        VPos vPos = position.getVPos();
-        double xOffset = position.getXOffset();
-        double yOffset = position.getYOffset();
+        if (position.getAlignment() != null) {
+            double containerW = container.prefWidth(-1);
+            double containerH = container.prefHeight(-1);
 
-        double px = hPos == HPos.RIGHT ? xOffset : containerW + xOffset;
-        double py = vPos == VPos.BOTTOM ? yOffset : containerH + yOffset;
+            HPos hPos = position.getHPos();
+            VPos vPos = position.getVPos();
+            double xOffset = position.getXOffset();
+            double yOffset = position.getYOffset();
 
-        scale.setPivotX(px);
-        scale.setPivotY(py);
+            double px = hPos == HPos.RIGHT ? xOffset : containerW + xOffset;
+            double py = vPos == VPos.BOTTOM ? yOffset : containerH + yOffset;
+            scale.setPivotX(px);
+            scale.setPivotY(py);
+        }
         popup.reposition();
     }
 
+    //================================================================================
+    // Overridden Methods
+    //================================================================================
     @Override
     public MFXPopup getSkinnable() {
         return popup;

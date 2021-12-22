@@ -1,9 +1,11 @@
 package io.github.palexdev.materialfx.css;
 
 import io.github.palexdev.materialfx.controls.MFXPopup;
+import io.github.palexdev.materialfx.skins.MFXContextMenuSkin;
 import javafx.collections.ObservableList;
 import javafx.scene.Parent;
 import javafx.scene.control.PopupControl;
+import javafx.scene.layout.Region;
 
 /**
  * JavaFX offers a special type of Popup, the {@link PopupControl}, to allow styling
@@ -39,4 +41,12 @@ public interface MFXStyleablePopup {
 	 * @return the parsed stylesheets
 	 */
 	ObservableList<String> getStyleSheets();
+
+	/**
+	 * This method works just like {@link Region#getUserAgentStylesheet()}.
+	 * <p></p>
+	 * Any {@link MFXStyleablePopup} should offer the possibility of setting a base stylesheet.
+	 * It's up to the skin on how to use it though (an example can be found here {@link MFXContextMenuSkin}).
+	 */
+	String getUserAgentStylesheet();
 }

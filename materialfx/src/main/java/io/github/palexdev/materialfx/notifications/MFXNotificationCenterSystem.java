@@ -52,9 +52,10 @@ public class MFXNotificationCenterSystem extends AbstractMFXNotificationSystem {
         center.setOnIconClicked(event -> {
             if (!isShowing() && !center.getNotifications().isEmpty()) {
                 show();
-            } else {
-                close();
             }
+        });
+        center.showingProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) close();
         });
 
         center.popupHoverProperty().addListener((observable, oldValue, newValue) -> {

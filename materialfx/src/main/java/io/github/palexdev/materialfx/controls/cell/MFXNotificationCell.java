@@ -42,7 +42,7 @@ public class MFXNotificationCell extends HBox implements Cell<INotification> {
         this.notificationCenter = notificationCenter;
         setNotification(notification);
 
-        setPrefHeight(65);
+        setPrefHeight(80);
         setMaxHeight(USE_PREF_SIZE);
         setAlignment(Pos.CENTER_LEFT);
 
@@ -74,6 +74,7 @@ public class MFXNotificationCell extends HBox implements Cell<INotification> {
         getStyleClass().add(STYLE_CLASS);
         setBehavior();
         render(getNotification());
+        if (notificationCenter.isSelectionMode()) expand(true);
     }
 
     /**
@@ -170,6 +171,15 @@ public class MFXNotificationCell extends HBox implements Cell<INotification> {
     @Override
     public void updateIndex(int index) {
         setIndex(index);
+    }
+
+    /**
+     * Ensures that the combobox container is properly expanded
+     * after the cell has been laid out.
+     */
+    @Override
+    public void afterLayout() {
+        expand(notificationCenter.isSelectionMode());
     }
 
     //================================================================================

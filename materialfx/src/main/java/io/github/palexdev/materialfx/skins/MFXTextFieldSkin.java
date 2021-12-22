@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SkinBase;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Scale;
@@ -76,6 +77,8 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 			}
 		};
 		textContainer.setAlignment(Pos.CENTER_LEFT);
+		textContainer.setMaxWidth(Double.MAX_VALUE);
+		HBox.setHgrow(textContainer, Priority.ALWAYS);
 
 		container = new HBox(textContainer);
 		container.setAlignment(Pos.CENTER_LEFT);

@@ -1,385 +1,386 @@
-/*
- * Copyright (C) 2021 Parisi Alessandro
- * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
- *
- * MaterialFX is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * MaterialFX is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
+import io.github.palexdev.materialfx.beans.properties.functional.ConsumerProperty;
+import io.github.palexdev.materialfx.beans.properties.functional.FunctionProperty;
+import io.github.palexdev.materialfx.factories.InsetsFactory;
+import io.github.palexdev.materialfx.skins.MFXContextMenuSkin;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.PopupControl;
+import javafx.scene.Parent;
+import javafx.scene.control.Skin;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.stage.WindowEvent;
+
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
- * This control is a context menu built from scratch which extends {@code VBox}.
- * <p>
- * It easily styleable and allows to add separators between the context menu nodes.
- * The context menu is shown in a {@code PopupControl}.
- * <p>
- * It also allows to easily change owner and menu items even at runtime.
+ * {@link MFXContextMenu} is a special case of {@link MFXPopup}.
+ * The content is determined by its skin, and also has a userAgentStylesheet to define
+ * the default style for all {@code MFXContextMenus}.
  * <p></p>
- * It is <b>highly recommended</b> to use the {@link MFXContextMenu.Builder} class to create a context menu.
+ * You can easily manage on what condition to show the popup and where to show it by changing these
+ * two properties:
+ * <p> - {@link #showConditionProperty()}: by default checks if the pressed mouse button was the SECONDARY button
+ * <p> - {@link #showActionProperty()}: by default calls {@link MFXPopup#show(Node, double, double)} with the mouse screen coordinates
+ * <p></p>
+ * The new implementation doesn't allow to change the owner anymore, to keep things simple.
+ * <p>
+ * The new implementation allows adding generic separators, not only lines, {@link #addSeparator(Node)},
+ * usually this is a Label to categorize the menu items.
+ * The new implementation also allows to disable the popup. The disabled state is used by the default
+ * {@link #showConditionProperty()}, so keep in mind that if you change that the disabled state
+ * will be ignored (unless specified by your logic of course).
+ * <p></p>
+ * It is highly suggested using the {@link Builder} class to create a context menu.
  */
-public class MFXContextMenu extends VBox {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final String STYLE_CLASS = "mfx-context-menu";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXContextMenu.css");
+public class MFXContextMenu extends MFXPopup {
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final String STYLE_CLASS = "mfx-context-menu";
+	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXContextMenu.css");
 
-    private final ObjectProperty<ObservableList<Node>> items = new SimpleObjectProperty<>(FXCollections.observableArrayList());
-    private final ObjectProperty<Node> owner = new SimpleObjectProperty<>();
-    private final PopupControl popup;
-    private EventHandler<MouseEvent> openHandler;
-    private ChangeListener<Boolean> ownerFocus;
+	private final ObservableList<Node> items = FXCollections.observableArrayList();
+	private Node owner;
+	private EventHandler<MouseEvent> ownerHandler;
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXContextMenu(Node owner) {
-        this(0, owner);
-    }
+	private boolean disabled = false;
+	private final FunctionProperty<MouseEvent, Boolean> showCondition = new FunctionProperty<>(event -> !disabled && event.getButton() == MouseButton.SECONDARY);
+	private final ConsumerProperty<MouseEvent> showAction = new ConsumerProperty<>(event -> show(owner, event.getScreenX(), event.getScreenY()));
 
-    public MFXContextMenu(double spacing, Node owner) {
-        super(spacing);
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXContextMenu(Node owner) {
+		if (owner == null) {
+			throw new NullPointerException("Owner node cannot be null!");
+		}
 
-        popup = new PopupControl();
-        popup.getScene().setRoot(this);
-        popup.getScene().setFill(Color.TRANSPARENT);
-        popup.setAutoHide(true);
-        popup.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> hide());
+		this.owner = owner;
+		ownerHandler = event -> {
+			if (isShowing()) {
+				hide();
+				return;
+			}
 
-        openHandler = event -> {
-            if (event.getButton() == MouseButton.SECONDARY) {
-                show(event);
-            } else {
-                hide();
-            }
-        };
-        ownerFocus = (observable, oldValue, newValue) -> {
-            if (!newValue && isShowing()) {
-                hide();
-            }
-        };
+			if (getShowCondition().apply(event)) {
+				getShowAction().accept(event);
+			}
+		};
 
-        initialize();
-        setOwner(owner);
-    }
+		initialize();
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
-    private void initialize() {
-        getStyleClass().add(STYLE_CLASS);
-        setStyle("-fx-background-color: white");
-        setMinWidth(100);
-        setAlignment(Pos.TOP_CENTER);
+	//================================================================================
+	// Methods
+	//================================================================================
+	private void initialize() {
+		getStyleClass().add(STYLE_CLASS);
+	}
 
+	/**
+	 * Adds the needed handlers on the owner node.
+	 */
+	public void install() {
+		owner.addEventFilter(MouseEvent.MOUSE_CLICKED, ownerHandler);
+	}
 
-        items.addListener((observable, oldValue, newValue) -> {
-            if (oldValue != null && !oldValue.isEmpty()) {
-                oldValue.clear();
-            }
-            if (newValue != null) {
-                super.getChildren().setAll(newValue);
-            }
-        });
+	/**
+	 * Removes any added handler from the owner node.
+	 */
+	public void uninstall() {
+		owner.removeEventFilter(MouseEvent.MOUSE_CLICKED, ownerHandler);
+	}
 
-        owner.addListener((observable, oldValue, newValue) -> {
-            if (oldValue != null) {
-                oldValue.removeEventFilter(MouseEvent.MOUSE_PRESSED, openHandler);
-                oldValue.focusedProperty().removeListener(ownerFocus);
-            }
-            if (newValue != null) {
-                newValue.addEventFilter(MouseEvent.MOUSE_PRESSED, openHandler);
-                newValue.focusedProperty().addListener(ownerFocus);
-            }
-        });
-    }
+	/**
+	 * Calls {@link #uninstall()} but also sets all the handlers and the owner
+	 * node to null, making this context menu not usable anymore.
+	 */
+	public void dispose() {
+		if (owner != null) {
+			uninstall();
+			ownerHandler = null;
+			owner = null;
+		}
+	}
 
-    /**
-     * Shows the context menu' popup.
-     */
-    public void show(MouseEvent event) {
-        popup.show(getOwner(), event.getScreenX(), event.getScreenY());
-    }
+	/**
+	 * Adds the giver menu item to the items list.
+	 */
+	public void addItem(MFXContextMenuItem item) {
+		items.add(item);
+	}
 
-    /**
-     * Hides the context menu' popup.
-     */
-    public void hide() {
-        popup.hide();
-    }
+	/**
+	 * Adds the given menu items to the items list.
+	 */
+	public void addItems(MFXContextMenuItem... items) {
+		this.items.addAll(items);
+	}
 
-    /**
-     * Removes the popup handler from the current set owner (if not null) and then
-     * sets it to null.
-     */
-    public void dispose() {
-        if (getOwner() != null) {
-            getOwner().removeEventFilter(MouseEvent.MOUSE_PRESSED, openHandler);
-            getOwner().focusedProperty().removeListener(ownerFocus);
-        }
-        openHandler = null;
-        ownerFocus = null;
-    }
+	/**
+	 * Adds the given node which acts as a separator to the items list.
+	 */
+	public void addSeparator(Node separator) {
+		separator.getStyleClass().add("separator");
+		items.add(separator);
+	}
 
-    /**
-     * @return the item's list of this context menu, separators included
-     */
-    public ObservableList<Node> getItems() {
-        return items.get();
-    }
+	/**
+	 * Adds the given line which acts as a separator to the items list.
+	 * <p></p>
+	 * It's suggested to use {@link Builder#getLineSeparator()} or {@link Builder#getLineSeparator(Insets)}
+	 * to generate the Line.
+	 */
+	public void addLineSeparator(Line separator) {
+		separator.getStyleClass().add("line-separator");
+		items.add(separator);
+	}
 
-    /**
-     * Sets the item's list of this context menu with the given list.
-     */
-    public void setItems(ObservableList<Node> items) {
-        this.items.set(items);
-    }
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
+	@Override
+	protected Skin<?> createDefaultSkin() {
+		return new MFXContextMenuSkin(this);
+	}
 
-    public Node getOwner() {
-        return owner.get();
-    }
+	@Override
+	public String getUserAgentStylesheet() {
+		return STYLESHEET;
+	}
 
-    /**
-     * Specifies the popup's owner. This is needed to invoke {@link PopupControl#show(Node, double, double)}.
-     */
-    public ObjectProperty<Node> ownerProperty() {
-        return owner;
-    }
+	//================================================================================
+	// Getters/Setters
+	//================================================================================
 
-    public void setOwner(Node owner) {
-        this.owner.set(owner);
-    }
+	/**
+	 * @return whether the context menu is disabled
+	 */
+	public boolean isDisabled() {
+		return disabled;
+	}
 
-    //================================================================================
-    // Delegate Methods
-    //================================================================================
-    public void setOnCloseRequest(EventHandler<WindowEvent> value) {
-        popup.setOnCloseRequest(value);
-    }
+	/**
+	 * Enables/Disables the context menu.
+	 */
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
+	}
 
-    public void setOnShowing(EventHandler<WindowEvent> value) {
-        popup.setOnShowing(value);
-    }
+	/**
+	 * @return the list containing the context menu's items
+	 */
+	public ObservableList<Node> getItems() {
+		return items;
+	}
 
-    public void setOnShown(EventHandler<WindowEvent> value) {
-        popup.setOnShown(value);
-    }
+	/**
+	 * @return this context menu's owner
+	 */
+	public Node getOwner() {
+		return owner;
+	}
 
-    public void setOnHiding(EventHandler<WindowEvent> value) {
-        popup.setOnHiding(value);
-    }
+	public Function<MouseEvent, Boolean> getShowCondition() {
+		return showCondition.get();
+	}
 
-    public void setOnHidden(EventHandler<WindowEvent> value) {
-        popup.setOnHidden(value);
-    }
+	/**
+	 * Specifies the function used to determine if a MouseEvent should trigger
+	 * the {@link #showActionProperty()}.
+	 * <p>
+	 * By default, checks if the SECONDARY mouse button was pressed.
+	 */
+	public FunctionProperty<MouseEvent, Boolean> showConditionProperty() {
+		return showCondition;
+	}
 
-    public boolean isShowing() {
-        return popup.isShowing();
-    }
+	public void setShowCondition(Function<MouseEvent, Boolean> showCondition) {
+		this.showCondition.set(showCondition);
+	}
 
-    public ReadOnlyBooleanProperty showingProperty() {
-        return popup.showingProperty();
-    }
+	public Consumer<MouseEvent> getShowAction() {
+		return showAction.get();
+	}
 
-    //================================================================================
-    // Override Methods
-    //================================================================================
+	/**
+	 * Specifies the action to perform when a valid MouseEvent occurs.
+	 * <p>
+	 * By default, calls {@link #show(Node, double, double)} with the MouseEvent screen coordinates.
+	 */
+	public ConsumerProperty<MouseEvent> showActionProperty() {
+		return showAction;
+	}
 
-    /**
-     * @return an unmodifiable list containing the control's children
-     */
-    @Override
-    public ObservableList<Node> getChildren() {
-        return super.getChildrenUnmodifiable();
-    }
+	public void setShowAction(Consumer<MouseEvent> showAction) {
+		this.showAction.set(showAction);
+	}
 
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
+	//================================================================================
+	// Builder
+	//================================================================================
 
-    @Override
-    protected void layoutChildren() {
-        super.layoutChildren();
+	/**
+	 * Builder class that facilitates the creation of context menus with fluent api.
+	 * <p>
+	 * An example:
+	 * <p></p>
+	 * <pre>
+	 * {@code
+	 *
+	 * MFXContextMenuItem item1 = ...;
+	 * MFXContextMenuItem item2 = ...;
+	 * MFXContextMenuItem item3 = ...;
+	 * MFXContextMenuItem item4 = ...;
+	 * MFXContextMenuItem item5 = ...;
+	 * MFXContextMenuItem item6 = ...;
+	 *
+	 * MFXContextMenu.Builder.build(owner)
+	 *         .addItems(item1, item2)
+	 *         .addLineSeparator()
+	 *         .addItems(item3, item4)
+	 *         .addLineSeparator()
+	 *         .addItems(item5, item6)
+	 *         .installAndGet();
+	 * }
+	 * </pre>
+	 *
+	 * @see MFXContextMenuItem
+	 */
+	public static class Builder {
+		private final MFXContextMenu contextMenu;
 
-        getItems().stream()
-                .filter(node -> node instanceof Line)
-                .map(node -> (Line) node)
-                .forEach(line -> {
-                    line.setStartX(0);
-                    line.setEndX(getWidth() - (snappedRightInset() + snappedLeftInset()));
-                });
-    }
+		private Builder(Node owner) {
+			contextMenu = new MFXContextMenu(owner);
+		}
 
-    //================================================================================
-    // Builder
-    //================================================================================
+		/**
+		 * @return a new Builder instance with the given owner for the MFXContextMenu
+		 */
+		public static Builder build(Node owner) {
+			return new Builder(owner);
+		}
 
-    /**
-     * Builder class that facilitates the creation of context menus with fluent api.
-     * <p>
-     * An example:
-     * <p></p>
-     * <pre>
-     * {@code
-     * MFXContextMenuItem item1 = new MFXContextMenuItem()
-     *         .setText("A")
-     *         .setAccelerator("Shift + A")
-     *         .setTooltipSupplier(() -> new Tooltip("A"))
-     *         .setAction(event -> System.out.println("Action A"));
-     *
-     * MFXContextMenuItem item2 = new MFXContextMenuItem()
-     *         .setText("B")
-     *         .setAccelerator("Shift + B")
-     *         .setTooltipSupplier(() -> new Tooltip("B"))
-     *         .setAction(event -> System.out.println("Action B"));
-     *
-     * MFXContextMenuItem item3 = new MFXContextMenuItem()
-     *         .setText("C")
-     *         .setAccelerator("Shift + C")
-     *         .setTooltipSupplier(() -> new Tooltip("C"))
-     *         .setAction(event -> System.out.println("Action C"));
-     *
-     * MFXContextMenuItem item4 = new MFXContextMenuItem()
-     *         .setText("D")
-     *         .setAccelerator("Shift + D")
-     *         .setTooltipSupplier(() -> new Tooltip("D"))
-     *         .setAction(event -> System.out.println("Action D"));
-     *
-     * MFXContextMenuItem item5 = new MFXContextMenuItem()
-     *         .setText("E")
-     *         .setAccelerator("Shift + E")
-     *         .setTooltipSupplier(() -> new Tooltip("E"))
-     *         .setAction(event -> System.out.println("Action E"));
-     *
-     * MFXContextMenuItem item6 = new MFXContextMenuItem()
-     *         .setText("F")
-     *         .setAccelerator("Shift + F")
-     *         .setTooltipSupplier(() -> new Tooltip("F"))
-     *         .setAction(event -> System.out.println("Action F"));
-     *
-     * MFXContextMenu.Builder.build(owner)
-     *         .addMenuItem(item1)
-     *         .addMenuItem(item2)
-     *         .addSeparator()
-     *         .addMenuItem(item3)
-     *         .addMenuItem(item4)
-     *         .addSeparator()
-     *         .addMenuItem(item5)
-     *         .addMenuItem(item6)
-     *         .install();
-     * }
-     * </pre>
-     *
-     * @see MFXContextMenuItem
-     */
-    public static class Builder {
-        private final MFXContextMenu contextMenu;
-        private final ObservableList<Node> items = FXCollections.observableArrayList();
+		/**
+		 * Adds the giver menu item to the items list.
+		 */
+		public Builder addItem(MFXContextMenuItem item) {
+			contextMenu.addItem(item);
+			return this;
+		}
 
-        private Builder(Node owner) {
-            this(0, owner);
-        }
+		/**
+		 * Adds the given menu items to the items list.
+		 */
+		public Builder addItems(MFXContextMenuItem... items) {
+			contextMenu.addItems(items);
+			return this;
+		}
 
-        private Builder(double spacing, Node owner) {
-            contextMenu = new MFXContextMenu(spacing, owner);
-        }
+		/**
+		 * Sets the given action on the given item, then adds it to the items list.
+		 */
+		public Builder addItem(MFXContextMenuItem item, EventHandler<ActionEvent> action) {
+			item.setOnAction(action);
+			contextMenu.addItem(item);
+			return this;
+		}
 
-        /**
-         * @return a new Builder instance with the given owner for the MFXContextMenu
-         */
-        public static Builder build(Node owner) {
-            return new Builder(owner);
-        }
+		/**
+		 * Adds the given node which acts as a separator to the items list.
+		 */
+		public Builder addSeparator(Node node) {
+			contextMenu.addSeparator(node);
+			return this;
+		}
 
-        /**
-         * @return a new Builder instance with the given owner for the MFXContextMenu
-         * and the given spacing
-         */
-        public static Builder build(double spacing, Node owner) {
-            return new Builder(spacing, owner);
-        }
+		/**
+		 * Adds the given line which acts as a separator to the items list.
+		 * <p>
+		 * The line is generated using {@link #getLineSeparator()}.
+		 */
+		public Builder addLineSeparator() {
+			contextMenu.addLineSeparator(getLineSeparator());
+			return this;
+		}
 
-        /**
-         * Adds the specifies node to the items list.
-         */
-        public Builder addMenuItem(Node node) {
-            items.add(node);
-            return this;
-        }
+		/**
+		 * Adds the given line which acts as a separator to the items list.
+		 * <p>
+		 * The line is generated using {@link #getLineSeparator(Insets)}.
+		 */
+		public Builder addLineSeparator(Insets insets) {
+			contextMenu.addLineSeparator(getLineSeparator(insets));
+			return this;
+		}
 
-        /**
-         * Adds the specified action to the specified node by adding an event handler
-         * for MOUSE_PRESSED to the node and then adds the node to the items list.
-         */
-        public Builder addMenuItem(Node node, EventHandler<MouseEvent> action) {
-            node.addEventHandler(MouseEvent.MOUSE_PRESSED, action);
-            items.add(node);
-            return this;
-        }
+		/**
+		 * Sets the condition on which the given MouseEvent should trigger
+		 * the {@link MFXContextMenu#showActionProperty()}.
+		 */
+		public Builder setShowCondition(Function<MouseEvent, Boolean> showCondition) {
+			contextMenu.setShowCondition(showCondition);
+			return this;
+		}
 
-        /**
-         * Adds the specified {@link MFXContextMenuItem} to the items list.
-         */
-        public Builder addMenuItem(MFXContextMenuItem item) {
-            items.add(item);
-            return this;
-        }
+		/**
+		 * Sets the action to perform when a valid MouseEvent occurs.
+		 *
+		 * @see MFXContextMenu#showActionProperty()
+		 */
+		public Builder setShowAction(Consumer<MouseEvent> showAction) {
+			contextMenu.setShowAction(showAction);
+			return this;
+		}
 
-        /**
-         * Adds a separator to the items list.
-         */
-        public Builder addSeparator() {
-            items.add(getSeparator());
-            return this;
-        }
+		/**
+		 * Sets the node that has the necessary stylesheets to customize the popup.
+		 */
+		public Builder setPopupStyleableParent(Parent parent) {
+			contextMenu.setPopupStyleableParent(parent);
+			return this;
+		}
 
-        /**
-         * Installs the added items in the context menu and returns it.
-         */
-        public MFXContextMenu installAndGet() {
-            contextMenu.setItems(items);
-            return contextMenu;
-        }
+		/**
+		 * @return the built context menu
+		 */
+		public MFXContextMenu get() {
+			return contextMenu;
+		}
 
-        /**
-         * Builds a separator.
-         */
-        public static Line getSeparator() {
-            Line separator = new Line();
-            separator.getStyleClass().add("separator");
-            VBox.setMargin(separator, new Insets(4, 0, 3, 0));
-            return separator;
-        }
-    }
+		/**
+		 * Installs the built context menu then returns it.
+		 */
+		public MFXContextMenu installAndGet() {
+			contextMenu.install();
+			return contextMenu;
+		}
+
+		/**
+		 * Calls {@link #getLineSeparator(Insets)} with top-bottom insets of 4.
+		 */
+		public static Line getLineSeparator() {
+			return getLineSeparator(InsetsFactory.of(4, 0, 4, 0));
+		}
+
+		/**
+		 * Builds a {@link Line} separator with startX of 0 and the given {@link Insets}, which are used
+		 * as {@link VBox} margins, {@link VBox#setMargin(Node, Insets)}.
+		 */
+		public static Line getLineSeparator(Insets insets) {
+			Line separator = new Line();
+			separator.setStartX(0);
+			VBox.setMargin(separator, InsetsFactory.of(4, 0, 4, 0));
+			return separator;
+		}
+	}
 }
