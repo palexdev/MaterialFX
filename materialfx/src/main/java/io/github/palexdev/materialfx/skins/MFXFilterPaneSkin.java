@@ -257,7 +257,7 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
         filterCombo.getStyleClass().add("filter-combo");
         filterCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
             setQuery("");
-            predicatesCombo.getSelectionModel().selectFirst();
+            predicatesCombo.selectFirst();
             predicates.setAll(newValue.getPredicates());
 
             if (newValue instanceof EnumFilter) {
@@ -279,7 +279,7 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
                 searchField.setVisible(true);
             }
         });
-        filterCombo.getSelectionModel().selectFirst();
+        filterCombo.selectFirst();
 
         // TODO FIX COMBO BOX ICON EMPTY LIST
         // TODO FIX SELECTION
@@ -291,12 +291,12 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
             }
         };
         addButton.setOnAction(event -> {
-            if (filterCombo.getSelectionModel().getSelectedItem() != null
-                    && predicatesCombo.getSelectionModel().getSelectedItem() != null
+            if (filterCombo.getSelectedItem() != null
+                    && predicatesCombo.getSelectedItem() != null
                     && !searchField.getText().isEmpty()
             ) {
                 AbstractFilter<T, ?> selected = filterCombo.getValue();
-                selected.setSelectedPredicateIndex(predicatesCombo.getSelectionModel().getSelectedIndex());
+                selected.setSelectedPredicateIndex(predicatesCombo.getSelectedIndex());
                 FilterBean<T, ?> predicate = selected.toFilterBean(getQuery());
 
                 if (queryValidation(selected)) {
@@ -341,6 +341,7 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
      * <p></p>
      * Returns true if the input is valid otherwise shows an {@link MFXExceptionDialog} and returns false.
      */
+    @SuppressWarnings("unused")
     protected boolean queryValidation(AbstractFilter<T, ?> filter) {
         String type = "";
         String name = "";

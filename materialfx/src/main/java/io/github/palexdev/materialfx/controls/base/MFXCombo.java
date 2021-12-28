@@ -63,9 +63,15 @@ public interface MFXCombo<T> {
 
 	/**
 	 * If the combo box is editable and the text has been changed, this method
-	 * os responsible for deciding what to do with the new text.
+	 * is responsible for deciding what to do with the new text on confirm.
 	 */
 	void commit(String text);
+
+	/**
+	 * If the combo box is editable and the text has been changed, this method
+	 * is responsible for deciding what to do with the new text on cancel.
+	 */
+	void cancel(String text);
 
 	Consumer<String> getOnCommit();
 
@@ -75,6 +81,15 @@ public interface MFXCombo<T> {
 	ConsumerProperty<String> onCommitProperty();
 
 	void setOnCommit(Consumer<String> onCommit);
+
+	Consumer<String> getOnCancel();
+
+	/**
+	 * Specifies the action to perform on {@link #cancel(String)}.
+	 */
+	ConsumerProperty<String> onCancelProperty();
+
+	void setOnCancel(Consumer<String> onCancel);
 
 	String getPromptText();
 

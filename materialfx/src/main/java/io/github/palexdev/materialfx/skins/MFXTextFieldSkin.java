@@ -8,6 +8,7 @@ import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
 import io.github.palexdev.materialfx.utils.AnimationUtils.PauseBuilder;
 import io.github.palexdev.materialfx.utils.AnimationUtils.TimelineBuilder;
 import io.github.palexdev.materialfx.utils.ColorUtils;
+import io.github.palexdev.materialfx.utils.LabelUtils;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
@@ -341,7 +342,7 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 	// Overridden Methods
 	//================================================================================
 	@Override
-	protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+	protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
 		MFXTextField textField = getSkinnable();
 		Node leadingIcon = textField.getLeadingIcon();
 		Node trailingIcon = textField.getLeadingIcon();
@@ -350,14 +351,14 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 		return leftInset +
 				(leadingIcon != null ? leadingIcon.prefWidth(-1) : 0) +
 				(leadingIcon != null ? spacing : 0) +
-				Math.max(floatingText.prefWidth(-1), field.prefWidth(-1)) +
+				Math.max(floatingText.prefWidth(-1), LabelUtils.computeTextWidth(field.getFont(), field.getText())) +
 				(trailingIcon != null ? spacing : 0) +
 				(trailingIcon != null ? trailingIcon.prefWidth(-1) : 0) +
 				rightInset;
 	}
 
 	@Override
-	protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+	protected double computePrefHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
 		MFXTextField textField = getSkinnable();
 		Node leadingIcon = textField.getLeadingIcon();
 		Node trailingIcon = textField.getTrailingIcon();
@@ -384,11 +385,13 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 
 	@Override
 	protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+		if (getSkinnable().getMaxWidth() == Double.MAX_VALUE) return Double.MAX_VALUE;
 		return getSkinnable().prefWidth(-1);
 	}
 
 	@Override
 	protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+		if (getSkinnable().getMaxHeight() == Double.MAX_VALUE) return Double.MAX_VALUE;
 		return getSkinnable().prefHeight(-1);
 	}
 }

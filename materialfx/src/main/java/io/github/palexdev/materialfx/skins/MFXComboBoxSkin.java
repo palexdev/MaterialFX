@@ -5,6 +5,7 @@ import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXPopup;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.selection.ComboBoxSelectionModel;
+import io.github.palexdev.materialfx.utils.AnimationUtils;
 import io.github.palexdev.virtualizedfx.cell.Cell;
 import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
@@ -13,9 +14,9 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.WindowEvent;
 import javafx.util.StringConverter;
 
 /**
@@ -25,7 +26,7 @@ import javafx.util.StringConverter;
  * {@link MFXTextField} and adds the necessary properties/behaviors to add the
  * popup listview.
  * <p></p>
- * The listview used in the popup is not really a listview but I decided to directly use
+ * The listview used in the popup is not really a listview, but I decided to directly use
  * a {@link SimpleVirtualFlow} to make things easier, so that I don't have to worry about
  * synchronization between the combobox' selection model and the listview' selection model
  */
@@ -35,6 +36,7 @@ public class MFXComboBoxSkin<T> extends MFXTextFieldSkin {
 	//================================================================================
 	protected final MFXPopup popup;
 	private EventHandler<MouseEvent> popupManager;
+	protected SimpleVirtualFlow<T, Cell<T>> virtualFlow;
 
 	//================================================================================
 	// Constructors
@@ -55,7 +57,7 @@ public class MFXComboBoxSkin<T> extends MFXTextFieldSkin {
 		initialize();
 		setBehavior();
 
-		T selectedItem = comboBox.getSelectionModel().getSelectedItem();
+		T selectedItem = comboBox.getSelectedItem();
 		if (selectedItem != null) {
 			comboBox.setValue(selectedItem);
 		}
@@ -64,30 +66,44 @@ public class MFXComboBoxSkin<T> extends MFXTextFieldSkin {
 	//================================================================================
 	// Methods
 	//================================================================================
-	private void setBehavior() {
+	protected void initialize() {
+		popup.setContent(createPopupContent());
+	}
+
+	protected void setBehavior() {
 		comboBehavior();
 		selectionBehavior();
 		iconBehavior();
 		popupBehavior();
 	}
 
-	protected void initialize() {
-		popup.setContent(createPopupContent());
-	}
-
 	/**
-	 * Handles the commit event (on ENTER pressed and if editable), and the update of the
+	 * Handles the commit event (on ENTER pressed and if editable), the cancel event
+	 * (on Ctrl+Shift+Z pressed and if editable), and the update of the
 	 * combo's value, {@link #updateValue(Object)}.
 	 */
 	private void comboBehavior() {
 		MFXComboBox<T> comboBox = getComboBox();
 		comboBox.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
-			if (event.getCode() == KeyCode.ENTER && comboBox.isEditable()) {
-				comboBox.commit(comboBox.getText());
+			if (!comboBox.isEditable()) return;
+			switch (event.getCode()) {
+				case ENTER: {
+					comboBox.commit(comboBox.getText());
+					break;
+				}
+				case Z: {
+					if (event.isShiftDown() && event.isControlDown()) {
+						comboBox.cancel(comboBox.getText());
+					}
+					break;
+				}
 			}
 		});
 
-		comboBox.valueProperty().addListener((observable, oldValue, newValue) -> updateValue(newValue));
+		comboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+			updateValue(newValue);
+			popup.hide();
+		});
 		comboBox.valueProperty().addListener(invalidated -> Event.fireEvent(comboBox, new ActionEvent()));
 	}
 
@@ -152,6 +168,18 @@ public class MFXComboBoxSkin<T> extends MFXTextFieldSkin {
 				animateIcon(comboBox.getTrailingIcon(), true);
 			}
 		});
+
+		popup.addEventFilter(WindowEvent.WINDOW_SHOWING, event ->
+				AnimationUtils.PauseBuilder.build()
+						.setDuration(20)
+						.setOnFinished(end -> {
+							if (comboBox.isScrollOnOpen()) {
+								int selectedIndex = comboBox.getSelectedIndex();
+								if (selectedIndex >= 0) virtualFlow.scrollTo(selectedIndex);
+							}
+						})
+						.getAnimation()
+						.play());
 	}
 
 	/**
@@ -187,16 +215,15 @@ public class MFXComboBoxSkin<T> extends MFXTextFieldSkin {
 	 */
 	protected Node createPopupContent() {
 		MFXComboBox<T> comboBox = getComboBox();
-		SimpleVirtualFlow<T, Cell<T>> virtualFlow = SimpleVirtualFlow.Builder.create(
-				comboBox.itemsProperty(),
-				comboBox.getCellFactory(),
-				Orientation.VERTICAL
-		);
-		virtualFlow.cellFactoryProperty().bind(comboBox.cellFactoryProperty());
-		virtualFlow.prefWidthProperty().bind(comboBox.widthProperty());
-		virtualFlow.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-			if (popup.isShowing()) popup.hide();
-		});
+		if (virtualFlow == null) {
+			virtualFlow = SimpleVirtualFlow.Builder.create(
+					comboBox.itemsProperty(),
+					comboBox.getCellFactory(),
+					Orientation.VERTICAL
+			);
+			virtualFlow.cellFactoryProperty().bind(comboBox.cellFactoryProperty());
+			virtualFlow.prefWidthProperty().bind(comboBox.widthProperty());
+		}
 		return virtualFlow;
 	}
 
@@ -220,5 +247,6 @@ public class MFXComboBoxSkin<T> extends MFXTextFieldSkin {
 			comboBox.getTrailingIcon().removeEventHandler(MouseEvent.MOUSE_PRESSED, popupManager);
 		}
 		popupManager = null;
+		virtualFlow = null;
 	}
 }

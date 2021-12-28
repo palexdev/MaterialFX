@@ -169,6 +169,24 @@ public class MFXTextField extends TextField {
     }
 
     //================================================================================
+    // Overridden Methods
+    //================================================================================
+    @Override
+    protected Skin<?> createDefaultSkin() {
+        return new MFXTextFieldSkin(this, floating);
+    }
+
+    @Override
+    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+        return MFXTextField.getClassCssMetaData();
+    }
+
+    @Override
+    public String getUserAgentStylesheet() {
+        return STYLESHEET;
+    }
+
+    //================================================================================
     // Getters/Setters
     //================================================================================
     public boolean isSelectable() {
@@ -531,23 +549,5 @@ public class MFXTextField extends TextField {
 
     public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
         return StyleableProperties.cssMetaDataList;
-    }
-
-    //================================================================================
-    // Overridden Methods
-    //================================================================================
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        return new MFXTextFieldSkin(this, floating);
-    }
-
-    @Override
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return MFXTextField.getClassCssMetaData();
-    }
-
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
     }
 }

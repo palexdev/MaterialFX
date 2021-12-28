@@ -18,117 +18,143 @@
 
 package io.github.palexdev.materialfx.controls.cell;
 
-import io.github.palexdev.materialfx.skins.MFXDateCellSkin;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.controls.MFXDatePicker;
+import io.github.palexdev.virtualizedfx.cell.Cell;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.css.PseudoClass;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.DateCell;
-import javafx.scene.control.Skin;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
+
+import java.time.LocalDate;
 
 /**
- * Custom implementation of a {@code DateCell} for easily distinguish selected dates and
- * current dates. Includes ripple effects.
+ * Simple implementation of a {@link Cell} capable of representing {@link LocalDate} values.
+ * <p></p>
+ * It has three main states:
+ * <p> - selected: when the cell's value is equal to {@link MFXDatePicker#valueProperty()}
+ * <p> - current: when the cell's value is equal to {@link MFXDatePicker#currentDateProperty()}
+ * <p> - extra: to mark this cells as belonging to a different month
  */
-public class MFXDateCell extends DateCell {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final String STYLE_CLASS = "mfx-date-cell";
+public class MFXDateCell extends Label implements Cell<LocalDate> {
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final String STYLE_CLASS = "mfx-date-cell";
+	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXDateCell.css");
 
-    private static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selectedDate");
-    private static final PseudoClass CURRENT_DAY_PSEUDO_CLASS = PseudoClass.getPseudoClass("current");
+	private final MFXDatePicker datePicker;
+	private final ReadOnlyObjectWrapper<LocalDate> date = new ReadOnlyObjectWrapper<>();
 
-    private final BooleanProperty selectedDate = new SimpleBooleanProperty(false);
-    private final BooleanProperty current = new SimpleBooleanProperty(false);
+	private final ReadOnlyBooleanWrapper selected = new ReadOnlyBooleanWrapper();
+	protected static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
 
-    private boolean drawGraphic = false;
+	private final ReadOnlyBooleanWrapper current = new ReadOnlyBooleanWrapper();
+	protected static final PseudoClass CURRENT_PSEUDO_CLASS = PseudoClass.getPseudoClass("current");
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXDateCell() {
-        initialize();
-    }
+	private boolean extra = false;
+	protected static final PseudoClass EXTRA_PSEUDO_CLASS = PseudoClass.getPseudoClass("extra");
 
-    public MFXDateCell(String text) {
-        setText(text);
-        initialize();
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXDateCell(MFXDatePicker datePicker, LocalDate date) {
+		this.datePicker = datePicker;
+		updateItem(date);
+		initialize();
+	}
 
-    public MFXDateCell(String text, boolean drawGraphic) {
-        setText(text);
-        this.drawGraphic = drawGraphic;
-        initialize();
-    }
+	//================================================================================
+	// Methods
+	//================================================================================
+	private void initialize() {
+		getStyleClass().add(STYLE_CLASS);
+		setAlignment(Pos.CENTER);
+		setBehavior();
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
-    private void initialize() {
-        getStyleClass().setAll(STYLE_CLASS);
-        addListeners();
-    }
+	/**
+	 * Sets the behavior for selected and current states. Binds the text to {@link LocalDate#getDayOfMonth()} (from the current value),
+	 * binds the visible property to the cell's text (hidden if text is empty, visible if text is not empty)
+	 * <p>
+	 * Also handles MOUSE_PRESSED events to change the date picker's value.
+	 */
+	protected void setBehavior() {
+		selected.addListener((observable, oldValue, newValue) -> pseudoClassStateChanged(SELECTED_PSEUDO_CLASS, selected.get()));
+		current.addListener((observable, oldValue, newValue) -> pseudoClassStateChanged(CURRENT_PSEUDO_CLASS, current.get()));
 
-    /**
-     * Adds listeners to selected and current date properties.
-     * <p>
-     * Adds event handler for ripple generator.
-     */
-    private void addListeners() {
-        selectedDate.addListener(invalidate -> pseudoClassStateChanged(SELECTED_PSEUDO_CLASS, selectedDate.get()));
-        current.addListener(invalidate -> pseudoClassStateChanged(CURRENT_DAY_PSEUDO_CLASS, current.get()));
+		textProperty().bind(Bindings.createStringBinding(
+				() -> getDate() != null ? String.valueOf(getDate().getDayOfMonth()) : "",
+				dateProperty()
+		));
+		visibleProperty().bind(textProperty().isNotEmpty());
 
-        selectedDate.addListener((observable, oldValue, newValue) -> {
-            if (getGraphic() != null) {
-                getGraphic().setVisible(!newValue || !current.get());
-            }
-        });
+		selected.bind(datePicker.valueProperty().isEqualTo(dateProperty()));
+		current.bind(datePicker.currentDateProperty().isEqualTo(dateProperty()));
+		addEventHandler(MouseEvent.MOUSE_PRESSED, event -> datePicker.setValue(getDate()));
+	}
 
-        current.addListener((observable, oldValue, newValue) -> {
-            if (newValue && !selectedDate.get() && drawGraphic) {
-                Circle circle = new Circle(getPrefWidth() / 3.8);
-                circle.setFill(Color.TRANSPARENT);
-                circle.getStyleClass().add("cell-stroke");
+	/**
+	 * Marks this cell as an extra cell.
+	 */
+	public void markAsExtra() {
+		extra = true;
+		pseudoClassStateChanged(EXTRA_PSEUDO_CLASS, true);
+	}
 
-                setContentDisplay(ContentDisplay.CENTER);
-                setGraphic(circle);
-            }
-        });
-    }
+	/**
+	 * Un-marks this cell as extra.
+	 */
+	public void unmarkAsExtra() {
+		extra = false;
+		pseudoClassStateChanged(EXTRA_PSEUDO_CLASS, false);
+	}
 
-    public boolean isSelectedDate() {
-        return selectedDate.get();
-    }
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
+	@Override
+	public Node getNode() {
+		return this;
+	}
 
-    public BooleanProperty selectedDateProperty() {
-        return selectedDate;
-    }
+	@Override
+	public void updateItem(LocalDate date) {
+		setDate(date);
+	}
 
-    public void setSelectedDate(boolean selectedDate) {
-        this.selectedDate.set(selectedDate);
-    }
+	@Override
+	public String getUserAgentStylesheet() {
+		return STYLESHEET;
+	}
 
-    public boolean isCurrent() {
-        return current.get();
-    }
+	//================================================================================
+	// Getters/Setters
+	//================================================================================
+	public LocalDate getDate() {
+		return date.get();
+	}
 
-    public BooleanProperty currentProperty() {
-        return current;
-    }
+	/**
+	 * Specifies the cell's represented date.
+	 */
+	public ReadOnlyObjectProperty<LocalDate> dateProperty() {
+		return date.getReadOnlyProperty();
+	}
 
-    public void setCurrent(boolean current) {
-        this.current.set(current);
-    }
+	protected void setDate(LocalDate date) {
+		this.date.set(date);
+	}
 
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        return new MFXDateCellSkin(this);
-    }
-
+	/**
+	 * @return whether the cell is an extra cell
+	 */
+	public boolean isExtra() {
+		return extra;
+	}
 }

@@ -7,6 +7,7 @@ import io.github.palexdev.materialfx.beans.properties.EventHandlerProperty;
 import io.github.palexdev.materialfx.beans.properties.functional.BiFunctionProperty;
 import io.github.palexdev.materialfx.beans.properties.functional.ConsumerProperty;
 import io.github.palexdev.materialfx.beans.properties.functional.FunctionProperty;
+import io.github.palexdev.materialfx.beans.properties.styleable.StyleableBooleanProperty;
 import io.github.palexdev.materialfx.controls.base.MFXCombo;
 import io.github.palexdev.materialfx.controls.cell.MFXComboBoxCell;
 import io.github.palexdev.materialfx.selection.ComboBoxSelectionModel;
@@ -14,6 +15,7 @@ import io.github.palexdev.materialfx.skins.MFXComboBoxSkin;
 import io.github.palexdev.materialfx.utils.ListChangeProcessor;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.NumberUtils;
+import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
 import io.github.palexdev.virtualizedfx.beans.NumberRange;
 import io.github.palexdev.virtualizedfx.cell.Cell;
@@ -25,7 +27,10 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.css.CssMetaData;
 import javafx.css.PseudoClass;
+import javafx.css.Styleable;
+import javafx.css.StyleablePropertyFactory;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -37,6 +42,7 @@ import javafx.util.Duration;
 import javafx.util.StringConverter;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -56,7 +62,7 @@ import java.util.function.Function;
  * <p> - Automatically handles selection when the item's list is modified
  * <p> - Allows to set the combo as editable or not, and in case of changed text
  * to commit the change (pressing enter by default) and specify how to treat the
- * typed text
+ * typed text, or cancel the change (pressing Ctrl+Shift+Z by default).
  * <p> - Also adds a new PseudoClass that activates when the popup opens
  */
 public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
@@ -79,6 +85,7 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 	private final FunctionProperty<T, Cell<T>> cellFactory = new FunctionProperty<>(t -> new MFXComboBoxCell<>(this, t));
 	private final ListChangeListener<? super T> itemsChanged = this::itemsChanged;
 	private final ConsumerProperty<String> onCommit = new ConsumerProperty<>();
+	private final ConsumerProperty<String> onCancel = new ConsumerProperty<>();
 
 	// TODO implement validation
 	// TODO add context menu
@@ -168,37 +175,201 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * By default this implementation calls the specified {@link #onCancelProperty()} consumer
+	 * to perform an action on cancel. So, instead of overriding the method you can easily modify
+	 * its behavior by changing the consumer.
+	 */
+	@Override
+	public void cancel(String text) {
+		if (getOnCancel() != null) {
+			getOnCancel().accept(text);
+		}
+	}
+
+	/**
 	 * Responsible for updating the selection when the items list changes.
 	 */
 	protected void itemsChanged(ListChangeListener.Change<? extends T> change) {
-		if (getSelectionModel().getSelectedIndex() == -1) return;
+		if (getSelectedIndex() == -1) return;
 
 		if (change.getList().isEmpty()) {
-			getSelectionModel().clearSelection();
+			clearSelection();
 			return;
 		}
 
 		ListChangeHelper.Change c = ListChangeHelper.processChange(change, NumberRange.of(0, Integer.MAX_VALUE));
 		Set<Integer> indexes = new HashSet<>();
-		indexes.add(getSelectionModel().getSelectedIndex());
+		indexes.add(getSelectedIndex());
 		ListChangeProcessor updater = new ListChangeProcessor(indexes);
 		c.processReplacement((changed, removed) -> {
-			int selected = getSelectionModel().getSelectedIndex();
+			int selected = getSelectedIndex();
 			if (changed.contains(selected) || removed.contains(selected)) {
-				getSelectionModel().selectItem(getItems().get(selected));
+				selectItem(getItems().get(selected));
 			}
 		});
 		c.processAddition((from, to, added) -> {
 			updater.computeAddition(added.size(), from);
-			getSelectionModel().selectIndex(updater.getIndexes().toArray(new Integer[0])[0]);
+			selectIndex(updater.getIndexes().toArray(new Integer[0])[0]);
 		});
 		c.processRemoval((from, to, removed) -> {
 			updater.computeRemoval(removed, from);
 			int index = NumberUtils.clamp(updater.getIndexes().toArray(new Integer[0])[0], 0, getItems().size() - 1);
-			getSelectionModel().selectIndex(index);
+			selectIndex(index);
 		});
 
-		setValue(getSelectionModel().getSelectedItem());
+		setValue(getSelectedItem());
+	}
+
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
+	@Override
+	protected Skin<?> createDefaultSkin() {
+		return new MFXComboBoxSkin<>(this, floating);
+	}
+
+	@Override
+	public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+		return MFXComboBox.getClassCssMetaData();
+	}
+
+	@Override
+	public String getUserAgentStylesheet() {
+		return STYLESHEET;
+	}
+
+	//================================================================================
+	// Delegate Methods
+	//================================================================================
+
+	/**
+	 * Delegate for {@link ComboBoxSelectionModel#selectFirst()}.
+	 */
+	public void selectFirst() {
+		selectionModel.selectFirst();
+	}
+
+	/**
+	 * Delegate for {@link ComboBoxSelectionModel#selectNext()}.
+	 */
+	public void selectNext() {
+		selectionModel.selectNext();
+	}
+
+	/**
+	 * Delegate for {@link ComboBoxSelectionModel#selectPrevious()}.
+	 */
+	public void selectPrevious() {
+		selectionModel.selectPrevious();
+	}
+
+	/**
+	 * Delegate for {@link ComboBoxSelectionModel#selectLast()}.
+	 */
+	public void selectLast() {
+		selectionModel.selectLast();
+	}
+
+	/**
+	 * Delegate for {@link ComboBoxSelectionModel#clearSelection()}.
+	 */
+	public void clearSelection() {
+		selectionModel.clearSelection();
+	}
+
+	/**
+	 * Delegate for {@link ComboBoxSelectionModel#selectIndex(int)}.
+	 */
+	public void selectIndex(int index) {
+		selectionModel.selectIndex(index);
+	}
+
+	/**
+	 * Delegate for {@link ComboBoxSelectionModel#selectItem(Object)}.
+	 */
+	public void selectItem(T item) {
+		selectionModel.selectItem(item);
+	}
+
+	/**
+	 * Delegate for {@link ComboBoxSelectionModel#getSelectedIndex()}.
+	 */
+	public int getSelectedIndex() {
+		return selectionModel.getSelectedIndex();
+	}
+
+	/**
+	 * Delegate for {@link ComboBoxSelectionModel#selectedIndexProperty()}.
+	 */
+	public ReadOnlyIntegerProperty selectedIndexProperty() {
+		return selectionModel.selectedIndexProperty();
+	}
+
+	/**
+	 * Delegate for {@link ComboBoxSelectionModel#getSelectedItem()}.
+	 */
+	public T getSelectedItem() {
+		return selectionModel.getSelectedItem();
+	}
+
+	/**
+	 * Delegate for {@link ComboBoxSelectionModel#selectedItemProperty()}.
+	 */
+	public ReadOnlyObjectProperty<T> selectedItemProperty() {
+		return selectionModel.selectedItemProperty();
+	}
+
+	//================================================================================
+	// Styleable Properties
+	//================================================================================
+	private final StyleableBooleanProperty scrollOnOpen = new StyleableBooleanProperty(
+			StyleableProperties.SCROLL_ON_OPEN,
+			this,
+			"scrollOnOpen",
+			false
+	);
+
+	public boolean isScrollOnOpen() {
+		return scrollOnOpen.get();
+	}
+
+	/**
+	 * Specifies whether the combo box list should scroll to the current
+	 * selected value on open.
+	 */
+	public StyleableBooleanProperty scrollOnOpenProperty() {
+		return scrollOnOpen;
+	}
+
+	public void setScrollOnOpen(boolean scrollOnOpen) {
+		this.scrollOnOpen.set(scrollOnOpen);
+	}
+
+	//================================================================================
+	// CssMetaData
+	//================================================================================
+	private static class StyleableProperties {
+		private static final StyleablePropertyFactory<MFXComboBox<?>> FACTORY = new StyleablePropertyFactory<>(MFXTextField.getClassCssMetaData());
+		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+
+		private static final CssMetaData<MFXComboBox<?>, Boolean> SCROLL_ON_OPEN =
+				FACTORY.createBooleanCssMetaData(
+						"-mfx-scroll-on-open",
+						MFXComboBox::scrollOnOpenProperty,
+						false
+				);
+
+		static {
+			cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(MFXTextField.getClassCssMetaData(),
+					SCROLL_ON_OPEN
+			);
+		}
+	}
+
+	public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
+		return StyleableProperties.cssMetaDataList;
 	}
 
 	//================================================================================
@@ -325,6 +496,20 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 	}
 
 	@Override
+	public Consumer<String> getOnCancel() {
+		return onCancel.get();
+	}
+
+	@Override
+	public ConsumerProperty<String> onCancelProperty() {
+		return onCancel;
+	}
+
+	public void setOnCancel(Consumer<String> onCancel) {
+		this.onCancel.set(onCancel);
+	}
+
+	@Override
 	public ObservableList<T> getItems() {
 		return items.get();
 	}
@@ -447,18 +632,5 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 
 	public void setOnHidden(EventHandler<Event> onHidden) {
 		this.onHidden.set(onHidden);
-	}
-
-	//================================================================================
-	// Overridden Methods
-	//================================================================================
-	@Override
-	protected Skin<?> createDefaultSkin() {
-		return new MFXComboBoxSkin<>(this, floating);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 }
