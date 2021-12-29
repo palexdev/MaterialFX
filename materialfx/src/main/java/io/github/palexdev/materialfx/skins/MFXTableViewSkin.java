@@ -4,8 +4,8 @@ import io.github.palexdev.materialfx.collections.TransformableList;
 import io.github.palexdev.materialfx.collections.TransformableListWrapper;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.MFXTableColumn.MFXTableColumnEvent;
-import io.github.palexdev.materialfx.controls.dialogs.MFXDialog;
-import io.github.palexdev.materialfx.controls.dialogs.MFXDialogs;
+import io.github.palexdev.materialfx.dialogs.MFXDialogs;
+import io.github.palexdev.materialfx.dialogs.MFXStageDialog;
 import io.github.palexdev.materialfx.enums.SortState;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
@@ -48,7 +48,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
 	protected final StackPane footer;
 
 	private final MFXFilterPane<T> filterPane;
-	private final MFXDialog filterDialog;
+	private final MFXStageDialog filterDialog;
 	private MFXTableColumn<T> sortedColumn;
 
 	//================================================================================
@@ -67,7 +67,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
 
 		filterDialog = MFXDialogs.filter(filterPane)
 				.setShowMinimize(false)
-				.toDialogBuilder()
+				.toStageDialogBuilder()
 				.initOwner(tableView.getScene().getWindow())
 				.initModality(Modality.WINDOW_MODAL)
 				.get();

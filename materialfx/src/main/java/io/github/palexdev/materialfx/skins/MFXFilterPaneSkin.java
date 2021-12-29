@@ -3,6 +3,10 @@ package io.github.palexdev.materialfx.skins;
 import io.github.palexdev.materialfx.beans.BiPredicateBean;
 import io.github.palexdev.materialfx.beans.FilterBean;
 import io.github.palexdev.materialfx.controls.*;
+import io.github.palexdev.materialfx.dialogs.MFXDialogs;
+import io.github.palexdev.materialfx.dialogs.MFXGenericDialog;
+import io.github.palexdev.materialfx.dialogs.MFXStageDialog;
+import io.github.palexdev.materialfx.dialogs.MFXStageDialogBuilder;
 import io.github.palexdev.materialfx.effects.ripple.RippleClipType;
 import io.github.palexdev.materialfx.enums.ChainMode;
 import io.github.palexdev.materialfx.enums.FloatMode;
@@ -50,8 +54,8 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
     private final MFXScrollPane filtersContainer;
     private final FlowPane activeFiltersPane;
 
-    private final MFXExceptionDialog exceptionDialog = new MFXExceptionDialog();
-    private final MFXStageDialog errorDialog = new MFXStageDialog(exceptionDialog);
+    private final MFXGenericDialog dialogContent;
+    private final MFXStageDialog dialog;
     private final StringProperty query = new SimpleStringProperty();
     private boolean avoidQueryReset = false;
 
@@ -61,9 +65,14 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
     public MFXFilterPaneSkin(MFXFilterPane<T> filterPane) {
         super(filterPane);
 
-        // TODO review exception dialog
-        exceptionDialog.setPrefSize(600, 500);
-        errorDialog.setModality(Modality.WINDOW_MODAL);
+        dialogContent = MFXDialogs.error()
+                .setShowAlwaysOnTop(false)
+                .get();
+        dialog = MFXStageDialogBuilder.build()
+                .setContent(dialogContent)
+                .initOwner(filterPane.getScene().getWindow())
+                .initModality(Modality.WINDOW_MODAL)
+                .get();
 
         Region header = buildHeader();
 
@@ -281,9 +290,6 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
         });
         filterCombo.selectFirst();
 
-        // TODO FIX COMBO BOX ICON EMPTY LIST
-        // TODO FIX SELECTION
-
         MFXButton addButton = new MFXButton("Add filter") {
             @Override
             public String getUserAgentStylesheet() {
@@ -339,26 +345,24 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
      * Validates the given query. This is needed for Numbers since the input is a
      * String and there's no guarantee that the typed text represents a number.
      * <p></p>
-     * Returns true if the input is valid otherwise shows an {@link MFXExceptionDialog} and returns false.
+     * Returns true if the input is valid otherwise shows an {@link MFXGenericDialog} and returns false.
      */
     @SuppressWarnings("unused")
     protected boolean queryValidation(AbstractFilter<T, ?> filter) {
-        String type = "";
         String name = "";
 
         try {
             if (filter instanceof NumberFilter) {
                 NumberFilter<T, ?> numberFilter = (NumberFilter<T, ?>) filter;
-                type = "Number";
                 name = numberFilter.name();
                 Number parsed = numberFilter.getValue(getQuery());
             }
             return true;
         } catch (Exception ex) {
-            String title = "Attempted to parse " + name + " of type: " + type;
-            exceptionDialog.setTitle(title);
-            exceptionDialog.setException(ex);
-            errorDialog.show();
+            String title = "Failed to parse: " + name;
+            dialogContent.setHeaderText(title);
+            dialogContent.setContentText(ex.getMessage());
+            dialog.showDialog();
             return false;
         }
     }
