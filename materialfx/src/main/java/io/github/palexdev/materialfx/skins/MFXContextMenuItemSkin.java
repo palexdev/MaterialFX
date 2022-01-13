@@ -18,7 +18,7 @@ import javafx.stage.Window;
 
 /**
  * Skin associated with every {@link MFXContextMenuItem} by default.
- * <p><
+ * <p></p>
  * This skin is composed of a top container, which is a {@link HBox},
  * a {@link MFXIconWrapper} to contain the icon and two labels to show
  * the item's text and the accelerator.

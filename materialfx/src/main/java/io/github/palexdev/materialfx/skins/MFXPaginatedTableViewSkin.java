@@ -13,7 +13,7 @@ import javafx.scene.layout.StackPane;
 
 /**
  * This is the default skin implementation for {@link MFXPaginatedTableView}.
- * <p><
+ * <p></p>
  * Extends {@link MFXTableViewSkin} and just modifies the footer node to add a
  * {@link MFXPagination} control to it, responsible for changing the current page.
  * <p></p>

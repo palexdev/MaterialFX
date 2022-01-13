@@ -54,9 +54,7 @@ public enum Interpolators {
             };
         }
     },
-    EASE_OUT_SINE((t) -> {
-        return Math.sin(t * 3.141592653589793D / 2.0D);
-    }) {
+    EASE_OUT_SINE((t) -> Math.sin(t * 3.141592653589793D / 2.0D)) {
         public Interpolator toInterpolator() {
             return new Interpolator() {
                 protected double curve(double t) {
@@ -91,7 +89,7 @@ public enum Interpolators {
     }
 
     /**
-     * Converts a Function<Double, Double> to a JavaFX's {@link Interpolator}.
+     * Converts a {@code Function<Double, Double>} to a JavaFX's {@link Interpolator}.
      */
     public abstract Interpolator toInterpolator();
 
