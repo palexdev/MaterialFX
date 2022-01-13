@@ -122,26 +122,26 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
      */
     @Override
     public void generateRipple(MouseEvent event) {
-        if (isCheckBounds() && !isWithinBounds(event)) {
-            return;
-        }
+	    if (isPaused()) return;
 
-        if (getClip() != null) {
-            setClip(null);
-        }
-        setClip(buildClip());
+	    if (isCheckBounds() && !isWithinBounds(event)) {
+		    return;
+	    }
+
+	    if (getClip() != null) {
+		    setClip(null);
+	    }
+	    setClip(buildClip());
 
         PositionBean position = getRipplePositionFunction().apply(event);
 
         CircleRipple ripple = getRippleSupplier().get();
-        ripple.setXPosition(position.getX());
         ripple.centerXProperty().bind(position.xProperty());
         ripple.centerYProperty().bind(position.yProperty());
         ripple.setFill(getRippleColor());
         ripple.setOpacity(getRippleOpacity());
 
         Animation rippleAnimation = ripple.getAnimation();
-        rippleAnimation.setOnFinished(end -> getChildren().remove(ripple));
         rippleAnimation.setRate(getAnimationSpeed());
 
         ParallelTransition transition = new ParallelTransition(rippleAnimation);
@@ -154,7 +154,8 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
             transition.getChildren().add(shadowAnimation);
         }
 
-        getChildren().add(ripple);
+	    transition.setOnFinished(end -> getChildren().remove(ripple));
+	    getChildren().add(ripple);
         animationsStack.add(transition);
         transition.play();
     }
@@ -415,37 +416,45 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
     private final StyleableDoubleProperty animationSpeed = new StyleableDoubleProperty(
             StyleableProperties.ANIMATION_SPEED,
             this,
-            "animationSpeed",
-            1.0
+		    "animationSpeed",
+		    1.0
     );
 
-    private final StyleableBooleanProperty autoClip = new StyleableBooleanProperty(
-            StyleableProperties.AUTO_CLIP,
-            this,
-            "autoClip",
-            false
-    );
+	private final StyleableBooleanProperty autoClip = new StyleableBooleanProperty(
+			StyleableProperties.AUTO_CLIP,
+			this,
+			"autoClip",
+			false
+	);
 
-    private final StyleableObjectProperty<Paint> rippleColor = new StyleableObjectProperty<>(
-            StyleableProperties.RIPPLE_COLOR,
-            this,
-            "rippleColor",
-            Color.LIGHTGRAY
-    );
+	private final StyleableDoubleProperty backgroundOpacity = new StyleableDoubleProperty(
+			StyleableProperties.BACKGROUND_OPACITY,
+			this,
+			"backgroundOpacity",
+			0.3
+	);
 
-    private final StyleableDoubleProperty rippleOpacity = new StyleableDoubleProperty(
-            StyleableProperties.RIPPLE_OPACITY,
+	private final StyleableBooleanProperty paused = new StyleableBooleanProperty(
+			StyleableProperties.PAUSED,
+			this,
+			"paused",
+			false
+	);
+
+	private final StyleableObjectProperty<Paint> rippleColor = new StyleableObjectProperty<>(
+			StyleableProperties.RIPPLE_COLOR,
+			this,
+			"rippleColor",
+			Color.LIGHTGRAY
+	);
+
+	private final StyleableDoubleProperty rippleOpacity = new StyleableDoubleProperty(
+			StyleableProperties.RIPPLE_OPACITY,
             this,
             "rippleOpacity",
             1.0
     );
 
-    private final StyleableDoubleProperty backgroundOpacity = new StyleableDoubleProperty(
-            StyleableProperties.BACKGROUND_OPACITY,
-            this,
-            "backgroundOpacity",
-            0.3
-    );
 
     private final StyleableDoubleProperty rippleRadius = new StyleableDoubleProperty(
             StyleableProperties.RIPPLE_RADIUS,
@@ -466,39 +475,71 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
         return animationSpeed;
     }
 
-    public void setAnimationSpeed(double animationSpeed) {
-        this.animationSpeed.set(animationSpeed);
-    }
+	public void setAnimationSpeed(double animationSpeed) {
+		this.animationSpeed.set(animationSpeed);
+	}
 
-    public boolean isAutoClip() {
-        return autoClip.get();
-    }
+	public boolean isAutoClip() {
+		return autoClip.get();
+	}
 
-    public StyleableBooleanProperty autoClipProperty() {
-        return autoClip;
-    }
+	/**
+	 * Specifies whether the generator should try to {@link #buildClip()} automatically,
+	 * this means also trying to fetch the background/border radius.
+	 * <p>
+	 * <b>EXPERIMENTAL, may not work in all situations</b>
+	 */
+	public StyleableBooleanProperty autoClipProperty() {
+		return autoClip;
+	}
 
-    public void setAutoClip(boolean autoClip) {
-        this.autoClip.set(autoClip);
-    }
+	public void setAutoClip(boolean autoClip) {
+		this.autoClip.set(autoClip);
+	}
 
-    public Paint getRippleColor() {
-        return rippleColor.get();
-    }
+	public double getBackgroundOpacity() {
+		return backgroundOpacity.get();
+	}
 
-    /**
-     * Specifies the ripples' color.
-     */
-    public StyleableObjectProperty<Paint> rippleColorProperty() {
-        return rippleColor;
+	/**
+	 * Specifies the strength of the background animation.
+	 */
+	public StyleableDoubleProperty backgroundOpacityProperty() {
+		return backgroundOpacity;
+	}
+
+	public void setBackgroundOpacity(double backgroundOpacity) {
+		this.backgroundOpacity.set(backgroundOpacity);
+	}
+
+	public boolean isPaused() {
+		return paused.get();
+	}
+
+	/**
+	 * Property to enable/disable the ripple generator.
+	 */
+	public StyleableBooleanProperty pausedProperty() {
+		return paused;
+	}
+
+	public void setPaused(boolean paused) {
+		this.paused.set(paused);
+	}
+
+	public Paint getRippleColor() {
+		return rippleColor.get();
+	}
+
+	/**
+	 * Specifies the ripples' color.
+	 */
+	public StyleableObjectProperty<Paint> rippleColorProperty() {
+		return rippleColor;
     }
 
     public void setRippleColor(Paint rippleColor) {
         this.rippleColor.set(rippleColor);
-    }
-
-    public double getBackgroundOpacity() {
-        return backgroundOpacity.get();
     }
 
     public double getRippleOpacity() {
@@ -516,17 +557,6 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
         this.rippleOpacity.set(rippleOpacity);
     }
 
-    /**
-     * Specifies the strength of the background animation.
-     */
-    public StyleableDoubleProperty backgroundOpacityProperty() {
-        return backgroundOpacity;
-    }
-
-    public void setBackgroundOpacity(double backgroundOpacity) {
-        this.backgroundOpacity.set(backgroundOpacity);
-    }
-
     public double getRippleRadius() {
         return rippleRadius.get();
     }
@@ -542,64 +572,71 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
         this.rippleRadius.set(radius);
     }
 
-    //================================================================================
-    // CssMetaData
-    //================================================================================
-    private static class StyleableProperties {
-        private static final StyleablePropertyFactory<MFXCircleRippleGenerator> FACTORY = new StyleablePropertyFactory<>(AbstractMFXRippleGenerator.getClassCssMetaData());
-        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+	//================================================================================
+	// CssMetaData
+	//================================================================================
+	private static class StyleableProperties {
+		private static final StyleablePropertyFactory<MFXCircleRippleGenerator> FACTORY = new StyleablePropertyFactory<>(AbstractMFXRippleGenerator.getClassCssMetaData());
+		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
-        private static final CssMetaData<MFXCircleRippleGenerator, Paint> RIPPLE_COLOR =
-                FACTORY.createPaintCssMetaData(
-                        "-mfx-ripple-color",
-                        MFXCircleRippleGenerator::rippleColorProperty,
-                        Color.LIGHTGRAY
-                );
+		private static final CssMetaData<MFXCircleRippleGenerator, Number> ANIMATION_SPEED =
+				FACTORY.createSizeCssMetaData(
+						"-mfx-animation-speed",
+						MFXCircleRippleGenerator::animationSpeedProperty,
+						1.0
+				);
 
-        private static final CssMetaData<MFXCircleRippleGenerator, Boolean> AUTO_CLIP =
-                FACTORY.createBooleanCssMetaData(
-                        "-mfx-auto-clip",
-                        MFXCircleRippleGenerator::autoClipProperty,
-                        false
-                );
+		private static final CssMetaData<MFXCircleRippleGenerator, Boolean> AUTO_CLIP =
+				FACTORY.createBooleanCssMetaData(
+						"-mfx-auto-clip",
+						MFXCircleRippleGenerator::autoClipProperty,
+						false
+				);
 
-        private static final CssMetaData<MFXCircleRippleGenerator, Number> RIPPLE_RADIUS =
-                FACTORY.createSizeCssMetaData(
-                        "-mfx-ripple-radius",
-                        MFXCircleRippleGenerator::rippleRadiusProperty,
-                        10.0
-                );
+		private static final CssMetaData<MFXCircleRippleGenerator, Number> BACKGROUND_OPACITY =
+				FACTORY.createSizeCssMetaData(
+						"-mfx-background-opacity",
+						MFXCircleRippleGenerator::backgroundOpacityProperty,
+						0.3
+				);
 
-        private static final CssMetaData<MFXCircleRippleGenerator, Number> RIPPLE_OPACITY =
-                FACTORY.createSizeCssMetaData(
-                        "-mfx-ripple-opacity",
-                        MFXCircleRippleGenerator::rippleOpacityProperty,
-                        1.0
-                );
-
-        private static final CssMetaData<MFXCircleRippleGenerator, Number> BACKGROUND_OPACITY =
-                FACTORY.createSizeCssMetaData(
-                        "-mfx-background-opacity",
-                        MFXCircleRippleGenerator::backgroundOpacityProperty,
-                        0.3
-                );
-
-        private static final CssMetaData<MFXCircleRippleGenerator, Number> ANIMATION_SPEED =
-                FACTORY.createSizeCssMetaData(
-                        "-mfx-animation-speed",
-                        MFXCircleRippleGenerator::animationSpeedProperty,
-                        1.0
-                );
+		private static final CssMetaData<MFXCircleRippleGenerator, Paint> RIPPLE_COLOR =
+				FACTORY.createPaintCssMetaData(
+						"-mfx-ripple-color",
+						MFXCircleRippleGenerator::rippleColorProperty,
+						Color.LIGHTGRAY
+				);
 
 
-        static {
-            cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
-                    AbstractMFXRippleGenerator.getClassCssMetaData(),
-                    ANIMATION_SPEED, AUTO_CLIP, BACKGROUND_OPACITY,
-                    RIPPLE_COLOR, RIPPLE_OPACITY, RIPPLE_RADIUS
-            );
-        }
-    }
+		private static final CssMetaData<MFXCircleRippleGenerator, Number> RIPPLE_OPACITY =
+				FACTORY.createSizeCssMetaData(
+						"-mfx-ripple-opacity",
+						MFXCircleRippleGenerator::rippleOpacityProperty,
+						1.0
+				);
+
+		private static final CssMetaData<MFXCircleRippleGenerator, Number> RIPPLE_RADIUS =
+				FACTORY.createSizeCssMetaData(
+						"-mfx-ripple-radius",
+						MFXCircleRippleGenerator::rippleRadiusProperty,
+						10.0
+				);
+
+		private static final CssMetaData<MFXCircleRippleGenerator, Boolean> PAUSED =
+				FACTORY.createBooleanCssMetaData(
+						"-mfx-paused",
+						MFXCircleRippleGenerator::pausedProperty,
+						false
+				);
+
+		static {
+			cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
+					AbstractMFXRippleGenerator.getClassCssMetaData(),
+					ANIMATION_SPEED, AUTO_CLIP, BACKGROUND_OPACITY, PAUSED,
+					RIPPLE_COLOR, RIPPLE_OPACITY, RIPPLE_RADIUS
+			);
+		}
+	}
 
     public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
         return StyleableProperties.cssMetaDataList;

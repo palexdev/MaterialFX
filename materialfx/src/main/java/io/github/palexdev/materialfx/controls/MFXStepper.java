@@ -19,12 +19,13 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.beans.properties.EventHandlerProperty;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle.MFXStepperToggleEvent;
 import io.github.palexdev.materialfx.enums.StepperToggleState;
 import io.github.palexdev.materialfx.skins.MFXStepperSkin;
 import io.github.palexdev.materialfx.utils.NodeUtils;
-import io.github.palexdev.materialfx.validation.base.AbstractMFXValidator;
-import io.github.palexdev.materialfx.validation.base.Validated;
+import io.github.palexdev.materialfx.validation.MFXValidator;
+import io.github.palexdev.materialfx.validation.Validated;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -203,10 +204,10 @@ public class MFXStepper extends Control {
             return;
         }
 
-        List<AbstractMFXValidator> validators = new ArrayList<>();
+        List<MFXValidator> validators = new ArrayList<>();
         Node currentContent = getCurrentContent();
         if (currentContent instanceof Validated) {
-            Validated<?> validated = (Validated<?>) currentContent;
+            Validated validated = (Validated) currentContent;
             if (validated.getValidator() != null) {
                 validators.add(validated.getValidator());
             }
@@ -214,11 +215,11 @@ public class MFXStepper extends Control {
             List<Node> allChildren = NodeUtils.getAllNodes((Parent) currentContent);
             allChildren.stream()
                     .filter(node -> node instanceof Validated)
-                    .map(node -> ((Validated<?>) node).getValidator())
+                    .map(node -> ((Validated) node).getValidator())
                     .filter(Objects::nonNull)
                     .forEach(validators::add);
         }
-       validators.forEach(AbstractMFXValidator::update);
+        validators.forEach(MFXValidator::update);
     }
 
     /**
@@ -720,42 +721,42 @@ public class MFXStepper extends Control {
         }
     }
 
-    private final ObjectProperty<EventHandler<MFXStepperEvent>> onBeforeNext = new SimpleObjectProperty<>() {
+    private final EventHandlerProperty<MFXStepperEvent> onBeforeNext = new EventHandlerProperty<>() {
         @Override
         protected void invalidated() {
             setEventHandler(MFXStepperEvent.BEFORE_NEXT_EVENT, get());
         }
     };
 
-    private final ObjectProperty<EventHandler<MFXStepperEvent>> onNext = new SimpleObjectProperty<>() {
+    private final EventHandlerProperty<MFXStepperEvent> onNext = new EventHandlerProperty<>() {
         @Override
         protected void invalidated() {
             setEventHandler(MFXStepperEvent.NEXT_EVENT, get());
         }
     };
 
-    private final ObjectProperty<EventHandler<MFXStepperEvent>> onBeforePrevious = new SimpleObjectProperty<>() {
+    private final EventHandlerProperty<MFXStepperEvent> onBeforePrevious = new EventHandlerProperty<>() {
         @Override
         protected void invalidated() {
             setEventHandler(MFXStepperEvent.BEFORE_PREVIOUS_EVENT, get());
         }
     };
 
-    private final ObjectProperty<EventHandler<MFXStepperEvent>> onPrevious = new SimpleObjectProperty<>() {
+    private final EventHandlerProperty<MFXStepperEvent> onPrevious = new EventHandlerProperty<>() {
         @Override
         protected void invalidated() {
             setEventHandler(MFXStepperEvent.PREVIOUS_EVENT, get());
         }
     };
 
-    private final ObjectProperty<EventHandler<MFXStepperEvent>> onLastNext = new SimpleObjectProperty<>() {
+    private final EventHandlerProperty<MFXStepperEvent> onLastNext = new EventHandlerProperty<>() {
         @Override
         protected void invalidated() {
             setEventHandler(MFXStepperEvent.LAST_NEXT_EVENT, get());
         }
     };
 
-    private final ObjectProperty<EventHandler<MFXStepperEvent>> onValidationFailed = new SimpleObjectProperty<>() {
+    private final EventHandlerProperty<MFXStepperEvent> onValidationFailed = new EventHandlerProperty<>() {
         @Override
         protected void invalidated() {
             setEventHandler(MFXStepperEvent.VALIDATION_FAILED_EVENT, get());
@@ -769,7 +770,7 @@ public class MFXStepper extends Control {
     /**
      * Specifies the action to perform when a {@link MFXStepperEvent#BEFORE_NEXT_EVENT} is fired.
      */
-    public ObjectProperty<EventHandler<MFXStepperEvent>> onBeforeNextProperty() {
+    public EventHandlerProperty<MFXStepperEvent> onBeforeNextProperty() {
         return onBeforeNext;
     }
 
@@ -786,7 +787,7 @@ public class MFXStepper extends Control {
      *
      * @see MFXStepperEvent
      */
-    public ObjectProperty<EventHandler<MFXStepperEvent>> onNextProperty() {
+    public EventHandlerProperty<MFXStepperEvent> onNextProperty() {
         return onNext;
     }
 
@@ -801,7 +802,7 @@ public class MFXStepper extends Control {
     /**
      * Specifies the action to perform when a {@link MFXStepperEvent#BEFORE_PREVIOUS_EVENT} is fired.
      */
-    public ObjectProperty<EventHandler<MFXStepperEvent>> onBeforePreviousProperty() {
+    public EventHandlerProperty<MFXStepperEvent> onBeforePreviousProperty() {
         return onBeforePrevious;
     }
 
@@ -818,7 +819,7 @@ public class MFXStepper extends Control {
      *
      * @see MFXStepperEvent
      */
-    public ObjectProperty<EventHandler<MFXStepperEvent>> onPreviousProperty() {
+    public EventHandlerProperty<MFXStepperEvent> onPreviousProperty() {
         return onPrevious;
     }
 
@@ -835,7 +836,7 @@ public class MFXStepper extends Control {
      *
      * @see MFXStepperEvent
      */
-    public ObjectProperty<EventHandler<MFXStepperEvent>> onLastNextProperty() {
+    public EventHandlerProperty<MFXStepperEvent> onLastNextProperty() {
         return onLastNext;
     }
 
@@ -852,7 +853,7 @@ public class MFXStepper extends Control {
      *
      * @see MFXStepperEvent
      */
-    public ObjectProperty<EventHandler<MFXStepperEvent>> onValidationFailedProperty() {
+    public EventHandlerProperty<MFXStepperEvent> onValidationFailedProperty() {
         return onValidationFailed;
     }
 

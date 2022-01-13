@@ -32,3 +32,7 @@
     -fx-arc-height: 6;
     -fx-arc-width: 6;
 }
+
+.mfx-progress-bar:disabled .track {
+    -fx-fill: #bcbcbc;
+}

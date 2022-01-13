@@ -20,17 +20,22 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.NumberRange;
+import io.github.palexdev.materialfx.beans.properties.styleable.StyleableDoubleProperty;
+import io.github.palexdev.materialfx.beans.properties.styleable.StyleableObjectProperty;
 import io.github.palexdev.materialfx.skins.MFXProgressSpinnerSkin;
+import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.css.*;
+import javafx.css.CssMetaData;
+import javafx.css.PseudoClass;
+import javafx.css.Styleable;
+import javafx.css.StyleablePropertyFactory;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.Skin;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static io.github.palexdev.materialfx.utils.NodeUtils.isPseudoClassActive;
@@ -51,7 +56,6 @@ public class MFXProgressSpinner extends ProgressIndicator {
     //================================================================================
     // Properties
     //================================================================================
-    private static final StyleablePropertyFactory<MFXProgressSpinner> FACTORY = new StyleablePropertyFactory<>(ProgressIndicator.getClassCssMetaData());
     private final String STYLE_CLASS = "mfx-progress-spinner";
     private final String STYLESHEET = MFXResourcesLoader.load("css/MFXProgressSpinner.css");
 
@@ -124,46 +128,133 @@ public class MFXProgressSpinner extends ProgressIndicator {
         return ranges2;
     }
 
-    /**
-     * Returns the third list of ranges.
-     */
-    public ObservableList<NumberRange<Double>> getRanges3() {
-        return ranges3;
-    }
+	/**
+	 * Returns the third list of ranges.
+	 */
+	public ObservableList<NumberRange<Double>> getRanges3() {
+		return ranges3;
+	}
 
-    //================================================================================
-    // Styleable Properties
-    //================================================================================
+	//================================================================================
+	// Styleable Properties
+	//================================================================================
+	private final StyleableObjectProperty<Color> color1 = new StyleableObjectProperty<>(
+			StyleableProperties.COLOR1,
+			this,
+			"color1",
+			Color.web("#4285f4")
+	);
 
-    /**
-     * Specifies the radius of the spinner.
-     */
-    private final StyleableDoubleProperty radius = new SimpleStyleableDoubleProperty(
-            StyleableProperties.RADIUS,
-            this,
-            "radius",
-            Region.USE_COMPUTED_SIZE
-    );
+	private final StyleableObjectProperty<Color> color2 = new StyleableObjectProperty<>(
+			StyleableProperties.COLOR2,
+			this,
+			"color2",
+			Color.web("#db4437")
+	);
 
-    /**
-     * Specifies the starting angle of the animation.
-     */
-    private final StyleableDoubleProperty startingAngle = new SimpleStyleableDoubleProperty(
-            StyleableProperties.STARTING_ANGLE,
-            this,
-            "startingAngle",
-            360 - Math.random() * 720
-    );
+	private final StyleableObjectProperty<Color> color3 = new StyleableObjectProperty<>(
+			StyleableProperties.COLOR3,
+			this,
+			"color3",
+			Color.web("#f4b400")
+	);
 
-    public double getRadius() {
-        return radius.get();
-    }
+	private final StyleableObjectProperty<Color> color4 = new StyleableObjectProperty<>(
+			StyleableProperties.COLOR4,
+			this,
+			"color4",
+			Color.web("#0F9D58")
+	);
 
-    public StyleableDoubleProperty radiusProperty() {
-        return radius;
-    }
+	/**
+	 * Specifies the radius of the spinner.
+	 */
+	private final StyleableDoubleProperty radius = new StyleableDoubleProperty(
+			StyleableProperties.RADIUS,
+			this,
+			"radius",
+			Region.USE_COMPUTED_SIZE
+	);
 
-    public void setRadius(double radius) {
+	/**
+	 * Specifies the starting angle of the animation.
+	 */
+	private final StyleableDoubleProperty startingAngle = new StyleableDoubleProperty(
+			StyleableProperties.STARTING_ANGLE,
+			this,
+			"startingAngle",
+			360 - Math.random() * 720
+	);
+
+	public Color getColor1() {
+		return color1.get();
+	}
+
+	/**
+	 * Specifies the first color of the spinner arc.
+	 */
+	public StyleableObjectProperty<Color> color1Property() {
+		return color1;
+	}
+
+	public void setColor1(Color color1) {
+		this.color1.set(color1);
+	}
+
+	public Color getColor2() {
+		return color2.get();
+	}
+
+	/**
+	 * Specifies the second color of the spinner arc.
+	 */
+	public StyleableObjectProperty<Color> color2Property() {
+		return color2;
+	}
+
+	public void setColor2(Color color2) {
+		this.color2.set(color2);
+	}
+
+	public Color getColor3() {
+		return color3.get();
+	}
+
+	/**
+	 * Specifies the third color of the spinner arc.
+	 */
+	public StyleableObjectProperty<Color> color3Property() {
+		return color3;
+	}
+
+	public void setColor3(Color color3) {
+		this.color3.set(color3);
+	}
+
+	public Color getColor4() {
+		return color4.get();
+	}
+
+	/**
+	 * Specifies the fourth color of the spinner arc.
+	 */
+	public StyleableObjectProperty<Color> color4Property() {
+		return color4;
+	}
+
+	public void setColor4(Color color4) {
+		this.color4.set(color4);
+	}
+
+	public double getRadius() {
+		return radius.get();
+	}
+
+	public StyleableDoubleProperty radiusProperty() {
+		return radius;
+	}
+
+	public void setRadius(double radius) {
         this.radius.set(radius);
     }
 
@@ -179,30 +270,61 @@ public class MFXProgressSpinner extends ProgressIndicator {
         this.startingAngle.set(startingAngle);
     }
 
-    //================================================================================
-    // CssMetaData
-    //================================================================================
-    private static class StyleableProperties {
-        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+	//================================================================================
+	// CssMetaData
+	//================================================================================
+	private static class StyleableProperties {
+		private static final StyleablePropertyFactory<MFXProgressSpinner> FACTORY = new StyleablePropertyFactory<>(ProgressIndicator.getClassCssMetaData());
+		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
-        private static final CssMetaData<MFXProgressSpinner, Number> RADIUS =
-                FACTORY.createSizeCssMetaData(
-                        "-mfx-radius",
-                        MFXProgressSpinner::radiusProperty,
-                        Region.USE_COMPUTED_SIZE
-                );
+		private static final CssMetaData<MFXProgressSpinner, Color> COLOR1 =
+				FACTORY.createColorCssMetaData(
+						"-mfx-color1",
+						MFXProgressSpinner::color1Property,
+						Color.web("#4285f4")
+				);
 
-        private static final CssMetaData<MFXProgressSpinner, Number> STARTING_ANGLE =
-                FACTORY.createSizeCssMetaData(
+		private static final CssMetaData<MFXProgressSpinner, Color> COLOR2 =
+				FACTORY.createColorCssMetaData(
+						"-mfx-color2",
+						MFXProgressSpinner::color2Property,
+						Color.web("#db4437")
+				);
+
+		private static final CssMetaData<MFXProgressSpinner, Color> COLOR3 =
+				FACTORY.createColorCssMetaData(
+						"-mfx-color3",
+						MFXProgressSpinner::color3Property,
+						Color.web("#f4b400")
+				);
+
+		private static final CssMetaData<MFXProgressSpinner, Color> COLOR4 =
+				FACTORY.createColorCssMetaData(
+						"-mfx-color4",
+						MFXProgressSpinner::color4Property,
+						Color.web("#0F9D58")
+				);
+
+		private static final CssMetaData<MFXProgressSpinner, Number> RADIUS =
+				FACTORY.createSizeCssMetaData(
+						"-mfx-radius",
+						MFXProgressSpinner::radiusProperty,
+						Region.USE_COMPUTED_SIZE
+				);
+
+		private static final CssMetaData<MFXProgressSpinner, Number> STARTING_ANGLE =
+				FACTORY.createSizeCssMetaData(
                         "-mfx-starting-angle",
                         MFXProgressSpinner::startingAngleProperty,
                         360 - Math.random() * 720
                 );
 
         static {
-            List<CssMetaData<? extends Styleable, ?>> priCssMetaData = new ArrayList<>(ProgressIndicator.getClassCssMetaData());
-            Collections.addAll(priCssMetaData, RADIUS, STARTING_ANGLE);
-            cssMetaDataList = Collections.unmodifiableList(priCssMetaData);
+	        cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
+			        ProgressIndicator.getClassCssMetaData(),
+			        COLOR1, COLOR2, COLOR3, COLOR4,
+			        RADIUS, STARTING_ANGLE
+	        );
         }
     }
 

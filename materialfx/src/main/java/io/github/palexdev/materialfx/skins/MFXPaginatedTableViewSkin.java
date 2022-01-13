@@ -8,6 +8,7 @@ import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
 import javafx.animation.PauseTransition;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 
 /**
@@ -37,6 +38,9 @@ public class MFXPaginatedTableViewSkin<T> extends MFXTableViewSkin<T> {
 	public MFXPaginatedTableViewSkin(MFXPaginatedTableView<T> tableView, SimpleVirtualFlow<T, MFXTableRow<T>> rowsFlow) {
 		super(tableView, rowsFlow);
 
+		rowsFlow.setMinHeight(Region.USE_PREF_SIZE);
+		rowsFlow.setMaxHeight(Region.USE_PREF_SIZE);
+
 		pagination = new MFXPagination();
 		pagination.pagesToShowProperty().bind(tableView.pagesToShowProperty());
 		pagination.maxPageProperty().bind(tableView.maxPageProperty());
@@ -45,6 +49,33 @@ public class MFXPaginatedTableViewSkin<T> extends MFXTableViewSkin<T> {
 
 		container.getChildren().remove(footer);
 		container.getChildren().add(buildFooter());
+
+		addListeners();
+	}
+
+	//================================================================================
+	// Methods
+	//================================================================================
+	private void addListeners() {
+		MFXPaginatedTableView<T> tableView = (MFXPaginatedTableView<T>) getSkinnable();
+		tableView.virtualFlowInitializedProperty().addListener((observable, oldValue, newValue) -> {
+			if (!init && newValue) {
+				rowsFlow.prefHeightProperty().bind(Bindings.createDoubleBinding(
+						() -> tableView.getRowsPerPage() * rowsFlow.getCellHeight(),
+						tableView.rowsPerPageProperty()
+				));
+
+				int current = tableView.getCurrentPage();
+				if (current != 1) {
+					PauseBuilder.build()
+							.setDuration(20)
+							.setOnFinished(event -> tableView.goToPage(current))
+							.getAnimation().play();
+				}
+
+				init = true;
+			}
+		});
 	}
 
 	//================================================================================
@@ -60,25 +91,8 @@ public class MFXPaginatedTableViewSkin<T> extends MFXTableViewSkin<T> {
 	}
 
 	@Override
-	protected void layoutChildren(double contentX, double contentY, double contentWidth, double contentHeight) {
-		super.layoutChildren(contentX, contentY, contentWidth, contentHeight);
-
-		if (!init && rowsFlow.getCellHeight() != 0) {
-			MFXPaginatedTableView<T> tableView = (MFXPaginatedTableView<T>) getSkinnable();
-			rowsFlow.minHeightProperty().bind(Bindings.createDoubleBinding(
-					() -> tableView.getRowsPerPage() * rowsFlow.getCellHeight(),
-					tableView.rowsPerPageProperty()
-			));
-
-			int current = tableView.getCurrentPage();
-			if (current != 1) {
-				PauseBuilder.build()
-						.setDuration(20)
-						.setOnFinished(event -> tableView.goToPage(current))
-						.getAnimation().play();
-			}
-
-			init = true;
-		}
+	protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+		double footerWidth = leftInset + footer.prefWidth(-1) + pagination.prefWidth(-1) * 2 + 10 + rightInset;
+		return Math.max(footerWidth, super.computeMinWidth(height, topInset, rightInset, bottomInset, leftInset));
 	}
 }

@@ -23,9 +23,8 @@ import io.github.palexdev.materialfx.enums.StepperToggleState;
 import io.github.palexdev.materialfx.enums.TextPosition;
 import io.github.palexdev.materialfx.skins.MFXStepperSkin;
 import io.github.palexdev.materialfx.skins.MFXStepperToggleSkin;
-import io.github.palexdev.materialfx.validation.MFXDialogValidator;
-import io.github.palexdev.materialfx.validation.base.AbstractMFXValidator;
-import io.github.palexdev.materialfx.validation.base.Validated;
+import io.github.palexdev.materialfx.validation.MFXValidator;
+import io.github.palexdev.materialfx.validation.Validated;
 import javafx.beans.property.*;
 import javafx.css.*;
 import javafx.event.Event;
@@ -36,7 +35,6 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 /**
  * A {@code MFXStepperToggle} is a special toggle that has 4 possible states.
@@ -55,21 +53,11 @@ import java.util.function.Supplier;
  * This control specifies three new PseudoClasses: ":selected", ":completed", ":error" to specify a different style in css
  * for each state.
  * <p></p>
- * This is a {@link Validated} control, that means you can specify certain conditions or dependencies
- * that must be met in order for the state to be COMPLETED and for the {@link MFXStepper} to go to the next toggle.
- * <p>
- * A little note on the usage of the Validation API:
- * <p>
- * Pay attention to the difference between "condition" and "dependency" which is further explained by {@link AbstractMFXValidator}.
- * <p>
- * If the content needs validation or has some controls that need validation and it is done by a {@link AbstractMFXValidator}, or any subclass, then
- * the content/controls' validators should be added to the toggle as dependencies using {@link AbstractMFXValidator#addDependencies(AbstractMFXValidator...)}.
- * <p>
- * If the validation is not done by a {@link AbstractMFXValidator} then the needed validation is a "condition" and should be added to the toggle using
- * {@link MFXDialogValidator#add(BooleanProperty, String)}.
- *
+ * This is a {@link Validated} control, meaning that by default the control offers a {@link MFXValidator} on which you can
+ * add certain conditions/constraints (or even dependencies, other validators) that must be met in order for the state
+ * to be COMPLETED and for the {@link MFXStepper} to go to the next toggle.
  */
-public class MFXStepperToggle extends Control implements Validated<MFXDialogValidator> {
+public class MFXStepperToggle extends Control implements Validated {
     //================================================================================
     // Properties
     //================================================================================
@@ -77,7 +65,7 @@ public class MFXStepperToggle extends Control implements Validated<MFXDialogVali
     private final String STYLE_CLASS = "mfx-stepper-toggle";
     private final String STYLESHEET = MFXResourcesLoader.load("css/MFXStepperToggle.css");
 
-    private MFXDialogValidator validator;
+    private final MFXValidator validator = new MFXValidator();
     private final BooleanProperty showErrorIcon = new SimpleBooleanProperty(true);
 
     private Node content;
@@ -87,7 +75,6 @@ public class MFXStepperToggle extends Control implements Validated<MFXDialogVali
 
     protected static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
     protected static final PseudoClass COMPLETED_PSEUDO_CLASS = PseudoClass.getPseudoClass("completed");
-    protected static final PseudoClass ERROR_PSEUDO_CLASS = PseudoClass.getPseudoClass("error");
 
     //================================================================================
     // Constructors
@@ -114,49 +101,9 @@ public class MFXStepperToggle extends Control implements Validated<MFXDialogVali
     //================================================================================
     // Validation
     //================================================================================
-    public MFXStepperToggle installValidator(Supplier<MFXDialogValidator> validatorSupplier) {
-        if (validatorSupplier == null) {
-            throw new IllegalArgumentException("The supplier cannot be null!");
-        }
-        this.validator = validatorSupplier.get();
-        return this;
-    }
-
-    /**
-     * Configures the validator.
-     * <p>
-     * By default the {@link AbstractMFXValidator#isInitControlValidation()} flag is false
-     * so the toggle state is set to ERROR (if the validator's state is invalid of course) when the
-     * {@link MFXStepper} attempts to go to the next toggle.
-     */
-    protected void setupValidator() {
-        validator = new MFXDialogValidator("You can't proceed because of the following errors:");
-    }
-
     @Override
-    public MFXDialogValidator getValidator() {
+    public MFXValidator getValidator() {
         return validator;
-    }
-
-    /**
-     * Delegate method to get the validator's title.
-     */
-    public String getValidatorTitle() {
-        return validator.getTitle();
-    }
-
-    /**
-     * Delegate method to get the validator's title property.
-     */
-    public StringProperty validatorTitleProperty() {
-        return validator.titleProperty();
-    }
-
-    /**
-     * Delegate method to set the validator's title.
-     */
-    public void setValidatorTitle(String title) {
-        validator.setTitle(title);
     }
 
     //================================================================================
@@ -164,7 +111,6 @@ public class MFXStepperToggle extends Control implements Validated<MFXDialogVali
     //================================================================================
     private void initialize() {
         getStyleClass().setAll(STYLE_CLASS);
-        setupValidator();
         addListeners();
     }
 
@@ -187,7 +133,7 @@ public class MFXStepperToggle extends Control implements Validated<MFXDialogVali
                     break;
                 }
                 case ERROR: {
-                    pseudoClassStateChanged(ERROR_PSEUDO_CLASS, true);
+                    pseudoClassStateChanged(INVALID_PSEUDO_CLASS, true);
                     break;
                 }
                 default: {
@@ -203,7 +149,7 @@ public class MFXStepperToggle extends Control implements Validated<MFXDialogVali
     private void resetPseudoClass() {
         pseudoClassStateChanged(SELECTED_PSEUDO_CLASS, false);
         pseudoClassStateChanged(COMPLETED_PSEUDO_CLASS, false);
-        pseudoClassStateChanged(ERROR_PSEUDO_CLASS, false);
+        pseudoClassStateChanged(INVALID_PSEUDO_CLASS, false);
     }
 
     /**

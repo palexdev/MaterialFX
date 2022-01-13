@@ -19,8 +19,8 @@
 package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.controls.base.AbstractMFXListView;
-import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.effects.MFXDepthManager;
+import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
 import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
 import javafx.animation.Animation;
@@ -29,6 +29,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.SkinBase;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 
 /**
@@ -92,6 +93,8 @@ public class MFXListViewSkin<T> extends SkinBase<AbstractMFXListView<T, ?>> {
                 listView.setEffect(MFXDepthManager.shadowOf(listView.getDepthLevel()));
             }
         });
+
+        listView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> listView.requestFocus());
     }
 
     /**

@@ -18,14 +18,14 @@
 
 .mfx-checkbox {
     -mfx-main: #6200EE;
-    -mfx-gray: #424242;
+    -mfx-secondary: #424242;
 }
 
 .mfx-checkbox .box {
     -fx-background-color: transparent;
     -fx-background-radius: 2;
 
-    -fx-border-color: -mfx-gray;
+    -fx-border-color: -mfx-secondary;
     -fx-border-radius: 2;
     -fx-border-width: 1.5;
 
@@ -57,8 +57,8 @@
 
 .mfx-checkbox:selected:disabled .box,
 .mfx-checkbox:indeterminate:disabled .box {
-    -fx-background-color: -mfx-gray;
-    -fx-border-color: -mfx-gray;
+    -fx-background-color: -mfx-secondary;
+    -fx-border-color: -mfx-secondary;
 }
 
 .mfx-checkbox:indeterminate .box .mark {

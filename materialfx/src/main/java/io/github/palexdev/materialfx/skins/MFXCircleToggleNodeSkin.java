@@ -5,6 +5,7 @@ import io.github.palexdev.materialfx.controls.MFXCircleToggleNode;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.enums.TextPosition;
+import io.github.palexdev.materialfx.utils.LabelUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
@@ -13,6 +14,7 @@ import javafx.scene.control.SkinBase;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 /**
@@ -31,7 +33,7 @@ public class MFXCircleToggleNodeSkin extends SkinBase<MFXCircleToggleNode> {
 		circle = new Circle();
 		circle.getStyleClass().add("circle");
 		circle.radiusProperty().bind(toggleNode.sizeProperty());
-		
+
 		label = new MFXTextField() {
 			@Override
 			public String getUserAgentStylesheet() {
@@ -41,14 +43,19 @@ public class MFXCircleToggleNodeSkin extends SkinBase<MFXCircleToggleNode> {
 		label.alignmentProperty().bind(toggleNode.alignmentProperty());
 		label.fontProperty().bind(toggleNode.fontProperty());
 		label.graphicTextGapProperty().bind(toggleNode.graphicTextGapProperty());
+		label.textFillProperty().bind(Bindings.createObjectBinding(
+				() -> (Color) toggleNode.getTextFill(),
+				toggleNode.textFillProperty()
+		));
 		label.textProperty().bind(toggleNode.textProperty());
 		label.leadingIconProperty().bind(toggleNode.labelLeadingIconProperty());
 		label.trailingIconProperty().bind(toggleNode.labelTrailingIconProperty());
 		label.setEditable(false);
 		label.setSelectable(false);
+		label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
 		rippleContainer = new StackPane();
-		
+
 		rippleGenerator = new MFXCircleRippleGenerator(rippleContainer);
 		rippleGenerator.setMouseTransparent(true);
 		rippleGenerator.setManaged(false);
@@ -80,7 +87,7 @@ public class MFXCircleToggleNodeSkin extends SkinBase<MFXCircleToggleNode> {
 		MFXCircleToggleNode toggleNode = getSkinnable();
 
 		toggleNode.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-			if (!NodeUtils.inHierarchy(event, circle)) {
+			if (!NodeUtils.inHierarchy(event, rippleContainer)) {
 				return;
 			}
 
@@ -96,7 +103,6 @@ public class MFXCircleToggleNodeSkin extends SkinBase<MFXCircleToggleNode> {
 			}
 
 			toggleNode.setSelected(!toggleNode.isSelected());
-			rippleGenerator.generateRipple(event);
 		});
 
 		toggleNode.graphicProperty().addListener((observable, oldValue, newValue) -> {
@@ -116,6 +122,8 @@ public class MFXCircleToggleNodeSkin extends SkinBase<MFXCircleToggleNode> {
 				topContainer.getChildren().setAll(rippleContainer, label);
 			}
 		});
+
+		rippleContainer.addEventHandler(MouseEvent.MOUSE_CLICKED, rippleGenerator::generateRipple);
 	}
 
 	/**
@@ -144,6 +152,22 @@ public class MFXCircleToggleNodeSkin extends SkinBase<MFXCircleToggleNode> {
 	//================================================================================
 	// Override Methods
 	//================================================================================
+	@Override
+	protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+		MFXCircleToggleNode toggleNode = getSkinnable();
+		double containerWidth = rippleContainer.prefWidth(-1);
+
+		double gap = label.getGraphicTextGap();
+		Node leading = toggleNode.getLabelLeadingIcon();
+		Node trailing = toggleNode.getLabelTrailingIcon();
+		double labelWidth = LabelUtils.computeTextWidth(toggleNode.getFont(), toggleNode.getText()) +
+				label.snappedLeftInset() +
+				label.snappedRightInset() +
+				(leading != null ? leading.prefWidth(-1) + gap : 0) +
+				(trailing != null ? trailing.prefWidth(-1) + gap : 0);
+		return leftInset + Math.max(containerWidth, labelWidth) + rightInset;
+	}
+
 	@Override
 	protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
 		return getSkinnable().prefWidth(-1);

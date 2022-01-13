@@ -8,12 +8,15 @@ import io.github.palexdev.materialfx.beans.properties.styleable.StyleableObjectP
 import io.github.palexdev.materialfx.enums.FloatMode;
 import io.github.palexdev.materialfx.skins.MFXTextFieldSkin;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
+import io.github.palexdev.materialfx.validation.MFXValidator;
+import io.github.palexdev.materialfx.validation.Validated;
 import javafx.beans.property.*;
 import javafx.css.CssMetaData;
 import javafx.css.PseudoClass;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
 import javafx.scene.Node;
+import javafx.scene.control.IndexRange;
 import javafx.scene.control.Skin;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
@@ -36,12 +39,12 @@ import java.util.List;
  * Unlike JavaFX's TextField, it also allows to easily change the text color (even with CSS).
  * <p>
  * But... the most important and requested feature is the floating text. You can decide between
- * three modes: DISABLED (no floating text), INLINE (the floating text is inside the field), BORDER
- * (the floating text is placed on the field's border.
+ * four modes: DISABLED (no floating text), INLINE (the floating text is inside the field), BORDER
+ * (the floating text is placed on the field's border, and ABOVE (the floating text is outside the field, above it).
  * <p>
- * You can also specify the distance between the text and the floating text (for INLINE mode) and
- * the distance from the x origin (for BORDER mode). The floating text is animated by default but
- * you can also disable it.
+ * You can also specify the distance between the text and the floating text (for INLINE and ABOVE modes).
+ * In ABOVE and BORDER modes you can control the floating text distance from the origin by modifying the left padding in CSS
+ * or by modifying the {@link #borderGapProperty()}.
  * <p></p>
  * {@code MFXTextField} now also introduces a new PseudoClass, ":floating" that activates
  * when the floating text node is floating.
@@ -52,53 +55,74 @@ import java.util.List;
  * <p>
  * Please note that because of the extra node to show the floating text, {@code MFXTextField} now takes more space.
  * There are several things you can do to make it more compact:
- * <p> 1) You can lower the {@link #gapProperty()} (for INLINE mode)
+ * <p> 1) You can lower the {@link #floatingTextGapProperty()} (for INLINE and ABOVE mode)
  * <p> 2) You can lower the padding (set in CSS) but I would not recommend it to be honest, a little
  * bit of padding makes the control more appealing
  * <p> 3) You can switch mode. The DISABLED mode requires the least space of course. The BORDER mode
- * requires some more space, and the INLINE mode is the one that requires the most space (because it acts
- * as a VBox)
+ * requires some more space, the ABOVE mode is visually equal to the DISABLED state but keep in mind
+ * that the floating text is still there, above the field, and the INLINE mode is the one that requires the most space.
  * <p></p>
- * Also, note that while it is allowed, it's highly discouraged to switch mode at runtime.
- * I put a lot of effort in making the layout as stable as possible in every condition but, as
- * I always said floating text is a quite hard to implement feature so, just be careful with that.
+ * The layout strategy now should be super solid and efficient, making possible to switch float modes even
+ * at runtime.
  * <p></p>
- * Last but not least... Keep in mind that in case of BORDER mode to make it really work as intended
+ * <b>Note 1: </b> in case of BORDER mode to make it really work as intended
  * a condition must be met. The background colors of the text field, the floating text and the parent
  * container of the field must be the same. You see, on the material.io website you can see the floating
  * text cut the field's borders but that's not what it is happening. If you look more carefully the
  * demo background is white, and the field's background as well. The floating text just sits on top of the
  * field's border and has the same background color, creating that 'cut' effect.
+ * <p></p>
+ * <b>Note 2: </b> since JavaFX devs are shitheads making everything private/readonly/final, the only way to
+ * make the caret position and the selection consistent is to delegate related methods to the {@link BoundTextField} instance.
+ * This means that most if not all methods related to the caret and the selection WON'T work, instead you should use
+ * the methods that start with "delegate", e.g. {@link #delegateCaretPositionProperty()}, {@link #delegateSelectionProperty()}, etc...
+ * <p>
+ * Also note that the same applies to the focus property, {@link #delegateFocusedProperty()}.
+ * <p>
+ * Some methods that do not start with "delegate" may work as they've been overridden to be delegates,
+ * e.g. {@link #positionCaret(int)}, {@link #selectRange(int, int)}, etc...
+ * <p>
+ * If that's not the case then maybe I missed something so please report it back and I'll see if it's fixable.
+ * <p>
+ * Considering that the other option would have been re-implementing a TextField completely from scratch (really hard task)
+ * this is the best option as of now. Even just a custom skin would not work (yep I tried) since black magic is involved
+ * in the default one, better not mess with that or something will break for sure, yay for spaghetti coding JavaFX devs :D
  */
-public class MFXTextField extends TextField {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final String STYLE_CLASS = "mfx-text-field";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTextField.css");
+public class MFXTextField extends TextField implements Validated {
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final String STYLE_CLASS = "mfx-text-field";
+	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTextField.css");
+	protected final BoundTextField boundField;
 
-    public static final Color DEFAULT_TEXT_COLOR = Color.rgb(0, 0, 0, 0.87);
+	public static final Color DEFAULT_TEXT_COLOR = Color.rgb(0, 0, 0, 0.87);
 
-    private final BooleanProperty selectable = new SimpleBooleanProperty(true);
-    private final ObjectProperty<Node> leadingIcon = new SimpleObjectProperty<>();
-    private final ObjectProperty<Node> trailingIcon = new SimpleObjectProperty<>();
+	private final BooleanProperty selectable = new SimpleBooleanProperty(true);
+	private final ObjectProperty<Node> leadingIcon = new SimpleObjectProperty<>();
+	private final ObjectProperty<Node> trailingIcon = new SimpleObjectProperty<>();
 
-    // TODO add context menu after conversion to MFXPopup
-    // TODO add validation
+	private final StringProperty floatingText = new SimpleStringProperty();
+	protected final BooleanProperty floating = new SimpleBooleanProperty() {
+		@Override
+		public void unbind() {
+		}
+	};
+	private static final PseudoClass FLOATING_PSEUDO_CLASS = PseudoClass.getPseudoClass("floating");
 
-    private final StringProperty floatingText = new SimpleStringProperty();
-    protected final ReadOnlyBooleanWrapper floating = new ReadOnlyBooleanWrapper(false);
-    private static final PseudoClass FLOATING_PSEUDO_CLASS = PseudoClass.getPseudoClass("floating");
+	private final MFXValidator validator = new MFXValidator();
+	// TODO add context menu after conversion to MFXPopup
+	// TODO add validation
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXTextField() {
-        this("");
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXTextField() {
+		this("");
+	}
 
-    public MFXTextField(String text) {
-        this(text, "");
+	public MFXTextField(String text) {
+		this(text, "");
     }
 
     public MFXTextField(String text, String promptText) {
@@ -106,8 +130,9 @@ public class MFXTextField extends TextField {
     }
 
     public MFXTextField(String text, String promptText, String floatingText) {
-        super(text);
-        setPromptText(promptText);
+	    super(text);
+	    boundField = new BoundTextField(this);
+	    setPromptText(promptText);
         setFloatingText(floatingText);
         initialize();
     }
@@ -147,8 +172,9 @@ public class MFXTextField extends TextField {
     // Methods
     //================================================================================
     private void initialize() {
-        getStyleClass().setAll(STYLE_CLASS);
-        floating.addListener(invalidated -> pseudoClassStateChanged(FLOATING_PSEUDO_CLASS, floating.get()));
+	    getStyleClass().setAll(STYLE_CLASS);
+	    setPrefColumnCount(6);
+	    floating.addListener(invalidated -> pseudoClassStateChanged(FLOATING_PSEUDO_CLASS, floating.get()));
         allowEditProperty().bindBidirectional(editableProperty());
 
         // TODO may be useful for context menu
@@ -173,28 +199,241 @@ public class MFXTextField extends TextField {
     //================================================================================
     @Override
     protected Skin<?> createDefaultSkin() {
-        return new MFXTextFieldSkin(this, floating);
+	    return new MFXTextFieldSkin(this, boundField);
     }
 
-    @Override
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return MFXTextField.getClassCssMetaData();
-    }
+	@Override
+	public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+		return MFXTextField.getClassCssMetaData();
+	}
 
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
+	@Override
+	public String getUserAgentStylesheet() {
+		return STYLESHEET;
+	}
 
-    //================================================================================
-    // Getters/Setters
-    //================================================================================
-    public boolean isSelectable() {
-        return selectable.get();
-    }
+	//================================================================================
+	// Workaround Methods
+	//================================================================================
+	@Override
+	public void cut() {
+		boundField.cut();
+	}
 
-    /**
-     * Specifies whether selection is allowed.
+	@Override
+	public void copy() {
+		boundField.copy();
+	}
+
+	@Override
+	public void paste() {
+		boundField.paste();
+	}
+
+	@Override
+	public void selectBackward() {
+		boundField.selectBackward();
+	}
+
+	@Override
+	public void selectForward() {
+		boundField.selectForward();
+	}
+
+	@Override
+	public void previousWord() {
+		boundField.previousWord();
+	}
+
+	@Override
+	public void nextWord() {
+		boundField.nextWord();
+	}
+
+	@Override
+	public void endOfNextWord() {
+		boundField.endOfNextWord();
+	}
+
+	@Override
+	public void selectPreviousWord() {
+		boundField.selectPreviousWord();
+	}
+
+	@Override
+	public void selectNextWord() {
+		boundField.selectNextWord();
+	}
+
+	@Override
+	public void selectEndOfNextWord() {
+		boundField.selectEndOfNextWord();
+	}
+
+	@Override
+	public void selectAll() {
+		boundField.selectAll();
+	}
+
+	@Override
+	public void home() {
+		boundField.home();
+	}
+
+	@Override
+	public void end() {
+		boundField.end();
+	}
+
+	@Override
+	public void selectHome() {
+		boundField.selectHome();
+	}
+
+	@Override
+	public void selectEnd() {
+		boundField.selectEnd();
+	}
+
+	@Override
+	public void forward() {
+		boundField.forward();
+	}
+
+	@Override
+	public void backward() {
+		boundField.backward();
+	}
+
+	@Override
+	public void positionCaret(int pos) {
+		boundField.positionCaret(pos);
+	}
+
+	@Override
+	public void selectPositionCaret(int pos) {
+		boundField.selectPositionCaret(pos);
+	}
+
+	@Override
+	public void selectRange(int anchor, int caretPosition) {
+		boundField.selectRange(anchor, caretPosition);
+	}
+
+	@Override
+	public void extendSelection(int pos) {
+		boundField.extendSelection(pos);
+	}
+
+	@Override
+	public void clear() {
+		boundField.clear();
+	}
+
+	@Override
+	public void deselect() {
+		boundField.deselect();
+	}
+
+	@Override
+	public void replaceSelection(String replacement) {
+		boundField.replaceSelection(replacement);
+	}
+
+	public int delegateGetAnchor() {
+		return boundField.getAnchor();
+	}
+
+	/**
+	 * Specifies the {@link BoundTextField} anchor position.
+	 */
+	public ReadOnlyIntegerProperty delegateAnchorProperty() {
+		return boundField.anchorProperty();
+	}
+
+	public int delegateGetCaretPosition() {
+		return boundField.getCaretPosition();
+	}
+
+	/**
+	 * Specifies the {@link BoundTextField} caret position.
+	 */
+	public ReadOnlyIntegerProperty delegateCaretPositionProperty() {
+		return boundField.caretPositionProperty();
+	}
+
+	public String delegateGetSelectedText() {
+		return boundField.getSelectedText();
+	}
+
+	/**
+	 * Specifies the {@link BoundTextField} selected text.
+	 */
+	public ReadOnlyStringProperty delegateSelectedTextProperty() {
+		return boundField.selectedTextProperty();
+	}
+
+	public IndexRange delegateGetSelection() {
+		return boundField.getSelection();
+	}
+
+	/**
+	 * Specifies the {@link BoundTextField} selection.
+	 */
+	public ReadOnlyObjectProperty<IndexRange> delegateSelectionProperty() {
+		return boundField.selectionProperty();
+	}
+
+	public boolean delegateIsRedoable() {
+		return boundField.isRedoable();
+	}
+
+	/**
+	 * Delegates to {@link BoundTextField}, see {@link BoundTextField#redoableProperty()}.
+	 */
+	public ReadOnlyBooleanProperty delegateRedoableProperty() {
+		return boundField.redoableProperty();
+	}
+
+	public boolean delegateIsUndoable() {
+		return boundField.isUndoable();
+	}
+
+	/**
+	 * Delegates to {@link BoundTextField}, see {@link BoundTextField#undoableProperty()}.
+	 */
+	public ReadOnlyBooleanProperty delegateUndoableProperty() {
+		return boundField.undoableProperty();
+	}
+
+	public boolean delegateIsFocused() {
+		return boundField.isFocused();
+	}
+
+	/**
+	 * Specifies whether the {@link BoundTextField} is focused.
+	 */
+	public ReadOnlyBooleanProperty delegateFocusedProperty() {
+		return boundField.focusedProperty();
+	}
+
+	//================================================================================
+	// Validation
+	//================================================================================
+	@Override
+	public MFXValidator getValidator() {
+		return validator;
+	}
+
+	//================================================================================
+	// Getters/Setters
+	//================================================================================
+	public boolean isSelectable() {
+		return selectable.get();
+	}
+
+	/**
+	 * Specifies whether selection is allowed.
      */
     public BooleanProperty selectableProperty() {
         return selectable;
@@ -253,141 +492,148 @@ public class MFXTextField extends TextField {
         return floating.get();
     }
 
-    /**
-     * Specifies if the floating text node is currently floating or not.
-     */
-    public ReadOnlyBooleanProperty floatingProperty() {
-        return floating.getReadOnlyProperty();
-    }
+	/**
+	 * Specifies if the floating text node is currently floating or not.
+	 */
+	public BooleanProperty floatingProperty() {
+		return floating;
+	}
 
-    //================================================================================
-    // Styleable Properties
-    //================================================================================
-    private final StyleableBooleanProperty animated = new StyleableBooleanProperty(
-            StyleableProperties.ANIMATED,
-            this,
-            "animated",
-            true
-    );
+	//================================================================================
+	// Styleable Properties
+	//================================================================================
+	private final StyleableBooleanProperty allowEdit = new StyleableBooleanProperty(
+			StyleableProperties.EDITABLE,
+			this,
+			"allowEdit",
+			true
+	);
 
-    private final StyleableDoubleProperty borderSpacing = new StyleableDoubleProperty(
-            StyleableProperties.BORDER_SPACING,
-            this,
-            "borderSpacing",
-            10.0
-    );
+	private final StyleableBooleanProperty animated = new StyleableBooleanProperty(
+			StyleableProperties.ANIMATED,
+			this,
+			"animated",
+			true
+	);
 
-    private final StyleableBooleanProperty caretVisible = new StyleableBooleanProperty(
-            StyleableProperties.CARET_VISIBLE,
-            this,
-            "caretAnimated",
-            true
-    );
+	private final StyleableDoubleProperty borderGap = new StyleableDoubleProperty(
+			StyleableProperties.BORDER_GAP,
+			this,
+			"borderGap",
+			10.0
+	);
 
-    private final StyleableBooleanProperty allowEdit = new StyleableBooleanProperty(
-            StyleableProperties.EDITABLE,
-            this,
-            "allowEdit",
-            true
-    );
+	private final StyleableBooleanProperty caretVisible = new StyleableBooleanProperty(
+			StyleableProperties.CARET_VISIBLE,
+			this,
+			"caretAnimated",
+			true
+	);
 
-    private final StyleableObjectProperty<FloatMode> floatMode = new StyleableObjectProperty<>(
-            StyleableProperties.FLOAT_MODE,
-            this,
-            "floatMode",
-            FloatMode.INLINE
-    );
+	private final StyleableObjectProperty<FloatMode> floatMode = new StyleableObjectProperty<>(
+			StyleableProperties.FLOAT_MODE,
+			this,
+			"floatMode",
+			FloatMode.INLINE
+	);
 
-    private final StyleableDoubleProperty gap = new StyleableDoubleProperty(
-            StyleableProperties.GAP,
-            this,
-            "gap",
-            5.0
-    );
+	private final StyleableDoubleProperty floatingTextGap = new StyleableDoubleProperty(
+			StyleableProperties.FLOATING_TEXT_GAP,
+			this,
+			"gap",
+			5.0
+	);
 
-    private final StyleableDoubleProperty graphicTextGap = new StyleableDoubleProperty(
-            StyleableProperties.GRAPHIC_TEXT_GAP,
-            this,
-            "graphicTextGap",
-            10.0
-    );
+	private final StyleableDoubleProperty graphicTextGap = new StyleableDoubleProperty(
+			StyleableProperties.GRAPHIC_TEXT_GAP,
+			this,
+			"graphicTextGap",
+			10.0
+	);
 
-    private final StyleableObjectProperty<Color> textFill = new StyleableObjectProperty<>(
-            StyleableProperties.TEXT_FILL,
-            this,
-            "textFill",
-            DEFAULT_TEXT_COLOR
-    );
+	private final StyleableBooleanProperty scaleOnAbove = new StyleableBooleanProperty(
+			StyleableProperties.SCALE_ON_ABOVE,
+			this,
+			"scaleOnAbove",
+			false
+	);
 
-    private final StyleableIntegerProperty textLimit = new StyleableIntegerProperty(
-            StyleableProperties.TEXT_LIMIT,
-            this,
-            "textLimit",
-            -1
-    );
+	private final StyleableObjectProperty<Color> textFill = new StyleableObjectProperty<>(
+			StyleableProperties.TEXT_FILL,
+			this,
+			"textFill",
+			DEFAULT_TEXT_COLOR
+	);
 
-    public boolean isAnimated() {
-        return animated.get();
-    }
+	private final StyleableIntegerProperty textLimit = new StyleableIntegerProperty(
+			StyleableProperties.TEXT_LIMIT,
+			this,
+			"textLimit",
+			-1
+	);
 
-    /**
-     * Specifies whether the floating text positioning is animated.
-     */
-    public StyleableBooleanProperty animatedProperty() {
-        return animated;
-    }
+	public boolean isAllowEdit() {
+		return allowEdit.get();
+	}
 
-    public void setAnimated(boolean animated) {
-        this.animated.set(animated);
-    }
+	/**
+	 * Specifies whether the field is editable.
+	 * <p>
+	 * This property is bound bidirectionally to {@link TextField#editableProperty()},
+	 * it's here just to be set via CSS.
+	 */
+	public StyleableBooleanProperty allowEditProperty() {
+		return allowEdit;
+	}
 
-    public double getBorderSpacing() {
-        return borderSpacing.get();
-    }
+	public void setAllowEdit(boolean allowEdit) {
+		this.allowEdit.set(allowEdit);
+	}
 
-    /**
-     * For {@link FloatMode#BORDER} mode, this specifies the distance from
-     * the control's x origin (padding not included).
-     */
-    public StyleableDoubleProperty borderSpacingProperty() {
-        return borderSpacing;
-    }
+	public boolean isAnimated() {
+		return animated.get();
+	}
 
-    public void setBorderSpacing(double borderSpacing) {
-        this.borderSpacing.set(borderSpacing);
-    }
+	/**
+	 * Specifies whether the floating text positioning is animated.
+	 */
+	public StyleableBooleanProperty animatedProperty() {
+		return animated;
+	}
 
-    public boolean getCaretVisible() {
-        return caretVisible.get();
-    }
+	public void setAnimated(boolean animated) {
+		this.animated.set(animated);
+	}
 
-    /**
-     * Specifies whether the caret should be visible.
-     */
-    public StyleableBooleanProperty caretVisibleProperty() {
+	public double getBorderGap() {
+		return borderGap.get();
+	}
+
+	/**
+	 * For {@link FloatMode#BORDER} and {@link FloatMode#ABOVE} modes, this specifies the distance from
+	 * the control's x origin (padding not included).
+	 */
+	public StyleableDoubleProperty borderGapProperty() {
+		return borderGap;
+	}
+
+	public void setBorderGap(double borderGap) {
+		this.borderGap.set(borderGap);
+	}
+
+	public boolean getCaretVisible() {
+		return caretVisible.get();
+	}
+
+	/**
+	 * Specifies whether the caret should be visible.
+	 */
+	public StyleableBooleanProperty caretVisibleProperty() {
         return caretVisible;
     }
 
     public void setCaretVisible(boolean caretVisible) {
         this.caretVisible.set(caretVisible);
-    }
-
-    public boolean isAllowEdit() {
-        return allowEdit.get();
-    }
-
-    /**
-     * Specifies whether the field is editable.
-     * <p>
-     * This property is bound bidirectionally to {@link TextField#editableProperty()},
-     * it's here just to be set via CSS.
-     */
-    public StyleableBooleanProperty allowEditProperty() {
-        return allowEdit;
-    }
-
-    public void setAllowEdit(boolean allowEdit) {
-        this.allowEdit.set(allowEdit);
     }
 
     public FloatMode getFloatMode() {
@@ -398,53 +644,65 @@ public class MFXTextField extends TextField {
      * Specifies how the floating text is positioned when floating.
      */
     public StyleableObjectProperty<FloatMode> floatModeProperty() {
-        return floatMode;
+	    return floatMode;
     }
 
-    public void setFloatMode(FloatMode floatMode) {
-        this.floatMode.set(floatMode);
-    }
+	public void setFloatMode(FloatMode floatMode) {
+		this.floatMode.set(floatMode);
+	}
 
-    public double getGap() {
-        return gap.get();
-    }
+	public double getFloatingTextGap() {
+		return floatingTextGap.get();
+	}
 
-    /**
-     * For {@link FloatMode#INLINE} mode, this specifies the gap between
-     * the floating text node and the input field node.
-     */
-    public StyleableDoubleProperty gapProperty() {
-        return gap;
-    }
+	/**
+	 * For {@link FloatMode#INLINE} mode, this specifies the gap between
+	 * the floating text node and the input field node.
+	 */
+	public StyleableDoubleProperty floatingTextGapProperty() {
+		return floatingTextGap;
+	}
 
-    public void setGap(double gap) {
-        this.gap.set(gap);
-    }
+	public void setFloatingTextGap(double floatingTextGap) {
+		this.floatingTextGap.set(floatingTextGap);
+	}
 
-    public double getGraphicTextGap() {
-        return graphicTextGap.get();
-    }
+	public double getGraphicTextGap() {
+		return graphicTextGap.get();
+	}
 
-    /**
-     * Specifies the gap between the input field and the icons.
-     */
-    public StyleableDoubleProperty graphicTextGapProperty() {
-        return graphicTextGap;
-    }
+	/**
+	 * Specifies the gap between the input field and the icons.
+	 */
+	public StyleableDoubleProperty graphicTextGapProperty() {
+		return graphicTextGap;
+	}
 
-    public void setGraphicTextGap(double graphicTextGap) {
-        this.graphicTextGap.set(graphicTextGap);
-    }
+	public void setGraphicTextGap(double graphicTextGap) {
+		this.graphicTextGap.set(graphicTextGap);
+	}
 
-    public Color getTextFill() {
-        return textFill.get();
-    }
+	public boolean scaleOnAbove() {
+		return scaleOnAbove.get();
+	}
 
-    /**
-     * Specifies the text color.
-     */
-    public StyleableObjectProperty<Color> textFillProperty() {
-        return textFill;
+	public StyleableBooleanProperty scaleOnAboveProperty() {
+		return scaleOnAbove;
+	}
+
+	public void setScaleOnAbove(boolean scaleOnAbove) {
+		this.scaleOnAbove.set(scaleOnAbove);
+	}
+
+	public Color getTextFill() {
+		return textFill.get();
+	}
+
+	/**
+	 * Specifies the text color.
+	 */
+	public StyleableObjectProperty<Color> textFillProperty() {
+		return textFill;
     }
 
     public void setTextFill(Color textFill) {
@@ -480,12 +738,12 @@ public class MFXTextField extends TextField {
                         true
                 );
 
-        private static final CssMetaData<MFXTextField, Number> BORDER_SPACING =
-                FACTORY.createSizeCssMetaData(
-                        "-mfx-border-spacing",
-                        MFXTextField::borderSpacingProperty,
-                        10.0
-                );
+	    private static final CssMetaData<MFXTextField, Number> BORDER_GAP =
+			    FACTORY.createSizeCssMetaData(
+					    "-mfx-border-gap",
+					    MFXTextField::borderGapProperty,
+					    10.0
+			    );
 
         private static final CssMetaData<MFXTextField, Boolean> CARET_VISIBLE =
                 FACTORY.createBooleanCssMetaData(
@@ -509,29 +767,36 @@ public class MFXTextField extends TextField {
                         FloatMode.INLINE
                 );
 
-        private static final CssMetaData<MFXTextField, Number> GAP =
-                FACTORY.createSizeCssMetaData(
-                        "-mfx-gap",
-                        MFXTextField::gapProperty,
-                        5.0
-                );
+	    private static final CssMetaData<MFXTextField, Number> FLOATING_TEXT_GAP =
+			    FACTORY.createSizeCssMetaData(
+					    "-mfx-gap",
+					    MFXTextField::floatingTextGapProperty,
+					    5.0
+			    );
 
-        private static final CssMetaData<MFXTextField, Number> GRAPHIC_TEXT_GAP =
-                FACTORY.createSizeCssMetaData(
-                        "-fx-graphic-text-gap",
-                        MFXTextField::graphicTextGapProperty,
-                        10.0
-                );
+	    private static final CssMetaData<MFXTextField, Number> GRAPHIC_TEXT_GAP =
+			    FACTORY.createSizeCssMetaData(
+					    "-fx-graphic-text-gap",
+					    MFXTextField::graphicTextGapProperty,
+					    10.0
+			    );
 
-        private static final CssMetaData<MFXTextField, Color> TEXT_FILL =
-                FACTORY.createColorCssMetaData(
-                        "-fx-text-fill",
-                        MFXTextField::textFillProperty,
-                        DEFAULT_TEXT_COLOR
-                );
+	    private static final CssMetaData<MFXTextField, Boolean> SCALE_ON_ABOVE =
+			    FACTORY.createBooleanCssMetaData(
+					    "-mfx-scale-on-above",
+					    MFXTextField::scaleOnAboveProperty,
+					    false
+			    );
 
-        private static final CssMetaData<MFXTextField, Number> TEXT_LIMIT =
-                FACTORY.createSizeCssMetaData(
+	    private static final CssMetaData<MFXTextField, Color> TEXT_FILL =
+			    FACTORY.createColorCssMetaData(
+					    "-fx-text-fill",
+					    MFXTextField::textFillProperty,
+					    DEFAULT_TEXT_COLOR
+			    );
+
+	    private static final CssMetaData<MFXTextField, Number> TEXT_LIMIT =
+			    FACTORY.createSizeCssMetaData(
                         "-mfx-text-limit",
                         MFXTextField::textLimitProperty,
                         -1
@@ -539,10 +804,10 @@ public class MFXTextField extends TextField {
 
         static {
             cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
-                    TextField.getClassCssMetaData(),
-                    ANIMATED, BORDER_SPACING, CARET_VISIBLE,
-                    EDITABLE, FLOAT_MODE, GAP, GRAPHIC_TEXT_GAP,
-                    TEXT_FILL, TEXT_LIMIT
+		            TextField.getClassCssMetaData(),
+		            ANIMATED, CARET_VISIBLE, BORDER_GAP,
+		            EDITABLE, FLOAT_MODE, FLOATING_TEXT_GAP, GRAPHIC_TEXT_GAP,
+		            SCALE_ON_ABOVE, TEXT_FILL, TEXT_LIMIT
             );
         }
     }

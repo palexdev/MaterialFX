@@ -23,6 +23,7 @@ import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.controls.MFXListView;
 import io.github.palexdev.materialfx.controls.cell.base.AbstractMFXListCell;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectExpression;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -56,9 +57,12 @@ public class MFXListCell<T> extends AbstractMFXListCell<T> {
         super(listView, data);
 
         if (!(data instanceof Node)) {
-            label = new Label();
-            label.textProperty().bind(dataProperty().asString());
-            label.getStyleClass().add("data-label");
+	        label = new Label();
+	        label.textProperty().bind(Bindings.createStringBinding(
+			        () -> listView.getConverter() != null ? listView.getConverter().toString(getData()) : getData().toString(),
+			        dataProperty(), listView.converterProperty()
+	        ));
+	        label.getStyleClass().add("data-label");
         } else {
             label = null;
         }

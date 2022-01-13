@@ -12,6 +12,7 @@ import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
 import javafx.beans.binding.Bindings;
 import javafx.css.Styleable;
+import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -65,24 +66,31 @@ public class MFXNotificationCenterSkin extends SkinBase<MFXNotificationCenter> {
         header.getStyleClass().add("header");
         header.setAlignment(Pos.CENTER_LEFT);
 
-        MFXIconWrapper select = new MFXIconWrapper("mfx-variant13-mark", 24, 36).defaultRippleGeneratorBehavior();
-        MFXIconWrapper markAsRead = new MFXIconWrapper("mfx-eye", 20, 36).defaultRippleGeneratorBehavior();
-        MFXIconWrapper markAsUnread = new MFXIconWrapper("mfx-eye-slash", 20, 36).defaultRippleGeneratorBehavior();
-        MFXIconWrapper dismiss = new MFXIconWrapper("mfx-delete", 20, 36).defaultRippleGeneratorBehavior();
+	    MFXIconWrapper select = new MFXIconWrapper("mfx-variant13-mark", 24, 36).defaultRippleGeneratorBehavior();
+	    MFXIconWrapper markAsRead = new MFXIconWrapper("mfx-eye", 20, 36).defaultRippleGeneratorBehavior();
+	    MFXIconWrapper markAsUnread = new MFXIconWrapper("mfx-eye-slash", 20, 36).defaultRippleGeneratorBehavior();
+	    MFXIconWrapper dismiss = new MFXIconWrapper("mfx-delete", 20, 36).defaultRippleGeneratorBehavior();
+	    MFXIconWrapper options = new MFXIconWrapper("mfx-bars", 18, 36).defaultRippleGeneratorBehavior();
 
-        select.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> notificationCenter.setSelectionMode(!notificationCenter.isSelectionMode()));
-        markAsRead.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> notificationCenter.markSelectedNotificationsAs(NotificationState.READ));
-        markAsUnread.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> notificationCenter.markSelectedNotificationsAs(NotificationState.UNREAD));
-        dismiss.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> notificationCenter.dismissSelected());
+	    select.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> notificationCenter.setSelectionMode(!notificationCenter.isSelectionMode()));
+	    markAsRead.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> notificationCenter.markSelectedNotificationsAs(NotificationState.READ));
+	    markAsUnread.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> notificationCenter.markSelectedNotificationsAs(NotificationState.UNREAD));
+	    dismiss.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> notificationCenter.dismissSelected());
+	    options.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+		    MFXContextMenu contextMenu = notificationCenter.getMFXContextMenu();
+		    Bounds toScreen = options.localToScreen(options.getLayoutBounds());
+		    contextMenu.show(options, toScreen.getMinX(), toScreen.getMinY());
+	    });
 
-        NodeUtils.makeRegionCircular(select);
-        NodeUtils.makeRegionCircular(markAsRead);
-        NodeUtils.makeRegionCircular(markAsUnread);
-        NodeUtils.makeRegionCircular(dismiss);
+	    NodeUtils.makeRegionCircular(select);
+	    NodeUtils.makeRegionCircular(markAsRead);
+	    NodeUtils.makeRegionCircular(markAsUnread);
+	    NodeUtils.makeRegionCircular(dismiss);
+	    NodeUtils.makeRegionCircular(options);
 
-        HBox actions = new HBox(50, select, markAsRead, markAsUnread, dismiss);
-        actions.getStyleClass().add("actions");
-        actions.setAlignment(Pos.CENTER);
+	    HBox actions = new HBox(40, select, markAsRead, markAsUnread, dismiss, options);
+	    actions.getStyleClass().add("actions");
+	    actions.setAlignment(Pos.CENTER);
 
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(header);

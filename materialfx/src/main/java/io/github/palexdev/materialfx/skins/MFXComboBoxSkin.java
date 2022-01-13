@@ -1,14 +1,10 @@
 package io.github.palexdev.materialfx.skins;
 
-import io.github.palexdev.materialfx.controls.MFXComboBox;
-import io.github.palexdev.materialfx.controls.MFXIconWrapper;
-import io.github.palexdev.materialfx.controls.MFXPopup;
-import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.selection.ComboBoxSelectionModel;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
 import io.github.palexdev.virtualizedfx.cell.Cell;
 import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
-import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -41,8 +37,8 @@ public class MFXComboBoxSkin<T> extends MFXTextFieldSkin {
 	//================================================================================
 	// Constructors
 	//================================================================================
-	public MFXComboBoxSkin(MFXComboBox<T> comboBox, ReadOnlyBooleanWrapper floating) {
-		super(comboBox, floating);
+	public MFXComboBoxSkin(MFXComboBox<T> comboBox, BoundTextField boundField) {
+		super(comboBox, boundField);
 
 		popup = new MFXPopup();
 		popup.getStyleClass().add("combo-popup");
@@ -84,7 +80,7 @@ public class MFXComboBoxSkin<T> extends MFXTextFieldSkin {
 	 */
 	private void comboBehavior() {
 		MFXComboBox<T> comboBox = getComboBox();
-		comboBox.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+		comboBox.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
 			if (!comboBox.isEditable()) return;
 			switch (event.getCode()) {
 				case ENTER: {

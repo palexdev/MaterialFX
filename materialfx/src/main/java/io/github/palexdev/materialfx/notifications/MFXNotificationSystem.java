@@ -74,11 +74,12 @@ public class MFXNotificationSystem extends AbstractMFXNotificationSystem {
      */
     @Override
     public MFXNotificationSystem initOwner(Window owner) {
-        dispose();
-        super.owner = owner;
-        owner.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, onClose);
-        popup.show(dummyStage);
-        return this;
+	    dispose();
+	    super.owner = owner;
+	    owner.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, onClose);
+	    PositionBean positionBean = computePosition();
+	    popup.show(dummyStage, positionBean.getX(), positionBean.getY());
+	    return this;
     }
 
     /**

@@ -1,34 +1,39 @@
 package io.github.palexdev.materialfx.skins;
 
+import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.controls.BoundTextField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
-import io.github.palexdev.materialfx.effects.Interpolators;
 import io.github.palexdev.materialfx.enums.FloatMode;
+import io.github.palexdev.materialfx.utils.AnimationUtils;
 import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
-import io.github.palexdev.materialfx.utils.AnimationUtils.PauseBuilder;
 import io.github.palexdev.materialfx.utils.AnimationUtils.TimelineBuilder;
 import io.github.palexdev.materialfx.utils.ColorUtils;
-import io.github.palexdev.materialfx.utils.LabelUtils;
-import javafx.beans.property.ReadOnlyBooleanWrapper;
+import io.github.palexdev.materialfx.utils.PositionUtils;
+import javafx.animation.Animation;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanExpression;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.css.PseudoClass;
-import javafx.geometry.Pos;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.SkinBase;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 
+import static io.github.palexdev.materialfx.effects.Interpolators.INTERPOLATOR_V1;
+
 /**
  * Skin associated with every {@link MFXTextField} by default.
  * <p>
  * This skin is mainly responsible for managing features such as the
- * leading and trailing icons, the floating text and the characters limit.
+ * leading and trailing icons, the floating text the characters limit and the text fill.
  * <p></p>
  * To avoid reinventing the whole text field from scratch this skin makes use of
  * {@link BoundTextField}, so it is basically a wrapper for a JavaFX's TextField.
@@ -37,58 +42,49 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 	//================================================================================
 	// Properties
 	//================================================================================
-	private final HBox container;
-	private final StackPane textContainer;
+	private final BoundTextField boundField;
 	private final Label floatingText;
-	private final BoundTextField field;
 
 	private static final PseudoClass FOCUSED_PSEUDO_CLASS = PseudoClass.getPseudoClass("focused");
 
-	private final ReadOnlyBooleanWrapper floating;
-	private final double scaleMultiplier = 0.85;
-	private final Scale scale = Transform.scale(1, 1, 0, 0);
+	private final ObjectProperty<PositionBean> floatingPos = new SimpleObjectProperty<>(PositionBean.of(0, 0));
+	private final BooleanExpression floating;
+	private final double scaleValue = 0.85;
+	private final Scale scale = Transform.scale(scaleValue, scaleValue, 0, 0);
 	private final Translate translate = Transform.translate(0, 0);
-	private boolean init = false;
+	private Animation floatAnimation;
+	private boolean skipLayout = false; // More accuracy and performance for subsequent layouts
 
 	//================================================================================
 	// Constructors
 	//================================================================================
-	public MFXTextFieldSkin(MFXTextField textField, ReadOnlyBooleanWrapper floating) {
+	public MFXTextFieldSkin(MFXTextField textField, BoundTextField boundField) {
 		super(textField);
-		this.floating = floating;
+		this.boundField = boundField;
+		boundField.setManaged(false);
 
 		floatingText = new Label();
-		floatingText.textProperty().bind(textField.floatingTextProperty());
 		floatingText.getStyleClass().setAll("floating-text");
+		floatingText.textProperty().bind(textField.floatingTextProperty());
 		floatingText.getTransforms().addAll(scale, translate);
+		if (textField.getFloatMode() == FloatMode.DISABLED) floatingText.setVisible(false);
 
-		field = new BoundTextField(textField);
-		if (textField.getFloatMode() == FloatMode.INLINE) {
-			StackPane.setAlignment(field, Pos.BOTTOM_LEFT);
-		} else if (textField.getFloatMode() == FloatMode.DISABLED) {
-			floatingText.setVisible(false);
+		floating = Bindings.createBooleanBinding(
+				() -> getFloatY() != 0,
+				floatingPos
+		);
+		textField.floatingProperty().bind(floating);
+
+		getChildren().setAll(floatingText, boundField);
+
+		if (!shouldFloat()) {
+			scale.setX(1);
+			scale.setY(1);
 		}
 
-		textContainer = new StackPane(floatingText, field) {
-			@Override
-			protected void layoutChildren() {
-				super.layoutChildren();
-				double floatingTextY = floatingText.getBoundsInParent().getMinY();
-				if (!init && floatingTextY >= 0) initText();
-			}
-		};
-		textContainer.setAlignment(Pos.CENTER_LEFT);
-		textContainer.setMaxWidth(Double.MAX_VALUE);
-		HBox.setHgrow(textContainer, Priority.ALWAYS);
+		if (textField.getLeadingIcon() != null) getChildren().add(textField.getLeadingIcon());
+		if (textField.getTrailingIcon() != null) getChildren().add(textField.getTrailingIcon());
 
-		container = new HBox(textContainer);
-		container.setAlignment(Pos.CENTER_LEFT);
-		container.spacingProperty().bind(textField.graphicTextGapProperty());
-		if (textField.getLeadingIcon() != null) container.getChildren().add(0, textField.getLeadingIcon());
-		if (textField.getTrailingIcon() != null) container.getChildren().add(textField.getTrailingIcon());
-
-		getChildren().add(container);
-		updateTextColor(textField.getTextFill());
 		addListeners();
 	}
 
@@ -98,118 +94,94 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 
 	/**
 	 * Handles the focus, the floating text, the selected text, the character limit,
-	 * the icons, and the disabled state.
+	 * the icons and the text fill.
 	 */
 	private void addListeners() {
 		MFXTextField textField = getSkinnable();
 
+		// Event Handling
 		textField.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-			field.requestFocus();
-			field.deselect();
+			boundField.requestFocus();
+			boundField.deselect();
 		});
-		field.focusedProperty().addListener((observable, oldValue, newValue) -> {
+
+		// Handle Floating
+		floatingPos.addListener((observable, oldValue, newValue) -> handleFloatingText());
+		boundField.layoutBoundsProperty().addListener(invalidated -> {
+			skipLayout = true;
+			textField.requestLayout();
+		});
+		floatingText.layoutBoundsProperty().addListener(invalidated -> skipLayout = true);
+		textField.scaleOnAboveProperty().addListener((observable, oldValue, newValue) -> textField.requestLayout());
+		textField.promptTextProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue.isEmpty() && !isFloating()) textField.requestLayout();
+		});
+		textField.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue.isEmpty() && !isFloating()) textField.requestLayout();
+		});
+		textField.floatModeProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue == FloatMode.DISABLED) floatingText.setVisible(false);
+			textField.requestLayout();
+		});
+		textField.floatingTextGapProperty().addListener((observable, oldValue, newValue) -> textField.requestLayout());
+		textField.borderGapProperty().addListener((observable, oldValue, newValue) -> textField.requestLayout());
+
+		// Focus Handling
+		textField.focusedProperty().addListener((observable, oldValue, newValue) -> boundField.requestFocus());
+		boundField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+			textField.requestLayout();
 			pseudoClassStateChanged(FOCUSED_PSEUDO_CLASS, newValue);
-			if (shouldFloat()) positionText();
 		});
-		field.selectedTextProperty().addListener((observable, oldValue, newValue) -> {
-			if (!textField.isSelectable() && !newValue.isEmpty()) field.deselect();
+
+		// Icons
+		textField.leadingIconProperty().addListener((observable, oldValue, newValue) -> {
+			if (oldValue != null) getChildren().remove(oldValue);
+			if (newValue != null) getChildren().add(newValue);
 		});
-		field.textProperty().addListener((observable, oldValue, newValue) -> {
+		textField.trailingIconProperty().addListener((observable, oldValue, newValue) -> {
+			if (oldValue != null) getChildren().remove(oldValue);
+			if (newValue != null) getChildren().add(newValue);
+		});
+
+		// Misc Features
+		boundField.selectedTextProperty().addListener((observable, oldValue, newValue) -> {
+			if (!textField.isSelectable() && !newValue.isEmpty()) boundField.deselect();
+		});
+		boundField.textProperty().addListener((observable, oldValue, newValue) -> {
 			int limit = textField.getTextLimit();
 			if (limit == -1) return;
 
 			if (newValue.length() > limit) {
-				String s = newValue.substring(0, limit);
-				field.setText(s);
+				boundField.setText(oldValue);
 			}
-		});
-
-		textField.promptTextProperty().addListener((observable, oldValue, newValue) -> {
-			if (!textField.getText().isEmpty()) return;
-			if (!isFloating() && !newValue.isEmpty()) positionText();
-		});
-
-		textField.textProperty().addListener((observable, oldValue, newValue) -> {
-			if (!isFloating() && !newValue.isEmpty()) positionText();
-		});
-
-		textField.disabledProperty().addListener((observable, oldValue, newValue) -> handleDisabled(newValue));
-
-		textField.borderSpacingProperty().addListener(invalidated -> repositionText());
-		textField.floatModeProperty().addListener((observable, oldValue, newValue) -> {
-			switch (newValue) {
-				case DISABLED:
-					floatingText.setVisible(false);
-					StackPane.setAlignment(field, Pos.CENTER_LEFT);
-					break;
-				case INLINE: {
-					StackPane.setAlignment(field, Pos.BOTTOM_LEFT);
-					repositionText();
-					break;
-				}
-				case BORDER: {
-					StackPane.setAlignment(field, Pos.CENTER_LEFT);
-					repositionText();
-					break;
-				}
-			}
-		});
-		textField.gapProperty().addListener(invalidated -> repositionText());
-
-		textField.leadingIconProperty().addListener((observable, oldValue, newValue) -> {
-			if (oldValue != null) container.getChildren().remove(oldValue);
-			if (newValue != null) container.getChildren().add(0, newValue);
-		});
-		textField.trailingIconProperty().addListener((observable, oldValue, newValue) -> {
-			if (oldValue != null) container.getChildren().remove(oldValue);
-			if (newValue != null) container.getChildren().add(newValue);
 		});
 		textField.textFillProperty().addListener((observable, oldValue, newValue) -> updateTextColor(newValue));
 	}
 
 	/**
-	 * When the control is laid out it's needed to initialize the position of the floating text,
-	 * and this is needed only the first time, as sizes and bounds are computed for the first time.
-	 */
-	protected void initText() {
-		MFXTextField textField = getSkinnable();
-		if (textField.getFloatMode() == FloatMode.DISABLED) {
-			init = true;
-			return;
-		}
-
-		if (textField.isDisabled()) {
-			floatingText.setVisible(false);
-			positionText();
-			handleDisabled(true);
-		} else if (!isFloating() && !shouldFloat()) {
-			positionText();
-		}
-		init = true;
-	}
-
-	/**
 	 * Responsible for positioning the floating text node.
 	 */
-	protected void positionText() {
+	private void handleFloatingText() {
 		MFXTextField textField = getSkinnable();
-		if (textField.getFloatMode() == FloatMode.DISABLED) return;
-
-		double targetScale = isFloating() ? 1 : scaleMultiplier;
-		double targetX = computeTargetX();
-		double targetY = computeTargetY();
-		switchFloating();
+		double targetX = getFloatX();
+		double targetY = getFloatY();
+		double targetScale = shouldFloat() ? scaleValue : 1;
+		if (textField.getFloatMode() == FloatMode.ABOVE && !textField.scaleOnAbove()) targetScale = 1;
 
 		if (textField.isAnimated()) {
-			TimelineBuilder.build()
+			if (floatAnimation != null && AnimationUtils.isPlaying(floatAnimation)) {
+				floatAnimation.stop();
+			}
+
+			floatAnimation = TimelineBuilder.build()
 					.add(
-							KeyFrames.of(150, scale.xProperty(), targetScale, Interpolators.INTERPOLATOR_V1),
-							KeyFrames.of(150, scale.yProperty(), targetScale, Interpolators.INTERPOLATOR_V1),
-							KeyFrames.of(150, translate.xProperty(), targetX, Interpolators.INTERPOLATOR_V1),
-							KeyFrames.of(150, translate.yProperty(), targetY, Interpolators.INTERPOLATOR_V1)
+							KeyFrames.of(150, scale.xProperty(), targetScale, INTERPOLATOR_V1),
+							KeyFrames.of(150, scale.yProperty(), targetScale, INTERPOLATOR_V1),
+							KeyFrames.of(150, translate.xProperty(), targetX, INTERPOLATOR_V1),
+							KeyFrames.of(150, translate.yProperty(), targetY, INTERPOLATOR_V1)
 					)
-					.getAnimation()
-					.play();
+					.getAnimation();
+			floatAnimation.play();
 		} else {
 			scale.setX(targetScale);
 			scale.setY(targetScale);
@@ -219,97 +191,15 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 	}
 
 	/**
-	 * Responsible for repositioning the floating text node when needed.
-	 * For example this is called when the gap changes, the border spacing changes or
-	 * when the {@link FloatMode} changes.
-	 */
-	protected void repositionText() {
-		floatingText.setVisible(false);
-		setFloating(false);
-
-		scale.setX(1);
-		scale.setY(1);
-		translate.setX(0);
-		translate.setY(0);
-
-		// Delay the actual reposition, so that coordinates are settled
-		// Also, don't use position text, better not use any animation
-		PauseBuilder.build()
-				.setDuration(300)
-				.setOnFinished(event -> {
-					double targetScale = isFloating() ? 1 : scaleMultiplier;
-					double targetX = computeTargetX();
-					double targetY = computeTargetY();
-					switchFloating();
-					scale.setX(targetScale);
-					scale.setY(targetScale);
-					translate.setX(targetX);
-					translate.setY(targetY);
-					floatingText.setVisible(true);
-				})
-				.getAnimation()
-				.play();
-	}
-
-	/**
-	 * Computes the x coordinate at which the floating text node will be positioned.
-	 */
-	protected double computeTargetX() {
-		MFXTextField textField = getSkinnable();
-		double targetX = 0;
-		if (isFloating() || textField.getFloatMode() == FloatMode.INLINE) return targetX;
-
-		if (!isFloating()) {
-			double iconWidth = textField.getLeadingIcon() != null ? textField.getLeadingIcon().prefWidth(-1) : 0;
-			targetX = textField.getBorderSpacing() - iconWidth - textField.getGraphicTextGap();
-		}
-		return snapPositionX(targetX);
-	}
-
-	/**
-	 * Computes the y coordinate at which the floating text node will be positioned.
-	 */
-	protected double computeTargetY() {
-		MFXTextField textField = getSkinnable();
-		double targetY = 0;
-		if (textField.getFloatMode() == FloatMode.INLINE) {
-			if (!isFloating()) {
-				targetY = -floatingText.getLayoutY();
-			}
-		} else {
-			if (!isFloating()) {
-				double zeroPos = -textContainer.getLayoutY() - (floatingText.getLayoutY() * scaleMultiplier);
-				targetY = zeroPos - (floatingText.prefHeight(-1));
-			}
-		}
-		return snapPositionY(targetY);
-	}
-
-	/**
 	 * Computes whether the floating text node must float or not.
 	 */
 	private boolean shouldFloat() {
 		MFXTextField textField = getSkinnable();
-		return !textField.getFloatingText().isBlank() &&
-				textField.getText() != null &&
-				textField.getText().isEmpty() &&
-				textField.getPromptText() != null &&
-				textField.getPromptText().isEmpty();
-	}
-
-	/**
-	 * When the control is disabled the floating text may be hidden in some cases.
-	 */
-	protected void handleDisabled(boolean disabled) {
-		if (disabled) {
-			if (isFloating()) {
-				if (shouldFloat()) {
-					repositionText();
-				} else {
-					floatingText.setVisible(false);
-				}
-			}
-		}
+		boolean modeCondition = textField.getFloatMode() == FloatMode.ABOVE;
+		boolean floatTextCondition = (textField.getFloatingText() != null && !textField.getFloatingText().isEmpty());
+		boolean textCondition = (textField.getText() != null && !textField.getText().isEmpty());
+		boolean promptTextCondition = (textField.getPromptText() != null && !textField.getPromptText().isEmpty());
+		return (floatTextCondition && textCondition || promptTextCondition) || modeCondition || boundField.isFocused();
 	}
 
 	/**
@@ -320,22 +210,9 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 	 */
 	protected void updateTextColor(Color color) {
 		String colorString = ColorUtils.rgba(color);
-		field.setStyle(
-				"-fx-text-inner-color: " + colorString + ";\n" +
-						"-fx-highlight-text-fill: " + colorString + ";\n"
+		boundField.setStyle(
+				"-fx-text-inner-color: " + colorString + ";\n" + "-fx-highlight-text-fill: " + colorString + ";\n"
 		);
-	}
-
-	public boolean isFloating() {
-		return floating.get();
-	}
-
-	public void setFloating(boolean floating) {
-		this.floating.set(floating);
-	}
-
-	public void switchFloating() {
-		this.floating.set(!isFloating());
 	}
 
 	//================================================================================
@@ -344,43 +221,45 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 	@Override
 	protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
 		MFXTextField textField = getSkinnable();
-		Node leadingIcon = textField.getLeadingIcon();
-		Node trailingIcon = textField.getLeadingIcon();
-		double spacing = textField.getGraphicTextGap();
-
+		Node leading = textField.getLeadingIcon();
+		Node trailing = textField.getTrailingIcon();
+		double gap = textField.getGraphicTextGap();
 		return leftInset +
-				(leadingIcon != null ? leadingIcon.prefWidth(-1) : 0) +
-				(leadingIcon != null ? spacing : 0) +
-				Math.max(floatingText.prefWidth(-1), LabelUtils.computeTextWidth(field.getFont(), field.getText())) +
-				(trailingIcon != null ? spacing : 0) +
-				(trailingIcon != null ? trailingIcon.prefWidth(-1) : 0) +
+				(leading != null ? leading.prefWidth(-1) + gap : 0) +
+				Math.max(boundField.prefWidth(-1), floatingText.prefWidth(-1)) +
+				(trailing != null ? trailing.prefWidth(-1) + gap : 0) +
 				rightInset;
 	}
 
 	@Override
-	protected double computePrefHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+	protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
 		MFXTextField textField = getSkinnable();
-		Node leadingIcon = textField.getLeadingIcon();
-		Node trailingIcon = textField.getTrailingIcon();
 		FloatMode floatMode = textField.getFloatMode();
+		Node leading = textField.getLeadingIcon();
+		Node trailing = textField.getTrailingIcon();
+		double iconsMax = topInset + Math.max(
+				(leading != null ? leading.prefHeight(-1) : 0),
+				(trailing != null ? trailing.prefHeight(-1) : 0)
+		) + bottomInset;
 
-		double iconsHeight = Math.max(leadingIcon != null ? leadingIcon.prefHeight(-1) : 0, trailingIcon != null ? trailingIcon.prefHeight(-1) : 0);
-		double textNodesHeight = 0;
+		double height = 0;
 		switch (floatMode) {
-			case INLINE: {
-				textNodesHeight += textField.getGap() + floatingText.prefHeight(-1) + field.prefHeight(-1);
+			case DISABLED:
+			case ABOVE: {
+				height = topInset + boundField.prefHeight(-1) + bottomInset;
 				break;
 			}
 			case BORDER: {
-				textNodesHeight += floatingText.prefHeight(-1) + field.prefHeight(-1);
+				height = topInset + (floatingText.prefHeight(-1) / 2) + boundField.prefHeight(-1) + bottomInset;
 				break;
 			}
-			case DISABLED: {
-				textNodesHeight = field.prefHeight(-1);
+			case INLINE: {
+				double gap = textField.getFloatingTextGap();
+				height = topInset + (floatingText.prefHeight(-1) * scaleValue) + gap + boundField.prefHeight(-1) + bottomInset;
 				break;
 			}
 		}
-		return topInset + Math.max(iconsHeight, textNodesHeight) + bottomInset;
+		return Math.max(iconsMax, height);
 	}
 
 	@Override
@@ -393,5 +272,150 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 	protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
 		if (getSkinnable().getMaxHeight() == Double.MAX_VALUE) return Double.MAX_VALUE;
 		return getSkinnable().prefHeight(-1);
+	}
+
+	@Override
+	protected void layoutChildren(double x, double y, double w, double h) {
+		MFXTextField textField = getSkinnable();
+		Node leading = textField.getLeadingIcon();
+		Node trailing = textField.getTrailingIcon();
+		double graphicTextGap = textField.getGraphicTextGap();
+		FloatMode floatMode = textField.getFloatMode();
+		VPos textVAlignment = (floatMode != FloatMode.INLINE) ? VPos.CENTER : VPos.BOTTOM;
+		double scaleValue = (floatMode == FloatMode.ABOVE && !textField.scaleOnAbove()) ? 1 : this.scaleValue;
+
+		// Before positioning the text it's important to layout the leading icon
+		// if present so that the actual minX (offsetX) starts after the icon + the specified gap
+		// Insets are already included in the x and y variables
+		double xOffset = x;
+		if (leading != null) {
+			PositionBean leadingPos = PositionUtils.computePosition(
+					textField,
+					leading,
+					x, y, w, h, 0,
+					Insets.EMPTY,
+					HPos.LEFT, VPos.CENTER
+			);
+			double leadingW = leading.prefWidth(-1);
+			double leadingH = leading.prefHeight(-1);
+			leading.resizeRelocate(leadingPos.getX(), leadingPos.getY(), leadingW, leadingH);
+			xOffset += leadingW + graphicTextGap;
+		}
+
+		if (trailing != null) {
+			PositionBean trailingPos = PositionUtils.computePosition(
+					textField,
+					trailing,
+					x, y, w, h, 0,
+					Insets.EMPTY,
+					HPos.RIGHT,
+					VPos.CENTER
+			);
+			double trailingW = trailing.prefWidth(-1);
+			double trailingH = trailing.prefHeight(-1);
+			trailing.resizeRelocate(trailingPos.getX(), trailingPos.getY(), trailingW, trailingH);
+		}
+
+		// The floating text is always positioned at the center of the Pane
+		// and then translated to the correct position
+		//
+		// Exception for the x coordinate in case of FloatMode.ABOVE, the
+		// offsetX computed previously is ignored and the floating text is positioned
+		// at the start of the Pane
+		double floatW = floatingText.prefWidth(-1);
+		double floatH = floatingText.prefHeight(-1);
+		double floatX = (floatMode == FloatMode.ABOVE) ? 1 : xOffset; // TODO change above doc
+		PositionBean floatPos = PositionUtils.computePosition(
+				textField,
+				floatingText,
+				floatX, y, w, h, 0,
+				Insets.EMPTY,
+				HPos.LEFT, VPos.CENTER
+		);
+		floatingText.resizeRelocate(floatPos.getX(), floatPos.getY(), floatW, floatH);
+
+		// The text is always positioned to the LEFT of the Pane, the vertical alignment
+		// depends on the FloatMode, BOTTOM if FloatMode.INLINE, CENTER in every other mode
+		//
+		// The width of the text is computed as the remaining space, so the control's width
+		// minus the icon's width and gap
+		double textW = w -
+				(leading != null ? leading.prefWidth(-1) + graphicTextGap : 0) -
+				(trailing != null ? trailing.prefWidth(-1) + graphicTextGap : 0);
+		double textH = boundField.prefHeight(-1);
+		PositionBean textPos = PositionUtils.computePosition(
+				textField,
+				boundField,
+				xOffset, y, w, h, 0,
+				Insets.EMPTY,
+				HPos.LEFT, textVAlignment
+		);
+		boundField.resizeRelocate(textPos.getX(), textPos.getY(), textW, textH);
+
+		// Sometimes subsequent layouts are not necessary for the floating text position.
+		// This flag avoids those unnecessary layout requests.
+		if (skipLayout) {
+			skipLayout = false;
+			return;
+		}
+
+		// The code below is responsible for computing the final x and y positions for the
+		// floating text.
+		// If the text should float (see shouldFloat() method) then the TOP position is computed
+		// as a starting point.
+		// Then according to the FloatMode adjustments are made to the computed coordinates.
+		// Note that the applied scale is NOT included in the measurements so certain values
+		// must be divided/multiplied for the scaleValue.
+		//
+		// In case the text should not float both the coordinates are 0.
+		double targetX = 0;
+		double targetY = 0;
+		if (shouldFloat()) {
+			if (floatMode == FloatMode.BORDER) floatX = 0;
+
+			PositionBean floatTopPos = PositionUtils.computePosition(
+					textField,
+					floatingText,
+					floatX, y, w, h, 0,
+					Insets.EMPTY,
+					HPos.LEFT, VPos.TOP
+			);
+			targetY = floatTopPos.getY() - floatPos.getY() / scaleValue + 1;
+			targetX = floatTopPos.getX() - floatPos.getX() / scaleValue + 1;
+
+			switch (floatMode) {
+				case ABOVE: {
+					targetX += textField.getBorderGap();
+					targetY -= snappedTopInset() + textField.getFloatingTextGap() + floatH / scaleValue;
+					break;
+				}
+				case BORDER: {
+					targetX += textField.getBorderGap();
+					targetY -= snappedTopInset() + floatH / 2 / scaleValue;
+					break;
+				}
+			}
+		} else {
+			if (floatMode == FloatMode.BORDER) {
+				targetX = (leading != null ? leading.prefWidth(-1) + graphicTextGap : 0);
+			}
+		}
+		setFloatPos(PositionBean.of(targetX, targetY));
+	}
+
+	private double getFloatX() {
+		return floatingPos.get().getX();
+	}
+
+	private double getFloatY() {
+		return floatingPos.get().getY();
+	}
+
+	private void setFloatPos(PositionBean pos) {
+		floatingPos.set(pos);
+	}
+
+	private boolean isFloating() {
+		return floating.get();
 	}
 }

@@ -7,5 +7,5 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
  * is positioned in {@link MFXTextField}s and subclasses.
  */
 public enum FloatMode {
-    DISABLED, BORDER, INLINE
+	DISABLED, ABOVE, BORDER, INLINE
 }

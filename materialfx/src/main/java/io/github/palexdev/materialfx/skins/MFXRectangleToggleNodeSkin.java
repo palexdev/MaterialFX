@@ -22,12 +22,15 @@ import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
+import io.github.palexdev.materialfx.utils.LabelUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
+import javafx.beans.binding.Bindings;
 import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.scene.control.SkinBase;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 
 /**
  * This is the default skin for every {@link MFXRectangleToggleNode}.
@@ -46,23 +49,30 @@ public class MFXRectangleToggleNodeSkin extends SkinBase<MFXRectangleToggleNode>
     public MFXRectangleToggleNodeSkin(MFXRectangleToggleNode toggleNode) {
         super(toggleNode);
 
-        label = new MFXTextField() {
-            @Override
-            public String getUserAgentStylesheet() {
-                return toggleNode.getUserAgentStylesheet();
-            }
-        };
-        label.fontProperty().bind(toggleNode.fontProperty());
-        label.textProperty().bind(toggleNode.textProperty());
-        label.setLeadingIcon(toggleNode.getLabelLeadingIcon());
-        label.setTrailingIcon(toggleNode.getLabelTrailingIcon());
-        label.setEditable(false);
-        label.setSelectable(false);
+	    label = new MFXTextField() {
+		    @Override
+		    public String getUserAgentStylesheet() {
+			    return toggleNode.getUserAgentStylesheet();
+		    }
+	    };
+	    label.alignmentProperty().bind(toggleNode.alignmentProperty());
+	    label.fontProperty().bind(toggleNode.fontProperty());
+	    label.graphicTextGapProperty().bind(toggleNode.graphicTextGapProperty());
+	    label.textProperty().bind(toggleNode.textProperty());
+	    label.textFillProperty().bind(Bindings.createObjectBinding(
+			    () -> (Color) toggleNode.getTextFill(),
+			    toggleNode.textFillProperty()
+	    ));
+	    label.setLeadingIcon(toggleNode.getLabelLeadingIcon());
+	    label.setTrailingIcon(toggleNode.getLabelTrailingIcon());
+	    label.setEditable(false);
+	    label.setSelectable(false);
+	    label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
-        container = new StackPane();
-        container.alignmentProperty().bind(toggleNode.alignmentProperty());
-        rippleGenerator = new MFXCircleRippleGenerator(container);
-        rippleGenerator.setManaged(false);
+	    container = new StackPane();
+	    container.alignmentProperty().bind(toggleNode.alignmentProperty());
+	    rippleGenerator = new MFXCircleRippleGenerator(container);
+	    rippleGenerator.setManaged(false);
 
         container.getChildren().setAll(rippleGenerator, label);
         handleGraphics();
@@ -167,23 +177,43 @@ public class MFXRectangleToggleNodeSkin extends SkinBase<MFXRectangleToggleNode>
         if (graphic != null) {
             label.setVisible(false);
             if (!container.getChildren().contains(graphic)) {
-                container.getChildren().add(graphic);
+	            container.getChildren().add(graphic);
             }
         } else {
-            label.setVisible(true);
+	        label.setVisible(true);
         }
     }
 
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return getSkinnable().prefWidth(-1);
-    }
+	//================================================================================
+	// Override Methods
+	//================================================================================
+	@Override
+	protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+		MFXRectangleToggleNode toggleNode = getSkinnable();
+		Node graphic = toggleNode.getGraphic();
+		if (graphic != null) {
+			return leftInset + graphic.prefWidth(-1) + rightInset;
+		}
 
-    @Override
-    protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return getSkinnable().prefHeight(-1);
-    }
+		double gap = label.getGraphicTextGap();
+		Node leading = toggleNode.getLabelLeadingIcon();
+		Node trailing = toggleNode.getLabelTrailingIcon();
+		double textWidth = LabelUtils.computeTextWidth(toggleNode.getFont(), toggleNode.getText())
+				+ label.snappedLeftInset() + label.snappedRightInset();
+		return leftInset +
+				(leading != null ? leading.prefWidth(-1) + gap : 0) +
+				textWidth +
+				(trailing != null ? trailing.prefWidth(-1) + gap : 0) +
+				rightInset;
+	}
+
+	@Override
+	protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+		return getSkinnable().prefWidth(-1);
+	}
+
+	@Override
+	protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+		return getSkinnable().prefHeight(-1);
+	}
 }

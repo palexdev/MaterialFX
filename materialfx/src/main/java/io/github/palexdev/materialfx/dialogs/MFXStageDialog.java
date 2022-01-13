@@ -41,7 +41,7 @@ import java.io.IOException;
  * <p>
  * So, the advice is to build this dialogs ahead of time, keep them in memory if you can,
  * so that you can use them whenever you need and just change  their content if needed,
- * // TODO, can an alternative be made based on the old implementation of AbstractMFXDialog?
+ * // TODO center in owner node
  */
 public class MFXStageDialog extends Stage {
 	//================================================================================

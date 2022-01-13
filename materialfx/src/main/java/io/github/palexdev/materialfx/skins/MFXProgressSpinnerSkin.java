@@ -51,11 +51,6 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
     private boolean wasIndeterminate = false;
     private double arcLength = -1;
 
-    private final Color greenColor;
-    private final Color redColor;
-    private final Color yellowColor;
-    private final Color blueColor;
-
     private final Arc arc;
     private final Arc track;
     private final StackPane arcPane;
@@ -69,11 +64,6 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
     //================================================================================
     public MFXProgressSpinnerSkin(MFXProgressSpinner spinner) {
         super(spinner);
-
-        blueColor = Color.valueOf("#4285f4");
-        redColor = Color.valueOf("#db4437");
-        yellowColor = Color.valueOf("#f4b400");
-        greenColor = Color.valueOf("#0F9D58");
 
         arc = new Arc();
         arc.setManaged(false);
@@ -115,13 +105,57 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
      * Adds listeners to: indeterminate, progress, visible, parent and scene properties.
      */
     private void setListeners() {
-        MFXProgressSpinner spinner = getSkinnable();
+	    MFXProgressSpinner spinner = getSkinnable();
 
-        spinner.indeterminateProperty().addListener((observable, oldValue, newValue) -> reset());
-        spinner.progressProperty().addListener((observable, oldValue, newValue) -> updateProgress());
-        spinner.visibleProperty().addListener((observable, oldValue, newValue) -> updateAnimation());
-        spinner.parentProperty().addListener((observable, oldValue, newValue) -> updateAnimation());
-        NodeUtils.waitForScene(spinner, this::updateAnimation, true, false);
+	    spinner.indeterminateProperty().addListener((observable, oldValue, newValue) -> reset());
+	    spinner.progressProperty().addListener((observable, oldValue, newValue) -> updateProgress());
+	    spinner.visibleProperty().addListener((observable, oldValue, newValue) -> {
+		    if (!newValue) {
+			    resetAndStop();
+		    } else {
+			    updateAnimation();
+		    }
+	    });
+	    spinner.disabledProperty().addListener((observable, oldValue, newValue) -> {
+		    if (newValue) {
+			    resetAndStop();
+			    return;
+		    }
+		    updateAnimation();
+	    });
+	    spinner.parentProperty().addListener((observable, oldValue, newValue) -> updateAnimation());
+
+	    spinner.color1Property().addListener((observable, oldValue, newValue) -> {
+		    if (!spinner.isIndeterminate()) return;
+		    clearAnimation();
+		    reset();
+	    });
+	    spinner.color2Property().addListener((observable, oldValue, newValue) -> {
+		    if (!spinner.isIndeterminate()) return;
+		    clearAnimation();
+		    reset();
+	    });
+	    spinner.color3Property().addListener((observable, oldValue, newValue) -> {
+		    if (!spinner.isIndeterminate()) return;
+		    clearAnimation();
+		    reset();
+	    });
+	    spinner.color4Property().addListener((observable, oldValue, newValue) -> {
+		    if (!spinner.isIndeterminate()) return;
+		    clearAnimation();
+		    reset();
+	    });
+
+	    NodeUtils.waitForScene(
+			    spinner,
+			    () -> {
+				    if (!spinner.isVisible() || spinner.isDisabled()) {
+					    resetAndStop();
+					    return;
+				    }
+				    updateAnimation();
+			    }, true, false
+	    );
     }
 
     /**
@@ -142,26 +176,40 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
      * Resets the spinner animation.
      */
     private void reset() {
-        MFXProgressSpinner spinner = getSkinnable();
+	    MFXProgressSpinner spinner = getSkinnable();
 
-        if (spinner.isIndeterminate()) {
-            if (animation == null) {
-                createAnimation();
-                animation.play();
-            }
-        } else {
-            clearAnimation();
-            arc.setStartAngle(90);
-            updateProgress();
-        }
+	    if (spinner.isIndeterminate()) {
+		    if (animation == null) {
+			    createAnimation();
+		    }
+	    } else {
+		    clearAnimation();
+		    arc.setStartAngle(spinner.getStartingAngle());
+		    updateProgress();
+	    }
     }
 
-    /**
-     * Clears the animation.
-     */
-    private void clearAnimation() {
-        if (animation != null) {
-            animation.stop();
+	/**
+	 * Resets and stops the spinner animation.
+	 */
+	private void resetAndStop() {
+		MFXProgressSpinner spinner = getSkinnable();
+
+		if (spinner.isIndeterminate()) {
+			if (animation != null) animation.stop();
+		} else {
+			clearAnimation();
+			arc.setStartAngle(spinner.getStartingAngle());
+			updateProgress();
+		}
+	}
+
+	/**
+	 * Clears the animation.
+	 */
+	private void clearAnimation() {
+		if (animation != null) {
+			animation.stop();
             animation.getKeyFrames().clear();
             animation = null;
         }
@@ -187,25 +235,29 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
      * Creates the animation.
      */
     private void createAnimation() {
-        MFXProgressSpinner spinner = getSkinnable();
+	    MFXProgressSpinner spinner = getSkinnable();
 
-        if (!spinner.isIndeterminate()) return;
-        final Paint initialColor = arc.getStroke();
-        if (initialColor == null) {
-            arc.setStroke(blueColor);
-        }
+	    Color color1 = spinner.getColor1();
+	    Color color2 = spinner.getColor2();
+	    Color color3 = spinner.getColor3();
+	    Color color4 = spinner.getColor4();
 
-        KeyFrame endingFrame = new KeyFrame(Duration.seconds(5.6),
-                new KeyValue(arc.lengthProperty(), 5, Interpolator.LINEAR),
-                new KeyValue(arc.startAngleProperty(), 1845 + spinner.getStartingAngle(), Interpolator.LINEAR));
+	    if (!spinner.isIndeterminate()) return;
+	    if (arc.getStroke() == null) {
+		    arc.setStroke(color1);
+	    }
 
-        KeyFrame[] allFrames = Stream.of(
-                getKeyFrames(0, 0, initialColor == null ? blueColor : initialColor),
-                getKeyFrames(450, 1.4, initialColor == null ? redColor : initialColor),
-                getKeyFrames(900, 2.8, initialColor == null ? yellowColor : initialColor),
-                getKeyFrames(1350, 4.2, initialColor == null ? greenColor : initialColor),
-                new KeyFrame[] { endingFrame }
-        ).flatMap(Arrays::stream).toArray(KeyFrame[]::new);
+	    KeyFrame endingFrame = new KeyFrame(Duration.seconds(5.6),
+			    new KeyValue(arc.lengthProperty(), 5, Interpolator.LINEAR),
+			    new KeyValue(arc.startAngleProperty(), 1845 + spinner.getStartingAngle(), Interpolator.LINEAR));
+
+	    KeyFrame[] allFrames = Stream.of(
+			    getKeyFrames(0, 0, color1),
+			    getKeyFrames(450, 1.4, color2),
+			    getKeyFrames(900, 2.8, color3),
+			    getKeyFrames(1350, 4.2, color4),
+			    new KeyFrame[]{endingFrame}
+	    ).flatMap(Arrays::stream).toArray(KeyFrame[]::new);
 
         if (animation != null) {
             animation.stop();
@@ -216,7 +268,7 @@ public class MFXProgressSpinnerSkin extends SkinBase<MFXProgressSpinner> {
                 .setDelay(Duration.ZERO)
                 .setCycleCount(Timeline.INDEFINITE)
                 .getAnimation();
-        animation.playFromStart();
+	    if (spinner.isVisible() && !spinner.isDisabled()) animation.playFromStart();
     }
 
     /**

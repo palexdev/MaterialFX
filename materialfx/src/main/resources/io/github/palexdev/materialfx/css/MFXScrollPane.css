@@ -19,18 +19,22 @@
 .mfx-scroll-pane {
     -fx-background-color: white;
 
-	-track-color: rgb(230, 230, 230);
-	-thumb-color: rgb(137, 137, 137);
-	-thumb-hover-color: rgb(89, 88, 91);
+    -track-color: rgb(230, 230, 230);
+    -thumb-color: rgb(137, 137, 137);
+    -thumb-hover-color: rgb(89, 88, 91);
 }
 
 /* Remove JavaFX crap */
+.mfx-scroll-pane:focused {
+    -fx-background-color: white;
+}
+
 .mfx-scroll-pane > .corner {
-	-fx-background-color: transparent;
+    -fx-background-color: transparent;
 }
 
 .mfx-scroll-pane .viewport {
-	-fx-background-color: transparent;
+    -fx-background-color: transparent;
 }
 
 .mfx-scroll-pane .scroll-bar,

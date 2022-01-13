@@ -17,63 +17,40 @@
  */
 
 @import "Fonts.css";
-
-.mfx-stepper-toggle {
-    -mfx-icon-color-selected: white;
-}
-
-.mfx-stepper-toggle .mfx-label {
-    -fx-background-color: transparent;
-    -mfx-font-family: 'Open Sans SemiBold';
-    -mfx-font-size: 14px;
-    -mfx-text-fill: -mfx-alt-color;
-}
+@import "MFXColors.css";
 
 .mfx-stepper-toggle #circle {
-    -fx-fill: -mfx-bar-background;
-    -fx-stroke: -mfx-bar-background;
-    -fx-stroke-width: 2px;
+    -fx-fill: white;
+    -fx-stroke: #EBEBEB;
 }
 
-.mfx-stepper-toggle .mfx-font-icon {
-    -mfx-color: -mfx-base-color;
+.mfx-stepper-toggle .mfx-text-field {
+    -mfx-float-mode: disabled;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-family: "Open Sans SemiBold";
+    -fx-font-size: 14;
+    -fx-pref-width: 100;
+    -fx-alignment: CENTER;
 }
 
 .mfx-stepper-toggle:selected #circle {
-    -fx-fill: -mfx-base-color;
-    -fx-stroke: -mfx-base-color;
+    -fx-stroke: -mfx-purple;
 }
 
-.mfx-stepper-toggle:selected .mfx-font-icon {
-    -mfx-color: white;
-}
-
-.mfx-stepper-toggle:selected .mfx-label {
-    -mfx-text-fill: -mfx-base-color;
+.mfx-stepper-toggle:selected .mfx-text-field {
+    -fx-text-fill: -mfx-purple;
 }
 
 .mfx-stepper-toggle:completed #circle {
-    -fx-fill: white;
-    -fx-stroke: -mfx-base-color;
+    -fx-stroke: -mfx-purple;
+    -fx-fill: -mfx-purple;
 }
 
-.mfx-stepper-toggle:completed .mfx-font-icon {
-    -mfx-color: -mfx-alt-color;
-}
-
-.mfx-stepper-toggle:completed .mfx-label {
-    -mfx-text-fill: -mfx-alt-color;
-}
-
-.mfx-stepper-toggle:error #circle {
-    -fx-fill: white;
+.mfx-stepper-toggle:invalid #circle {
     -fx-stroke: -mfx-red;
 }
 
-.mfx-stepper-toggle:error .mfx-font-icon {
-    -mfx-color: -mfx-red;
-}
-
-.mfx-stepper-toggle:error .mfx-label {
-    -mfx-text-fill: -mfx-red;
+.mfx-stepper-toggle:invalid .mfx-text-field {
+    -fx-text-fill: -mfx-red;
 }

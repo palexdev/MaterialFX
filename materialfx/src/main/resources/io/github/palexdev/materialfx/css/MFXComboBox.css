@@ -39,3 +39,7 @@
 	-fx-border-radius: 5;
 	-fx-max-height: 200;
 }
+
+.mfx-combo-box:disabled .caret .mfx-font-icon {
+	-mfx-color: #bcbcbc;
+}

@@ -69,7 +69,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
 				.setShowMinimize(false)
 				.toStageDialogBuilder()
 				.initOwner(tableView.getScene().getWindow())
-				.initModality(Modality.WINDOW_MODAL)
+				.initModality(Modality.APPLICATION_MODAL)
 				.get();
 
 		footer = buildFooter();
@@ -176,12 +176,6 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
 	//================================================================================
 	// Overridden Methods
 	//================================================================================
-	@Override
-	protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-		double footerMin = footer.snappedLeftInset() + footer.prefWidth(-1) + 50 + footer.snappedRightInset();
-		return Math.max(footerMin, super.computeMinWidth(height, topInset, rightInset, bottomInset, leftInset));
-	}
-
 	@Override
 	protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
 		return getSkinnable().prefWidth(-1);

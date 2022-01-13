@@ -1,15 +1,11 @@
 package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.beans.NumberRange;
-import io.github.palexdev.materialfx.controls.MFXComboBox;
-import io.github.palexdev.materialfx.controls.MFXDatePicker;
-import io.github.palexdev.materialfx.controls.MFXIconWrapper;
-import io.github.palexdev.materialfx.controls.MFXPopup;
+import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXDateCell;
 import io.github.palexdev.materialfx.utils.DateTimeUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -82,8 +78,8 @@ public class MFXDatePickerSkin extends MFXTextFieldSkin {
 	//================================================================================
 	// Constructors
 	//================================================================================
-	public MFXDatePickerSkin(MFXDatePicker datePicker, ReadOnlyBooleanWrapper floating) {
-		super(datePicker, floating);
+	public MFXDatePickerSkin(MFXDatePicker datePicker, BoundTextField boundField) {
+		super(datePicker, boundField);
 
 		popup = new MFXPopup();
 		popup.getStyleClass().add("date-picker-popup");

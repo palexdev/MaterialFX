@@ -194,21 +194,21 @@ public class StringUtils {
      * Generates a random alphabetic string of given length
      */
     public static String randAlphabetic(int length) {
-        return RandomInstance.random.ints(97, 123)
-                .limit(length)
-                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                .toString();
+        return RandomUtils.random.ints(97, 123)
+		        .limit(length)
+		        .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+		        .toString();
     }
 
     /**
      * Generates a random alphanumeric string of given length
      */
     public static String randAlphanumeric(int length) {
-        return RandomInstance.random.ints(48, 123)
-                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
-                .limit(length)
-                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                .toString();
+	    return RandomUtils.random.ints(48, 123)
+			    .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+			    .limit(length)
+			    .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+			    .toString();
     }
 
     private static boolean regionMatches(final CharSequence cs, final int thisStart,

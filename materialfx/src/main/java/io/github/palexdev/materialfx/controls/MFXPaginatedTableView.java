@@ -9,7 +9,9 @@ import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.scene.control.Skin;
+import javafx.scene.input.ScrollEvent;
 
 /**
  * This is the implementation of a paginated {@link MFXTableView}.
@@ -63,8 +65,14 @@ public class MFXPaginatedTableView<T> extends MFXTableView<T> {
 		rowsFlow.getHBar().visibleProperty().unbind();
 		rowsFlow.getVBar().setVisible(false);
 		rowsFlow.getHBar().setVisible(false);
+		addEventFilter(ScrollEvent.ANY, Event::consume);
 
 		getTransformableList().addListener((InvalidationListener) invalidated -> updateMaxPages());
+		getTransformableList().predicateProperty().addListener(invalidated -> {
+			updateMaxPages();
+			setCurrentPage(1);
+			goToPage(1);
+		});
 		updateMaxPages();
 
 		currentPageProperty().addListener(invalidated -> goToPage(getCurrentPage()));

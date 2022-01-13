@@ -18,10 +18,28 @@
 
 package io.github.palexdev.materialfx.utils;
 
+import java.util.List;
 import java.util.Random;
 
-public class RandomInstance {
-    public static final Random random = new Random(System.currentTimeMillis());
+public class RandomUtils {
+	public static final Random random = new Random(System.currentTimeMillis());
 
-    private RandomInstance() {}
+	private RandomUtils() {
+	}
+
+	/**
+	 * @return a random value from the given array
+	 */
+	public static <T> T randFromArray(T[] array) {
+		int index = random.nextInt(array.length);
+		return array[index];
+	}
+
+	/**
+	 * @return a random value from the given list
+	 */
+	public static <T> T randFromList(List<T> list) {
+		int index = random.nextInt(list.size());
+		return list.get(index);
+	}
 }

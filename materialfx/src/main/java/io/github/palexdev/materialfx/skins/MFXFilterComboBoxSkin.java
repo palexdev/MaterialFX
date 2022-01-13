@@ -1,12 +1,12 @@
 package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.collections.TransformableList;
+import io.github.palexdev.materialfx.controls.BoundTextField;
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.cell.MFXFilterComboBoxCell;
 import io.github.palexdev.virtualizedfx.cell.Cell;
 import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
-import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -29,14 +29,23 @@ public class MFXFilterComboBoxSkin<T> extends MFXComboBoxSkin<T> {
 	//================================================================================
 	// Constructors
 	//================================================================================
-	public MFXFilterComboBoxSkin(MFXFilterComboBox<T> comboBox, ReadOnlyBooleanWrapper floating) {
-		super(comboBox, floating);
+	public MFXFilterComboBoxSkin(MFXFilterComboBox<T> comboBox, BoundTextField boundField) {
+		super(comboBox, boundField);
 		popup.setContent(createPopupContent());
+		addListeners();
 	}
 
 	//================================================================================
 	// Methods
 	//================================================================================
+	private void addListeners() {
+		MFXFilterComboBox<T> comboBox = getComboBox();
+
+		comboBox.searchTextProperty().addListener((observable, oldValue, newValue) -> filter(newValue));
+		popup.showingProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue && comboBox.isResetOnPopupHidden()) comboBox.setSearchText("");
+		});
+	}
 
 	/**
 	 * Responsible for filtering the popup's listview.
@@ -81,8 +90,8 @@ public class MFXFilterComboBoxSkin<T> extends MFXComboBoxSkin<T> {
 
 		MFXTextField searchField = new MFXTextField("", "Search...");
 		searchField.getStyleClass().add("search-field");
-		searchField.textProperty().addListener(invalidated -> filter(searchField.getText()));
-		searchField.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> searchField.requestFocus());
+		searchField.textProperty().bindBidirectional(comboBox.searchTextProperty());
+		searchField.setMaxWidth(Double.MAX_VALUE);
 
 		SimpleVirtualFlow<T, Cell<T>> virtualFlow = SimpleVirtualFlow.Builder.create(
 				filterList,
@@ -94,7 +103,6 @@ public class MFXFilterComboBoxSkin<T> extends MFXComboBoxSkin<T> {
 		virtualFlow.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 			if (popup.isShowing()) {
 				popup.hide();
-				searchField.setText("");
 			}
 		});
 

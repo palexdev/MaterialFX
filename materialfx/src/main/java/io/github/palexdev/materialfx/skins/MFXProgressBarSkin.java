@@ -88,23 +88,37 @@ public class MFXProgressBarSkin extends SkinBase<MFXProgressBar> {
      * Adds listeners for: progress, width, visible, parent,scene and animation speed properties.
      */
     private void setListeners() {
-        MFXProgressBar progressBar = getSkinnable();
+	    MFXProgressBar progressBar = getSkinnable();
 
-        progressBar.progressProperty().addListener((observable, oldValue, newValue) -> updateBars());
-        progressBar.widthProperty().addListener((observable, oldValue, newValue) -> {
-            resetBars();
-            updateBars();
-        });
-        progressBar.visibleProperty().addListener((observable, oldValue, newValue) -> {
-            resetBars();
-            updateBars();
-        });
-        progressBar.parentProperty().addListener((observable, oldValue, newValue) -> {
-            resetBars();
-            updateBars();
-        });
-        NodeUtils.waitForScene(progressBar, () -> {
-            resetBars();
+	    progressBar.progressProperty().addListener((observable, oldValue, newValue) -> updateBars());
+	    progressBar.widthProperty().addListener((observable, oldValue, newValue) -> {
+		    if (!progressBar.isVisible() || progressBar.isDisabled()) return;
+		    resetBars();
+		    updateBars();
+	    });
+	    progressBar.visibleProperty().addListener((observable, oldValue, newValue) -> {
+		    if (!newValue) {
+			    resetBars();
+			    return;
+		    }
+		    resetBars();
+		    updateBars();
+	    });
+	    progressBar.disabledProperty().addListener((observable, oldValue, newValue) -> {
+		    if (newValue) {
+			    resetBars();
+			    return;
+		    }
+		    resetBars();
+		    updateBars();
+	    });
+	    progressBar.parentProperty().addListener((observable, oldValue, newValue) -> {
+		    resetBars();
+		    updateBars();
+	    });
+	    NodeUtils.waitForScene(progressBar, () -> {
+		    if (!progressBar.isVisible() || progressBar.isDisabled()) return;
+		    resetBars();
             updateBars();
         }, true, false);
         progressBar.animationSpeedProperty().addListener((observable, oldValue, newValue) -> {

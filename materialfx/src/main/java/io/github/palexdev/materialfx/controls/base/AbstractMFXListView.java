@@ -22,6 +22,7 @@ import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.selection.MultipleSelectionModel;
 import io.github.palexdev.materialfx.selection.base.IMultipleSelectionModel;
 import io.github.palexdev.materialfx.utils.ColorUtils;
+import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import io.github.palexdev.virtualizedfx.cell.Cell;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -32,6 +33,7 @@ import javafx.scene.control.Control;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.util.Duration;
+import javafx.util.StringConverter;
 
 import java.util.List;
 
@@ -41,12 +43,12 @@ import java.util.List;
  * @param <T> the type of data within the ListView
  */
 public abstract class AbstractMFXListView<T, C extends Cell<T>> extends Control implements IListView<T, C> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private static final StyleablePropertyFactory<AbstractMFXListView<?, ?>> FACTORY = new StyleablePropertyFactory<>(Control.getClassCssMetaData());
-    protected final ObjectProperty<ObservableList<T>> items = new SimpleObjectProperty<>(FXCollections.observableArrayList());
-    protected final IMultipleSelectionModel<T> selectionModel = new MultipleSelectionModel<>(items);
+	//================================================================================
+	// Properties
+	//================================================================================
+	protected final ObjectProperty<ObservableList<T>> items = new SimpleObjectProperty<>(FXCollections.observableArrayList());
+	protected final ObjectProperty<StringConverter<T>> converter = new SimpleObjectProperty<>();
+	protected final IMultipleSelectionModel<T> selectionModel = new MultipleSelectionModel<>(items);
 
     //================================================================================
     // Constructors
@@ -183,25 +185,40 @@ public abstract class AbstractMFXListView<T, C extends Cell<T>> extends Control 
         return items.get();
     }
 
-    @Override
-    public ObjectProperty<ObservableList<T>> itemsProperty() {
-        return items;
-    }
+	@Override
+	public ObjectProperty<ObservableList<T>> itemsProperty() {
+		return items;
+	}
 
-    @Override
-    public void setItems(ObservableList<T> items) {
-        this.items.set(items);
-    }
+	@Override
+	public void setItems(ObservableList<T> items) {
+		this.items.set(items);
+	}
 
-    @Override
-    public IMultipleSelectionModel<T> getSelectionModel() {
-        return selectionModel;
-    }
+	@Override
+	public StringConverter<T> getConverter() {
+		return converter.get();
+	}
 
-    //================================================================================
-    // Styleable Properties
-    //================================================================================
-    private final StyleableBooleanProperty hideScrollBars = new SimpleStyleableBooleanProperty(
+	@Override
+	public ObjectProperty<StringConverter<T>> converterProperty() {
+		return converter;
+	}
+
+	@Override
+	public void setConverter(StringConverter<T> converter) {
+		this.converter.set(converter);
+	}
+
+	@Override
+	public IMultipleSelectionModel<T> getSelectionModel() {
+		return selectionModel;
+	}
+
+	//================================================================================
+	// Styleable Properties
+	//================================================================================
+	private final StyleableBooleanProperty hideScrollBars = new SimpleStyleableBooleanProperty(
             StyleableProperties.HIDE_SCROLLBARS,
             this,
             "hideScrollBars",
@@ -246,7 +263,8 @@ public abstract class AbstractMFXListView<T, C extends Cell<T>> extends Control 
     }
 
     private static class StyleableProperties {
-        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+	    private static final StyleablePropertyFactory<AbstractMFXListView<?, ?>> FACTORY = new StyleablePropertyFactory<>(Control.getClassCssMetaData());
+	    private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
         private static final CssMetaData<AbstractMFXListView<?, ?>, Boolean> HIDE_SCROLLBARS =
                 FACTORY.createBooleanCssMetaData(
@@ -265,16 +283,19 @@ public abstract class AbstractMFXListView<T, C extends Cell<T>> extends Control 
 
 
         static {
-            cssMetaDataList = List.of(HIDE_SCROLLBARS, DEPTH_LEVEL);
+	        cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
+			        Control.getClassCssMetaData(),
+			        HIDE_SCROLLBARS, DEPTH_LEVEL
+	        );
         }
     }
 
-    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
-        return StyleableProperties.cssMetaDataList;
-    }
+	public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
+		return StyleableProperties.cssMetaDataList;
+	}
 
     @Override
     protected List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return AbstractMFXListView.getControlCssMetaDataList();
+	    return AbstractMFXListView.getClassCssMetaData();
     }
 }

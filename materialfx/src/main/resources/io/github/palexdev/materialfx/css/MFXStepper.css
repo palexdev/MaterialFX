@@ -18,11 +18,12 @@
 
 @import "Fonts.css";
 @import "MFXColors.css";
+@import "MFXStepperToggle.css";
 
 .mfx-stepper {
-    -mfx-base-color: #7F0FFF;
+    -mfx-base-color: -mfx-purple;
     -mfx-alt-color: #BEBEBE;
-    -mfx-bar-background: #F8F8FF;
+    -mfx-bar-background: #EBEBEB;
     -mfx-progress-color: -mfx-base-color;
 }
 
@@ -45,7 +46,7 @@
 }
 
 .mfx-stepper .buttons-box .mfx-button .text {
-    -fx-fill: -mfx-charcoal;
+    -fx-fill: -mfx-text-he;
 }
 
 .mfx-stepper .buttons-box .mfx-button:focused {

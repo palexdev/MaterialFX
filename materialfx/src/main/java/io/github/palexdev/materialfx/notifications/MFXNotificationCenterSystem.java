@@ -42,6 +42,7 @@ public class MFXNotificationCenterSystem extends AbstractMFXNotificationSystem {
     //================================================================================
     private final MFXNotificationCenter center;
     private boolean openOnNew = true;
+	private boolean centerInit = false;
 
     //================================================================================
     // Constructors
@@ -49,27 +50,6 @@ public class MFXNotificationCenterSystem extends AbstractMFXNotificationSystem {
     private MFXNotificationCenterSystem() {
         super();
         center = new MFXNotificationCenter();
-        center.setOnIconClicked(event -> {
-            if (!isShowing() && !center.getNotifications().isEmpty()) {
-                show();
-            }
-        });
-        center.showingProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) close();
-        });
-
-        center.popupHoverProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                closeAfterTransition.stop();
-            } else if (closeAutomatically) {
-                closeAfterTransition.playFromStart();
-            }
-        });
-        center.addEventFilter(MouseEvent.MOUSE_ENTERED, event -> closeAfterTransition.stop());
-        center.addEventFilter(MouseEvent.MOUSE_EXITED, event -> {
-            if (closeAutomatically) closeAfterTransition.playFromStart();
-        });
-
         popup.setContent(center);
     }
 
@@ -89,7 +69,8 @@ public class MFXNotificationCenterSystem extends AbstractMFXNotificationSystem {
         dispose();
         super.owner = owner;
         owner.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, onClose);
-        center.setOpacity(0.0);
+	    center.setOpacity(0.0);
+	    init();
         if (!dummyStage.isShowing()) dummyStage.show();
         popup.show(dummyStage);
         return this;
@@ -100,9 +81,33 @@ public class MFXNotificationCenterSystem extends AbstractMFXNotificationSystem {
      */
     @Override
     protected void init() {
-        PositionBean positionBean = computePosition();
-        popup.setX(positionBean.getX());
-        popup.setY(positionBean.getY());
+	    PositionBean positionBean = computePosition();
+	    popup.setX(positionBean.getX());
+	    popup.setY(positionBean.getY());
+
+	    if (!centerInit) {
+		    center.setOnIconClicked(event -> {
+			    if (!isShowing() && !center.getNotifications().isEmpty()) {
+				    show();
+			    }
+		    });
+		    center.showingProperty().addListener((observable, oldValue, newValue) -> {
+			    if (!newValue) close();
+		    });
+
+		    center.popupHoverProperty().addListener((observable, oldValue, newValue) -> {
+			    if (newValue) {
+				    closeAfterTransition.stop();
+			    } else if (closeAutomatically) {
+				    closeAfterTransition.playFromStart();
+			    }
+		    });
+		    center.addEventFilter(MouseEvent.MOUSE_ENTERED, event -> closeAfterTransition.stop());
+		    center.addEventFilter(MouseEvent.MOUSE_EXITED, event -> {
+			    if (closeAutomatically) closeAfterTransition.playFromStart();
+		    });
+		    centerInit = true;
+	    }
     }
 
     /**

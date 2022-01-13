@@ -9,6 +9,8 @@ import io.github.palexdev.materialfx.controls.cell.MFXFilterComboBoxCell;
 import io.github.palexdev.materialfx.skins.MFXFilterComboBoxSkin;
 import io.github.palexdev.materialfx.utils.StringUtils;
 import javafx.beans.InvalidationListener;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Skin;
@@ -37,8 +39,11 @@ public class MFXFilterComboBox<T> extends MFXComboBox<T> {
 	//================================================================================
 	private final String STYLECLASS = "mfx-filter-combo-box";
 	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXFilterComboBox.css");
+
+	private final StringProperty searchText = new SimpleStringProperty();
 	private final TransformableListWrapper<T> filterList = new TransformableListWrapper<>(FXCollections.observableArrayList());
 	private final FunctionProperty<String, Predicate<T>> filterFunction = new FunctionProperty<>(s -> t -> StringUtils.containsIgnoreCase(t.toString(), s));
+	private boolean resetOnPopupHidden = true;
 
 	private final InvalidationListener itemsChanged = invalidated -> filterList.setAll(getItems());
 
@@ -47,6 +52,7 @@ public class MFXFilterComboBox<T> extends MFXComboBox<T> {
 	//================================================================================
 	public MFXFilterComboBox() {
 		super();
+		initialize();
 	}
 
 	public MFXFilterComboBox(ObservableList<T> items) {
@@ -63,8 +69,11 @@ public class MFXFilterComboBox<T> extends MFXComboBox<T> {
 
 		filterList.setAll(getItems());
 		itemsProperty().addListener((observable, oldValue, newValue) -> {
-			oldValue.removeListener(itemsChanged);
-			newValue.addListener(itemsChanged);
+			if (oldValue != null) oldValue.removeListener(itemsChanged);
+			if (newValue != null) {
+				newValue.addListener(itemsChanged);
+				filterList.setAll(newValue);
+			}
 		});
 		getItems().addListener(itemsChanged);
 	}
@@ -72,6 +81,24 @@ public class MFXFilterComboBox<T> extends MFXComboBox<T> {
 	//================================================================================
 	// Getters/Setters
 	//================================================================================
+	public String getSearchText() {
+		return searchText.get();
+	}
+
+	/**
+	 * Specifies the text used to filter the items list.
+	 * <p></p>
+	 * By default this text is bound bidirectionally with the text-field's
+	 * used in the popup
+	 */
+	public StringProperty searchTextProperty() {
+		return searchText;
+	}
+
+	public void setSearchText(String searchText) {
+		this.searchText.set(searchText);
+	}
+
 	public TransformableList<T> getFilterList() {
 		return filterList.getTransformableList();
 	}
@@ -92,12 +119,28 @@ public class MFXFilterComboBox<T> extends MFXComboBox<T> {
 		this.filterFunction.set(filterFunction);
 	}
 
+	/**
+	 * @return whether to reset the filter state, such as the {@link #searchTextProperty()}
+	 * when the popup is closed
+	 */
+	public boolean isResetOnPopupHidden() {
+		return resetOnPopupHidden;
+	}
+
+	/**
+	 * Sets whether to reset the filter state, such as the {@link #searchTextProperty()}
+	 * when the popup is closed
+	 */
+	public void setResetOnPopupHidden(boolean resetOnPopupHidden) {
+		this.resetOnPopupHidden = resetOnPopupHidden;
+	}
+
 	//================================================================================
 	// Overridden Methods
 	//================================================================================
 	@Override
 	protected Skin<?> createDefaultSkin() {
-		return new MFXFilterComboBoxSkin<>(this, floating);
+		return new MFXFilterComboBoxSkin<>(this, boundField);
 	}
 
 	@Override

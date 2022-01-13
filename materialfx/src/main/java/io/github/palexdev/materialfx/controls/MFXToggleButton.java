@@ -272,25 +272,40 @@ public class MFXToggleButton extends Labeled implements Toggle, MFXLabeled {
         setStyle("-mfx-main: " + ColorUtils.toCss(color) + ";\n");
     }
 
-    /**
-     * Sets the colors of the toggle button when not selected.
-     * <p>
-     * The color is set inline by using {@link Node#setStyle(String)}, the
-     * set CSS value is the "-mfx-secondary" property.
-     */
-    public void setSecondaryColor(Color color) {
-        setStyle("-mfx-secondary: " + ColorUtils.toCss(color) + ";\n");
-    }
+	/**
+	 * Sets the colors of the toggle button when not selected.
+	 * <p>
+	 * The color is set inline by using {@link Node#setStyle(String)}, the
+	 * set CSS value is the "-mfx-secondary" property.
+	 */
+	public void setSecondaryColor(Color color) {
+		setStyle("-mfx-secondary: " + ColorUtils.toCss(color) + ";\n");
+	}
 
-    //================================================================================
-    // CssMetaData
-    //================================================================================
-    private static class StyleableProperties {
-        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+	/**
+	 * Combines {@link #setMainColor(Color)} and {@link #setSecondaryColor(Color)}
+	 * into one method.
+	 * <p>
+	 * If you want to set both colors then you <b>must</b> use this method
+	 * since multiple calls to {@link Node#setStyle(String)} retain only the
+	 * last specified style.
+	 */
+	public void setColors(Color main, Color secondary) {
+		setStyle(
+				"-mfx-main: " + ColorUtils.toCss(main) + ";\n" +
+						"-mfx-secondary: " + ColorUtils.toCss(secondary) + ";\n"
+		);
+	}
 
-        private static final CssMetaData<MFXToggleButton, ContentDisplay> CONTENT_DISPOSITION =
-                FACTORY.createEnumCssMetaData(
-                        ContentDisplay.class,
+	//================================================================================
+	// CssMetaData
+	//================================================================================
+	private static class StyleableProperties {
+		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+
+		private static final CssMetaData<MFXToggleButton, ContentDisplay> CONTENT_DISPOSITION =
+				FACTORY.createEnumCssMetaData(
+						ContentDisplay.class,
                         "-mfx-content-disposition",
                         MFXToggleButton::contentDispositionProperty,
                         ContentDisplay.LEFT

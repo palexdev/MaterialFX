@@ -10,14 +10,12 @@ import io.github.palexdev.materialfx.selection.MultipleSelectionModel;
 import io.github.palexdev.materialfx.selection.base.IMultipleSelectionModel;
 import io.github.palexdev.materialfx.skins.MFXTableViewSkin;
 import io.github.palexdev.materialfx.utils.ListChangeProcessor;
+import io.github.palexdev.materialfx.utils.others.When;
 import io.github.palexdev.virtualizedfx.beans.NumberRange;
 import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
 import io.github.palexdev.virtualizedfx.utils.ListChangeHelper;
 import javafx.beans.InvalidationListener;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -45,6 +43,7 @@ public class MFXTableView<T> extends Control {
 	private final String STYLE_CLASS = "mfx-table-view";
 	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTableView.css");
 	protected final SimpleVirtualFlow<T, MFXTableRow<T>> rowsFlow;
+	protected final ReadOnlyBooleanWrapper virtualFlowInitialized = new ReadOnlyBooleanWrapper();
 
 	private final ObjectProperty<ObservableList<T>> items = new SimpleObjectProperty<>();
 	private final ListChangeListener<? super T> itemsChanged = this::itemsChanged;
@@ -97,6 +96,7 @@ public class MFXTableView<T> extends Control {
 			if (newValue != null) {
 				newValue.addListener(itemsChanged);
 				newValue.addListener(itemsInvalid);
+				transformableList.setAll(newValue);
 			}
 		});
 
@@ -179,6 +179,20 @@ public class MFXTableView<T> extends Control {
 		if (max != -1.0) {
 			column.setMinWidth(max);
 		}
+	}
+
+	/**
+	 * This should be called only if you need to autosize the columns
+	 * before the table is laid out/initialized.
+	 * <p>
+	 * Calling this afterwards won't have any effect.
+	 */
+	public void autosizeColumnsOnInitialization() {
+		if (isVirtualFlowInitialized()) return;
+		When.onChanged(virtualFlowInitialized)
+				.then((oldValue, newValue) -> autosizeColumns())
+				.oneShot()
+				.listen();
 	}
 
 	//================================================================================
@@ -268,6 +282,12 @@ public class MFXTableView<T> extends Control {
 		return STYLESHEET;
 	}
 
+	@Override
+	protected void layoutChildren() {
+		super.layoutChildren();
+		if (!isVirtualFlowInitialized() && rowsFlow.getCellHeight() > 0) virtualFlowInitialized.set(true);
+	}
+
 	//================================================================================
 	// Getters/Setters
 	//================================================================================
@@ -346,5 +366,24 @@ public class MFXTableView<T> extends Control {
 
 	public void setFooterVisible(boolean footerVisible) {
 		this.footerVisible.set(footerVisible);
+	}
+
+	public boolean isVirtualFlowInitialized() {
+		return virtualFlowInitialized.get();
+	}
+
+	/**
+	 * Useful property to inform that the table layout
+	 * has been initialized/is ready.
+	 * <p>
+	 * For example it is used by {@link #autosizeColumnsOnInitialization()}
+	 * to autosize the columns before the table is even laid out by using a
+	 * listener.
+	 * <p>
+	 * It is considered initialized as soon as the {@link SimpleVirtualFlow}
+	 * retrieves the cells' height.
+	 */
+	public ReadOnlyBooleanProperty virtualFlowInitializedProperty() {
+		return virtualFlowInitialized.getReadOnlyProperty();
 	}
 }

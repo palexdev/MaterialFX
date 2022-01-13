@@ -63,9 +63,12 @@ public class MFXCheckListCell<T> extends AbstractMFXListCell<T> {
         checkbox.getStylesheets().setAll(getUserAgentStylesheet());
 
         if (!(data instanceof Node)) {
-            label = new Label();
-            label.textProperty().bind(dataProperty().asString());
-            label.getStyleClass().add("data-label");
+	        label = new Label();
+	        label.textProperty().bind(Bindings.createStringBinding(
+			        () -> listView.getConverter() != null ? listView.getConverter().toString(getData()) : getData().toString(),
+			        dataProperty(), listView.converterProperty()
+	        ));
+	        label.getStyleClass().add("data-label");
         } else {
             label = null;
         }

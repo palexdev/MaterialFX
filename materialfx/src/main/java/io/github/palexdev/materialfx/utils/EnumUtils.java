@@ -36,7 +36,6 @@ public class EnumUtils {
 	 * using {@link Class#getEnumConstants()}.
 	 */
 	public static <E extends Enum<E>> E randomEnum(Class<E> clazz) {
-		E[] values = clazz.getEnumConstants();
-		return values[RandomInstance.random.nextInt(values.length)];
+		return RandomUtils.randFromArray(clazz.getEnumConstants());
 	}
 }

@@ -97,10 +97,10 @@ public class MFXListView<T> extends AbstractMFXListView<T, MFXListCell<T>> {
         super.initialize();
         getStyleClass().setAll(STYLE_CLASS);
         items.addListener((observable, oldValue, newValue) -> {
-            oldValue.removeListener(itemsChanged);
-            newValue.addListener(itemsChanged);
+	        if (oldValue != null) oldValue.removeListener(itemsChanged);
+	        if (newValue != null) newValue.removeListener(itemsChanged);
         });
-        getItems().addListener(this::itemsChanged);
+	    getItems().addListener(itemsChanged);
     }
 
     protected void itemsChanged(ListChangeListener.Change<? extends T> change) {

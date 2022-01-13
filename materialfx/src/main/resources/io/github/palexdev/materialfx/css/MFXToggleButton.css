@@ -52,3 +52,13 @@
 .mfx-toggle-button:selected .line {
     -fx-stroke: -mfx-main;
 }
+
+.mfx-toggle-button:disabled .circle,
+.mfx-toggle-button:disabled:selected .circle {
+    -fx-fill: gray;
+}
+
+.mfx-toggle-button:disabled .line,
+.mfx-toggle-button:disabled:selected .line {
+    -fx-stroke: gray;
+}

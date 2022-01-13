@@ -18,10 +18,9 @@
 
 package io.github.palexdev.materialfx.utils;
 
+import io.github.palexdev.materialfx.beans.SizeBean;
 import javafx.beans.property.BooleanProperty;
-import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
@@ -30,17 +29,17 @@ import javafx.scene.text.Text;
 /**
  * Utils class for JavaFX's {@code Labels} and {@code MFXLabels}.
  */
-public class LabelUtils {
+public class LabelUtils { // TODO rename to TextUtils
 
-    private LabelUtils() {
-    }
+	private LabelUtils() {
+	}
 
-    /**
-     * Checks if the text of the specified {@code Label} is truncated.
-     *
-     * @param label The specified label
-     */
-    public static boolean isLabelTruncated(Label label) {
+	/**
+	 * Checks if the text of the specified {@code Label} is truncated.
+	 *
+	 * @param label The specified label
+	 */
+	public static boolean isLabelTruncated(Label label) {
         String originalString = label.getText();
         Text textNode = (Text) label.lookup(".text");
         if (textNode != null) {
@@ -92,29 +91,37 @@ public class LabelUtils {
      * @param text the node text
      */
     public static double computeLabelHeight(Font font, String text) {
-        Label helper = new Label(text);
-        helper.setMaxWidth(Double.MAX_VALUE);
-        helper.setFont(font);
-        return NodeUtils.getRegionHeight(helper);
+	    Label helper = new Label(text);
+	    helper.setMaxWidth(Double.MAX_VALUE);
+	    helper.setFont(font);
+	    return NodeUtils.getRegionHeight(helper);
     }
 
-    /**
-     * Computes the min width of a text node so that all the text is visible.
-     * <p>
-     * Uses {@link Text} as helper.
-     *
-     * @param font the node font
-     * @param text the node text
-     */
-    public static double computeTextWidth(Font font, String text) {
+	/**
+	 * Computes both the width and the height of a {@link Label}
+	 * for the given font and text.
+	 *
+	 * @return the bean containing the computed values
+	 */
+	public static SizeBean computeLabelSizes(Font font, String text) {
+		Label helper = new Label(text);
+		helper.setMaxWidth(Double.MAX_VALUE);
+		helper.setFont(font);
+		return NodeUtils.getNodeSizes(helper);
+	}
+
+	/**
+	 * Computes the min width of a text node so that all the text is visible.
+	 * <p>
+	 * Uses {@link Text} as helper.
+	 *
+	 * @param font the node font
+	 * @param text the node text
+	 */
+	public static double computeTextWidth(Font font, String text) {
         Text helper = new Text(text);
         helper.setFont(font);
-
-        Group group = new Group(helper);
-        Scene scene = new Scene(group);
-        group.applyCss();
-        group.layout();
-        return helper.getLayoutBounds().getWidth();
+		return NodeUtils.getNodeWidth(helper);
     }
 
     /**
@@ -128,12 +135,7 @@ public class LabelUtils {
     public static double computeTextHeight(Font font, String text) {
         Text helper = new Text(text);
         helper.setFont(font);
-
-        Group group = new Group(helper);
-        Scene scene = new Scene(group);
-        group.applyCss();
-        group.layout();
-        return helper.getLayoutBounds().getHeight();
+	    return NodeUtils.getNodeHeight(helper);
     }
 
     /**

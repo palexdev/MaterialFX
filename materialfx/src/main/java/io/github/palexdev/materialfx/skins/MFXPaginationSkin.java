@@ -5,6 +5,7 @@ import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXPagination;
 import io.github.palexdev.materialfx.controls.cell.MFXPage;
 import io.github.palexdev.materialfx.utils.NodeUtils;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
@@ -54,6 +55,7 @@ public class MFXPaginationSkin extends SkinBase<MFXPagination> {
 
 		buildBar();
 		buildPages();
+		Bindings.bindContent(bar.getChildren(), pages);
 
 		container = buildContainer();
 		addListeners();
@@ -165,8 +167,6 @@ public class MFXPaginationSkin extends SkinBase<MFXPagination> {
 		supplyPages(Math.min(pagination.getMaxPage(), pagination.getPagesToShow()));
 		updatePages();
 		updateBetweens();
-
-		bar.getChildren().setAll(pages);
 	}
 
 	/**

@@ -77,9 +77,9 @@ public class ColorUtils {
      */
     public static Color getRandomColor() {
         return Color.rgb(
-                RandomInstance.random.nextInt(256),
-                RandomInstance.random.nextInt(256),
-                RandomInstance.random.nextInt(256)
+		        RandomUtils.random.nextInt(256),
+		        RandomUtils.random.nextInt(256),
+		        RandomUtils.random.nextInt(256)
         );
     }
 

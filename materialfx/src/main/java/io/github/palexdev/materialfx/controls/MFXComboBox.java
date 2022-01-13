@@ -17,6 +17,8 @@ import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.NumberUtils;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
+import io.github.palexdev.materialfx.validation.MFXValidator;
+import io.github.palexdev.materialfx.validation.Validated;
 import io.github.palexdev.virtualizedfx.beans.NumberRange;
 import io.github.palexdev.virtualizedfx.cell.Cell;
 import io.github.palexdev.virtualizedfx.utils.ListChangeHelper;
@@ -65,7 +67,7 @@ import java.util.function.Function;
  * typed text, or cancel the change (pressing Ctrl+Shift+Z by default).
  * <p> - Also adds a new PseudoClass that activates when the popup opens
  */
-public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
+public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T>, Validated {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -87,6 +89,7 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 	private final ConsumerProperty<String> onCommit = new ConsumerProperty<>();
 	private final ConsumerProperty<String> onCancel = new ConsumerProperty<>();
 
+	private final MFXValidator validator = new MFXValidator();
 	// TODO implement validation
 	// TODO add context menu
 
@@ -227,7 +230,7 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 	//================================================================================
 	@Override
 	protected Skin<?> createDefaultSkin() {
-		return new MFXComboBoxSkin<>(this, floating);
+		return new MFXComboBoxSkin<>(this, boundField);
 	}
 
 	@Override
@@ -322,6 +325,14 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 	}
 
 	//================================================================================
+	// Validation
+	//================================================================================
+	@Override
+	public MFXValidator getValidator() {
+		return validator;
+	}
+
+	//================================================================================
 	// Styleable Properties
 	//================================================================================
 	private final StyleableBooleanProperty scrollOnOpen = new StyleableBooleanProperty(
@@ -362,7 +373,8 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 				);
 
 		static {
-			cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(MFXTextField.getClassCssMetaData(),
+			cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
+					MFXTextField.getClassCssMetaData(),
 					SCROLL_ON_OPEN
 			);
 		}

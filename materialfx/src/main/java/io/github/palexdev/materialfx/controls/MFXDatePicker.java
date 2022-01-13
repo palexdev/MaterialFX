@@ -10,6 +10,7 @@ import io.github.palexdev.materialfx.beans.properties.functional.ConsumerPropert
 import io.github.palexdev.materialfx.beans.properties.functional.FunctionProperty;
 import io.github.palexdev.materialfx.beans.properties.functional.SupplierProperty;
 import io.github.palexdev.materialfx.controls.cell.MFXDateCell;
+import io.github.palexdev.materialfx.enums.FloatMode;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.skins.MFXDatePickerSkin;
 import io.github.palexdev.materialfx.utils.DateTimeUtils;
@@ -155,6 +156,7 @@ public class MFXDatePicker extends MFXTextField {
 	private void initialize() {
 		getStyleClass().add(STYLE_CLASS);
 		setPrefWidth(200);
+		setFloatMode(FloatMode.DISABLED);
 
 		showing.addListener(invalidated -> pseudoClassStateChanged(POPUP_OPEN_PSEUDO_CLASS, showing.get()));
 
@@ -265,7 +267,7 @@ public class MFXDatePicker extends MFXTextField {
 	//================================================================================
 	@Override
 	protected Skin<?> createDefaultSkin() {
-		return new MFXDatePickerSkin(this, floating);
+		return new MFXDatePickerSkin(this, boundField);
 	}
 
 	@Override

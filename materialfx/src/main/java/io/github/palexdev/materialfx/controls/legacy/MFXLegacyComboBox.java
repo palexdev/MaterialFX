@@ -21,15 +21,11 @@ package io.github.palexdev.materialfx.controls.legacy;
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
-import io.github.palexdev.materialfx.enums.DialogType;
 import io.github.palexdev.materialfx.skins.legacy.MFXLegacyComboBoxSkin;
-import io.github.palexdev.materialfx.utils.NodeUtils;
-import io.github.palexdev.materialfx.validation.MFXDialogValidator;
-import io.github.palexdev.materialfx.validation.base.AbstractMFXValidator;
-import io.github.palexdev.materialfx.validation.base.Validated;
+import io.github.palexdev.materialfx.validation.MFXValidator;
+import io.github.palexdev.materialfx.validation.Validated;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.css.*;
 import javafx.scene.SnapshotParameters;
@@ -45,7 +41,6 @@ import javafx.scene.shape.StrokeLineCap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Supplier;
 
 /**
  * This is a restyle of the JavaFX's combo box.
@@ -53,7 +48,7 @@ import java.util.function.Supplier;
  * For a combo box which more closely follows the guidelines of material design see {@link MFXComboBox}.
  * <p>
  * Extends {@code ComboBox}, redefines the style class to "mfx-legacy-combo-box" for usage in CSS and
- * includes a {@link MFXDialogValidator}. Also, introduces a new PseudoClass ":invalid" to specify
+ * includes a {@link MFXValidator}. Also, introduces a new PseudoClass ":invalid" to specify
  * the control's look when the validation fails.
  * <p></p>
  * A few notes on features and usage:
@@ -71,17 +66,17 @@ import java.util.function.Supplier;
  *
  * @see MFXSnapshotWrapper
  */
-public class MFXLegacyComboBox<T> extends ComboBox<T> implements Validated<MFXDialogValidator> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private static final StyleablePropertyFactory<MFXLegacyComboBox<?>> FACTORY = new StyleablePropertyFactory<>(ComboBox.getClassCssMetaData());
-    private final String STYLE_CLASS = "mfx-legacy-combo-box";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/MFXComboBox.css");
+public class MFXLegacyComboBox<T> extends ComboBox<T> implements Validated {
+	//================================================================================
+	// Properties
+	//================================================================================
+	private static final StyleablePropertyFactory<MFXLegacyComboBox<?>> FACTORY = new StyleablePropertyFactory<>(ComboBox.getClassCssMetaData());
+	private final String STYLE_CLASS = "mfx-legacy-combo-box";
+	private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/MFXComboBox.css");
 
-    private MFXDialogValidator validator;
-    private final ObjectProperty<Paint> invalidLineColor = new SimpleObjectProperty<>(Color.web("#EF6E6B"));
-    protected static final PseudoClass INVALID_PSEUDO_CLASS = PseudoClass.getPseudoClass("invalid");
+	private final MFXValidator validator = new MFXValidator();
+	private final ObjectProperty<Paint> invalidLineColor = new SimpleObjectProperty<>(Color.web("#EF6E6B"));
+	protected static final PseudoClass INVALID_PSEUDO_CLASS = PseudoClass.getPseudoClass("invalid");
 
     //================================================================================
     // Constructors
@@ -95,76 +90,13 @@ public class MFXLegacyComboBox<T> extends ComboBox<T> implements Validated<MFXDi
         initialize();
     }
 
-    //================================================================================
-    // Validation
-    //================================================================================
-
-    /**
-     * Configures the validator. The first time the error label can appear in two cases:
-     * <p></p>
-     * 1) The validator {@link AbstractMFXValidator#isInitControlValidation()} flag is true,
-     * in this case as soon as the control is laid out in the scene the label visible property is
-     * set accordingly to the validator state. (by default is false) <p>
-     * 2) When the control lose the focus and the the validator's state is invalid.
-     * <p></p>
-     * Then the label visible property is automatically updated when the validator state changes.
-     * <p></p>
-     * The validator is also responsible for updating the ":invalid" PseudoClass.
-     */
-    private void setupValidator() {
-        validator = new MFXDialogValidator("Error");
-        validator.setDialogType(DialogType.ERROR);
-        validator.validProperty().addListener(invalidated -> {
-            if (isValidated()) {
-                pseudoClassStateChanged(INVALID_PSEUDO_CLASS, !isValid());
-            }
-        });
-
-        NodeUtils.waitForScene(this, () -> {
-            if (isValidated()) {
-                if (getValidator().isInitControlValidation()) {
-                    pseudoClassStateChanged(INVALID_PSEUDO_CLASS, !isValid());
-                } else {
-                    pseudoClassStateChanged(INVALID_PSEUDO_CLASS, false);
-                }
-            }
-        }, true, false);
-    }
-
-    @Override
-    public MFXLegacyComboBox<T> installValidator(Supplier<MFXDialogValidator> validatorSupplier) {
-        if (validatorSupplier == null) {
-            throw new IllegalArgumentException("The supplier cannot be null!");
-        }
-        this.validator = validatorSupplier.get();
-        return this;
-    }
-
-    @Override
-    public MFXDialogValidator getValidator() {
-        return validator;
-    }
-
-    /**
-     * Delegate method to get the validator's title.
-     */
-    public String getValidatorTitle() {
-        return validator.getTitle();
-    }
-
-    /**
-     * Delegate method to get the validator's title property.
-     */
-    public StringProperty validatorTitleProperty() {
-        return validator.titleProperty();
-    }
-
-    /**
-     * Delegate method to set the validator's title.
-     */
-    public void setValidatorTitle(String title) {
-        validator.setTitle(title);
-    }
+	//================================================================================
+	// Validation
+	//================================================================================
+	@Override
+	public MFXValidator getValidator() {
+		return validator;
+	}
 
     public Paint getInvalidLineColor() {
         return invalidLineColor.get();
@@ -213,8 +145,6 @@ public class MFXLegacyComboBox<T> extends ComboBox<T> implements Validated<MFXDi
                 updateComboItem(this, item, empty);
             }
         });
-
-        setupValidator();
     }
 
     /**

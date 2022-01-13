@@ -6,8 +6,7 @@
 Date Picker
 ********************/
 .mfx-date-picker {
-	-mfx-float-mode: disabled;
-	-fx-padding: 1 5 1 5;
+	-fx-padding: 3 5 3 5;
 }
 
 .mfx-date-picker .mfx-icon-wrapper .mfx-ripple-generator {
@@ -17,6 +16,10 @@ Date Picker
 
 .mfx-date-picker:focused .icon {
 	-mfx-color: -mfx-purple;
+}
+
+.mfx-date-picker:disabled .icon {
+	-mfx-color: #bcbcbc;
 }
 
 /********************

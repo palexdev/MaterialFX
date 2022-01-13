@@ -68,6 +68,7 @@
 .mfx-text-field .text-field {
 	-fx-text-box-border: transparent;
 	-fx-background-color: transparent;
+	-fx-backrgound-insets: 0;
 	-fx-padding: 0;
 }
 

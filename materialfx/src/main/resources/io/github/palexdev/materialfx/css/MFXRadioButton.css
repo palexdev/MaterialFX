@@ -18,7 +18,7 @@
 
 .mfx-radio-button {
     -mfx-main: #6200EE;
-    -mfx-gray: #424242;
+    -mfx-secondary: #424242;
 
     -fx-cursor: HAND;
 }
@@ -26,7 +26,7 @@
 .mfx-radio-button .radio {
     -fx-stroke-width: 2.0;
     -fx-fill: transparent;
-    -fx-stroke: -mfx-gray;
+    -fx-stroke: -mfx-secondary;
 }
 
 .mfx-radio-button .dot {
@@ -41,5 +41,13 @@
 
 .mfx-radio-button:selected .radio {
     -fx-stroke: -mfx-main;
+}
+
+.mfx-radio-button:disabled:selected .radio {
+    -fx-stroke: -mfx-secondary;
+}
+
+.mfx-radio-button:disabled:selected .dot {
+    -fx-fill: -mfx-secondary;
 }
 

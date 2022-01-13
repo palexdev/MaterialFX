@@ -35,9 +35,11 @@
 }
 
 .mfx-filter-combo-box .combo-popup .search-container {
-    -fx-background-color: white;
-    -fx-background-radius: 5;
-    -fx-padding: 10 5 5 5;
+	-fx-background-color: white;
+	-fx-background-radius: 5;
+	-fx-border-color: #ebebeb;
+	-fx-border-radius: 5;
+	-fx-padding: 10 5 5 5;
 }
 
 .mfx-filter-combo-box .combo-popup .search-field {

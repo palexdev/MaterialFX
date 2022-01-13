@@ -20,7 +20,7 @@
 @import "MFXTextField.css";
 
 .mfx-circle-toggle-node {
-    -mfx-unselected-color: #F9F9F9;
+    -mfx-unselected-color: white;
     -mfx-selected-color: #EDEDED;
     -mfx-unselected-border-color: #E1E1E1;
     -mfx-selected-border-color: #E1E1E1;

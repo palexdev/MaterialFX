@@ -28,3 +28,11 @@
 .mfx-progress-spinner:determinate .percentage {
     -fx-fill: #4d4d4d;
 }
+
+.mfx-progress-spinner:disabled .arc {
+    visibility: hidden;
+}
+
+.mfx-progress-spinner:disabled .track {
+    -fx-stroke: #bcbcbc;
+}

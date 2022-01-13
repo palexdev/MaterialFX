@@ -22,13 +22,13 @@ import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyComboBox;
 import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.utils.LabelUtils;
-import io.github.palexdev.materialfx.validation.MFXDialogValidator;
+import io.github.palexdev.materialfx.validation.Constraint;
+import io.github.palexdev.materialfx.validation.MFXValidator;
 import javafx.animation.ScaleTransition;
 import javafx.beans.binding.Bindings;
 import javafx.css.PseudoClass;
 import javafx.scene.control.Label;
 import javafx.scene.control.skin.ComboBoxListViewSkin;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
@@ -93,17 +93,11 @@ public class MFXLegacyComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
         validate.setGraphic(warnWrapper);
         validate.getStyleClass().add("validate-label");
         validate.getStylesheets().setAll(comboBox.getUserAgentStylesheet());
-        validate.textProperty().bind(comboBox.getValidator().validatorMessageProperty());
         validate.setGraphicTextGap(padding);
         validate.setVisible(false);
         validate.setManaged(false);
 
-        if (comboBox.isValidated() && comboBox.getValidator().isInitControlValidation()) {
-            validate.setVisible(!comboBox.isValid());
-        }
-
         getChildren().addAll(unfocusedLine, focusedLine, validate);
-
         setListeners();
     }
 
@@ -123,8 +117,8 @@ public class MFXLegacyComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
      * on the warning label.
      */
     private void setListeners() {
-        MFXLegacyComboBox<T> comboBox = (MFXLegacyComboBox<T>) getSkinnable();
-        MFXDialogValidator validator = comboBox.getValidator();
+	    MFXLegacyComboBox<T> comboBox = (MFXLegacyComboBox<T>) getSkinnable();
+	    MFXValidator validator = comboBox.getValidator();
 
         comboBox.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue && comboBox.isValidated()) {
@@ -146,24 +140,27 @@ public class MFXLegacyComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
 
         comboBox.isValidatedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
-                validate.setVisible(false);
+	            validate.setVisible(false);
             }
         });
 
-        comboBox.disabledProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                validate.setVisible(false);
-            }
-        });
+	    comboBox.disabledProperty().addListener((observable, oldValue, newValue) -> {
+		    if (newValue) {
+			    validate.setVisible(false);
+		    }
+	    });
 
-        validator.addListener(invalidated -> {
-            if (comboBox.isValidated()) {
-                validate.setVisible(!comboBox.isValid());
-            }
-        });
+	    validator.setOnUpdated((valid, constraints) -> {
+		    if (!comboBox.isValidated()) return;
 
-        validate.textProperty().addListener(invalidated -> comboBox.requestLayout());
-        validate.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> validator.showModal(comboBox.getScene().getWindow()));
+		    if (!valid) {
+			    Constraint first = constraints.get(0);
+			    validate.setText(first.getMessage());
+		    }
+		    validate.setVisible(!valid);
+	    });
+
+	    validate.textProperty().addListener(invalidated -> comboBox.requestLayout());
     }
 
     /**

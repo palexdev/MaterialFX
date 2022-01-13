@@ -22,6 +22,7 @@ import io.github.palexdev.materialfx.selection.base.IMultipleSelectionModel;
 import io.github.palexdev.virtualizedfx.cell.Cell;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
+import javafx.util.StringConverter;
 
 import java.util.function.Function;
 
@@ -38,25 +39,35 @@ public interface IListView<T, C extends Cell<T>> {
      */
     ObservableList<T> getItems();
 
-    /**
-     * The items list property.
-     */
-    ObjectProperty<ObservableList<T>> itemsProperty();
+	/**
+	 * The items list property.
+	 */
+	ObjectProperty<ObservableList<T>> itemsProperty();
 
-    /**
-     * Replaces the items list with the given one.
-     */
-    void setItems(ObservableList<T> items);
+	/**
+	 * Replaces the items list with the given one.
+	 */
+	void setItems(ObservableList<T> items);
 
-    /**
-     * @return the function used to build the list cells
-     */
-    Function<T, C> getCellFactory();
+	StringConverter<T> getConverter();
 
-    /**
-     * @return the cell factory property
-     */
-    ObjectProperty<Function<T, C>> cellFactoryProperty();
+	/**
+	 * Specifies the {@link StringConverter} used to convert a generic
+	 * item to a String. It is used by the list cells.
+	 */
+	ObjectProperty<StringConverter<T>> converterProperty();
+
+	void setConverter(StringConverter<T> converter);
+
+	/**
+	 * @return the function used to build the list cells
+	 */
+	Function<T, C> getCellFactory();
+
+	/**
+	 * @return the cell factory property
+	 */
+	ObjectProperty<Function<T, C>> cellFactoryProperty();
 
     /**
      * Replaces the cell factory with the given one

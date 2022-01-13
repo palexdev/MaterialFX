@@ -1,9 +1,14 @@
 package io.github.palexdev.materialfx.controls;
 
-import javafx.scene.control.IndexRange;
+import javafx.beans.binding.StringBinding;
+import javafx.scene.Node;
 import javafx.scene.control.Skin;
 import javafx.scene.control.TextField;
 import javafx.scene.control.skin.TextFieldSkin;
+import javafx.scene.text.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Similar to {@link BoundLabel}.
@@ -12,8 +17,9 @@ import javafx.scene.control.skin.TextFieldSkin;
  * bound to another {@link TextField} control.
  * <p></p>
  * Note: JavaFX's text fields do not allow to also bind the selection and the caret position
- * (thank you very much for making everything close/private you donkeys devs), as a workaround for
- * that two listeners and a boolean flag are used to update both the text fields when needed.
+ * (thank you very much for making everything close/private you fucking donkeys devs), the
+ * only consistent way of doing this is to keep the reference in the custom control and
+ * redirect all the related methods to this field.
  * <p></p>
  * Oh, also another feature of this field is that it uses a special skin which allows to
  * hide the caret. Because for some fucking reason the JavaFX's -fx-caret-visible property was not
@@ -25,7 +31,6 @@ public class BoundTextField extends TextField {
 	// Properties
 	//================================================================================
 	private MFXTextField textField;
-	private boolean updatingField = false;
 
 	//================================================================================
 	// Constructors
@@ -39,6 +44,7 @@ public class BoundTextField extends TextField {
 		setFont(textField.getFont());
 		setEditable(textField.isEditable());
 		setAlignment(textField.getAlignment());
+		setPrefColumnCount(textField.getPrefColumnCount());
 		setTextFormatter(textField.getTextFormatter());
 		selectRange(textField.getSelection().getStart(), textField.getSelection().getEnd());
 		positionCaret(textField.getCaretPosition());
@@ -49,28 +55,8 @@ public class BoundTextField extends TextField {
 		fontProperty().bind(textField.fontProperty());
 		editableProperty().bind(textField.editableProperty());
 		alignmentProperty().bind(textField.alignmentProperty());
+		prefColumnCountProperty().bind(textField.prefColumnCountProperty());
 		textFormatterProperty().bind(textField.textFormatterProperty());
-
-		// Update selection/caret via listeners
-		textField.selectionProperty().addListener(invalidated -> {
-			if (updatingField) {
-				updatingField = false;
-				return;
-			}
-			updateField(this, textField.getSelection(), textField.getCaretPosition());
-		});
-		selectedTextProperty().addListener(invalidated -> {
-			updatingField = true;
-			updateField(textField, getSelection(), getCaretPosition());
-		});
-	}
-
-	private void updateField(TextField textField, IndexRange selection, int caretPosition) {
-		if (selection.getEnd() == caretPosition) {
-			textField.selectRange(selection.getStart(), selection.getEnd());
-		} else {
-			textField.selectRange(selection.getEnd(), selection.getStart());
-		}
 	}
 
 	@Override
@@ -83,10 +69,60 @@ public class BoundTextField extends TextField {
 	}
 
 	private class CustomTextFieldSkin extends TextFieldSkin {
+		private final StringBinding textBinding;
+
 		public CustomTextFieldSkin(TextField field) {
 			super(field);
+
+			// This is needed because there's no way to distinguish the text node
+			// from the prompt text node (both have .text style class, no id)
+			// The prompt text node is present only when the prompt text is not empty
+			// and it's always placed at the beginning of the children list
+			// so the text node we want is the last
+			Text textNode;
+			if (!field.getPromptText().isEmpty()) {
+				try {
+					List<Node> textNodes = new ArrayList<>(lookupAll(".text"));
+					textNode = (Text) textNodes.get(textNodes.size() - 1);
+				} catch (Exception ex) {
+					textNode = (Text) lookup(".text");
+				}
+			} else {
+				textNode = (Text) lookup(".text");
+			}
+
+			textBinding = new StringBinding() {
+				{
+					bind(field.textProperty());
+				}
+
+				@Override
+				protected String computeValue() {
+					return maskText(field.textProperty().getValueSafe());
+				}
+			};
+			textNode.textProperty().bind(textBinding);
+
 			setCaretAnimating(textField.getCaretVisible());
 			textField.caretVisibleProperty().addListener(invalidated -> setCaretAnimating(textField.getCaretVisible()));
+
+			if (textField instanceof MFXPasswordField) {
+				MFXPasswordField passwordField = (MFXPasswordField) textField;
+				passwordField.showPasswordProperty().addListener((observable, oldValue, newValue) -> textBinding.invalidate());
+				passwordField.hideCharacterProperty().addListener((observable, oldValue, newValue) -> textBinding.invalidate());
+			}
+		}
+
+		@Override
+		protected String maskText(String txt) {
+			if (textField instanceof MFXPasswordField) {
+				MFXPasswordField passwordField = (MFXPasswordField) textField;
+				if (passwordField.isShowPassword()) return txt;
+
+				int n = txt.length();
+				return passwordField.getHideCharacter().repeat(n);
+			}
+			return txt;
 		}
 
 		@Override
