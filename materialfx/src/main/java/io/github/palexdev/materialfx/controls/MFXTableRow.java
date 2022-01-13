@@ -53,6 +53,9 @@ public class MFXTableRow<T> extends HBox implements Cell<T> {
 	public MFXTableRow(MFXTableView<T> tableView, T data) {
 		this.tableView = tableView;
 		setData(data);
+		setMinHeight(USE_PREF_SIZE);
+		setPrefHeight(32);
+		setMaxHeight(USE_PREF_SIZE);
 		initialize();
 		buildCells();
 	}
@@ -62,9 +65,6 @@ public class MFXTableRow<T> extends HBox implements Cell<T> {
 	//================================================================================
 	private void initialize() {
 		getStyleClass().add(STYLE_CLASS);
-		setMinHeight(USE_PREF_SIZE);
-		setPrefHeight(32);
-		setMaxHeight(USE_PREF_SIZE);
 
 		setBehavior();
 		setupRippleGenerator();

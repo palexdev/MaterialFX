@@ -76,6 +76,7 @@ public class MFXTableView<T> extends Control {
 				return MFXTableView.this.getUserAgentStylesheet();
 			}
 		};
+		rowsFlow.cellFactoryProperty().bind(tableRowFactoryProperty());
 		VBox.setVgrow(rowsFlow, Priority.ALWAYS);
 
 		initialize();

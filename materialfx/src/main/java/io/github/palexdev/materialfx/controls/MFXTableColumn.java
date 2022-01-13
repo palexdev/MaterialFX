@@ -70,7 +70,7 @@ public class MFXTableColumn<T> extends Labeled {
 	private final ObjectProperty<SortState> sortState = new SimpleObjectProperty<>(SortState.UNSORTED) {
 		@Override
 		public void set(SortState newValue) {
-			if (getComparator() != null) {
+			if (getComparator() == null) {
 				super.set(SortState.UNSORTED);
 				return;
 			}
