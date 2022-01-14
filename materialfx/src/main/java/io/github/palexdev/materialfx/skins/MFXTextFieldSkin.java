@@ -219,6 +219,11 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 	// Overridden Methods
 	//================================================================================
 	@Override
+	protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+		return computePrefWidth(height, topInset, rightInset, bottomInset, leftInset);
+	}
+
+	@Override
 	protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
 		MFXTextField textField = getSkinnable();
 		Node leading = textField.getLeadingIcon();

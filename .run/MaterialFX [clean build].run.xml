@@ -10,7 +10,8 @@
             </option>
             <option name="taskNames">
                 <list>
-                    <option value="clean build"/>
+                    <option value="clean"/>
+                    <option value="build"/>
                 </list>
             </option>
             <option name="vmOptions" value=""/>

@@ -199,7 +199,7 @@ public class MFXRectangleToggleNodeSkin extends SkinBase<MFXRectangleToggleNode>
 		Node leading = toggleNode.getLabelLeadingIcon();
 		Node trailing = toggleNode.getLabelTrailingIcon();
 		double textWidth = LabelUtils.computeTextWidth(toggleNode.getFont(), toggleNode.getText())
-				+ label.snappedLeftInset() + label.snappedRightInset();
+				+ label.snappedLeftInset() + label.snappedRightInset() + 10; // Take into account the caret width and some more space to be sure text won't wobble around
 		return leftInset +
 				(leading != null ? leading.prefWidth(-1) + gap : 0) +
 				textWidth +
