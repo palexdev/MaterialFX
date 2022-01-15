@@ -179,7 +179,7 @@ public class SynchronizedLongProperty extends SimpleLongProperty implements Sync
             throw new IllegalArgumentException("Cannot bind to itself!");
         }
 
-        if (isBound()) unbind(); // TODO check, may be unnecessary
+        if (isBound()) unbind();
         BiBindingManager.instance().bindBidirectional(this).to(other).create();
     }
 

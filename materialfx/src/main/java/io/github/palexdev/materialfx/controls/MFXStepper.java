@@ -24,6 +24,7 @@ import io.github.palexdev.materialfx.controls.MFXStepperToggle.MFXStepperToggleE
 import io.github.palexdev.materialfx.enums.StepperToggleState;
 import io.github.palexdev.materialfx.skins.MFXStepperSkin;
 import io.github.palexdev.materialfx.utils.NodeUtils;
+import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import io.github.palexdev.materialfx.validation.MFXValidator;
 import io.github.palexdev.materialfx.validation.Validated;
 import javafx.beans.property.*;
@@ -658,7 +659,8 @@ public class MFXStepper extends Control {
                 );
 
         static {
-            cssMetaDataList = List.of(
+            cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
+                    Control.getClassCssMetaData(),
                     SPACING, EXTRA_SPACING, ALIGNMENT, BASE_COLOR, ALT_COLOR,
                     BORDER_RADIUS, PROGRESS_BAR_BACKGROUND, PROGRESS_COLOR, PROGRESS_BAR_ANIMATED
             );

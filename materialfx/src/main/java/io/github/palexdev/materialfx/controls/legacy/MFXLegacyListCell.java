@@ -19,8 +19,9 @@
 package io.github.palexdev.materialfx.controls.legacy;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.beans.PositionBean;
+import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
+import io.github.palexdev.materialfx.factories.InsetsFactory;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.css.*;
 import javafx.geometry.Insets;
@@ -65,7 +66,7 @@ public class MFXLegacyListCell<T> extends ListCell<T> {
     //================================================================================
     private void initialize() {
         getStyleClass().add(STYLE_CLASS);
-        setPadding(new Insets(8, 12, 8, 12));
+        setPadding(InsetsFactory.of(8, 12, 8, 12));
         addListeners();
     }
 
@@ -88,15 +89,15 @@ public class MFXLegacyListCell<T> extends ListCell<T> {
 
         selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
-                NodeUtils.updateBackground(MFXLegacyListCell.this, getSelectedColor(), new CornerRadii(getCornerRadius()), new Insets(getBackgroundInsets()));
+                NodeUtils.updateBackground(MFXLegacyListCell.this, getSelectedColor(), new CornerRadii(getCornerRadius()), InsetsFactory.all(getBackgroundInsets()));
             } else {
-                NodeUtils.updateBackground(MFXLegacyListCell.this, Color.WHITE, new CornerRadii(getCornerRadius()), new Insets(getBackgroundInsets()));
+                NodeUtils.updateBackground(MFXLegacyListCell.this, Color.WHITE, new CornerRadii(getCornerRadius()), InsetsFactory.all(getBackgroundInsets()));
             }
         });
 
         backgroundProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && isSelected() && !containsFill(newValue.getFills(), getSelectedColor())) {
-                NodeUtils.updateBackground(this, getSelectedColor(), new CornerRadii(getCornerRadius()), new Insets(getBackgroundInsets()));
+                NodeUtils.updateBackground(this, getSelectedColor(), new CornerRadii(getCornerRadius()), InsetsFactory.all(getBackgroundInsets()));
             }
         });
 
@@ -109,10 +110,10 @@ public class MFXLegacyListCell<T> extends ListCell<T> {
                 if (getIndex() == 0) {
                     setBackground(new Background(new BackgroundFill(getHoverColor(), CornerRadii.EMPTY, Insets.EMPTY)));
                 } else {
-                    NodeUtils.updateBackground(MFXLegacyListCell.this, getHoverColor(), new CornerRadii(getCornerRadius()), new Insets(getBackgroundInsets()));
+                    NodeUtils.updateBackground(MFXLegacyListCell.this, getHoverColor(), new CornerRadii(getCornerRadius()), InsetsFactory.all(getBackgroundInsets()));
                 }
             } else {
-                NodeUtils.updateBackground(MFXLegacyListCell.this, Color.WHITE, new CornerRadii(getCornerRadius()), new Insets(getBackgroundInsets()));
+                NodeUtils.updateBackground(MFXLegacyListCell.this, Color.WHITE, new CornerRadii(getCornerRadius()), InsetsFactory.all(getBackgroundInsets()));
             }
         });
 

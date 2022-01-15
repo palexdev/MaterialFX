@@ -13,7 +13,6 @@ public class StyleablePropertiesUtils {
     private StyleablePropertiesUtils() {
     }
 
-    // TODO replace everywhere
     @SafeVarargs
     public static List<CssMetaData<? extends Styleable, ?>> cssMetaDataList(List<CssMetaData<? extends Styleable, ?>> styleable, CssMetaData<? extends Styleable, ?>... cssMetaData) {
         CssMetaDataList styleableMetaData = new CssMetaDataList(styleable);

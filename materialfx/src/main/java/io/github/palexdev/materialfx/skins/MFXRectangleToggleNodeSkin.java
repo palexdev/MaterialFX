@@ -22,8 +22,8 @@ import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.materialfx.utils.LabelUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
+import io.github.palexdev.materialfx.utils.TextUtils;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Node;
 import javafx.scene.control.SkinBase;
@@ -183,7 +183,7 @@ public class MFXRectangleToggleNodeSkin extends SkinBase<MFXRectangleToggleNode>
 		double gap = label.getGraphicTextGap();
 		Node leading = toggleNode.getLabelLeadingIcon();
 		Node trailing = toggleNode.getLabelTrailingIcon();
-		double textWidth = LabelUtils.computeTextWidth(toggleNode.getFont(), toggleNode.getText())
+		double textWidth = TextUtils.computeTextWidth(toggleNode.getFont(), toggleNode.getText())
 				+ label.snappedLeftInset() + label.snappedRightInset() + 10; // Take into account the caret width and some more space to be sure text won't wobble around
 		return leftInset +
 				(leading != null ? leading.prefWidth(-1) + gap : 0) +

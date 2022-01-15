@@ -21,6 +21,7 @@ package io.github.palexdev.materialfx.skins;
 import io.github.palexdev.materialfx.controls.MFXTreeItem;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeCell;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
+import io.github.palexdev.materialfx.factories.InsetsFactory;
 import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.selection.TreeSelectionModel;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
@@ -247,7 +248,7 @@ public class MFXTreeItemSkin<T> extends SkinBase<MFXTreeItem<T>> {
                     forceUpdate();
                 }
                 cell.setVisible(false);
-                item.setPadding(new Insets(-(item.getInitialHeight() * 2), 0, 0, -item.getChildrenMargin()));
+                item.setPadding(InsetsFactory.of(-(item.getInitialHeight() * 2), 0, 0, -item.getChildrenMargin()));
             } else {
                 cell.setVisible(true);
                 item.setPadding(Insets.EMPTY);

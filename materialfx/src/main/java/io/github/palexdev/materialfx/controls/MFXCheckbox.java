@@ -21,13 +21,12 @@ package io.github.palexdev.materialfx.controls;
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.MFXLabeled;
 import io.github.palexdev.materialfx.skins.MFXCheckboxSkin;
+import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import javafx.css.*;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Skin;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -162,9 +161,10 @@ public class MFXCheckbox extends CheckBox implements MFXLabeled {
                 );
 
         static {
-            List<CssMetaData<? extends Styleable, ?>> ckbCssMetaData = new ArrayList<>(CheckBox.getClassCssMetaData());
-            Collections.addAll(ckbCssMetaData, CONTENT_DISPOSITION, GAP, TEXT_EXPAND);
-            cssMetaDataList = Collections.unmodifiableList(ckbCssMetaData);
+            cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
+                    CheckBox.getClassCssMetaData(),
+                    CONTENT_DISPOSITION, GAP, TEXT_EXPAND
+            );
         }
     }
 

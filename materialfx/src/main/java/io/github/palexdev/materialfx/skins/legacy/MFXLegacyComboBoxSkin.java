@@ -21,7 +21,7 @@ package io.github.palexdev.materialfx.skins.legacy;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyComboBox;
 import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
-import io.github.palexdev.materialfx.utils.LabelUtils;
+import io.github.palexdev.materialfx.utils.TextUtils;
 import io.github.palexdev.materialfx.validation.Constraint;
 import io.github.palexdev.materialfx.validation.MFXValidator;
 import javafx.animation.ScaleTransition;
@@ -184,15 +184,15 @@ public class MFXLegacyComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
     //================================================================================
     @Override
     protected void layoutChildren(double x, double y, double w, double h) {
-        super.layoutChildren(x, y, w, h);
+	    super.layoutChildren(x, y, w, h);
 
-        double lw = snapSizeX(LabelUtils.computeLabelWidth(validate));
-        double lh = snapSizeY(LabelUtils.computeTextHeight(validate.getFont(), validate.getText()));
-        double lx = 0;
-        double ly = h + (padding * 0.7);
+	    double lw = snapSizeX(TextUtils.computeLabelWidth(validate));
+	    double lh = snapSizeY(TextUtils.computeTextHeight(validate.getFont(), validate.getText()));
+	    double lx = 0;
+	    double ly = h + (padding * 0.7);
 
-        validate.resizeRelocate(lx, ly, lw, lh);
-        focusedLine.relocate(0, h);
-        unfocusedLine.relocate(0, h);
+	    validate.resizeRelocate(lx, ly, lw, lh);
+	    focusedLine.relocate(0, h);
+	    unfocusedLine.relocate(0, h);
     }
 }

@@ -23,6 +23,7 @@ import io.github.palexdev.materialfx.enums.StepperToggleState;
 import io.github.palexdev.materialfx.enums.TextPosition;
 import io.github.palexdev.materialfx.skins.MFXStepperSkin;
 import io.github.palexdev.materialfx.skins.MFXStepperToggleSkin;
+import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import io.github.palexdev.materialfx.validation.MFXValidator;
 import io.github.palexdev.materialfx.validation.Validated;
 import javafx.beans.property.*;
@@ -364,7 +365,10 @@ public class MFXStepperToggle extends Control implements Validated {
                 );
 
         static {
-            cssMetaDataList = List.of(LABEL_TEXT_GAP, TEXT_POSITION, SIZE, STROKE_WIDTH);
+            cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
+                    Control.getClassCssMetaData(),
+                    LABEL_TEXT_GAP, TEXT_POSITION, SIZE, STROKE_WIDTH
+            );
         }
     }
 

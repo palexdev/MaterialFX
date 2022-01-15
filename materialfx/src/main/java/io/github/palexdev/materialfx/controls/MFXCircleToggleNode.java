@@ -172,7 +172,8 @@ public class MFXCircleToggleNode extends AbstractMFXToggleNode {
 				);
 
 		static {
-			cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(ToggleButton.getClassCssMetaData(),
+			cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
+					ToggleButton.getClassCssMetaData(),
 					GAP, SIZE, TEXT_POSITION
 			);
 		}

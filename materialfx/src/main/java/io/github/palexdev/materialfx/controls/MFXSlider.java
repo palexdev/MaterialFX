@@ -29,6 +29,7 @@ import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.skins.MFXSliderSkin;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.NumberUtils;
+import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -864,7 +865,8 @@ public class MFXSlider extends Control {
                 );
 
         static {
-            cssMetaDataList = List.of(
+            cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
+                    Control.getClassCssMetaData(),
                     SLIDER_MODE, UNIT_INCREMENT, ALTERNATIVE_UNIT_INCREMENT,
                     TICK_UNIT, SHOW_MAJOR_TICKS, SHOW_MINOR_TICKS, SHOW_TICKS_AT_EDGE, MINOR_TICKS_COUNT,
                     ANIMATE_ON_PRESS, BIDIRECTIONAL, ORIENTATION, POPUP_SIDE

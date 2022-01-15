@@ -20,6 +20,7 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
+import io.github.palexdev.materialfx.factories.InsetsFactory;
 import io.github.palexdev.materialfx.selection.TreeSelectionModel;
 import io.github.palexdev.materialfx.selection.base.ITreeSelectionModel;
 import io.github.palexdev.materialfx.utils.NodeUtils;
@@ -29,7 +30,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.Event;
 import javafx.event.EventType;
-import javafx.geometry.Insets;
 
 /**
  * This is the container for a tree made of AbstractMFXTreeItems.
@@ -101,7 +101,7 @@ public class MFXTreeView<T> extends MFXScrollPane {
     public void setupRoot() {
         AbstractMFXTreeItem<T> root = getRoot();
         root.prefWidthProperty().bind(widthProperty().subtract(10));
-        root.setPadding(new Insets(0, 0, 5, 0));
+        root.setPadding(InsetsFactory.bottom(5));
         NodeUtils.waitForSkin(root, () -> {
             if (!isShowRoot()) {
                 root.fireEvent(new TreeViewEvent(TreeViewEvent.HIDE_ROOT_EVENT, isShowRoot()));

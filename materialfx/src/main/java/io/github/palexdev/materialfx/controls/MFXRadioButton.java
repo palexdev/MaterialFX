@@ -21,13 +21,12 @@ package io.github.palexdev.materialfx.controls;
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.MFXLabeled;
 import io.github.palexdev.materialfx.skins.MFXRadioButtonSkin;
+import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import javafx.css.*;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Skin;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -227,9 +226,11 @@ public class MFXRadioButton extends RadioButton implements MFXLabeled {
                 );
 
         static {
-            List<CssMetaData<? extends Styleable, ?>> rdbCssMetaData = new ArrayList<>(RadioButton.getClassCssMetaData());
-            Collections.addAll(rdbCssMetaData, CONTENT_DISPOSITION, GAP, RADIO_GAP, RADIUS, TEXT_EXPAND);
-            cssMetaDataList = Collections.unmodifiableList(rdbCssMetaData);
+            cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
+                    RadioButton.getClassCssMetaData(),
+                    CONTENT_DISPOSITION, GAP, RADIO_GAP,
+                    RADIUS, TEXT_EXPAND
+            );
         }
 
     }

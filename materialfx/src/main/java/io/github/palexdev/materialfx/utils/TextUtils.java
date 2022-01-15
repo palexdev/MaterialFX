@@ -29,9 +29,9 @@ import javafx.scene.text.Text;
 /**
  * Utils class for JavaFX's {@code Labels} and {@code MFXLabels}.
  */
-public class LabelUtils { // TODO rename to TextUtils
+public class TextUtils {
 
-	private LabelUtils() {
+	private TextUtils() {
 	}
 
 	/**
@@ -148,10 +148,10 @@ public class LabelUtils { // TODO rename to TextUtils
      */
     public static double computeLabelWidth(Label label) {
         Node graphic = label.getGraphic();
-        return label.snappedLeftInset() +
-                (graphic != null ? graphic.getBoundsInParent().getWidth() : 0) +
-                LabelUtils.computeTextWidth(label.getFont(), label.getText()) +
-                label.snappedRightInset() +
-                label.getGraphicTextGap();
+	    return label.snappedLeftInset() +
+			    (graphic != null ? graphic.getBoundsInParent().getWidth() : 0) +
+			    TextUtils.computeTextWidth(label.getFont(), label.getText()) +
+			    label.snappedRightInset() +
+			    label.getGraphicTextGap();
     }
 }

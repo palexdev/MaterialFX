@@ -21,6 +21,7 @@ package io.github.palexdev.materialfx.controls;
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.NumberRange;
 import io.github.palexdev.materialfx.skins.MFXProgressBarSkin;
+import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -28,8 +29,6 @@ import javafx.css.*;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Skin;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static io.github.palexdev.materialfx.utils.NodeUtils.isPseudoClassActive;
@@ -171,9 +170,10 @@ public class MFXProgressBar extends ProgressBar {
                 );
 
         static {
-            List<CssMetaData<? extends Styleable, ?>> prbCssMetaData = new ArrayList<>(ProgressBar.getClassCssMetaData());
-            Collections.addAll(prbCssMetaData, ANIMATION_SPEED);
-            cssMetaDataList = Collections.unmodifiableList(prbCssMetaData);
+            cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
+                    ProgressBar.getClassCssMetaData(),
+                    ANIMATION_SPEED
+            );
         }
     }
 

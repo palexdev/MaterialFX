@@ -5,6 +5,7 @@ import io.github.palexdev.materialfx.beans.properties.EventHandlerProperty;
 import io.github.palexdev.materialfx.controls.base.MFXLabeled;
 import io.github.palexdev.materialfx.skins.MFXToggleButtonSkin;
 import io.github.palexdev.materialfx.utils.ColorUtils;
+import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import io.github.palexdev.materialfx.utils.ToggleButtonsUtil;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -18,8 +19,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -340,9 +339,10 @@ public class MFXToggleButton extends Labeled implements Toggle, MFXLabeled {
                 );
 
         static {
-            List<CssMetaData<? extends Styleable, ?>> tobCssMetaData = new ArrayList<>(Labeled.getClassCssMetaData());
-            Collections.addAll(tobCssMetaData, CONTENT_DISPOSITION, GAP, LENGTH, RADIUS, TEXT_EXPAND);
-            cssMetaDataList = Collections.unmodifiableList(tobCssMetaData);
+            cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
+                    Labeled.getClassCssMetaData(),
+                    CONTENT_DISPOSITION, GAP, LENGTH, RADIUS, TEXT_EXPAND
+            );
         }
     }
 

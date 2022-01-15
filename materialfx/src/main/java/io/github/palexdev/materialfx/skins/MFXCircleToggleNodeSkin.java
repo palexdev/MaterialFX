@@ -5,8 +5,8 @@ import io.github.palexdev.materialfx.controls.MFXCircleToggleNode;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.enums.TextPosition;
-import io.github.palexdev.materialfx.utils.LabelUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
+import io.github.palexdev.materialfx.utils.TextUtils;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -160,7 +160,7 @@ public class MFXCircleToggleNodeSkin extends SkinBase<MFXCircleToggleNode> {
 		double gap = label.getGraphicTextGap();
 		Node leading = toggleNode.getLabelLeadingIcon();
 		Node trailing = toggleNode.getLabelTrailingIcon();
-		double labelWidth = LabelUtils.computeTextWidth(toggleNode.getFont(), toggleNode.getText()) +
+		double labelWidth = TextUtils.computeTextWidth(toggleNode.getFont(), toggleNode.getText()) +
 				label.snappedLeftInset() +
 				label.snappedRightInset() +
 				(leading != null ? leading.prefWidth(-1) + gap : 0) +

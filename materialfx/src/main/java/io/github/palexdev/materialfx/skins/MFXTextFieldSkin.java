@@ -329,7 +329,7 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 		// at the start of the Pane
 		double floatW = floatingText.prefWidth(-1);
 		double floatH = floatingText.prefHeight(-1);
-		double floatX = (floatMode == FloatMode.ABOVE) ? 1 : xOffset; // TODO change above doc
+		double floatX = (floatMode == FloatMode.ABOVE) ? 1 : xOffset;
 		PositionBean floatPos = PositionUtils.computePosition(
 				textField,
 				floatingText,

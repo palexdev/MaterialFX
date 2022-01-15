@@ -2,7 +2,6 @@ package io.github.palexdev.materialfx.factories;
 
 import javafx.geometry.Insets;
 
-// TODO replace everywhere
 /**
  * Convenience class to build {@link Insets} objects.
  */

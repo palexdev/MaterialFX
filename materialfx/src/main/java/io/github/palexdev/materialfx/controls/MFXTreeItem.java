@@ -22,6 +22,7 @@ import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeCell;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
 import io.github.palexdev.materialfx.controls.cell.MFXSimpleTreeCell;
+import io.github.palexdev.materialfx.factories.InsetsFactory;
 import io.github.palexdev.materialfx.selection.TreeSelectionModel;
 import io.github.palexdev.materialfx.selection.base.ITreeSelectionModel;
 import io.github.palexdev.materialfx.skins.MFXTreeItemSkin;
@@ -30,7 +31,6 @@ import javafx.collections.ListChangeListener;
 import javafx.css.*;
 import javafx.event.Event;
 import javafx.event.EventType;
-import javafx.geometry.Insets;
 import javafx.scene.control.Skin;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
@@ -303,10 +303,7 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
     @Override
     protected void layoutChildren() {
         super.layoutChildren();
-
-        items.forEach(
-                item -> VBox.setMargin(item, new Insets(0, 0, 0, getChildrenMargin()))
-        );
+        items.forEach(item -> VBox.setMargin(item, InsetsFactory.right(getChildrenMargin())));
     }
 
     @Override

@@ -19,11 +19,12 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.enums.ButtonType;
+import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.materialfx.beans.PositionBean;
+import io.github.palexdev.materialfx.enums.ButtonType;
 import io.github.palexdev.materialfx.skins.MFXButtonSkin;
+import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import javafx.beans.property.*;
 import javafx.css.*;
 import javafx.geometry.Pos;
@@ -33,8 +34,6 @@ import javafx.scene.control.Skin;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -332,9 +331,10 @@ public class MFXButton extends Button {
                         ButtonType.FLAT);
 
         static {
-            List<CssMetaData<? extends Styleable, ?>> btnCssMetaData = new ArrayList<>(Button.getClassCssMetaData());
-            Collections.addAll(btnCssMetaData, DEPTH_LEVEL, BUTTON_TYPE);
-            cssMetaDataList = Collections.unmodifiableList(btnCssMetaData);
+            cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
+                    Button.getClassCssMetaData(),
+                    DEPTH_LEVEL, BUTTON_TYPE
+            );
         }
 
     }
