@@ -1,5 +1,6 @@
 package io.github.palexdev.materialfx.validation;
 
+import io.github.palexdev.materialfx.enums.ChainMode;
 import javafx.beans.binding.BooleanExpression;
 
 /**
@@ -7,7 +8,10 @@ import javafx.beans.binding.BooleanExpression;
  * for the validator' state to be valid.
  * <p></p>
  * This bean allows to specify the {@link Severity} of the condition, the message
- * to show when invalid, and of course the {@link BooleanExpression} that is the condition itself
+ * to show when invalid, and of course the {@link BooleanExpression} that is the condition itself.
+ * <p>
+ * It also allows to specify how this constraint should chained with others by setting its {@link ChainMode},
+ * {@link #setChainMode(ChainMode)}.
  * <p></p>
  * To build a constraint you can use the offered static methods, the {@link Builder}, or the parameterized constructors.
  */
@@ -18,6 +22,7 @@ public class Constraint {
 	private Severity severity;
 	private String message;
 	private BooleanExpression condition;
+	private ChainMode chainMode = ChainMode.AND;
 
 	//================================================================================
 	// Constructors
@@ -112,6 +117,21 @@ public class Constraint {
 		this.condition = condition;
 	}
 
+	/**
+	 * @return the mode defining how this constraint will be chained to other constraints
+	 */
+	public ChainMode getChainMode() {
+		return chainMode;
+	}
+
+	/**
+	 * Sets the mode defining how this constraint will be chained to other constraints.
+	 */
+	public Constraint setChainMode(ChainMode chainMode) {
+		this.chainMode = chainMode;
+		return this;
+	}
+
 	//================================================================================
 	// Builder Class
 	//================================================================================
@@ -134,6 +154,11 @@ public class Constraint {
 
 		public Builder setCondition(BooleanExpression condition) {
 			constraint.setCondition(condition);
+			return this;
+		}
+
+		public Builder setChainMode(ChainMode mode) {
+			constraint.setChainMode(mode);
 			return this;
 		}
 

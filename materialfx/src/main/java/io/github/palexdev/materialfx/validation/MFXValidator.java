@@ -1,5 +1,6 @@
 package io.github.palexdev.materialfx.validation;
 
+import io.github.palexdev.materialfx.enums.ChainMode;
 import io.github.palexdev.materialfx.utils.others.observables.When;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.BooleanExpression;
@@ -157,6 +158,9 @@ public class MFXValidator {
 	 * This is the method responsible for updating the validator' state.
 	 * Despite being public it should not be necessary to call it automatically as the
 	 * constraints and the dependencies automatically trigger this method.
+	 * <p>
+	 * Note that constraints are evaluated in order of insertion and according to their
+	 * {@link Constraint#getChainMode()}, so be careful with OR modes.
 	 * <p></p>
 	 * At the end invokes {@link #onUpdated()}.
 	 */
@@ -166,7 +170,7 @@ public class MFXValidator {
 			valid = valid && dependency.isValid();
 		}
 		for (Constraint constraint : constraints) {
-			valid = valid && constraint.isValid();
+			valid = ChainMode.chain(constraint.getChainMode(), valid, constraint.isValid());
 		}
 		setValid(valid);
 		onUpdated();

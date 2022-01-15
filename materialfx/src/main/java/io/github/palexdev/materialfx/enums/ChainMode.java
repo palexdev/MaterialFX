@@ -19,4 +19,10 @@ public enum ChainMode {
         return this == AND && useAlternativeAnd ? "and" : this.text;
     }
 
+    /**
+     * Chains the given two boolean values according to the given {@link ChainMode}.
+     */
+    public static boolean chain(ChainMode mode, boolean first, boolean second) {
+        return (mode == AND) ? first && second : first || second;
+    }
 }
