@@ -69,7 +69,8 @@ public class MFXFilterComboBoxSkin<T> extends MFXComboBoxSkin<T> {
 	// Overridden Methods
 	//================================================================================
 	@Override
-	protected void initialize() {}
+	protected void initialize() {
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -93,7 +94,7 @@ public class MFXFilterComboBoxSkin<T> extends MFXComboBoxSkin<T> {
 		searchField.textProperty().bindBidirectional(comboBox.searchTextProperty());
 		searchField.setMaxWidth(Double.MAX_VALUE);
 
-		SimpleVirtualFlow<T, Cell<T>> virtualFlow = SimpleVirtualFlow.Builder.create(
+		SimpleVirtualFlow<T, Cell<T>> virtualFlow = new SimpleVirtualFlow<>(
 				filterList,
 				t -> new MFXFilterComboBoxCell<>(comboBox, filterList, t),
 				Orientation.VERTICAL

@@ -1,6 +1,6 @@
 package io.github.palexdev.materialfx.validation;
 
-import io.github.palexdev.materialfx.utils.others.When;
+import io.github.palexdev.materialfx.utils.others.observables.When;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.BooleanExpression;
 import javafx.beans.property.ReadOnlyBooleanProperty;

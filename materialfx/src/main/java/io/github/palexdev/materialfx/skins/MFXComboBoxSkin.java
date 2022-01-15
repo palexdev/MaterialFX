@@ -212,7 +212,7 @@ public class MFXComboBoxSkin<T> extends MFXTextFieldSkin {
 	protected Node createPopupContent() {
 		MFXComboBox<T> comboBox = getComboBox();
 		if (virtualFlow == null) {
-			virtualFlow = SimpleVirtualFlow.Builder.create(
+			virtualFlow = new SimpleVirtualFlow<>(
 					comboBox.itemsProperty(),
 					comboBox.getCellFactory(),
 					Orientation.VERTICAL

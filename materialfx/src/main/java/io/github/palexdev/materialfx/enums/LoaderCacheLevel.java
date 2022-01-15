@@ -18,14 +18,14 @@
 
 package io.github.palexdev.materialfx.enums;
 
-import io.github.palexdev.materialfx.controls.MFXHLoader;
-import io.github.palexdev.materialfx.controls.MFXVLoader;
+import io.github.palexdev.materialfx.utils.others.loader.MFXLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 /**
- * Enumerator to define the level of caching used by {@link MFXHLoader}
- * and {@link MFXVLoader}. By enabling cache the switch performance vastly improves
+ * Enumerator to define the level of caching used by {@link MFXLoader}.
+ * <p>
+ * By enabling cache the switch performance vastly improves
  * but the views cannot be loaded in parallel (quite acceptable loss in some cases).
  */
 public enum LoaderCacheLevel {
@@ -46,7 +46,7 @@ public enum LoaderCacheLevel {
     /**
      * Does what SCENE_CACHE does, plus sets the JavaFX's properties cache to true
      * and the cache hint to SPEED on the loaded root node.
-     * (To be honest I don't know if this truly improves performance since I didn't notice any effective improvement)
+     * (To be honest I don't know if this truly improves performance since I didn't notice anything notable)
      */
     SCENE_JAVAFX_CACHE
 }

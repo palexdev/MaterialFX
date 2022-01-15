@@ -25,7 +25,6 @@ import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.utils.LabelUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.beans.binding.Bindings;
-import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.scene.control.SkinBase;
 import javafx.scene.input.MouseEvent;
@@ -68,6 +67,7 @@ public class MFXRectangleToggleNodeSkin extends SkinBase<MFXRectangleToggleNode>
 	    label.setEditable(false);
 	    label.setSelectable(false);
 	    label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+	    label.setMouseTransparent(true);
 
 	    container = new StackPane();
 	    container.alignmentProperty().bind(toggleNode.alignmentProperty());
@@ -125,33 +125,18 @@ public class MFXRectangleToggleNodeSkin extends SkinBase<MFXRectangleToggleNode>
         toggleNode.labelTrailingIconProperty().addListener((observable, oldValue, newValue) -> handleGraphics());
 
         container.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            Node leadingIcon = label.getLeadingIcon();
-            Node trailingIcon = label.getTrailingIcon();
+	        Node leadingIcon = label.getLeadingIcon();
+	        Node trailingIcon = label.getTrailingIcon();
 
-            if (leadingIcon != null && NodeUtils.inHierarchy(event, leadingIcon)) {
-                return;
-            }
-            if (trailingIcon != null && NodeUtils.inHierarchy(event, trailingIcon)) {
-                return;
-            }
+	        if (leadingIcon != null && NodeUtils.inHierarchy(event, leadingIcon)) {
+		        return;
+	        }
+	        if (trailingIcon != null && NodeUtils.inHierarchy(event, trailingIcon)) {
+		        return;
+	        }
 
-            toggleNode.setSelected(!toggleNode.isSelected());
-            rippleGenerator.generateRipple(event);
-        });
-
-        label.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            Node leadingIcon = label.getLeadingIcon();
-            Node trailingIcon = label.getTrailingIcon();
-
-
-            if (leadingIcon != null && NodeUtils.inHierarchy(event, leadingIcon)) {
-                return;
-            }
-            if (trailingIcon != null && NodeUtils.inHierarchy(event, trailingIcon)) {
-                return;
-            }
-
-            Event.fireEvent(toggleNode, event);
+	        toggleNode.fire();
+	        rippleGenerator.generateRipple(event);
         });
     }
 

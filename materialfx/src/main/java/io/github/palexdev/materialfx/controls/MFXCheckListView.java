@@ -71,7 +71,7 @@ public class MFXCheckListView<T> extends AbstractMFXListView<T, MFXCheckListCell
     // Constructors
     //================================================================================
     public MFXCheckListView() {
-        virtualFlow = SimpleVirtualFlow.Builder.create(
+        virtualFlow = new SimpleVirtualFlow<>(
                 itemsProperty(),
                 null,
                 Orientation.VERTICAL
@@ -81,7 +81,7 @@ public class MFXCheckListView<T> extends AbstractMFXListView<T, MFXCheckListCell
 
     public MFXCheckListView(ObservableList<T> items) {
         super(items);
-        virtualFlow = SimpleVirtualFlow.Builder.create(
+        virtualFlow = new SimpleVirtualFlow<>(
                 itemsProperty(),
                 null,
                 Orientation.VERTICAL

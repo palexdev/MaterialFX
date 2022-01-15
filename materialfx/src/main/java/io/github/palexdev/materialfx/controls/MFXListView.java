@@ -71,7 +71,7 @@ public class MFXListView<T> extends AbstractMFXListView<T, MFXListCell<T>> {
     // Constructors
     //================================================================================
     public MFXListView() {
-        virtualFlow = SimpleVirtualFlow.Builder.create(
+        virtualFlow = new SimpleVirtualFlow<>(
                 itemsProperty(),
                 null,
                 Orientation.VERTICAL
@@ -81,7 +81,7 @@ public class MFXListView<T> extends AbstractMFXListView<T, MFXListCell<T>> {
 
     public MFXListView(ObservableList<T> items) {
         super(items);
-        virtualFlow = SimpleVirtualFlow.Builder.create(
+        virtualFlow = new SimpleVirtualFlow<>(
                 itemsProperty(),
                 null,
                 Orientation.VERTICAL

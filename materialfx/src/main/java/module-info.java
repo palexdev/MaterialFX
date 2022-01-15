@@ -70,6 +70,9 @@ module MaterialFX {
 	// Utils Package
 	exports io.github.palexdev.materialfx.utils;
 	exports io.github.palexdev.materialfx.utils.others;
+	exports io.github.palexdev.materialfx.utils.others.dates;
+	exports io.github.palexdev.materialfx.utils.others.loader;
+	exports io.github.palexdev.materialfx.utils.others.observables;
 
 	// Validation Package
 	exports io.github.palexdev.materialfx.validation;

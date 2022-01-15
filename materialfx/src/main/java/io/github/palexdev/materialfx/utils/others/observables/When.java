@@ -1,4 +1,4 @@
-package io.github.palexdev.materialfx.utils.others;
+package io.github.palexdev.materialfx.utils.others.observables;
 
 import javafx.beans.value.ObservableValue;
 

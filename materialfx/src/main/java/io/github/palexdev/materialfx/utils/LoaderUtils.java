@@ -18,9 +18,7 @@
 
 package io.github.palexdev.materialfx.utils;
 
-import io.github.palexdev.materialfx.beans.MFXLoaderBean;
-import io.github.palexdev.materialfx.controls.MFXHLoader;
-import io.github.palexdev.materialfx.controls.MFXVLoader;
+import io.github.palexdev.materialfx.utils.others.loader.MFXLoaderBean;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.util.Callback;
@@ -30,7 +28,7 @@ import java.net.URL;
 import java.util.concurrent.*;
 
 /**
- * Utils class which defines the core methods used by {@link MFXHLoader} and {@link MFXVLoader}.
+ * Utils class to load FXML views.
  */
 public class LoaderUtils {
     private static final ThreadPoolExecutor executor;
@@ -82,38 +80,38 @@ public class LoaderUtils {
     }
 
     /**
-     * Creates a new FXMLLoader with location {@link MFXLoaderBean#getFxmlURL()} and
+     * Creates a new FXMLLoader with location {@link MFXLoaderBean#getFxmlFile()} and
      * controller {@link MFXLoaderBean#getControllerFactory()} (if not null) and loads the fxml file.
      *
-     * @return  the loaded object hierarchy from the fxml
-     * @see     #fxmlLoad(FXMLLoader, URL)
-     * @see     #fxmlLoad(FXMLLoader, URL, Callback)
+     * @return the loaded object hierarchy from the fxml
+     * @see #fxmlLoad(FXMLLoader, URL)
+     * @see #fxmlLoad(FXMLLoader, URL, Callback)
      */
     public static Parent fxmlLoad(MFXLoaderBean loaderBean) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader();
         if (loaderBean.getControllerFactory() != null) {
-            return fxmlLoad(fxmlLoader, loaderBean.getFxmlURL(), loaderBean.getControllerFactory());
+            return fxmlLoad(fxmlLoader, loaderBean.getFxmlFile(), loaderBean.getControllerFactory());
         }
-        return fxmlLoad(fxmlLoader, loaderBean.getFxmlURL());
+        return fxmlLoad(fxmlLoader, loaderBean.getFxmlFile());
     }
 
     /**
      * Sets the location and the controller factory (if not null) for the given
-     * fxmlLoader with {@link MFXLoaderBean#getFxmlURL()} and {@link MFXLoaderBean#getControllerFactory()},
+     * fxmlLoader with {@link MFXLoaderBean#getFxmlFile()} and {@link MFXLoaderBean#getControllerFactory()},
      * and loads the fxml file.
      * <p></p>
      * This method is useful for example when using a DI framework with JavaFX.
      *
-     * @param   fxmlLoader the FXMLLoader instance to use
-     * @return  the loaded object hierarchy from the fxml
-     * @see     #fxmlLoad(FXMLLoader, URL)
-     * @see     #fxmlLoad(FXMLLoader, URL, Callback)
+     * @param fxmlLoader the FXMLLoader instance to use
+     * @return the loaded object hierarchy from the fxml
+     * @see #fxmlLoad(FXMLLoader, URL)
+     * @see #fxmlLoad(FXMLLoader, URL, Callback)
      */
     public static Parent fxmlLoad(FXMLLoader fxmlLoader, MFXLoaderBean loaderBean) throws IOException {
         if (loaderBean.getControllerFactory() != null) {
-            return fxmlLoad(fxmlLoader, loaderBean.getFxmlURL(), loaderBean.getControllerFactory());
+            return fxmlLoad(fxmlLoader, loaderBean.getFxmlFile(), loaderBean.getControllerFactory());
         }
-        return fxmlLoad(fxmlLoader, loaderBean.getFxmlURL());
+        return fxmlLoad(fxmlLoader, loaderBean.getFxmlFile());
     }
 
     /**

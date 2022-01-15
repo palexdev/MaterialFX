@@ -10,7 +10,7 @@ import io.github.palexdev.materialfx.selection.MultipleSelectionModel;
 import io.github.palexdev.materialfx.selection.base.IMultipleSelectionModel;
 import io.github.palexdev.materialfx.skins.MFXTableViewSkin;
 import io.github.palexdev.materialfx.utils.ListChangeProcessor;
-import io.github.palexdev.materialfx.utils.others.When;
+import io.github.palexdev.materialfx.utils.others.observables.When;
 import io.github.palexdev.virtualizedfx.beans.NumberRange;
 import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
 import io.github.palexdev.virtualizedfx.utils.ListChangeHelper;
