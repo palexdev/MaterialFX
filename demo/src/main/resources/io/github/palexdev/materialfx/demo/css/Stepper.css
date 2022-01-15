@@ -1,0 +1,47 @@
+@import '../fonts/Fonts.css';
+@import 'Common.css';
+@import 'MFXColors.css';
+
+.mfx-stepper .mfx-text-field {
+	-mfx-float-mode: disabled;
+	-fx-font-family: 'Visby Round CF Medium';
+	-fx-pref-width: 200;
+}
+
+.mfx-stepper .mfx-stepper-toggle .mfx-text-field {
+	-fx-border-color: transparent;
+	-fx-font-family: 'Visby Round CF Bold';
+	-fx-pref-width: 1;
+}
+
+.mfx-stepper .error-label {
+	-fx-font-family: 'Visby Round CF Medium';
+	-fx-text-fill: -mfx-red;
+}
+
+.mfx-stepper .header-label {
+	-fx-border-color: transparent;
+	-fx-font-family: 'Visby Round CF Demi Bold';
+}
+
+.mfx-stepper .completed-label {
+	-fx-border-color: transparent;
+	-fx-font-family: 'Visby Round CF Bold';
+	-fx-font-size: 24;
+	-fx-alignment: center;
+	-fx-text-fill: -mfx-green;
+}
+
+.outline-button {
+    -fx-background-color: transparent;
+    -fx-border-color: -mfx-purple;
+    -fx-border-radius: 3;
+
+    -fx-text-fill: -mfx-purple;
+}
+
+.outline-button:hover,
+.outline-button:focused {
+    -fx-background-color: -mfx-purple;
+    -fx-text-fill: white;
+}

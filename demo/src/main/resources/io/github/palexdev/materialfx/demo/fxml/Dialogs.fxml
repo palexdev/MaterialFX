@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<GridPane hgap="20.0" maxHeight="-Infinity" maxWidth="-Infinity" styleClass="grid-pane"
+          stylesheets="@../css/Buttons.css" vgap="20.0" xmlns:fx="http://javafx.com/fxml/1"
+          xmlns="http://javafx.com/javafx/17"
+          fx:controller="io.github.palexdev.materialfx.demo.controllers.DialogsController">
+    <columnConstraints>
+        <ColumnConstraints halignment="CENTER"/>
+        <ColumnConstraints halignment="CENTER"/>
+        <ColumnConstraints halignment="CENTER"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints prefHeight="32.0"/>
+        <RowConstraints minHeight="10.0" prefHeight="64.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="64.0" vgrow="SOMETIMES"/>
+    </rowConstraints>
+    <padding>
+        <Insets bottom="20.0" left="30.0" right="30.0" top="20.0"/>
+    </padding>
+    <StackPane minHeight="150.0" minWidth="300.0" styleClass="grid-background" GridPane.columnSpan="3"
+               GridPane.rowSpan="3">
+        <GridPane.margin>
+          <Insets left="-15.0" right="-15.0"/>
+        </GridPane.margin>
+    </StackPane>
+    <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="header-label" text="Dialogs"
+           GridPane.columnSpan="3"/>
+    <MFXButton minHeight="28.0" minWidth="90.0" onAction="#openInfo" styleClass="outline-button" text="Info"
+               GridPane.rowIndex="1"/>
+    <MFXButton minHeight="28.0" minWidth="90.0" onAction="#openWarning" styleClass="outline-button" text="Warning"
+               GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+    <MFXButton minHeight="28.0" minWidth="90.0" onAction="#openError" styleClass="outline-button" text="Error"
+               GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+    <MFXButton minHeight="28.0" minWidth="90.0" onAction="#openGeneric" styleClass="outline-button" text="Generic"
+               GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+</GridPane>

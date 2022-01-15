@@ -1,0 +1,8 @@
+.mfx-table-view .virtual-flow .mfx-table-row:hover,
+.mfx-table-view .virtual-flow .mfx-table-row:selected {
+	-fx-background-color: transparent;
+}
+
+.mfx-table-view .virtual-flow .mfx-table-row .mfx-ripple-generator {
+	-mfx-paused: true;
+}

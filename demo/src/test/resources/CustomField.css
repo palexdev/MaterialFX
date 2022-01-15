@@ -1,0 +1,10 @@
+.mfx-text-field {
+	-fx-padding: 5 10 5 10;
+	-fx-font-size: 24;
+	-mfx-float-mode: border;
+}
+
+.mfx-text-field .floating-text {
+	-fx-padding: 0 10 0 10;
+	-fx-text-fill: black;
+}

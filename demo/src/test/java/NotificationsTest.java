@@ -1,13 +1,16 @@
-import io.github.palexdev.materialfx.controls.MFXLabel;
+import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXNotificationCenter;
+import io.github.palexdev.materialfx.controls.MFXSimpleNotification;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.enums.NotificationPos;
+import io.github.palexdev.materialfx.factories.InsetsFactory;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.notifications.MFXNotificationCenterSystem;
 import io.github.palexdev.materialfx.notifications.MFXNotificationSystem;
-import io.github.palexdev.materialfx.controls.MFXSimpleNotification;
 import io.github.palexdev.materialfx.notifications.base.INotification;
 import io.github.palexdev.materialfx.utils.ColorUtils;
-import io.github.palexdev.materialfx.utils.RandomInstance;
+import io.github.palexdev.materialfx.utils.RandomUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -16,7 +19,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.scenicview.ScenicView;
 
@@ -30,6 +32,7 @@ public class NotificationsTest extends Application {
         StackPane stackPane = new StackPane();
 
         MFXNotificationCenter notificationCenter = new MFXNotificationCenter();
+        notificationCenter.getStylesheets().add(MFXResourcesLoader.load("css/MFXNotificationCenter.css"));
         IntStream.range(0, 100).forEach(i -> notificationCenter.getNotifications().add(createDummyNotification()));
         stackPane.getChildren().add(notificationCenter);
 
@@ -37,7 +40,7 @@ public class NotificationsTest extends Application {
                 .initOwner(primaryStage)
                 .setOpenOnNew(false)
                 .setCloseAutomatically(true)
-                .setPosition(NotificationPos.TOP_RIGHT);
+                .setPosition(NotificationPos.TOP_LEFT);
         MFXNotificationSystem.instance()
                 .initOwner(primaryStage)
                 .setPosition(NotificationPos.TOP_RIGHT);
@@ -55,27 +58,24 @@ public class NotificationsTest extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        ScenicView.show(scene);
+        ScenicView.show(notificationCenter.getScene());
     }
 
     private INotification createDummyNotification() {
-        MFXLabel label = new MFXLabel("Random Label n." + RandomInstance.random.nextInt());
-        label.setLeadingIcon(MFXFontIcon.getRandomIcon(32, ColorUtils.getRandomColor()));
+        MFXTextField label = MFXTextField.asLabel("Random Label n." + RandomUtils.random.nextInt());
+        label.setLeadingIcon(new MFXIconWrapper(MFXFontIcon.getRandomIcon(18, ColorUtils.getRandomColor()), 24));
         label.setAlignment(Pos.CENTER_LEFT);
-        label.setLineColor(Color.TRANSPARENT);
-        label.setUnfocusedLineColor(Color.TRANSPARENT);
         label.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(label, Priority.ALWAYS);
 
-        MFXLabel time = new MFXLabel();
+        MFXTextField time = MFXTextField.asLabel();
         time.setAlignment(Pos.CENTER_RIGHT);
-        time.setLineColor(Color.TRANSPARENT);
-        time.setUnfocusedLineColor(Color.TRANSPARENT);
 
         HBox box = new HBox(label, time);
-        box.setMinSize(450, 100);
+        box.setMinSize(450, -1);
         box.setStyle("-fx-background-color: white");
         box.setAlignment(Pos.CENTER_LEFT);
+        box.setPadding(InsetsFactory.right(20));
         MFXSimpleNotification notification = new MFXSimpleNotification(box);
         notification.setOnUpdateElapsed((longElapsed, stringElapsed) -> Platform.runLater(() -> time.setText(stringElapsed)));
         time.setText(notification.getTimeToStringConverter().apply(notification.getElapsedTime()));

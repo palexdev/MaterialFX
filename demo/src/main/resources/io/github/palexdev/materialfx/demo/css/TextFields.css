@@ -1,0 +1,64 @@
+@import '../fonts/Fonts.css';
+@import 'Common.css';
+@import 'MFXColors.css';
+
+/**************************************************
+ * Text Fields
+**************************************************/
+.mfx-text-field {
+	-fx-min-width: 130;
+    -fx-font-family: 'Visby Round CF Medium';
+}
+
+.mfx-text-field .floating-text {
+    -fx-font-family: 'Visby Round CF Medium';
+}
+
+
+#customField {
+    -fx-border-color: -common-gradient;
+}
+
+#customField .floating-text {
+    -fx-text-fill: -mfx-red;
+}
+
+/**************************************************
+ * Password Fields
+**************************************************/
+#customPassword {
+    -fx-border-color: -secondary-gradient;
+}
+
+#customPassword:masked {
+    -fx-text-fill: -mfx-blue;
+}
+
+#customPassword .mfx-font-icon {
+    -mfx-color: -mfx-blue;
+}
+
+#customPassword .floating-text {
+    -fx-text-fill: -mfx-blue;
+}
+
+#validatedField {
+    -mfx-hide-character: '?';
+}
+
+#validatedField:invalid {
+    -fx-border-color: -mfx-red;
+}
+
+#validatedField:invalid .floating-text {
+    -fx-text-fill: -mfx-red;
+}
+
+#validatedField:invalid .mfx-font-icon {
+    -mfx-color: -mfx-red;
+}
+
+#validationLabel {
+    -fx-font-family: 'Visby Round CF Demi Bold';
+    -fx-font-size: 11;
+}

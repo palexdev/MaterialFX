@@ -1,0 +1,84 @@
+@import '../fonts/Fonts.css';
+@import 'Common.css';
+@import 'MFXColors.css';
+
+/**************************************************
+ * Progress Bars
+**************************************************/
+#customBar1 .bar1 {
+	-fx-fill: -common-gradient;
+}
+
+#customBar1 .bar2 {
+	-fx-fill: -secondary-gradient;
+}
+
+#customBar2 .track {
+	-fx-fill: -mfx-purple;
+	-fx-stroke: -mfx-purple;
+	-fx-stroke-width: 2;
+}
+
+#customBar2 .bar1,
+#customBar2 .bar2 {
+	-fx-stroke: -mfx-purple;
+	-fx-stroke-width: 1;
+	-fx-fill: white;
+}
+
+#determinateBar:range1 .bar1 {
+    -fx-fill: -mfx-red;
+}
+
+#determinateBar:range1 .track {
+    -fx-fill: derive(-mfx-red, 85%)
+}
+
+#determinateBar:range2 .bar1 {
+    -fx-fill: -mfx-blue;
+}
+
+#determinateBar:range2 .track {
+    -fx-fill: derive(-mfx-blue, 85%)
+}
+
+#determinateBar:range3 .bar1 {
+    -fx-fill: -mfx-green;
+}
+
+#determinateBar:range3 .track {
+    -fx-fill: derive(-mfx-green, 85%);
+}
+
+
+/**************************************************
+ * Progress Spinners
+**************************************************/
+#customSpinner1 {
+	-mfx-color1: #7A0ED9;
+	-mfx-color2: #EB00A6;
+	-mfx-color3: #FF1471;
+	-mfx-color4: #FF7C4A;
+}
+
+#customSpinner1 .track {
+	-fx-stroke: #ebebeb;
+}
+
+#determinateSpinner .text {
+	-fx-font-family: 'Visby Round CF Demi Bold';
+	-fx-font-size: 18;
+	-fx-fill: black;
+}
+
+#determinateSpinner:range1 .arc {
+    -fx-fill: #FF6088;
+}
+
+#determinateSpinner:range2 .arc {
+    -fx-fill: #00BCFF;
+}
+
+#determinateSpinner:range3 .arc {
+    -fx-fill: #1EC400;
+}

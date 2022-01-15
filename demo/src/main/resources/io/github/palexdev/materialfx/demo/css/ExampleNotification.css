@@ -1,0 +1,30 @@
+@import 'MFXColors.css';
+
+.notification {
+	-fx-background-color: white;
+	-fx-background-radius: 5;
+	-fx-border-color: #ebebeb;
+	-fx-border-radius: 5;
+}
+
+.notification .label {
+	-fx-font-family: 'Visby Round CF Bold';
+	-fx-text-fill: -mfx-text-he;
+}
+
+.notification .content {
+	-fx-padding: 10;
+	-fx-font-family: 'Visby Round CF Medium';
+}
+
+.notification .mfx-button {
+	-fx-min-height: 27;
+	-fx-border-color: -mfx-purple;
+	-fx-border-radius: 3;
+	-fx-text-fill: -mfx-purple;
+}
+
+.notification .mfx-button .mfx-ripple-generator {
+	-mfx-auto-clip: true;
+	-mfx-ripple-color: derive(#7a0ed9, 125%);
+}

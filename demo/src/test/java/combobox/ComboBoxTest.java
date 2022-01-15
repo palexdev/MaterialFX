@@ -33,7 +33,7 @@ public class ComboBoxTest extends Application {
         MFXFilterComboBox<String> c2 = new MFXFilterComboBox<>(s2);
         MFXFilterComboBox<String> c3 = new MFXFilterComboBox<>(s3);
 
-        c2.selectedValueProperty().bind(c1.selectedValueProperty());
+        c2.valueProperty().bind(c1.valueProperty());
         c3.getSelectionModel().bindIndexBidirectional(c1.getSelectionModel());
 
         hBox.getChildren().addAll(c1, c2, c3);

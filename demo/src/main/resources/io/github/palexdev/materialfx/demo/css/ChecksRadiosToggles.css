@@ -1,0 +1,129 @@
+@import '../fonts/Fonts.css';
+@import 'Common.css';
+@import 'MFXColors.css';
+
+
+/**************************************************
+ * Checkboxes
+**************************************************/
+.mfx-checkbox {
+	-fx-font-family: 'Visby Round CF Medium';
+	-fx-text-fill: -mfx-text-he;
+}
+
+.mfx-checkbox .text {
+	-fx-font-smoothing-type: lcd;
+}
+
+#customCheck {
+	-mfx-main: -common-gradient;
+	-mfx-gray: #5E0BA8;
+	-fx-text-fill: #5E0BA8;
+}
+
+#customCheck .box .mark {
+	-mfx-description: "mfx-x-alt";
+}
+
+#customCheck:indeterminate .box .mark {
+	-mfx-description:  "mfx-hyphen";
+} 
+
+#customCheck .mfx-ripple-generator {
+	-mfx-ripple-color: -common-gradient;
+	-fx-opacity: 0.4;
+}
+
+/**************************************************
+ * Radios
+**************************************************/
+.mfx-radio-button {
+	-fx-font-family: 'Visby Round CF Medium';
+	-fx-text-fill: -mfx-text-he;
+}
+
+.mfx-radio-button .text {
+	-fx-font-smoothing-type: lcd;
+}
+
+#customRadio {
+	-mfx-main: -common-gradient;
+	-mfx-gray: #5E0BA8;
+	-fx-text-fill: #5E0BA8;
+}
+
+#customRadio .mfx-ripple-generator {
+	-mfx-ripple-color: -common-gradient;
+	-fx-opacity: 0.5;
+}
+
+/**************************************************
+ * Toggle Buttons
+**************************************************/
+.mfx-toggle-button {
+	-fx-font-family: 'Visby Round CF Medium';
+	-fx-text-fill: -mfx-text-he;
+}
+
+.mfx-toggle-button .text {
+	-fx-font-smoothing-type: lcd;
+}
+
+#customToggleButton {
+	-mfx-main: -common-gradient;
+	-mfx-secondary: #5E0BA8;
+	-fx-text-fill: #5E0BA8;
+}
+
+#customToggleButton .mfx-ripple-generator {
+	-mfx-ripple-color: -common-gradient;
+	-fx-opacity: 0.5;
+}
+
+/**************************************************
+ * Toggle Nodes
+**************************************************/
+.mfx-circle-toggle-node {
+	-fx-font-family: 'Visby Round CF Medium';
+	-fx-text-fill: -mfx-text-he;
+
+}
+
+.mfx-rectangle-toggle-node {
+	-fx-font-family: 'Visby Round CF Medium';
+	-fx-text-fill: -mfx-text-he;
+	-fx-min-height: 40;
+}
+
+#customCircle,
+#customRectangle {
+	-mfx-selected-color: -common-gradient;
+	-mfx-selected-border-color: transparent;
+	-fx-text-fill: #5E0BA8;
+}
+
+#customCircle:selected .mfx-font-icon,
+#customRectangle:selected .mfx-font-icon {
+	-mfx-color: white;
+}
+
+#customCircle:selected .mfx-ripple-generator,
+#customRectangle:selected .mfx-ripple-generator {
+	-mfx-paused: true;
+}
+
+#customRectangle:selected {
+	-fx-text-fill: white;
+}
+
+/**************************************************
+ * Others
+**************************************************/
+.mfx-button {
+	-fx-font-family: 'Visby Round CF Medium';
+    -fx-text-fill: -mfx-text-he;
+}
+
+.mfx-button .text {
+	-fx-font-smoothing-type: lcd;
+}

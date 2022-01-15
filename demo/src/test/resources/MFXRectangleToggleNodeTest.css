@@ -1,0 +1,10 @@
+/*
+.mfx-toggle-node .mfx-text-field,
+.mfx-toggle-node .mfx-text-field:focused {
+	-fx-background-color: red;
+	-fx-border-color: transparent;
+}
+
+.mfx-toggle-node .mfx-text-field .text-field {
+	-fx-text-inner-color: green;
+}*/

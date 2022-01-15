@@ -1,43 +1,43 @@
-import io.github.palexdev.materialfx.controls.MFXCheckbox;
-import io.github.palexdev.materialfx.controls.MFXRadioButton;
-import io.github.palexdev.materialfx.controls.MFXToggleButton;
+import fr.brouillard.oss.cssfx.CSSFX;
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXPasswordField;
+import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
 import io.github.palexdev.materialfx.factories.InsetsFactory;
+import io.github.palexdev.materialfx.font.MFXFontIcon;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import org.scenicview.ScenicView;
 
 public class Playground extends Application {
 
-    @Override
-    public void start(Stage primaryStage) {
-        StackPane stackPane = new StackPane();
+	@Override
+	public void start(Stage primaryStage) {
+		CSSFX.start();
+		BorderPane borderPane = new BorderPane();
 
-        HBox box = new HBox(20);
-        box.setAlignment(Pos.CENTER_LEFT);
+		MFXPasswordField textField = new MFXPasswordField("", "Prompt", "Floating Text");
 
-        MFXToggleButton toggle = new MFXToggleButton("Toggle Button");
-        toggle.setAlignment(Pos.CENTER_RIGHT);
+		MFXRectangleToggleNode toggleNode = new MFXRectangleToggleNode("This should be a long text");
+		toggleNode.setLabelLeadingIcon(new MFXFontIcon("mfx-google", 48));
+		toggleNode.setLabelTrailingIcon(new MFXFontIcon("mfx-google", 24));
 
-        MFXRadioButton radioButton = new MFXRadioButton("Radio Button");
-        radioButton.setContentDisposition(ContentDisplay.TOP);
-        radioButton.setTextExpand(true);
-        radioButton.setAlignment(Pos.BOTTOM_CENTER);
-        radioButton.setPrefHeight(120);
-        radioButton.setPadding(InsetsFactory.all(5));
+		MFXButton button = new MFXButton("Click Me!");
+		button.setOnAction(event -> textField.setShowPassword(!textField.isShowPassword()));
+		button.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+		BorderPane.setAlignment(button, Pos.TOP_CENTER);
+		BorderPane.setMargin(button, InsetsFactory.top(10));
 
-        MFXCheckbox checkbox = new MFXCheckbox("Checkbox");
-
-        box.getChildren().addAll(toggle, radioButton, checkbox);
-        stackPane.getChildren().add(box);
-        Scene scene = new Scene(stackPane, 800, 600);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-
-        ScenicView.show(scene);
-    }
+		borderPane.getStylesheets().add(Playground.class.getResource("CustomField.css").toString());
+		borderPane.setTop(button);
+		borderPane.setCenter(toggleNode);
+		Scene scene = new Scene(borderPane, 800, 600);
+		primaryStage.setScene(scene);
+		primaryStage.setOnShown(event -> button.requestFocus());
+		primaryStage.show();
+		ScenicView.show(scene);
+	}
 }

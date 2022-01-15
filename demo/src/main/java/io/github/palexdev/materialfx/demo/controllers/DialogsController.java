@@ -1,278 +1,89 @@
-/*
- * Copyright (C) 2021 Parisi Alessandro
- * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
- *
- * MaterialFX is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * MaterialFX is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.palexdev.materialfx.demo.controllers;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXStageDialog;
-import io.github.palexdev.materialfx.controls.base.AbstractMFXDialog;
-import io.github.palexdev.materialfx.effects.DepthLevel;
-import io.github.palexdev.materialfx.enums.ButtonType;
-import io.github.palexdev.materialfx.enums.DialogType;
-import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
-import io.github.palexdev.materialfx.factories.MFXDialogFactory;
+import io.github.palexdev.materialfx.demo.model.Model;
+import io.github.palexdev.materialfx.dialogs.MFXGenericDialog;
+import io.github.palexdev.materialfx.dialogs.MFXGenericDialogBuilder;
+import io.github.palexdev.materialfx.dialogs.MFXStageDialog;
+import io.github.palexdev.materialfx.font.MFXFontIcon;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.Map;
 
-public class DialogsController implements Initializable {
-    private final Pane pane;
+public class DialogsController {
+	private MFXGenericDialog dialogContent;
+	private MFXStageDialog dialog;
 
-    @FXML
-    private MFXButton pError;
+	public DialogsController(Stage stage) {
 
-    @FXML
-    private MFXButton pWarning;
+		Platform.runLater(() -> {
+			this.dialogContent = MFXGenericDialogBuilder.build()
+					.setContentText(Model.ipsum)
+					.makeScrollable(true)
+					.get();
+			this.dialog = MFXGenericDialogBuilder.build(dialogContent)
+					.toStageDialogBuilder()
+					.initOwner(stage)
+					.initModality(Modality.APPLICATION_MODAL)
+					.setDraggable(true)
+					.setTitle("Dialogs Preview")
+					.setScrimOwner(true)
+					.get();
 
-    @FXML
-    private MFXButton pInfo;
+			dialogContent.addActions(
+					Map.entry(new MFXButton("Confirm"), event -> {}),
+					Map.entry(new MFXButton("Cancel"), event -> dialog.close())
+			);
 
-    @FXML
-    private MFXButton pGeneric;
+			dialogContent.setMaxSize(400, 200);
+		});
+	}
 
-    @FXML
-    private MFXButton pGenericActions;
+	@FXML
+	private void openInfo(ActionEvent event) {
+		MFXFontIcon infoIcon = new MFXFontIcon("mfx-info-circle-filled", 18);
+		dialogContent.setHeaderIcon(infoIcon);
+		dialogContent.setHeaderText("This is a generic info dialog");
+		convertDialogTo("mfx-info-dialog");
+		dialog.showDialog();
+	}
 
-    @FXML
-    private MFXButton pFade;
+	@FXML
+	private void openWarning(ActionEvent event) {
+		MFXFontIcon warnIcon = new MFXFontIcon("mfx-do-not-enter-circle", 18);
+		dialogContent.setHeaderIcon(warnIcon);
+		dialogContent.setHeaderText("This is a warning info dialog");
+		convertDialogTo("mfx-warn-dialog");
+		dialog.showDialog();
+	}
 
-    @FXML
-    private MFXButton pSlideLR;
+	@FXML
+	private void openError(ActionEvent event) {
+		MFXFontIcon errorIcon = new MFXFontIcon("mfx-exclamation-circle-filled", 18);
+		dialogContent.setHeaderIcon(errorIcon);
+		dialogContent.setHeaderText("This is a error info dialog");
+		convertDialogTo("mfx-error-dialog");
+		dialog.showDialog();
+	}
 
-    @FXML
-    private MFXButton pSlideTB;
+	@FXML
+	private void openGeneric(ActionEvent event) {
+		dialogContent.setHeaderIcon(null);
+		dialogContent.setHeaderText("This is a generic dialog");
+		convertDialogTo(null);
+		dialog.showDialog();
+	}
 
-    @FXML
-    private MFXButton pMix;
+	private void convertDialogTo(String styleClass) {
+		dialogContent.getStyleClass().removeIf(
+				s -> s.equals("mfx-info-dialog") || s.equals("mfx-warn-dialog") || s.equals("mfx-error-dialog")
+		);
 
-    @FXML
-    private MFXButton sError;
-
-    @FXML
-    private MFXButton sWarning;
-
-    @FXML
-    private MFXButton sInfo;
-
-    @FXML
-    private MFXButton sGeneric;
-
-    @FXML
-    private MFXButton pDraggable;
-
-    @FXML
-    private MFXButton pOverlayClose;
-
-    @FXML
-    private MFXButton sModal;
-
-    private final AbstractMFXDialog dialog;
-    private final AbstractMFXDialog animateDialog;
-    private final String text =
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. " +
-                    "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, " +
-                    "when an unknown printer took a galley of type and scrambled it to make a type specimen book. " +
-                    "It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. " +
-                    "It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, " +
-                    "and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
-
-    public DialogsController(Pane pane) {
-        this.pane = pane;
-
-        dialog = MFXDialogFactory.buildDialog(DialogType.INFO, "MFXDialog - Generic Dialog", text);
-
-        animateDialog = MFXDialogFactory.buildDialog(DialogType.INFO, "", text);
-        animateDialog.setAnimateIn(true);
-        animateDialog.setAnimateOut(true);
-
-        animateDialog.setOnBeforeOpen(event -> System.out.println("BEFORE OPEN"));
-        animateDialog.setOnOpened(event -> System.out.println("OPENED"));
-        animateDialog.setOnBeforeClose(event -> System.out.println("BEFORE CLOSING"));
-        animateDialog.setOnClosed(event -> System.out.println("CLOSED"));
-
-        Platform.runLater(() -> this.pane.getChildren().addAll(dialog, animateDialog));
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        dialog.setVisible(false);
-        animateDialog.setVisible(false);
-
-        pError.setOnAction(event -> {
-            resetDialog();
-            MFXDialogFactory.convertToSpecific(DialogType.ERROR, dialog);
-            dialog.setTitle("MFXDialog - Error Dialog");
-            dialog.show();
-        });
-
-        pWarning.setOnAction(event -> {
-            resetDialog();
-            MFXDialogFactory.convertToSpecific(DialogType.WARNING, dialog);
-            dialog.setTitle("MFXDialog - Warning Dialog");
-            dialog.show();
-        });
-
-        pInfo.setOnAction(event -> {
-            resetDialog();
-            MFXDialogFactory.convertToSpecific(DialogType.INFO, dialog);
-            dialog.setTitle("MFXDialog - Info Dialog");
-            dialog.show();
-        });
-
-        pGeneric.setOnAction(event -> {
-            AbstractMFXDialog genericDialog = MFXDialogFactory.buildGenericDialog("MFXDialog - Generic Dialog", text);
-            genericDialog.setCloseHandler(c -> {
-                genericDialog.close();
-                DialogsController.this.pane.getChildren().remove(genericDialog);
-            });
-            genericDialog.setVisible(false);
-            this.pane.getChildren().add(genericDialog);
-            genericDialog.show();
-        });
-
-        pGenericActions.setOnAction(event -> {
-            AbstractMFXDialog genericDialog = MFXDialogFactory.buildGenericDialog("MFXDialog - Generic Dialog", text);
-            genericDialog.setCloseHandler(c -> {
-                genericDialog.close();
-                DialogsController.this.pane.getChildren().remove(genericDialog);
-            });
-            genericDialog.setVisible(false);
-            this.pane.getChildren().add(genericDialog);
-            genericDialog.setActions(createActionsBar(genericDialog));
-            genericDialog.show();
-        });
-
-        pFade.setOnAction(event -> {
-            resetDialog();
-            animateDialog.setTitle("MFXDialog - Fade Dialog");
-            animateDialog.setInAnimationType(MFXAnimationFactory.FADE_IN);
-            animateDialog.setOutAnimationType(MFXAnimationFactory.FADE_OUT);
-            animateDialog.show();
-        });
-
-        pSlideLR.setOnAction(event -> {
-            resetDialog();
-            animateDialog.setTitle("MFXDialog - Slide Left/Right Dialog");
-            animateDialog.setInAnimationType(MFXAnimationFactory.SLIDE_IN_LEFT);
-            animateDialog.setOutAnimationType(MFXAnimationFactory.SLIDE_OUT_RIGHT);
-            animateDialog.show();
-        });
-
-        pSlideTB.setOnAction(event -> {
-            resetDialog();
-            animateDialog.setTitle("MFXDialog - Slide Top/Bottom Dialog");
-            animateDialog.setInAnimationType(MFXAnimationFactory.SLIDE_IN_TOP);
-            animateDialog.setOutAnimationType(MFXAnimationFactory.SLIDE_OUT_BOTTOM);
-            animateDialog.show();
-        });
-
-        pMix.setOnAction(event -> {
-            resetDialog();
-            animateDialog.setTitle("MFXDialog - Mix Animation Dialog");
-            animateDialog.setInAnimationType(MFXAnimationFactory.SLIDE_IN_TOP);
-            animateDialog.setOutAnimationType(MFXAnimationFactory.SLIDE_OUT_RIGHT);
-            animateDialog.show();
-        });
-
-        pDraggable.setOnAction(event -> {
-            resetDialog();
-            MFXDialogFactory.convertToSpecific(DialogType.INFO, dialog);
-            dialog.setTitle("MFXDialog - Draggable Dialog");
-            dialog.setIsDraggable(true);
-            dialog.show();
-        });
-
-        pOverlayClose.setOnAction(event -> {
-            resetDialog();
-            MFXDialogFactory.convertToSpecific(DialogType.INFO, dialog);
-            dialog.setTitle("MFXDialog - Overlay Close Dialog");
-            dialog.setOverlayClose(true);
-            dialog.show();
-        });
-
-        sError.setOnAction(event -> {
-            MFXStageDialog dialog = new MFXStageDialog(DialogType.ERROR, "MFXStageDialog - Error Dialog", text);
-            dialog.show();
-        });
-
-        sWarning.setOnAction(event -> {
-            MFXStageDialog dialog = new MFXStageDialog(DialogType.WARNING, "MFXStageDialog - Warning Dialog", text);
-            dialog.show();
-        });
-
-        sInfo.setOnAction(event -> {
-            MFXStageDialog dialog = new MFXStageDialog(DialogType.INFO, "MFXStageDialog - Info Dialog", text);
-            dialog.show();
-        });
-
-        sGeneric.setOnAction(event -> {
-            MFXStageDialog dialog = new MFXStageDialog(DialogType.GENERIC, "MFXStageDialog - Generic Dialog", text);
-            dialog.show();
-        });
-
-        sModal.setOnAction(event -> {
-            MFXStageDialog dialog = new MFXStageDialog(DialogType.INFO, "MFXStageDialog - Modal Dialog", text);
-            dialog.setOwner(pane.getScene().getWindow());
-            dialog.setModality(Modality.APPLICATION_MODAL);
-            dialog.setScrimBackground(true);
-            dialog.setCenterInOwner(true);
-            dialog.show();
-        });
-    }
-
-    private void resetDialog() {
-        dialog.setOverlayClose(false);
-        dialog.setIsDraggable(false);
-    }
-
-    private HBox createActionsBar(AbstractMFXDialog dialog) {
-        MFXButton action1 = new MFXButton("Perform Action 1");
-        MFXButton action2 = new MFXButton("Perform Action 2");
-        MFXButton action3 = new MFXButton("Perform Action 3");
-        MFXButton close = new MFXButton("Close");
-
-        action1.setButtonType(ButtonType.RAISED);
-        action2.setButtonType(ButtonType.RAISED);
-        action3.setButtonType(ButtonType.RAISED);
-        close.setButtonType(ButtonType.RAISED);
-
-        action1.setDepthLevel(DepthLevel.LEVEL1);
-        action2.setDepthLevel(DepthLevel.LEVEL1);
-        action3.setDepthLevel(DepthLevel.LEVEL1);
-        close.setDepthLevel(DepthLevel.LEVEL1);
-
-        // TODO remake
-/*        action1.setOnAction(event -> NotificationsManager.send(NotificationPos.BOTTOM_RIGHT, createNotification("Action 1 Performed")));
-        action2.setOnAction(event -> NotificationsManager.send(NotificationPos.BOTTOM_RIGHT, createNotification("Action 2 Performed")));
-        action3.setOnAction(event -> NotificationsManager.send(NotificationPos.BOTTOM_RIGHT, createNotification("Action 3 Performed")));*/
-        dialog.addCloseButton(close);
-
-        HBox box = new HBox(20, action1, action2, action3, close);
-        box.setAlignment(Pos.CENTER);
-        box.setPadding(new Insets(20, 5, 20, 5));
-        return box;
-    }
+		if (styleClass != null)
+		dialogContent.getStyleClass().add(styleClass);
+	}
 }
