@@ -20,17 +20,17 @@
 @import "MFXColors.css";
 
 .mfx-menu-item {
-    -fx-background-color: transparent;
-    -fx-background-radius: 5;
-    -fx-min-height: 24;
-    -fx-padding: 0 2 0 2;
+	-fx-background-color: transparent;
+	-fx-background-radius: 5;
+	-fx-min-height: 24;
+	-fx-padding: 0 2 0 2;
 
-    -fx-font-family: "Open Sans Regular";
-    -fx-text-fill: -mfx-text-he;
+	-fx-font-family: "Open Sans Regular";
+	-fx-text-fill: -mfx-text-he;
 }
 
 .mfx-menu-item:hover {
-    -fx-background-color: #ededed;
+	-fx-background-color: #ededed;
 }
 
 .mfx-menu-item .label {

@@ -19,6 +19,6 @@
 package io.github.palexdev.materialfx.enums;
 
 public enum TextPosition {
-    TOP,
-    BOTTOM
+	TOP,
+	BOTTOM
 }

@@ -78,17 +78,17 @@ public class MFXLegacyComboBox<T> extends ComboBox<T> implements Validated {
 	private final ObjectProperty<Paint> invalidLineColor = new SimpleObjectProperty<>(Color.web("#EF6E6B"));
 	protected static final PseudoClass INVALID_PSEUDO_CLASS = PseudoClass.getPseudoClass("invalid");
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXLegacyComboBox() {
-        initialize();
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXLegacyComboBox() {
+		initialize();
+	}
 
-    public MFXLegacyComboBox(ObservableList<T> observableList) {
-        super(observableList);
-        initialize();
-    }
+	public MFXLegacyComboBox(ObservableList<T> observableList) {
+		super(observableList);
+		initialize();
+	}
 
 	//================================================================================
 	// Validation
@@ -98,293 +98,293 @@ public class MFXLegacyComboBox<T> extends ComboBox<T> implements Validated {
 		return validator;
 	}
 
-    public Paint getInvalidLineColor() {
-        return invalidLineColor.get();
-    }
+	public Paint getInvalidLineColor() {
+		return invalidLineColor.get();
+	}
 
-    /**
-     * Specifies the color of the focused line when the validator state is invalid.
-     * <p></p>
-     * This workaround is needed because I discovered a rather surprising/shocking bug.
-     * If you set the line color in SceneBuilder (didn't test in Java code) and the validator state is invalid,
-     * the line won't change color as specified in the CSS file, damn you JavaFX :)
-     */
-    public ObjectProperty<Paint> invalidLineColorProperty() {
-        return invalidLineColor;
-    }
+	/**
+	 * Specifies the color of the focused line when the validator state is invalid.
+	 * <p></p>
+	 * This workaround is needed because I discovered a rather surprising/shocking bug.
+	 * If you set the line color in SceneBuilder (didn't test in Java code) and the validator state is invalid,
+	 * the line won't change color as specified in the CSS file, damn you JavaFX :)
+	 */
+	public ObjectProperty<Paint> invalidLineColorProperty() {
+		return invalidLineColor;
+	}
 
-    public void setInvalidLineColor(Paint invalidLineColor) {
-        this.invalidLineColor.set(invalidLineColor);
-    }
+	public void setInvalidLineColor(Paint invalidLineColor) {
+		this.invalidLineColor.set(invalidLineColor);
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
-    private void initialize() {
-        getStyleClass().add(STYLE_CLASS);
-        setCellFactory(listCell -> new MFXLegacyListCell<>() {
-            @Override
-            protected void updateItem(T item, boolean empty) {
-                super.updateItem(item, empty);
+	//================================================================================
+	// Methods
+	//================================================================================
+	private void initialize() {
+		getStyleClass().add(STYLE_CLASS);
+		setCellFactory(listCell -> new MFXLegacyListCell<>() {
+			@Override
+			protected void updateItem(T item, boolean empty) {
+				super.updateItem(item, empty);
 
-                getChildren().remove(lookup(".mfx-ripple-generator"));
-            }
-        });
+				getChildren().remove(lookup(".mfx-ripple-generator"));
+			}
+		});
 
-        setButtonCell(new ListCell<>() {
-            {
-                valueProperty().addListener(observable -> {
-                    if (getValue() == null) {
-                        updateItem(null, true);
-                    }
-                });
-            }
+		setButtonCell(new ListCell<>() {
+			{
+				valueProperty().addListener(observable -> {
+					if (getValue() == null) {
+						updateItem(null, true);
+					}
+				});
+			}
 
-            @Override
-            protected void updateItem(T item, boolean empty) {
-                updateComboItem(this, item, empty);
-            }
-        });
-    }
+			@Override
+			protected void updateItem(T item, boolean empty) {
+				updateComboItem(this, item, empty);
+			}
+		});
+	}
 
-    /**
-     * Defines the behavior of the button cell.
-     * <p>
-     * If it's empty or the item is null, shows the prompt text.
-     * <p>
-     * If the item is instanceof {@code Labeled} makes a "screenshot" of the graphic if not null,
-     * and gets item's text. Otherwise calls {@code toString()} on the item.
-     */
-    protected void updateComboItem(ListCell<T> cell, T item, boolean empty) {
+	/**
+	 * Defines the behavior of the button cell.
+	 * <p>
+	 * If it's empty or the item is null, shows the prompt text.
+	 * <p>
+	 * If the item is instanceof {@code Labeled} makes a "screenshot" of the graphic if not null,
+	 * and gets item's text. Otherwise calls {@code toString()} on the item.
+	 */
+	protected void updateComboItem(ListCell<T> cell, T item, boolean empty) {
 
-        if (empty || item == null) {
-            cell.setGraphic(null);
-            cell.setText(getPromptText());
-            return;
-        }
+		if (empty || item == null) {
+			cell.setGraphic(null);
+			cell.setText(getPromptText());
+			return;
+		}
 
-        if (item instanceof Labeled) {
-            Labeled nodeItem = (Labeled) item;
-            if (nodeItem.getGraphic() != null) {
-                cell.setGraphic(new MFXSnapshotWrapper(nodeItem.getGraphic()).getGraphic());
-            }
-            cell.setText(nodeItem.getText());
-        } else {
-            cell.setText(item.toString());
-        }
-    }
+		if (item instanceof Labeled) {
+			Labeled nodeItem = (Labeled) item;
+			if (nodeItem.getGraphic() != null) {
+				cell.setGraphic(new MFXSnapshotWrapper(nodeItem.getGraphic()).getGraphic());
+			}
+			cell.setText(nodeItem.getText());
+		} else {
+			cell.setText(item.toString());
+		}
+	}
 
-    //================================================================================
-    // Styleable Properties
-    //================================================================================
-    private final StyleableObjectProperty<Paint> lineColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.LINE_COLOR,
-            this,
-            "lineColor",
-            Color.rgb(50, 120, 220)
-    );
+	//================================================================================
+	// Styleable Properties
+	//================================================================================
+	private final StyleableObjectProperty<Paint> lineColor = new SimpleStyleableObjectProperty<>(
+			StyleableProperties.LINE_COLOR,
+			this,
+			"lineColor",
+			Color.rgb(50, 120, 220)
+	);
 
-    private final StyleableObjectProperty<Paint> unfocusedLineColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.UNFOCUSED_LINE_COLOR,
-            this,
-            "unfocusedLineColor",
-            Color.rgb(77, 77, 77)
-    );
+	private final StyleableObjectProperty<Paint> unfocusedLineColor = new SimpleStyleableObjectProperty<>(
+			StyleableProperties.UNFOCUSED_LINE_COLOR,
+			this,
+			"unfocusedLineColor",
+			Color.rgb(77, 77, 77)
+	);
 
-    private final StyleableDoubleProperty lineStrokeWidth = new SimpleStyleableDoubleProperty(
-            StyleableProperties.LINE_STROKE_WIDTH,
-            this,
-            "lineStrokeWidth",
-            2.0
-    );
+	private final StyleableDoubleProperty lineStrokeWidth = new SimpleStyleableDoubleProperty(
+			StyleableProperties.LINE_STROKE_WIDTH,
+			this,
+			"lineStrokeWidth",
+			2.0
+	);
 
-    private final StyleableObjectProperty<StrokeLineCap> lineStrokeCap = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.LINE_STROKE_CAP,
-            this,
-            "lineStrokeCap",
-            StrokeLineCap.ROUND
-    );
+	private final StyleableObjectProperty<StrokeLineCap> lineStrokeCap = new SimpleStyleableObjectProperty<>(
+			StyleableProperties.LINE_STROKE_CAP,
+			this,
+			"lineStrokeCap",
+			StrokeLineCap.ROUND
+	);
 
-    private final StyleableBooleanProperty animateLines = new SimpleStyleableBooleanProperty(
-            StyleableProperties.ANIMATE_LINES,
-            this,
-            "animateLines",
-            true
-    );
+	private final StyleableBooleanProperty animateLines = new SimpleStyleableBooleanProperty(
+			StyleableProperties.ANIMATE_LINES,
+			this,
+			"animateLines",
+			true
+	);
 
-    private final StyleableBooleanProperty isValidated = new SimpleStyleableBooleanProperty(
-            StyleableProperties.IS_VALIDATED,
-            this,
-            "isValidated",
-            false
-    );
+	private final StyleableBooleanProperty isValidated = new SimpleStyleableBooleanProperty(
+			StyleableProperties.IS_VALIDATED,
+			this,
+			"isValidated",
+			false
+	);
 
-    public Paint getLineColor() {
-        return lineColor.get();
-    }
+	public Paint getLineColor() {
+		return lineColor.get();
+	}
 
-    /**
-     * Specifies the line's color when the control is focused.
-     */
-    public StyleableObjectProperty<Paint> lineColorProperty() {
-        return lineColor;
-    }
+	/**
+	 * Specifies the line's color when the control is focused.
+	 */
+	public StyleableObjectProperty<Paint> lineColorProperty() {
+		return lineColor;
+	}
 
-    public void setLineColor(Paint lineColor) {
-        this.lineColor.set(lineColor);
-    }
+	public void setLineColor(Paint lineColor) {
+		this.lineColor.set(lineColor);
+	}
 
-    public Paint getUnfocusedLineColor() {
-        return unfocusedLineColor.get();
-    }
+	public Paint getUnfocusedLineColor() {
+		return unfocusedLineColor.get();
+	}
 
-    /**
-     * Specifies the line's color when the control is not focused.
-     */
-    public StyleableObjectProperty<Paint> unfocusedLineColorProperty() {
-        return unfocusedLineColor;
-    }
+	/**
+	 * Specifies the line's color when the control is not focused.
+	 */
+	public StyleableObjectProperty<Paint> unfocusedLineColorProperty() {
+		return unfocusedLineColor;
+	}
 
-    public void setUnfocusedLineColor(Paint unfocusedLineColor) {
-        this.unfocusedLineColor.set(unfocusedLineColor);
-    }
+	public void setUnfocusedLineColor(Paint unfocusedLineColor) {
+		this.unfocusedLineColor.set(unfocusedLineColor);
+	}
 
-    public double getLineStrokeWidth() {
-        return lineStrokeWidth.get();
-    }
+	public double getLineStrokeWidth() {
+		return lineStrokeWidth.get();
+	}
 
-    /**
-     * Specifies the lines' stroke width.
-     */
-    public StyleableDoubleProperty lineStrokeWidthProperty() {
-        return lineStrokeWidth;
-    }
+	/**
+	 * Specifies the lines' stroke width.
+	 */
+	public StyleableDoubleProperty lineStrokeWidthProperty() {
+		return lineStrokeWidth;
+	}
 
-    public void setLineStrokeWidth(double lineStrokeWidth) {
-        this.lineStrokeWidth.set(lineStrokeWidth);
-    }
+	public void setLineStrokeWidth(double lineStrokeWidth) {
+		this.lineStrokeWidth.set(lineStrokeWidth);
+	}
 
-    public StrokeLineCap getLineStrokeCap() {
-        return lineStrokeCap.get();
-    }
+	public StrokeLineCap getLineStrokeCap() {
+		return lineStrokeCap.get();
+	}
 
-    /**
-     * Specifies the lines' stroke cap.
-     */
-    public StyleableObjectProperty<StrokeLineCap> lineStrokeCapProperty() {
-        return lineStrokeCap;
-    }
+	/**
+	 * Specifies the lines' stroke cap.
+	 */
+	public StyleableObjectProperty<StrokeLineCap> lineStrokeCapProperty() {
+		return lineStrokeCap;
+	}
 
-    public void setLineStrokeCap(StrokeLineCap lineStrokeCap) {
-        this.lineStrokeCap.set(lineStrokeCap);
-    }
+	public void setLineStrokeCap(StrokeLineCap lineStrokeCap) {
+		this.lineStrokeCap.set(lineStrokeCap);
+	}
 
-    public boolean isAnimateLines() {
-        return animateLines.get();
-    }
+	public boolean isAnimateLines() {
+		return animateLines.get();
+	}
 
-    /**
-     * Specifies if the lines switch between focus/un-focus should be animated.
-     */
-    public StyleableBooleanProperty animateLinesProperty() {
-        return animateLines;
-    }
+	/**
+	 * Specifies if the lines switch between focus/un-focus should be animated.
+	 */
+	public StyleableBooleanProperty animateLinesProperty() {
+		return animateLines;
+	}
 
-    public void setAnimateLines(boolean animateLines) {
-        this.animateLines.set(animateLines);
-    }
+	public void setAnimateLines(boolean animateLines) {
+		this.animateLines.set(animateLines);
+	}
 
-    public boolean isValidated() {
-        return isValidated.get();
-    }
+	public boolean isValidated() {
+		return isValidated.get();
+	}
 
-    /**
-     * Specifies if validation is required for the control.
-     */
-    public StyleableBooleanProperty isValidatedProperty() {
-        return isValidated;
-    }
+	/**
+	 * Specifies if validation is required for the control.
+	 */
+	public StyleableBooleanProperty isValidatedProperty() {
+		return isValidated;
+	}
 
-    public void setValidated(boolean isValidated) {
-        this.isValidated.set(isValidated);
-    }
+	public void setValidated(boolean isValidated) {
+		this.isValidated.set(isValidated);
+	}
 
-    //================================================================================
-    // CssMetaData
-    //================================================================================
-    private static class StyleableProperties {
-        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+	//================================================================================
+	// CssMetaData
+	//================================================================================
+	private static class StyleableProperties {
+		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
-        private static final CssMetaData<MFXLegacyComboBox<?>, Paint> LINE_COLOR =
-                FACTORY.createPaintCssMetaData(
-                        "-mfx-line-color",
-                        MFXLegacyComboBox::lineColorProperty,
-                        Color.rgb(50, 120, 220)
-                );
+		private static final CssMetaData<MFXLegacyComboBox<?>, Paint> LINE_COLOR =
+				FACTORY.createPaintCssMetaData(
+						"-mfx-line-color",
+						MFXLegacyComboBox::lineColorProperty,
+						Color.rgb(50, 120, 220)
+				);
 
-        private static final CssMetaData<MFXLegacyComboBox<?>, Paint> UNFOCUSED_LINE_COLOR =
-                FACTORY.createPaintCssMetaData(
-                        "-mfx-unfocused-line-color",
-                        MFXLegacyComboBox::unfocusedLineColorProperty,
-                        Color.rgb(77, 77, 77)
-                );
+		private static final CssMetaData<MFXLegacyComboBox<?>, Paint> UNFOCUSED_LINE_COLOR =
+				FACTORY.createPaintCssMetaData(
+						"-mfx-unfocused-line-color",
+						MFXLegacyComboBox::unfocusedLineColorProperty,
+						Color.rgb(77, 77, 77)
+				);
 
-        private final static CssMetaData<MFXLegacyComboBox<?>, Number> LINE_STROKE_WIDTH =
-                FACTORY.createSizeCssMetaData(
-                        "-mfx-line-stroke-width",
-                        MFXLegacyComboBox::lineStrokeWidthProperty,
-                        2.0
-                );
+		private final static CssMetaData<MFXLegacyComboBox<?>, Number> LINE_STROKE_WIDTH =
+				FACTORY.createSizeCssMetaData(
+						"-mfx-line-stroke-width",
+						MFXLegacyComboBox::lineStrokeWidthProperty,
+						2.0
+				);
 
-        private static final CssMetaData<MFXLegacyComboBox<?>, StrokeLineCap> LINE_STROKE_CAP =
-                FACTORY.createEnumCssMetaData(
-                        StrokeLineCap.class,
-                        "-mfx-line-stroke-cap",
-                        MFXLegacyComboBox::lineStrokeCapProperty,
-                        StrokeLineCap.ROUND
-                );
+		private static final CssMetaData<MFXLegacyComboBox<?>, StrokeLineCap> LINE_STROKE_CAP =
+				FACTORY.createEnumCssMetaData(
+						StrokeLineCap.class,
+						"-mfx-line-stroke-cap",
+						MFXLegacyComboBox::lineStrokeCapProperty,
+						StrokeLineCap.ROUND
+				);
 
-        private static final CssMetaData<MFXLegacyComboBox<?>, Boolean> ANIMATE_LINES =
-                FACTORY.createBooleanCssMetaData(
-                        "-mfx-animate-lines",
-                        MFXLegacyComboBox::animateLinesProperty,
-                        true
-                );
+		private static final CssMetaData<MFXLegacyComboBox<?>, Boolean> ANIMATE_LINES =
+				FACTORY.createBooleanCssMetaData(
+						"-mfx-animate-lines",
+						MFXLegacyComboBox::animateLinesProperty,
+						true
+				);
 
-        private static final CssMetaData<MFXLegacyComboBox<?>, Boolean> IS_VALIDATED =
-                FACTORY.createBooleanCssMetaData(
-                        "-mfx-validate",
-                        MFXLegacyComboBox::isValidatedProperty,
-                        false
-                );
+		private static final CssMetaData<MFXLegacyComboBox<?>, Boolean> IS_VALIDATED =
+				FACTORY.createBooleanCssMetaData(
+						"-mfx-validate",
+						MFXLegacyComboBox::isValidatedProperty,
+						false
+				);
 
-        static {
-            List<CssMetaData<? extends Styleable, ?>> lcbCssMetaData = new ArrayList<>(ComboBox.getClassCssMetaData());
-            Collections.addAll(lcbCssMetaData, ANIMATE_LINES, LINE_COLOR, UNFOCUSED_LINE_COLOR, LINE_STROKE_WIDTH, LINE_STROKE_CAP, IS_VALIDATED);
-            cssMetaDataList = Collections.unmodifiableList(lcbCssMetaData);
-        }
+		static {
+			List<CssMetaData<? extends Styleable, ?>> lcbCssMetaData = new ArrayList<>(ComboBox.getClassCssMetaData());
+			Collections.addAll(lcbCssMetaData, ANIMATE_LINES, LINE_COLOR, UNFOCUSED_LINE_COLOR, LINE_STROKE_WIDTH, LINE_STROKE_CAP, IS_VALIDATED);
+			cssMetaDataList = Collections.unmodifiableList(lcbCssMetaData);
+		}
 
-    }
+	}
 
-    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
-        return StyleableProperties.cssMetaDataList;
-    }
+	public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
+		return StyleableProperties.cssMetaDataList;
+	}
 
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        return new MFXLegacyComboBoxSkin<>(this);
-    }
+	//================================================================================
+	// Override Methods
+	//================================================================================
+	@Override
+	protected Skin<?> createDefaultSkin() {
+		return new MFXLegacyComboBoxSkin<>(this);
+	}
 
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
+	@Override
+	public String getUserAgentStylesheet() {
+		return STYLESHEET;
+	}
 
-    @Override
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return MFXLegacyComboBox.getControlCssMetaDataList();
-    }
+	@Override
+	public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+		return MFXLegacyComboBox.getControlCssMetaDataList();
+	}
 }

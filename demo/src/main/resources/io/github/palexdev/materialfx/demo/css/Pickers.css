@@ -66,8 +66,8 @@
 #custDatePicker .date-picker-popup .months-combo .virtual-flow,
 #custDatePicker .date-picker-popup .years-combo .virtual-flow {
 	-track-color: derive(#007BF6, 100%);
-    -thumb-color: derive(#007BF6, 70%);
-    -thumb-hover-color: derive(#007BF6, 45%);
+	-thumb-color: derive(#007BF6, 70%);
+	-thumb-hover-color: derive(#007BF6, 45%);
 }
 
 #custDatePicker .date-picker-popup .months-combo .virtual-flow .mfx-combo-box-cell,

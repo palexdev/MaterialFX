@@ -491,63 +491,63 @@ public class MFXTextField extends TextField implements Validated, MFXMenuControl
 
 	/**
 	 * Specifies whether selection is allowed.
-     */
-    public BooleanProperty selectableProperty() {
-        return selectable;
-    }
+	 */
+	public BooleanProperty selectableProperty() {
+		return selectable;
+	}
 
-    public void setSelectable(boolean selectable) {
-        this.selectable.set(selectable);
-    }
+	public void setSelectable(boolean selectable) {
+		this.selectable.set(selectable);
+	}
 
-    public Node getLeadingIcon() {
-        return leadingIcon.get();
-    }
+	public Node getLeadingIcon() {
+		return leadingIcon.get();
+	}
 
-    /**
-     * Specifies the icon placed before the input field.
-     */
-    public ObjectProperty<Node> leadingIconProperty() {
-        return leadingIcon;
-    }
+	/**
+	 * Specifies the icon placed before the input field.
+	 */
+	public ObjectProperty<Node> leadingIconProperty() {
+		return leadingIcon;
+	}
 
-    public void setLeadingIcon(Node leadingIcon) {
-        this.leadingIcon.set(leadingIcon);
-    }
+	public void setLeadingIcon(Node leadingIcon) {
+		this.leadingIcon.set(leadingIcon);
+	}
 
-    public Node getTrailingIcon() {
-        return trailingIcon.get();
-    }
+	public Node getTrailingIcon() {
+		return trailingIcon.get();
+	}
 
-    /**
-     * Specifies the icon placed after the input field.
-     */
-    public ObjectProperty<Node> trailingIconProperty() {
-        return trailingIcon;
-    }
+	/**
+	 * Specifies the icon placed after the input field.
+	 */
+	public ObjectProperty<Node> trailingIconProperty() {
+		return trailingIcon;
+	}
 
-    public void setTrailingIcon(Node trailingIcon) {
-        this.trailingIcon.set(trailingIcon);
-    }
+	public void setTrailingIcon(Node trailingIcon) {
+		this.trailingIcon.set(trailingIcon);
+	}
 
-    public String getFloatingText() {
-        return floatingText.get();
-    }
+	public String getFloatingText() {
+		return floatingText.get();
+	}
 
-    /**
-     * Specifies the text of the floating text node.
-     */
-    public StringProperty floatingTextProperty() {
-        return floatingText;
-    }
+	/**
+	 * Specifies the text of the floating text node.
+	 */
+	public StringProperty floatingTextProperty() {
+		return floatingText;
+	}
 
-    public void setFloatingText(String floatingText) {
-        this.floatingText.set(floatingText);
-    }
+	public void setFloatingText(String floatingText) {
+		this.floatingText.set(floatingText);
+	}
 
-    public boolean isFloating() {
-        return floating.get();
-    }
+	public boolean isFloating() {
+		return floating.get();
+	}
 
 	/**
 	 * Specifies if the floating text node is currently floating or not.
@@ -686,23 +686,23 @@ public class MFXTextField extends TextField implements Validated, MFXMenuControl
 	 * Specifies whether the caret should be visible.
 	 */
 	public StyleableBooleanProperty caretVisibleProperty() {
-        return caretVisible;
-    }
+		return caretVisible;
+	}
 
-    public void setCaretVisible(boolean caretVisible) {
-        this.caretVisible.set(caretVisible);
-    }
+	public void setCaretVisible(boolean caretVisible) {
+		this.caretVisible.set(caretVisible);
+	}
 
-    public FloatMode getFloatMode() {
-        return floatMode.get();
-    }
+	public FloatMode getFloatMode() {
+		return floatMode.get();
+	}
 
-    /**
-     * Specifies how the floating text is positioned when floating.
-     */
-    public StyleableObjectProperty<FloatMode> floatModeProperty() {
-	    return floatMode;
-    }
+	/**
+	 * Specifies how the floating text is positioned when floating.
+	 */
+	public StyleableObjectProperty<FloatMode> floatModeProperty() {
+		return floatMode;
+	}
 
 	public void setFloatMode(FloatMode floatMode) {
 		this.floatMode.set(floatMode);
@@ -760,116 +760,116 @@ public class MFXTextField extends TextField implements Validated, MFXMenuControl
 	 */
 	public StyleableObjectProperty<Color> textFillProperty() {
 		return textFill;
-    }
+	}
 
-    public void setTextFill(Color textFill) {
-        this.textFill.set(textFill);
-    }
+	public void setTextFill(Color textFill) {
+		this.textFill.set(textFill);
+	}
 
-    public int getTextLimit() {
-        return textLimit.get();
-    }
+	public int getTextLimit() {
+		return textLimit.get();
+	}
 
-    /**
-     * Specifies the maximum number of characters the field's text can have.
-     */
-    public StyleableIntegerProperty textLimitProperty() {
-        return textLimit;
-    }
+	/**
+	 * Specifies the maximum number of characters the field's text can have.
+	 */
+	public StyleableIntegerProperty textLimitProperty() {
+		return textLimit;
+	}
 
-    public void setTextLimit(int textLimit) {
-        this.textLimit.set(textLimit);
-    }
+	public void setTextLimit(int textLimit) {
+		this.textLimit.set(textLimit);
+	}
 
-    //================================================================================
-    // CssMetaData
-    //================================================================================
-    private static class StyleableProperties {
-        private static final StyleablePropertyFactory<MFXTextField> FACTORY = new StyleablePropertyFactory<>(TextField.getClassCssMetaData());
-        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+	//================================================================================
+	// CssMetaData
+	//================================================================================
+	private static class StyleableProperties {
+		private static final StyleablePropertyFactory<MFXTextField> FACTORY = new StyleablePropertyFactory<>(TextField.getClassCssMetaData());
+		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
-        private static final CssMetaData<MFXTextField, Boolean> ANIMATED =
-                FACTORY.createBooleanCssMetaData(
-                        "-mfx-animated",
-                        MFXTextField::animatedProperty,
-                        true
-                );
+		private static final CssMetaData<MFXTextField, Boolean> ANIMATED =
+				FACTORY.createBooleanCssMetaData(
+						"-mfx-animated",
+						MFXTextField::animatedProperty,
+						true
+				);
 
-	    private static final CssMetaData<MFXTextField, Number> BORDER_GAP =
-			    FACTORY.createSizeCssMetaData(
-					    "-mfx-border-gap",
-					    MFXTextField::borderGapProperty,
-					    10.0
-			    );
+		private static final CssMetaData<MFXTextField, Number> BORDER_GAP =
+				FACTORY.createSizeCssMetaData(
+						"-mfx-border-gap",
+						MFXTextField::borderGapProperty,
+						10.0
+				);
 
-        private static final CssMetaData<MFXTextField, Boolean> CARET_VISIBLE =
-                FACTORY.createBooleanCssMetaData(
-                        "-mfx-caret-animated",
-                        MFXTextField::caretVisibleProperty,
-                        true
-                );
+		private static final CssMetaData<MFXTextField, Boolean> CARET_VISIBLE =
+				FACTORY.createBooleanCssMetaData(
+						"-mfx-caret-animated",
+						MFXTextField::caretVisibleProperty,
+						true
+				);
 
-        private static final CssMetaData<MFXTextField, Boolean> EDITABLE =
-                FACTORY.createBooleanCssMetaData(
-                        "-mfx-editable",
-                        MFXTextField::allowEditProperty,
-                        true
-                );
+		private static final CssMetaData<MFXTextField, Boolean> EDITABLE =
+				FACTORY.createBooleanCssMetaData(
+						"-mfx-editable",
+						MFXTextField::allowEditProperty,
+						true
+				);
 
-        private static final CssMetaData<MFXTextField, FloatMode> FLOAT_MODE =
-                FACTORY.createEnumCssMetaData(
-                        FloatMode.class,
-                        "-mfx-float-mode",
-                        MFXTextField::floatModeProperty,
-                        FloatMode.INLINE
-                );
+		private static final CssMetaData<MFXTextField, FloatMode> FLOAT_MODE =
+				FACTORY.createEnumCssMetaData(
+						FloatMode.class,
+						"-mfx-float-mode",
+						MFXTextField::floatModeProperty,
+						FloatMode.INLINE
+				);
 
-	    private static final CssMetaData<MFXTextField, Number> FLOATING_TEXT_GAP =
-			    FACTORY.createSizeCssMetaData(
-					    "-mfx-gap",
-					    MFXTextField::floatingTextGapProperty,
-					    5.0
-			    );
+		private static final CssMetaData<MFXTextField, Number> FLOATING_TEXT_GAP =
+				FACTORY.createSizeCssMetaData(
+						"-mfx-gap",
+						MFXTextField::floatingTextGapProperty,
+						5.0
+				);
 
-	    private static final CssMetaData<MFXTextField, Number> GRAPHIC_TEXT_GAP =
-			    FACTORY.createSizeCssMetaData(
-					    "-fx-graphic-text-gap",
-					    MFXTextField::graphicTextGapProperty,
-					    10.0
-			    );
+		private static final CssMetaData<MFXTextField, Number> GRAPHIC_TEXT_GAP =
+				FACTORY.createSizeCssMetaData(
+						"-fx-graphic-text-gap",
+						MFXTextField::graphicTextGapProperty,
+						10.0
+				);
 
-	    private static final CssMetaData<MFXTextField, Boolean> SCALE_ON_ABOVE =
-			    FACTORY.createBooleanCssMetaData(
-					    "-mfx-scale-on-above",
-					    MFXTextField::scaleOnAboveProperty,
-					    false
-			    );
+		private static final CssMetaData<MFXTextField, Boolean> SCALE_ON_ABOVE =
+				FACTORY.createBooleanCssMetaData(
+						"-mfx-scale-on-above",
+						MFXTextField::scaleOnAboveProperty,
+						false
+				);
 
-	    private static final CssMetaData<MFXTextField, Color> TEXT_FILL =
-			    FACTORY.createColorCssMetaData(
-					    "-fx-text-fill",
-					    MFXTextField::textFillProperty,
-					    DEFAULT_TEXT_COLOR
-			    );
+		private static final CssMetaData<MFXTextField, Color> TEXT_FILL =
+				FACTORY.createColorCssMetaData(
+						"-fx-text-fill",
+						MFXTextField::textFillProperty,
+						DEFAULT_TEXT_COLOR
+				);
 
-	    private static final CssMetaData<MFXTextField, Number> TEXT_LIMIT =
-			    FACTORY.createSizeCssMetaData(
-                        "-mfx-text-limit",
-                        MFXTextField::textLimitProperty,
-                        -1
-                );
+		private static final CssMetaData<MFXTextField, Number> TEXT_LIMIT =
+				FACTORY.createSizeCssMetaData(
+						"-mfx-text-limit",
+						MFXTextField::textLimitProperty,
+						-1
+				);
 
-        static {
-            cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
-		            TextField.getClassCssMetaData(),
-		            ANIMATED, CARET_VISIBLE, BORDER_GAP,
-		            EDITABLE, FLOAT_MODE, FLOATING_TEXT_GAP, GRAPHIC_TEXT_GAP,
-		            SCALE_ON_ABOVE, TEXT_FILL, TEXT_LIMIT
-            );
-        }
-    }
+		static {
+			cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
+					TextField.getClassCssMetaData(),
+					ANIMATED, CARET_VISIBLE, BORDER_GAP,
+					EDITABLE, FLOAT_MODE, FLOATING_TEXT_GAP, GRAPHIC_TEXT_GAP,
+					SCALE_ON_ABOVE, TEXT_FILL, TEXT_LIMIT
+			);
+		}
+	}
 
-    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
-        return StyleableProperties.cssMetaDataList;
-    }
+	public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
+		return StyleableProperties.cssMetaDataList;
+	}
 }

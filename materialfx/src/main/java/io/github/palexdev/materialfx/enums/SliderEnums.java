@@ -25,19 +25,19 @@ import io.github.palexdev.materialfx.controls.MFXSlider;
  */
 public class SliderEnums {
 
-    private SliderEnums() {}
+	private SliderEnums() {}
 
-    /**
-     * Enumeration to specify the snap behavior of {@link MFXSlider}.
-     */
-    public enum SliderMode {
-        DEFAULT, SNAP_TO_TICKS
-    }
+	/**
+	 * Enumeration to specify the snap behavior of {@link MFXSlider}.
+	 */
+	public enum SliderMode {
+		DEFAULT, SNAP_TO_TICKS
+	}
 
-    /**
-     * Enumeration to specify on which side to show the {@link MFXSlider}'s popup.
-     */
-    public enum SliderPopupSide {
-        DEFAULT, OTHER_SIDE
-    }
+	/**
+	 * Enumeration to specify on which side to show the {@link MFXSlider}'s popup.
+	 */
+	public enum SliderPopupSide {
+		DEFAULT, OTHER_SIDE
+	}
 }

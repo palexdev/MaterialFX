@@ -117,128 +117,128 @@ import java.util.function.Predicate;
  * @param <T>
  */
 public class MFXFilterPane<T> extends Control {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final String STYLE_CLASS = "mfx-filter-pane";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXFilterPane.css");
-    private final StringProperty headerText = new SimpleStringProperty("Filters");
-    private final ObservableList<AbstractFilter<T, ?>> filters = FXCollections.observableArrayList();
-    private final ObservableList<FilterBean<T, ?>> activeFilters = FXCollections.observableArrayList();
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final String STYLE_CLASS = "mfx-filter-pane";
+	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXFilterPane.css");
+	private final StringProperty headerText = new SimpleStringProperty("Filters");
+	private final ObservableList<AbstractFilter<T, ?>> filters = FXCollections.observableArrayList();
+	private final ObservableList<FilterBean<T, ?>> activeFilters = FXCollections.observableArrayList();
 
-    private EventHandler<MouseEvent> onFilter = event -> {};
-    private EventHandler<MouseEvent> onReset = event -> {};
+	private EventHandler<MouseEvent> onFilter = event -> {};
+	private EventHandler<MouseEvent> onReset = event -> {};
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXFilterPane() {
-        initialize();
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXFilterPane() {
+		initialize();
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
-    private void initialize() {
-        getStyleClass().add(STYLE_CLASS);
-    }
+	//================================================================================
+	// Methods
+	//================================================================================
+	private void initialize() {
+		getStyleClass().add(STYLE_CLASS);
+	}
 
-    /**
-     * Builds a predicate from the list of built filters (active filters).
-     * <p></p>
-     * The {@link FilterBean} are chained by using {@link PredicateUtils#chain(Predicate, Predicate, ChainMode)}.
-     * <p></p>
-     * If the list is empty by default a predicate that always returns true is built.
-     */
-    public Predicate<T> filter() {
-        Predicate<T> filter = null;
-        ChainMode mode = null;
+	/**
+	 * Builds a predicate from the list of built filters (active filters).
+	 * <p></p>
+	 * The {@link FilterBean} are chained by using {@link PredicateUtils#chain(Predicate, Predicate, ChainMode)}.
+	 * <p></p>
+	 * If the list is empty by default a predicate that always returns true is built.
+	 */
+	public Predicate<T> filter() {
+		Predicate<T> filter = null;
+		ChainMode mode = null;
 
-        for (FilterBean<T, ?> activeFilter : activeFilters) {
-            if (filter == null) {
-                filter = activeFilter.predicate();
-                mode = activeFilter.getMode();
-                continue;
-            }
+		for (FilterBean<T, ?> activeFilter : activeFilters) {
+			if (filter == null) {
+				filter = activeFilter.predicate();
+				mode = activeFilter.getMode();
+				continue;
+			}
 
-            filter = PredicateUtils.chain(filter, activeFilter.predicate(), mode);
-            mode = activeFilter.getMode();
-        }
+			filter = PredicateUtils.chain(filter, activeFilter.predicate(), mode);
+			mode = activeFilter.getMode();
+		}
 
-        return filter != null ? filter : t -> true;
-    }
+		return filter != null ? filter : t -> true;
+	}
 
-    //================================================================================
-    // Getters/Setters
-    //================================================================================
-    public String getHeaderText() {
-        return headerText.get();
-    }
+	//================================================================================
+	// Getters/Setters
+	//================================================================================
+	public String getHeaderText() {
+		return headerText.get();
+	}
 
-    /**
-     * Specifies the text of the header.
-     */
-    public StringProperty headerTextProperty() {
-        return headerText;
-    }
+	/**
+	 * Specifies the text of the header.
+	 */
+	public StringProperty headerTextProperty() {
+		return headerText;
+	}
 
-    public void setHeaderText(String headerText) {
-        this.headerText.set(headerText);
-    }
+	public void setHeaderText(String headerText) {
+		this.headerText.set(headerText);
+	}
 
-    /**
-     * @return the list of {@link AbstractFilter}s. Each of them
-     * represents an object's field o  which the filter operates
-     */
-    public ObservableList<AbstractFilter<T, ?>> getFilters() {
-        return filters;
-    }
+	/**
+	 * @return the list of {@link AbstractFilter}s. Each of them
+	 * represents an object's field o  which the filter operates
+	 */
+	public ObservableList<AbstractFilter<T, ?>> getFilters() {
+		return filters;
+	}
 
-    /**
-     * @return the list of built filters
-     */
-    public ObservableList<FilterBean<T, ?>> getActiveFilters() {
-        return activeFilters;
-    }
+	/**
+	 * @return the list of built filters
+	 */
+	public ObservableList<FilterBean<T, ?>> getActiveFilters() {
+		return activeFilters;
+	}
 
-    /**
-     * @return the action invoked when clicking on the filter icon
-     */
-    public EventHandler<MouseEvent> getOnFilter() {
-        return onFilter;
-    }
+	/**
+	 * @return the action invoked when clicking on the filter icon
+	 */
+	public EventHandler<MouseEvent> getOnFilter() {
+		return onFilter;
+	}
 
-    /**
-     * Sets the action to perform when the filter icon is clicked.
-     */
-    public void setOnFilter(EventHandler<MouseEvent> onFilter) {
-        this.onFilter = onFilter;
-    }
+	/**
+	 * Sets the action to perform when the filter icon is clicked.
+	 */
+	public void setOnFilter(EventHandler<MouseEvent> onFilter) {
+		this.onFilter = onFilter;
+	}
 
-    /**
-     * @return the action invoked when clicking on the reset icon
-     */
-    public EventHandler<MouseEvent> getOnReset() {
-        return onReset;
-    }
+	/**
+	 * @return the action invoked when clicking on the reset icon
+	 */
+	public EventHandler<MouseEvent> getOnReset() {
+		return onReset;
+	}
 
-    /**
-     * Sets the action to perform when the reset icon is clicked.
-     */
-    public void setOnReset(EventHandler<MouseEvent> onReset) {
-        this.onReset = onReset;
-    }
+	/**
+	 * Sets the action to perform when the reset icon is clicked.
+	 */
+	public void setOnReset(EventHandler<MouseEvent> onReset) {
+		this.onReset = onReset;
+	}
 
-    //================================================================================
-    // Overridden Methods
-    //================================================================================
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        return new MFXFilterPaneSkin<>(this);
-    }
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
+	@Override
+	protected Skin<?> createDefaultSkin() {
+		return new MFXFilterPaneSkin<>(this);
+	}
 
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
+	@Override
+	public String getUserAgentStylesheet() {
+		return STYLESHEET;
+	}
 }

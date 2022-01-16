@@ -16,29 +16,29 @@ import java.util.stream.Stream;
  */
 public class FXCollectors {
 
-    private FXCollectors() {}
+	private FXCollectors() {}
 
-    /**
-     * @return a collector that returns an {@link ObservableSet}
-     */
-    public static <T> Collector<T, ?, ObservableSet<T>> toSet() {
-        return Collectors.collectingAndThen(Collectors.toSet(), FXCollections::observableSet);
-    }
+	/**
+	 * @return a collector that returns an {@link ObservableSet}
+	 */
+	public static <T> Collector<T, ?, ObservableSet<T>> toSet() {
+		return Collectors.collectingAndThen(Collectors.toSet(), FXCollections::observableSet);
+	}
 
-    /**
-     * @return a collector that returns an {@link ObservableList}
-     */
-    public static <T> Collector<T, ?, ObservableList<T>> toList() {
-        return Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList);
-    }
+	/**
+	 * @return a collector that returns an {@link ObservableList}
+	 */
+	public static <T> Collector<T, ?, ObservableList<T>> toList() {
+		return Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList);
+	}
 
-    /**
-     * @return a collector that returns an {@link ObservableMap}
-     */
-    public static <T, K, U> Collector<T, ?, ObservableMap<K, U>> toMap(
-            Function<T, K> keyMapper,
-            Function<T, U> valueMapper
-    ) {
-        return Collectors.collectingAndThen(Collectors.toMap(keyMapper, valueMapper), FXCollections::observableMap);
-    }
+	/**
+	 * @return a collector that returns an {@link ObservableMap}
+	 */
+	public static <T, K, U> Collector<T, ?, ObservableMap<K, U>> toMap(
+			Function<T, K> keyMapper,
+			Function<T, U> valueMapper
+	) {
+		return Collectors.collectingAndThen(Collectors.toMap(keyMapper, valueMapper), FXCollections::observableMap);
+	}
 }

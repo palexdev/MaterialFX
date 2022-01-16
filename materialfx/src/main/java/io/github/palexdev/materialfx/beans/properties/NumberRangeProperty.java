@@ -49,31 +49,31 @@ public class NumberRangeProperty<T extends Number> extends SimpleObjectProperty<
 		return get() == null ? null : get().getMin();
 	}
 
-    /**
-     * Convenience method to set a range with both min and max equal.
-     */
-    public void setRange(T value) {
-        set(NumberRange.of(value));
-    }
+	/**
+	 * Convenience method to set a range with both min and max equal.
+	 */
+	public void setRange(T value) {
+		set(NumberRange.of(value));
+	}
 
-    /**
-     * Convenience method to set a range with the given min and max values.
-     */
-    public void setRange(T min, T max) {
-        set(NumberRange.of(min, max));
-    }
+	/**
+	 * Convenience method to set a range with the given min and max values.
+	 */
+	public void setRange(T min, T max) {
+		set(NumberRange.of(min, max));
+	}
 
-    //================================================================================
-    // Overridden Methods
-    //================================================================================
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
 
-    /**
-     * Overridden to check equality between ranges and return in case ranges are the same.
-     */
-    @Override
-    public void set(NumberRange<T> newValue) {
-        NumberRange<T> oldValue = get();
-        if (newValue.equals(oldValue)) return;
-        super.set(newValue);
-    }
+	/**
+	 * Overridden to check equality between ranges and return in case ranges are the same.
+	 */
+	@Override
+	public void set(NumberRange<T> newValue) {
+		NumberRange<T> oldValue = get();
+		if (newValue.equals(oldValue)) return;
+		super.set(newValue);
+	}
 }

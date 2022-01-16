@@ -19,49 +19,49 @@ import java.util.function.Function;
  */
 public interface INotification {
 
-    /**
-     * @return the notification's content
-     */
-    Region getContent();
+	/**
+	 * @return the notification's content
+	 */
+	Region getContent();
 
-    NotificationState getState();
+	NotificationState getState();
 
-    /**
-     * Specifies the notification's read state.
-     */
-    ObjectProperty<NotificationState> notificationStateProperty();
+	/**
+	 * Specifies the notification's read state.
+	 */
+	ObjectProperty<NotificationState> notificationStateProperty();
 
-    void setNotificationState(NotificationState state);
+	void setNotificationState(NotificationState state);
 
-    /**
-     * @return the created time as a long value, the number of seconds from the Java epoch
-     */
-    long getTime();
+	/**
+	 * @return the created time as a long value, the number of seconds from the Java epoch
+	 */
+	long getTime();
 
-    /**
-     * @return the difference between the current number of seconds from the Java epoch and the created time
-     */
-    long getElapsedTime();
+	/**
+	 * @return the difference between the current number of seconds from the Java epoch and the created time
+	 */
+	long getElapsedTime();
 
-    /**
-     * @return the function used to convert a time in seconds to String
-     */
-    Function<Long, String> getTimeToStringConverter();
+	/**
+	 * @return the function used to convert a time in seconds to String
+	 */
+	Function<Long, String> getTimeToStringConverter();
 
-    /**
-     * Sets the function used to convert a time in seconds to String.
-     */
-    void setTimeToStringConverter(Function<Long, String> converter);
+	/**
+	 * Sets the function used to convert a time in seconds to String.
+	 */
+	void setTimeToStringConverter(Function<Long, String> converter);
 
-    /**
-     * Should be called by a periodic task to inform "someone" that the elapsed time should be updated
-     */
-    void updateElapsed();
+	/**
+	 * Should be called by a periodic task to inform "someone" that the elapsed time should be updated
+	 */
+	void updateElapsed();
 
-    /**
-     * This action is automatically called by {@link #updateElapsed()}, use this to inform "someone" that
-     * the elapsed time should be updated. The action is a {@link BiConsumer} and the inputs are the elapsed seconds
-     * as a long value and the elapsed seconds converted to a String by using the {@link #getTimeToStringConverter()}.
-     */
-    void setOnUpdateElapsed(BiConsumer<Long, String> elapsedConsumer);
+	/**
+	 * This action is automatically called by {@link #updateElapsed()}, use this to inform "someone" that
+	 * the elapsed time should be updated. The action is a {@link BiConsumer} and the inputs are the elapsed seconds
+	 * as a long value and the elapsed seconds converted to a String by using the {@link #getTimeToStringConverter()}.
+	 */
+	void setOnUpdateElapsed(BiConsumer<Long, String> elapsedConsumer);
 }

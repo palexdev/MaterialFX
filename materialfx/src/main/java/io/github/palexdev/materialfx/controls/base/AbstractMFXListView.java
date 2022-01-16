@@ -50,140 +50,140 @@ public abstract class AbstractMFXListView<T, C extends Cell<T>> extends Control 
 	protected final ObjectProperty<StringConverter<T>> converter = new SimpleObjectProperty<>();
 	protected final IMultipleSelectionModel<T> selectionModel = new MultipleSelectionModel<>(items);
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public AbstractMFXListView() {}
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public AbstractMFXListView() {}
 
-    public AbstractMFXListView(ObservableList<T> items) {
-        setItems(items);
-    }
+	public AbstractMFXListView(ObservableList<T> items) {
+		setItems(items);
+	}
 
-    //================================================================================
-    // Abstract Methods
-    //================================================================================
+	//================================================================================
+	// Abstract Methods
+	//================================================================================
 
-    /**
-     * Abstract method called automatically to set a default factory for the cells.
-     */
-    protected abstract void setDefaultCellFactory();
+	/**
+	 * Abstract method called automatically to set a default factory for the cells.
+	 */
+	protected abstract void setDefaultCellFactory();
 
-    //================================================================================
-    // Methods
-    //================================================================================
-    protected void initialize() {
-        setDefaultCellFactory();
-        addBarsListeners();
-    }
+	//================================================================================
+	// Methods
+	//================================================================================
+	protected void initialize() {
+		setDefaultCellFactory();
+		addBarsListeners();
+	}
 
-    protected void addBarsListeners() {
-        this.trackColor.addListener((observable, oldValue, newValue) -> {
-            if (!newValue.equals(oldValue)) {
-                setColors();
-            }
-        });
+	protected void addBarsListeners() {
+		this.trackColor.addListener((observable, oldValue, newValue) -> {
+			if (!newValue.equals(oldValue)) {
+				setColors();
+			}
+		});
 
-        this.thumbColor.addListener((observable, oldValue, newValue) -> {
-            if (!newValue.equals(oldValue)) {
-                setColors();
-            }
-        });
+		this.thumbColor.addListener((observable, oldValue, newValue) -> {
+			if (!newValue.equals(oldValue)) {
+				setColors();
+			}
+		});
 
-        this.thumbHoverColor.addListener((observable, oldValue, newValue) -> {
-            if (!newValue.equals(oldValue)) {
-                setColors();
-            }
-        });
-    }
+		this.thumbHoverColor.addListener((observable, oldValue, newValue) -> {
+			if (!newValue.equals(oldValue)) {
+				setColors();
+			}
+		});
+	}
 
-    /**
-     * Sets the CSS looked-up colors
-     */
-    protected void setColors() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("-mfx-track-color: ").append(ColorUtils.toCss(trackColor.get()))
-                .append(";\n-mfx-thumb-color: ").append(ColorUtils.toCss(thumbColor.get()))
-                .append(";\n-mfx-thumb-hover-color: ").append(ColorUtils.toCss(thumbHoverColor.get()))
-                .append(";");
-        setStyle(sb.toString());
-    }
+	/**
+	 * Sets the CSS looked-up colors
+	 */
+	protected void setColors() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("-mfx-track-color: ").append(ColorUtils.toCss(trackColor.get()))
+				.append(";\n-mfx-thumb-color: ").append(ColorUtils.toCss(thumbColor.get()))
+				.append(";\n-mfx-thumb-hover-color: ").append(ColorUtils.toCss(thumbHoverColor.get()))
+				.append(";");
+		setStyle(sb.toString());
+	}
 
-    //================================================================================
-    // ScrollBars Properties
-    //================================================================================
-    private final ObjectProperty<Paint> trackColor = new SimpleObjectProperty<>(Color.rgb(230, 230, 230));
-    private final ObjectProperty<Paint> thumbColor = new SimpleObjectProperty<>(Color.rgb(137, 137, 137));
-    private final ObjectProperty<Paint> thumbHoverColor = new SimpleObjectProperty<>(Color.rgb(89, 88, 91));
-    private final ObjectProperty<Duration> hideAfter = new SimpleObjectProperty<>(Duration.seconds(1));
+	//================================================================================
+	// ScrollBars Properties
+	//================================================================================
+	private final ObjectProperty<Paint> trackColor = new SimpleObjectProperty<>(Color.rgb(230, 230, 230));
+	private final ObjectProperty<Paint> thumbColor = new SimpleObjectProperty<>(Color.rgb(137, 137, 137));
+	private final ObjectProperty<Paint> thumbHoverColor = new SimpleObjectProperty<>(Color.rgb(89, 88, 91));
+	private final ObjectProperty<Duration> hideAfter = new SimpleObjectProperty<>(Duration.seconds(1));
 
-    public Paint getTrackColor() {
-        return trackColor.get();
-    }
+	public Paint getTrackColor() {
+		return trackColor.get();
+	}
 
-    /**
-     * Specifies the color of the scrollbars' track.
-     */
-    public ObjectProperty<Paint> trackColorProperty() {
-        return trackColor;
-    }
+	/**
+	 * Specifies the color of the scrollbars' track.
+	 */
+	public ObjectProperty<Paint> trackColorProperty() {
+		return trackColor;
+	}
 
-    public void setTrackColor(Paint trackColor) {
-        this.trackColor.set(trackColor);
-    }
+	public void setTrackColor(Paint trackColor) {
+		this.trackColor.set(trackColor);
+	}
 
-    public Paint getThumbColor() {
-        return thumbColor.get();
-    }
+	public Paint getThumbColor() {
+		return thumbColor.get();
+	}
 
-    /**
-     * Specifies the color of the scrollbars' thumb.
-     */
-    public ObjectProperty<Paint> thumbColorProperty() {
-        return thumbColor;
-    }
+	/**
+	 * Specifies the color of the scrollbars' thumb.
+	 */
+	public ObjectProperty<Paint> thumbColorProperty() {
+		return thumbColor;
+	}
 
-    public void setThumbColor(Paint thumbColor) {
-        this.thumbColor.set(thumbColor);
-    }
+	public void setThumbColor(Paint thumbColor) {
+		this.thumbColor.set(thumbColor);
+	}
 
-    public Paint getThumbHoverColor() {
-        return thumbHoverColor.get();
-    }
+	public Paint getThumbHoverColor() {
+		return thumbHoverColor.get();
+	}
 
-    /**
-     * Specifies the color of the scrollbars' thumb when mouse hover.
-     */
-    public ObjectProperty<Paint> thumbHoverColorProperty() {
-        return thumbHoverColor;
-    }
+	/**
+	 * Specifies the color of the scrollbars' thumb when mouse hover.
+	 */
+	public ObjectProperty<Paint> thumbHoverColorProperty() {
+		return thumbHoverColor;
+	}
 
-    public void setThumbHoverColor(Paint thumbHoverColor) {
-        this.thumbHoverColor.set(thumbHoverColor);
-    }
+	public void setThumbHoverColor(Paint thumbHoverColor) {
+		this.thumbHoverColor.set(thumbHoverColor);
+	}
 
-    public Duration getHideAfter() {
-        return hideAfter.get();
-    }
+	public Duration getHideAfter() {
+		return hideAfter.get();
+	}
 
-    /**
-     * Specifies the time after which the scrollbars are hidden.
-     */
-    public ObjectProperty<Duration> hideAfterProperty() {
-        return hideAfter;
-    }
+	/**
+	 * Specifies the time after which the scrollbars are hidden.
+	 */
+	public ObjectProperty<Duration> hideAfterProperty() {
+		return hideAfter;
+	}
 
-    public void setHideAfter(Duration hideAfter) {
-        this.hideAfter.set(hideAfter);
-    }
+	public void setHideAfter(Duration hideAfter) {
+		this.hideAfter.set(hideAfter);
+	}
 
 
-    //================================================================================
-    // Getters/Setters
-    //================================================================================
-    @Override
-    public ObservableList<T> getItems() {
-        return items.get();
-    }
+	//================================================================================
+	// Getters/Setters
+	//================================================================================
+	@Override
+	public ObservableList<T> getItems() {
+		return items.get();
+	}
 
 	@Override
 	public ObjectProperty<ObservableList<T>> itemsProperty() {
@@ -219,83 +219,83 @@ public abstract class AbstractMFXListView<T, C extends Cell<T>> extends Control 
 	// Styleable Properties
 	//================================================================================
 	private final StyleableBooleanProperty hideScrollBars = new SimpleStyleableBooleanProperty(
-            StyleableProperties.HIDE_SCROLLBARS,
-            this,
-            "hideScrollBars",
-            false
-    );
+			StyleableProperties.HIDE_SCROLLBARS,
+			this,
+			"hideScrollBars",
+			false
+	);
 
-    private final StyleableObjectProperty<DepthLevel> depthLevel = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.DEPTH_LEVEL,
-            this,
-            "depthLevel",
-            DepthLevel.LEVEL2
-    );
+	private final StyleableObjectProperty<DepthLevel> depthLevel = new SimpleStyleableObjectProperty<>(
+			StyleableProperties.DEPTH_LEVEL,
+			this,
+			"depthLevel",
+			DepthLevel.LEVEL2
+	);
 
-    public boolean isHideScrollBars() {
-        return hideScrollBars.get();
-    }
+	public boolean isHideScrollBars() {
+		return hideScrollBars.get();
+	}
 
-    /**
-     * Specifies if the scrollbars should be hidden when the mouse is not on the list.
-     */
-    public StyleableBooleanProperty hideScrollBarsProperty() {
-        return hideScrollBars;
-    }
+	/**
+	 * Specifies if the scrollbars should be hidden when the mouse is not on the list.
+	 */
+	public StyleableBooleanProperty hideScrollBarsProperty() {
+		return hideScrollBars;
+	}
 
-    public void setHideScrollBars(boolean hideScrollBars) {
-        this.hideScrollBars.set(hideScrollBars);
-    }
+	public void setHideScrollBars(boolean hideScrollBars) {
+		this.hideScrollBars.set(hideScrollBars);
+	}
 
-    public DepthLevel getDepthLevel() {
-        return depthLevel.get();
-    }
+	public DepthLevel getDepthLevel() {
+		return depthLevel.get();
+	}
 
-    /**
-     * Specifies the shadow strength around the control.
-     */
-    public StyleableObjectProperty<DepthLevel> depthLevelProperty() {
-        return depthLevel;
-    }
+	/**
+	 * Specifies the shadow strength around the control.
+	 */
+	public StyleableObjectProperty<DepthLevel> depthLevelProperty() {
+		return depthLevel;
+	}
 
-    public void setDepthLevel(DepthLevel depthLevel) {
-        this.depthLevel.set(depthLevel);
-    }
+	public void setDepthLevel(DepthLevel depthLevel) {
+		this.depthLevel.set(depthLevel);
+	}
 
-    private static class StyleableProperties {
-	    private static final StyleablePropertyFactory<AbstractMFXListView<?, ?>> FACTORY = new StyleablePropertyFactory<>(Control.getClassCssMetaData());
-	    private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+	private static class StyleableProperties {
+		private static final StyleablePropertyFactory<AbstractMFXListView<?, ?>> FACTORY = new StyleablePropertyFactory<>(Control.getClassCssMetaData());
+		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
-        private static final CssMetaData<AbstractMFXListView<?, ?>, Boolean> HIDE_SCROLLBARS =
-                FACTORY.createBooleanCssMetaData(
-                        "-mfx-hide-scrollbars",
-                        AbstractMFXListView::hideScrollBarsProperty,
-                        false
-                );
+		private static final CssMetaData<AbstractMFXListView<?, ?>, Boolean> HIDE_SCROLLBARS =
+				FACTORY.createBooleanCssMetaData(
+						"-mfx-hide-scrollbars",
+						AbstractMFXListView::hideScrollBarsProperty,
+						false
+				);
 
-        private static final CssMetaData<AbstractMFXListView<?, ?>, DepthLevel> DEPTH_LEVEL =
-                FACTORY.createEnumCssMetaData(
-                        DepthLevel.class,
-                        "-mfx-depth-level",
-                        AbstractMFXListView::depthLevelProperty,
-                        DepthLevel.LEVEL2
-                );
+		private static final CssMetaData<AbstractMFXListView<?, ?>, DepthLevel> DEPTH_LEVEL =
+				FACTORY.createEnumCssMetaData(
+						DepthLevel.class,
+						"-mfx-depth-level",
+						AbstractMFXListView::depthLevelProperty,
+						DepthLevel.LEVEL2
+				);
 
 
-        static {
-	        cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
-			        Control.getClassCssMetaData(),
-			        HIDE_SCROLLBARS, DEPTH_LEVEL
-	        );
-        }
-    }
+		static {
+			cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
+					Control.getClassCssMetaData(),
+					HIDE_SCROLLBARS, DEPTH_LEVEL
+			);
+		}
+	}
 
 	public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
 		return StyleableProperties.cssMetaDataList;
 	}
 
-    @Override
-    protected List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-	    return AbstractMFXListView.getClassCssMetaData();
-    }
+	@Override
+	protected List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+		return AbstractMFXListView.getClassCssMetaData();
+	}
 }

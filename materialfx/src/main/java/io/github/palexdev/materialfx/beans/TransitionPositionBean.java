@@ -28,57 +28,57 @@ import javafx.animation.Transition;
  * </pre>
  */
 public class TransitionPositionBean extends PositionBean {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final double endX;
-    private final double endY;
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final double endX;
+	private final double endY;
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public TransitionPositionBean(double x, double y, double endX, double endY) {
-        super(x, y);
-        this.endX = endX;
-        this.endY = endY;
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public TransitionPositionBean(double x, double y, double endX, double endY) {
+		super(x, y);
+		this.endX = endX;
+		this.endY = endY;
+	}
 
-    //================================================================================
-    // Static Methods
-    //================================================================================
-    public static TransitionPositionBean of(double x, double y, double endX, double endY) {
-        return new TransitionPositionBean(x, y, endX, endY);
-    }
+	//================================================================================
+	// Static Methods
+	//================================================================================
+	public static TransitionPositionBean of(double x, double y, double endX, double endY) {
+		return new TransitionPositionBean(x, y, endX, endY);
+	}
 
-    //================================================================================
-    // Getters/Setters
-    //================================================================================
+	//================================================================================
+	// Getters/Setters
+	//================================================================================
 
-    /**
-     * @return the end x coordinate
-     */
-    public double getEndX() {
-        return endX;
-    }
+	/**
+	 * @return the end x coordinate
+	 */
+	public double getEndX() {
+		return endX;
+	}
 
-    /**
-     * @return the end y coordinate
-     */
-    public double getEndY() {
-        return endY;
-    }
+	/**
+	 * @return the end y coordinate
+	 */
+	public double getEndY() {
+		return endY;
+	}
 
-    /**
-     * @return the difference between the star x and end x coordinates
-     */
-    public double deltaX() {
-        return getX() - getEndX();
-    }
+	/**
+	 * @return the difference between the star x and end x coordinates
+	 */
+	public double deltaX() {
+		return getX() - getEndX();
+	}
 
-    /**
-     * @return the difference between the start y and end y coordinates
-     */
-    public double deltaY() {
-        return getY() - getEndY();
-    }
+	/**
+	 * @return the difference between the start y and end y coordinates
+	 */
+	public double deltaY() {
+		return getY() - getEndY();
+	}
 }

@@ -24,65 +24,65 @@ import javafx.scene.Node;
 import javafx.scene.control.ToggleButton;
 
 public abstract class AbstractMFXToggleNode extends ToggleButton {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final String STYLE_CLASS = "mfx-toggle-node";
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final String STYLE_CLASS = "mfx-toggle-node";
 
-    private final ObjectProperty<Node> labelLeadingIcon = new SimpleObjectProperty<>();
-    private final ObjectProperty<Node> labelTrailingIcon = new SimpleObjectProperty<>();
+	private final ObjectProperty<Node> labelLeadingIcon = new SimpleObjectProperty<>();
+	private final ObjectProperty<Node> labelTrailingIcon = new SimpleObjectProperty<>();
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public AbstractMFXToggleNode() {
-        initialize();
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public AbstractMFXToggleNode() {
+		initialize();
+	}
 
-    public AbstractMFXToggleNode(String text) {
-        super(text);
-        initialize();
-    }
+	public AbstractMFXToggleNode(String text) {
+		super(text);
+		initialize();
+	}
 
-    public AbstractMFXToggleNode(String text, Node graphic) {
-        super(text, graphic);
-        initialize();
-    }
+	public AbstractMFXToggleNode(String text, Node graphic) {
+		super(text, graphic);
+		initialize();
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
-    private void initialize() {
-        getStyleClass().add(STYLE_CLASS);
-    }
+	//================================================================================
+	// Methods
+	//================================================================================
+	private void initialize() {
+		getStyleClass().add(STYLE_CLASS);
+	}
 
-    public Node getLabelLeadingIcon() {
-        return labelLeadingIcon.get();
-    }
+	public Node getLabelLeadingIcon() {
+		return labelLeadingIcon.get();
+	}
 
-    /**
-     * Specifies the label's leading icon.
-     */
-    public ObjectProperty<Node> labelLeadingIconProperty() {
-        return labelLeadingIcon;
-    }
+	/**
+	 * Specifies the label's leading icon.
+	 */
+	public ObjectProperty<Node> labelLeadingIconProperty() {
+		return labelLeadingIcon;
+	}
 
-    public void setLabelLeadingIcon(Node labelLeadingIcon) {
-        this.labelLeadingIcon.set(labelLeadingIcon);
-    }
+	public void setLabelLeadingIcon(Node labelLeadingIcon) {
+		this.labelLeadingIcon.set(labelLeadingIcon);
+	}
 
-    public Node getLabelTrailingIcon() {
-        return labelTrailingIcon.get();
-    }
+	public Node getLabelTrailingIcon() {
+		return labelTrailingIcon.get();
+	}
 
-    /**
-     * Specifies the label's trailing icon.
-     */
-    public ObjectProperty<Node> labelTrailingIconProperty() {
-        return labelTrailingIcon;
-    }
+	/**
+	 * Specifies the label's trailing icon.
+	 */
+	public ObjectProperty<Node> labelTrailingIconProperty() {
+		return labelTrailingIcon;
+	}
 
-    public void setLabelTrailingIcon(Node labelTrailingIcon) {
-        this.labelTrailingIcon.set(labelTrailingIcon);
-    }
+	public void setLabelTrailingIcon(Node labelTrailingIcon) {
+		this.labelTrailingIcon.set(labelTrailingIcon);
+	}
 }

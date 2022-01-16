@@ -38,7 +38,7 @@ public class ProgressController implements Initializable {
 		createAndPlayAnimation(determinateBar);
 		createAndPlayAnimation(determinateSpinner);
 	}
-	
+
 	private void createAndPlayAnimation(ProgressIndicator indicator) {
 		Animation a1 = TimelineBuilder.build()
 				.add(

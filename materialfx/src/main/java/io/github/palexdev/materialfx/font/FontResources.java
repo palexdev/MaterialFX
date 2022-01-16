@@ -173,11 +173,11 @@ public enum FontResources {
 	}
 
 	public String getDescription() {
-        return description;
-    }
+		return description;
+	}
 
-    public char getCode() {
-        return code;
-    }
+	public char getCode() {
+		return code;
+	}
 
 }

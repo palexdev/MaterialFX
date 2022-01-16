@@ -48,7 +48,7 @@ import java.util.stream.IntStream;
  *     // You'll notice that sometimes sourceToView will return a negative index because the item is not in the transformed list (after a filter operation)
  * }
  * </pre>
- *
+ * <p>
  * Check {@link #computeIndexes()} documentation to see how indexes are calculated.
  * <p></p>
  * <b>IMPORTANT:</b> If using a reversed comparator please use {@link #setComparator(Comparator, boolean)} with 'true' as argument,
@@ -58,213 +58,213 @@ import java.util.stream.IntStream;
  * @param <T> the items' type
  */
 public class TransformableList<T> extends TransformationList<T, T> {
-    //================================================================================
-    // Constructors
-    //================================================================================
-    private final List<Integer> indexes = new ArrayList<>();
-    private boolean reversed = false;
+	//================================================================================
+	// Constructors
+	//================================================================================
+	private final List<Integer> indexes = new ArrayList<>();
+	private boolean reversed = false;
 
-    private final PredicateProperty<T> predicate = new PredicateProperty<>() {
-        @Override
-        protected void invalidated() {
-            update();
-        }
-    };
+	private final PredicateProperty<T> predicate = new PredicateProperty<>() {
+		@Override
+		protected void invalidated() {
+			update();
+		}
+	};
 
-    private final ComparatorProperty<T> comparator = new ComparatorProperty<>() {
-        @Override
-        protected void invalidated() {
-            update();
-        }
-    };
+	private final ComparatorProperty<T> comparator = new ComparatorProperty<>() {
+		@Override
+		protected void invalidated() {
+			update();
+		}
+	};
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public TransformableList(ObservableList<? extends T> source) {
-        this(source, null);
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public TransformableList(ObservableList<? extends T> source) {
+		this(source, null);
+	}
 
-    public TransformableList(ObservableList<? extends T> source, Predicate<T> predicate) {
-        this(source, predicate, null);
-    }
+	public TransformableList(ObservableList<? extends T> source, Predicate<T> predicate) {
+		this(source, predicate, null);
+	}
 
-    public TransformableList(ObservableList<? extends T> source, Predicate<T> predicate, Comparator<T> comparator) {
-        super(source);
-        setPredicate(predicate);
-        setComparator(comparator);
-        update();
-    }
+	public TransformableList(ObservableList<? extends T> source, Predicate<T> predicate, Comparator<T> comparator) {
+		super(source);
+		setPredicate(predicate);
+		setComparator(comparator);
+		update();
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
+	//================================================================================
+	// Methods
+	//================================================================================
 
-    /**
-     * Calls {@link #getSourceIndex(int)}, just with a different name to be more clear.
-     * <p></p>
-     * Maps an index of the transformed list, to the index of the source list.
-     */
-    public int viewToSource(int index) {
-        return getSourceIndex(index);
-    }
+	/**
+	 * Calls {@link #getSourceIndex(int)}, just with a different name to be more clear.
+	 * <p></p>
+	 * Maps an index of the transformed list, to the index of the source list.
+	 */
+	public int viewToSource(int index) {
+		return getSourceIndex(index);
+	}
 
-    /**
-     * Calls {@link #getViewIndex(int)}, just with a different name to be more clear.
-     * <p></p>
-     * Maps an index of the source list, to the index of the transformed list.
-     */
-    public int sourceToView(int index) {
-        return getViewIndex(index);
-    }
+	/**
+	 * Calls {@link #getViewIndex(int)}, just with a different name to be more clear.
+	 * <p></p>
+	 * Maps an index of the source list, to the index of the transformed list.
+	 */
+	public int sourceToView(int index) {
+		return getViewIndex(index);
+	}
 
-    /**
-     * Responsible for updating the transformed indexes when the
-     * predicate or the comparator change.
-     */
-    private void update() {
-        indexes.clear();
-        indexes.addAll(computeIndexes());
-        if (this.hasListeners()) {
-            this.fireChange(new GenericAddRemoveChange<>(0, size(), new ArrayList<>(this), this));
-        }
-    }
+	/**
+	 * Responsible for updating the transformed indexes when the
+	 * predicate or the comparator change.
+	 */
+	private void update() {
+		indexes.clear();
+		indexes.addAll(computeIndexes());
+		if (this.hasListeners()) {
+			this.fireChange(new GenericAddRemoveChange<>(0, size(), new ArrayList<>(this), this));
+		}
+	}
 
-    /**
-     * Core method of TransformableLists. This is responsible for computing
-     * the transformed indexes by creating a {@link SortedMap} and mapping every index from 0 to source size
-     * to its item. Before mapping, items are filtered with the given predicate, {@link #predicateProperty()}.
-     * Before returning, the map's entry set is sorted by its values with the given comparator, {@link #comparatorProperty()}.
-     * Finally, returns the map's key set, this set contains the transformed indexes, filtered and sorted.
-     */
-    private Collection<Integer> computeIndexes() {
-        Predicate<? super T> filter = this.getPredicate();
-        Comparator<? super T> sorter = this.getComparator();
-        SortedMap<Integer, T> sourceMap;
-        if (filter != null) {
-            sourceMap = IntStream.range(0, getSource().size())
-                    .filter((index) -> filter.test(getSource().get(index)))
-                    .collect(TreeMap::new, (map, index) -> map.put(index, getSource().get(index)), TreeMap::putAll);
-        } else {
-            sourceMap = IntStream.range(0, getSource().size())
-                    .collect(TreeMap::new, (map, index) -> map.put(index, getSource().get(index)), TreeMap::putAll);
-        }
+	/**
+	 * Core method of TransformableLists. This is responsible for computing
+	 * the transformed indexes by creating a {@link SortedMap} and mapping every index from 0 to source size
+	 * to its item. Before mapping, items are filtered with the given predicate, {@link #predicateProperty()}.
+	 * Before returning, the map's entry set is sorted by its values with the given comparator, {@link #comparatorProperty()}.
+	 * Finally, returns the map's key set, this set contains the transformed indexes, filtered and sorted.
+	 */
+	private Collection<Integer> computeIndexes() {
+		Predicate<? super T> filter = this.getPredicate();
+		Comparator<? super T> sorter = this.getComparator();
+		SortedMap<Integer, T> sourceMap;
+		if (filter != null) {
+			sourceMap = IntStream.range(0, getSource().size())
+					.filter((index) -> filter.test(getSource().get(index)))
+					.collect(TreeMap::new, (map, index) -> map.put(index, getSource().get(index)), TreeMap::putAll);
+		} else {
+			sourceMap = IntStream.range(0, getSource().size())
+					.collect(TreeMap::new, (map, index) -> map.put(index, getSource().get(index)), TreeMap::putAll);
+		}
 
-        return sorter != null ? sourceMap.entrySet().stream()
-                .sorted((o1, o2) -> sorter.compare(o1.getValue(), o2.getValue()))
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList()) : sourceMap.keySet();
-    }
+		return sorter != null ? sourceMap.entrySet().stream()
+				.sorted((o1, o2) -> sorter.compare(o1.getValue(), o2.getValue()))
+				.map(Map.Entry::getKey)
+				.collect(Collectors.toList()) : sourceMap.keySet();
+	}
 
-    public Predicate<? super T> getPredicate() {
-        return this.predicate.get();
-    }
+	public Predicate<? super T> getPredicate() {
+		return this.predicate.get();
+	}
 
-    /**
-     * Specifies the predicate used to filter the source list.
-     */
-    public PredicateProperty<T> predicateProperty() {
-        return this.predicate;
-    }
+	/**
+	 * Specifies the predicate used to filter the source list.
+	 */
+	public PredicateProperty<T> predicateProperty() {
+		return this.predicate;
+	}
 
-    public void setPredicate(Predicate<T> predicate) {
-        this.predicate.set(predicate);
-    }
+	public void setPredicate(Predicate<T> predicate) {
+		this.predicate.set(predicate);
+	}
 
-    public Comparator<T> getComparator() {
-        return this.comparator.get();
-    }
+	public Comparator<T> getComparator() {
+		return this.comparator.get();
+	}
 
-    /**
-     * Specifies the comparator used to sort the source list.
-     *
-     * @see #setComparator(Comparator, boolean)
-     */
-    public ComparatorProperty<T> comparatorProperty() {
-        return this.comparator;
-    }
+	/**
+	 * Specifies the comparator used to sort the source list.
+	 *
+	 * @see #setComparator(Comparator, boolean)
+	 */
+	public ComparatorProperty<T> comparatorProperty() {
+		return this.comparator;
+	}
 
-    public void setComparator(Comparator<T> comparator) {
-        this.reversed = false;
-        this.comparator.set(comparator);
-    }
+	public void setComparator(Comparator<T> comparator) {
+		this.reversed = false;
+		this.comparator.set(comparator);
+	}
 
-    /**
-     * This method is NECESSARY if using a reversed comparator,
-     * a special flag is set to true and {@link #sourceToView(int)} behaves accordingly.
-     */
-    public void setComparator(Comparator<T> comparator, boolean reversed) {
-        this.reversed = reversed;
-        this.comparator.set(comparator);
-    }
+	/**
+	 * This method is NECESSARY if using a reversed comparator,
+	 * a special flag is set to true and {@link #sourceToView(int)} behaves accordingly.
+	 */
+	public void setComparator(Comparator<T> comparator, boolean reversed) {
+		this.reversed = reversed;
+		this.comparator.set(comparator);
+	}
 
-    /**
-     * Specifies if a reversed comparator is being used.
-     */
-    public boolean isReversed() {
-        return reversed;
-    }
+	/**
+	 * Specifies if a reversed comparator is being used.
+	 */
+	public boolean isReversed() {
+		return reversed;
+	}
 
-    /**
-     * Communicates to the transformed list, specifically to {@link #getViewIndex(int)},
-     * if the list is sorted in reversed order.
-     */
-    public void setReversed(boolean reversed) {
-        this.reversed = reversed;
-    }
+	/**
+	 * Communicates to the transformed list, specifically to {@link #getViewIndex(int)},
+	 * if the list is sorted in reversed order.
+	 */
+	public void setReversed(boolean reversed) {
+		this.reversed = reversed;
+	}
 
-    //================================================================================
-    // Overridden Methods
-    //================================================================================
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
 
-    /**
-     * {@inheritDoc}
-     * <p></p>
-     * Calls {@link #update()}.
-     */
-    @Override
-    protected void sourceChanged(ListChangeListener.Change<? extends T> c) {
-        beginChange();
-        update();
-        endChange();
-    }
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Calls {@link #update()}.
+	 */
+	@Override
+	protected void sourceChanged(ListChangeListener.Change<? extends T> c) {
+		beginChange();
+		update();
+		endChange();
+	}
 
-    /**
-     * @return the number of items in the transformable list
-     */
-    @Override
-    public int size() {
-        return indexes.size();
-    }
+	/**
+	 * @return the number of items in the transformable list
+	 */
+	@Override
+	public int size() {
+		return indexes.size();
+	}
 
-    /**
-     * Retrieves and return the item at the given index in the transformable list.
-     * This means transformations due to {@link #predicateProperty()} or {@link #comparatorProperty()}
-     * are taken into account.
-     */
-    @Override
-    public T get(int index) {
-        if (index > size()) {
-            throw new IndexOutOfBoundsException(index);
-        } else {
-            return getSource().get(indexes.get(index));
-        }
-    }
+	/**
+	 * Retrieves and return the item at the given index in the transformable list.
+	 * This means transformations due to {@link #predicateProperty()} or {@link #comparatorProperty()}
+	 * are taken into account.
+	 */
+	@Override
+	public T get(int index) {
+		if (index > size()) {
+			throw new IndexOutOfBoundsException(index);
+		} else {
+			return getSource().get(indexes.get(index));
+		}
+	}
 
-    @Override
-    public int getSourceIndex(int index) {
-        if (index > size()) {
-            throw new IndexOutOfBoundsException(index);
-        } else {
-            return indexes.get(index);
-        }
-    }
+	@Override
+	public int getSourceIndex(int index) {
+		if (index > size()) {
+			throw new IndexOutOfBoundsException(index);
+		} else {
+			return indexes.get(index);
+		}
+	}
 
-    @Override
-    public int getViewIndex(int index) {
-        int viewIndex = reversed ?
-                Collections.binarySearch(indexes, index, Collections.reverseOrder()) :
-                Collections.binarySearch(indexes, index);
-        return viewIndex < 0 ? -1 : viewIndex;
-    }
+	@Override
+	public int getViewIndex(int index) {
+		int viewIndex = reversed ?
+				Collections.binarySearch(indexes, index, Collections.reverseOrder()) :
+				Collections.binarySearch(indexes, index);
+		return viewIndex < 0 ? -1 : viewIndex;
+	}
 }

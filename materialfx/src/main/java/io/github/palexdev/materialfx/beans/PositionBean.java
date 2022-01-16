@@ -32,19 +32,19 @@ public class PositionBean {
 	//================================================================================
 	// Properties
 	//================================================================================
-    private final DoubleProperty x = new SimpleDoubleProperty(0);
-    private final DoubleProperty y = new SimpleDoubleProperty(0);
+	private final DoubleProperty x = new SimpleDoubleProperty(0);
+	private final DoubleProperty y = new SimpleDoubleProperty(0);
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public PositionBean() {
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public PositionBean() {
+	}
 
-    public PositionBean(double x, double y) {
-        setX(x);
-	    setY(y);
-    }
+	public PositionBean(double x, double y) {
+		setX(x);
+		setY(y);
+	}
 
 	//================================================================================
 	// Static Methods
@@ -83,27 +83,27 @@ public class PositionBean {
 
 	/**
 	 * The x coordinate property.
-     */
-    public DoubleProperty xProperty() {
-        return x;
-    }
+	 */
+	public DoubleProperty xProperty() {
+		return x;
+	}
 
-    public void setX(double xPosition) {
-        this.x.set(xPosition);
-    }
+	public void setX(double xPosition) {
+		this.x.set(xPosition);
+	}
 
-    public double getY() {
-        return y.get();
-    }
+	public double getY() {
+		return y.get();
+	}
 
-    /**
-     * The y coordinate property
-     */
-    public DoubleProperty yProperty() {
-        return y;
-    }
+	/**
+	 * The y coordinate property
+	 */
+	public DoubleProperty yProperty() {
+		return y;
+	}
 
-    public void setY(double yPosition) {
-        this.y.set(yPosition);
-    }
+	public void setY(double yPosition) {
+		this.y.set(yPosition);
+	}
 }

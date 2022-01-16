@@ -41,122 +41,122 @@ import javafx.scene.input.MouseEvent;
  * using {@link ObjectExpression#asString()}.
  */
 public class MFXListCell<T> extends AbstractMFXListCell<T> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final String STYLE_CLASS = "mfx-list-cell";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXListCell.css");
-    protected final MFXCircleRippleGenerator rippleGenerator = new MFXCircleRippleGenerator(this);
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final String STYLE_CLASS = "mfx-list-cell";
+	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXListCell.css");
+	protected final MFXCircleRippleGenerator rippleGenerator = new MFXCircleRippleGenerator(this);
 
-    private final Label label;
+	private final Label label;
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXListCell(MFXListView<T> listView, T data) {
-        super(listView, data);
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXListCell(MFXListView<T> listView, T data) {
+		super(listView, data);
 
-        if (!(data instanceof Node)) {
-	        label = new Label();
-	        label.textProperty().bind(Bindings.createStringBinding(
-			        () -> listView.getConverter() != null ? listView.getConverter().toString(getData()) : getData().toString(),
-			        dataProperty(), listView.converterProperty()
-	        ));
-	        label.getStyleClass().add("data-label");
-        } else {
-            label = null;
-        }
+		if (!(data instanceof Node)) {
+			label = new Label();
+			label.textProperty().bind(Bindings.createStringBinding(
+					() -> listView.getConverter() != null ? listView.getConverter().toString(getData()) : getData().toString(),
+					dataProperty(), listView.converterProperty()
+			));
+			label.getStyleClass().add("data-label");
+		} else {
+			label = null;
+		}
 
-        initialize();
-    }
+		initialize();
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
+	//================================================================================
+	// Methods
+	//================================================================================
 
-    /**
-     * Overridden to add the style class, setup the ripple generator and call {@link #render(Object)}
-     * for the first time.
-     */
-    @Override
-    protected void initialize() {
-        super.initialize();
-        getStyleClass().add(STYLE_CLASS);
-        setupRippleGenerator();
-        render(getData());
-    }
+	/**
+	 * Overridden to add the style class, setup the ripple generator and call {@link #render(Object)}
+	 * for the first time.
+	 */
+	@Override
+	protected void initialize() {
+		super.initialize();
+		getStyleClass().add(STYLE_CLASS);
+		setupRippleGenerator();
+		render(getData());
+	}
 
-    /**
-     * Sets up the properties of the ripple generator and adds the mouse pressed filter.
-     */
-    protected void setupRippleGenerator() {
-        rippleGenerator.setManaged(false);
-        rippleGenerator.setRipplePositionFunction(event -> PositionBean.of(event.getX(), event.getY()));
-        rippleGenerator.rippleRadiusProperty().bind(widthProperty().divide(2.0));
-        addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                rippleGenerator.generateRipple(event);
-            }
-        });
-    }
+	/**
+	 * Sets up the properties of the ripple generator and adds the mouse pressed filter.
+	 */
+	protected void setupRippleGenerator() {
+		rippleGenerator.setManaged(false);
+		rippleGenerator.setRipplePositionFunction(event -> PositionBean.of(event.getX(), event.getY()));
+		rippleGenerator.rippleRadiusProperty().bind(widthProperty().divide(2.0));
+		addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+			if (event.getButton() == MouseButton.PRIMARY) {
+				rippleGenerator.generateRipple(event);
+			}
+		});
+	}
 
-    //================================================================================
-    // Overridden/Implemented Methods
-    //================================================================================
+	//================================================================================
+	// Overridden/Implemented Methods
+	//================================================================================
 
-    /**
-     * Responsible for rendering the cell's content.
-     * <p>
-     * If the given data type is a Node, it is added to the children list,
-     * otherwise a label is used to display the data.
-     * <p>
-     * At the end adds a ripple generator at index 0.
-     */
-    @Override
-    protected void render(T data) {
-        if (data instanceof Node) {
-            getChildren().setAll(rippleGenerator, (Node) data);
-        } else {
-            getChildren().setAll(rippleGenerator, label);
-        }
-    }
+	/**
+	 * Responsible for rendering the cell's content.
+	 * <p>
+	 * If the given data type is a Node, it is added to the children list,
+	 * otherwise a label is used to display the data.
+	 * <p>
+	 * At the end adds a ripple generator at index 0.
+	 */
+	@Override
+	protected void render(T data) {
+		if (data instanceof Node) {
+			getChildren().setAll(rippleGenerator, (Node) data);
+		} else {
+			getChildren().setAll(rippleGenerator, label);
+		}
+	}
 
-    /**
-     * Updates the data property of the cell. If the data is a Node
-     * {@link #render(Object)} is called.
-     * <p>
-     * This is called after {@link #updateIndex(int)}.
-     */
-    @Override
-    public void updateItem(T item) {
-        super.updateItem(item);
-        if (item instanceof Node) render(item);
-    }
+	/**
+	 * Updates the data property of the cell. If the data is a Node
+	 * {@link #render(Object)} is called.
+	 * <p>
+	 * This is called after {@link #updateIndex(int)}.
+	 */
+	@Override
+	public void updateItem(T item) {
+		super.updateItem(item);
+		if (item instanceof Node) render(item);
+	}
 
-    @Override
-    public Node getNode() {
-        return this;
-    }
+	@Override
+	public Node getNode() {
+		return this;
+	}
 
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
+	@Override
+	public String getUserAgentStylesheet() {
+		return STYLESHEET;
+	}
 
-    @Override
-    public String toString() {
-        String className = getClass().getName();
-        String simpleName = className.substring(className.lastIndexOf('.') + 1);
-        StringBuilder sb = new StringBuilder();
-        sb.append("[").append(simpleName);
-        sb.append('@');
-        sb.append(Integer.toHexString(hashCode()));
-        sb.append("]");
-        sb.append("[Data:").append(getData()).append("]");
-        if (getId() != null) {
-            sb.append("[id:").append(getId()).append("]");
-        }
+	@Override
+	public String toString() {
+		String className = getClass().getName();
+		String simpleName = className.substring(className.lastIndexOf('.') + 1);
+		StringBuilder sb = new StringBuilder();
+		sb.append("[").append(simpleName);
+		sb.append('@');
+		sb.append(Integer.toHexString(hashCode()));
+		sb.append("]");
+		sb.append("[Data:").append(getData()).append("]");
+		if (getId() != null) {
+			sb.append("[id:").append(getId()).append("]");
+		}
 
-        return sb.toString();
-    }
+		return sb.toString();
+	}
 }

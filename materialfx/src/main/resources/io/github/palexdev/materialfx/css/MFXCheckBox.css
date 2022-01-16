@@ -20,55 +20,55 @@
 @import "MFXColors.css";
 
 .mfx-checkbox {
-    -mfx-main: #6200EE;
-    -mfx-secondary: #424242;
+	-mfx-main: #6200EE;
+	-mfx-secondary: #424242;
 
-    -fx-font-family: "Open Sans Regular";
-    -fx-text-fill: -mfx-text-he;
+	-fx-font-family: "Open Sans Regular";
+	-fx-text-fill: -mfx-text-he;
 }
 
 .mfx-checkbox .box {
-    -fx-background-color: transparent;
-    -fx-background-radius: 2;
+	-fx-background-color: transparent;
+	-fx-background-radius: 2;
 
-    -fx-border-color: -mfx-secondary;
-    -fx-border-radius: 2;
-    -fx-border-width: 1.5;
+	-fx-border-color: -mfx-secondary;
+	-fx-border-radius: 2;
+	-fx-border-width: 1.5;
 
-    -fx-padding: 4;
+	-fx-padding: 4;
 }
 
 .mfx-checkbox .box .mark {
-    visibility: hidden;
-    -mfx-color: white;
-    -mfx-description: "mfx-variant7-mark";
-    -mfx-size: 12;
+	visibility: hidden;
+	-mfx-color: white;
+	-mfx-description: "mfx-variant7-mark";
+	-mfx-size: 12;
 }
 
 .mfx-checkbox .ripple-container .mfx-ripple-generator {
-    -mfx-animation-speed: 1.5;
-    -mfx-ripple-color: derive(-mfx-main, 110%);
-    -mfx-ripple-radius: 16;
+	-mfx-animation-speed: 1.5;
+	-mfx-ripple-color: derive(-mfx-main, 110%);
+	-mfx-ripple-radius: 16;
 }
 
 .mfx-checkbox:selected .box,
 .mfx-checkbox:indeterminate .box {
-    -fx-background-color: -mfx-main;
-    -fx-border-color: -mfx-main;
+	-fx-background-color: -mfx-main;
+	-fx-border-color: -mfx-main;
 }
 
 .mfx-checkbox:selected .box .mark {
-    visibility: visible;
+	visibility: visible;
 }
 
 .mfx-checkbox:selected:disabled .box,
 .mfx-checkbox:indeterminate:disabled .box {
-    -fx-background-color: -mfx-secondary;
-    -fx-border-color: -mfx-secondary;
+	-fx-background-color: -mfx-secondary;
+	-fx-border-color: -mfx-secondary;
 }
 
 .mfx-checkbox:indeterminate .box .mark {
-    visibility: visible;
-    -mfx-description: "mfx-minus";
+	visibility: visible;
+	-mfx-description: "mfx-minus";
 }
 

@@ -34,10 +34,10 @@ import java.util.function.Function;
  */
 public interface IListView<T, C extends Cell<T>> {
 
-    /**
-     * @return the items observable list
-     */
-    ObservableList<T> getItems();
+	/**
+	 * @return the items observable list
+	 */
+	ObservableList<T> getItems();
 
 	/**
 	 * The items list property.
@@ -69,13 +69,13 @@ public interface IListView<T, C extends Cell<T>> {
 	 */
 	ObjectProperty<Function<T, C>> cellFactoryProperty();
 
-    /**
-     * Replaces the cell factory with the given one
-     */
-    void setCellFactory(Function<T, C> cellFactory);
+	/**
+	 * Replaces the cell factory with the given one
+	 */
+	void setCellFactory(Function<T, C> cellFactory);
 
-    /**
-     * @return the listview selection model
-     */
-    IMultipleSelectionModel<T> getSelectionModel();
+	/**
+	 * @return the listview selection model
+	 */
+	IMultipleSelectionModel<T> getSelectionModel();
 }

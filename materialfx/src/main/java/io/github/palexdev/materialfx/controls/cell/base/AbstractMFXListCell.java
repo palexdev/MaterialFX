@@ -39,159 +39,159 @@ import javafx.scene.layout.HBox;
  * @param <T> the type of data within the ListView
  */
 public abstract class AbstractMFXListCell<T> extends HBox implements Cell<T> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    protected final AbstractMFXListView<T, ?> listView;
-    protected final ReadOnlyObjectWrapper<T> data = new ReadOnlyObjectWrapper<>();
-    protected final ReadOnlyIntegerWrapper index = new ReadOnlyIntegerWrapper();
+	//================================================================================
+	// Properties
+	//================================================================================
+	protected final AbstractMFXListView<T, ?> listView;
+	protected final ReadOnlyObjectWrapper<T> data = new ReadOnlyObjectWrapper<>();
+	protected final ReadOnlyIntegerWrapper index = new ReadOnlyIntegerWrapper();
 
-    protected final ReadOnlyBooleanWrapper selected = new ReadOnlyBooleanWrapper();
-    protected final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
+	protected final ReadOnlyBooleanWrapper selected = new ReadOnlyBooleanWrapper();
+	protected final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public AbstractMFXListCell(AbstractMFXListView<T, ?> listView, T data) {
-        this.listView = listView;
-        setData(data);
-        setPrefHeight(32);
-        setMaxHeight(USE_PREF_SIZE);
-        setAlignment(Pos.CENTER_LEFT);
-        setSpacing(5);
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public AbstractMFXListCell(AbstractMFXListView<T, ?> listView, T data) {
+		this.listView = listView;
+		setData(data);
+		setPrefHeight(32);
+		setMaxHeight(USE_PREF_SIZE);
+		setAlignment(Pos.CENTER_LEFT);
+		setSpacing(5);
+	}
 
-    //================================================================================
-    // Abstract Methods
-    //================================================================================
+	//================================================================================
+	// Abstract Methods
+	//================================================================================
 
-    /**
-     * Abstract method which defines how the cell should process and show the given data.
-     */
-    protected abstract void render(T data);
+	/**
+	 * Abstract method which defines how the cell should process and show the given data.
+	 */
+	protected abstract void render(T data);
 
-    //================================================================================
-    // Methods
-    //================================================================================
-    protected void initialize() {
-        setBehavior();
-    }
+	//================================================================================
+	// Methods
+	//================================================================================
+	protected void initialize() {
+		setBehavior();
+	}
 
-    /**
-     * Sets the following behaviors:
-     * <p>
-     * - Binds the selected property to the list' selection model (checks for index). <p>
-     * - Updates the selected PseudoClass state when selected property changes.<p>
-     * - Adds and handler for MOUSE_PRESSED events to call {@link #updateSelection(MouseEvent)}.
-     */
-    protected void setBehavior() {
-        selected.addListener(invalidated -> pseudoClassStateChanged(SELECTED_PSEUDO_CLASS, selected.get()));
-        selected.bind(Bindings.createBooleanBinding(
-                () -> listView.getSelectionModel().getSelection().containsKey(index.get()),
-                listView.getSelectionModel().selectionProperty(), index
-        ));
+	/**
+	 * Sets the following behaviors:
+	 * <p>
+	 * - Binds the selected property to the list' selection model (checks for index). <p>
+	 * - Updates the selected PseudoClass state when selected property changes.<p>
+	 * - Adds and handler for MOUSE_PRESSED events to call {@link #updateSelection(MouseEvent)}.
+	 */
+	protected void setBehavior() {
+		selected.addListener(invalidated -> pseudoClassStateChanged(SELECTED_PSEUDO_CLASS, selected.get()));
+		selected.bind(Bindings.createBooleanBinding(
+				() -> listView.getSelectionModel().getSelection().containsKey(index.get()),
+				listView.getSelectionModel().selectionProperty(), index
+		));
 
-        addEventFilter(MouseEvent.MOUSE_PRESSED, this::updateSelection);
-    }
+		addEventFilter(MouseEvent.MOUSE_PRESSED, this::updateSelection);
+	}
 
-    /**
-     * If the pressed mouse button is not the primary, exits immediately.
-     * <p>
-     * If the cell is already deselected calls {@link MultipleSelectionModel#deselectIndex(int)},
-     * otherwise checks if Shift or Ctrl are pressed and updates the selection accordingly,
-     * adds if they were pressed, replaces if not (acting like single selection),
-     * see {@link MultipleSelectionModel#selectIndex(int)}, {@link MultipleSelectionModel#replaceSelection(Integer...)}.
-     */
-    protected void updateSelection(MouseEvent event) {
-        if (event.getButton() != MouseButton.PRIMARY) return;
+	/**
+	 * If the pressed mouse button is not the primary, exits immediately.
+	 * <p>
+	 * If the cell is already deselected calls {@link MultipleSelectionModel#deselectIndex(int)},
+	 * otherwise checks if Shift or Ctrl are pressed and updates the selection accordingly,
+	 * adds if they were pressed, replaces if not (acting like single selection),
+	 * see {@link MultipleSelectionModel#selectIndex(int)}, {@link MultipleSelectionModel#replaceSelection(Integer...)}.
+	 */
+	protected void updateSelection(MouseEvent event) {
+		if (event.getButton() != MouseButton.PRIMARY) return;
 
-        int index = getIndex();
-        if (event.isControlDown()) {
-            if (isSelected()) {
-                listView.getSelectionModel().deselectIndex(index);
-            } else {
-                listView.getSelectionModel().selectIndex(index);
-            }
-            return;
-        }
+		int index = getIndex();
+		if (event.isControlDown()) {
+			if (isSelected()) {
+				listView.getSelectionModel().deselectIndex(index);
+			} else {
+				listView.getSelectionModel().selectIndex(index);
+			}
+			return;
+		}
 
-        if (event.isShiftDown()) {
-            listView.getSelectionModel().expandSelection(index);
-            return;
-        }
+		if (event.isShiftDown()) {
+			listView.getSelectionModel().expandSelection(index);
+			return;
+		}
 
-        listView.getSelectionModel().replaceSelection(index);
-    }
+		listView.getSelectionModel().replaceSelection(index);
+	}
 
-    //================================================================================
-    // Override Methods
-    //================================================================================
+	//================================================================================
+	// Override Methods
+	//================================================================================
 
-    /**
-     * Updates the index property of the cell.
-     * <p>
-     * This is called before {@link #updateItem(Object)}.
-     */
-    @Override
-    public void updateIndex(int index) {
-        setIndex(index);
-    }
+	/**
+	 * Updates the index property of the cell.
+	 * <p>
+	 * This is called before {@link #updateItem(Object)}.
+	 */
+	@Override
+	public void updateIndex(int index) {
+		setIndex(index);
+	}
 
-    /**
-     * Updates the data property of the cell.
-     * <p>
-     * This is called after {@link #updateIndex(int)}.
-     */
-    @Override
-    public void updateItem(T item) {
-        setData(item);
-    }
+	/**
+	 * Updates the data property of the cell.
+	 * <p>
+	 * This is called after {@link #updateIndex(int)}.
+	 */
+	@Override
+	public void updateItem(T item) {
+		setData(item);
+	}
 
-    //================================================================================
-    // Getters/Setters
-    //================================================================================
-    public T getData() {
-        return data.get();
-    }
+	//================================================================================
+	// Getters/Setters
+	//================================================================================
+	public T getData() {
+		return data.get();
+	}
 
-    /**
-     * Data property of the cell.
-     */
-    public ReadOnlyObjectProperty<T> dataProperty() {
-        return data.getReadOnlyProperty();
-    }
+	/**
+	 * Data property of the cell.
+	 */
+	public ReadOnlyObjectProperty<T> dataProperty() {
+		return data.getReadOnlyProperty();
+	}
 
-    protected void setData(T data) {
-        this.data.set(data);
-    }
+	protected void setData(T data) {
+		this.data.set(data);
+	}
 
-    public int getIndex() {
-        return index.get();
-    }
+	public int getIndex() {
+		return index.get();
+	}
 
-    /**
-     * Specifies the cell's index.
-     */
-    public ReadOnlyIntegerProperty indexProperty() {
-        return index.getReadOnlyProperty();
-    }
+	/**
+	 * Specifies the cell's index.
+	 */
+	public ReadOnlyIntegerProperty indexProperty() {
+		return index.getReadOnlyProperty();
+	}
 
-    protected void setIndex(int index) {
-        this.index.set(index);
-    }
+	protected void setIndex(int index) {
+		this.index.set(index);
+	}
 
-    public boolean isSelected() {
-        return selected.get();
-    }
+	public boolean isSelected() {
+		return selected.get();
+	}
 
-    /**
-     * Specifies the selection state of the cell.
-     */
-    public ReadOnlyBooleanProperty selectedProperty() {
-        return selected.getReadOnlyProperty();
-    }
+	/**
+	 * Specifies the selection state of the cell.
+	 */
+	public ReadOnlyBooleanProperty selectedProperty() {
+		return selected.getReadOnlyProperty();
+	}
 
-    protected void setSelected(boolean selected) {
-        this.selected.set(selected);
-    }
+	protected void setSelected(boolean selected) {
+		this.selected.set(selected);
+	}
 }

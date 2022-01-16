@@ -21,304 +21,303 @@ import java.util.function.Predicate;
  * <p>
  * This way you can benefit of the futures of the new {@link TransformableList} (sorting and filtering)
  * while also being able to directly modify the source list.
- * @param <T>
  */
 @SuppressWarnings({"unchecked", "NullableProblems"})
 public class TransformableListWrapper<T> extends AbstractList<T> implements ObservableList<T> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final ObservableList<T> source;
-    private final TransformableList<T> transformableList;
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final ObservableList<T> source;
+	private final TransformableList<T> transformableList;
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public TransformableListWrapper(ObservableList<T> source) {
-        this.source = source;
-        this.transformableList = new TransformableList<>(source);
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public TransformableListWrapper(ObservableList<T> source) {
+		this.source = source;
+		this.transformableList = new TransformableList<>(source);
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
+	//================================================================================
+	// Methods
+	//================================================================================
 
-    /**
-     * {@inheritDoc}
-     * <p></p>
-     * Added to the {@link TransformableList}.
-     */
-    @Override
-    public void addListener(ListChangeListener<? super T> listener) {
-        transformableList.addListener(listener);
-    }
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Added to the {@link TransformableList}.
+	 */
+	@Override
+	public void addListener(ListChangeListener<? super T> listener) {
+		transformableList.addListener(listener);
+	}
 
-    /**
-     * {@inheritDoc}
-     * <p></p>
-     * Removed from the {@link TransformableList}.
-     */
-    @Override
-    public void removeListener(ListChangeListener<? super T> listener) {
-        transformableList.removeListener(listener);
-    }
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Removed from the {@link TransformableList}.
+	 */
+	@Override
+	public void removeListener(ListChangeListener<? super T> listener) {
+		transformableList.removeListener(listener);
+	}
 
-    /**
-     * {@inheritDoc}
-     * <p></p>
-     * Added to the source list.
-     */
-    @Override
-    public boolean add(T t) {
-        return source.add(t);
-    }
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Added to the source list.
+	 */
+	@Override
+	public boolean add(T t) {
+		return source.add(t);
+	}
 
-    /**
-     * {@inheritDoc}
-     * <p></p>
-     * Set on the source list.
-     */
-    @Override
-    public T set(int index, T element) {
-        return source.set(index, element);
-    }
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Set on the source list.
+	 */
+	@Override
+	public T set(int index, T element) {
+		return source.set(index, element);
+	}
 
-    /**
-     * {@inheritDoc}
-     * <p></p>
-     * Added to the source list.
-     */
-    @Override
-    public void add(int index, T element) {
-        source.add(index, element);
-    }
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Added to the source list.
+	 */
+	@Override
+	public void add(int index, T element) {
+		source.add(index, element);
+	}
 
-    /**
-     * {@inheritDoc}
-     * <p></p>
-     * Removed from the source list.
-     */
-    @Override
-    public T remove(int index) {
-        return source.remove(index);
-    }
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Removed from the source list.
+	 */
+	@Override
+	public T remove(int index) {
+		return source.remove(index);
+	}
 
-    /**
-     * {@inheritDoc}
-     * <p></p>
-     * Retrieved from the {@link TransformableList}.
-     */
-    @Override
-    public int indexOf(Object o) {
-        return transformableList.indexOf(o);
-    }
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Retrieved from the {@link TransformableList}.
+	 */
+	@Override
+	public int indexOf(Object o) {
+		return transformableList.indexOf(o);
+	}
 
-    /**
-     * {@inheritDoc}
-     * <p></p>
-     * Retrieved from the {@link TransformableList}.
-     */
-    @Override
-    public int lastIndexOf(Object o) {
-        return transformableList.lastIndexOf(o);
-    }
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Retrieved from the {@link TransformableList}.
+	 */
+	@Override
+	public int lastIndexOf(Object o) {
+		return transformableList.lastIndexOf(o);
+	}
 
-    /**
-     * {@inheritDoc}
-     * <p></p>
-     * The source list is cleared.
-     */
-    @Override
-    public void clear() {
-        source.clear();
-    }
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * The source list is cleared.
+	 */
+	@Override
+	public void clear() {
+		source.clear();
+	}
 
-    /**
-     * {@inheritDoc}
-     * <p></p>
-     * Added to the source list.
-     */
-    @Override
-    public boolean addAll(int index, Collection<? extends T> c) {
-        return source.addAll(index, c);
-    }
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Added to the source list.
+	 */
+	@Override
+	public boolean addAll(int index, Collection<? extends T> c) {
+		return source.addAll(index, c);
+	}
 
-    /**
-     * {@inheritDoc}
-     * <p></p>
-     * Added to the source list.
-     */
-    @Override
-    public boolean addAll(T... elements) {
-        return source.addAll(elements);
-    }
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Added to the source list.
+	 */
+	@Override
+	public boolean addAll(T... elements) {
+		return source.addAll(elements);
+	}
 
-    /**
-     * {@inheritDoc}
-     * <p></p>
-     * Set on the source list.
-     */
-    @Override
-    public boolean setAll(T... elements) {
-        return source.setAll(elements);
-    }
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Set on the source list.
+	 */
+	@Override
+	public boolean setAll(T... elements) {
+		return source.setAll(elements);
+	}
 
-    /**
-     * {@inheritDoc}
-     * <p></p>
-     * Set on the source list.
-     */
-    @Override
-    public boolean setAll(Collection<? extends T> col) {
-        return source.setAll(col);
-    }
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Set on the source list.
+	 */
+	@Override
+	public boolean setAll(Collection<? extends T> col) {
+		return source.setAll(col);
+	}
 
-    /**
-     * {@inheritDoc}
-     * <p></p>
-     * Removed from the source list.
-     */
-    @Override
-    public boolean removeAll(T... elements) {
-        return source.removeAll(elements);
-    }
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Removed from the source list.
+	 */
+	@Override
+	public boolean removeAll(T... elements) {
+		return source.removeAll(elements);
+	}
 
-    /**
-     * {@inheritDoc}
-     * <p></p>
-     * Retained on the source list.
-     */
-    @Override
-    public boolean retainAll(T... elements) {
-        return source.retainAll(elements);
-    }
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Retained on the source list.
+	 */
+	@Override
+	public boolean retainAll(T... elements) {
+		return source.retainAll(elements);
+	}
 
-    /**
-     * {@inheritDoc}
-     * <p></p>
-     * Removed from the source list.
-     */
-    @Override
-    public void remove(int from, int to) {
-        source.remove(from, to);
-    }
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Removed from the source list.
+	 */
+	@Override
+	public void remove(int from, int to) {
+		source.remove(from, to);
+	}
 
-    /**
-     * {@inheritDoc}
-     * <p></p>
-     * Added to the {@link TransformableList}.
-     */
-    @Override
-    public void addListener(InvalidationListener listener) {
-        transformableList.addListener(listener);
-    }
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Added to the {@link TransformableList}.
+	 */
+	@Override
+	public void addListener(InvalidationListener listener) {
+		transformableList.addListener(listener);
+	}
 
-    /**
-     * {@inheritDoc}
-     * <p></p>
-     * Removed from the {@link TransformableList}.
-     */
-    @Override
-    public void removeListener(InvalidationListener listener) {
-        transformableList.removeListener(listener);
-    }
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Removed from the {@link TransformableList}.
+	 */
+	@Override
+	public void removeListener(InvalidationListener listener) {
+		transformableList.removeListener(listener);
+	}
 
-    /**
-     * {@inheritDoc}
-     * <p></p>
-     * Retrieved from the {@link TransformableList}.
-     */
-    @Override
-    public T get(int index) {
-        return transformableList.get(index);
-    }
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Retrieved from the {@link TransformableList}.
+	 */
+	@Override
+	public T get(int index) {
+		return transformableList.get(index);
+	}
 
-    /**
-     * {@inheritDoc}
-     * <p></p>
-     * Size of the {@link TransformableList}.
-     */
-    @Override
-    public int size() {
-        return transformableList.size();
-    }
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Size of the {@link TransformableList}.
+	 */
+	@Override
+	public int size() {
+		return transformableList.size();
+	}
 
-    /**
-     * @return the source observable list
-     */
-    public ObservableList<? extends T> getSource() {
-        return transformableList.getSource();
-    }
+	/**
+	 * @return the source observable list
+	 */
+	public ObservableList<? extends T> getSource() {
+		return transformableList.getSource();
+	}
 
-    /**
-     * Delegate for {@link TransformableList#viewToSource(int)}.
-     */
-    public int viewToSource(int index) {
-        return transformableList.viewToSource(index);
-    }
+	/**
+	 * Delegate for {@link TransformableList#viewToSource(int)}.
+	 */
+	public int viewToSource(int index) {
+		return transformableList.viewToSource(index);
+	}
 
-    /**
-     * Delegate for {@link TransformableList#sourceToView(int)}.
-     */
-    public int sourceToView(int index) {
-        return transformableList.sourceToView(index);
-    }
+	/**
+	 * Delegate for {@link TransformableList#sourceToView(int)}.
+	 */
+	public int sourceToView(int index) {
+		return transformableList.sourceToView(index);
+	}
 
-    public Predicate<? super T> getPredicate() {
-        return transformableList.getPredicate();
-    }
+	public Predicate<? super T> getPredicate() {
+		return transformableList.getPredicate();
+	}
 
-    /**
-     * Delegate for {@link TransformableList#predicateProperty()}.
-     */
-    public PredicateProperty<T> predicateProperty() {
-        return transformableList.predicateProperty();
-    }
+	/**
+	 * Delegate for {@link TransformableList#predicateProperty()}.
+	 */
+	public PredicateProperty<T> predicateProperty() {
+		return transformableList.predicateProperty();
+	}
 
-    public void setPredicate(Predicate<T> predicate) {
-        transformableList.setPredicate(predicate);
-    }
+	public void setPredicate(Predicate<T> predicate) {
+		transformableList.setPredicate(predicate);
+	}
 
-    public Comparator<T> getComparator() {
-        return transformableList.getComparator();
-    }
+	public Comparator<T> getComparator() {
+		return transformableList.getComparator();
+	}
 
-    /**
-     * Delegate for {@link TransformableList#comparatorProperty()}.
-     */
-    public ComparatorProperty<T> comparatorProperty() {
-        return transformableList.comparatorProperty();
-    }
+	/**
+	 * Delegate for {@link TransformableList#comparatorProperty()}.
+	 */
+	public ComparatorProperty<T> comparatorProperty() {
+		return transformableList.comparatorProperty();
+	}
 
-    public void setComparator(Comparator<T> comparator) {
-        transformableList.setComparator(comparator);
-    }
+	public void setComparator(Comparator<T> comparator) {
+		transformableList.setComparator(comparator);
+	}
 
-    /**
-     * Delegate for {@link TransformableList#setComparator(Comparator, boolean)}.
-     */
-    public void setComparator(Comparator<T> sorter, boolean reversed) {
-        transformableList.setComparator(sorter, reversed);
-    }
+	/**
+	 * Delegate for {@link TransformableList#setComparator(Comparator, boolean)}.
+	 */
+	public void setComparator(Comparator<T> sorter, boolean reversed) {
+		transformableList.setComparator(sorter, reversed);
+	}
 
-    /**
-     * Delegate for {@link TransformableList#isReversed()}.
-     */
-    public boolean isReversed() {
-        return transformableList.isReversed();
-    }
+	/**
+	 * Delegate for {@link TransformableList#isReversed()}.
+	 */
+	public boolean isReversed() {
+		return transformableList.isReversed();
+	}
 
-    /**
-     * Delegate for {@link TransformableList#setReversed(boolean)}.
-     */
-    public void setReversed(boolean reversed) {
-        transformableList.setReversed(reversed);
-    }
+	/**
+	 * Delegate for {@link TransformableList#setReversed(boolean)}.
+	 */
+	public void setReversed(boolean reversed) {
+		transformableList.setReversed(reversed);
+	}
 
-    /**
-     * @return the wrapped {@link TransformableList}
-     */
-    public TransformableList<T> getTransformableList() {
-        return transformableList;
-    }
+	/**
+	 * @return the wrapped {@link TransformableList}
+	 */
+	public TransformableList<T> getTransformableList() {
+		return transformableList;
+	}
 }

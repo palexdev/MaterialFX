@@ -28,10 +28,10 @@
     <StackPane minHeight="150.0" minWidth="300.0" styleClass="grid-background" GridPane.columnSpan="3"
                GridPane.rowSpan="2">
         <GridPane.margin>
-          <Insets left="-15.0" right="-15.0"/>
+            <Insets left="-15.0" right="-15.0"/>
         </GridPane.margin>
         <opaqueInsets>
-          <Insets/>
+            <Insets/>
         </opaqueInsets>
     </StackPane>
     <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="header-label" text="Flat Buttons"
@@ -44,10 +44,10 @@
     <StackPane minHeight="150.0" minWidth="300.0" styleClass="grid-background" GridPane.columnSpan="3"
                GridPane.rowIndex="3" GridPane.rowSpan="2">
         <opaqueInsets>
-          <Insets/>
+            <Insets/>
         </opaqueInsets>
         <GridPane.margin>
-          <Insets left="-15.0" right="-15.0"/>
+            <Insets left="-15.0" right="-15.0"/>
         </GridPane.margin>
     </StackPane>
     <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
@@ -60,7 +60,7 @@
     <StackPane minHeight="150.0" minWidth="300.0" styleClass="grid-background" GridPane.columnIndex="4"
                GridPane.columnSpan="3" GridPane.rowSpan="2">
         <GridPane.margin>
-          <Insets left="-15.0" right="-15.0"/>
+            <Insets left="-15.0" right="-15.0"/>
         </GridPane.margin>
     </StackPane>
     <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="header-label" text="Outlined Buttons"
@@ -74,7 +74,7 @@
     <StackPane minHeight="150.0" minWidth="300.0" styleClass="grid-background" GridPane.columnIndex="4"
                GridPane.columnSpan="3" GridPane.rowIndex="3" GridPane.rowSpan="2">
         <GridPane.margin>
-          <Insets left="-15.0" right="-15.0"/>
+            <Insets left="-15.0" right="-15.0"/>
         </GridPane.margin>
     </StackPane>
     <Label styleClass="header-label" text="Other Buttons" GridPane.columnIndex="5" GridPane.rowIndex="3"/>

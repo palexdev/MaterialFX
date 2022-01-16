@@ -38,231 +38,231 @@ import java.util.function.Function;
  */
 public class SingleSelectionModel<T> extends AbstractSingleSelectionModel<T> {
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public SingleSelectionModel(ObservableList<T> items) {
-        super(items);
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public SingleSelectionModel(ObservableList<T> items) {
+		super(items);
+	}
 
-    public SingleSelectionModel(ObjectProperty<ObservableList<T>> items) {
-        super(items);
-    }
+	public SingleSelectionModel(ObjectProperty<ObservableList<T>> items) {
+		super(items);
+	}
 
-    //================================================================================
-    // Delegate Methods
-    //================================================================================
+	//================================================================================
+	// Delegate Methods
+	//================================================================================
 
-    /**
-     * Delegate method for {@link SingleSelectionManager#clearSelection()}.
-     */
-    @Override
-    public void clearSelection() {
-        selectionManager.clearSelection();
-    }
+	/**
+	 * Delegate method for {@link SingleSelectionManager#clearSelection()}.
+	 */
+	@Override
+	public void clearSelection() {
+		selectionManager.clearSelection();
+	}
 
-    /**
-     * Delegate method for {@link SingleSelectionManager#updateSelection(int)}.
-     */
-    @Override
-    public void selectIndex(int index) {
-        selectionManager.updateSelection(index);
-    }
+	/**
+	 * Delegate method for {@link SingleSelectionManager#updateSelection(int)}.
+	 */
+	@Override
+	public void selectIndex(int index) {
+		selectionManager.updateSelection(index);
+	}
 
-    /**
-     * Delegate method for {@link SingleSelectionManager#updateSelection(Object)}.
-     */
-    @Override
-    public void selectItem(T item) {
-        selectionManager.updateSelection(item);
-    }
+	/**
+	 * Delegate method for {@link SingleSelectionManager#updateSelection(Object)}.
+	 */
+	@Override
+	public void selectItem(T item) {
+		selectionManager.updateSelection(item);
+	}
 
-    /**
-     * Delegate method for {@link SingleSelectionManager#getSelectedIndex()}}.
-     */
-    @Override
-    public int getSelectedIndex() {
-        return selectionManager.getSelectedIndex();
-    }
+	/**
+	 * Delegate method for {@link SingleSelectionManager#getSelectedIndex()}}.
+	 */
+	@Override
+	public int getSelectedIndex() {
+		return selectionManager.getSelectedIndex();
+	}
 
-    /**
-     * Delegate method for {@link SingleSelectionManager#selectedIndexProperty()}, but
-     * a read-only property is returned.
-     */
-    @Override
-    public ReadOnlyIntegerProperty selectedIndexProperty() {
-        return selectionManager.selectedIndexProperty().getReadOnlyProperty();
-    }
+	/**
+	 * Delegate method for {@link SingleSelectionManager#selectedIndexProperty()}, but
+	 * a read-only property is returned.
+	 */
+	@Override
+	public ReadOnlyIntegerProperty selectedIndexProperty() {
+		return selectionManager.selectedIndexProperty().getReadOnlyProperty();
+	}
 
-    /**
-     * Delegate method for {@link SingleSelectionManager#getSelectedItem()}.
-     */
-    @Override
-    public T getSelectedItem() {
-        return selectionManager.getSelectedItem();
-    }
+	/**
+	 * Delegate method for {@link SingleSelectionManager#getSelectedItem()}.
+	 */
+	@Override
+	public T getSelectedItem() {
+		return selectionManager.getSelectedItem();
+	}
 
-    /**
-     * Delegate method for {@link SingleSelectionManager#selectedItemProperty()}, but
-     * a read-only property is returned.
-     */
-    @Override
-    public ReadOnlyObjectProperty<T> selectedItemProperty() {
-        return selectionManager.selectedItemProperty().getReadOnlyProperty();
-    }
+	/**
+	 * Delegate method for {@link SingleSelectionManager#selectedItemProperty()}, but
+	 * a read-only property is returned.
+	 */
+	@Override
+	public ReadOnlyObjectProperty<T> selectedItemProperty() {
+		return selectionManager.selectedItemProperty().getReadOnlyProperty();
+	}
 
-    //================================================================================
-    // Bindings
-    //================================================================================
+	//================================================================================
+	// Bindings
+	//================================================================================
 
-    /**
-     * Binds this selection model's index to the given selection model's index,
-     * calls {@link SingleSelectionManager#bindIndex(ObservableValue, Function)}.
-     * <p></p>
-     * Default implementation:
-     * <pre>
-     * {@code
-     *      selectionManager.bindIndex(selectionModel.selectionManager.selectedIndexProperty(), getItems()::get);
-     * }
-     * </pre>
-     */
-    public void bindIndex(SingleSelectionModel<T> selectionModel) {
-        selectionManager.bindIndex(selectionModel.selectionManager.selectedIndexProperty(), getItems()::get);
-    }
+	/**
+	 * Binds this selection model's index to the given selection model's index,
+	 * calls {@link SingleSelectionManager#bindIndex(ObservableValue, Function)}.
+	 * <p></p>
+	 * Default implementation:
+	 * <pre>
+	 * {@code
+	 *      selectionManager.bindIndex(selectionModel.selectionManager.selectedIndexProperty(), getItems()::get);
+	 * }
+	 * </pre>
+	 */
+	public void bindIndex(SingleSelectionModel<T> selectionModel) {
+		selectionManager.bindIndex(selectionModel.selectionManager.selectedIndexProperty(), getItems()::get);
+	}
 
-    /**
-     * Binds this selection model's index bidirectionally to the given selection model's index,
-     * calls {@link SingleSelectionManager#bindIndexBidirectional(Property, Function, TriConsumer)}.
-     * <p></p>
-     * Default implementation:
-     * <pre>
-     * {@code
-     *         selectionManager.bindIndexBidirectional(
-     *                 selectionModel.selectionManager.selectedIndexProperty(),
-     *                 getItems()::get,
-     *                 (clearing, i, other) -> {
-     *                     selectionModel.selectionManager.setClearing(clearing);
-     *                     selectionModel.selectionManager.updateSelection(i);
-     *                 }
-     *         );
-     * }
-     * </pre>
-     */
-    public void bindIndexBidirectional(SingleSelectionModel<T> selectionModel) {
-        selectionManager.bindIndexBidirectional(
-                selectionModel.selectionManager.selectedIndexProperty(),
-                getItems()::get,
-                (clearing, i, other) -> {
-                    selectionModel.selectionManager.setClearing(clearing);
-                    selectionModel.selectionManager.updateSelection(i);
-                }
-        );
-    }
+	/**
+	 * Binds this selection model's index bidirectionally to the given selection model's index,
+	 * calls {@link SingleSelectionManager#bindIndexBidirectional(Property, Function, TriConsumer)}.
+	 * <p></p>
+	 * Default implementation:
+	 * <pre>
+	 * {@code
+	 *         selectionManager.bindIndexBidirectional(
+	 *                 selectionModel.selectionManager.selectedIndexProperty(),
+	 *                 getItems()::get,
+	 *                 (clearing, i, other) -> {
+	 *                     selectionModel.selectionManager.setClearing(clearing);
+	 *                     selectionModel.selectionManager.updateSelection(i);
+	 *                 }
+	 *         );
+	 * }
+	 * </pre>
+	 */
+	public void bindIndexBidirectional(SingleSelectionModel<T> selectionModel) {
+		selectionManager.bindIndexBidirectional(
+				selectionModel.selectionManager.selectedIndexProperty(),
+				getItems()::get,
+				(clearing, i, other) -> {
+					selectionModel.selectionManager.setClearing(clearing);
+					selectionModel.selectionManager.updateSelection(i);
+				}
+		);
+	}
 
-    /**
-     * Binds this selection model's item to the given selection model's item,
-     * calls {@link SingleSelectionManager#bindItem(ObservableValue, Function)}.
-     * <p></p>
-     * Default implementation:
-     * <pre>
-     * {@code
-     *         selectionManager.bindItem(selectionModel.selectionManager.selectedItemProperty(), getItems()::indexOf);
-     * }
-     * </pre>
-     */
-    public void bindItem(SingleSelectionModel<T> selectionModel) {
-        selectionManager.bindItem(selectionModel.selectionManager.selectedItemProperty(), getItems()::indexOf);
-    }
+	/**
+	 * Binds this selection model's item to the given selection model's item,
+	 * calls {@link SingleSelectionManager#bindItem(ObservableValue, Function)}.
+	 * <p></p>
+	 * Default implementation:
+	 * <pre>
+	 * {@code
+	 *         selectionManager.bindItem(selectionModel.selectionManager.selectedItemProperty(), getItems()::indexOf);
+	 * }
+	 * </pre>
+	 */
+	public void bindItem(SingleSelectionModel<T> selectionModel) {
+		selectionManager.bindItem(selectionModel.selectionManager.selectedItemProperty(), getItems()::indexOf);
+	}
 
-    /**
-     * Binds this selection model's item bidirectionally to the given selection model's item,
-     * calls {@link SingleSelectionManager#bindItemBidirectional(Property, Function, TriConsumer)}.
-     * <p></p>
-     * Default implementation:
-     * <pre>
-     * {@code
-     *         selectionManager.bindItemBidirectional(
-     *                 selectionModel.selectionManager.selectedItemProperty(),
-     *                 getItems()::indexOf,
-     *                 (clearing, item, other) -> {
-     *                     selectionModel.selectionManager.setClearing(clearing);
-     *                     selectionModel.selectionManager.updateSelection(item);
-     *                 }
-     *         );
-     * }
-     * </pre>
-     */
-    public void bindItemBidirectional(SingleSelectionModel<T> selectionModel) {
-        selectionManager.bindItemBidirectional(
-                selectionModel.selectionManager.selectedItemProperty(),
-                getItems()::indexOf,
-                (clearing, item, other) -> {
-                    selectionModel.selectionManager.setClearing(clearing);
-                    selectionModel.selectionManager.updateSelection(item);
-                }
-        );
-    }
+	/**
+	 * Binds this selection model's item bidirectionally to the given selection model's item,
+	 * calls {@link SingleSelectionManager#bindItemBidirectional(Property, Function, TriConsumer)}.
+	 * <p></p>
+	 * Default implementation:
+	 * <pre>
+	 * {@code
+	 *         selectionManager.bindItemBidirectional(
+	 *                 selectionModel.selectionManager.selectedItemProperty(),
+	 *                 getItems()::indexOf,
+	 *                 (clearing, item, other) -> {
+	 *                     selectionModel.selectionManager.setClearing(clearing);
+	 *                     selectionModel.selectionManager.updateSelection(item);
+	 *                 }
+	 *         );
+	 * }
+	 * </pre>
+	 */
+	public void bindItemBidirectional(SingleSelectionModel<T> selectionModel) {
+		selectionManager.bindItemBidirectional(
+				selectionModel.selectionManager.selectedItemProperty(),
+				getItems()::indexOf,
+				(clearing, item, other) -> {
+					selectionModel.selectionManager.setClearing(clearing);
+					selectionModel.selectionManager.updateSelection(item);
+				}
+		);
+	}
 
-    /**
-     * Delegate method for {@link SingleSelectionManager#bindIndex(ObservableValue, Function)}.
-     */
-    public void bindIndex(ObservableValue<? extends Number> source, Function<Integer, T> indexConverter) {
-        selectionManager.bindIndex(source, indexConverter);
-    }
+	/**
+	 * Delegate method for {@link SingleSelectionManager#bindIndex(ObservableValue, Function)}.
+	 */
+	public void bindIndex(ObservableValue<? extends Number> source, Function<Integer, T> indexConverter) {
+		selectionManager.bindIndex(source, indexConverter);
+	}
 
-    /**
-     * Delegate method for {@link SingleSelectionManager#bindIndexBidirectional(Property, Function, TriConsumer)}.
-     */
-    public void bindIndexBidirectional(Property<Number> other, Function<Integer, T> indexConverter, TriConsumer<Boolean, Integer, Property<Number>> updateOther) {
-        selectionManager.bindIndexBidirectional(other, indexConverter, updateOther);
-    }
+	/**
+	 * Delegate method for {@link SingleSelectionManager#bindIndexBidirectional(Property, Function, TriConsumer)}.
+	 */
+	public void bindIndexBidirectional(Property<Number> other, Function<Integer, T> indexConverter, TriConsumer<Boolean, Integer, Property<Number>> updateOther) {
+		selectionManager.bindIndexBidirectional(other, indexConverter, updateOther);
+	}
 
-    /**
-     * Delegate method for {@link SingleSelectionManager#bindItem(ObservableValue, Function)}.
-     */
-    public void bindItem(ObservableValue<? extends T> source, Function<T, Integer> itemConverter) {
-        selectionManager.bindItem(source, itemConverter);
-    }
+	/**
+	 * Delegate method for {@link SingleSelectionManager#bindItem(ObservableValue, Function)}.
+	 */
+	public void bindItem(ObservableValue<? extends T> source, Function<T, Integer> itemConverter) {
+		selectionManager.bindItem(source, itemConverter);
+	}
 
-    /**
-     * Delegate method for {@link SingleSelectionManager#bindItemBidirectional(Property, Function, TriConsumer)}.
-     */
-    public void bindItemBidirectional(Property<T> other, Function<T, Integer> itemConverter, TriConsumer<Boolean, T, Property<T>> updateOther) {
-        selectionManager.bindItemBidirectional(other, itemConverter, updateOther);
-    }
+	/**
+	 * Delegate method for {@link SingleSelectionManager#bindItemBidirectional(Property, Function, TriConsumer)}.
+	 */
+	public void bindItemBidirectional(Property<T> other, Function<T, Integer> itemConverter, TriConsumer<Boolean, T, Property<T>> updateOther) {
+		selectionManager.bindItemBidirectional(other, itemConverter, updateOther);
+	}
 
-    /**
-     * Delegate method for {@link SingleSelectionManager#unbind()}.
-     */
-    public void unbind() {
-        selectionManager.unbind();
-    }
+	/**
+	 * Delegate method for {@link SingleSelectionManager#unbind()}.
+	 */
+	public void unbind() {
+		selectionManager.unbind();
+	}
 
-    /**
-     * Delegate method for {@link SingleSelectionManager#unbindIndexBidirectional(Property)}.
-     */
-    public void unbindIndexBidirectional(Property<Number> other) {
-        selectionManager.unbindIndexBidirectional(other);
-    }
+	/**
+	 * Delegate method for {@link SingleSelectionManager#unbindIndexBidirectional(Property)}.
+	 */
+	public void unbindIndexBidirectional(Property<Number> other) {
+		selectionManager.unbindIndexBidirectional(other);
+	}
 
-    /**
-     * Delegate method for {@link SingleSelectionManager#unbindItemBidirectional(Property)}.
-     */
-    public void unbindItemBidirectional(Property<T> other) {
-        selectionManager.unbindItemBidirectional(other);
-    }
+	/**
+	 * Delegate method for {@link SingleSelectionManager#unbindItemBidirectional(Property)}.
+	 */
+	public void unbindItemBidirectional(Property<T> other) {
+		selectionManager.unbindItemBidirectional(other);
+	}
 
-    /**
-     * Delegate method for {@link SingleSelectionManager#unbindBidirectional()}.
-     */
-    public void unbindBidirectional() {
-        selectionManager.unbindBidirectional();
-    }
+	/**
+	 * Delegate method for {@link SingleSelectionManager#unbindBidirectional()}.
+	 */
+	public void unbindBidirectional() {
+		selectionManager.unbindBidirectional();
+	}
 
-    /**
-     * Delegate method for {@link SingleSelectionManager#isBound()}.
-     */
-    public boolean isBound() {
-        return selectionManager.isBound();
-    }
+	/**
+	 * Delegate method for {@link SingleSelectionManager#isBound()}.
+	 */
+	public boolean isBound() {
+		return selectionManager.isBound();
+	}
 }

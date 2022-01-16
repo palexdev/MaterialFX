@@ -19,8 +19,8 @@
 package io.github.palexdev.materialfx.enums;
 
 public enum DialogType {
-    ERROR,
-    WARNING,
-    INFO,
-    GENERIC
+	ERROR,
+	WARNING,
+	INFO,
+	GENERIC
 }

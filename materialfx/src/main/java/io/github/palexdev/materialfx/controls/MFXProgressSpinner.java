@@ -53,80 +53,80 @@ import static io.github.palexdev.materialfx.utils.NodeUtils.isPseudoClassActive;
  * I know this may seem a strange approach, but it is much more flexible and allows for a lot more customization.
  */
 public class MFXProgressSpinner extends ProgressIndicator {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final String STYLE_CLASS = "mfx-progress-spinner";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXProgressSpinner.css");
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final String STYLE_CLASS = "mfx-progress-spinner";
+	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXProgressSpinner.css");
 
-    private final ObservableList<NumberRange<Double>> ranges1 = FXCollections.observableArrayList();
-    private final ObservableList<NumberRange<Double>> ranges2 = FXCollections.observableArrayList();
-    private final ObservableList<NumberRange<Double>> ranges3 = FXCollections.observableArrayList();
-    protected final PseudoClass RANGE1_PSEUDO_CLASS = PseudoClass.getPseudoClass("range1");
-    protected final PseudoClass RANGE2_PSEUDO_CLASS = PseudoClass.getPseudoClass("range2");
-    protected final PseudoClass RANGE3_PSEUDO_CLASS = PseudoClass.getPseudoClass("range3");
+	private final ObservableList<NumberRange<Double>> ranges1 = FXCollections.observableArrayList();
+	private final ObservableList<NumberRange<Double>> ranges2 = FXCollections.observableArrayList();
+	private final ObservableList<NumberRange<Double>> ranges3 = FXCollections.observableArrayList();
+	protected final PseudoClass RANGE1_PSEUDO_CLASS = PseudoClass.getPseudoClass("range1");
+	protected final PseudoClass RANGE2_PSEUDO_CLASS = PseudoClass.getPseudoClass("range2");
+	protected final PseudoClass RANGE3_PSEUDO_CLASS = PseudoClass.getPseudoClass("range3");
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXProgressSpinner() {
-        this(-1);
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXProgressSpinner() {
+		this(-1);
+	}
 
-    public MFXProgressSpinner(double progress) {
-        super(progress);
-        initialize();
-    }
+	public MFXProgressSpinner(double progress) {
+		super(progress);
+		initialize();
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
-    private void initialize() {
-        getStyleClass().add(STYLE_CLASS);
-        addListeners();
-    }
+	//================================================================================
+	// Methods
+	//================================================================================
+	private void initialize() {
+		getStyleClass().add(STYLE_CLASS);
+		addListeners();
+	}
 
-    private void addListeners() {
-        ranges1.addListener((ListChangeListener<? super NumberRange<Double>>) c -> handlePseudoClasses());
-        ranges2.addListener((ListChangeListener<? super NumberRange<Double>>) c -> handlePseudoClasses());
-        ranges3.addListener((ListChangeListener<? super NumberRange<Double>>) c -> handlePseudoClasses());
-        progressProperty().addListener((observable, oldValue, newValue) -> handlePseudoClasses());
-    }
+	private void addListeners() {
+		ranges1.addListener((ListChangeListener<? super NumberRange<Double>>) c -> handlePseudoClasses());
+		ranges2.addListener((ListChangeListener<? super NumberRange<Double>>) c -> handlePseudoClasses());
+		ranges3.addListener((ListChangeListener<? super NumberRange<Double>>) c -> handlePseudoClasses());
+		progressProperty().addListener((observable, oldValue, newValue) -> handlePseudoClasses());
+	}
 
-    /**
-     * Handles the ":range1", ":range2" and ":range3" css pseudo classes when these properties change:
-     * {@link #progressProperty()}, {@link #getRanges1()}, {@link #getRanges2()}, {@link #getRanges3()}.
-     */
-    private void handlePseudoClasses() {
-        double val = getProgress();
-        if (!isPseudoClassActive(this, RANGE1_PSEUDO_CLASS) && NumberRange.inRangeOf(val, ranges1)) {
-            pseudoClassStateChanged(RANGE1_PSEUDO_CLASS, true);
-            pseudoClassStateChanged(RANGE2_PSEUDO_CLASS, false);
-            pseudoClassStateChanged(RANGE3_PSEUDO_CLASS, false);
-        } else if (!isPseudoClassActive(this, RANGE2_PSEUDO_CLASS) && NumberRange.inRangeOf(val, ranges2)) {
-            pseudoClassStateChanged(RANGE2_PSEUDO_CLASS, true);
-            pseudoClassStateChanged(RANGE1_PSEUDO_CLASS, false);
-            pseudoClassStateChanged(RANGE3_PSEUDO_CLASS, false);
-        } else if (!isPseudoClassActive(this, RANGE3_PSEUDO_CLASS) && NumberRange.inRangeOf(val, ranges3)) {
-            pseudoClassStateChanged(RANGE3_PSEUDO_CLASS, true);
-            pseudoClassStateChanged(RANGE1_PSEUDO_CLASS, false);
-            pseudoClassStateChanged(RANGE2_PSEUDO_CLASS, false);
-        }
-    }
+	/**
+	 * Handles the ":range1", ":range2" and ":range3" css pseudo classes when these properties change:
+	 * {@link #progressProperty()}, {@link #getRanges1()}, {@link #getRanges2()}, {@link #getRanges3()}.
+	 */
+	private void handlePseudoClasses() {
+		double val = getProgress();
+		if (!isPseudoClassActive(this, RANGE1_PSEUDO_CLASS) && NumberRange.inRangeOf(val, ranges1)) {
+			pseudoClassStateChanged(RANGE1_PSEUDO_CLASS, true);
+			pseudoClassStateChanged(RANGE2_PSEUDO_CLASS, false);
+			pseudoClassStateChanged(RANGE3_PSEUDO_CLASS, false);
+		} else if (!isPseudoClassActive(this, RANGE2_PSEUDO_CLASS) && NumberRange.inRangeOf(val, ranges2)) {
+			pseudoClassStateChanged(RANGE2_PSEUDO_CLASS, true);
+			pseudoClassStateChanged(RANGE1_PSEUDO_CLASS, false);
+			pseudoClassStateChanged(RANGE3_PSEUDO_CLASS, false);
+		} else if (!isPseudoClassActive(this, RANGE3_PSEUDO_CLASS) && NumberRange.inRangeOf(val, ranges3)) {
+			pseudoClassStateChanged(RANGE3_PSEUDO_CLASS, true);
+			pseudoClassStateChanged(RANGE1_PSEUDO_CLASS, false);
+			pseudoClassStateChanged(RANGE2_PSEUDO_CLASS, false);
+		}
+	}
 
-    /**
-     * Returns the first list of ranges.
-     */
-    public ObservableList<NumberRange<Double>> getRanges1() {
-        return ranges1;
-    }
+	/**
+	 * Returns the first list of ranges.
+	 */
+	public ObservableList<NumberRange<Double>> getRanges1() {
+		return ranges1;
+	}
 
-    /**
-     * Returns the second list of ranges.
-     */
-    public ObservableList<NumberRange<Double>> getRanges2() {
-        return ranges2;
-    }
+	/**
+	 * Returns the second list of ranges.
+	 */
+	public ObservableList<NumberRange<Double>> getRanges2() {
+		return ranges2;
+	}
 
 	/**
 	 * Returns the third list of ranges.
@@ -255,20 +255,20 @@ public class MFXProgressSpinner extends ProgressIndicator {
 	}
 
 	public void setRadius(double radius) {
-        this.radius.set(radius);
-    }
+		this.radius.set(radius);
+	}
 
-    public double getStartingAngle() {
-        return startingAngle.get();
-    }
+	public double getStartingAngle() {
+		return startingAngle.get();
+	}
 
-    public StyleableDoubleProperty startingAngleProperty() {
-        return startingAngle;
-    }
+	public StyleableDoubleProperty startingAngleProperty() {
+		return startingAngle;
+	}
 
-    public void setStartingAngle(double startingAngle) {
-        this.startingAngle.set(startingAngle);
-    }
+	public void setStartingAngle(double startingAngle) {
+		this.startingAngle.set(startingAngle);
+	}
 
 	//================================================================================
 	// CssMetaData
@@ -314,39 +314,39 @@ public class MFXProgressSpinner extends ProgressIndicator {
 
 		private static final CssMetaData<MFXProgressSpinner, Number> STARTING_ANGLE =
 				FACTORY.createSizeCssMetaData(
-                        "-mfx-starting-angle",
-                        MFXProgressSpinner::startingAngleProperty,
-                        360 - Math.random() * 720
-                );
+						"-mfx-starting-angle",
+						MFXProgressSpinner::startingAngleProperty,
+						360 - Math.random() * 720
+				);
 
-        static {
-	        cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
-			        ProgressIndicator.getClassCssMetaData(),
-			        COLOR1, COLOR2, COLOR3, COLOR4,
-			        RADIUS, STARTING_ANGLE
-	        );
-        }
-    }
+		static {
+			cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
+					ProgressIndicator.getClassCssMetaData(),
+					COLOR1, COLOR2, COLOR3, COLOR4,
+					RADIUS, STARTING_ANGLE
+			);
+		}
+	}
 
-    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
-        return StyleableProperties.cssMetaDataList;
-    }
+	public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
+		return StyleableProperties.cssMetaDataList;
+	}
 
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        return new MFXProgressSpinnerSkin(this);
-    }
+	//================================================================================
+	// Override Methods
+	//================================================================================
+	@Override
+	protected Skin<?> createDefaultSkin() {
+		return new MFXProgressSpinnerSkin(this);
+	}
 
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
+	@Override
+	public String getUserAgentStylesheet() {
+		return STYLESHEET;
+	}
 
-    @Override
-    protected List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return MFXProgressSpinner.getControlCssMetaDataList();
-    }
+	@Override
+	protected List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+		return MFXProgressSpinner.getControlCssMetaDataList();
+	}
 }

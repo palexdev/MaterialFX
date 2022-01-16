@@ -19,6 +19,7 @@ import java.util.function.BiConsumer;
  * disposed before
  * <p> - The method responsible for updating the target (triggered by the sourceListener)
  * <p> - The actions to perform: before/after the target update, before/after the binding, before/after the unbinding
+ *
  * @param <T>
  */
 public abstract class AbstractBindingHelper<T> {
@@ -33,9 +34,13 @@ public abstract class AbstractBindingHelper<T> {
 	// Abstract Properties
 	//================================================================================
 	public abstract AbstractBindingHelper<T> bind(ObservableValue<? extends T> target);
+
 	public abstract AbstractBindingHelper<T> with(BiConsumer<T, T> targetUpdater);
+
 	public abstract void invalidate();
+
 	public abstract void dispose();
+
 	public abstract boolean isDispose();
 
 	//================================================================================
@@ -48,9 +53,9 @@ public abstract class AbstractBindingHelper<T> {
 	 * <p>
 	 * Also calls {@link #beforeUpdateTarget()} and {@link #afterUpdateTarget()}.
 	 *
-	 * @param source    the source property
-	 * @param oldValue  the source's oldValue
-	 * @param newValue  the source's newValue
+	 * @param source   the source property
+	 * @param oldValue the source's oldValue
+	 * @param newValue the source's newValue
 	 */
 	protected void updateTarget(ObservableValue<? extends T> source, T oldValue, T newValue) {
 		beforeUpdateTarget();

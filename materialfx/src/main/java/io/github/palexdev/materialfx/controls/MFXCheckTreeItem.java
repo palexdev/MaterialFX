@@ -44,133 +44,133 @@ import java.lang.ref.WeakReference;
  * @see ITreeCheckModel
  */
 public class MFXCheckTreeItem<T> extends MFXTreeItem<T> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final String STYLE_CLASS = "mfx-check-tree-item";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTreeItem.css");
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final String STYLE_CLASS = "mfx-check-tree-item";
+	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTreeItem.css");
 
-    private final BooleanProperty checked = new SimpleBooleanProperty(false);
-    private final BooleanProperty indeterminate = new SimpleBooleanProperty(false);
+	private final BooleanProperty checked = new SimpleBooleanProperty(false);
+	private final BooleanProperty indeterminate = new SimpleBooleanProperty(false);
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXCheckTreeItem(T data) {
-        super(data);
-        initialize();
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXCheckTreeItem(T data) {
+		super(data);
+		initialize();
+	}
 
-    public MFXCheckTreeItem(T data, Callback<AbstractMFXTreeItem<T>, AbstractMFXTreeCell<T>> cellFactory) {
-        super(data, cellFactory);
-        initialize();
-    }
+	public MFXCheckTreeItem(T data, Callback<AbstractMFXTreeItem<T>, AbstractMFXTreeCell<T>> cellFactory) {
+		super(data, cellFactory);
+		initialize();
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
+	//================================================================================
+	// Methods
+	//================================================================================
 
-    /**
-     * Sets the style class to "mfx-tree-view".
-     * <p>
-     * Adds a listener to {@link #treeViewProperty()} allowing item check before the Scene is shown
-     * by calling the TreeCheckModel {@link TreeCheckModel#scanTree(MFXCheckTreeItem)} )} method.
-     */
-    private void initialize() {
-        getStyleClass().add(STYLE_CLASS);
+	/**
+	 * Sets the style class to "mfx-tree-view".
+	 * <p>
+	 * Adds a listener to {@link #treeViewProperty()} allowing item check before the Scene is shown
+	 * by calling the TreeCheckModel {@link TreeCheckModel#scanTree(MFXCheckTreeItem)} )} method.
+	 */
+	private void initialize() {
+		getStyleClass().add(STYLE_CLASS);
 
-        treeViewProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && isRoot()) {
-                TreeCheckModel<T> treeCheckModel = (TreeCheckModel<T>) getSelectionModel();
-                treeCheckModel.scanTree((MFXCheckTreeItem<T>) getRoot());
-            }
-        });
-    }
+		treeViewProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue != null && isRoot()) {
+				TreeCheckModel<T> treeCheckModel = (TreeCheckModel<T>) getSelectionModel();
+				treeCheckModel.scanTree((MFXCheckTreeItem<T>) getRoot());
+			}
+		});
+	}
 
-    public boolean isChecked() {
-        return checked.get();
-    }
+	public boolean isChecked() {
+		return checked.get();
+	}
 
-    public BooleanProperty checkedProperty() {
-        return checked;
-    }
+	public BooleanProperty checkedProperty() {
+		return checked;
+	}
 
-    public void setChecked(boolean checked) {
-        this.checked.set(checked);
-    }
+	public void setChecked(boolean checked) {
+		this.checked.set(checked);
+	}
 
-    public boolean isIndeterminate() {
-        return indeterminate.get();
-    }
+	public boolean isIndeterminate() {
+		return indeterminate.get();
+	}
 
-    public BooleanProperty indeterminateProperty() {
-        return indeterminate;
-    }
+	public BooleanProperty indeterminateProperty() {
+		return indeterminate;
+	}
 
-    public void setIndeterminate(boolean indeterminate) {
-        this.indeterminate.set(indeterminate);
-    }
+	public void setIndeterminate(boolean indeterminate) {
+		this.indeterminate.set(indeterminate);
+	}
 
-    //================================================================================
-    // Override Methods
-    //================================================================================
+	//================================================================================
+	// Override Methods
+	//================================================================================
 
-    /**
-     * Overridden to return the ITreeCheckModel instance of the MFXCheckTreeView.
-     */
-    @Override
-    public ITreeCheckModel<T> getSelectionModel() {
-        return (ITreeCheckModel<T>) super.getSelectionModel();
-    }
+	/**
+	 * Overridden to return the ITreeCheckModel instance of the MFXCheckTreeView.
+	 */
+	@Override
+	public ITreeCheckModel<T> getSelectionModel() {
+		return (ITreeCheckModel<T>) super.getSelectionModel();
+	}
 
-    /**
-     * Overridden to use {@link MFXCheckTreeCell}.
-     */
-    @Override
-    protected void defaultCellFactory() {
-        super.cellFactory.set(cell -> new MFXCheckTreeCell<>(this));
-    }
+	/**
+	 * Overridden to use {@link MFXCheckTreeCell}.
+	 */
+	@Override
+	protected void defaultCellFactory() {
+		super.cellFactory.set(cell -> new MFXCheckTreeCell<>(this));
+	}
 
-    /**
-     * Overridden to use {@link MFXCheckTreeItemSkin}.
-     */
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        return new MFXCheckTreeItemSkin<>(this);
-    }
+	/**
+	 * Overridden to use {@link MFXCheckTreeItemSkin}.
+	 */
+	@Override
+	protected Skin<?> createDefaultSkin() {
+		return new MFXCheckTreeItemSkin<>(this);
+	}
 
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
+	@Override
+	public String getUserAgentStylesheet() {
+		return STYLESHEET;
+	}
 
-    //================================================================================
-    // Events
-    //================================================================================
+	//================================================================================
+	// Events
+	//================================================================================
 
-    /**
-     * Events class for the items.
-     * <p>
-     * Defines a new EventTypes:
-     * <p>
-     * - CHECK_EVENT: when an item is checked/unchecked, the item and all the parents up to the root should adjust their state accordingly. <p></p>
-     * <p>
-     * Note on constructor: when we fire an event we pass the item reference to distinguish between the item on which the item is fired and the parents.
-     * <p>
-     * Of course these events are for internal use only so they should not be used by users.
-     */
-    public static final class CheckTreeItemEvent<T> extends Event {
-        private final WeakReference<AbstractMFXTreeItem<T>> itemRef;
+	/**
+	 * Events class for the items.
+	 * <p>
+	 * Defines a new EventTypes:
+	 * <p>
+	 * - CHECK_EVENT: when an item is checked/unchecked, the item and all the parents up to the root should adjust their state accordingly. <p></p>
+	 * <p>
+	 * Note on constructor: when we fire an event we pass the item reference to distinguish between the item on which the item is fired and the parents.
+	 * <p>
+	 * Of course these events are for internal use only so they should not be used by users.
+	 */
+	public static final class CheckTreeItemEvent<T> extends Event {
+		private final WeakReference<AbstractMFXTreeItem<T>> itemRef;
 
-        public static final EventType<CheckTreeItemEvent<?>> CHECK_EVENT = new EventType<>(ANY, "CHECK_EVENT");
+		public static final EventType<CheckTreeItemEvent<?>> CHECK_EVENT = new EventType<>(ANY, "CHECK_EVENT");
 
-        public CheckTreeItemEvent(EventType<? extends Event> eventType, AbstractMFXTreeItem<T> item) {
-            super(eventType);
-            this.itemRef = new WeakReference<>(item);
-        }
+		public CheckTreeItemEvent(EventType<? extends Event> eventType, AbstractMFXTreeItem<T> item) {
+			super(eventType);
+			this.itemRef = new WeakReference<>(item);
+		}
 
-        public AbstractMFXTreeItem<T> getItemRef() {
-            return itemRef.get();
-        }
-    }
+		public AbstractMFXTreeItem<T> getItemRef() {
+			return itemRef.get();
+		}
+	}
 }

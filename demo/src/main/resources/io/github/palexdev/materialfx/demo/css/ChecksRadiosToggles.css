@@ -26,8 +26,8 @@
 }
 
 #customCheck:indeterminate .box .mark {
-	-mfx-description:  "mfx-hyphen";
-} 
+	-mfx-description: "mfx-hyphen";
+}
 
 #customCheck .mfx-ripple-generator {
 	-mfx-ripple-color: -common-gradient;
@@ -121,7 +121,7 @@
 **************************************************/
 .mfx-button {
 	-fx-font-family: 'Visby Round CF Medium';
-    -fx-text-fill: -mfx-text-he;
+	-fx-text-fill: -mfx-text-he;
 }
 
 .mfx-button .text {

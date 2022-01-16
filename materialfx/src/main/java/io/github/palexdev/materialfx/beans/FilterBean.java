@@ -20,85 +20,85 @@ import java.util.function.Predicate;
  * @param <U> the type of objects on which the {@link BiPredicate} operates
  */
 public class FilterBean<T, U> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final String query;
-    private final AbstractFilter<T, U> filter;
-    private final BiPredicateBean<U, U> predicateBean;
-    private ChainMode mode;
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final String query;
+	private final AbstractFilter<T, U> filter;
+	private final BiPredicateBean<U, U> predicateBean;
+	private ChainMode mode;
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public FilterBean(String query, AbstractFilter<T, U> filter, BiPredicateBean<U, U> predicateBean) {
-        this(query, filter, predicateBean, ChainMode.OR);
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public FilterBean(String query, AbstractFilter<T, U> filter, BiPredicateBean<U, U> predicateBean) {
+		this(query, filter, predicateBean, ChainMode.OR);
+	}
 
-    public FilterBean(String query, AbstractFilter<T, U> filter, BiPredicateBean<U, U> predicateBean, ChainMode mode) {
-        this.query = query;
-        this.filter = filter;
-        this.predicateBean = predicateBean;
-        this.mode = mode;
-    }
+	public FilterBean(String query, AbstractFilter<T, U> filter, BiPredicateBean<U, U> predicateBean, ChainMode mode) {
+		this.query = query;
+		this.filter = filter;
+		this.predicateBean = predicateBean;
+		this.mode = mode;
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
+	//================================================================================
+	// Methods
+	//================================================================================
 
-    /**
-     * Calls {@link AbstractFilter#predicateFor(String)} with the query specified by this bean.
-     */
-    public Predicate<T> predicate() {
-        return filter.predicateFor(query);
-    }
+	/**
+	 * Calls {@link AbstractFilter#predicateFor(String)} with the query specified by this bean.
+	 */
+	public Predicate<T> predicate() {
+		return filter.predicateFor(query);
+	}
 
-    /**
-     * @return the query, see {@link AbstractFilter} documentation for more info about the query
-     */
-    public String getQuery() {
-        return query;
-    }
+	/**
+	 * @return the query, see {@link AbstractFilter} documentation for more info about the query
+	 */
+	public String getQuery() {
+		return query;
+	}
 
-    /**
-     * @return the {@link AbstractFilter} specified by this bean
-     */
-    public AbstractFilter<T, U> getFilter() {
-        return filter;
-    }
+	/**
+	 * @return the {@link AbstractFilter} specified by this bean
+	 */
+	public AbstractFilter<T, U> getFilter() {
+		return filter;
+	}
 
-    /**
-     * Delegate for {@link AbstractFilter#name()}.
-     */
-    public String getFilterName() {
-        return filter.name();
-    }
+	/**
+	 * Delegate for {@link AbstractFilter#name()}.
+	 */
+	public String getFilterName() {
+		return filter.name();
+	}
 
-    /**
-     * @return the {@link BiPredicateBean} specified by this bean
-     */
-    public BiPredicateBean<U, U> getPredicateBean() {
-        return predicateBean;
-    }
+	/**
+	 * @return the {@link BiPredicateBean} specified by this bean
+	 */
+	public BiPredicateBean<U, U> getPredicateBean() {
+		return predicateBean;
+	}
 
-    /**
-     * Delegate for {@link BiPredicateBean#name()}.
-     */
-    public String getPredicateName() {
-        return predicateBean.name();
-    }
+	/**
+	 * Delegate for {@link BiPredicateBean#name()}.
+	 */
+	public String getPredicateName() {
+		return predicateBean.name();
+	}
 
-    /**
-     * @return the {@link ChainMode} enumeration that specifies how this filter should be chained with other filters.
-     */
-    public ChainMode getMode() {
-        return mode;
-    }
+	/**
+	 * @return the {@link ChainMode} enumeration that specifies how this filter should be chained with other filters.
+	 */
+	public ChainMode getMode() {
+		return mode;
+	}
 
-    /**
-     * Sets the chain mode to the specified one.
-     */
-    public void setMode(ChainMode mode) {
-        this.mode = mode;
-    }
+	/**
+	 * Sets the chain mode to the specified one.
+	 */
+	public void setMode(ChainMode mode) {
+		this.mode = mode;
+	}
 }

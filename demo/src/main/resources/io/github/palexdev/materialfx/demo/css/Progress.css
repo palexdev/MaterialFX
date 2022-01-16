@@ -27,27 +27,27 @@
 }
 
 #determinateBar:range1 .bar1 {
-    -fx-fill: -mfx-red;
+	-fx-fill: -mfx-red;
 }
 
 #determinateBar:range1 .track {
-    -fx-fill: derive(-mfx-red, 85%)
+	-fx-fill: derive(-mfx-red, 85%)
 }
 
 #determinateBar:range2 .bar1 {
-    -fx-fill: -mfx-blue;
+	-fx-fill: -mfx-blue;
 }
 
 #determinateBar:range2 .track {
-    -fx-fill: derive(-mfx-blue, 85%)
+	-fx-fill: derive(-mfx-blue, 85%)
 }
 
 #determinateBar:range3 .bar1 {
-    -fx-fill: -mfx-green;
+	-fx-fill: -mfx-green;
 }
 
 #determinateBar:range3 .track {
-    -fx-fill: derive(-mfx-green, 85%);
+	-fx-fill: derive(-mfx-green, 85%);
 }
 
 
@@ -72,13 +72,13 @@
 }
 
 #determinateSpinner:range1 .arc {
-    -fx-fill: #FF6088;
+	-fx-fill: #FF6088;
 }
 
 #determinateSpinner:range2 .arc {
-    -fx-fill: #00BCFF;
+	-fx-fill: #00BCFF;
 }
 
 #determinateSpinner:range3 .arc {
-    -fx-fill: #1EC400;
+	-fx-fill: #1EC400;
 }

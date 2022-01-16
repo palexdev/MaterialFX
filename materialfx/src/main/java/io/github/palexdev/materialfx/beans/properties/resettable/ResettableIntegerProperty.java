@@ -25,81 +25,81 @@ import javafx.beans.property.SimpleIntegerProperty;
  * A {@link SimpleIntegerProperty} that implements {@link ResettableProperty}.
  */
 public class ResettableIntegerProperty extends SimpleIntegerProperty implements ResettableProperty<Number> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private int defaultValue;
-    private boolean fireChangeOnReset = false;
-    private boolean hasBeenReset = false;
+	//================================================================================
+	// Properties
+	//================================================================================
+	private int defaultValue;
+	private boolean fireChangeOnReset = false;
+	private boolean hasBeenReset = false;
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public ResettableIntegerProperty() {
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public ResettableIntegerProperty() {
+	}
 
-    public ResettableIntegerProperty(int initialValue) {
-        super(initialValue);
-    }
+	public ResettableIntegerProperty(int initialValue) {
+		super(initialValue);
+	}
 
-    public ResettableIntegerProperty(int initialValue, int defaultValue) {
-        super(initialValue);
-        this.defaultValue = defaultValue;
-    }
+	public ResettableIntegerProperty(int initialValue, int defaultValue) {
+		super(initialValue);
+		this.defaultValue = defaultValue;
+	}
 
-    public ResettableIntegerProperty(Object bean, String name) {
-        super(bean, name);
-    }
+	public ResettableIntegerProperty(Object bean, String name) {
+		super(bean, name);
+	}
 
-    public ResettableIntegerProperty(Object bean, String name, int initialValue) {
-        super(bean, name, initialValue);
-    }
+	public ResettableIntegerProperty(Object bean, String name, int initialValue) {
+		super(bean, name, initialValue);
+	}
 
-    public ResettableIntegerProperty(Object bean, String name, int initialValue, int defaultValue) {
-        super(bean, name, initialValue);
-        this.defaultValue = defaultValue;
-    }
+	public ResettableIntegerProperty(Object bean, String name, int initialValue, int defaultValue) {
+		super(bean, name, initialValue);
+		this.defaultValue = defaultValue;
+	}
 
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    public boolean isFireChangeOnReset() {
-        return fireChangeOnReset;
-    }
+	//================================================================================
+	// Override Methods
+	//================================================================================
+	@Override
+	public boolean isFireChangeOnReset() {
+		return fireChangeOnReset;
+	}
 
-    @Override
-    public void setFireChangeOnReset(boolean fireChangeOnReset) {
-        this.fireChangeOnReset = fireChangeOnReset;
-    }
+	@Override
+	public void setFireChangeOnReset(boolean fireChangeOnReset) {
+		this.fireChangeOnReset = fireChangeOnReset;
+	}
 
-    @Override
-    public void set(int newValue) {
-        hasBeenReset = newValue == defaultValue;
-        super.set(newValue);
-    }
+	@Override
+	public void set(int newValue) {
+		hasBeenReset = newValue == defaultValue;
+		super.set(newValue);
+	}
 
-    @Override
-    protected void fireValueChangedEvent() {
-        if (getValue() == defaultValue && !fireChangeOnReset) {
-            return;
-        }
+	@Override
+	protected void fireValueChangedEvent() {
+		if (getValue() == defaultValue && !fireChangeOnReset) {
+			return;
+		}
 
-        super.fireValueChangedEvent();
-    }
+		super.fireValueChangedEvent();
+	}
 
-    @Override
-    public boolean hasBeenReset() {
-        return hasBeenReset;
-    }
+	@Override
+	public boolean hasBeenReset() {
+		return hasBeenReset;
+	}
 
-    @Override
-    public Integer getDefaultValue() {
-        return defaultValue;
-    }
+	@Override
+	public Integer getDefaultValue() {
+		return defaultValue;
+	}
 
-    @Override
-    public void setDefaultValue(Number defaultValue) {
-        this.defaultValue = defaultValue.intValue();
-    }
+	@Override
+	public void setDefaultValue(Number defaultValue) {
+		this.defaultValue = defaultValue.intValue();
+	}
 }

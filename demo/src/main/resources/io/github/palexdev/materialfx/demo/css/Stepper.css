@@ -33,15 +33,15 @@
 }
 
 .outline-button {
-    -fx-background-color: transparent;
-    -fx-border-color: -mfx-purple;
-    -fx-border-radius: 3;
+	-fx-background-color: transparent;
+	-fx-border-color: -mfx-purple;
+	-fx-border-radius: 3;
 
-    -fx-text-fill: -mfx-purple;
+	-fx-text-fill: -mfx-purple;
 }
 
 .outline-button:hover,
 .outline-button:focused {
-    -fx-background-color: -mfx-purple;
-    -fx-text-fill: white;
+	-fx-background-color: -mfx-purple;
+	-fx-text-fill: white;
 }

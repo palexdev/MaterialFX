@@ -27,58 +27,58 @@ import java.util.stream.IntStream;
 
 public class NotificationsTest extends Application {
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        StackPane stackPane = new StackPane();
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		StackPane stackPane = new StackPane();
 
-        MFXNotificationCenter notificationCenter = new MFXNotificationCenter();
-        notificationCenter.getStylesheets().add(MFXResourcesLoader.load("css/MFXNotificationCenter.css"));
-        IntStream.range(0, 100).forEach(i -> notificationCenter.getNotifications().add(createDummyNotification()));
-        stackPane.getChildren().add(notificationCenter);
+		MFXNotificationCenter notificationCenter = new MFXNotificationCenter();
+		notificationCenter.getStylesheets().add(MFXResourcesLoader.load("css/MFXNotificationCenter.css"));
+		IntStream.range(0, 100).forEach(i -> notificationCenter.getNotifications().add(createDummyNotification()));
+		stackPane.getChildren().add(notificationCenter);
 
-        MFXNotificationCenterSystem.instance()
-                .initOwner(primaryStage)
-                .setOpenOnNew(false)
-                .setCloseAutomatically(true)
-                .setPosition(NotificationPos.TOP_LEFT);
-        MFXNotificationSystem.instance()
-                .initOwner(primaryStage)
-                .setPosition(NotificationPos.TOP_RIGHT);
-        stackPane.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            switch (event.getCode()) {
-                case A -> MFXNotificationCenterSystem.instance().publish(createDummyNotification());
-                case C -> notificationCenter.stopNotificationsUpdater();
-                case S -> notificationCenter.startNotificationsUpdater(60, TimeUnit.SECONDS);
-                case T -> MFXNotificationSystem.instance().publish(createDummyNotification());
-                case P -> MFXNotificationCenterSystem.instance().delaySetPosition(NotificationPos.TOP_LEFT);
-            }
-        });
+		MFXNotificationCenterSystem.instance()
+				.initOwner(primaryStage)
+				.setOpenOnNew(false)
+				.setCloseAutomatically(true)
+				.setPosition(NotificationPos.TOP_LEFT);
+		MFXNotificationSystem.instance()
+				.initOwner(primaryStage)
+				.setPosition(NotificationPos.TOP_RIGHT);
+		stackPane.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+			switch (event.getCode()) {
+				case A -> MFXNotificationCenterSystem.instance().publish(createDummyNotification());
+				case C -> notificationCenter.stopNotificationsUpdater();
+				case S -> notificationCenter.startNotificationsUpdater(60, TimeUnit.SECONDS);
+				case T -> MFXNotificationSystem.instance().publish(createDummyNotification());
+				case P -> MFXNotificationCenterSystem.instance().delaySetPosition(NotificationPos.TOP_LEFT);
+			}
+		});
 
-        Scene scene = new Scene(stackPane, 800, 600);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+		Scene scene = new Scene(stackPane, 800, 600);
+		primaryStage.setScene(scene);
+		primaryStage.show();
 
-        ScenicView.show(notificationCenter.getScene());
-    }
+		ScenicView.show(notificationCenter.getScene());
+	}
 
-    private INotification createDummyNotification() {
-        MFXTextField label = MFXTextField.asLabel("Random Label n." + RandomUtils.random.nextInt());
-        label.setLeadingIcon(new MFXIconWrapper(MFXFontIcon.getRandomIcon(18, ColorUtils.getRandomColor()), 24));
-        label.setAlignment(Pos.CENTER_LEFT);
-        label.setMaxWidth(Double.MAX_VALUE);
-        HBox.setHgrow(label, Priority.ALWAYS);
+	private INotification createDummyNotification() {
+		MFXTextField label = MFXTextField.asLabel("Random Label n." + RandomUtils.random.nextInt());
+		label.setLeadingIcon(new MFXIconWrapper(MFXFontIcon.getRandomIcon(18, ColorUtils.getRandomColor()), 24));
+		label.setAlignment(Pos.CENTER_LEFT);
+		label.setMaxWidth(Double.MAX_VALUE);
+		HBox.setHgrow(label, Priority.ALWAYS);
 
-        MFXTextField time = MFXTextField.asLabel();
-        time.setAlignment(Pos.CENTER_RIGHT);
+		MFXTextField time = MFXTextField.asLabel();
+		time.setAlignment(Pos.CENTER_RIGHT);
 
-        HBox box = new HBox(label, time);
-        box.setMinSize(450, -1);
-        box.setStyle("-fx-background-color: white");
-        box.setAlignment(Pos.CENTER_LEFT);
-        box.setPadding(InsetsFactory.right(20));
-        MFXSimpleNotification notification = new MFXSimpleNotification(box);
-        notification.setOnUpdateElapsed((longElapsed, stringElapsed) -> Platform.runLater(() -> time.setText(stringElapsed)));
-        time.setText(notification.getTimeToStringConverter().apply(notification.getElapsedTime()));
-        return notification;
-    }
+		HBox box = new HBox(label, time);
+		box.setMinSize(450, -1);
+		box.setStyle("-fx-background-color: white");
+		box.setAlignment(Pos.CENTER_LEFT);
+		box.setPadding(InsetsFactory.right(20));
+		MFXSimpleNotification notification = new MFXSimpleNotification(box);
+		notification.setOnUpdateElapsed((longElapsed, stringElapsed) -> Platform.runLater(() -> time.setText(stringElapsed)));
+		time.setText(notification.getTimeToStringConverter().apply(notification.getElapsedTime()));
+		return notification;
+	}
 }

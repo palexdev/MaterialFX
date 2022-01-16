@@ -31,51 +31,51 @@ import java.util.stream.Stream;
  */
 public class StringFilter<T> extends AbstractFilter<T, String> {
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public StringFilter(String name, Function<T, String> extractor) {
-        this(name, extractor, new StringConverter<>() {
-            @Override
-            public String toString(String object) {
-                return object;
-            }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public StringFilter(String name, Function<T, String> extractor) {
+		this(name, extractor, new StringConverter<>() {
+			@Override
+			public String toString(String object) {
+				return object;
+			}
 
-            @Override
-            public String fromString(String string) {
-                return string;
-            }
-        });
-    }
+			@Override
+			public String fromString(String string) {
+				return string;
+			}
+		});
+	}
 
-    public StringFilter(String name, Function<T, String> extractor, StringConverter<String> converter) {
-        super(name, extractor, converter);
-    }
+	public StringFilter(String name, Function<T, String> extractor, StringConverter<String> converter) {
+		super(name, extractor, converter);
+	}
 
-    //================================================================================
-    // Overridden Methods
-    //================================================================================
-    @Override
-    protected ObservableList<BiPredicateBean<String, String>> defaultPredicates() {
-        return Stream.<BiPredicateBean<String, String>>of(
-                new BiPredicateBean<>("contains", String::contains),
-                new BiPredicateBean<>("contains ignore case", StringUtils::containsIgnoreCase),
-                new BiPredicateBean<>("contains any", StringUtils::containsAny),
-                new BiPredicateBean<>("contains all", StringUtils::containsAll),
-                new BiPredicateBean<>("ends with", String::endsWith),
-                new BiPredicateBean<>("ends with ignore case", StringUtils::endsWithIgnoreCase),
-                new BiPredicateBean<>("equals", String::equals),
-                new BiPredicateBean<>("equals ignore case", String::equalsIgnoreCase),
-                new BiPredicateBean<>("is not equal to", (aString, aString2) -> !aString.equals(aString2)),
-                new BiPredicateBean<>("starts with", String::startsWith),
-                new BiPredicateBean<>("starts with ignore case", StringUtils::startsWithIgnoreCase)
-        ).collect(FXCollectors.toList());
-    }
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
+	@Override
+	protected ObservableList<BiPredicateBean<String, String>> defaultPredicates() {
+		return Stream.<BiPredicateBean<String, String>>of(
+				new BiPredicateBean<>("contains", String::contains),
+				new BiPredicateBean<>("contains ignore case", StringUtils::containsIgnoreCase),
+				new BiPredicateBean<>("contains any", StringUtils::containsAny),
+				new BiPredicateBean<>("contains all", StringUtils::containsAll),
+				new BiPredicateBean<>("ends with", String::endsWith),
+				new BiPredicateBean<>("ends with ignore case", StringUtils::endsWithIgnoreCase),
+				new BiPredicateBean<>("equals", String::equals),
+				new BiPredicateBean<>("equals ignore case", String::equalsIgnoreCase),
+				new BiPredicateBean<>("is not equal to", (aString, aString2) -> !aString.equals(aString2)),
+				new BiPredicateBean<>("starts with", String::startsWith),
+				new BiPredicateBean<>("starts with ignore case", StringUtils::startsWithIgnoreCase)
+		).collect(FXCollectors.toList());
+	}
 
-    @SafeVarargs
-    @Override
-    protected final StringFilter<T> extend(BiPredicateBean<String, String>... predicateBeans) {
-        Collections.addAll(super.predicates, predicateBeans);
-        return this;
-    }
+	@SafeVarargs
+	@Override
+	protected final StringFilter<T> extend(BiPredicateBean<String, String>... predicateBeans) {
+		Collections.addAll(super.predicates, predicateBeans);
+		return this;
+	}
 }

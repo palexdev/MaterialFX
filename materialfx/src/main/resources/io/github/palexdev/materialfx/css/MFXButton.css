@@ -20,20 +20,20 @@
 @import "MFXColors.css";
 
 .mfx-button {
-    -fx-font-family: "Open Sans Regular";
-    -fx-text-fill: -mfx-text-he;
+	-fx-font-family: "Open Sans Regular";
+	-fx-text-fill: -mfx-text-he;
 }
 
 .mfx-button:armed,
 .mfx-button:hover,
 .mfx-button:focused,
 .mfx-button {
-    -fx-background-radius: 3px;
-    -fx-background-insets: 0px;
+	-fx-background-radius: 3px;
+	-fx-background-insets: 0px;
 }
 
 .mfx-button,
 .mfx-button:armed,
 .mfx-button:focused {
-    -fx-background-color: white;
+	-fx-background-color: white;
 }

@@ -23,16 +23,16 @@
     <StackPane minHeight="150.0" minWidth="300.0" styleClass="grid-background" GridPane.columnSpan="2147483647"
                GridPane.rowSpan="2147483647">
         <GridPane.margin>
-          <Insets bottom="-15.0" left="-15.0" right="-15.0"/>
+            <Insets bottom="-15.0" left="-15.0" right="-15.0"/>
         </GridPane.margin>
     </StackPane>
     <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="header-label" text="Label"
            GridPane.columnSpan="2147483647">
         <GridPane.margin>
-          <Insets/>
+            <Insets/>
         </GridPane.margin>
         <padding>
-          <Insets bottom="10.0" top="10.0"/>
+            <Insets bottom="10.0" top="10.0"/>
         </padding>
     </Label>
     <MFXTableView fx:id="table" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0"

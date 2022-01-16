@@ -28,63 +28,64 @@ import javafx.scene.input.MouseEvent;
  * This is the implementation of the {@code Skin} associated with every {@link MFXButton}.
  */
 public class MFXButtonSkin extends ButtonSkin {
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXButtonSkin(MFXButton button) {
-        super(button);
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXButtonSkin(MFXButton button) {
+		super(button);
 
-        setListeners();
-        updateButtonType();
+		setListeners();
+		updateButtonType();
 
-        updateChildren();
-    }
+		updateChildren();
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
-    /**
-     * Adds listeners to: depthLevel and buttonType properties.
-     */
-    private void setListeners() {
-        MFXButton button = (MFXButton) getSkinnable();
-        MFXCircleRippleGenerator rippleGenerator = button.getRippleGenerator();
+	//================================================================================
+	// Methods
+	//================================================================================
 
-        button.depthLevelProperty().addListener((observable, oldValue, newValue) -> updateButtonType());
-        button.buttonTypeProperty().addListener((observable, oldValue, newValue) -> updateButtonType());
+	/**
+	 * Adds listeners to: depthLevel and buttonType properties.
+	 */
+	private void setListeners() {
+		MFXButton button = (MFXButton) getSkinnable();
+		MFXCircleRippleGenerator rippleGenerator = button.getRippleGenerator();
 
-        button.addEventFilter(MouseEvent.MOUSE_PRESSED, rippleGenerator::generateRipple);
-    }
+		button.depthLevelProperty().addListener((observable, oldValue, newValue) -> updateButtonType());
+		button.buttonTypeProperty().addListener((observable, oldValue, newValue) -> updateButtonType());
 
-    /**
-     * Changes the button type.
-     */
-    private void updateButtonType() {
-        MFXButton button = (MFXButton) getSkinnable();
+		button.addEventFilter(MouseEvent.MOUSE_PRESSED, rippleGenerator::generateRipple);
+	}
 
-        switch (button.getButtonType()) {
-            case RAISED: {
-                button.setEffect(MFXDepthManager.shadowOf(button.getDepthLevel()));
-                button.setPickOnBounds(false);
-                break;
-            }
-            case FLAT: {
-                button.setPickOnBounds(true);
-                break;
-            }
-        }
-    }
+	/**
+	 * Changes the button type.
+	 */
+	private void updateButtonType() {
+		MFXButton button = (MFXButton) getSkinnable();
 
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    protected void updateChildren() {
-        super.updateChildren();
+		switch (button.getButtonType()) {
+			case RAISED: {
+				button.setEffect(MFXDepthManager.shadowOf(button.getDepthLevel()));
+				button.setPickOnBounds(false);
+				break;
+			}
+			case FLAT: {
+				button.setPickOnBounds(true);
+				break;
+			}
+		}
+	}
 
-        MFXButton button = (MFXButton) getSkinnable();
-        if (!getChildren().contains(button.getRippleGenerator())) {
-            getChildren().add(0, button.getRippleGenerator());
-        }
-    }
+	//================================================================================
+	// Override Methods
+	//================================================================================
+	@Override
+	protected void updateChildren() {
+		super.updateChildren();
+
+		MFXButton button = (MFXButton) getSkinnable();
+		if (!getChildren().contains(button.getRippleGenerator())) {
+			getChildren().add(0, button.getRippleGenerator());
+		}
+	}
 }

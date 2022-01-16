@@ -26,41 +26,41 @@ import javafx.beans.property.ReadOnlyObjectProperty;
  */
 public interface ISingleSelectionModel<T> {
 
-    /**
-     * Clears the selection.
-     */
-    void clearSelection();
+	/**
+	 * Clears the selection.
+	 */
+	void clearSelection();
 
-    /**
-     * Selects the given index.
-     */
-    void selectIndex(int index);
+	/**
+	 * Selects the given index.
+	 */
+	void selectIndex(int index);
 
-    /**
-     * Selects the given item.
-     */
-    void selectItem(T item);
+	/**
+	 * Selects the given item.
+	 */
+	void selectItem(T item);
 
-    /**
-     * @return the current selected index
-     */
-    int getSelectedIndex();
+	/**
+	 * @return the current selected index
+	 */
+	int getSelectedIndex();
 
-    /**
-     * The selected index property as a read-only property.
-     * Selection should always be updated with the dedicated methods.
-     */
-    ReadOnlyIntegerProperty selectedIndexProperty();
+	/**
+	 * The selected index property as a read-only property.
+	 * Selection should always be updated with the dedicated methods.
+	 */
+	ReadOnlyIntegerProperty selectedIndexProperty();
 
-    /**
-     * @return the current selected item
-     */
-    T getSelectedItem();
+	/**
+	 * @return the current selected item
+	 */
+	T getSelectedItem();
 
-    /**
-     * The selected item property as a read-only property.
-     * Selection should always be updated with the dedicated methods.
-     */
-    ReadOnlyObjectProperty<T> selectedItemProperty();
+	/**
+	 * The selected item property as a read-only property.
+	 * Selection should always be updated with the dedicated methods.
+	 */
+	ReadOnlyObjectProperty<T> selectedItemProperty();
 
 }

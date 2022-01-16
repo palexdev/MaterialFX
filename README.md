@@ -37,10 +37,10 @@
 * [About the Project and History of JavaFX](#about-the-project-and-history-of-javafx)
 * [Some GIFs](#preview-gifs)
 * [Getting Started](#getting-started)
-  * [Build](#build)
-  * [Usage](#usage)
-    * [Gradle](#gradle)
-    * [Maven](#maven)
+    * [Build](#build)
+    * [Usage](#usage)
+        * [Gradle](#gradle)
+        * [Maven](#maven)
 * [Roadmap](#roadmap)
 * [Contributing](#contributing)
 * [License](#license)
@@ -74,8 +74,10 @@ That's where this project comes in. The aim of my project is to bring components
 Google's material design guidelines to JavaFX. The second purpose is to provide a successor to the already
 available [JFoenix](https://github.com/jfoenixadmin/JFoenix) library, which is a bit old and has a lot of issues.
 
-In recent months the project has evolved a lot, to the point that it is no longer a simple substitute.
-To date MaterialFX offers not only restyled controls, but also: new and unique controls such as the Stepper, controls completely redone from scratch such as ComboBoxes or TableViews (and many others), and many utilities for JavaFX and Java (NodeUtils, ColorUtils, StringUtils ...).
+In recent months the project has evolved a lot, to the point that it is no longer a simple substitute.  
+To date MaterialFX offers not only restyled controls, but also: new and unique controls such as the Stepper,
+controls completely redone from scratch such as ComboBoxes or TableViews (and many others),
+and many utilities for JavaFX and Java (NodeUtils, ColorUtils, StringUtils ...).
 
 <!-- PREVIEW GIFS -->
 

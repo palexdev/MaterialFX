@@ -31,146 +31,146 @@ import javafx.util.Duration;
  * @see Timeline
  */
 public enum MFXAnimationFactory {
-    FADE_IN {
-        @Override
-        public Timeline build(Node node, double durationMillis) {
-            MFXAnimationFactory.resetNode(node);
-            KeyValue keyValue1 = new KeyValue(node.opacityProperty(), 0, INTERPOLATOR_V1);
-            KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
+	FADE_IN {
+		@Override
+		public Timeline build(Node node, double durationMillis) {
+			MFXAnimationFactory.resetNode(node);
+			KeyValue keyValue1 = new KeyValue(node.opacityProperty(), 0, INTERPOLATOR_V1);
+			KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-            KeyValue keyValue2 = new KeyValue(node.opacityProperty(), 1.0, INTERPOLATOR_V1);
-            KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
+			KeyValue keyValue2 = new KeyValue(node.opacityProperty(), 1.0, INTERPOLATOR_V1);
+			KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
-            return new Timeline(keyFrame1, keyFrame2);
-        }
-    },
-    FADE_OUT {
-        @Override
-        public Timeline build(Node node, double durationMillis) {
-            MFXAnimationFactory.resetNode(node);
-            KeyValue keyValue1 = new KeyValue(node.opacityProperty(), 1.0, INTERPOLATOR_V1);
-            KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
+			return new Timeline(keyFrame1, keyFrame2);
+		}
+	},
+	FADE_OUT {
+		@Override
+		public Timeline build(Node node, double durationMillis) {
+			MFXAnimationFactory.resetNode(node);
+			KeyValue keyValue1 = new KeyValue(node.opacityProperty(), 1.0, INTERPOLATOR_V1);
+			KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-            KeyValue keyValue2 = new KeyValue(node.opacityProperty(), 0, INTERPOLATOR_V1);
-            KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
+			KeyValue keyValue2 = new KeyValue(node.opacityProperty(), 0, INTERPOLATOR_V1);
+			KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
-            return new Timeline(keyFrame1, keyFrame2);
-        }
-    },
-    SLIDE_IN_BOTTOM {
-        @Override
-        public Timeline build(Node node, double durationMillis) {
-            MFXAnimationFactory.resetNode(node);
-            KeyValue keyValue1 = new KeyValue(node.translateYProperty(), -node.getBoundsInParent().getHeight() * 2, INTERPOLATOR_V1);
-            KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
+			return new Timeline(keyFrame1, keyFrame2);
+		}
+	},
+	SLIDE_IN_BOTTOM {
+		@Override
+		public Timeline build(Node node, double durationMillis) {
+			MFXAnimationFactory.resetNode(node);
+			KeyValue keyValue1 = new KeyValue(node.translateYProperty(), -node.getBoundsInParent().getHeight() * 2, INTERPOLATOR_V1);
+			KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-            KeyValue keyValue2 = new KeyValue(node.translateYProperty(), 0, INTERPOLATOR_V1);
-            KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
+			KeyValue keyValue2 = new KeyValue(node.translateYProperty(), 0, INTERPOLATOR_V1);
+			KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
-            return new Timeline(keyFrame1, keyFrame2);
-        }
-    },
-    SLIDE_OUT_BOTTOM {
-        @Override
-        public Timeline build(Node node, double durationMillis) {
-            MFXAnimationFactory.resetNode(node);
-            KeyValue keyValue1 = new KeyValue(node.translateYProperty(), 0, INTERPOLATOR_V1);
-            KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
+			return new Timeline(keyFrame1, keyFrame2);
+		}
+	},
+	SLIDE_OUT_BOTTOM {
+		@Override
+		public Timeline build(Node node, double durationMillis) {
+			MFXAnimationFactory.resetNode(node);
+			KeyValue keyValue1 = new KeyValue(node.translateYProperty(), 0, INTERPOLATOR_V1);
+			KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-            KeyValue keyValue2 = new KeyValue(node.translateYProperty(), node.getBoundsInParent().getHeight() * 2, INTERPOLATOR_V1);
-            KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
+			KeyValue keyValue2 = new KeyValue(node.translateYProperty(), node.getBoundsInParent().getHeight() * 2, INTERPOLATOR_V1);
+			KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
-            return new Timeline(keyFrame1, keyFrame2);
-        }
-    },
-    SLIDE_IN_LEFT {
-        @Override
-        public Timeline build(Node node, double durationMillis) {
-            MFXAnimationFactory.resetNode(node);
-            KeyValue keyValue1 = new KeyValue(node.translateXProperty(), -node.getBoundsInParent().getWidth() * 2, INTERPOLATOR_V1);
-            KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
+			return new Timeline(keyFrame1, keyFrame2);
+		}
+	},
+	SLIDE_IN_LEFT {
+		@Override
+		public Timeline build(Node node, double durationMillis) {
+			MFXAnimationFactory.resetNode(node);
+			KeyValue keyValue1 = new KeyValue(node.translateXProperty(), -node.getBoundsInParent().getWidth() * 2, INTERPOLATOR_V1);
+			KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-            KeyValue keyValue2 = new KeyValue(node.translateXProperty(), 0, INTERPOLATOR_V1);
-            KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
+			KeyValue keyValue2 = new KeyValue(node.translateXProperty(), 0, INTERPOLATOR_V1);
+			KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
-            return new Timeline(keyFrame1, keyFrame2);
-        }
-    },
-    SLIDE_OUT_LEFT {
-        @Override
-        public Timeline build(Node node, double durationMillis) {
-            MFXAnimationFactory.resetNode(node);
-            KeyValue keyValue1 = new KeyValue(node.translateXProperty(), 0, INTERPOLATOR_V1);
-            KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
+			return new Timeline(keyFrame1, keyFrame2);
+		}
+	},
+	SLIDE_OUT_LEFT {
+		@Override
+		public Timeline build(Node node, double durationMillis) {
+			MFXAnimationFactory.resetNode(node);
+			KeyValue keyValue1 = new KeyValue(node.translateXProperty(), 0, INTERPOLATOR_V1);
+			KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-            KeyValue keyValue2 = new KeyValue(node.translateXProperty(), -node.getBoundsInParent().getWidth() * 2, INTERPOLATOR_V1);
-            KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
+			KeyValue keyValue2 = new KeyValue(node.translateXProperty(), -node.getBoundsInParent().getWidth() * 2, INTERPOLATOR_V1);
+			KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
-            return new Timeline(keyFrame1, keyFrame2);
-        }
-    },
-    SLIDE_IN_RIGHT {
-        @Override
-        public Timeline build(Node node, double durationMillis) {
-            MFXAnimationFactory.resetNode(node);
-            KeyValue keyValue1 = new KeyValue(node.translateXProperty(), node.getBoundsInParent().getWidth() * 2, INTERPOLATOR_V1);
-            KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
+			return new Timeline(keyFrame1, keyFrame2);
+		}
+	},
+	SLIDE_IN_RIGHT {
+		@Override
+		public Timeline build(Node node, double durationMillis) {
+			MFXAnimationFactory.resetNode(node);
+			KeyValue keyValue1 = new KeyValue(node.translateXProperty(), node.getBoundsInParent().getWidth() * 2, INTERPOLATOR_V1);
+			KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-            KeyValue keyValue2 = new KeyValue(node.translateXProperty(), 0, INTERPOLATOR_V1);
-            KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
+			KeyValue keyValue2 = new KeyValue(node.translateXProperty(), 0, INTERPOLATOR_V1);
+			KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
-            return new Timeline(keyFrame1, keyFrame2);
-        }
-    },
-    SLIDE_OUT_RIGHT {
-        @Override
-        public Timeline build(Node node, double durationMillis) {
-            MFXAnimationFactory.resetNode(node);
-            KeyValue keyValue1 = new KeyValue(node.translateXProperty(), 0, INTERPOLATOR_V1);
-            KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
+			return new Timeline(keyFrame1, keyFrame2);
+		}
+	},
+	SLIDE_OUT_RIGHT {
+		@Override
+		public Timeline build(Node node, double durationMillis) {
+			MFXAnimationFactory.resetNode(node);
+			KeyValue keyValue1 = new KeyValue(node.translateXProperty(), 0, INTERPOLATOR_V1);
+			KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-            KeyValue keyValue2 = new KeyValue(node.translateXProperty(), node.getBoundsInParent().getWidth() * 2, INTERPOLATOR_V1);
-            KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
+			KeyValue keyValue2 = new KeyValue(node.translateXProperty(), node.getBoundsInParent().getWidth() * 2, INTERPOLATOR_V1);
+			KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
-            return new Timeline(keyFrame1, keyFrame2);
-        }
-    },
-    SLIDE_IN_TOP {
-        @Override
-        public Timeline build(Node node, double durationMillis) {
-            MFXAnimationFactory.resetNode(node);
-            KeyValue keyValue1 = new KeyValue(node.translateYProperty(), node.getBoundsInParent().getHeight() * 2, INTERPOLATOR_V1);
-            KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
+			return new Timeline(keyFrame1, keyFrame2);
+		}
+	},
+	SLIDE_IN_TOP {
+		@Override
+		public Timeline build(Node node, double durationMillis) {
+			MFXAnimationFactory.resetNode(node);
+			KeyValue keyValue1 = new KeyValue(node.translateYProperty(), node.getBoundsInParent().getHeight() * 2, INTERPOLATOR_V1);
+			KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-            KeyValue keyValue2 = new KeyValue(node.translateYProperty(), 0, INTERPOLATOR_V1);
-            KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
+			KeyValue keyValue2 = new KeyValue(node.translateYProperty(), 0, INTERPOLATOR_V1);
+			KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
-            return new Timeline(keyFrame1, keyFrame2);
-        }
-    },
-    SLIDE_OUT_TOP {
-        @Override
-        public Timeline build(Node node, double durationMillis) {
-            MFXAnimationFactory.resetNode(node);
-            KeyValue keyValue1 = new KeyValue(node.translateYProperty(), 0, INTERPOLATOR_V1);
-            KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
+			return new Timeline(keyFrame1, keyFrame2);
+		}
+	},
+	SLIDE_OUT_TOP {
+		@Override
+		public Timeline build(Node node, double durationMillis) {
+			MFXAnimationFactory.resetNode(node);
+			KeyValue keyValue1 = new KeyValue(node.translateYProperty(), 0, INTERPOLATOR_V1);
+			KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-            KeyValue keyValue2 = new KeyValue(node.translateYProperty(), -node.getBoundsInParent().getHeight() * 2, INTERPOLATOR_V1);
-            KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
+			KeyValue keyValue2 = new KeyValue(node.translateYProperty(), -node.getBoundsInParent().getHeight() * 2, INTERPOLATOR_V1);
+			KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
-            return new Timeline(keyFrame1, keyFrame2);
-        }
-    };
+			return new Timeline(keyFrame1, keyFrame2);
+		}
+	};
 
-    public static final Interpolator INTERPOLATOR_V1 = Interpolator.SPLINE(0.25, 0.1, 0.25, 1);
-    public static final Interpolator INTERPOLATOR_V2 = Interpolator.SPLINE(0.0825D, 0.3025D, 0.0875D, 0.9975D);
+	public static final Interpolator INTERPOLATOR_V1 = Interpolator.SPLINE(0.25, 0.1, 0.25, 1);
+	public static final Interpolator INTERPOLATOR_V2 = Interpolator.SPLINE(0.0825D, 0.3025D, 0.0875D, 0.9975D);
 
-    private static void resetNode(Node node) {
-        if (node != null) {
-            node.setTranslateX(0);
-            node.setTranslateY(0);
-        }
-    }
+	private static void resetNode(Node node) {
+		if (node != null) {
+			node.setTranslateX(0);
+			node.setTranslateY(0);
+		}
+	}
 
-    public abstract Timeline build(Node node, double durationMillis);
+	public abstract Timeline build(Node node, double durationMillis);
 }

@@ -8,23 +8,23 @@
 <GridPane maxHeight="-Infinity" maxWidth="-Infinity" stylesheets="@../css/Stepper.css"
           xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
           fx:controller="io.github.palexdev.materialfx.demo.controllers.StepperController">
-   <columnConstraints>
-      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"/>
-   </columnConstraints>
-   <rowConstraints>
-      <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES"/>
-      <RowConstraints minHeight="10.0" prefHeight="40.0" valignment="CENTER" vgrow="SOMETIMES"/>
-      <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
-   </rowConstraints>
-   <padding>
-      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-   </padding>
-   <StackPane styleClass="grid-background" GridPane.rowSpan="2147483647">
-      <GridPane.margin>
-         <Insets bottom="-15.0" left="-15.0" right="-15.0" top="-15.0"/>
-      </GridPane.margin>
-   </StackPane>
-   <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="header-label" text="Stepper"/>
-   <MFXButton fx:id="unlock" styleClass="outline-button" text="Unlock Mouse" GridPane.rowIndex="1"/>
-   <MFXStepper fx:id="stepper" minHeight="450.0" prefHeight="450.0" prefWidth="600.0" GridPane.rowIndex="2"/>
+    <columnConstraints>
+        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="40.0" valignment="CENTER" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+    </rowConstraints>
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+    <StackPane styleClass="grid-background" GridPane.rowSpan="2147483647">
+        <GridPane.margin>
+            <Insets bottom="-15.0" left="-15.0" right="-15.0" top="-15.0"/>
+        </GridPane.margin>
+    </StackPane>
+    <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="header-label" text="Stepper"/>
+    <MFXButton fx:id="unlock" styleClass="outline-button" text="Unlock Mouse" GridPane.rowIndex="1"/>
+    <MFXStepper fx:id="stepper" minHeight="450.0" prefHeight="450.0" prefWidth="600.0" GridPane.rowIndex="2"/>
 </GridPane>

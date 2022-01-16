@@ -51,196 +51,196 @@ import java.util.function.Predicate;
  * @param <U> the objects' field on which to operate
  */
 public abstract class AbstractFilter<T, U> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final String name;
-    private final Function<T, U> extractor;
-    protected final ObservableList<BiPredicateBean<U, U>> predicates;
-    protected final IntegerProperty selectedPredicateIndex = new SimpleIntegerProperty(-1);
-    protected final StringConverter<U> converter;
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final String name;
+	private final Function<T, U> extractor;
+	protected final ObservableList<BiPredicateBean<U, U>> predicates;
+	protected final IntegerProperty selectedPredicateIndex = new SimpleIntegerProperty(-1);
+	protected final StringConverter<U> converter;
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public AbstractFilter(String name, Function<T, U> extractor, StringConverter<U> converter) {
-        this.name = name;
-        this.extractor = extractor;
-        this.converter = converter;
-        this.predicates = defaultPredicates();
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public AbstractFilter(String name, Function<T, U> extractor, StringConverter<U> converter) {
+		this.name = name;
+		this.extractor = extractor;
+		this.converter = converter;
+		this.predicates = defaultPredicates();
+	}
 
-    //================================================================================
-    // Abstract Methods
-    //================================================================================
+	//================================================================================
+	// Abstract Methods
+	//================================================================================
 
-    /**
-     * Every implementation of {@link AbstractFilter} must define some default {@link BiPredicate}s.
-     */
-    protected abstract ObservableList<BiPredicateBean<U, U>> defaultPredicates();
+	/**
+	 * Every implementation of {@link AbstractFilter} must define some default {@link BiPredicate}s.
+	 */
+	protected abstract ObservableList<BiPredicateBean<U, U>> defaultPredicates();
 
-    /**
-     * Allows to add some extra {@link BiPredicateBean}s alongside the default ones.
-     */
-    @SuppressWarnings("unchecked")
-    protected abstract AbstractFilter<T, U> extend(BiPredicateBean<U, U>... predicateBeans);
+	/**
+	 * Allows to add some extra {@link BiPredicateBean}s alongside the default ones.
+	 */
+	@SuppressWarnings("unchecked")
+	protected abstract AbstractFilter<T, U> extend(BiPredicateBean<U, U>... predicateBeans);
 
-    //================================================================================
-    // Methods
-    //================================================================================
+	//================================================================================
+	// Methods
+	//================================================================================
 
-    /**
-     * Converts a given input String to an object of type U using
-     * the {@link StringConverter} specified by this filter.
-     */
-    public U getValue(String input) {
-        return getConverter().fromString(input);
-    }
+	/**
+	 * Converts a given input String to an object of type U using
+	 * the {@link StringConverter} specified by this filter.
+	 */
+	public U getValue(String input) {
+		return getConverter().fromString(input);
+	}
 
-    /**
-     * Produces a {@link Predicate} from the given input.
-     * <p></p>
-     * First checks if a {@link BiPredicate} is selected by checking
-     * the selected index property, see {@link #checkIndex()}.
-     * <p>
-     * Then converts the input to an object of type U by using {@link #getValue(String)},
-     * and then returns a Predicate that applies the selected BiPredicate to the extracted U field of T
-     * and the converted U input.
-     * <p></p>
-     * In code:
-     * <pre>
-     * {@code
-     *      return t -> biPredicate.test(extractor.apply(t), convertedQuery);
-     * }
-     * </pre>
-     */
-    public Predicate<T> predicateFor(String input) {
-        checkIndex();
-        int index = getSelectedPredicateIndex();
-        U convertedInput = getValue(input);
-        return t -> predicates.get(index).predicate().test(extractor.apply(t), convertedInput);
-    }
+	/**
+	 * Produces a {@link Predicate} from the given input.
+	 * <p></p>
+	 * First checks if a {@link BiPredicate} is selected by checking
+	 * the selected index property, see {@link #checkIndex()}.
+	 * <p>
+	 * Then converts the input to an object of type U by using {@link #getValue(String)},
+	 * and then returns a Predicate that applies the selected BiPredicate to the extracted U field of T
+	 * and the converted U input.
+	 * <p></p>
+	 * In code:
+	 * <pre>
+	 * {@code
+	 *      return t -> biPredicate.test(extractor.apply(t), convertedQuery);
+	 * }
+	 * </pre>
+	 */
+	public Predicate<T> predicateFor(String input) {
+		checkIndex();
+		int index = getSelectedPredicateIndex();
+		U convertedInput = getValue(input);
+		return t -> predicates.get(index).predicate().test(extractor.apply(t), convertedInput);
+	}
 
-    /**
-     * Produces a {@link Predicate} from the given input and {@link BiPredicate}.
-     * <p></p>
-     * First converts the input to an object of type U by using {@link #getValue(String)},
-     * and then returns a Predicate that applies the given BiPredicate to the extracted U field of T
-     * and the converted U input.
-     * <p></p>
-     * In code:
-     * <pre>
-     * {@code
-     *      return t -> biPredicate.test(extractor.apply(t), convertedQuery);
-     * }
-     * </pre>
-     * <p></p>
-     * <b>WARN:</b> to be honest this method should have been removed but I wanted to keep it
-     * since it adds some flexibility to the filter system. Note that using this method may lead
-     * to inconsistencies in UI controls since the given argument is not a {@link BiPredicateBean},
-     * which means that it won't be added to the predicates list of this filter, and the selected predicate index
-     * property won't be updated. This also means that any other method that relies on that index will fail.
-     */
-    public Predicate<T> predicateFor(String input, BiPredicate<U, U> biPredicate) {
-        U convertedInput = getValue(input);
-        return t -> biPredicate.test(extractor.apply(t), convertedInput);
-    }
+	/**
+	 * Produces a {@link Predicate} from the given input and {@link BiPredicate}.
+	 * <p></p>
+	 * First converts the input to an object of type U by using {@link #getValue(String)},
+	 * and then returns a Predicate that applies the given BiPredicate to the extracted U field of T
+	 * and the converted U input.
+	 * <p></p>
+	 * In code:
+	 * <pre>
+	 * {@code
+	 *      return t -> biPredicate.test(extractor.apply(t), convertedQuery);
+	 * }
+	 * </pre>
+	 * <p></p>
+	 * <b>WARN:</b> to be honest this method should have been removed but I wanted to keep it
+	 * since it adds some flexibility to the filter system. Note that using this method may lead
+	 * to inconsistencies in UI controls since the given argument is not a {@link BiPredicateBean},
+	 * which means that it won't be added to the predicates list of this filter, and the selected predicate index
+	 * property won't be updated. This also means that any other method that relies on that index will fail.
+	 */
+	public Predicate<T> predicateFor(String input, BiPredicate<U, U> biPredicate) {
+		U convertedInput = getValue(input);
+		return t -> biPredicate.test(extractor.apply(t), convertedInput);
+	}
 
-    /**
-     * Converts this filter to a {@link FilterBean} from the given input.
-     * <p></p>
-     * Checks for the selected BiPredicate, see {@link #checkIndex()}.
-     */
-    public FilterBean<T, U> toFilterBean(String input) {
-        checkIndex();
-        int index = getSelectedPredicateIndex();
-        BiPredicateBean<U, U> bean = predicates.get(index);
-        return new FilterBean<>(input, this, bean);
-    }
+	/**
+	 * Converts this filter to a {@link FilterBean} from the given input.
+	 * <p></p>
+	 * Checks for the selected BiPredicate, see {@link #checkIndex()}.
+	 */
+	public FilterBean<T, U> toFilterBean(String input) {
+		checkIndex();
+		int index = getSelectedPredicateIndex();
+		BiPredicateBean<U, U> bean = predicates.get(index);
+		return new FilterBean<>(input, this, bean);
+	}
 
-    /**
-     * Converts this filter to a {@link FilterBean} from the given input and {@link ChainMode}.
-     * <p></p>
-     * Checks for the selected BiPredicate, see {@link #checkIndex()}.
-     */
-    public FilterBean<T, U> toFilterBean(String input, ChainMode mode) {
-        checkIndex();
-        int index = getSelectedPredicateIndex();
-        BiPredicateBean<U, U> bean = predicates.get(index);
-        return new FilterBean<>(input, this, bean, mode);
-    }
+	/**
+	 * Converts this filter to a {@link FilterBean} from the given input and {@link ChainMode}.
+	 * <p></p>
+	 * Checks for the selected BiPredicate, see {@link #checkIndex()}.
+	 */
+	public FilterBean<T, U> toFilterBean(String input, ChainMode mode) {
+		checkIndex();
+		int index = getSelectedPredicateIndex();
+		BiPredicateBean<U, U> bean = predicates.get(index);
+		return new FilterBean<>(input, this, bean, mode);
+	}
 
-    /**
-     * Converts this filter to a {@link FilterBean} from the given input, {@link BiPredicateBean} and {@link ChainMode}.
-     */
-    public FilterBean<T, U> toFilterBean(String input, BiPredicateBean<U, U> bean, ChainMode mode) {
-        return new FilterBean<>(input, this, bean, mode);
-    }
+	/**
+	 * Converts this filter to a {@link FilterBean} from the given input, {@link BiPredicateBean} and {@link ChainMode}.
+	 */
+	public FilterBean<T, U> toFilterBean(String input, BiPredicateBean<U, U> bean, ChainMode mode) {
+		return new FilterBean<>(input, this, bean, mode);
+	}
 
-    /**
-     * Used in methods which rely on a selected {@link BiPredicateBean}.
-     *
-     * @throws IllegalStateException if the selected index is not valid
-     */
-    private void checkIndex() throws IllegalStateException{
-        int index = getSelectedPredicateIndex();
-        if (index < 0) {
-            throw new IllegalStateException("No predicate selected for filter: " + name);
-        }
-    }
+	/**
+	 * Used in methods which rely on a selected {@link BiPredicateBean}.
+	 *
+	 * @throws IllegalStateException if the selected index is not valid
+	 */
+	private void checkIndex() throws IllegalStateException {
+		int index = getSelectedPredicateIndex();
+		if (index < 0) {
+			throw new IllegalStateException("No predicate selected for filter: " + name);
+		}
+	}
 
-    //================================================================================
-    // Getters/Setters
-    //================================================================================
+	//================================================================================
+	// Getters/Setters
+	//================================================================================
 
-    /**
-     * @return the filter's name
-     */
-    public String name() {
-        return name;
-    }
+	/**
+	 * @return the filter's name
+	 */
+	public String name() {
+		return name;
+	}
 
-    /**
-     * @return the function used to extract a field of type U from an object of type T
-     */
-    public Function<T, U> getExtractor() {
-        return extractor;
-    }
+	/**
+	 * @return the function used to extract a field of type U from an object of type T
+	 */
+	public Function<T, U> getExtractor() {
+		return extractor;
+	}
 
-    /**
-     * @return the list of usable {@link BiPredicate}s, each wrapped in a {@link BiPredicateBean}
-     */
-    public ObservableList<BiPredicateBean<U, U>> getPredicates() {
-        return predicates;
-    }
+	/**
+	 * @return the list of usable {@link BiPredicate}s, each wrapped in a {@link BiPredicateBean}
+	 */
+	public ObservableList<BiPredicateBean<U, U>> getPredicates() {
+		return predicates;
+	}
 
-    public int getSelectedPredicateIndex() {
-        return selectedPredicateIndex.get();
-    }
+	public int getSelectedPredicateIndex() {
+		return selectedPredicateIndex.get();
+	}
 
-    /**
-     * Used to specify the selected {@link BiPredicateBean}.
-     */
-    public IntegerProperty selectedPredicateIndexProperty() {
-        return selectedPredicateIndex;
-    }
+	/**
+	 * Used to specify the selected {@link BiPredicateBean}.
+	 */
+	public IntegerProperty selectedPredicateIndexProperty() {
+		return selectedPredicateIndex;
+	}
 
-    public void setSelectedPredicateIndex(int selectedPredicateIndex) {
-        this.selectedPredicateIndex.set(selectedPredicateIndex);
-    }
+	public void setSelectedPredicateIndex(int selectedPredicateIndex) {
+		this.selectedPredicateIndex.set(selectedPredicateIndex);
+	}
 
-    /**
-     * @return the {@link StringConverter} used to convert the input String to an object of type U
-     */
-    public StringConverter<U> getConverter() {
-        return converter;
-    }
+	/**
+	 * @return the {@link StringConverter} used to convert the input String to an object of type U
+	 */
+	public StringConverter<U> getConverter() {
+		return converter;
+	}
 
-    //================================================================================
-    // Overridden Methods
-    //================================================================================
-    @Override
-    public String toString() {
-        return name;
-    }
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
+	@Override
+	public String toString() {
+		return name;
+	}
 }

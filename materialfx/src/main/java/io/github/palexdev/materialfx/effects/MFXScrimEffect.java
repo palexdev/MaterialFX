@@ -34,143 +34,143 @@ import javafx.stage.Window;
  * They help direct user attention to other parts of the screen, away from the surface receiving a scrim.
  */
 public class MFXScrimEffect {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final Rectangle scrim;
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final Rectangle scrim;
 
-    //================================================================================
-    // Constructor
-    //================================================================================
-    public MFXScrimEffect() {
-        scrim = new Rectangle();
-    }
+	//================================================================================
+	// Constructor
+	//================================================================================
+	public MFXScrimEffect() {
+		scrim = new Rectangle();
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
+	//================================================================================
+	// Methods
+	//================================================================================
 
-    /**
-     * Adds a scrim effect to the specified pane with specified opacity.
-     *
-     * @param pane    The pane to which add the effect
-     * @param opacity The effect opacity/strength
-     */
-    public void scrim(Pane pane, double opacity) {
-        scrim.widthProperty().bind(pane.widthProperty());
-        scrim.heightProperty().bind(pane.heightProperty());
-        scrim.setFill(Color.rgb(0, 0, 0, opacity));
-        scrim.setBlendMode(BlendMode.SRC_ATOP);
+	/**
+	 * Adds a scrim effect to the specified pane with specified opacity.
+	 *
+	 * @param pane    The pane to which add the effect
+	 * @param opacity The effect opacity/strength
+	 */
+	public void scrim(Pane pane, double opacity) {
+		scrim.widthProperty().bind(pane.widthProperty());
+		scrim.heightProperty().bind(pane.heightProperty());
+		scrim.setFill(Color.rgb(0, 0, 0, opacity));
+		scrim.setBlendMode(BlendMode.SRC_ATOP);
 
-        pane.getChildren().add(0, scrim);
-    }
+		pane.getChildren().add(0, scrim);
+	}
 
-    /**
-     * Same as {@link #scrim(Pane, double)} but the effect is placed at
-     * the end of the children list, covering all the pane's nodes
-     *
-     * @param pane    The pane to which add the effect
-     * @param opacity The effect opacity/strength
-     */
-    public void modalScrim(Pane pane, double opacity) {
-        scrim.widthProperty().bind(pane.widthProperty());
-        scrim.heightProperty().bind(pane.heightProperty());
-        scrim.setFill(Color.rgb(0, 0, 0, opacity));
-        scrim.setBlendMode(BlendMode.SRC_ATOP);
+	/**
+	 * Same as {@link #scrim(Pane, double)} but the effect is placed at
+	 * the end of the children list, covering all the pane's nodes
+	 *
+	 * @param pane    The pane to which add the effect
+	 * @param opacity The effect opacity/strength
+	 */
+	public void modalScrim(Pane pane, double opacity) {
+		scrim.widthProperty().bind(pane.widthProperty());
+		scrim.heightProperty().bind(pane.heightProperty());
+		scrim.setFill(Color.rgb(0, 0, 0, opacity));
+		scrim.setBlendMode(BlendMode.SRC_ATOP);
 
-        pane.getChildren().add(scrim);
-    }
+		pane.getChildren().add(scrim);
+	}
 
-    /**
-     * Adds a scrim effect to the specified pane with specified opacity.
-     * It also simulates the modal behavior of {@code Stages}, leaving only the specified
-     * {@code Node} interactive.
-     *
-     * @param parent  The pane to which add the effect
-     * @param child   The node to leave interactive
-     * @param opacity The effect opacity/strength
-     */
-    public void modalScrim(Pane parent, Node child, double opacity) {
-        scrim.widthProperty().bind(parent.widthProperty());
-        scrim.heightProperty().bind(parent.heightProperty());
-        scrim.setFill(Color.rgb(0, 0, 0, opacity));
-        scrim.setBlendMode(BlendMode.SRC_ATOP);
+	/**
+	 * Adds a scrim effect to the specified pane with specified opacity.
+	 * It also simulates the modal behavior of {@code Stages}, leaving only the specified
+	 * {@code Node} interactive.
+	 *
+	 * @param parent  The pane to which add the effect
+	 * @param child   The node to leave interactive
+	 * @param opacity The effect opacity/strength
+	 */
+	public void modalScrim(Pane parent, Node child, double opacity) {
+		scrim.widthProperty().bind(parent.widthProperty());
+		scrim.heightProperty().bind(parent.heightProperty());
+		scrim.setFill(Color.rgb(0, 0, 0, opacity));
+		scrim.setBlendMode(BlendMode.SRC_ATOP);
 
-        /*
-         * Workaround, especially for SceneBuilder
-         * This method adds the scrim effect to the given pane's children list
-         * before the given node to leave interactable so if that node is let's say in position 2
-         * and there are others controls after index 2 they will be interactable.
-         * To fix that and avoid some hassle for developers this piece of code
-         * finds the node to leave interactable and if it is not in the last position of the list
-         * removes and re-adds it, then adds the scrim effect in the second-last position which of course is
-         * (list.size() - 1)
-         */
-        ObservableList<Node> children = parent.getChildren();
-        children.stream()
-                .filter(node -> node.equals(child))
-                .findFirst()
-                .ifPresent(node -> {
-                    if (children.indexOf(node) != children.size() - 1) {
-                        parent.getChildren().remove(node);
-                        parent.getChildren().add(node);
-                    }
-                });
+		/*
+		 * Workaround, especially for SceneBuilder
+		 * This method adds the scrim effect to the given pane's children list
+		 * before the given node to leave interactable so if that node is let's say in position 2
+		 * and there are others controls after index 2 they will be interactable.
+		 * To fix that and avoid some hassle for developers this piece of code
+		 * finds the node to leave interactable and if it is not in the last position of the list
+		 * removes and re-adds it, then adds the scrim effect in the second-last position which of course is
+		 * (list.size() - 1)
+		 */
+		ObservableList<Node> children = parent.getChildren();
+		children.stream()
+				.filter(node -> node.equals(child))
+				.findFirst()
+				.ifPresent(node -> {
+					if (children.indexOf(node) != children.size() - 1) {
+						parent.getChildren().remove(node);
+						parent.getChildren().add(node);
+					}
+				});
 
-        parent.getChildren().add(children.size() - 1, scrim);
-    }
+		parent.getChildren().add(children.size() - 1, scrim);
+	}
 
-    /**
-     * Adds a scrim effect to the specified {@code Window}'s root pane with the specified opacity.
-     *
-     * @param window  The desired window
-     * @param opacity The desired opacity
-     */
-    public void scrimWindow(Window window, double opacity) {
-        Parent root = window.getScene().getRoot();
-        if (root instanceof Pane) {
-            Pane pane = (Pane) root;
-            scrim.widthProperty().bind(pane.widthProperty());
-            scrim.heightProperty().bind(pane.heightProperty());
-            scrim.setFill(Color.rgb(0, 0, 0, opacity));
-            scrim.setBlendMode(BlendMode.SRC_ATOP);
-            pane.getChildren().add(scrim);
-        }
-    }
+	/**
+	 * Adds a scrim effect to the specified {@code Window}'s root pane with the specified opacity.
+	 *
+	 * @param window  The desired window
+	 * @param opacity The desired opacity
+	 */
+	public void scrimWindow(Window window, double opacity) {
+		Parent root = window.getScene().getRoot();
+		if (root instanceof Pane) {
+			Pane pane = (Pane) root;
+			scrim.widthProperty().bind(pane.widthProperty());
+			scrim.heightProperty().bind(pane.heightProperty());
+			scrim.setFill(Color.rgb(0, 0, 0, opacity));
+			scrim.setBlendMode(BlendMode.SRC_ATOP);
+			pane.getChildren().add(scrim);
+		}
+	}
 
-    /**
-     * Removes the scrim effect from the specified pane.
-     *
-     * @param pane The pane to which remove the effect.
-     */
-    public void removeEffect(Pane pane) {
-        pane.getChildren().remove(scrim);
-        unbindResizing();
-    }
+	/**
+	 * Removes the scrim effect from the specified pane.
+	 *
+	 * @param pane The pane to which remove the effect.
+	 */
+	public void removeEffect(Pane pane) {
+		pane.getChildren().remove(scrim);
+		unbindResizing();
+	}
 
-    /**
-     * Removes the scrim effect from the specified window.
-     *
-     * @param window The window to which remove the effect.
-     */
-    public void removeEffect(Window window) {
-        Parent root = window.getScene().getRoot();
-        if (root instanceof Pane) {
-            removeEffect((Pane) root);
-            unbindResizing();
-        }
-    }
+	/**
+	 * Removes the scrim effect from the specified window.
+	 *
+	 * @param window The window to which remove the effect.
+	 */
+	public void removeEffect(Window window) {
+		Parent root = window.getScene().getRoot();
+		if (root instanceof Pane) {
+			removeEffect((Pane) root);
+			unbindResizing();
+		}
+	}
 
-    /**
-     * Removes the bindings to the width and height properties of the
-     * scrim effect when it is removed.
-     */
-    private void unbindResizing() {
-        scrim.widthProperty().unbind();
-        scrim.heightProperty().unbind();
-    }
+	/**
+	 * Removes the bindings to the width and height properties of the
+	 * scrim effect when it is removed.
+	 */
+	private void unbindResizing() {
+		scrim.widthProperty().unbind();
+		scrim.heightProperty().unbind();
+	}
 
-    public Node getScrimNode() {
-        return scrim;
-    }
+	public Node getScrimNode() {
+		return scrim;
+	}
 }

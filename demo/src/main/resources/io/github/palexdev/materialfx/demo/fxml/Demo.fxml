@@ -5,40 +5,47 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
-<AnchorPane fx:id="rootPane" prefHeight="720.0" prefWidth="1280.0" styleClass="rootPane" stylesheets="@../css/Demo.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.palexdev.materialfx.demo.controllers.DemoController">
-   <HBox fx:id="windowHeader" alignment="CENTER_RIGHT" layoutY="6.0" prefHeight="50.0" prefWidth="1281.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <padding>
-         <Insets right="10.0" />
-      </padding>
-      <MFXFontIcon fx:id="alwaysOnTopIcon" description="mfx-circle" size="15.0" styleClass="always-on-top-icon" />
-      <MFXFontIcon fx:id="minimizeIcon" description="mfx-circle" size="15.0" styleClass="minimize-icon" />
-      <MFXFontIcon fx:id="closeIcon" description="mfx-circle" size="15.0" styleClass="close-icon" />
-   </HBox>
-   <VBox layoutX="227.0" layoutY="51.0" prefWidth="250.0" styleClass="sidebar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <padding>
-         <Insets bottom="10.0" left="10.0" top="60.0" />
-      </padding>
-      <Label graphicTextGap="15.0" styleClass="header" text="MaterialFX">
-         <graphic>
-            <MFXFontIcon description="mfx-logo" size="52.0" />
-         </graphic>
-      </Label>
-      <Label styleClass="menu-label" text="Components">
-         <VBox.margin>
-            <Insets left="5.0" top="40.0" />
-         </VBox.margin>
-      </Label>
-      <MFXScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
-         <VBox.margin>
-            <Insets bottom="10.0" left="5.0" top="15.0" />
-         </VBox.margin>
-         <padding>
-            <Insets right="10.0" />
-         </padding>
-         <content>
-            <VBox fx:id="navBar" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" styleClass="navbar" />
-         </content>
-      </MFXScrollPane>
-   </VBox>
-   <StackPane fx:id="contentPane" layoutX="252.0" layoutY="52.0" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="252.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="51.0" />
+<AnchorPane fx:id="rootPane" prefHeight="720.0" prefWidth="1280.0" styleClass="rootPane" stylesheets="@../css/Demo.css"
+            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="io.github.palexdev.materialfx.demo.controllers.DemoController">
+    <HBox fx:id="windowHeader" alignment="CENTER_RIGHT" layoutY="6.0" prefHeight="50.0" prefWidth="1281.0"
+          spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <padding>
+            <Insets right="10.0"/>
+        </padding>
+        <MFXFontIcon fx:id="alwaysOnTopIcon" description="mfx-circle" size="15.0" styleClass="always-on-top-icon"/>
+        <MFXFontIcon fx:id="minimizeIcon" description="mfx-circle" size="15.0" styleClass="minimize-icon"/>
+        <MFXFontIcon fx:id="closeIcon" description="mfx-circle" size="15.0" styleClass="close-icon"/>
+    </HBox>
+    <VBox layoutX="227.0" layoutY="51.0" prefWidth="250.0" styleClass="sidebar" AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <padding>
+            <Insets bottom="10.0" left="10.0" top="60.0"/>
+        </padding>
+        <Label graphicTextGap="15.0" styleClass="header" text="MaterialFX">
+            <graphic>
+                <MFXFontIcon description="mfx-logo" size="52.0"/>
+            </graphic>
+        </Label>
+        <Label styleClass="menu-label" text="Components">
+            <VBox.margin>
+                <Insets left="5.0" top="40.0"/>
+            </VBox.margin>
+        </Label>
+        <MFXScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+            <VBox.margin>
+                <Insets bottom="10.0" left="5.0" top="15.0"/>
+            </VBox.margin>
+            <padding>
+                <Insets right="10.0"/>
+            </padding>
+            <content>
+                <VBox fx:id="navBar" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0"
+                      styleClass="navbar"/>
+            </content>
+        </MFXScrollPane>
+    </VBox>
+    <StackPane fx:id="contentPane" layoutX="252.0" layoutY="52.0" prefHeight="150.0" prefWidth="200.0"
+               AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="252.0" AnchorPane.rightAnchor="10.0"
+               AnchorPane.topAnchor="51.0"/>
 </AnchorPane>

@@ -47,7 +47,9 @@ public class TableViewsController implements Initializable {
 
 		nameColumn.setRowCellFactory(person -> new MFXTableRowCell<>(Person::getName));
 		surnameColumn.setRowCellFactory(person -> new MFXTableRowCell<>(Person::getSurname));
-		ageColumn.setRowCellFactory(person -> new MFXTableRowCell<>(Person::getAge) {{ setAlignment(Pos.CENTER_RIGHT); }});
+		ageColumn.setRowCellFactory(person -> new MFXTableRowCell<>(Person::getAge) {{
+			setAlignment(Pos.CENTER_RIGHT);
+		}});
 		ageColumn.setAlignment(Pos.CENTER_RIGHT);
 
 		table.getTableColumns().addAll(nameColumn, surnameColumn, ageColumn);
@@ -68,7 +70,9 @@ public class TableViewsController implements Initializable {
 
 		idColumn.setRowCellFactory(device -> new MFXTableRowCell<>(Device::getID));
 		nameColumn.setRowCellFactory(device -> new MFXTableRowCell<>(Device::getName));
-		ipColumn.setRowCellFactory(device -> new MFXTableRowCell<>(Device::getIP) {{ setAlignment(Pos.CENTER_RIGHT); }});
+		ipColumn.setRowCellFactory(device -> new MFXTableRowCell<>(Device::getIP) {{
+			setAlignment(Pos.CENTER_RIGHT);
+		}});
 		ownerColumn.setRowCellFactory(device -> new MFXTableRowCell<>(Device::getOwner));
 		stateColumn.setRowCellFactory(device -> new MFXTableRowCell<>(Device::getState));
 		ipColumn.setAlignment(Pos.CENTER_RIGHT);

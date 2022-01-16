@@ -10,31 +10,30 @@ import java.util.List;
 
 public class StyleablePropertiesUtils {
 
-    private StyleablePropertiesUtils() {
-    }
+	private StyleablePropertiesUtils() {}
 
-    @SafeVarargs
-    public static List<CssMetaData<? extends Styleable, ?>> cssMetaDataList(List<CssMetaData<? extends Styleable, ?>> styleable, CssMetaData<? extends Styleable, ?>... cssMetaData) {
-        CssMetaDataList styleableMetaData = new CssMetaDataList(styleable);
-        styleableMetaData.addAll(cssMetaData);
-        return styleableMetaData.toUnmodifiable();
-    }
+	@SafeVarargs
+	public static List<CssMetaData<? extends Styleable, ?>> cssMetaDataList(List<CssMetaData<? extends Styleable, ?>> styleable, CssMetaData<? extends Styleable, ?>... cssMetaData) {
+		CssMetaDataList styleableMetaData = new CssMetaDataList(styleable);
+		styleableMetaData.addAll(cssMetaData);
+		return styleableMetaData.toUnmodifiable();
+	}
 
-    public static class CssMetaDataList extends ArrayList<CssMetaData<? extends Styleable, ?>> {
-        public CssMetaDataList() {
-        }
+	public static class CssMetaDataList extends ArrayList<CssMetaData<? extends Styleable, ?>> {
+		public CssMetaDataList() {
+		}
 
-        public CssMetaDataList(Collection<? extends CssMetaData<? extends Styleable, ?>> c) {
-            super(c);
-        }
+		public CssMetaDataList(Collection<? extends CssMetaData<? extends Styleable, ?>> c) {
+			super(c);
+		}
 
-        @SafeVarargs
-        public final boolean addAll(CssMetaData<? extends Styleable, ?>... cssMetaData) {
-            return Collections.addAll(this, cssMetaData);
-        }
+		@SafeVarargs
+		public final boolean addAll(CssMetaData<? extends Styleable, ?>... cssMetaData) {
+			return Collections.addAll(this, cssMetaData);
+		}
 
-        public List<CssMetaData<? extends Styleable, ?>> toUnmodifiable() {
-            return Collections.unmodifiableList(this);
-        }
-    }
+		public List<CssMetaData<? extends Styleable, ?>> toUnmodifiable() {
+			return Collections.unmodifiableList(this);
+		}
+	}
 }

@@ -24,8 +24,8 @@ import io.github.palexdev.materialfx.controls.MFXStepperToggle;
  * Enumerator to represent the states of a {@link MFXStepperToggle}
  */
 public enum StepperToggleState {
-    SELECTED,
-    COMPLETED,
-    ERROR,
-    NONE
+	SELECTED,
+	COMPLETED,
+	ERROR,
+	NONE
 }

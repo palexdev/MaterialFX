@@ -29,94 +29,94 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public interface IMultipleSelectionModel<T> {
 
-    /**
-     * Clears the selection.
-     */
-    void clearSelection();
+	/**
+	 * Clears the selection.
+	 */
+	void clearSelection();
 
-    /**
-     * Deselects the given index.
-     */
-    void deselectIndex(int index);
+	/**
+	 * Deselects the given index.
+	 */
+	void deselectIndex(int index);
 
-    /**
-     * Deselects the given item.
-     */
-    void deselectItem(T item);
+	/**
+	 * Deselects the given item.
+	 */
+	void deselectItem(T item);
 
-    /**
-     * Deselects the given indexes.
-     */
-    void deselectIndexes(int... indexes);
+	/**
+	 * Deselects the given indexes.
+	 */
+	void deselectIndexes(int... indexes);
 
-    /**
-     * Deselects the given items.
-     */
-    void deselectItems(T... items);
+	/**
+	 * Deselects the given items.
+	 */
+	void deselectItems(T... items);
 
-    /**
-     * Selects the given index.
-     */
-    void selectIndex(int index);
+	/**
+	 * Selects the given index.
+	 */
+	void selectIndex(int index);
 
-    /**
-     * Selects the given item.
-     */
-    void selectItem(T item);
+	/**
+	 * Selects the given item.
+	 */
+	void selectItem(T item);
 
-    /**
-     * Selects the given indexes list.
-     */
-    void selectIndexes(List<Integer> indexes);
+	/**
+	 * Selects the given indexes list.
+	 */
+	void selectIndexes(List<Integer> indexes);
 
-    /**
-     * Selects the given items list.
-     */
-    void selectItems(List<T> items);
+	/**
+	 * Selects the given items list.
+	 */
+	void selectItems(List<T> items);
 
-    /**
-     * Expands the selection in the given index direction.
-     */
-    void expandSelection(int index);
+	/**
+	 * Expands the selection in the given index direction.
+	 */
+	void expandSelection(int index);
 
-    /**
-     * Clears the selection and replaces it with the given indexes.
-     */
-    void replaceSelection(Integer... indexes);
+	/**
+	 * Clears the selection and replaces it with the given indexes.
+	 */
+	void replaceSelection(Integer... indexes);
 
-    /**
-     * Clears the selection and replaces it with the given items.
-     */
-    void replaceSelection(T... items);
+	/**
+	 * Clears the selection and replaces it with the given items.
+	 */
+	void replaceSelection(T... items);
 
-    /**
-     * @return the selection {@link ObservableMap}
-     */
-    ObservableMap<Integer, T> getSelection();
+	/**
+	 * @return the selection {@link ObservableMap}
+	 */
+	ObservableMap<Integer, T> getSelection();
 
-    /**
-     * The {@link MapProperty} used to keep track of multiple selection.
-     * <p></p>
-     * We use a {@link MapProperty} to represent multiple selection because this way
-     * we can always update it "atomically", meaning that when the selected indexes changes
-     * the selected items are updated as well (also true viceversa).
-     */
-    MapProperty<Integer, T> selectionProperty();
+	/**
+	 * The {@link MapProperty} used to keep track of multiple selection.
+	 * <p></p>
+	 * We use a {@link MapProperty} to represent multiple selection because this way
+	 * we can always update it "atomically", meaning that when the selected indexes changes
+	 * the selected items are updated as well (also true viceversa).
+	 */
+	MapProperty<Integer, T> selectionProperty();
 
-    /**
-     * Replaces the selection with the given {@link ObservableMap}.
-     */
-    void setSelection(ObservableMap<Integer, T> newSelection);
+	/**
+	 * Replaces the selection with the given {@link ObservableMap}.
+	 */
+	void setSelection(ObservableMap<Integer, T> newSelection);
 
-    /**
-     * Specifies if this model allows multiple selection or should act like
-     * a SingleSelectionModel.
-     */
-    boolean allowsMultipleSelection();
+	/**
+	 * Specifies if this model allows multiple selection or should act like
+	 * a SingleSelectionModel.
+	 */
+	boolean allowsMultipleSelection();
 
-    /**
-     * Sets the selection behavior of this model to be multiple (true) or
-     * single (false).
-     */
-    void setAllowsMultipleSelection(boolean allowsMultipleSelection);
+	/**
+	 * Sets the selection behavior of this model to be multiple (true) or
+	 * single (false).
+	 */
+	void setAllowsMultipleSelection(boolean allowsMultipleSelection);
 }

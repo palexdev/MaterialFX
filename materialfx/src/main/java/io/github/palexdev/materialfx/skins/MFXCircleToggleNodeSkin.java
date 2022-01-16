@@ -29,7 +29,7 @@ public class MFXCircleToggleNodeSkin extends SkinBase<MFXCircleToggleNode> {
 
 	public MFXCircleToggleNodeSkin(MFXCircleToggleNode toggleNode) {
 		super(toggleNode);
-		
+
 		circle = new Circle();
 		circle.getStyleClass().add("circle");
 		circle.radiusProperty().bind(toggleNode.sizeProperty());
@@ -67,7 +67,7 @@ public class MFXCircleToggleNodeSkin extends SkinBase<MFXCircleToggleNode> {
 		} else {
 			rippleContainer.getChildren().setAll(circle, rippleGenerator);
 		}
-		
+
 		topContainer = new VBox();
 		topContainer.setAlignment(Pos.TOP_CENTER);
 		topContainer.spacingProperty().bind(toggleNode.gapProperty());
@@ -77,7 +77,7 @@ public class MFXCircleToggleNodeSkin extends SkinBase<MFXCircleToggleNode> {
 		} else {
 			topContainer.getChildren().setAll(rippleContainer, label);
 		}
-		
+
 		setupRippleGenerator();
 		addListeners();
 		getChildren().setAll(topContainer);

@@ -42,7 +42,8 @@ public class DialogsController {
 					.get();
 
 			dialogContent.addActions(
-					Map.entry(new MFXButton("Confirm"), event -> {}),
+					Map.entry(new MFXButton("Confirm"), event -> {
+					}),
 					Map.entry(new MFXButton("Cancel"), event -> dialog.close())
 			);
 
@@ -91,6 +92,6 @@ public class DialogsController {
 		);
 
 		if (styleClass != null)
-		dialogContent.getStyleClass().add(styleClass);
+			dialogContent.getStyleClass().add(styleClass);
 	}
 }

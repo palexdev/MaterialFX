@@ -1,7 +1,7 @@
 package io.github.palexdev.materialfx.filter;
 
-import io.github.palexdev.materialfx.filter.base.NumberFilter;
 import io.github.palexdev.materialfx.beans.BiPredicateBean;
+import io.github.palexdev.materialfx.filter.base.NumberFilter;
 import io.github.palexdev.materialfx.utils.FXCollectors;
 import javafx.collections.ObservableList;
 import javafx.util.StringConverter;
@@ -24,36 +24,36 @@ import java.util.stream.Stream;
  */
 public class LongFilter<T> extends NumberFilter<T, Long> {
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public LongFilter(String name, Function<T, Long> extractor) {
-        this(name, extractor, new LongStringConverter());
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public LongFilter(String name, Function<T, Long> extractor) {
+		this(name, extractor, new LongStringConverter());
+	}
 
-    public LongFilter(String name, Function<T, Long> extractor, StringConverter<Long> converter) {
-        super(name, extractor, converter);
-    }
+	public LongFilter(String name, Function<T, Long> extractor, StringConverter<Long> converter) {
+		super(name, extractor, converter);
+	}
 
-    //================================================================================
-    // Overridden Methods
-    //================================================================================
-    @Override
-    protected ObservableList<BiPredicateBean<Long, Long>> defaultPredicates() {
-        return Stream.<BiPredicateBean<Long, Long>>of(
-                new BiPredicateBean<>("is", Long::equals),
-                new BiPredicateBean<>("is not", (aLong, aLong2) -> !aLong.equals(aLong2)),
-                new BiPredicateBean<>("greater than", (aLong, aLong2) -> aLong > aLong2),
-                new BiPredicateBean<>("greater or equal to", (aLong, aLong2) -> aLong >= aLong2),
-                new BiPredicateBean<>("lesser than", (aLong, aLong2) -> aLong < aLong2),
-                new BiPredicateBean<>("lesser or equal to", (aLong, aLong2) -> aLong <= aLong2)
-        ).collect(FXCollectors.toList());
-    }
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
+	@Override
+	protected ObservableList<BiPredicateBean<Long, Long>> defaultPredicates() {
+		return Stream.<BiPredicateBean<Long, Long>>of(
+				new BiPredicateBean<>("is", Long::equals),
+				new BiPredicateBean<>("is not", (aLong, aLong2) -> !aLong.equals(aLong2)),
+				new BiPredicateBean<>("greater than", (aLong, aLong2) -> aLong > aLong2),
+				new BiPredicateBean<>("greater or equal to", (aLong, aLong2) -> aLong >= aLong2),
+				new BiPredicateBean<>("lesser than", (aLong, aLong2) -> aLong < aLong2),
+				new BiPredicateBean<>("lesser or equal to", (aLong, aLong2) -> aLong <= aLong2)
+		).collect(FXCollectors.toList());
+	}
 
-    @SafeVarargs
-    @Override
-    protected final LongFilter<T> extend(BiPredicateBean<Long, Long>... predicateBeans) {
-        Collections.addAll(super.predicates, predicateBeans);
-        return this;
-    }
+	@SafeVarargs
+	@Override
+	protected final LongFilter<T> extend(BiPredicateBean<Long, Long>... predicateBeans) {
+		Collections.addAll(super.predicates, predicateBeans);
+		return this;
+	}
 }

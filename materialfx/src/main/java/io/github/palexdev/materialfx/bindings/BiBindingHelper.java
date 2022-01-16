@@ -69,8 +69,8 @@ public class BiBindingHelper<T> extends AbstractBindingHelper<T> {
 	 * <p></p>
 	 * Also calls {@link #beforeBind()} and {@link #afterBind()}.
 	 *
-	 * @param source    the source observable
-	 * @param updater   the {@link BiConsumer} responsible for updating the source when the target changes
+	 * @param source  the source observable
+	 * @param updater the {@link BiConsumer} responsible for updating the source when the target changes
 	 */
 	public BiBindingHelper<T> addSource(ObservableValue<? extends T> source, BiConsumer<T, T> updater) {
 		sources.put(source, updater);
@@ -141,9 +141,9 @@ public class BiBindingHelper<T> extends AbstractBindingHelper<T> {
 	 * The whole process is wrapped in a try-finally block as it's super important to reset
 	 * both the flags at the end.
 	 *
-	 * @param updatingSource    the source that triggered the target update
-	 * @param oldValue          the source's oldValue
-	 * @param newValue          the source's newValue
+	 * @param updatingSource the source that triggered the target update
+	 * @param oldValue       the source's oldValue
+	 * @param newValue       the source's newValue
 	 */
 	@Override
 	protected void updateTarget(ObservableValue<? extends T> updatingSource, T oldValue, T newValue) {

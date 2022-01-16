@@ -29,24 +29,24 @@ import javafx.scene.Scene;
  * but the views cannot be loaded in parallel (quite acceptable loss in some cases).
  */
 public enum LoaderCacheLevel {
-    /**
-     * No caching, may lag a little in some occasions
-     * (when the root contains a huge amount of nodes for example).
-     */
-    NONE,
+	/**
+	 * No caching, may lag a little in some occasions
+	 * (when the root contains a huge amount of nodes for example).
+	 */
+	NONE,
 
-    /**
-     * The root node is added to a dummy pane and {@link Scene},
-     * then {@link Parent#applyCss()} and {@link Parent#layout()} are called.
-     * This causes all nodes in the scene to create their skin and layout
-     * thus "caching" the scenegraph. Vastly improves view switching performance.
-     */
-    SCENE_CACHE,
+	/**
+	 * The root node is added to a dummy pane and {@link Scene},
+	 * then {@link Parent#applyCss()} and {@link Parent#layout()} are called.
+	 * This causes all nodes in the scene to create their skin and layout
+	 * thus "caching" the scenegraph. Vastly improves view switching performance.
+	 */
+	SCENE_CACHE,
 
-    /**
-     * Does what SCENE_CACHE does, plus sets the JavaFX's properties cache to true
-     * and the cache hint to SPEED on the loaded root node.
-     * (To be honest I don't know if this truly improves performance since I didn't notice anything notable)
-     */
-    SCENE_JAVAFX_CACHE
+	/**
+	 * Does what SCENE_CACHE does, plus sets the JavaFX's properties cache to true
+	 * and the cache hint to SPEED on the loaded root node.
+	 * (To be honest I don't know if this truly improves performance since I didn't notice anything notable)
+	 */
+	SCENE_JAVAFX_CACHE
 }

@@ -17,68 +17,68 @@
  */
 
 .mfx-legacy-combo-box {
-    -mfx-line-color: rgb(50, 120, 220);
-    -mfx-unfocused-line-color: #4d4d4d;
-    -fx-prompt-text-fill: #4d4d4d;
-    -fx-padding: -1 -1 -1 -5;
+	-mfx-line-color: rgb(50, 120, 220);
+	-mfx-unfocused-line-color: #4d4d4d;
+	-fx-prompt-text-fill: #4d4d4d;
+	-fx-padding: -1 -1 -1 -5;
 }
 
 .mfx-legacy-combo-box:editable > .arrow-button,
 .mfx-legacy-combo-box > .arrow-button {
-    -fx-padding: 2;
+	-fx-padding: 2;
 }
 
 .mfx-legacy-combo-box,
 .mfx-legacy-combo-box:focused,
 .mfx-legacy-combo-box:editable,
 .mfx-legacy-combo-box:editable:focused {
-    -fx-background-color: transparent, transparent, transparent, transparent;
-    -fx-background-radius: 3px;
-    -fx-background-insets: 0px;
+	-fx-background-color: transparent, transparent, transparent, transparent;
+	-fx-background-radius: 3px;
+	-fx-background-insets: 0px;
 }
 
 .mfx-legacy-combo-box .text-field,
 .mfx-legacy-combo-box:focused .text-field,
 .mfx-legacy-combo-box:editable .text-field,
 .mfx-legacy-combo-box:editable:focused .text-field {
-    -fx-background-color: transparent, transparent, transparent, transparent;
-    -fx-background-radius: 3px;
-    -fx-background-insets: 0px;
+	-fx-background-color: transparent, transparent, transparent, transparent;
+	-fx-background-radius: 3px;
+	-fx-background-insets: 0px;
 }
 
 .mfx-legacy-combo-box .combo-box-button-container {
-    -fx-background-color: transparent;
+	-fx-background-color: transparent;
 }
 
 .mfx-legacy-combo-box > .arrow-button,
 .mfx-legacy-combo-box:editable > .arrow-button,
 .mfx-legacy-combo-box:editable:focused > .arrow-button {
-    -fx-background-color: transparent;
+	-fx-background-color: transparent;
 }
 
 .mfx-legacy-combo-box .validate-label {
-    -fx-background-color: transparent;
-    -fx-font-family: "Open Sans SemiBold";
-    -fx-font-size: 11;
-    -fx-text-fill: #EF6E6B;
+	-fx-background-color: transparent;
+	-fx-font-family: "Open Sans SemiBold";
+	-fx-font-size: 11;
+	-fx-text-fill: #EF6E6B;
 }
 
 .mfx-legacy-combo-box:invalid {
-    -mfx-line-color: #EF6E6B;
-    -mfx-unfocused-line-color: #EF6E6B;
-    -fx-prompt-text-fill: #EF6E6B;
-    -fx-text-fill: #EF6E6B;
+	-mfx-line-color: #EF6E6B;
+	-mfx-unfocused-line-color: #EF6E6B;
+	-fx-prompt-text-fill: #EF6E6B;
+	-fx-text-fill: #EF6E6B;
 }
 
 .mfx-legacy-combo-box:invalid .text-field {
-    -fx-prompt-text-fill: #ff0600;
-    -fx-text-fill: #EF6E6B;
+	-fx-prompt-text-fill: #ff0600;
+	-fx-text-fill: #EF6E6B;
 }
 
 .mfx-legacy-combo-box:invalid .list-cell {
-    -fx-text-fill: #EF6E6B;
+	-fx-text-fill: #EF6E6B;
 }
 
 .mfx-legacy-combo-box:invalid > .arrow-button > .arrow {
-    -fx-background-color: #EF6E6B;
+	-fx-background-color: #EF6E6B;
 }

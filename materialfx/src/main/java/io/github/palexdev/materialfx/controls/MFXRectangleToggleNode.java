@@ -41,73 +41,73 @@ import javafx.scene.control.ToggleButton;
  * graphic property will be shown. Setting it back to null will show the label, leading and trailing icons back again.
  */
 public class MFXRectangleToggleNode extends AbstractMFXToggleNode {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final String STYLE_CLASS = "mfx-rectangle-toggle-node";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXRectangleToggleNode.css");
-    private final ObjectProperty<RippleClipTypeFactory> rippleClipTypeFactory = new SimpleObjectProperty<>();
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final String STYLE_CLASS = "mfx-rectangle-toggle-node";
+	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXRectangleToggleNode.css");
+	private final ObjectProperty<RippleClipTypeFactory> rippleClipTypeFactory = new SimpleObjectProperty<>();
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXRectangleToggleNode() {
-        this("");
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXRectangleToggleNode() {
+		this("");
+	}
 
-    public MFXRectangleToggleNode(String text) {
-        this(text, null);
-    }
+	public MFXRectangleToggleNode(String text) {
+		this(text, null);
+	}
 
-    public MFXRectangleToggleNode(String text, Node leadingIcon) {
-        this(text, leadingIcon, null);
-    }
+	public MFXRectangleToggleNode(String text, Node leadingIcon) {
+		this(text, leadingIcon, null);
+	}
 
-    public MFXRectangleToggleNode(String text, Node leadingIcon, Node trailingIcon) {
-        super(text, null);
-        setLabelLeadingIcon(leadingIcon);
-        setLabelTrailingIcon(trailingIcon);
-        initialize();
-    }
+	public MFXRectangleToggleNode(String text, Node leadingIcon, Node trailingIcon) {
+		super(text, null);
+		setLabelLeadingIcon(leadingIcon);
+		setLabelTrailingIcon(trailingIcon);
+		initialize();
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
-    private void initialize() {
-        getStyleClass().add(STYLE_CLASS);
-        setRippleClipTypeFactory(
-                new RippleClipTypeFactory(RippleClipType.ROUNDED_RECTANGLE)
-                .setArcs(15)
-        );
-    }
+	//================================================================================
+	// Methods
+	//================================================================================
+	private void initialize() {
+		getStyleClass().add(STYLE_CLASS);
+		setRippleClipTypeFactory(
+				new RippleClipTypeFactory(RippleClipType.ROUNDED_RECTANGLE)
+						.setArcs(15)
+		);
+	}
 
-    public RippleClipTypeFactory getRippleClipTypeFactory() {
-        return rippleClipTypeFactory.get();
-    }
+	public RippleClipTypeFactory getRippleClipTypeFactory() {
+		return rippleClipTypeFactory.get();
+	}
 
-    /**
-     * Specifies the ripple generator's clip factory.
-     * <p></p>
-     * If you change the borders' radius this property will most likely need to be changed.
-     */
-    public ObjectProperty<RippleClipTypeFactory> rippleClipTypeFactoryProperty() {
-        return rippleClipTypeFactory;
-    }
+	/**
+	 * Specifies the ripple generator's clip factory.
+	 * <p></p>
+	 * If you change the borders' radius this property will most likely need to be changed.
+	 */
+	public ObjectProperty<RippleClipTypeFactory> rippleClipTypeFactoryProperty() {
+		return rippleClipTypeFactory;
+	}
 
-    public void setRippleClipTypeFactory(RippleClipTypeFactory rippleClipTypeFactory) {
-        this.rippleClipTypeFactory.set(rippleClipTypeFactory);
-    }
+	public void setRippleClipTypeFactory(RippleClipTypeFactory rippleClipTypeFactory) {
+		this.rippleClipTypeFactory.set(rippleClipTypeFactory);
+	}
 
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        return new MFXRectangleToggleNodeSkin(this);
-    }
+	//================================================================================
+	// Override Methods
+	//================================================================================
+	@Override
+	protected Skin<?> createDefaultSkin() {
+		return new MFXRectangleToggleNodeSkin(this);
+	}
 
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
+	@Override
+	public String getUserAgentStylesheet() {
+		return STYLESHEET;
+	}
 }

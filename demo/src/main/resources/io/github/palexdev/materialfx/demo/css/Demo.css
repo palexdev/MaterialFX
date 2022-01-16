@@ -5,40 +5,40 @@
  * Root
 **************************************************/
 .rootPane {
-    -fx-background-color: white;
-    -fx-background-radius: 10;
-    -fx-border-color: #ebebeb;
-    -fx-border-radius: 10;
+	-fx-background-color: white;
+	-fx-background-radius: 10;
+	-fx-border-color: #ebebeb;
+	-fx-border-radius: 10;
 }
 
 /**************************************************
  * Window Header
 **************************************************/
 .rootPane .close-icon {
-    -mfx-color: -mfx-red;
-    -fx-opacity: 0.5;
+	-mfx-color: -mfx-red;
+	-fx-opacity: 0.5;
 }
 
 .rootPane .close-icon:hover {
-    -fx-opacity: 1.0;
+	-fx-opacity: 1.0;
 }
 
 .rootPane .minimize-icon {
-    -mfx-color: #ffbf37;
-    -fx-opacity: 0.5;
+	-mfx-color: #ffbf37;
+	-fx-opacity: 0.5;
 }
 
 .rootPane .minimize-icon:hover {
-    -fx-opacity: 1.0;
+	-fx-opacity: 1.0;
 }
 
 .rootPane .always-on-top-icon {
-    -mfx-color: -mfx-purple;
-    -fx-opacity: 0.5;
+	-mfx-color: -mfx-purple;
+	-fx-opacity: 0.5;
 }
 
 .rootPane .always-on-top-icon:hover {
-    -fx-opacity: 1.0;
+	-fx-opacity: 1.0;
 }
 
 .rootPane .always-on-top-icon:always-on-top {
@@ -49,66 +49,66 @@
  * Sidebar
 **************************************************/
 .rootPane .sidebar {
-    -fx-background-color: -mfx-purple;
-    -fx-background-insets: -1 -5 -1 -1;
-    -fx-background-radius: 0 20 20 0;
+	-fx-background-color: -mfx-purple;
+	-fx-background-insets: -1 -5 -1 -1;
+	-fx-background-radius: 0 20 20 0;
 }
 
 .rootPane .sidebar .header {
-    -fx-font-family: 'Visby Round CF Heavy';
-    -fx-font-size: 24;
-    -fx-text-fill: white;
+	-fx-font-family: 'Visby Round CF Heavy';
+	-fx-font-size: 24;
+	-fx-text-fill: white;
 }
 
 .rootPane .sidebar .header .mfx-font-icon {
-    -mfx-color: white;
+	-mfx-color: white;
 }
 
 .rootPane .sidebar .mfx-scroll-pane {
-    -fx-background-color: transparent;
+	-fx-background-color: transparent;
 
-    -track-color: rgba(255, 255, 255, 0.3);
-    -thumb-color: white;
-    -thumb-hover-color: white;
+	-track-color: rgba(255, 255, 255, 0.3);
+	-thumb-color: white;
+	-thumb-hover-color: white;
 }
 
 .rootPane .sidebar .menu-label {
-    -fx-font-family: 'Visby Round CF Bold';
-    -fx-font-size: 14;
-    -fx-text-fill: white;
+	-fx-font-family: 'Visby Round CF Bold';
+	-fx-font-size: 14;
+	-fx-text-fill: white;
 }
 
 .rootPane .sidebar .navbar .mfx-rectangle-toggle-node {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0;
-    -fx-border-color: transparent;
-    -fx-border-radius: 0;
-    -fx-pref-height: 40;
+	-fx-background-color: transparent;
+	-fx-background-radius: 0;
+	-fx-border-color: transparent;
+	-fx-border-radius: 0;
+	-fx-pref-height: 40;
 
-    -fx-font-family: 'Visby Round CF Demi Bold';
-    -fx-font-size: 13;
-    -fx-text-fill: white;
+	-fx-font-family: 'Visby Round CF Demi Bold';
+	-fx-font-size: 13;
+	-fx-text-fill: white;
 }
 
 .rootPane .sidebar .navbar .mfx-rectangle-toggle-node .mfx-ripple-generator {
-    -mfx-paused: true;
+	-mfx-paused: true;
 }
 
 .rootPane .sidebar .navbar .mfx-rectangle-toggle-node .mfx-icon-wrapper .mfx-font-icon {
-    -mfx-color: white;
+	-mfx-color: white;
 }
 
 .rootPane .sidebar .navbar .mfx-rectangle-toggle-node:selected {
-    -fx-background-color: white;
-    -fx-background-radius: 5;
-    -fx-text-fill: #601cbe;
+	-fx-background-color: white;
+	-fx-background-radius: 5;
+	-fx-text-fill: #601cbe;
 }
 
 .rootPane .sidebar .navbar .mfx-rectangle-toggle-node:selected .selection-rectangle {
-    -fx-stroke: transparent;
-    -fx-fill: #601cbe;
+	-fx-stroke: transparent;
+	-fx-fill: #601cbe;
 }
 
 .rootPane .sidebar .navbar .mfx-rectangle-toggle-node:selected .mfx-icon-wrapper .mfx-font-icon {
-    -mfx-color: #601cbe;
+	-mfx-color: #601cbe;
 }

@@ -47,155 +47,155 @@ import java.util.function.Function;
  * The size is equal and fixed both for height and width, can be changed via CSS.
  */
 public class MFXIconWrapper extends StackPane {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final String STYLE_CLASS = "mfx-icon-wrapper";
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final String STYLE_CLASS = "mfx-icon-wrapper";
 
-    private final ObjectProperty<Node> icon = new SimpleObjectProperty<>();
-    private final MFXCircleRippleGenerator rippleGenerator = new MFXCircleRippleGenerator(this);
+	private final ObjectProperty<Node> icon = new SimpleObjectProperty<>();
+	private final MFXCircleRippleGenerator rippleGenerator = new MFXCircleRippleGenerator(this);
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXIconWrapper() {
-        initialize();
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXIconWrapper() {
+		initialize();
+	}
 
-    public MFXIconWrapper(Node icon, double size) {
-        initialize();
+	public MFXIconWrapper(Node icon, double size) {
+		initialize();
 
-        setIcon(icon);
-        setSize(size);
-    }
+		setIcon(icon);
+		setSize(size);
+	}
 
-    public MFXIconWrapper(String description, double iconSize, double wrapperSize) {
-        initialize();
+	public MFXIconWrapper(String description, double iconSize, double wrapperSize) {
+		initialize();
 
-        setIcon(new MFXFontIcon(description, iconSize));
-        setSize(wrapperSize);
-    }
+		setIcon(new MFXFontIcon(description, iconSize));
+		setSize(wrapperSize);
+	}
 
-    public MFXIconWrapper(String description, double iconSize, Color iconColor, double wrapperSize) {
-        initialize();
+	public MFXIconWrapper(String description, double iconSize, Color iconColor, double wrapperSize) {
+		initialize();
 
-        setIcon(new MFXFontIcon(description, iconSize, iconColor));
-        setSize(wrapperSize);
-    }
+		setIcon(new MFXFontIcon(description, iconSize, iconColor));
+		setSize(wrapperSize);
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
+	//================================================================================
+	// Methods
+	//================================================================================
 
-    /**
-     * Adds a ripple generator to the icon. It is an optional.
-     */
-    public MFXIconWrapper addRippleGenerator() {
-        if (!getChildren().contains(rippleGenerator)) {
-            super.getChildren().add(0, rippleGenerator);
-        }
+	/**
+	 * Adds a ripple generator to the icon. It is an optional.
+	 */
+	public MFXIconWrapper addRippleGenerator() {
+		if (!getChildren().contains(rippleGenerator)) {
+			super.getChildren().add(0, rippleGenerator);
+		}
 
-        return this;
-    }
+		return this;
+	}
 
-    /**
-     * Adds the ripple generator to the icon by calling {@link #addRippleGenerator()}, sets its position function
-     * to use the mouse event x and y coordinates, and adds the event filter to the icon to generate the ripples.
-     *
-     * @see IRippleGenerator
-     * @see MFXCircleRippleGenerator
-     */
-    public MFXIconWrapper defaultRippleGeneratorBehavior() {
-        addRippleGenerator();
-        rippleGenerator.setRipplePositionFunction(event -> PositionBean.of(event.getX(), event.getY()));
-        addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                rippleGenerator.generateRipple(event);
-            }
-        });
-        return this;
-    }
+	/**
+	 * Adds the ripple generator to the icon by calling {@link #addRippleGenerator()}, sets its position function
+	 * to use the mouse event x and y coordinates, and adds the event filter to the icon to generate the ripples.
+	 *
+	 * @see IRippleGenerator
+	 * @see MFXCircleRippleGenerator
+	 */
+	public MFXIconWrapper defaultRippleGeneratorBehavior() {
+		addRippleGenerator();
+		rippleGenerator.setRipplePositionFunction(event -> PositionBean.of(event.getX(), event.getY()));
+		addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+			if (event.getButton() == MouseButton.PRIMARY) {
+				rippleGenerator.generateRipple(event);
+			}
+		});
+		return this;
+	}
 
-    /**
-     * Adds the ripple generator to the icon by calling {@link #addRippleGenerator()}, sets its position function
-     * to the given function, and adds the event filter to the icon to generate the ripples.
-     *
-     * @see IRippleGenerator
-     * @see MFXCircleRippleGenerator
-     */
-    public MFXIconWrapper rippleGeneratorBehavior(Function<MouseEvent, PositionBean> positionFunction) {
-        addRippleGenerator();
-        rippleGenerator.setRipplePositionFunction(positionFunction);
-        addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                rippleGenerator.generateRipple(event);
-            }
-        });
-        return this;
-    }
+	/**
+	 * Adds the ripple generator to the icon by calling {@link #addRippleGenerator()}, sets its position function
+	 * to the given function, and adds the event filter to the icon to generate the ripples.
+	 *
+	 * @see IRippleGenerator
+	 * @see MFXCircleRippleGenerator
+	 */
+	public MFXIconWrapper rippleGeneratorBehavior(Function<MouseEvent, PositionBean> positionFunction) {
+		addRippleGenerator();
+		rippleGenerator.setRipplePositionFunction(positionFunction);
+		addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+			if (event.getButton() == MouseButton.PRIMARY) {
+				rippleGenerator.generateRipple(event);
+			}
+		});
+		return this;
+	}
 
-    private void initialize() {
-        getStyleClass().add(STYLE_CLASS);
+	private void initialize() {
+		getStyleClass().add(STYLE_CLASS);
 
-        setMinSize(USE_PREF_SIZE, USE_PREF_SIZE);
-        setMaxSize(USE_PREF_SIZE, USE_PREF_SIZE);
+		setMinSize(USE_PREF_SIZE, USE_PREF_SIZE);
+		setMaxSize(USE_PREF_SIZE, USE_PREF_SIZE);
 
-        icon.addListener((observable, oldValue, newValue) -> {
-            super.getChildren().remove(oldValue);
-            manageIcon(newValue);
-        });
-        size.addListener((observable, oldValue, newValue) -> setPrefSize(newValue.doubleValue(), newValue.doubleValue()));
-    }
+		icon.addListener((observable, oldValue, newValue) -> {
+			super.getChildren().remove(oldValue);
+			manageIcon(newValue);
+		});
+		size.addListener((observable, oldValue, newValue) -> setPrefSize(newValue.doubleValue(), newValue.doubleValue()));
+	}
 
-    /**
-     * This method handles the positioning of the icon in the children list.
-     */
-    private void manageIcon(Node icon) {
-        if (icon == null) {
-            return;
-        }
+	/**
+	 * This method handles the positioning of the icon in the children list.
+	 */
+	private void manageIcon(Node icon) {
+		if (icon == null) {
+			return;
+		}
 
-        ObservableList<Node> children = super.getChildren();
+		ObservableList<Node> children = super.getChildren();
 
-        if (children.isEmpty()) {
-            children.add(icon);
-            return;
-        }
+		if (children.isEmpty()) {
+			children.add(icon);
+			return;
+		}
 
-        if (children.contains(rippleGenerator)) {
-            if (children.size() == 1) {
-                children.add(icon);
-            } else {
-                children.set(1, icon);
-            }
-        }
-    }
+		if (children.contains(rippleGenerator)) {
+			if (children.size() == 1) {
+				children.add(icon);
+			} else {
+				children.set(1, icon);
+			}
+		}
+	}
 
-    //================================================================================
-    // Override Methods
-    //================================================================================
+	//================================================================================
+	// Override Methods
+	//================================================================================
 
-    /**
-     * @return an unmodifiable list of the StackPane children
-     */
-    @Override
-    public ObservableList<Node> getChildren() {
-        return FXCollections.unmodifiableObservableList(super.getChildren());
-    }
+	/**
+	 * @return an unmodifiable list of the StackPane children
+	 */
+	@Override
+	public ObservableList<Node> getChildren() {
+		return FXCollections.unmodifiableObservableList(super.getChildren());
+	}
 
-    @Override
-    protected void layoutChildren() {
-        super.layoutChildren();
+	@Override
+	protected void layoutChildren() {
+		super.layoutChildren();
 
-	    if (getSize() == -1) {
-		    Node icon = getIcon();
-		    double iW = icon.prefWidth(-1);
-		    double iH = icon.prefHeight(-1);
-		    Insets padding = getPadding();
-		    double size = Math.max(padding.getLeft() + iW + padding.getRight(), padding.getTop() + iH + padding.getBottom());
-		    setSize(size);
-	    }
-    }
+		if (getSize() == -1) {
+			Node icon = getIcon();
+			double iW = icon.prefWidth(-1);
+			double iH = icon.prefHeight(-1);
+			Insets padding = getPadding();
+			double size = Math.max(padding.getLeft() + iW + padding.getRight(), padding.getTop() + iH + padding.getBottom());
+			setSize(size);
+		}
+	}
 
 	//================================================================================
 	// Styleable Properties

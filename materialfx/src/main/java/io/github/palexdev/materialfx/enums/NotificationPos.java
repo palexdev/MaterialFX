@@ -9,10 +9,10 @@ import io.github.palexdev.materialfx.notifications.MFXNotificationSystem;
  * Used by {@link MFXNotificationCenterSystem} and {@link MFXNotificationSystem}.
  */
 public enum NotificationPos {
-    TOP_CENTER,
-    TOP_LEFT,
-    TOP_RIGHT,
-    BOTTOM_CENTER,
-    BOTTOM_LEFT,
-    BOTTOM_RIGHT
+	TOP_CENTER,
+	TOP_LEFT,
+	TOP_RIGHT,
+	BOTTOM_CENTER,
+	BOTTOM_LEFT,
+	BOTTOM_RIGHT
 }

@@ -1,3 +1,3 @@
 public enum FloatingStyle {
-    FLOATING, IFTA
+	FLOATING, IFTA
 }

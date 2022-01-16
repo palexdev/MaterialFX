@@ -20,37 +20,37 @@
 @import "MFXColors.css";
 
 .mfx-stepper-toggle #circle {
-    -fx-fill: white;
-    -fx-stroke: #EBEBEB;
+	-fx-fill: white;
+	-fx-stroke: #EBEBEB;
 }
 
 .mfx-stepper-toggle .mfx-text-field {
-    -mfx-float-mode: disabled;
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-font-family: "Open Sans SemiBold";
-    -fx-font-size: 14;
-    -fx-pref-width: 100;
-    -fx-alignment: CENTER;
+	-mfx-float-mode: disabled;
+	-fx-background-color: transparent;
+	-fx-border-color: transparent;
+	-fx-font-family: "Open Sans SemiBold";
+	-fx-font-size: 14;
+	-fx-pref-width: 100;
+	-fx-alignment: CENTER;
 }
 
 .mfx-stepper-toggle:selected #circle {
-    -fx-stroke: -mfx-purple;
+	-fx-stroke: -mfx-purple;
 }
 
 .mfx-stepper-toggle:selected .mfx-text-field {
-    -fx-text-fill: -mfx-purple;
+	-fx-text-fill: -mfx-purple;
 }
 
 .mfx-stepper-toggle:completed #circle {
-    -fx-stroke: -mfx-purple;
-    -fx-fill: -mfx-purple;
+	-fx-stroke: -mfx-purple;
+	-fx-fill: -mfx-purple;
 }
 
 .mfx-stepper-toggle:invalid #circle {
-    -fx-stroke: -mfx-red;
+	-fx-stroke: -mfx-red;
 }
 
 .mfx-stepper-toggle:invalid .mfx-text-field {
-    -fx-text-fill: -mfx-red;
+	-fx-text-fill: -mfx-red;
 }

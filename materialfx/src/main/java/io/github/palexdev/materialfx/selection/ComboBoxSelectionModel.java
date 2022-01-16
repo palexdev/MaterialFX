@@ -26,69 +26,69 @@ import javafx.collections.ObservableList;
  */
 public class ComboBoxSelectionModel<T> extends SingleSelectionModel<T> {
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public ComboBoxSelectionModel(ObservableList<T> items) {
-        super(items);
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public ComboBoxSelectionModel(ObservableList<T> items) {
+		super(items);
+	}
 
-    public ComboBoxSelectionModel(ObjectProperty<ObservableList<T>> items) {
-        super(items);
-    }
+	public ComboBoxSelectionModel(ObjectProperty<ObservableList<T>> items) {
+		super(items);
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
+	//================================================================================
+	// Methods
+	//================================================================================
 
-    /**
-     * Selects the first item of the combobox if the items list is not empty.
-     */
-    public void selectFirst() {
-        if (itemsEmpty()) return;
-        selectIndex(0);
-    }
+	/**
+	 * Selects the first item of the combobox if the items list is not empty.
+	 */
+	public void selectFirst() {
+		if (itemsEmpty()) return;
+		selectIndex(0);
+	}
 
-    /**
-     * Selects the next item of the combobox if exists.
-     */
-    public void selectNext() {
-        int index = getSelectedIndex() + 1;
-        if (index < itemsSize()) {
-            selectIndex(index);
-        }
-    }
+	/**
+	 * Selects the next item of the combobox if exists.
+	 */
+	public void selectNext() {
+		int index = getSelectedIndex() + 1;
+		if (index < itemsSize()) {
+			selectIndex(index);
+		}
+	}
 
-    /**
-     * Selects the previous item of the combobox if exists.
-     */
-    public void selectPrevious() {
-        int index = getSelectedIndex() - 1;
-        if (index >= 0 && !itemsEmpty()) {
-            selectIndex(index);
-        }
-    }
+	/**
+	 * Selects the previous item of the combobox if exists.
+	 */
+	public void selectPrevious() {
+		int index = getSelectedIndex() - 1;
+		if (index >= 0 && !itemsEmpty()) {
+			selectIndex(index);
+		}
+	}
 
-    /**
-     * Selects the last item of the combobox if the items list is not empty.
-     */
-    public void selectLast() {
-        if (itemsEmpty()) return;
-        int index = itemsSize() - 1;
-        selectIndex(index);
-    }
+	/**
+	 * Selects the last item of the combobox if the items list is not empty.
+	 */
+	public void selectLast() {
+		if (itemsEmpty()) return;
+		int index = itemsSize() - 1;
+		selectIndex(index);
+	}
 
-    /**
-     * Convenience method to get the items list size.
-     */
-    private int itemsSize() {
-        return items.get().size();
-    }
+	/**
+	 * Convenience method to get the items list size.
+	 */
+	private int itemsSize() {
+		return items.get().size();
+	}
 
-    /**
-     * Convenience method to check if the items list is empty.
-     */
-    private boolean itemsEmpty() {
-        return items.get().isEmpty();
-    }
+	/**
+	 * Convenience method to check if the items list is empty.
+	 */
+	private boolean itemsEmpty() {
+		return items.get().isEmpty();
+	}
 }

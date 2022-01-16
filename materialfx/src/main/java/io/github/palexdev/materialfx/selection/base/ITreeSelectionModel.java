@@ -26,11 +26,17 @@ import javafx.scene.input.MouseEvent;
  * Public API used by any MFXTreeView.
  */
 public interface ITreeSelectionModel<T> {
-    void scanTree(AbstractMFXTreeItem<T> item);
-    void select(AbstractMFXTreeItem<T> item, MouseEvent mouseEvent);
-    void clearSelection();
-    AbstractMFXTreeItem<T> getSelectedItem();
-    ListProperty<AbstractMFXTreeItem<T>> getSelectedItems();
-    boolean allowsMultipleSelection();
-    void setAllowsMultipleSelection(boolean multipleSelection);
+	void scanTree(AbstractMFXTreeItem<T> item);
+
+	void select(AbstractMFXTreeItem<T> item, MouseEvent mouseEvent);
+
+	void clearSelection();
+
+	AbstractMFXTreeItem<T> getSelectedItem();
+
+	ListProperty<AbstractMFXTreeItem<T>> getSelectedItems();
+
+	boolean allowsMultipleSelection();
+
+	void setAllowsMultipleSelection(boolean multipleSelection);
 }

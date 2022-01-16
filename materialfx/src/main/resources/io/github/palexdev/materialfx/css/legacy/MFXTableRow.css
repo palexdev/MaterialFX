@@ -17,27 +17,27 @@
  */
 
 .mfx-legacy-table-row {
-    -fx-background-insets: 0.0;
-    -fx-text-fill: black;
-    -fx-padding: 0 -3 0 3;
+	-fx-background-insets: 0.0;
+	-fx-text-fill: black;
+	-fx-padding: 0 -3 0 3;
 
-    -mfx-hover-color: rgba(50, 150, 255, 0.15);
+	-mfx-hover-color: rgba(50, 150, 255, 0.15);
 }
 
 .mfx-legacy-table-row:odd,
 .mfx-legacy-table-row:even {
-    -fx-background-color: white;
+	-fx-background-color: white;
 }
 
 .mfx-legacy-table-row:filled:hover,
 .mfx-legacy-table-row:selected .label {
-    -fx-text-fill: black;
+	-fx-text-fill: black;
 }
 
 .table-row-cell .text {
-    -fx-fill: -fx-text-background-color;
+	-fx-fill: -fx-text-background-color;
 }
 
 .table-row-cell:selected .text {
-    -fx-fill: black;
+	-fx-fill: black;
 }

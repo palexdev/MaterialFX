@@ -61,8 +61,8 @@
 
 #customNCombo2 .virtual-flow {
 	-track-color: derive(#ff5d53, 90%);
-    -thumb-color: derive(#ff5d53, 50%);
-    -thumb-hover-color: derive(#ff5d53, 25%);
+	-thumb-color: derive(#ff5d53, 50%);
+	-thumb-hover-color: derive(#ff5d53, 25%);
 }
 
 #customNCombo2 .virtual-flow .mfx-combo-box-cell:hover {

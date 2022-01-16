@@ -19,6 +19,6 @@
 package io.github.palexdev.materialfx.enums;
 
 public enum ButtonType {
-    FLAT,
-    RAISED
+	FLAT,
+	RAISED
 }

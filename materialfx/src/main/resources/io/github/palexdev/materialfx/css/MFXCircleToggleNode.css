@@ -20,10 +20,10 @@
 @import "MFXTextField.css";
 
 .mfx-circle-toggle-node {
-    -mfx-unselected-color: white;
-    -mfx-selected-color: #EDEDED;
-    -mfx-unselected-border-color: #E1E1E1;
-    -mfx-selected-border-color: #E1E1E1;
+	-mfx-unselected-color: white;
+	-mfx-selected-color: #EDEDED;
+	-mfx-unselected-border-color: #E1E1E1;
+	-mfx-selected-border-color: #E1E1E1;
 }
 
 .mfx-circle-toggle-node,
@@ -32,25 +32,25 @@
 .mfx-circle-toggle-node:focused,
 .mfx-circle-toggle-node:selected,
 .mfx-circle-toggle-node:focused:selected {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0;
-    -fx-background-insets: 0;
+	-fx-background-color: transparent;
+	-fx-background-radius: 0;
+	-fx-background-insets: 0;
 }
 
 .mfx-circle-toggle-node .circle {
-    -fx-fill: -mfx-unselected-color;
-    -fx-stroke: -mfx-unselected-border-color;
+	-fx-fill: -mfx-unselected-color;
+	-fx-stroke: -mfx-unselected-border-color;
 }
 
 .mfx-circle-toggle-node:selected .circle {
-    -fx-fill: -mfx-selected-color;
-    -fx-stroke: -mfx-selected-border-color;
+	-fx-fill: -mfx-selected-color;
+	-fx-stroke: -mfx-selected-border-color;
 }
 
 .mfx-circle-toggle-node .mfx-text-field {
-    -mfx-float-mode: disabled;
-    -mfx-gap: 0;
+	-mfx-float-mode: disabled;
+	-mfx-gap: 0;
 
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
+	-fx-background-color: transparent;
+	-fx-border-color: transparent;
 }

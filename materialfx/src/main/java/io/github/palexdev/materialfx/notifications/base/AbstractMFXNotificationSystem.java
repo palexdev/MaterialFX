@@ -54,214 +54,214 @@ import javafx.util.Duration;
  * Last note: notification systems ideally should be singletons.
  */
 public abstract class AbstractMFXNotificationSystem implements INotificationSystem {
-    //================================================================================
-    // Properties
-    //================================================================================
-    protected Screen screen = Screen.getPrimary();
-    protected Window owner;
-    protected final Stage dummyStage;
-    protected final EventHandler<WindowEvent> onClose;
-    protected final MFXPopup popup;
-    protected NotificationPos position;
-    protected Insets spacing;
+	//================================================================================
+	// Properties
+	//================================================================================
+	protected Screen screen = Screen.getPrimary();
+	protected Window owner;
+	protected final Stage dummyStage;
+	protected final EventHandler<WindowEvent> onClose;
+	protected final MFXPopup popup;
+	protected NotificationPos position;
+	protected Insets spacing;
 
-    protected boolean animated = true;
-    protected boolean closeAutomatically = true;
-    protected Duration closeAfter = Duration.seconds(3);
-    protected final PauseTransition closeAfterTransition;
+	protected boolean animated = true;
+	protected boolean closeAutomatically = true;
+	protected Duration closeAfter = Duration.seconds(3);
+	protected final PauseTransition closeAfterTransition;
 
-    protected final ResettableBooleanProperty showing = new ResettableBooleanProperty(false, false);
-    protected final ResettableBooleanProperty closing = new ResettableBooleanProperty(false, false);
+	protected final ResettableBooleanProperty showing = new ResettableBooleanProperty(false, false);
+	protected final ResettableBooleanProperty closing = new ResettableBooleanProperty(false, false);
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    protected AbstractMFXNotificationSystem() {
-        position = NotificationPos.BOTTOM_RIGHT;
-        spacing = InsetsFactory.all(15);
+	//================================================================================
+	// Constructors
+	//================================================================================
+	protected AbstractMFXNotificationSystem() {
+		position = NotificationPos.BOTTOM_RIGHT;
+		spacing = InsetsFactory.all(15);
 
-        dummyStage = new Stage();
-        dummyStage.initStyle(StageStyle.UTILITY);
-        dummyStage.setOpacity(0.0);
-        dummyStage.show();
-        onClose = event -> dummyStage.close();
+		dummyStage = new Stage();
+		dummyStage.initStyle(StageStyle.UTILITY);
+		dummyStage.setOpacity(0.0);
+		dummyStage.show();
+		onClose = event -> dummyStage.close();
 
-        popup = new MFXPopup();
-        popup.setAnimated(false);
+		popup = new MFXPopup();
+		popup.setAnimated(false);
 
-        closeAfterTransition = PauseBuilder.build()
-                .setDelay(100)
-                .setDuration(closeAfter)
-                .setOnFinished(event -> close())
-                .getAnimation();
+		closeAfterTransition = PauseBuilder.build()
+				.setDelay(100)
+				.setDuration(closeAfter)
+				.setOnFinished(event -> close())
+				.getAnimation();
 
-        closing.setFireChangeOnReset(true);
-    }
+		closing.setFireChangeOnReset(true);
+	}
 
-    //================================================================================
-    // Abstract Methods
-    //================================================================================
+	//================================================================================
+	// Abstract Methods
+	//================================================================================
 
-    /**
-     * Shows a notification by manipulating the popup's coordinates and content.
-     */
-    protected abstract void show();
+	/**
+	 * Shows a notification by manipulating the popup's coordinates and content.
+	 */
+	protected abstract void show();
 
-    /**
-     * Closes a notification by manipulating the popup's coordinates and content.
-     * <p>
-     * The popup should be closed as well!
-     */
-    protected abstract void close();
+	/**
+	 * Closes a notification by manipulating the popup's coordinates and content.
+	 * <p>
+	 * The popup should be closed as well!
+	 */
+	protected abstract void close();
 
-    /**
-     * Instructs the notification system to shown the specified notification when possible.
-     */
-    protected abstract void scheduleReopen(INotification notification);
+	/**
+	 * Instructs the notification system to shown the specified notification when possible.
+	 */
+	protected abstract void scheduleReopen(INotification notification);
 
-    /**
-     * Responsible for computing the popup's coordinates.
-     */
-    protected abstract TransitionPositionBean computePosition();
+	/**
+	 * Responsible for computing the popup's coordinates.
+	 */
+	protected abstract TransitionPositionBean computePosition();
 
-    //================================================================================
-    // Methods
-    //================================================================================
+	//================================================================================
+	// Methods
+	//================================================================================
 
-    /**
-     * Default implementation is empty.
-     */
-    protected void init() {}
+	/**
+	 * Default implementation is empty.
+	 */
+	protected void init() {}
 
-    //================================================================================
-    // Getters/Setters
-    //================================================================================
+	//================================================================================
+	// Getters/Setters
+	//================================================================================
 
-    /**
-     * @return the screen on which to show the notifications
-     */
-    public Screen getScreen() {
-        return screen;
-    }
+	/**
+	 * @return the screen on which to show the notifications
+	 */
+	public Screen getScreen() {
+		return screen;
+	}
 
-    /**
-     * Sets the screen on which to show the notifications.
-     */
-    public AbstractMFXNotificationSystem setScreen(Screen screen) {
-        this.screen = screen;
-        return this;
-    }
+	/**
+	 * Sets the screen on which to show the notifications.
+	 */
+	public AbstractMFXNotificationSystem setScreen(Screen screen) {
+		this.screen = screen;
+		return this;
+	}
 
-    /**
-     * @return the position at which notifications will be shown
-     */
-    public NotificationPos getPosition() {
-        return position;
-    }
+	/**
+	 * @return the position at which notifications will be shown
+	 */
+	public NotificationPos getPosition() {
+		return position;
+	}
 
-    /**
-     * Sets the position at which notifications will be shown.
-     */
-    public AbstractMFXNotificationSystem setPosition(NotificationPos position) {
-        this.position = position;
-        return this;
-    }
+	/**
+	 * Sets the position at which notifications will be shown.
+	 */
+	public AbstractMFXNotificationSystem setPosition(NotificationPos position) {
+		this.position = position;
+		return this;
+	}
 
-    /**
-     * Safer version of {@link #setPosition(NotificationPos)}. If the notification system is currently showing
-     * it's not a good idea to change the position as the close method could then misbehave, this method
-     * changes the position as soon as the notification system has been closed. If it's already closed then
-     * the position is set immediately.
-     */
-    public AbstractMFXNotificationSystem delaySetPosition(NotificationPos position) {
-        if (isShowing()) {
-            ExecutionUtils.executeWhen(
-                    closing,
-                    (oldValue, newValue) -> setPosition(position),
-                    false,
-                    (oldValue, newValue) -> !newValue,
-                    true
-            );
-        } else {
-            setPosition(position);
-        }
-        return this;
-    }
+	/**
+	 * Safer version of {@link #setPosition(NotificationPos)}. If the notification system is currently showing
+	 * it's not a good idea to change the position as the close method could then misbehave, this method
+	 * changes the position as soon as the notification system has been closed. If it's already closed then
+	 * the position is set immediately.
+	 */
+	public AbstractMFXNotificationSystem delaySetPosition(NotificationPos position) {
+		if (isShowing()) {
+			ExecutionUtils.executeWhen(
+					closing,
+					(oldValue, newValue) -> setPosition(position),
+					false,
+					(oldValue, newValue) -> !newValue,
+					true
+			);
+		} else {
+			setPosition(position);
+		}
+		return this;
+	}
 
-    /**
-     * @return the Insets object that specifies the spacing between notifications and the screen borders
-     */
-    public Insets getSpacing() {
-        return spacing;
-    }
+	/**
+	 * @return the Insets object that specifies the spacing between notifications and the screen borders
+	 */
+	public Insets getSpacing() {
+		return spacing;
+	}
 
-    /**
-     * Sets the Insets object that specifies the spacing between notifications and the screen borders.
-     */
-    public AbstractMFXNotificationSystem setSpacing(Insets spacing) {
-        this.spacing = spacing;
-        return this;
-    }
+	/**
+	 * Sets the Insets object that specifies the spacing between notifications and the screen borders.
+	 */
+	public AbstractMFXNotificationSystem setSpacing(Insets spacing) {
+		this.spacing = spacing;
+		return this;
+	}
 
-    /**
-     * @return whether the notification system is animated
-     */
-    public boolean isAnimated() {
-        return animated;
-    }
+	/**
+	 * @return whether the notification system is animated
+	 */
+	public boolean isAnimated() {
+		return animated;
+	}
 
-    /**
-     * Enables/Disables animations.
-     */
-    public AbstractMFXNotificationSystem setAnimated(boolean animated) {
-        this.animated = animated;
-        return this;
-    }
+	/**
+	 * Enables/Disables animations.
+	 */
+	public AbstractMFXNotificationSystem setAnimated(boolean animated) {
+		this.animated = animated;
+		return this;
+	}
 
-    /**
-     * @return whether notifications should close automatically
-     */
-    public boolean isCloseAutomatically() {
-        return closeAutomatically;
-    }
+	/**
+	 * @return whether notifications should close automatically
+	 */
+	public boolean isCloseAutomatically() {
+		return closeAutomatically;
+	}
 
-    /**
-     * Enables/Disables notifications automatic close.
-     */
-    public AbstractMFXNotificationSystem setCloseAutomatically(boolean closeAutomatically) {
-        this.closeAutomatically = closeAutomatically;
-        return this;
-    }
+	/**
+	 * Enables/Disables notifications automatic close.
+	 */
+	public AbstractMFXNotificationSystem setCloseAutomatically(boolean closeAutomatically) {
+		this.closeAutomatically = closeAutomatically;
+		return this;
+	}
 
-    /**
-     * @return the duration of time after which the notifications are automatically closed
-     * if {@link #isCloseAutomatically()} is true
-     */
-    public Duration getCloseAfter() {
-        return closeAfter;
-    }
+	/**
+	 * @return the duration of time after which the notifications are automatically closed
+	 * if {@link #isCloseAutomatically()} is true
+	 */
+	public Duration getCloseAfter() {
+		return closeAfter;
+	}
 
-    /**
-     * Sets the duration of time after which the notifications are automatically closed
-     * if {@link #isCloseAutomatically()} is true
-     */
-    public AbstractMFXNotificationSystem setCloseAfter(Duration closeAfter) {
-        this.closeAfter = closeAfter;
-        closeAfterTransition.setDuration(closeAfter);
-        return this;
-    }
+	/**
+	 * Sets the duration of time after which the notifications are automatically closed
+	 * if {@link #isCloseAutomatically()} is true
+	 */
+	public AbstractMFXNotificationSystem setCloseAfter(Duration closeAfter) {
+		this.closeAfter = closeAfter;
+		closeAfterTransition.setDuration(closeAfter);
+		return this;
+	}
 
-    /**
-     * @return whether the notification system is showing a notification
-     */
-    public boolean isShowing() {
-        return showing.get();
-    }
+	/**
+	 * @return whether the notification system is showing a notification
+	 */
+	public boolean isShowing() {
+		return showing.get();
+	}
 
-    /**
-     * @return whether the notification system is closing
-     */
-    public boolean isClosing() {
-        return closing.get();
-    }
+	/**
+	 * @return whether the notification system is closing
+	 */
+	public boolean isClosing() {
+		return closing.get();
+	}
 }

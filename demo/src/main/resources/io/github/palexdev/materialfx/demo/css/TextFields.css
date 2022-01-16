@@ -7,27 +7,27 @@
 **************************************************/
 .mfx-text-field {
 	-fx-min-width: 130;
-    -fx-font-family: 'Visby Round CF Medium';
+	-fx-font-family: 'Visby Round CF Medium';
 }
 
 .mfx-text-field .floating-text {
-    -fx-font-family: 'Visby Round CF Medium';
+	-fx-font-family: 'Visby Round CF Medium';
 }
 
 
 #customField {
-    -fx-border-color: -common-gradient;
+	-fx-border-color: -common-gradient;
 }
 
 #customField .floating-text {
-    -fx-text-fill: -mfx-red;
+	-fx-text-fill: -mfx-red;
 }
 
 /**************************************************
  * Password Fields
 **************************************************/
 #customPassword {
-    -fx-border-color: -secondary-gradient;
+	-fx-border-color: -secondary-gradient;
 }
 
 #customPassword:masked {
@@ -51,18 +51,18 @@
 }
 
 #validatedField:invalid {
-    -fx-border-color: -mfx-red;
+	-fx-border-color: -mfx-red;
 }
 
 #validatedField:invalid .floating-text {
-    -fx-text-fill: -mfx-red;
+	-fx-text-fill: -mfx-red;
 }
 
 #validatedField:invalid .mfx-font-icon {
-    -mfx-color: -mfx-red;
+	-mfx-color: -mfx-red;
 }
 
 #validationLabel {
-    -fx-font-family: 'Visby Round CF Demi Bold';
-    -fx-font-size: 11;
+	-fx-font-family: 'Visby Round CF Demi Bold';
+	-fx-font-size: 11;
 }

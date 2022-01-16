@@ -24,8 +24,8 @@ import javafx.animation.Animation;
  * RippleGenerators only accept ripple types that implement this interface.
  */
 public interface IRipple {
-    /**
-     * Every ripple type should specify its animation.
-     */
-    Animation getAnimation();
+	/**
+	 * Every ripple type should specify its animation.
+	 */
+	Animation getAnimation();
 }

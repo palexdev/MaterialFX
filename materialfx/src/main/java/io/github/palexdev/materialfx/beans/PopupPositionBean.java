@@ -15,65 +15,65 @@ import javafx.scene.Node;
  * all info about the content are available so this bean is necessary to properly reposition and animate the popup.
  */
 public class PopupPositionBean {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final Node owner;
-    private final Bounds ownerBounds;
-    private final PositionBean positionBean;
-    private final Alignment alignment;
-    private final double xOffset;
-    private final double yOffset;
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final Node owner;
+	private final Bounds ownerBounds;
+	private final PositionBean positionBean;
+	private final Alignment alignment;
+	private final double xOffset;
+	private final double yOffset;
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public PopupPositionBean(Node owner, PositionBean positionBean, Alignment alignment, double xOffset, double yOffset) {
-        this.owner = owner;
-        this.ownerBounds = owner.getLayoutBounds();
-        this.positionBean = positionBean;
-        this.alignment = alignment;
-        this.xOffset = xOffset;
-        this.yOffset = yOffset;
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public PopupPositionBean(Node owner, PositionBean positionBean, Alignment alignment, double xOffset, double yOffset) {
+		this.owner = owner;
+		this.ownerBounds = owner.getLayoutBounds();
+		this.positionBean = positionBean;
+		this.alignment = alignment;
+		this.xOffset = xOffset;
+		this.yOffset = yOffset;
+	}
 
-    /**
-     * @return the popup's owner
-     */
-    public Node getOwner() {
-        return owner;
-    }
+	/**
+	 * @return the popup's owner
+	 */
+	public Node getOwner() {
+		return owner;
+	}
 
-    /**
-     * @return the popup owner's bounds
-     */
-    public Bounds getOwnerBounds() {
-        return ownerBounds;
-    }
+	/**
+	 * @return the popup owner's bounds
+	 */
+	public Bounds getOwnerBounds() {
+		return ownerBounds;
+	}
 
-    /**
-     * @return the popup owner's width
-     */
-    public double getOwnerWidth() {
-        return ownerBounds.getWidth();
-    }
+	/**
+	 * @return the popup owner's width
+	 */
+	public double getOwnerWidth() {
+		return ownerBounds.getWidth();
+	}
 
-    /**
-     * @return the popup owner's height
-     */
-    public double getOwnerHeight() {
-        return ownerBounds.getHeight();
-    }
+	/**
+	 * @return the popup owner's height
+	 */
+	public double getOwnerHeight() {
+		return ownerBounds.getHeight();
+	}
 
-    /**
-     * You should NOT rely on these coordinates since as of now
-     * they do not take into account the translations made by the skin.
-     *
-     * @return the initial computed coordinates of the popup
-     */
-    public PositionBean getPositionBean() {
-	    return positionBean;
-    }
+	/**
+	 * You should NOT rely on these coordinates since as of now
+	 * they do not take into account the translations made by the skin.
+	 *
+	 * @return the initial computed coordinates of the popup
+	 */
+	public PositionBean getPositionBean() {
+		return positionBean;
+	}
 
 	/**
 	 * Delegate for {@link #getPositionBean()}.getX().
@@ -112,26 +112,26 @@ public class PopupPositionBean {
 	 */
 	public HPos getHPos() {
 		return alignment.getHPos();
-    }
+	}
 
-    /**
-     * @return the specified {@link VPos}
-     */
-    public VPos getVPos() {
-        return alignment.getVPos();
-    }
+	/**
+	 * @return the specified {@link VPos}
+	 */
+	public VPos getVPos() {
+		return alignment.getVPos();
+	}
 
-    /**
-     * @return the specified x offset
-     */
-    public double getXOffset() {
-        return xOffset;
-    }
+	/**
+	 * @return the specified x offset
+	 */
+	public double getXOffset() {
+		return xOffset;
+	}
 
-    /**
-     * @return the specified y offset
-     */
-    public double getYOffset() {
-        return yOffset;
-    }
+	/**
+	 * @return the specified y offset
+	 */
+	public double getYOffset() {
+		return yOffset;
+	}
 }

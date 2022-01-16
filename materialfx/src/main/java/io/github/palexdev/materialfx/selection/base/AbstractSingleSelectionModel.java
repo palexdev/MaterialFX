@@ -35,38 +35,38 @@ import javafx.collections.ObservableList;
  * responsible for updating/managing the selection model' state.
  */
 public abstract class AbstractSingleSelectionModel<T> implements ISingleSelectionModel<T> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    protected final ObjectProperty<ObservableList<T>> items = new SimpleObjectProperty<>();
-    protected final SingleSelectionManager<T> selectionManager = new SingleSelectionManager<>(this);
+	//================================================================================
+	// Properties
+	//================================================================================
+	protected final ObjectProperty<ObservableList<T>> items = new SimpleObjectProperty<>();
+	protected final SingleSelectionManager<T> selectionManager = new SingleSelectionManager<>(this);
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    protected AbstractSingleSelectionModel(ObservableList<T> items) {
-        this.items.set(items);
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	protected AbstractSingleSelectionModel(ObservableList<T> items) {
+		this.items.set(items);
+	}
 
-    protected AbstractSingleSelectionModel(ObservableValue<? extends ObservableList<T>> items) {
-        this.items.bind(items);
-    }
+	protected AbstractSingleSelectionModel(ObservableValue<? extends ObservableList<T>> items) {
+		this.items.bind(items);
+	}
 
-    //================================================================================
-    // Getters/Setters
-    //================================================================================
+	//================================================================================
+	// Getters/Setters
+	//================================================================================
 
-    /**
-     * @return an unmodifiable copy of the items list
-     */
-    public ObservableList<T> getUnmodifiableItems() {
-        return FXCollections.unmodifiableObservableList(items.get());
-    }
+	/**
+	 * @return an unmodifiable copy of the items list
+	 */
+	public ObservableList<T> getUnmodifiableItems() {
+		return FXCollections.unmodifiableObservableList(items.get());
+	}
 
-    /**
-     * @return the items list
-     */
-    final protected ObservableList<T> getItems() {
-        return items.get();
-    }
+	/**
+	 * @return the items list
+	 */
+	final protected ObservableList<T> getItems() {
+		return items.get();
+	}
 }

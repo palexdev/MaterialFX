@@ -41,153 +41,153 @@ import java.util.List;
  * <p> - {@link #textExpandProperty()}: to control the text size and the checkbox layout (see documentation)
  */
 public class MFXCheckbox extends CheckBox implements MFXLabeled {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private static final StyleablePropertyFactory<MFXCheckbox> FACTORY = new StyleablePropertyFactory<>(CheckBox.getClassCssMetaData());
-    private final String STYLE_CLASS = "mfx-checkbox";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXCheckBox.css");
+	//================================================================================
+	// Properties
+	//================================================================================
+	private static final StyleablePropertyFactory<MFXCheckbox> FACTORY = new StyleablePropertyFactory<>(CheckBox.getClassCssMetaData());
+	private final String STYLE_CLASS = "mfx-checkbox";
+	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXCheckBox.css");
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXCheckbox() {
-        this("");
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXCheckbox() {
+		this("");
+	}
 
-    public MFXCheckbox(String text) {
-        super(text);
-        initialize();
-    }
+	public MFXCheckbox(String text) {
+		super(text);
+		initialize();
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
-    private void initialize() {
-        getStyleClass().add(STYLE_CLASS);
-    }
+	//================================================================================
+	// Methods
+	//================================================================================
+	private void initialize() {
+		getStyleClass().add(STYLE_CLASS);
+	}
 
-    //================================================================================
-    // Stylesheet properties
-    //================================================================================
-    private final StyleableObjectProperty<ContentDisplay> contentDisposition = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.CONTENT_DISPOSITION,
-            this,
-            "contentDisposition",
-            ContentDisplay.LEFT
-    ) {
-        @Override
-        public StyleOrigin getStyleOrigin() {
-            return StyleOrigin.USER_AGENT;
-        }
-    };
+	//================================================================================
+	// Stylesheet properties
+	//================================================================================
+	private final StyleableObjectProperty<ContentDisplay> contentDisposition = new SimpleStyleableObjectProperty<>(
+			StyleableProperties.CONTENT_DISPOSITION,
+			this,
+			"contentDisposition",
+			ContentDisplay.LEFT
+	) {
+		@Override
+		public StyleOrigin getStyleOrigin() {
+			return StyleOrigin.USER_AGENT;
+		}
+	};
 
-    private final StyleableDoubleProperty gap = new SimpleStyleableDoubleProperty(
-            StyleableProperties.GAP,
-            this,
-            "gap",
-            8.0
-    );
+	private final StyleableDoubleProperty gap = new SimpleStyleableDoubleProperty(
+			StyleableProperties.GAP,
+			this,
+			"gap",
+			8.0
+	);
 
-    private final StyleableBooleanProperty textExpand = new SimpleStyleableBooleanProperty(
-            StyleableProperties.TEXT_EXPAND,
-            this,
-            "textExpand",
-            false
-    );
+	private final StyleableBooleanProperty textExpand = new SimpleStyleableBooleanProperty(
+			StyleableProperties.TEXT_EXPAND,
+			this,
+			"textExpand",
+			false
+	);
 
-    public ContentDisplay getContentDisposition() {
-        return contentDisposition.get();
-    }
+	public ContentDisplay getContentDisposition() {
+		return contentDisposition.get();
+	}
 
-    public StyleableObjectProperty<ContentDisplay> contentDispositionProperty() {
-        return contentDisposition;
-    }
+	public StyleableObjectProperty<ContentDisplay> contentDispositionProperty() {
+		return contentDisposition;
+	}
 
-    public void setContentDisposition(ContentDisplay contentDisposition) {
-        this.contentDisposition.set(contentDisposition);
-    }
+	public void setContentDisposition(ContentDisplay contentDisposition) {
+		this.contentDisposition.set(contentDisposition);
+	}
 
-    public double getGap() {
-        return gap.get();
-    }
+	public double getGap() {
+		return gap.get();
+	}
 
-    public StyleableDoubleProperty gapProperty() {
-        return gap;
-    }
+	public StyleableDoubleProperty gapProperty() {
+		return gap;
+	}
 
-    public void setGap(double gap) {
-        this.gap.set(gap);
-    }
+	public void setGap(double gap) {
+		this.gap.set(gap);
+	}
 
-    public boolean isTextExpand() {
-        return textExpand.get();
-    }
+	public boolean isTextExpand() {
+		return textExpand.get();
+	}
 
-    public StyleableBooleanProperty textExpandProperty() {
-        return textExpand;
-    }
+	public StyleableBooleanProperty textExpandProperty() {
+		return textExpand;
+	}
 
-    public void setTextExpand(boolean textExpand) {
-        this.textExpand.set(textExpand);
-    }
+	public void setTextExpand(boolean textExpand) {
+		this.textExpand.set(textExpand);
+	}
 
-    //================================================================================
-    // CssMetaData
-    //================================================================================
-    private static class StyleableProperties {
-        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+	//================================================================================
+	// CssMetaData
+	//================================================================================
+	private static class StyleableProperties {
+		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
-        private static final CssMetaData<MFXCheckbox, ContentDisplay> CONTENT_DISPOSITION =
-                FACTORY.createEnumCssMetaData(
-                        ContentDisplay.class,
-                        "-mfx-content-disposition",
-                        MFXCheckbox::contentDispositionProperty,
-                        ContentDisplay.LEFT
-                );
+		private static final CssMetaData<MFXCheckbox, ContentDisplay> CONTENT_DISPOSITION =
+				FACTORY.createEnumCssMetaData(
+						ContentDisplay.class,
+						"-mfx-content-disposition",
+						MFXCheckbox::contentDispositionProperty,
+						ContentDisplay.LEFT
+				);
 
-        private static final CssMetaData<MFXCheckbox, Number> GAP =
-                FACTORY.createSizeCssMetaData(
-                        "-mfx-gap",
-                        MFXCheckbox::gapProperty,
-                        8.0
-                );
+		private static final CssMetaData<MFXCheckbox, Number> GAP =
+				FACTORY.createSizeCssMetaData(
+						"-mfx-gap",
+						MFXCheckbox::gapProperty,
+						8.0
+				);
 
-        private static final CssMetaData<MFXCheckbox, Boolean> TEXT_EXPAND =
-                FACTORY.createBooleanCssMetaData(
-                        "-mfx-text-expand",
-                        MFXCheckbox::textExpandProperty,
-                        false
-                );
+		private static final CssMetaData<MFXCheckbox, Boolean> TEXT_EXPAND =
+				FACTORY.createBooleanCssMetaData(
+						"-mfx-text-expand",
+						MFXCheckbox::textExpandProperty,
+						false
+				);
 
-        static {
-            cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
-                    CheckBox.getClassCssMetaData(),
-                    CONTENT_DISPOSITION, GAP, TEXT_EXPAND
-            );
-        }
-    }
+		static {
+			cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
+					CheckBox.getClassCssMetaData(),
+					CONTENT_DISPOSITION, GAP, TEXT_EXPAND
+			);
+		}
+	}
 
-    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
-        return StyleableProperties.cssMetaDataList;
-    }
+	public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
+		return StyleableProperties.cssMetaDataList;
+	}
 
-    //================================================================================
-    // Override Methods
-    //================================================================================
+	//================================================================================
+	// Override Methods
+	//================================================================================
 
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        return new MFXCheckboxSkin(this);
-    }
+	@Override
+	protected Skin<?> createDefaultSkin() {
+		return new MFXCheckboxSkin(this);
+	}
 
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
+	@Override
+	public String getUserAgentStylesheet() {
+		return STYLESHEET;
+	}
 
-    @Override
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return MFXCheckbox.getControlCssMetaDataList();
-    }
+	@Override
+	public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+		return MFXCheckbox.getControlCssMetaDataList();
+	}
 }

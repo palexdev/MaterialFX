@@ -8,35 +8,35 @@ import javafx.util.StringConverter;
  * For this to work, it's necessary to specify the enumerator class, see {@link Enum#valueOf(Class, String)}.
  */
 public class EnumStringConverter<E extends Enum<E>> extends StringConverter<E> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final Class<E> type;
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final Class<E> type;
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public EnumStringConverter(Class<E> type) {
-        this.type = type;
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public EnumStringConverter(Class<E> type) {
+		this.type = type;
+	}
 
-    //================================================================================
-    // Overridden Methods
-    //================================================================================
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
 
-    /**
-     * Calls toString() on the given enumeration.
-     */
-    @Override
-    public String toString(E e) {
-        return e.toString();
-    }
+	/**
+	 * Calls toString() on the given enumeration.
+	 */
+	@Override
+	public String toString(E e) {
+		return e.toString();
+	}
 
-    /**
-     * Uses {@link EnumUtils#valueOfIgnoreCase(Class, String)} to convert the given String to an enumeration.
-     */
-    @Override
-    public E fromString(String string) {
-        return EnumUtils.valueOfIgnoreCase(type, string);
-    }
+	/**
+	 * Uses {@link EnumUtils#valueOfIgnoreCase(Class, String)} to convert the given String to an enumeration.
+	 */
+	@Override
+	public E fromString(String string) {
+		return EnumUtils.valueOfIgnoreCase(type, string);
+	}
 }

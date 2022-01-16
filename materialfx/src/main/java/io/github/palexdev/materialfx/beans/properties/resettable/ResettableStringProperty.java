@@ -25,81 +25,81 @@ import javafx.beans.property.SimpleStringProperty;
  * A {@link SimpleStringProperty} that implements {@link ResettableProperty}.
  */
 public class ResettableStringProperty extends SimpleStringProperty implements ResettableProperty<String> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private String defaultValue;
-    private boolean fireChangeOnReset = false;
-    private boolean hasBeenReset = false;
+	//================================================================================
+	// Properties
+	//================================================================================
+	private String defaultValue;
+	private boolean fireChangeOnReset = false;
+	private boolean hasBeenReset = false;
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public ResettableStringProperty() {
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public ResettableStringProperty() {
+	}
 
-    public ResettableStringProperty(String initialValue) {
-        super(initialValue);
-    }
+	public ResettableStringProperty(String initialValue) {
+		super(initialValue);
+	}
 
-    public ResettableStringProperty(String initialValue, String defaultValue) {
-        super(initialValue);
-        this.defaultValue = defaultValue;
-    }
+	public ResettableStringProperty(String initialValue, String defaultValue) {
+		super(initialValue);
+		this.defaultValue = defaultValue;
+	}
 
-    public ResettableStringProperty(Object bean, String name) {
-        super(bean, name);
-    }
+	public ResettableStringProperty(Object bean, String name) {
+		super(bean, name);
+	}
 
-    public ResettableStringProperty(Object bean, String name, String initialValue) {
-        super(bean, name, initialValue);
-    }
+	public ResettableStringProperty(Object bean, String name, String initialValue) {
+		super(bean, name, initialValue);
+	}
 
-    public ResettableStringProperty(Object bean, String name, String initialValue, String defaultValue) {
-        super(bean, name, initialValue);
-        this.defaultValue = defaultValue;
-    }
+	public ResettableStringProperty(Object bean, String name, String initialValue, String defaultValue) {
+		super(bean, name, initialValue);
+		this.defaultValue = defaultValue;
+	}
 
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    public boolean isFireChangeOnReset() {
-        return fireChangeOnReset;
-    }
+	//================================================================================
+	// Override Methods
+	//================================================================================
+	@Override
+	public boolean isFireChangeOnReset() {
+		return fireChangeOnReset;
+	}
 
-    @Override
-    public void setFireChangeOnReset(boolean fireChangeOnReset) {
-        this.fireChangeOnReset = fireChangeOnReset;
-    }
+	@Override
+	public void setFireChangeOnReset(boolean fireChangeOnReset) {
+		this.fireChangeOnReset = fireChangeOnReset;
+	}
 
-    @Override
-    public void set(String newValue) {
-        hasBeenReset = newValue.equals(defaultValue);
-        super.set(newValue);
-    }
+	@Override
+	public void set(String newValue) {
+		hasBeenReset = newValue.equals(defaultValue);
+		super.set(newValue);
+	}
 
-    @Override
-    protected void fireValueChangedEvent() {
-        if (getValue().equals(defaultValue) && !fireChangeOnReset) {
-            return;
-        }
+	@Override
+	protected void fireValueChangedEvent() {
+		if (getValue().equals(defaultValue) && !fireChangeOnReset) {
+			return;
+		}
 
-        super.fireValueChangedEvent();
-    }
+		super.fireValueChangedEvent();
+	}
 
-    @Override
-    public boolean hasBeenReset() {
-        return hasBeenReset;
-    }
+	@Override
+	public boolean hasBeenReset() {
+		return hasBeenReset;
+	}
 
-    @Override
-    public String getDefaultValue() {
-        return defaultValue;
-    }
+	@Override
+	public String getDefaultValue() {
+		return defaultValue;
+	}
 
-    @Override
-    public void setDefaultValue(String defaultValue) {
-        this.defaultValue = defaultValue;
-    }
+	@Override
+	public void setDefaultValue(String defaultValue) {
+		this.defaultValue = defaultValue;
+	}
 }

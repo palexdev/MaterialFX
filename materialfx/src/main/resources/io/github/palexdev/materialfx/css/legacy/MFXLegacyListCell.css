@@ -17,30 +17,30 @@
  */
 
 .mfx-legacy-list-cell {
-    -fx-background-insets: 0.0;
-    -fx-text-fill: BLACK;
+	-fx-background-insets: 0.0;
+	-fx-text-fill: BLACK;
 
-    -mfx-hover-color: rgba(50, 150, 255, 0.2);
+	-mfx-hover-color: rgba(50, 150, 255, 0.2);
 }
 
 .mfx-legacy-list-cell:odd,
 .mfx-legacy-list-cell:even {
-    -fx-background-color: white;
+	-fx-background-color: white;
 }
 
 .mfx-legacy-list-cell:filled:hover,
 .mfx-legacy-list-cell:selected .label {
-    -fx-text-fill: black;
+	-fx-text-fill: black;
 }
 
 .mfx-legacy-list-cell .text {
-    -fx-fill: -fx-text-background-color;
+	-fx-fill: -fx-text-background-color;
 }
 
 .mfx-legacy-list-cell:selected .text {
-    -fx-fill: black;
+	-fx-fill: black;
 }
 
 .mfx-legacy-list-cell:hover .text {
-    -fx-fill: black;
+	-fx-fill: black;
 }

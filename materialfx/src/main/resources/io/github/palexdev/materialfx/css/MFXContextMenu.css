@@ -19,8 +19,8 @@
 @import "MFXScrollPane.css";
 
 .mfx-context-menu .line-separator {
-    -fx-stroke: #e1e1e1;
-    -fx-stroke-width: 0.5;
+	-fx-stroke: #e1e1e1;
+	-fx-stroke-width: 0.5;
 }
 
 .mfx-context-menu .mfx-scroll-pane {
@@ -34,6 +34,6 @@
 }
 
 .mfx-context-menu .mfx-scroll-pane .viewport {
-    -fx-background-color: transparent;
+	-fx-background-color: transparent;
 }
 

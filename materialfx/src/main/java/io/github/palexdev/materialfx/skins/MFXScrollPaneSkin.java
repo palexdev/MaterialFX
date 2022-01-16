@@ -30,9 +30,9 @@ import javafx.scene.layout.StackPane;
  */
 public class MFXScrollPaneSkin extends ScrollPaneSkin {
 
-    public MFXScrollPaneSkin(MFXScrollPane scrollPane) {
-        super(scrollPane);
-        StackPane viewPort = (StackPane) scrollPane.lookup(".viewport");
-        viewPort.setCache(false);
-    }
+	public MFXScrollPaneSkin(MFXScrollPane scrollPane) {
+		super(scrollPane);
+		StackPane viewPort = (StackPane) scrollPane.lookup(".viewport");
+		viewPort.setCache(false);
+	}
 }

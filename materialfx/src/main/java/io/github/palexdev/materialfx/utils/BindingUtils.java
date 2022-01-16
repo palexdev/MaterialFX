@@ -29,86 +29,86 @@ import javafx.beans.property.*;
  */
 public class BindingUtils {
 
-    private BindingUtils() {}
+	private BindingUtils() {}
 
-    public static <T> ObjectProperty<T> toProperty(ObjectExpression<T> expression) {
-        if (expression == null) {
-            throw  new IllegalArgumentException("The argument cannot be null!");
-        }
-        ObjectProperty<T> property = new SimpleObjectProperty<>();
-        property.bind(expression);
-        return property;
-    }
+	public static <T> ObjectProperty<T> toProperty(ObjectExpression<T> expression) {
+		if (expression == null) {
+			throw new IllegalArgumentException("The argument cannot be null!");
+		}
+		ObjectProperty<T> property = new SimpleObjectProperty<>();
+		property.bind(expression);
+		return property;
+	}
 
-    /**
-     * Creates a new {@link IntegerProperty} and binds it to the given bindings/expression.
-     */
-    public static IntegerProperty toProperty(IntegerExpression expression) {
-        if (expression == null) {
-            throw  new IllegalArgumentException("The argument cannot be null!");
-        }
-        IntegerProperty property = new SimpleIntegerProperty();
-        property.bind(expression);
-        return property;
-    }
+	/**
+	 * Creates a new {@link IntegerProperty} and binds it to the given bindings/expression.
+	 */
+	public static IntegerProperty toProperty(IntegerExpression expression) {
+		if (expression == null) {
+			throw new IllegalArgumentException("The argument cannot be null!");
+		}
+		IntegerProperty property = new SimpleIntegerProperty();
+		property.bind(expression);
+		return property;
+	}
 
-    /**
-     * Creates a new {@link LongProperty} and binds it to the given bindings/expression.
-     */
-    public static LongProperty toProperty(LongExpression expression) {
-        if (expression == null) {
-            throw  new IllegalArgumentException("The argument cannot be null!");
-        }
-        LongProperty property = new SimpleLongProperty();
-        property.bind(expression);
-        return property;
-    }
+	/**
+	 * Creates a new {@link LongProperty} and binds it to the given bindings/expression.
+	 */
+	public static LongProperty toProperty(LongExpression expression) {
+		if (expression == null) {
+			throw new IllegalArgumentException("The argument cannot be null!");
+		}
+		LongProperty property = new SimpleLongProperty();
+		property.bind(expression);
+		return property;
+	}
 
-    /**
-     * Creates a new {@link FloatProperty} and binds it to the given bindings/expression.
-     */
-    public static FloatProperty toProperty(FloatExpression expression) {
-        if (expression == null) {
-            throw  new IllegalArgumentException("The argument cannot be null!");
-        }
-        FloatProperty property = new SimpleFloatProperty();
-        property.bind(expression);
-        return property;
-    }
+	/**
+	 * Creates a new {@link FloatProperty} and binds it to the given bindings/expression.
+	 */
+	public static FloatProperty toProperty(FloatExpression expression) {
+		if (expression == null) {
+			throw new IllegalArgumentException("The argument cannot be null!");
+		}
+		FloatProperty property = new SimpleFloatProperty();
+		property.bind(expression);
+		return property;
+	}
 
-    /**
-     * Creates a new {@link DoubleProperty} and binds it to the given bindings/expression.
-     */
-    public static DoubleProperty toProperty(DoubleExpression expression) {
-        if (expression == null) {
-            throw  new IllegalArgumentException("The argument cannot be null!");
-        }
-        DoubleProperty property = new SimpleDoubleProperty();
-        property.bind(expression);
-        return property;
-    }
+	/**
+	 * Creates a new {@link DoubleProperty} and binds it to the given bindings/expression.
+	 */
+	public static DoubleProperty toProperty(DoubleExpression expression) {
+		if (expression == null) {
+			throw new IllegalArgumentException("The argument cannot be null!");
+		}
+		DoubleProperty property = new SimpleDoubleProperty();
+		property.bind(expression);
+		return property;
+	}
 
-    /**
-     * Creates a new {@link BooleanProperty} and binds it to the given bindings/expression.
-     */
-    public static BooleanProperty toProperty(BooleanExpression expression) {
-        if (expression == null) {
-            throw  new IllegalArgumentException("The argument cannot be null!");
-        }
-        BooleanProperty property = new SimpleBooleanProperty();
-        property.bind(expression);
-        return property;
-    }
+	/**
+	 * Creates a new {@link BooleanProperty} and binds it to the given bindings/expression.
+	 */
+	public static BooleanProperty toProperty(BooleanExpression expression) {
+		if (expression == null) {
+			throw new IllegalArgumentException("The argument cannot be null!");
+		}
+		BooleanProperty property = new SimpleBooleanProperty();
+		property.bind(expression);
+		return property;
+	}
 
-    /**
-     * Creates a new {@link StringProperty} and binds it to the given bindings/expression.
-     */
-    public static StringProperty toProperty(StringExpression expression) {
-        if (expression == null) {
-            throw  new IllegalArgumentException("The argument cannot be null!");
-        }
-        StringProperty property = new SimpleStringProperty();
-        property.bind(expression);
-        return property;
-    }
+	/**
+	 * Creates a new {@link StringProperty} and binds it to the given bindings/expression.
+	 */
+	public static StringProperty toProperty(StringExpression expression) {
+		if (expression == null) {
+			throw new IllegalArgumentException("The argument cannot be null!");
+		}
+		StringProperty property = new SimpleStringProperty();
+		property.bind(expression);
+		return property;
+	}
 }

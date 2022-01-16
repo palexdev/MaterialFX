@@ -20,18 +20,18 @@
 @import "MFXColors.css";
 
 .mfx-filter-combo-box {
-    -mfx-caret-animated: true;
+	-mfx-caret-animated: true;
 }
 
 .mfx-filter-combo-box:popup {
-    -mfx-caret-animated: false;
-    -mfx-editable: false;
+	-mfx-caret-animated: false;
+	-mfx-editable: false;
 }
 
 .mfx-filter-combo-box .combo-popup .virtual-flow {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0;
-    -fx-max-height: 200;
+	-fx-background-color: transparent;
+	-fx-background-radius: 0;
+	-fx-max-height: 200;
 }
 
 .mfx-filter-combo-box .combo-popup .search-container {
@@ -43,16 +43,16 @@
 }
 
 .mfx-filter-combo-box .combo-popup .search-field {
-    -mfx-gap: 0;
-    -mfx-float-mode: disabled;
-    -fx-padding: 5;
-    -fx-display-caret: false;
+	-mfx-gap: 0;
+	-mfx-float-mode: disabled;
+	-fx-padding: 5;
+	-fx-display-caret: false;
 }
 
 .mfx-filter-combo-box .combo-popup .search-field,
 .mfx-filter-combo-box .combo-popup .search-field:focused {
-    -fx-border-width: 1;
-    -fx-background-insets: 0;
-    -fx-border-color: lightgray;
+	-fx-border-width: 1;
+	-fx-background-insets: 0;
+	-fx-border-color: lightgray;
 }
 

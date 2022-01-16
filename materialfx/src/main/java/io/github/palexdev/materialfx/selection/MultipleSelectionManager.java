@@ -35,284 +35,284 @@ import java.util.stream.Collectors;
  */
 @SuppressWarnings("unchecked")
 public class MultipleSelectionManager<T> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final AbstractMultipleSelectionModel<T> selectionModel;
-    private final MapProperty<Integer, T> selection = new SimpleMapProperty<>(getMap());
-    private boolean allowsMultipleSelection = true;
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final AbstractMultipleSelectionModel<T> selectionModel;
+	private final MapProperty<Integer, T> selection = new SimpleMapProperty<>(getMap());
+	private boolean allowsMultipleSelection = true;
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MultipleSelectionManager(AbstractMultipleSelectionModel<T> selectionModel) {
-        this.selectionModel = selectionModel;
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MultipleSelectionManager(AbstractMultipleSelectionModel<T> selectionModel) {
+		this.selectionModel = selectionModel;
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
+	//================================================================================
+	// Methods
+	//================================================================================
 
-    /**
-     * Clears the selection by setting it to an empty map.
-     */
-    public void clearSelection() {
-        selection.set(getMap());
-    }
+	/**
+	 * Clears the selection by setting it to an empty map.
+	 */
+	public void clearSelection() {
+		selection.set(getMap());
+	}
 
-    /**
-     * Removes the given index from the selection map.
-     */
-    public void deselectIndex(int index) {
-        selection.remove(index);
-    }
+	/**
+	 * Removes the given index from the selection map.
+	 */
+	public void deselectIndex(int index) {
+		selection.remove(index);
+	}
 
-    /**
-     * Retrieves the index of the given item from the items list and if it's not -1
-     * removes it from the selection map.
-     */
-    public void deselectItem(T item) {
-        int index = selectionModel.getItems().indexOf(item);
-        if (index >= 0) {
-            selection.remove(index);
-        }
-    }
+	/**
+	 * Retrieves the index of the given item from the items list and if it's not -1
+	 * removes it from the selection map.
+	 */
+	public void deselectItem(T item) {
+		int index = selectionModel.getItems().indexOf(item);
+		if (index >= 0) {
+			selection.remove(index);
+		}
+	}
 
-    /**
-     * Removes all the specified indexes from the selection map, done
-     * by creating a tmp map, updating the tmp map and then replacing the
-     * selection with this new map.
-     */
-    public void deselectIndexes(int... indexes) {
-        ObservableMap<Integer, T> tmp = getMap(selection);
-        for (int index : indexes) {
-            tmp.remove(index);
-        }
-        selection.set(tmp);
-    }
+	/**
+	 * Removes all the specified indexes from the selection map, done
+	 * by creating a tmp map, updating the tmp map and then replacing the
+	 * selection with this new map.
+	 */
+	public void deselectIndexes(int... indexes) {
+		ObservableMap<Integer, T> tmp = getMap(selection);
+		for (int index : indexes) {
+			tmp.remove(index);
+		}
+		selection.set(tmp);
+	}
 
-    /**
-     * Filters the items list to check if the given items exist, then retrieves
-     * their index and collect them to a tmp map, then replaces the
-     * selection with this new map.
-     */
-    public void deselectItems(T... items) {
-        Map<Integer, T> tmp = Arrays.stream(items)
-                .filter(item -> selectionModel.getItems().contains(item))
-                .collect(Collectors.toMap(
-                        item -> selectionModel.getItems().indexOf(item),
-                        item -> item
-                ));
-        ObservableMap<Integer, T> newSelection = getMap(tmp);
-        selection.set(newSelection);
-    }
+	/**
+	 * Filters the items list to check if the given items exist, then retrieves
+	 * their index and collect them to a tmp map, then replaces the
+	 * selection with this new map.
+	 */
+	public void deselectItems(T... items) {
+		Map<Integer, T> tmp = Arrays.stream(items)
+				.filter(item -> selectionModel.getItems().contains(item))
+				.collect(Collectors.toMap(
+						item -> selectionModel.getItems().indexOf(item),
+						item -> item
+				));
+		ObservableMap<Integer, T> newSelection = getMap(tmp);
+		selection.set(newSelection);
+	}
 
-    /**
-     * If multiple selection is allowed adds the given index (and the retrieved item) to the selection map,
-     * otherwise creates a new tmp map containing only the given index-item entry and replaces the selection.
-     */
-    public void updateSelection(int index) {
-        T item = selectionModel.getItems().get(index);
-        if (allowsMultipleSelection) {
-            selection.put(index, item);
-        } else {
-            ObservableMap<Integer, T> map = getMap();
-            map.put(index, item);
-            selection.set(map);
-        }
-    }
+	/**
+	 * If multiple selection is allowed adds the given index (and the retrieved item) to the selection map,
+	 * otherwise creates a new tmp map containing only the given index-item entry and replaces the selection.
+	 */
+	public void updateSelection(int index) {
+		T item = selectionModel.getItems().get(index);
+		if (allowsMultipleSelection) {
+			selection.put(index, item);
+		} else {
+			ObservableMap<Integer, T> map = getMap();
+			map.put(index, item);
+			selection.set(map);
+		}
+	}
 
-    /**
-     * If multiple selection is allowed adds the given item (and the retrieved index) to the selection map,
-     * otherwise creates a new tmp map containing only the given index-item entry and replaces the selection.
-     */
-    public void updateSelection(T item) {
-        int index = selectionModel.getItems().indexOf(item);
-        if (allowsMultipleSelection) {
-            selection.put(index, item);
-        } else {
-            ObservableMap<Integer, T> map = getMap();
-            map.put(index, item);
-            selection.set(map);
-        }
-    }
+	/**
+	 * If multiple selection is allowed adds the given item (and the retrieved index) to the selection map,
+	 * otherwise creates a new tmp map containing only the given index-item entry and replaces the selection.
+	 */
+	public void updateSelection(T item) {
+		int index = selectionModel.getItems().indexOf(item);
+		if (allowsMultipleSelection) {
+			selection.put(index, item);
+		} else {
+			ObservableMap<Integer, T> map = getMap();
+			map.put(index, item);
+			selection.set(map);
+		}
+	}
 
-    /**
-     * If multiple selection is allowed adds all the given indexes to the selection
-     * (and the retrieved items), otherwise replaces the selection with the first index given in the list.
-     */
-    public void updateSelectionByIndexes(List<Integer> indexes) {
-        if (indexes.isEmpty()) return;
+	/**
+	 * If multiple selection is allowed adds all the given indexes to the selection
+	 * (and the retrieved items), otherwise replaces the selection with the first index given in the list.
+	 */
+	public void updateSelectionByIndexes(List<Integer> indexes) {
+		if (indexes.isEmpty()) return;
 
-        if (allowsMultipleSelection) {
-            Set<Integer> indexesSet = new HashSet<>(indexes);
-            Map<Integer, T> newSelection = indexesSet.stream().collect(Collectors.toMap(
-                    i -> i,
-                    i -> selectionModel.getItems().get(i)
-            ));
-            selection.putAll(newSelection);
-        } else {
-            int index = indexes.get(0);
-            T item = selectionModel.getItems().get(index);
-            ObservableMap<Integer, T> map = getMap();
-            map.put(index, item);
-            selection.set(map);
-        }
-    }
+		if (allowsMultipleSelection) {
+			Set<Integer> indexesSet = new HashSet<>(indexes);
+			Map<Integer, T> newSelection = indexesSet.stream().collect(Collectors.toMap(
+					i -> i,
+					i -> selectionModel.getItems().get(i)
+			));
+			selection.putAll(newSelection);
+		} else {
+			int index = indexes.get(0);
+			T item = selectionModel.getItems().get(index);
+			ObservableMap<Integer, T> map = getMap();
+			map.put(index, item);
+			selection.set(map);
+		}
+	}
 
-    /**
-     * If multiple selection is allowed adds all the given items to the selection
-     * (and the retrieved indexes), otherwise replaces the selection with the first item given in the list.
-     */
-    public void updateSelectionByItems(List<T> items) {
-        if (items.isEmpty()) return;
+	/**
+	 * If multiple selection is allowed adds all the given items to the selection
+	 * (and the retrieved indexes), otherwise replaces the selection with the first item given in the list.
+	 */
+	public void updateSelectionByItems(List<T> items) {
+		if (items.isEmpty()) return;
 
-        if (allowsMultipleSelection) {
-            Set<Integer> indexesSet = items.stream()
-                    .mapToInt(item -> selectionModel.getItems().indexOf(item))
-                    .boxed()
-                    .collect(Collectors.toSet());
-            Map<Integer, T> newSelection = indexesSet.stream().collect(Collectors.toMap(
-                    i -> i,
-                    items::get
-            ));
-            selection.putAll(newSelection);
-        } else {
-            T item = items.get(0);
-            int index = selectionModel.getItems().indexOf(item);
-            ObservableMap<Integer, T> map = getMap();
-            map.put(index, item);
-            selection.set(map);
-        }
-    }
+		if (allowsMultipleSelection) {
+			Set<Integer> indexesSet = items.stream()
+					.mapToInt(item -> selectionModel.getItems().indexOf(item))
+					.boxed()
+					.collect(Collectors.toSet());
+			Map<Integer, T> newSelection = indexesSet.stream().collect(Collectors.toMap(
+					i -> i,
+					items::get
+			));
+			selection.putAll(newSelection);
+		} else {
+			T item = items.get(0);
+			int index = selectionModel.getItems().indexOf(item);
+			ObservableMap<Integer, T> map = getMap();
+			map.put(index, item);
+			selection.set(map);
+		}
+	}
 
-    /**
-     * This is responsible for expanding the selection in the given index direction.
-     * There are 4 cases to consider:
-     * <p> 1) The selection is empty: the new selection will go from [0 to index]
-     * <p> 2) The minimum selected index is equal to the given index: the new selection will just be [index]
-     * <p> 3) The given index is lesser than the minimum index: the new selection will go from [index to min]
-     * <p> 4) The given index is greater than the minimum index: the new selection will go from [min to index]
-     */
-    public void expandSelection(int index) {
-        if (selection.isEmpty()) {
-            replaceSelection(NumberRange.expandRangeToArray(0, index));
-            return;
-        }
+	/**
+	 * This is responsible for expanding the selection in the given index direction.
+	 * There are 4 cases to consider:
+	 * <p> 1) The selection is empty: the new selection will go from [0 to index]
+	 * <p> 2) The minimum selected index is equal to the given index: the new selection will just be [index]
+	 * <p> 3) The given index is lesser than the minimum index: the new selection will go from [index to min]
+	 * <p> 4) The given index is greater than the minimum index: the new selection will go from [min to index]
+	 */
+	public void expandSelection(int index) {
+		if (selection.isEmpty()) {
+			replaceSelection(NumberRange.expandRangeToArray(0, index));
+			return;
+		}
 
-        int min = selection.keySet().stream().min(Integer::compareTo).orElse(-1);
-        if (index == min) {
-            replaceSelection(index);
-            return;
-        }
+		int min = selection.keySet().stream().min(Integer::compareTo).orElse(-1);
+		if (index == min) {
+			replaceSelection(index);
+			return;
+		}
 
-        if (index < min) {
-            replaceSelection(NumberRange.expandRangeToArray(index, min));
-        } else {
-            replaceSelection(NumberRange.expandRangeToArray(min, index));
-        }
-    }
+		if (index < min) {
+			replaceSelection(NumberRange.expandRangeToArray(index, min));
+		} else {
+			replaceSelection(NumberRange.expandRangeToArray(min, index));
+		}
+	}
 
-    /**
-     * If multiple selection is allowed replaces the selection with all the given indexes
-     * (and the retrieved items), otherwise replaces the selection with the first given index.
-     */
-    public void replaceSelection(Integer... indexes) {
-        ObservableMap<Integer, T> newSelection = getMap();
-        if (allowsMultipleSelection) {
-            newSelection.putAll(
-                    Arrays.stream(indexes).collect(Collectors.toMap(
-                            i -> i,
-                            i -> selectionModel.getItems().get(i)
-                    ))
-            );
-        } else {
-            int index = indexes[0];
-            newSelection.put(index, selectionModel.getItems().get(index));
-        }
-        selection.set(newSelection);
-    }
+	/**
+	 * If multiple selection is allowed replaces the selection with all the given indexes
+	 * (and the retrieved items), otherwise replaces the selection with the first given index.
+	 */
+	public void replaceSelection(Integer... indexes) {
+		ObservableMap<Integer, T> newSelection = getMap();
+		if (allowsMultipleSelection) {
+			newSelection.putAll(
+					Arrays.stream(indexes).collect(Collectors.toMap(
+							i -> i,
+							i -> selectionModel.getItems().get(i)
+					))
+			);
+		} else {
+			int index = indexes[0];
+			newSelection.put(index, selectionModel.getItems().get(index));
+		}
+		selection.set(newSelection);
+	}
 
-    /**
-     * If multiple selection is allowed replaces the selection with all the given items
-     * (and the retrieved indexes), otherwise replaces the selection with the first given item.
-     */
-    public void replaceSelection(T... items) {
-        ObservableMap<Integer, T> newSelection = getMap();
-        if (allowsMultipleSelection) {
-            newSelection.putAll(
-                    Arrays.stream(items).collect(Collectors.toMap(
-                            item -> selectionModel.getItems().indexOf(item),
-                            item -> item
-                    ))
-            );
-        } else {
-            T item = items[0];
-            newSelection.put(selectionModel.getItems().indexOf(item), item);
-        }
-        selection.set(newSelection);
-    }
+	/**
+	 * If multiple selection is allowed replaces the selection with all the given items
+	 * (and the retrieved indexes), otherwise replaces the selection with the first given item.
+	 */
+	public void replaceSelection(T... items) {
+		ObservableMap<Integer, T> newSelection = getMap();
+		if (allowsMultipleSelection) {
+			newSelection.putAll(
+					Arrays.stream(items).collect(Collectors.toMap(
+							item -> selectionModel.getItems().indexOf(item),
+							item -> item
+					))
+			);
+		} else {
+			T item = items[0];
+			newSelection.put(selectionModel.getItems().indexOf(item), item);
+		}
+		selection.set(newSelection);
+	}
 
-    /**
-     * Builds a new observable hash map backed by a {@link TreeMap}.
-     */
-    protected ObservableMap<Integer, T> getMap() {
-        return FXCollections.observableMap(new TreeMap<>());
-    }
+	/**
+	 * Builds a new observable hash map backed by a {@link TreeMap}.
+	 */
+	protected ObservableMap<Integer, T> getMap() {
+		return FXCollections.observableMap(new TreeMap<>());
+	}
 
-    /**
-     * Builds a new observable hash map backed by a {@link TreeMap}, initialized with the given map.
-     */
-    protected ObservableMap<Integer, T> getMap(Map<Integer, T> map) {
-        return FXCollections.observableMap(new TreeMap<>(map));
-    }
+	/**
+	 * Builds a new observable hash map backed by a {@link TreeMap}, initialized with the given map.
+	 */
+	protected ObservableMap<Integer, T> getMap(Map<Integer, T> map) {
+		return FXCollections.observableMap(new TreeMap<>(map));
+	}
 
 
-    //================================================================================
-    // Getters/Setters
-    //================================================================================
+	//================================================================================
+	// Getters/Setters
+	//================================================================================
 
-    /**
-     * @return the selection {@link ObservableMap}
-     */
-    public ObservableMap<Integer, T> getSelection() {
-        return selection.get();
-    }
+	/**
+	 * @return the selection {@link ObservableMap}
+	 */
+	public ObservableMap<Integer, T> getSelection() {
+		return selection.get();
+	}
 
-    /**
-     * The {@link MapProperty} used to keep track of multiple selection.
-     * <p></p>
-     * We use a {@link MapProperty} to represent multiple selection because this way
-     * we can always update it "atomically", meaning that when the selected indexes changes
-     * the selected items are updated as well (also true viceversa).
-     */
-    public MapProperty<Integer, T> selectionProperty() {
-        return selection;
-    }
+	/**
+	 * The {@link MapProperty} used to keep track of multiple selection.
+	 * <p></p>
+	 * We use a {@link MapProperty} to represent multiple selection because this way
+	 * we can always update it "atomically", meaning that when the selected indexes changes
+	 * the selected items are updated as well (also true viceversa).
+	 */
+	public MapProperty<Integer, T> selectionProperty() {
+		return selection;
+	}
 
-    /**
-     * Replaces the selection with the given {@link ObservableMap}.
-     */
-    public void setSelection(ObservableMap<Integer, T> selection) {
-        this.selection.set(selection);
-    }
+	/**
+	 * Replaces the selection with the given {@link ObservableMap}.
+	 */
+	public void setSelection(ObservableMap<Integer, T> selection) {
+		this.selection.set(selection);
+	}
 
-    /**
-     * Specifies if this model allows multiple selection or should act like
-     * a SingleSelectionModel.
-     */
-    public boolean allowsMultipleSelection() {
-        return allowsMultipleSelection;
-    }
+	/**
+	 * Specifies if this model allows multiple selection or should act like
+	 * a SingleSelectionModel.
+	 */
+	public boolean allowsMultipleSelection() {
+		return allowsMultipleSelection;
+	}
 
-    /**
-     * Sets the selection behavior of this model to be multiple (true) or
-     * single (false).
-     * <p>
-     * If it's set to false the selection is cleared.
-     */
-    public void setAllowsMultipleSelection(boolean allowsMultipleSelection) {
-        if (!allowsMultipleSelection) clearSelection();
-        this.allowsMultipleSelection = allowsMultipleSelection;
-    }
+	/**
+	 * Sets the selection behavior of this model to be multiple (true) or
+	 * single (false).
+	 * <p>
+	 * If it's set to false the selection is cleared.
+	 */
+	public void setAllowsMultipleSelection(boolean allowsMultipleSelection) {
+		if (!allowsMultipleSelection) clearSelection();
+		this.allowsMultipleSelection = allowsMultipleSelection;
+	}
 }

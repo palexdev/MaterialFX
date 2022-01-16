@@ -18,101 +18,101 @@ import javafx.scene.shape.Circle;
  * This is the implementation of the {@code Skin} associated with every {@link MFXRadioButton}.
  */
 public class MFXRadioButtonSkin extends MFXLabeledSkinBase<MFXRadioButton> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final StackPane radioContainer;
-    private final Circle radio;
-    private final Circle dot;
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final StackPane radioContainer;
+	private final Circle radio;
+	private final Circle dot;
 
-    private final MFXCircleRippleGenerator rippleGenerator;
+	private final MFXCircleRippleGenerator rippleGenerator;
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXRadioButtonSkin(MFXRadioButton radioButton) {
-        super(radioButton);
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXRadioButtonSkin(MFXRadioButton radioButton) {
+		super(radioButton);
 
-        radio = new Circle();
-        radio.getStyleClass().add("radio");
-        radio.radiusProperty().bind(radioButton.radiusProperty());
-        radio.setSmooth(true);
+		radio = new Circle();
+		radio.getStyleClass().add("radio");
+		radio.radiusProperty().bind(radioButton.radiusProperty());
+		radio.setSmooth(true);
 
-        dot = new Circle();
-        dot.getStyleClass().add("dot");
-        dot.radiusProperty().bind(radioButton.radiusProperty());
-        dot.setScaleX(0);
-        dot.setScaleY(0);
-        dot.setSmooth(true);
+		dot = new Circle();
+		dot.getStyleClass().add("dot");
+		dot.radiusProperty().bind(radioButton.radiusProperty());
+		dot.setScaleX(0);
+		dot.setScaleY(0);
+		dot.setSmooth(true);
 
-        radioContainer = new StackPane(radio, dot);
+		radioContainer = new StackPane(radio, dot);
 
-        rippleGenerator = new MFXCircleRippleGenerator(radioContainer);
-        rippleGenerator.setAnimateBackground(false);
-        rippleGenerator.setClipSupplier(() -> null);
-        rippleGenerator.setRipplePositionFunction(event -> {
-            PositionBean position = new PositionBean();
-            position.setX(radio.getBoundsInParent().getCenterX());
-            position.setY(radio.getBoundsInParent().getCenterY());
-            return position;
-        });
-        radioContainer.getChildren().add(0, rippleGenerator);
-        rippleGenerator.setManaged(false);
+		rippleGenerator = new MFXCircleRippleGenerator(radioContainer);
+		rippleGenerator.setAnimateBackground(false);
+		rippleGenerator.setClipSupplier(() -> null);
+		rippleGenerator.setRipplePositionFunction(event -> {
+			PositionBean position = new PositionBean();
+			position.setX(radio.getBoundsInParent().getCenterX());
+			position.setY(radio.getBoundsInParent().getCenterY());
+			return position;
+		});
+		radioContainer.getChildren().add(0, rippleGenerator);
+		rippleGenerator.setManaged(false);
 
-        updateAlignment();
-        initContainer();
+		updateAlignment();
+		initContainer();
 
-        getChildren().setAll(topContainer);
-        addListeners();
-    }
+		getChildren().setAll(topContainer);
+		addListeners();
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
-    private void animate(boolean selected) {
-        MFXRadioButton radioButton = getSkinnable();
-        double radius = radioButton.getRadius();
-        double scale = (radius - radioButton.getRadioGap()) / radius;
-        TimelineBuilder.build()
-                .add(KeyFrames.of(
-                        100,
-                        new KeyValue(dot.scaleXProperty(), selected ? scale : 0, Interpolators.EASE_OUT.toInterpolator()),
-                        new KeyValue(dot.scaleYProperty(), selected ? scale : 0, Interpolators.EASE_OUT.toInterpolator())
-                ))
-                .getAnimation()
-                .play();
-    }
+	//================================================================================
+	// Methods
+	//================================================================================
+	private void animate(boolean selected) {
+		MFXRadioButton radioButton = getSkinnable();
+		double radius = radioButton.getRadius();
+		double scale = (radius - radioButton.getRadioGap()) / radius;
+		TimelineBuilder.build()
+				.add(KeyFrames.of(
+						100,
+						new KeyValue(dot.scaleXProperty(), selected ? scale : 0, Interpolators.EASE_OUT.toInterpolator()),
+						new KeyValue(dot.scaleYProperty(), selected ? scale : 0, Interpolators.EASE_OUT.toInterpolator())
+				))
+				.getAnimation()
+				.play();
+	}
 
-    //================================================================================
-    // Overridden Methods
-    //================================================================================
-    @Override
-    protected void addListeners() {
-        super.addListeners();
-        MFXRadioButton radioButton = getSkinnable();
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
+	@Override
+	protected void addListeners() {
+		super.addListeners();
+		MFXRadioButton radioButton = getSkinnable();
 
-        radioButton.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> radioButton.fire());
-        radioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            animate(newValue);
-            rippleGenerator.generateRipple(null);
-        });
+		radioButton.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> radioButton.fire());
+		radioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+			animate(newValue);
+			rippleGenerator.generateRipple(null);
+		});
 
-        radioButton.radioGapProperty().addListener(invalidated -> {
-            if (radioButton.isSelected()) {
-                double radius = radioButton.getRadius();
-                double scale = (radius - radioButton.getRadioGap()) / radius;
-                dot.setScaleX(scale);
-                dot.setScaleY(scale);
-            }
-        });
+		radioButton.radioGapProperty().addListener(invalidated -> {
+			if (radioButton.isSelected()) {
+				double radius = radioButton.getRadius();
+				double scale = (radius - radioButton.getRadioGap()) / radius;
+				dot.setScaleX(scale);
+				dot.setScaleY(scale);
+			}
+		});
 
-        NodeUtils.waitForSkin(radioButton, () -> {
-            if (radioButton.isSelected()) animate(true);
-        }, false, false);
-    }
+		NodeUtils.waitForSkin(radioButton, () -> {
+			if (radioButton.isSelected()) animate(true);
+		}, false, false);
+	}
 
-    @Override
-    protected Pane getControlContainer() {
-        return radioContainer;
-    }
+	@Override
+	protected Pane getControlContainer() {
+		return radioContainer;
+	}
 }
