@@ -278,6 +278,7 @@ If you are using MaterialFX in your projects and feel like it, you can make a sm
 - Yiding He
 - Alaa Abu Zidan
 - Ultraviolet-Ninja
+- Sourabh Bhat
 - Mohammad Chaudhry (thank you very much for the huge donation, YOU are the legend)
 - Yahia Rehab
 - *Your name can be here by supporting me at this link, [Support](https://bit.ly/31XB8zD)*
