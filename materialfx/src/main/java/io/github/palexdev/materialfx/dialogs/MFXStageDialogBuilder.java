@@ -1,5 +1,6 @@
 package io.github.palexdev.materialfx.dialogs;
 
+import io.github.palexdev.materialfx.enums.ScrimPriority;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -64,6 +65,15 @@ public class MFXStageDialogBuilder {
 	}
 
 	/**
+	 * Sets whether the dialog should be centered on the owner node
+	 * when shown.
+	 */
+	public MFXStageDialogBuilder setCenterInOwnerNode(boolean centerInOwnerNode) {
+		stageDialog.setCenterInOwnerNode(centerInOwnerNode);
+		return this;
+	}
+
+	/**
 	 * Sets whether to scrim the dialog's owner node on showing.
 	 */
 	public MFXStageDialogBuilder setScrimOwner(boolean scrimOwner) {
@@ -76,6 +86,19 @@ public class MFXStageDialogBuilder {
 	 */
 	public MFXStageDialogBuilder setScrimStrength(double scrimStrength) {
 		stageDialog.setScrimStrength(scrimStrength);
+		return this;
+	}
+
+	/**
+	 * Sets the enum constant used to specify how to apply the scrim effect.
+	 * You can have two owners, one is the stage owner(Window) and the other is the dialog owner(Pane).
+	 * Sometimes it's better to apply the scrim to the window (for example the owner node would not allow to apply the
+	 * scrim effect, for example AnchorPanes, VBoxes, HBoxes...), but you still want to center the dialog in the owner node.
+	 * Setting this to {@link ScrimPriority#WINDOW} will tell the dialog to apply the effect to owner window,
+	 * setting this to {@link ScrimPriority#NODE} will tell the dialog to apply the effect to owner node.
+	 */
+	public MFXStageDialogBuilder setScrimPriority(ScrimPriority scrimPriority) {
+		stageDialog.setScrimPriority(scrimPriority);
 		return this;
 	}
 

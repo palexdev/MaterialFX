@@ -55,6 +55,7 @@ public class MFXComboBoxCell<T> extends HBox implements Cell<T> {
 
 		if (!(data instanceof Node)) {
 			label = new Label();
+			label.getStyleClass().add("data-label");
 			label.textProperty().bind(Bindings.createStringBinding(
 					() -> {
 						StringConverter<T> converter = combo.getConverter();

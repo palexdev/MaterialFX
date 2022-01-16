@@ -75,6 +75,11 @@ public interface IMultipleSelectionModel<T> {
     void selectItems(List<T> items);
 
     /**
+     * Expands the selection in the given index direction.
+     */
+    void expandSelection(int index);
+
+    /**
      * Clears the selection and replaces it with the given indexes.
      */
     void replaceSelection(Integer... indexes);

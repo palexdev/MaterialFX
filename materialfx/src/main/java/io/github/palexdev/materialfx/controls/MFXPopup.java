@@ -172,8 +172,6 @@ public class MFXPopup extends PopupControl implements MFXStyleablePopup {
         show(window, position.getX(), position.getY());
     }
 
-    // TODO add show Window
-
     /**
      * Repositions the popup by recomputing the position from
      * the previous stored info.

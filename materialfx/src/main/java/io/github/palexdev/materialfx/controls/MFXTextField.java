@@ -5,7 +5,9 @@ import io.github.palexdev.materialfx.beans.properties.styleable.StyleableBoolean
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableDoubleProperty;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableIntegerProperty;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableObjectProperty;
+import io.github.palexdev.materialfx.controls.base.MFXMenuControl;
 import io.github.palexdev.materialfx.enums.FloatMode;
+import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.skins.MFXTextFieldSkin;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import io.github.palexdev.materialfx.validation.MFXValidator;
@@ -15,10 +17,12 @@ import javafx.css.CssMetaData;
 import javafx.css.PseudoClass;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
+import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.scene.control.IndexRange;
 import javafx.scene.control.Skin;
 import javafx.scene.control.TextField;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.paint.Color;
 
 import java.util.List;
@@ -88,7 +92,7 @@ import java.util.List;
  * this is the best option as of now. Even just a custom skin would not work (yep I tried) since black magic is involved
  * in the default one, better not mess with that or something will break for sure, yay for spaghetti coding JavaFX devs :D
  */
-public class MFXTextField extends TextField implements Validated {
+public class MFXTextField extends TextField implements Validated, MFXMenuControl {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -110,9 +114,8 @@ public class MFXTextField extends TextField implements Validated {
 	};
 	private static final PseudoClass FLOATING_PSEUDO_CLASS = PseudoClass.getPseudoClass("floating");
 
-	private final MFXValidator validator = new MFXValidator();
-	// TODO add context menu after conversion to MFXPopup
-	// TODO add validation
+	protected final MFXValidator validator = new MFXValidator();
+	protected MFXContextMenu contextMenu;
 
 	//================================================================================
 	// Constructors
@@ -123,84 +126,138 @@ public class MFXTextField extends TextField implements Validated {
 
 	public MFXTextField(String text) {
 		this(text, "");
-    }
+	}
 
-    public MFXTextField(String text, String promptText) {
-        this(text, promptText, "");
-    }
+	public MFXTextField(String text, String promptText) {
+		this(text, promptText, "");
+	}
 
-    public MFXTextField(String text, String promptText, String floatingText) {
-	    super(text);
-	    boundField = new BoundTextField(this);
-	    setPromptText(promptText);
-        setFloatingText(floatingText);
-        initialize();
-    }
+	public MFXTextField(String text, String promptText, String floatingText) {
+		super(text);
+		boundField = new BoundTextField(this);
+		setPromptText(promptText);
+		setFloatingText(floatingText);
+		initialize();
+	}
 
-    /**
-     * Calls {@link #asLabel(String)} with empty text.
-     */
-    public static MFXTextField asLabel() {
-        return asLabel("");
-    }
+	//================================================================================
+	// Static Methods
+	//================================================================================
 
-    /**
-     * Calls {@link #asLabel(String, String)} with empty promptText.
-     */
-    public static MFXTextField asLabel(String text) {
-        return asLabel(text, "");
-    }
+	/**
+	 * Calls {@link #asLabel(String)} with empty text.
+	 */
+	public static MFXTextField asLabel() {
+		return asLabel("");
+	}
 
-    /**
-     * Calls {@link #asLabel(String, String, String)} with empty floatingText.
-     */
-    public static MFXTextField asLabel(String text, String promptText) {
-        return asLabel(text, promptText, "");
-    }
+	/**
+	 * Calls {@link #asLabel(String, String)} with empty promptText.
+	 */
+	public static MFXTextField asLabel(String text) {
+		return asLabel(text, "");
+	}
 
-    /**
-     * Creates a text field that is not editable nor selectable to act just like a label.
-     */
-    public static MFXTextField asLabel(String text, String promptText, String floatingText) {
-        MFXTextField textField = new MFXTextField(text, promptText, floatingText);
-        textField.setEditable(false);
-        textField.setSelectable(false);
-        return textField;
-    }
+	/**
+	 * Calls {@link #asLabel(String, String, String)} with empty floatingText.
+	 */
+	public static MFXTextField asLabel(String text, String promptText) {
+		return asLabel(text, promptText, "");
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
-    private void initialize() {
-	    getStyleClass().setAll(STYLE_CLASS);
-	    setPrefColumnCount(6);
-	    floating.addListener(invalidated -> pseudoClassStateChanged(FLOATING_PSEUDO_CLASS, floating.get()));
-        allowEditProperty().bindBidirectional(editableProperty());
+	/**
+	 * Creates a text field that is not editable nor selectable to act just like a label.
+	 */
+	public static MFXTextField asLabel(String text, String promptText, String floatingText) {
+		MFXTextField textField = new MFXTextField(text, promptText, floatingText);
+		textField.setEditable(false);
+		textField.setSelectable(false);
+		return textField;
+	}
 
-        // TODO may be useful for context menu
-/*        EventDispatcher original = getEventDispatcher();
-        setEventDispatcher((event, tail) -> {
-            if (getMFXContextMenu() != null
-                    && event instanceof MouseEvent &&
-                    ((MouseEvent) event).getButton() == MouseButton.SECONDARY &&
-                    !getSelectedText().isEmpty()
-            ) {
-                MFXContextMenu contextMenu = getMFXContextMenu();
-                contextMenu.show((MouseEvent) event);
-                event.consume();
-            }
-            return original.dispatchEvent(event, tail);
-        });
-        addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);*/
-    }
+	//================================================================================
+	// Methods
+	//================================================================================
+	private void initialize() {
+		getStyleClass().setAll(STYLE_CLASS);
+		setPrefColumnCount(6);
+		floating.addListener(invalidated -> pseudoClassStateChanged(FLOATING_PSEUDO_CLASS, floating.get()));
+		allowEditProperty().bindBidirectional(editableProperty());
 
-    //================================================================================
-    // Overridden Methods
-    //================================================================================
-    @Override
-    protected Skin<?> createDefaultSkin() {
-	    return new MFXTextFieldSkin(this, boundField);
-    }
+		addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
+		defaultContextMenu();
+	}
+
+	public void defaultContextMenu() {
+		MFXContextMenuItem copyItem = MFXContextMenuItem.Builder.build()
+				.setIcon(new MFXFontIcon("mfx-content-copy", 14))
+				.setText("Copy")
+				.setAccelerator("Ctrl + C")
+				.setOnAction(event -> copy())
+				.get();
+
+		MFXContextMenuItem cutItem = MFXContextMenuItem.Builder.build()
+				.setIcon(new MFXFontIcon("mfx-content-cut", 14))
+				.setText("Cut")
+				.setAccelerator("Ctrl + X")
+				.setOnAction(event -> cut())
+				.get();
+
+		MFXContextMenuItem pasteItem = MFXContextMenuItem.Builder.build()
+				.setIcon(new MFXFontIcon("mfx-content-paste", 14))
+				.setText("Paste")
+				.setAccelerator("Ctrl + V")
+				.setOnAction(event -> paste())
+				.get();
+
+		MFXContextMenuItem deleteItem = MFXContextMenuItem.Builder.build()
+				.setIcon(new MFXFontIcon("mfx-delete-alt", 16))
+				.setText("Delete")
+				.setAccelerator("Ctrl + D")
+				.setOnAction(event -> deleteText(getSelection()))
+				.get();
+
+		MFXContextMenuItem selectAllItem = MFXContextMenuItem.Builder.build()
+				.setIcon(new MFXFontIcon("mfx-select-all", 16))
+				.setText("Select All")
+				.setAccelerator("Ctrl + A")
+				.setOnAction(event -> selectAll())
+				.get();
+
+		MFXContextMenuItem redoItem = MFXContextMenuItem.Builder.build()
+				.setIcon(new MFXFontIcon("mfx-redo", 12))
+				.setText("Redo")
+				.setAccelerator("Ctrl + Y")
+				.setOnAction(event -> redo())
+				.get();
+
+		MFXContextMenuItem undoItem = MFXContextMenuItem.Builder.build()
+				.setIcon(new MFXFontIcon("mfx-undo", 12))
+				.setText("Undo")
+				.setAccelerator("Ctrl + Z")
+				.setOnAction(event -> undo())
+				.get();
+
+		contextMenu = MFXContextMenu.Builder.build(this)
+				.addItems(copyItem, cutItem, pasteItem, deleteItem, selectAllItem)
+				.addLineSeparator()
+				.addItems(redoItem, undoItem)
+				.setPopupStyleableParent(this)
+				.installAndGet();
+	}
+
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
+	@Override
+	public MFXContextMenu getMFXContextMenu() {
+		return contextMenu;
+	}
+
+	@Override
+	protected Skin<?> createDefaultSkin() {
+		return new MFXTextFieldSkin(this, boundField);
+	}
 
 	@Override
 	public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {

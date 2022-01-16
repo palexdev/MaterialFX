@@ -16,11 +16,16 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-.mfx-radio-button {
-    -mfx-main: #6200EE;
-    -mfx-secondary: #424242;
+@import "Fonts.css";
+@import "MFXColors.css";
 
-    -fx-cursor: HAND;
+.mfx-radio-button {
+	-mfx-main: #6200EE;
+	-mfx-secondary: #424242;
+
+	-fx-font-family: "Open Sans Regular";
+	-fx-text-fill: -mfx-text-he;
+	-fx-cursor: HAND;
 }
 
 .mfx-radio-button .radio {

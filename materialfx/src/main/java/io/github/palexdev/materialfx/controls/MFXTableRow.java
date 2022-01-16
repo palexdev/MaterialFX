@@ -175,15 +175,21 @@ public class MFXTableRow<T> extends HBox implements Cell<T> {
 		if (event.getButton() != MouseButton.PRIMARY) return;
 
 		int index = getIndex();
-		if (isSelected()) {
-			tableView.getSelectionModel().deselectIndex(index);
-		} else {
-			if (event.isShiftDown() || event.isControlDown()) { // TODO change shift behavior (low priority)
-				tableView.getSelectionModel().selectIndex(index);
+		if (event.isControlDown()) {
+			if (isSelected()) {
+				tableView.getSelectionModel().deselectIndex(index);
 			} else {
-				tableView.getSelectionModel().replaceSelection(index);
+				tableView.getSelectionModel().selectIndex(index);
 			}
+			return;
 		}
+
+		if (event.isShiftDown()) {
+			tableView.getSelectionModel().expandSelection(index);
+			return;
+		}
+
+		tableView.getSelectionModel().replaceSelection(index);
 	}
 
 	//================================================================================

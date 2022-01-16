@@ -70,6 +70,7 @@ public class MFXPasswordField extends MFXTextField {
         getStyleClass().add(STYLE_CLASS);
         setBehavior();
         defaultTrailingIcon();
+	    defaultContextMenu();
     }
 
     /**
@@ -118,38 +119,105 @@ public class MFXPasswordField extends MFXTextField {
             setShowPassword(!isShowPassword());
 
             // Workaround for caret being positioned (only visually) wrongly
-            int currPos = delegateGetCaretPosition();
-            positionCaret(0);
-            positionCaret(currPos);
+	        int currPos = delegateGetCaretPosition();
+	        positionCaret(0);
+	        positionCaret(currPos);
 
-            event.consume();
+	        event.consume();
         });
 
-        setTrailingIcon(showPasswordIcon);
+	    setTrailingIcon(showPasswordIcon);
     }
 
-    //================================================================================
-    // Overridden Methods
-    //================================================================================
-    @Override
-    public void copy() {
-        if (!isAllowCopy()) return;
-        super.copy();
-    }
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
+	@Override
+	public void defaultContextMenu() {
+		if (allowCopy == null ||
+				allowCut == null ||
+				allowPaste == null)
+			return;
 
-    @Override
-    public void cut() {
-        if (!isAllowCut()) return;
-        super.cut();
-    }
+		MFXContextMenuItem copyItem = MFXContextMenuItem.Builder.build()
+				.setIcon(new MFXFontIcon("mfx-content-copy", 14))
+				.setText("Copy")
+				.setAccelerator("Ctrl + C")
+				.setOnAction(event -> copy())
+				.get();
+		copyItem.disableProperty().bind(allowCopyProperty().not());
 
-    @Override
-    public void paste() {
-        if (!isAllowPaste()) return;
-        super.paste();
-    }
+		MFXContextMenuItem cutItem = MFXContextMenuItem.Builder.build()
+				.setIcon(new MFXFontIcon("mfx-content-cut", 14))
+				.setText("Cut")
+				.setAccelerator("Ctrl + X")
+				.setOnAction(event -> cut())
+				.get();
+		cutItem.disableProperty().bind(allowCutProperty().not());
 
-    @Override
+		MFXContextMenuItem pasteItem = MFXContextMenuItem.Builder.build()
+				.setIcon(new MFXFontIcon("mfx-content-paste", 14))
+				.setText("Paste")
+				.setAccelerator("Ctrl + V")
+				.setOnAction(event -> paste())
+				.get();
+		pasteItem.disableProperty().bind(allowPasteProperty().not());
+
+		MFXContextMenuItem deleteItem = MFXContextMenuItem.Builder.build()
+				.setIcon(new MFXFontIcon("mfx-delete-alt", 16))
+				.setText("Delete")
+				.setAccelerator("Ctrl + D")
+				.setOnAction(event -> deleteText(getSelection()))
+				.get();
+
+		MFXContextMenuItem selectAllItem = MFXContextMenuItem.Builder.build()
+				.setIcon(new MFXFontIcon("mfx-select-all", 16))
+				.setText("Select All")
+				.setAccelerator("Ctrl + A")
+				.setOnAction(event -> selectAll())
+				.get();
+
+		MFXContextMenuItem redoItem = MFXContextMenuItem.Builder.build()
+				.setIcon(new MFXFontIcon("mfx-redo", 12))
+				.setText("Redo")
+				.setAccelerator("Ctrl + Y")
+				.setOnAction(event -> redo())
+				.get();
+
+		MFXContextMenuItem undoItem = MFXContextMenuItem.Builder.build()
+				.setIcon(new MFXFontIcon("mfx-undo", 12))
+				.setText("Undo")
+				.setAccelerator("Ctrl + Z")
+				.setOnAction(event -> undo())
+				.get();
+
+		contextMenu = MFXContextMenu.Builder.build(this)
+				.addItems(copyItem, cutItem, pasteItem, deleteItem, selectAllItem)
+				.addLineSeparator()
+				.addItems(redoItem, undoItem)
+				.setPopupStyleableParent(this)
+				.installAndGet();
+	}
+
+	@Override
+	public void copy() {
+		if (!isAllowCopy()) return;
+		super.copy();
+	}
+
+	@Override
+	public void cut() {
+		if (!isAllowCut()) return;
+		super.cut();
+	}
+
+	@Override
+	public void paste() {
+		if (!isAllowPaste()) return;
+		super.paste();
+	}
+
+	@Override
     public void previousWord() {
         boundField.selectAll();
     }

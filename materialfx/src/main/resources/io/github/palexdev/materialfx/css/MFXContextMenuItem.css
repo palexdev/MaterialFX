@@ -34,15 +34,19 @@
 }
 
 .mfx-menu-item .label {
-    -fx-padding: 7 0 7 -7;
-    -fx-font-family: "Open Sans Regular";
-    -fx-text-fill: -mfx-text-he;
+	-fx-padding: 7 0 7 -7;
+	-fx-font-family: "Open Sans Regular";
+	-fx-text-fill: -mfx-text-he;
 }
 
 .mfx-menu-item .label .text {
-    -fx-font-smoothing-type: lcd;
+	-fx-font-smoothing-type: lcd;
 }
 
 .mfx-menu-item .accelerator {
-    -fx-padding: 0 5 0 15;
+	-fx-padding: 0 5 0 15;
+}
+
+.mfx-menu-item:disabled .mfx-font-icon {
+	-mfx-color: #bcbcbc;
 }

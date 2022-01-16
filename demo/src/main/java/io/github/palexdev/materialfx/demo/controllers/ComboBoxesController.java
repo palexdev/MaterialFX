@@ -69,20 +69,20 @@ public class ComboBoxesController implements Initializable {
 			nEditCombo.selectItem(s);
 		});
 
-		// TODO remake tooltips
-		MFXTooltip tooltip = new MFXTooltip(
+		MFXTooltip.of(
+				nEditCombo,
 				"""
-					This combo box allows you to add new items to the list (no duplicates allowed) when pressing Enter.
-					It also allows to restore the previous selected item by pressing Ctrl+Shift+Z.
-					Both key strokes are default for all MFXComboBoxes but the action to perform must be configured by the user.
-					This combo box is also set to scroll to the selected item when opening the popup.
-					""",
-				nEditCombo
-		);
-		nEditCombo.setTooltip(tooltip);
+						This combo box allows you to add new items to the list (no duplicates allowed) when pressing Enter.
+						It also allows to restore the previous selected item by pressing Ctrl+Shift+Z.
+						Both key strokes are default for all MFXComboBoxes but the action to perform must be configured by the user.
+						This combo box is also set to scroll to the selected item when opening the popup.
+						"""
+		).install();
 
 		StringConverter<Person> converter = FunctionalStringConverter.converter(
-				s -> {throw new UnsupportedOperationException();},
+				s -> {
+					throw new UnsupportedOperationException();
+				},
 				person -> person.getName() + " " + person.getSurname()
 		);
 		Function<String, Predicate<Person>> filterFunction = s -> person -> StringUtils.containsIgnoreCase(converter.toString(person), s);

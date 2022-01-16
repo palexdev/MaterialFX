@@ -124,6 +124,14 @@ public class MultipleSelectionModel<T> extends AbstractMultipleSelectionModel<T>
     }
 
     /**
+     * Delegate method for {@link MultipleSelectionManager#expandSelection(int)}.
+     */
+    @Override
+    public void expandSelection(int index) {
+        selectionManager.expandSelection(index);
+    }
+
+    /**
      * Delegate method for {@link MultipleSelectionManager#replaceSelection(Integer...)}.
      */
     @Override

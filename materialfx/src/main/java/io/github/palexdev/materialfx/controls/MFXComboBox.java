@@ -10,6 +10,7 @@ import io.github.palexdev.materialfx.beans.properties.functional.FunctionPropert
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableBooleanProperty;
 import io.github.palexdev.materialfx.controls.base.MFXCombo;
 import io.github.palexdev.materialfx.controls.cell.MFXComboBoxCell;
+import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.selection.ComboBoxSelectionModel;
 import io.github.palexdev.materialfx.skins.MFXComboBoxSkin;
 import io.github.palexdev.materialfx.utils.ListChangeProcessor;
@@ -18,7 +19,6 @@ import io.github.palexdev.materialfx.utils.NumberUtils;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
 import io.github.palexdev.materialfx.validation.MFXValidator;
-import io.github.palexdev.materialfx.validation.Validated;
 import io.github.palexdev.virtualizedfx.beans.NumberRange;
 import io.github.palexdev.virtualizedfx.cell.Cell;
 import io.github.palexdev.virtualizedfx.utils.ListChangeHelper;
@@ -67,7 +67,7 @@ import java.util.function.Function;
  * typed text, or cancel the change (pressing Ctrl+Shift+Z by default).
  * <p> - Also adds a new PseudoClass that activates when the popup opens
  */
-public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T>, Validated {
+public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -88,10 +88,6 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T>, Validat
 	private final ListChangeListener<? super T> itemsChanged = this::itemsChanged;
 	private final ConsumerProperty<String> onCommit = new ConsumerProperty<>();
 	private final ConsumerProperty<String> onCancel = new ConsumerProperty<>();
-
-	private final MFXValidator validator = new MFXValidator();
-	// TODO implement validation
-	// TODO add context menu
 
 	protected static final PseudoClass POPUP_OPEN_PSEUDO_CLASS = PseudoClass.getPseudoClass("popup");
 
@@ -151,6 +147,45 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T>, Validat
 			newValue.addListener(itemsChanged);
 		});
 		getItems().addListener(this::itemsChanged);
+	}
+
+	@Override
+	public void defaultContextMenu() {
+		MFXContextMenuItem selectFirst = MFXContextMenuItem.Builder.build()
+				.setIcon(new MFXFontIcon("mfx-first-page", 16))
+				.setText("Select First")
+				.setOnAction(event -> selectFirst())
+				.get();
+
+		MFXContextMenuItem selectNext = MFXContextMenuItem.Builder.build()
+				.setIcon(new MFXFontIcon("mfx-next", 18))
+				.setText("Select Next")
+				.setOnAction(event -> selectNext())
+				.get();
+
+		MFXContextMenuItem selectPrevious = MFXContextMenuItem.Builder.build()
+				.setIcon(new MFXFontIcon("mfx-back", 18))
+				.setText("Select Previous")
+				.setOnAction(event -> selectPrevious())
+				.get();
+
+		MFXContextMenuItem selectLast = MFXContextMenuItem.Builder.build()
+				.setIcon(new MFXFontIcon("mfx-last-page", 16))
+				.setText("Select Last")
+				.setOnAction(event -> selectLast())
+				.get();
+
+		MFXContextMenuItem resetSelection = MFXContextMenuItem.Builder.build()
+				.setIcon(new MFXFontIcon("mfx-x", 16))
+				.setText("Clear Selection")
+				.setOnAction(event -> clearSelection())
+				.get();
+
+		contextMenu = MFXContextMenu.Builder.build(this)
+				.addItems(selectFirst, selectNext, selectPrevious, selectLast)
+				.addLineSeparator()
+				.addItem(resetSelection)
+				.installAndGet();
 	}
 
 	@Override

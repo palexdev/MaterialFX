@@ -18,6 +18,7 @@
 
 package io.github.palexdev.materialfx.selection;
 
+import io.github.palexdev.materialfx.beans.NumberRange;
 import io.github.palexdev.materialfx.selection.base.AbstractMultipleSelectionModel;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
@@ -182,6 +183,33 @@ public class MultipleSelectionManager<T> {
             ObservableMap<Integer, T> map = getMap();
             map.put(index, item);
             selection.set(map);
+        }
+    }
+
+    /**
+     * This is responsible for expanding the selection in the given index direction.
+     * There are 4 cases to consider:
+     * <p> 1) The selection is empty: the new selection will go from [0 to index]
+     * <p> 2) The minimum selected index is equal to the given index: the new selection will just be [index]
+     * <p> 3) The given index is lesser than the minimum index: the new selection will go from [index to min]
+     * <p> 4) The given index is greater than the minimum index: the new selection will go from [min to index]
+     */
+    public void expandSelection(int index) {
+        if (selection.isEmpty()) {
+            replaceSelection(NumberRange.expandRangeToArray(0, index));
+            return;
+        }
+
+        int min = selection.keySet().stream().min(Integer::compareTo).orElse(-1);
+        if (index == min) {
+            replaceSelection(index);
+            return;
+        }
+
+        if (index < min) {
+            replaceSelection(NumberRange.expandRangeToArray(index, min));
+        } else {
+            replaceSelection(NumberRange.expandRangeToArray(min, index));
         }
     }
 

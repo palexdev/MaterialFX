@@ -16,9 +16,15 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+@import "Fonts.css";
+@import "MFXColors.css";
+
 .mfx-checkbox {
     -mfx-main: #6200EE;
     -mfx-secondary: #424242;
+
+    -fx-font-family: "Open Sans Regular";
+    -fx-text-fill: -mfx-text-he;
 }
 
 .mfx-checkbox .box {

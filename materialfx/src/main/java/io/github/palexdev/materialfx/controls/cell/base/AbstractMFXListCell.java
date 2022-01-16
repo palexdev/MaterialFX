@@ -103,20 +103,24 @@ public abstract class AbstractMFXListCell<T> extends HBox implements Cell<T> {
      * see {@link MultipleSelectionModel#selectIndex(int)}, {@link MultipleSelectionModel#replaceSelection(Integer...)}.
      */
     protected void updateSelection(MouseEvent event) {
-        if (event.getButton() != MouseButton.PRIMARY) {
+        if (event.getButton() != MouseButton.PRIMARY) return;
+
+        int index = getIndex();
+        if (event.isControlDown()) {
+            if (isSelected()) {
+                listView.getSelectionModel().deselectIndex(index);
+            } else {
+                listView.getSelectionModel().selectIndex(index);
+            }
             return;
         }
 
-        int index = getIndex();
-        if (isSelected()) {
-            listView.getSelectionModel().deselectIndex(index);
-        } else {
-            if (event.isShiftDown() || event.isControlDown()) {
-                listView.getSelectionModel().selectIndex(index);
-            } else {
-                listView.getSelectionModel().replaceSelection(index);
-            }
+        if (event.isShiftDown()) {
+            listView.getSelectionModel().expandSelection(index);
+            return;
         }
+
+        listView.getSelectionModel().replaceSelection(index);
     }
 
     //================================================================================

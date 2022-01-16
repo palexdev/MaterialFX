@@ -2,8 +2,10 @@ package io.github.palexdev.materialfx.utils;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 
+import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,5 +30,15 @@ public class FXCollectors {
      */
     public static <T> Collector<T, ?, ObservableList<T>> toList() {
         return Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList);
+    }
+
+    /**
+     * @return a collector that returns an {@link ObservableMap}
+     */
+    public static <T, K, U> Collector<T, ?, ObservableMap<K, U>> toMap(
+            Function<T, K> keyMapper,
+            Function<T, U> valueMapper
+    ) {
+        return Collectors.collectingAndThen(Collectors.toMap(keyMapper, valueMapper), FXCollections::observableMap);
     }
 }

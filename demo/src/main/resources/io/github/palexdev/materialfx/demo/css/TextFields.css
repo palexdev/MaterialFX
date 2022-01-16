@@ -31,19 +31,23 @@
 }
 
 #customPassword:masked {
-    -fx-text-fill: -mfx-blue;
+	-fx-text-fill: -mfx-blue;
 }
 
 #customPassword .mfx-font-icon {
-    -mfx-color: -mfx-blue;
+	-mfx-color: -mfx-blue;
+}
+
+#customPassword .mfx-context-menu .mfx-menu-item:disabled .mfx-font-icon {
+	-mfx-color: #bcbcbc;
 }
 
 #customPassword .floating-text {
-    -fx-text-fill: -mfx-blue;
+	-fx-text-fill: -mfx-blue;
 }
 
 #validatedField {
-    -mfx-hide-character: '?';
+	-mfx-hide-character: '?';
 }
 
 #validatedField:invalid {

@@ -31,7 +31,6 @@ import javafx.stage.Stage;
 
 public class NotificationsController {
 
-	// TODO stop auto close on hover for NotificationSystem
 	public NotificationsController(Stage stage) {
 		Platform.runLater(() -> {
 			MFXNotificationSystem.instance().initOwner(stage);

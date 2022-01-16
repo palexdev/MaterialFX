@@ -45,7 +45,7 @@ import java.util.function.Function;
  * It is highly suggested using the {@link Builder} class to create a context menu.
  * <p></p>
  * <b>NOTE</b> that since the content of the context menu is entirely determined by its skin, the {@link #contentProperty()}
- * will always be null. As a result methods involving {@link Alignment}, {@link HPos} or {@link VPos} will fill with a
+ * will always be null. As a result methods involving {@link Alignment}, {@link HPos} or {@link VPos} will fail with a
  * NullPointerException.
  */
 public class MFXContextMenu extends MFXPopup {

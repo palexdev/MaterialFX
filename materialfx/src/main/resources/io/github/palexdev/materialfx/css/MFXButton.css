@@ -16,6 +16,14 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+@import "Fonts.css";
+@import "MFXColors.css";
+
+.mfx-button {
+    -fx-font-family: "Open Sans Regular";
+    -fx-text-fill: -mfx-text-he;
+}
+
 .mfx-button:armed,
 .mfx-button:hover,
 .mfx-button:focused,

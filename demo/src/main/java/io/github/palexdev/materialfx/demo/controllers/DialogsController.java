@@ -5,10 +5,12 @@ import io.github.palexdev.materialfx.demo.model.Model;
 import io.github.palexdev.materialfx.dialogs.MFXGenericDialog;
 import io.github.palexdev.materialfx.dialogs.MFXGenericDialogBuilder;
 import io.github.palexdev.materialfx.dialogs.MFXStageDialog;
+import io.github.palexdev.materialfx.enums.ScrimPriority;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -17,6 +19,9 @@ import java.util.Map;
 public class DialogsController {
 	private MFXGenericDialog dialogContent;
 	private MFXStageDialog dialog;
+
+	@FXML
+	private GridPane grid;
 
 	public DialogsController(Stage stage) {
 
@@ -31,6 +36,8 @@ public class DialogsController {
 					.initModality(Modality.APPLICATION_MODAL)
 					.setDraggable(true)
 					.setTitle("Dialogs Preview")
+					.setOwnerNode(grid)
+					.setScrimPriority(ScrimPriority.WINDOW)
 					.setScrimOwner(true)
 					.get();
 

@@ -158,9 +158,30 @@ public class NumberRange<T extends Number> {
     }
 
     /**
+     * Expands a range of integers to a List of integers.
+     */
+    public static List<Integer> expandRange(int min, int max) {
+        return IntStream.rangeClosed(min, max).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+    }
+
+    /**
      * Expands a range of integers to a Set of integers.
      */
     public static Set<Integer> expandRangeToSet(NumberRange<Integer> range) {
         return IntStream.rangeClosed(range.getMin(), range.getMax()).collect(HashSet::new, HashSet::add, HashSet::addAll);
+    }
+
+    /**
+     * Expands a range of integers to a Set of integers.
+     */
+    public static Set<Integer> expandRangeToSet(int min, int max) {
+        return IntStream.rangeClosed(min, max).collect(HashSet::new, HashSet::add, HashSet::addAll);
+    }
+
+    /**
+     * Expands a range of integers to an array of integers.
+     */
+    public static Integer[] expandRangeToArray(int min, int max) {
+        return IntStream.rangeClosed(min, max).boxed().toArray(Integer[]::new);
     }
 }

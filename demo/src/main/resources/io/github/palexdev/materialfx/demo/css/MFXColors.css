@@ -27,7 +27,6 @@
 	-mfx-yellow: #FFEA00;
 
 
-    /* TODO must use everywhere*/
 	-mfx-text-he: rgba(0, 0, 0, 0.87); /* High Emphasis */
 	-mfx-text-me: rgba(0, 0, 0, 0.60); /* Medium Emphasis*/
 	-mfx-text-disabled: rgba(0, 0, 0, 0.38); /* Disabled */

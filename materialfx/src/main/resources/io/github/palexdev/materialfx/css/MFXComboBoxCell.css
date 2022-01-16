@@ -1,3 +1,4 @@
+@import "Fonts.css";
 @import "MFXColors.css";
 
 .mfx-combo-box-cell {
@@ -16,4 +17,9 @@
 
 .mfx-combo-box-cell:selected {
 	-fx-background-color: -mfx-selected;
+}
+
+.mfx-combo-box-cell .data-label {
+	-fx-font-family: "Open Sans Regular";
+	-fx-text-fill: -mfx-text-he;
 }

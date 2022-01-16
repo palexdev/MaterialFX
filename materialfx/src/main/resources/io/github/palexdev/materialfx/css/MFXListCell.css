@@ -16,27 +16,35 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+@import "Fonts.css";
+@import "MFXColors.css";
+
 .mfx-list-cell {
-    -fx-background-color: white;
-    -fx-border-color: white;
-    -fx-padding: 5;
+	-fx-background-color: white;
+	-fx-border-color: white;
+	-fx-padding: 5;
 }
 
 .mfx-list-cell:hover {
-    -fx-background-color: #F5F5F5;
-    -fx-border-color: #F5F5F5;
+	-fx-background-color: #F5F5F5;
+	-fx-border-color: #F5F5F5;
 }
 
 .mfx-list-cell:selected {
-    -fx-background-color: #E1E1E1;
-    -fx-border-color: #E1E1E1;
+	-fx-background-color: #E1E1E1;
+	-fx-border-color: #E1E1E1;
 }
 
 .mfx-list-cell:empty {
-    -fx-background-color: white;
-    -fx-border-color: white;
+	-fx-background-color: white;
+	-fx-border-color: white;
+}
+
+.mfx-list-cell .data-label {
+	-fx-font-family: "Open Sans Regular";
+	-fx-text-fill: -mfx-text-he;
 }
 
 .mfx-list-cell .mfx-ripple-generator {
-    -mfx-ripple-color: #C8C8C8;
+	-mfx-ripple-color: #C8C8C8;
 }

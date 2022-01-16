@@ -1,18 +1,22 @@
 package io.github.palexdev.materialfx.dialogs;
 
+import io.github.palexdev.materialfx.beans.SizeBean;
 import io.github.palexdev.materialfx.effects.MFXScrimEffect;
+import io.github.palexdev.materialfx.enums.ScrimPriority;
 import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
 import io.github.palexdev.materialfx.utils.AnimationUtils.TimelineBuilder;
 import javafx.animation.Interpolator;
 import javafx.beans.property.*;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Bounds;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 
@@ -41,7 +45,6 @@ import java.io.IOException;
  * <p>
  * So, the advice is to build this dialogs ahead of time, keep them in memory if you can,
  * so that you can use them whenever you need and just change  their content if needed,
- * // TODO center in owner node
  */
 public class MFXStageDialog extends Stage {
 	//================================================================================
@@ -65,9 +68,11 @@ public class MFXStageDialog extends Stage {
 	private EventHandler<MouseEvent> overlayCloseHandler = event -> close();
 
 	private Pane ownerNode;
+	private final BooleanProperty centerInOwnerNode = new SimpleBooleanProperty(true);
 	private final BooleanProperty scrimOwner = new SimpleBooleanProperty(false);
 	private final DoubleProperty scrimStrength = new SimpleDoubleProperty(0.5);
 	private MFXScrimEffect scrimEffect = new MFXScrimEffect();
+	private ScrimPriority scrimPriority = ScrimPriority.NODE;
 
 	//================================================================================
 	// Constructors
@@ -106,6 +111,8 @@ public class MFXStageDialog extends Stage {
 			setScene(buildScene(getContent()));
 			initDraggable();
 		});
+
+		addEventHandler(WindowEvent.WINDOW_SHOWN, event -> centerInOwner());
 	}
 
 	/**
@@ -174,17 +181,23 @@ public class MFXStageDialog extends Stage {
 	}
 
 	/**
-	 * If the scrim effect is enabled and {@link #getOwnerNode()} is not null,
-	 * applies the effect to it.
+	 * This is responsible for applying the scrim effect (if enabled) according to
+	 * the {@link #getScrimPriority()}.
 	 */
 	protected void scrimOwner() {
 		if (!isScrimOwner()) return;
 
-		if (ownerNode != null) {
-			scrimEffect.modalScrim(ownerNode, getScrimStrength());
-		} else if (getOwner() != null) {
-			scrimEffect.scrimWindow(getOwner(), getScrimStrength());
+		switch (scrimPriority) {
+			case NODE: {
+				if (ownerNode != null) scrimEffect.modalScrim(ownerNode, getScrimStrength());
+				break;
+			}
+			case WINDOW: {
+				if (getOwner() != null) scrimEffect.scrimWindow(getOwner(), getScrimStrength());
+				break;
+			}
 		}
+
 		TimelineBuilder.build()
 				.add(KeyFrames.of(200, scrimEffect.getScrimNode().opacityProperty(), getScrimStrength(), Interpolator.EASE_BOTH))
 				.getAnimation()
@@ -201,6 +214,23 @@ public class MFXStageDialog extends Stage {
 				.add(KeyFrames.of(200, scrimEffect.getScrimNode().opacityProperty(), 0, Interpolator.EASE_BOTH))
 				.getAnimation()
 				.play();
+	}
+
+	/**
+	 * This is responsible for centering the dialog on the {@link #getOwnerNode()} (if enabled).
+	 */
+	protected void centerInOwner() {
+		if (!isCenterInOwnerNode() || ownerNode == null) return;
+
+		Bounds screenBounds = ownerNode.localToScreen(ownerNode.getBoundsInLocal());
+		double startX = screenBounds.getMinX();
+		double startY = screenBounds.getMinY();
+		SizeBean dialogSize = SizeBean.of(getWidth(), getHeight());
+		SizeBean nodeSize = SizeBean.of(ownerNode.prefWidth(-1), ownerNode.prefHeight(-1));
+		double x = startX + (nodeSize.getWidth() / 2 - dialogSize.getWidth() / 2);
+		double y = startY + (nodeSize.getHeight() / 2 - dialogSize.getHeight() / 2);
+		setX(x);
+		setY(y);
 	}
 
 	/**
@@ -308,6 +338,22 @@ public class MFXStageDialog extends Stage {
 		initOverlayClose();
 	}
 
+	public boolean isCenterInOwnerNode() {
+		return centerInOwnerNode.get();
+	}
+
+	/**
+	 * Specifies whether the dialog should be centered on the {@link #getOwnerNode()}
+	 * when shown.
+	 */
+	public BooleanProperty centerInOwnerNodeProperty() {
+		return centerInOwnerNode;
+	}
+
+	public void setCenterInOwnerNode(boolean centerInOwnerNode) {
+		this.centerInOwnerNode.set(centerInOwnerNode);
+	}
+
 	public boolean isScrimOwner() {
 		return scrimOwner.get();
 	}
@@ -336,5 +382,26 @@ public class MFXStageDialog extends Stage {
 
 	public void setScrimStrength(double scrimStrength) {
 		this.scrimStrength.set(scrimStrength);
+	}
+
+	/**
+	 * @return the enum constant used to specify how to apply the scrim effect.
+	 * You can have two owners, one is the stage owner(Window) and the other is the dialog owner(Pane).
+	 * Sometimes it's better to apply the scrim to the window (for example the owner node would not allow to apply the
+	 * scrim effect, for example AnchorPanes, VBoxes, HBoxes...), but you still want to center the dialog in the owner node.
+	 * Setting this to {@link ScrimPriority#WINDOW} will tell the dialog to apply the effect to {@link #getOwner()},
+	 * setting this to {@link ScrimPriority#NODE} will tell the dialog to apply the effect to {@link #getOwnerNode()}.
+	 */
+	public ScrimPriority getScrimPriority() {
+		return scrimPriority;
+	}
+
+	/**
+	 * Sets the enum constant used to specify how to apply the scrim effect.
+	 *
+	 * @see #getScrimPriority()
+	 */
+	public void setScrimPriority(ScrimPriority scrimPriority) {
+		this.scrimPriority = scrimPriority;
 	}
 }

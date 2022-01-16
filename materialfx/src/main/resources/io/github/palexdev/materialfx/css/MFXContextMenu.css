@@ -24,12 +24,13 @@
 }
 
 .mfx-context-menu .mfx-scroll-pane {
-    -fx-background-color: white;
-    -fx-background-radius: 5;
-    -fx-border-color: lightgray;
-    -fx-border-radius: 5;
-    -fx-padding: 5;
-    -fx-max-height: 300;
+	-fx-background-color: white;
+	-fx-background-radius: 5;
+	-fx-background-insets: 1;
+	-fx-border-color: lightgray;
+	-fx-border-radius: 5;
+	-fx-padding: 5;
+	-fx-max-height: 300;
 }
 
 .mfx-context-menu .mfx-scroll-pane .viewport {

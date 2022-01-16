@@ -21,8 +21,9 @@
 }
 
 .mfx-progress-spinner .percentage {
-    -fx-font-family: "Comfortaa Medium";
-    -fx-font-smoothing-type: gray;
+	-fx-font-family: "Open Sans SemiBold";
+	-fx-font-smoothing-type: gray;
+	-fx-text-fill: -mfx-text-he;
 }
 
 .mfx-progress-spinner:determinate .percentage {

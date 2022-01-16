@@ -88,6 +88,13 @@ public class MFXNotificationSystem extends AbstractMFXNotificationSystem {
     @Override
     protected void init() {
         PositionBean position = computePosition();
+        popup.hoverProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                closeAfterTransition.stop();
+            } else if (closeAutomatically) {
+                closeAfterTransition.playFromStart();
+            }
+        });
         popup.show(dummyStage, position.getX(), position.getY());
     }
 
