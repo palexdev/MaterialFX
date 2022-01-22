@@ -83,19 +83,21 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
 		filterPane = new MFXFilterPane<>();
 		Bindings.bindContent(filterPane.getFilters(), tableView.getFilters());
 
-		filterDialog = MFXDialogs.filter(filterPane)
-				.setShowMinimize(false)
-				.toStageDialogBuilder()
-				.initOwner(tableView.getScene().getWindow())
-				.initModality(Modality.APPLICATION_MODAL)
-				.get();
-
 		footer = buildFooter();
 
 		container = new VBox(columnsContainer, rowsFlow);
 		if (tableView.isFooterVisible()) {
 			container.getChildren().add(footer);
 		}
+
+		filterDialog = MFXDialogs.filter(filterPane)
+				.setShowMinimize(false)
+				.toStageDialogBuilder()
+				.setOwnerNode(container)
+				.setCenterInOwnerNode(true)
+				.initOwner(tableView.getScene().getWindow())
+				.initModality(Modality.APPLICATION_MODAL)
+				.get();
 
 		getChildren().setAll(container);
 		addListeners();

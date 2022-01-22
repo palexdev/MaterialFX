@@ -250,6 +250,9 @@ public class MFXProgressSpinner extends ProgressIndicator {
 		return radius.get();
 	}
 
+	/**
+	 * Specifies the radius of the progress spinner.
+	 */
 	public StyleableDoubleProperty radiusProperty() {
 		return radius;
 	}
@@ -262,6 +265,9 @@ public class MFXProgressSpinner extends ProgressIndicator {
 		return startingAngle.get();
 	}
 
+	/**
+	 * Specifies the angle at which the spinner will start.
+	 */
 	public StyleableDoubleProperty startingAngleProperty() {
 		return startingAngle;
 	}

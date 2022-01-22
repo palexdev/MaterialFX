@@ -761,6 +761,10 @@ public class MFXTextField extends TextField implements Validated, MFXMenuControl
 		return scaleOnAbove.get();
 	}
 
+	/**
+	 * Specifies whether the floating text node should be scaled or not when
+	 * the float mode is set to {@link FloatMode#ABOVE}.
+	 */
 	public StyleableBooleanProperty scaleOnAboveProperty() {
 		return scaleOnAbove;
 	}
@@ -822,7 +826,7 @@ public class MFXTextField extends TextField implements Validated, MFXMenuControl
 
 		private static final CssMetaData<MFXTextField, Boolean> CARET_VISIBLE =
 				FACTORY.createBooleanCssMetaData(
-						"-mfx-caret-animated",
+						"-mfx-caret-visible",
 						MFXTextField::caretVisibleProperty,
 						true
 				);

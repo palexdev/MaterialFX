@@ -206,7 +206,7 @@ public class MFXFilterPane<T> extends Control {
 
 	/**
 	 * @return the list of {@link AbstractFilter}s. Each of them
-	 * represents an object's field o  which the filter operates
+	 * represents an object's field on which the filter operates
 	 */
 	public ObservableList<AbstractFilter<T, ?>> getFilters() {
 		return filters;

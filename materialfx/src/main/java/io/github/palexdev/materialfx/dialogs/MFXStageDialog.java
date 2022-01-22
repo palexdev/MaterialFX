@@ -244,7 +244,7 @@ public class MFXStageDialog extends Stage {
 		double startX = screenBounds.getMinX();
 		double startY = screenBounds.getMinY();
 		SizeBean dialogSize = SizeBean.of(getWidth(), getHeight());
-		SizeBean nodeSize = SizeBean.of(ownerNode.prefWidth(-1), ownerNode.prefHeight(-1));
+		SizeBean nodeSize = SizeBean.of(ownerNode.getWidth(), ownerNode.getHeight());
 		double x = startX + (nodeSize.getWidth() / 2 - dialogSize.getWidth() / 2);
 		double y = startY + (nodeSize.getHeight() / 2 - dialogSize.getHeight() / 2);
 		setX(x);

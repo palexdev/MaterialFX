@@ -377,7 +377,7 @@ public class MFXTableView<T> extends Control {
 	}
 
 	/**
-	 * Specifies if the whether the footer is visible.
+	 * Specifies whether the table's footer is visible
 	 */
 	public BooleanProperty footerVisibleProperty() {
 		return footerVisible;

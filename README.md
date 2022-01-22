@@ -35,12 +35,14 @@
 ## Table of Contents
 
 * [About the Project and History of JavaFX](#about-the-project-and-history-of-javafx)
+* [About the Logo](#about-the-logo)
 * [Some GIFs](#preview-gifs)
 * [Getting Started](#getting-started)
     * [Build](#build)
     * [Usage](#usage)
         * [Gradle](#gradle)
         * [Maven](#maven)
+* [Changelog](#changelog)
 * [Roadmap](#roadmap)
 * [Contributing](#contributing)
 * [License](#license)
@@ -78,6 +80,16 @@ In recent months the project has evolved a lot, to the point that it is no longe
 To date MaterialFX offers not only restyled controls, but also: new and unique controls such as the Stepper,
 controls completely redone from scratch such as ComboBoxes or TableViews (and many others),
 and many utilities for JavaFX and Java (NodeUtils, ColorUtils, StringUtils ...).
+
+<!-- ABOUT THE PROJECT -->
+
+## About The Logo
+MaterialFX v11.13.0 brought a lot of fixes and new features, but it also brought a new logo, something that is more
+meaningful for me and that somewhat represents the new version.  
+The new logo is a Phoenix, the immortal bird from Greek mythology, associated to regeneration/rebirth.
+When a Phoenix dies it obtains new life by raising from its ashes.  
+MaterialFX v11.13.0 fixed many critical bugs and broken features, I like to think that it is reborn from
+the previous version, so I thought a new logo would have been a good idea. 
 
 <!-- PREVIEW GIFS -->
 
@@ -226,6 +238,11 @@ implementation 'io.github.palexdev:materialfx:11.13.0'
 
 <!-- ROADMAP -->
 
+## Changelog
+See the [CHANGELOG](https://github.com/palexdev/MaterialFX/blob/main/CHANGELOG.md) file for a list of changes per version.
+
+<!-- ROADMAP -->
+
 ## Roadmap
 
 See the [Open Issues](https://github.com/palexdev/MaterialFX/issues) for a list of proposed features (and known issues).  
@@ -269,7 +286,8 @@ especially considering that developing for JavaFX also means to deal with its cl
 design decisions. Many times I've honestly been on the verge of giving up because sometimes it's really too much
 stress to handle.  
 **But**, today MaterialFX is a great library, supported by many people and I'm proud of it.
-If you are using MaterialFX in your projects and feel like it, you can make a small donation here: [![Donate](https://img.shields.io/badge/$-support-green.svg?style=flat-square)](https://bit.ly/31XB8zD)
+If you are using MaterialFX in your projects and feel like it, I recently activated [GitHub Sponsors](https://github.com/sponsors/palexdev) so
+you can easily donate/sponsor.
 
 <!-- SUPPORTERS -->
 
@@ -283,6 +301,7 @@ If you are using MaterialFX in your projects and feel like it, you can make a sm
 - Sourabh Bhat
 - Mohammad Chaudhry (thank you very much for the huge donation, YOU are the legend)
 - Yahia Rehab
-- *Your name can be here by supporting me at this link, [Support](https://bit.ly/31XB8zD)*
+- Mauro de Wit
+- *Your name can be here by supporting me at this link, [GitHub Sponsors](https://github.com/sponsors/palexdev)*
 
 Thank you very very much to all supporters, to all people who contribute to the project, to all people that thanked me, you really made my day
