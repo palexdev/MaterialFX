@@ -63,9 +63,9 @@ public class Model {
 				""",
 				"""
 				Have you ever encountered a computer bug? How about a real bug in your computer? In 1947 a technician at Harvard had an issue with the performance of their Mark II computer.
-				Once they investigated, they discovered that a moth had gotten into a relay – an actual real live bug. In the logbook, it was noted as “First actual case of bug being found.”
-				While it is oft-repeated that this is where the term “bug” came to refer to errors that impacted the performance of programs, this is not the case.
-				The term “bug” was already in fairly widespread use in technical circles in 1947. Thomas Edison used it in 1869 to describe problems in his own inventions.
+				Once they investigated, they discovered that a moth had gotten into a relay – an actual real live bug. In the logbook, it was noted as “First actual case of bug being found."
+				While it is oft-repeated that this is where the term “bug" came to refer to errors that impacted the performance of programs, this is not the case.
+				The term “bug" was already in fairly widespread use in technical circles in 1947. Thomas Edison used it in 1869 to describe problems in his own inventions.
 				""",
 				"""
 				Coding and STEM fields may seem like it’s built for boys, but the first person to write our modern understanding of a program was Ada Lovelace.
@@ -74,9 +74,9 @@ public class Model {
 				While working with a peer on a mechanical general-purpose computer known as the Analytical Engine, she recognized that the machine could go way beyond simple and pure calculations, publishing then the first algorithm intended to be carried out by a machine like this one.
 				""",
 				"""
-				The idea of a computer virus was published in the essay “Theory of self-reproducing automata” by John von Neumann in 1949, but the first replicating computer program was not written until 1971.
+				The idea of a computer virus was published in the essay “Theory of self-reproducing automata" by John von Neumann in 1949, but the first replicating computer program was not written until 1971.
 				The program was not actively malicious software as it caused no damage to data,
-				the only effect being a message it output to the teletype reading “I’M THE CREEPER; CATCH ME IF YOU CAN”.
+				the only effect being a message it output to the teletype reading “I’M THE CREEPER; CATCH ME IF YOU CAN".
 				""",
 				"""
 				You may be fluent in Javascript or C++ but what NASA engineers really need to know is ADA and HAL/S.
@@ -91,7 +91,7 @@ public class Model {
 				By 2014, Microsoft bought it for $2.5 billion.
 				""",
 				"""
-				Computers operate on what is called a “binary code.” All of the software that runs them is written using only 0’s and 1’s,
+				Computers operate on what is called a “binary code." All of the software that runs them is written using only 0’s and 1’s,
 				and there are infinite combinations of these two digits. That’s why new software can be written all the time.
 				""",
 				"""
