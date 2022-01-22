@@ -94,3 +94,11 @@ task removeBnd(type: Delete) {
 build {
     dependsOn shadowJar, copyJar, removeBnd
 }
+
+allprojects {
+    plugins.withId("com.vanniktech.maven.publish") {
+        mavenPublish {
+            sonatypeHost = "S01"
+        }
+    }
+}
