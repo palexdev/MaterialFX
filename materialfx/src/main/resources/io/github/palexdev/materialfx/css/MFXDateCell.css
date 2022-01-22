@@ -1,0 +1,52 @@
+/*
+ * Copyright (C) 2022 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import "Fonts.css";
+@import "MFXColors.css";
+
+.mfx-date-cell {
+	-fx-font-family: "Open Sans Regular";
+	-fx-font-size: 13;
+	-fx-text-fill: -mfx-text-he;
+	-fx-padding: 0 1 0 0;
+	-fx-pref-width: 32;
+	-fx-pref-height: 32;
+
+	-fx-background-radius: 100%;
+	-fx-border-radius: 100%;
+}
+
+.mfx-date-cell .text {
+	-fx-font-smoothing-type: lcd;
+}
+
+.mfx-date-cell:extra {
+	-fx-text-fill: #a9a9a9;
+}
+
+.mfx-date-cell:current {
+	-fx-text-fill: #7a0ed9;
+	-fx-background-color: #F7F6F9;
+	-fx-font-family: "Open Sans SemiBold";
+}
+
+.mfx-date-cell:selected {
+	-fx-text-fill: white;
+	-fx-background-color: #7a0ed9;
+	-fx-font-family: "Open Sans SemiBold";
+}

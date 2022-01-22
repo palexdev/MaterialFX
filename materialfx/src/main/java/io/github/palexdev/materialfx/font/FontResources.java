@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -19,129 +19,165 @@
 package io.github.palexdev.materialfx.font;
 
 /**
- * Enumerator class for MaterialFX font resources. (Count: 95)
+ * Enumerator class for MaterialFX font resources. (Count: 132)
  */
 public enum FontResources {
-    ANGLE_DOWN("mfx-angle-down", '\uE900'),
-    ANGLE_LEFT("mfx-angle-left", '\uE901'),
-    ANGLE_RIGHT("mfx-angle-right", '\uE902'),
-    ANGLE_UP("mfx-angle-up", '\uE903'),
-    ARROW_BACK("mfx-arrow-back", '\uE904'),
-    ARROW_FORWARD("mfx-arrow-forward", '\uE905'),
-    BACK("mfx-back", '\uE906'),
-    CALENDAR_BLACK("mfx-calendar-black", '\uE907'),
-    CALENDAR_SEMI_BLACK("mfx-calendar-semi-black", '\uE908'),
-    CALENDAR_WHITE("mfx-calendar-white", '\uE909'),
-    CARET_DOWN("mfx-caret-down", '\uE90A'),
-    CARET_LEFT("mfx-caret-left", '\uE90B'),
-    CARET_RIGHT("mfx-caret-right", '\uE90C'),
-    CARET_UP("mfx-caret-up", '\uE90D'),
-    CASPIAN_MARK("mfx-caspian-mark", '\uE90E'),
-    CHART_PIE("mfx-chart-pie", '\uE90F'),
-    CHECK_CIRCLE("mfx-check-circle", '\uE910'),
-    CHEVRON_DOWN("mfx-chevron-down", '\uE911'),
-    CHEVRON_LEFT("mfx-chevron-left", '\uE912'),
-    CHEVRON_RIGHT("mfx-chevron-right", '\uE913'),
-    CHEVRON_UP("mfx-chevron-up", '\uE914'),
-    CIRCLE("mfx-circle", '\uE915'),
-    CONTENT_COPY("mfx-content-copy", '\uE916'),
-    CONTENT_CUT("mfx-content-cut", '\uE917'),
-    CONTENT_PASTE("mfx-content-paste", '\uE918'),
-    DASHBOARD("mfx-dashboard", '\uE919'),
-    DEBUG("mfx-debug", '\uE91A'),
-    DELETE("mfx-delete", '\uE91B'),
-    DELETE_ALT("mfx-delete-alt", '\uE91C'),
-    EXCLAMATION_CIRCLE("mfx-exclamation-circle", '\uE91D'),
-    EXCLAMATION_TRIANGLE("mfx-exclamation-triangle", '\uE91E'),
-    EXPAND("mfx-expand", '\uE91F'),
-    EYE("mfx-eye", '\uE920'),
-    EYE_SLASH("mfx-eye-slash", '\uE921'),
-    FILE("mfx-file", '\uE922'),
-    FILTER("mfx-filter", '\uE923'),
-    FILTER_ALT("mfx-filter-alt", '\uE924'),
-    FILTER_ALT_CLEAR("mfx-filter-alt-clear", '\uE925'),
-    FIRST_PAGE("mfx-first-page", '\uE926'),
-    FIT("mfx-fit", '\uE927'),
-    FOLDER("mfx-folder", '\uE928'),
-    GEAR("mfx-gear", '\uE929'),
-    GOOGLE("mfx-google", '\uE92A'),
-    GOOGLE_DRAWING("mfx-google-drawing", '\uE92B'),
-    GOOGLE_DRIVE("mfx-google-drive", '\uE92C'),
-    GOOGLE_FORMS("mfx-google-forms", '\uE92D'),
-    GOOGLE_FUSION_TABLES("mfx-google-fusion-tables", '\uE92E'),
-    GOOGLE_PRESENTATION("mfx-google-presentation", '\uE92F'),
-    GOOGLE_SCRIPT("mfx-google-script", '\uE930'),
-    GOOGLE_SITES("mfx-google-sites", '\uE931'),
-    HOME("mfx-home", '\uE932'),
-    IMAGE("mfx-image", '\uE933'),
-    INFO("mfx-info", '\uE934'),
-    INFO_CIRCLE("mfx-info-circle", '\uE935'),
-    LAST_PAGE("mfx-last-page", '\uE936'),
-    LEVEL_UP("mfx-level-up", '\uE937'),
-    LOCK("mfx-lock", '\uE938'),
-    LOCK_OPEN("mfx-lock-open", '\uE939'),
-    MAP("mfx-map", '\uE93A'),
-    MINUS("mfx-minus", '\uE93B'),
-    MINUS_CIRCLE("mfx-minus-circle", '\uE93C'),
-    MODENA_MARK("mfx-modena-mark", '\uE93D'),
-    MUSIC("mfx-music", '\uE93E'),
-    NEXT("mfx-next", '\uE93F'),
-    REDO("mfx-redo", '\uE940'),
-    RESTORE("mfx-restore", '\uE941'),
-    SEARCH("mfx-search", '\uE942'),
-    SEARCH_PLUS("mfx-search-plus", '\uE943'),
-    SELECT_ALL("mfx-select-all", '\uE944'),
-    SHORTCUT("mfx-shortcut", '\uE945'),
-    SLIDERS("mfx-sliders", '\uE946'),
-    SPREADSHEET("mfx-spreadsheet", '\uE947'),
-    STEP_BACKWARD("mfx-step-backward", '\uE948'),
-    STEP_FORWARD("mfx-step-forward", '\uE949'),
-    SYNC("mfx-sync", '\uE94A'),
-    SYNC_LIGHT("mfx-sync-light", '\uE94B'),
-    UNDO("mfx-undo", '\uE94C'),
-    USER("mfx-user", '\uE94D'),
-    USERS("mfx-users", '\uE94E'),
-    VARIANT10_MARK("mfx-variant10-mark", '\uE94F'),
-    VARIANT11_MARK("mfx-variant11-mark", '\uE950'),
-    VARIANT12_MARK("mfx-variant12-mark", '\uE951'),
-    VARIANT3_MARK("mfx-variant3-mark", '\uE952'),
-    VARIANT4_MARK("mfx-variant4-mark", '\uE953'),
-    VARIANT5_MARK("mfx-variant5-mark", '\uE954'),
-    VARIANT6_MARK("mfx-variant6-mark", '\uE955'),
-    VARIANT7_MARK("mfx-variant7-mark", '\uE956'),
-    VARIANT8_MARK("mfx-variant8-mark", '\uE957'),
-    VARIANT9_MARK("mfx-variant9-mark", '\uE958'),
-    VIDEO("mfx-video", '\uE959'),
-    X("mfx-x", '\uE95A'),
-    X_ALT("mfx-x-alt", '\uE95B'),
-    X_CIRCLE("mfx-x-circle", '\uE95C'),
-    X_CIRCLE_LIGHT("mfx-x-circle-light", '\uE95D'),
-    X_LIGHT("mfx-x-light", '\uE95E'),
-    ;
+	ANGLE_DOWN("mfx-angle-down", '\uE900'),
+	ANGLE_LEFT("mfx-angle-left", '\uE901'),
+	ANGLE_RIGHT("mfx-angle-right", '\uE902'),
+	ANGLE_UP("mfx-angle-up", '\uE903'),
+	ARROW_BACK("mfx-arrow-back", '\uE904'),
+	ARROW_FORWARD("mfx-arrow-forward", '\uE905'),
+	BACK("mfx-back", '\uE906'),
+	BARS("mfx-bars", '\uE907'),
+	BELL("mfx-bell", '\uE908'),
+	BELL_ALT("mfx-bell-alt", '\uE909'),
+	CALENDAR_ALT_DARK("mfx-calendar-alt-dark", '\uE90A'),
+	CALENDAR_ALT_LIGHT("mfx-calendar-alt-light", '\uE90B'),
+	CALENDAR_ALT_SEMI_DARK("mfx-calendar-alt-semi-dark", '\uE90C'),
+	CALENDAR_DARK("mfx-calendar-dark", '\uE90D'),
+	CALENDAR_LIGHT("mfx-calendar-light", '\uE90E'),
+	CALENDAR_SEMI_DARK("mfx-calendar-semi-dark", '\uE90F'),
+	CALENDARS("mfx-calendars", '\uE910'),
+	CALENDARS_SEMI_DARK("mfx-calendars-semi-dark", '\uE911'),
+	CARET_DOWN("mfx-caret-down", '\uE912'),
+	CARET_LEFT("mfx-caret-left", '\uE913'),
+	CARET_RIGHT("mfx-caret-right", '\uE914'),
+	CARET_UP("mfx-caret-up", '\uE915'),
+	CASPIAN_MARK("mfx-caspian-mark", '\uE916'),
+	CHART_PIE("mfx-chart-pie", '\uE917'),
+	CHECK_CIRCLE("mfx-check-circle", '\uE918'),
+	CHECK_CIRCLE_EMPTY("mfx-check-circle-empty", '\uE919'),
+	CHEVRON_DOWN("mfx-chevron-down", '\uE91A'),
+	CHEVRON_LEFT("mfx-chevron-left", '\uE91B'),
+	CHEVRON_RIGHT("mfx-chevron-right", '\uE91C'),
+	CHEVRON_UP("mfx-chevron-up", '\uE91D'),
+	CIRCLE("mfx-circle", '\uE91E'),
+	CIRCLE_DOT("mfx-circle-dot", '\uE91F'),
+	CIRCLE_EMPTY("mfx-circle-empty", '\uE920'),
+	CONTENT_COPY("mfx-content-copy", '\uE921'),
+	CONTENT_CUT("mfx-content-cut", '\uE922'),
+	CONTENT_PASTE("mfx-content-paste", '\uE923'),
+	DASHBOARD("mfx-dashboard", '\uE924'),
+	DEBUG("mfx-debug", '\uE925'),
+	DELETE("mfx-delete", '\uE926'),
+	DELETE_ALT("mfx-delete-alt", '\uE927'),
+	DO_NOT_ENTER_CIRCLE("mfx-do-not-enter-circle", '\uE928'),
+	ELLIPSIS_VERTICAL("mfx-ellipsis-vertical", '\uE929'),
+	EXCLAMATION_CIRCLE("mfx-exclamation-circle", '\uE92A'),
+	EXCLAMATION_CIRCLE_FILLED("mfx-exclamation-circle-filled", '\uE92B'),
+	EXCLAMATION_TRIANGLE("mfx-exclamation-triangle", '\uE92C'),
+	EXPAND("mfx-expand", '\uE92D'),
+	EYE("mfx-eye", '\uE92E'),
+	EYE_SLASH("mfx-eye-slash", '\uE92F'),
+	FILE("mfx-file", '\uE930'),
+	FILTER("mfx-filter", '\uE931'),
+	FILTER_ALT("mfx-filter-alt", '\uE932'),
+	FILTER_ALT_CLEAR("mfx-filter-alt-clear", '\uE933'),
+	FIRST_PAGE("mfx-first-page", '\uE934'),
+	FIT("mfx-fit", '\uE935'),
+	FOLDER("mfx-folder", '\uE936'),
+	FONTICONS("mfx-fonticons", '\uE937'),
+	GEAR("mfx-gear", '\uE938'),
+	GOOGLE("mfx-google", '\uE939'),
+	GOOGLE_DRAWING("mfx-google-drawing", '\uE93A'),
+	GOOGLE_DRIVE("mfx-google-drive", '\uE93B'),
+	GOOGLE_FORMS("mfx-google-forms", '\uE93C'),
+	GOOGLE_FUSION_TABLES("mfx-google-fusion-tables", '\uE93D'),
+	GOOGLE_PRESENTATION("mfx-google-presentation", '\uE93E'),
+	GOOGLE_SCRIPT("mfx-google-script", '\uE93F'),
+	GOOGLE_SITES("mfx-google-sites", '\uE940'),
+	HOME("mfx-home", '\uE941'),
+	HYPHEN("mfx-hyphen", '\uE942'),
+	IMAGE("mfx-image", '\uE943'),
+	INFO("mfx-info", '\uE944'),
+	INFO_CIRCLE("mfx-info-circle", '\uE945'),
+	INFO_CIRCLE_FILLED("mfx-info-circle-filled", '\uE946'),
+	INPUT_PIPE("mfx-input-pipe", '\uE947'),
+	INPUT_PIPE_ALT("mfx-input-pipe-alt", '\uE948'),
+	LAST_PAGE("mfx-last-page", '\uE949'),
+	LEVEL_UP("mfx-level-up", '\uE94A'),
+	LIST_DROPDOWN("mfx-list-dropdown", '\uE94B'),
+	LOCK("mfx-lock", '\uE94C'),
+	LOCK_OPEN("mfx-lock-open", '\uE94D'),
+	LOGO("mfx-logo", '\uE94E'),
+	LOGO_ALT("mfx-logo-alt", '\uE94F'),
+	MAP("mfx-map", '\uE950'),
+	MESSAGE("mfx-message", '\uE951'),
+	MESSAGES("mfx-messages", '\uE952'),
+	MINUS("mfx-minus", '\uE953'),
+	MINUS_CIRCLE("mfx-minus-circle", '\uE954'),
+	MODENA_MARK("mfx-modena-mark", '\uE955'),
+	MUSIC("mfx-music", '\uE956'),
+	NEXT("mfx-next", '\uE957'),
+	PROGRESS_BARS("mfx-progress-bars", '\uE958'),
+	PROGRESS_BARS_ALT("mfx-progress-bars-alt", '\uE959'),
+	REDO("mfx-redo", '\uE95A'),
+	RESTORE("mfx-restore", '\uE95B'),
+	SCROLL_BAR("mfx-scroll-bar", '\uE95C'),
+	SEARCH("mfx-search", '\uE961'),
+	SEARCH_PLUS("mfx-search-plus", '\uE962'),
+	SELECT_ALL("mfx-select-all", '\uE963'),
+	SHORTCUT("mfx-shortcut", '\uE964'),
+	SIDEBAR_CLOSE("mfx-sidebar-close", '\uE965'),
+	SIDEBAR_OPEN("mfx-sidebar-open", '\uE966'),
+	SLIDERS("mfx-sliders", '\uE967'),
+	SPREADSHEET("mfx-spreadsheet", '\uE968'),
+	SQUARE_LIST("mfx-square-list", '\uE969'),
+	STEP_BACKWARD("mfx-step-backward", '\uE96A'),
+	STEP_FORWARD("mfx-step-forward", '\uE96B'),
+	STEPPER("mfx-stepper", '\uE96C'),
+	SYNC("mfx-sync", '\uE970'),
+	SYNC_LIGHT("mfx-sync-light", '\uE971'),
+	TABLE("mfx-table", '\uE972'),
+	TABLE_ALT("mfx-table-alt", '\uE973'),
+	TOGGLE_OFF("mfx-toggle-off", '\uE974'),
+	TOGGLE_ON("mfx-toggle-on", '\uE975'),
+	UNDO("mfx-undo", '\uE976'),
+	USER("mfx-user", '\uE977'),
+	USERS("mfx-users", '\uE978'),
+	VARIANT10_MARK("mfx-variant10-mark", '\uE979'),
+	VARIANT11_MARK("mfx-variant11-mark", '\uE97A'),
+	VARIANT12_MARK("mfx-variant12-mark", '\uE97B'),
+	VARIANT13_MARK("mfx-variant13-mark", '\uE97C'),
+	VARIANT14_MARK("mfx-variant14-mark", '\uE97D'),
+	VARIANT3_MARK("mfx-variant3-mark", '\uE97E'),
+	VARIANT4_MARK("mfx-variant4-mark", '\uE97F'),
+	VARIANT5_MARK("mfx-variant5-mark", '\uE980'),
+	VARIANT6_MARK("mfx-variant6-mark", '\uE981'),
+	VARIANT7_MARK("mfx-variant7-mark", '\uE982'),
+	VARIANT8_MARK("mfx-variant8-mark", '\uE983'),
+	VARIANT9_MARK("mfx-variant9-mark", '\uE984'),
+	VIDEO("mfx-video", '\uE985'),
+	X("mfx-x", '\uE986'),
+	X_ALT("mfx-x-alt", '\uE987'),
+	X_CIRCLE("mfx-x-circle", '\uE988'),
+	X_CIRCLE_LIGHT("mfx-x-circle-light", '\uE989'),
+	X_LIGHT("mfx-x-light", '\uE98A');
 
-    public static FontResources findByDescription(String description) {
-        for (FontResources font : values()) {
-            if (font.getDescription().equals(description)) {
-                return font;
-            }
-        }
-        throw new IllegalArgumentException("Icon description '" + description + "' is invalid!");
-    }
+	public static FontResources findByDescription(String description) {
+		for (FontResources font : values()) {
+			if (font.getDescription().equals(description)) {
+				return font;
+			}
+		}
+		throw new IllegalArgumentException("Icon description '" + description + "' is invalid!");
+	}
 
-    private final String description;
-    private final char code;
+	private final String description;
+	private final char code;
 
-    FontResources(String description, char code) {
-        this.description = description;
-        this.code = code;
-    }
+	FontResources(String description, char code) {
+		this.description = description;
+		this.code = code;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public char getCode() {
-        return code;
-    }
+	public char getCode() {
+		return code;
+	}
 
 }

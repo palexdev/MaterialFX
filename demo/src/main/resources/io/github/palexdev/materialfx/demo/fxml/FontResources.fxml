@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright (C) 2022 Parisi Alessandro
+  ~ This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+  ~
+  ~ MaterialFX is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ MaterialFX is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<?import io.github.palexdev.materialfx.controls.MFXTableView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+      prefWidth="900.0" spacing="10.0" style="-fx-background-color: white; -fx-background-radius: 10;"
+      stylesheets="@../css/Common.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="io.github.palexdev.materialfx.demo.controllers.FontResourcesController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="10.0"/>
+    </padding>
+    <effect>
+        <DropShadow blurType="GAUSSIAN" offsetX="-1.0" offsetY="2.0" spread="0.12">
+            <color>
+                <Color opacity="0.20000000298023224"/>
+            </color>
+        </DropShadow>
+    </effect>
+    <Label fx:id="header" alignment="CENTER" maxWidth="1.7976931348623157E308" minHeight="32.0"
+           styleClass="header-label" text="MaterialFX Font Resources"/>
+    <MFXTableView fx:id="tableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                  stylesheets="@../css/FontResources.css" VBox.vgrow="ALWAYS"/>
+</VBox>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -29,37 +29,37 @@ import io.github.palexdev.materialfx.selection.TreeCheckModel;
  * @param <T> The type of the data within the items.
  */
 public class MFXCheckTreeView<T> extends MFXTreeView<T> {
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXCheckTreeView() {
-        super();
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXCheckTreeView() {
+		super();
+	}
 
-    public MFXCheckTreeView(MFXCheckTreeItem<T> root) {
-        super(root);
-    }
+	public MFXCheckTreeView(MFXCheckTreeItem<T> root) {
+		super(root);
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
-    public TreeCheckModel<T> getCheckModel() {
-        return (TreeCheckModel<T>) super.getSelectionModel();
-    }
+	//================================================================================
+	// Methods
+	//================================================================================
+	public TreeCheckModel<T> getCheckModel() {
+		return (TreeCheckModel<T>) super.getSelectionModel();
+	}
 
-    //================================================================================
-    // Override Methods
-    //================================================================================
+	//================================================================================
+	// Override Methods
+	//================================================================================
 
-    /**
-     * Overridden method to install a TreeCheckModel.
-     * <p>
-     * By default it is set to allow multiple selection.
-     */
-    @Override
-    protected void installSelectionModel() {
-        TreeCheckModel<T> treeCheckModel = new TreeCheckModel<>();
-        treeCheckModel.setAllowsMultipleSelection(true);
-        setSelectionModel(treeCheckModel);
-    }
+	/**
+	 * Overridden method to install a TreeCheckModel.
+	 * <p>
+	 * By default it is set to allow multiple selection.
+	 */
+	@Override
+	protected void installSelectionModel() {
+		TreeCheckModel<T> treeCheckModel = new TreeCheckModel<>();
+		treeCheckModel.setAllowsMultipleSelection(true);
+		setSelectionModel(treeCheckModel);
+	}
 }

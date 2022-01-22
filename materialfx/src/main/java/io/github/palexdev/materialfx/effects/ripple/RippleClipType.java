@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -19,8 +19,8 @@
 package io.github.palexdev.materialfx.effects.ripple;
 
 public enum RippleClipType {
-    CIRCLE,
-    RECTANGLE,
-    ROUNDED_RECTANGLE,
-    NO_CLIP,
+	CIRCLE,
+	RECTANGLE,
+	ROUNDED_RECTANGLE,
+	NO_CLIP,
 }

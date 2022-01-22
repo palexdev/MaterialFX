@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -19,15 +19,14 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.controls.base.MFXLabeled;
 import io.github.palexdev.materialfx.skins.MFXCheckboxSkin;
+import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import javafx.css.*;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Skin;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,194 +34,160 @@ import java.util.List;
  * <p>
  * Extends {@code CheckBox}, redefines the style class to "mfx-checkbox" for usage in CSS and
  * includes a {@code RippleGenerator}(in the Skin) to generate ripple effect on click.
+ * <p></p>
+ * It also introduces some new features like:
+ * <p> - {@link #contentDispositionProperty()}: to control the checkbox position
+ * <p> - {@link #gapProperty()}: to control the gap between the checkbox and the text
+ * <p> - {@link #textExpandProperty()}: to control the text size and the checkbox layout (see documentation)
  */
-public class MFXCheckbox extends CheckBox {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private static final StyleablePropertyFactory<MFXCheckbox> FACTORY = new StyleablePropertyFactory<>(CheckBox.getClassCssMetaData());
-    private final String STYLE_CLASS = "mfx-checkbox";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXCheckBox.css");
+public class MFXCheckbox extends CheckBox implements MFXLabeled {
+	//================================================================================
+	// Properties
+	//================================================================================
+	private static final StyleablePropertyFactory<MFXCheckbox> FACTORY = new StyleablePropertyFactory<>(CheckBox.getClassCssMetaData());
+	private final String STYLE_CLASS = "mfx-checkbox";
+	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXCheckBox.css");
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXCheckbox() {
-        setText("CheckBox");
-        initialize();
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXCheckbox() {
+		this("");
+	}
 
-    public MFXCheckbox(String text) {
-        super(text);
-        initialize();
-    }
+	public MFXCheckbox(String text) {
+		super(text);
+		initialize();
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
-    private void initialize() {
-        getStyleClass().add(STYLE_CLASS);
-    }
+	//================================================================================
+	// Methods
+	//================================================================================
+	private void initialize() {
+		getStyleClass().add(STYLE_CLASS);
+	}
 
-    //================================================================================
-    // Stylesheet properties
-    //================================================================================
+	//================================================================================
+	// Stylesheet properties
+	//================================================================================
+	private final StyleableObjectProperty<ContentDisplay> contentDisposition = new SimpleStyleableObjectProperty<>(
+			StyleableProperties.CONTENT_DISPOSITION,
+			this,
+			"contentDisposition",
+			ContentDisplay.LEFT
+	) {
+		@Override
+		public StyleOrigin getStyleOrigin() {
+			return StyleOrigin.USER_AGENT;
+		}
+	};
 
-    /**
-     * Specifies the color of the box when it's checked.
-     *
-     * @see Color
-     */
-    private final StyleableObjectProperty<Paint> checkedColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.CHECKED_COLOR,
-            this,
-            "checkedColor",
-            Color.rgb(15, 157, 88)
-    );
+	private final StyleableDoubleProperty gap = new SimpleStyleableDoubleProperty(
+			StyleableProperties.GAP,
+			this,
+			"gap",
+			8.0
+	);
 
-    /**
-     * Specifies the color of the box when it's unchecked.
-     *
-     * @see Color
-     */
-    private final StyleableObjectProperty<Paint> uncheckedColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.UNCHECKED_COLOR,
-            this,
-            "uncheckedColor",
-            Color.rgb(90, 90, 90)
-    );
+	private final StyleableBooleanProperty textExpand = new SimpleStyleableBooleanProperty(
+			StyleableProperties.TEXT_EXPAND,
+			this,
+			"textExpand",
+			false
+	);
 
-    /**
-     * Specifies the shape of the mark from a predefined set.
-     *
-     * @see javafx.scene.shape.SVGPath
-     */
-    private final StyleableStringProperty markType = new SimpleStyleableStringProperty(
-            StyleableProperties.MARK_TYPE,
-            this,
-            "markType",
-            "mfx-modena-mark"
-    );
+	public ContentDisplay getContentDisposition() {
+		return contentDisposition.get();
+	}
 
-    /**
-     * Specifies the size of the mark.
-     */
-    private final StyleableDoubleProperty markSize = new SimpleStyleableDoubleProperty(
-            StyleableProperties.MARK_SIZE,
-            this,
-            "markSize",
-            12.0
-    );
+	public StyleableObjectProperty<ContentDisplay> contentDispositionProperty() {
+		return contentDisposition;
+	}
 
-    public Paint getCheckedColor() {
-        return checkedColor.get();
-    }
+	public void setContentDisposition(ContentDisplay contentDisposition) {
+		this.contentDisposition.set(contentDisposition);
+	}
 
-    public StyleableObjectProperty<Paint> checkedColorProperty() {
-        return checkedColor;
-    }
+	public double getGap() {
+		return gap.get();
+	}
 
-    public void setCheckedColor(Paint checkedColor) {
-        this.checkedColor.set(checkedColor);
-    }
+	public StyleableDoubleProperty gapProperty() {
+		return gap;
+	}
 
-    public Paint getUncheckedColor() {
-        return uncheckedColor.get();
-    }
+	public void setGap(double gap) {
+		this.gap.set(gap);
+	}
 
-    public StyleableObjectProperty<Paint> uncheckedColorProperty() {
-        return uncheckedColor;
-    }
+	public boolean isTextExpand() {
+		return textExpand.get();
+	}
 
-    public void setUncheckedColor(Paint uncheckedColor) {
-        this.uncheckedColor.set(uncheckedColor);
-    }
+	public StyleableBooleanProperty textExpandProperty() {
+		return textExpand;
+	}
 
-    public String getMarkType() {
-        return markType.get();
-    }
+	public void setTextExpand(boolean textExpand) {
+		this.textExpand.set(textExpand);
+	}
 
-    public StyleableStringProperty markTypeProperty() {
-        return markType;
-    }
+	//================================================================================
+	// CssMetaData
+	//================================================================================
+	private static class StyleableProperties {
+		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
-    public void setMarkType(String markType) {
-        this.markType.set(markType);
-    }
+		private static final CssMetaData<MFXCheckbox, ContentDisplay> CONTENT_DISPOSITION =
+				FACTORY.createEnumCssMetaData(
+						ContentDisplay.class,
+						"-mfx-content-disposition",
+						MFXCheckbox::contentDispositionProperty,
+						ContentDisplay.LEFT
+				);
 
-    public double getMarkSize() {
-        return markSize.get();
-    }
+		private static final CssMetaData<MFXCheckbox, Number> GAP =
+				FACTORY.createSizeCssMetaData(
+						"-mfx-gap",
+						MFXCheckbox::gapProperty,
+						8.0
+				);
 
-    public StyleableDoubleProperty markSizeProperty() {
-        return markSize;
-    }
+		private static final CssMetaData<MFXCheckbox, Boolean> TEXT_EXPAND =
+				FACTORY.createBooleanCssMetaData(
+						"-mfx-text-expand",
+						MFXCheckbox::textExpandProperty,
+						false
+				);
 
-    public void setMarkSize(double markSize) {
-        this.markSize.set(markSize);
-    }
+		static {
+			cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
+					CheckBox.getClassCssMetaData(),
+					CONTENT_DISPOSITION, GAP, TEXT_EXPAND
+			);
+		}
+	}
 
-    //================================================================================
-    // CssMetaData
-    //================================================================================
-    private static class StyleableProperties {
-        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+	public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
+		return StyleableProperties.cssMetaDataList;
+	}
 
-        private static final CssMetaData<MFXCheckbox, Paint> CHECKED_COLOR =
-                FACTORY.createPaintCssMetaData(
-                        "-mfx-checked-color",
-                        MFXCheckbox::checkedColorProperty,
-                        Color.rgb(15, 157, 88)
-                );
+	//================================================================================
+	// Override Methods
+	//================================================================================
 
-        private static final CssMetaData<MFXCheckbox, Paint> UNCHECKED_COLOR =
-                FACTORY.createPaintCssMetaData(
-                        "-mfx-unchecked-color",
-                        MFXCheckbox::uncheckedColorProperty,
-                        Color.rgb(90, 90, 90)
-                );
+	@Override
+	protected Skin<?> createDefaultSkin() {
+		return new MFXCheckboxSkin(this);
+	}
 
-        private static final CssMetaData<MFXCheckbox, String> MARK_TYPE =
-                FACTORY.createStringCssMetaData(
-                        "-mfx-mark-type",
-                        MFXCheckbox::markTypeProperty,
-                        "mfx-modena-mark"
-                );
+	@Override
+	public String getUserAgentStylesheet() {
+		return STYLESHEET;
+	}
 
-        private static final CssMetaData<MFXCheckbox, Number> MARK_SIZE =
-                FACTORY.createSizeCssMetaData(
-                        "-mfx-mark-size",
-                        MFXCheckbox::markSizeProperty,
-                        12
-                );
-
-        static {
-            List<CssMetaData<? extends Styleable, ?>> ckbCssMetaData = new ArrayList<>(CheckBox.getClassCssMetaData());
-            Collections.addAll(ckbCssMetaData, CHECKED_COLOR, UNCHECKED_COLOR, MARK_TYPE, MARK_SIZE);
-            cssMetaDataList = Collections.unmodifiableList(ckbCssMetaData);
-        }
-    }
-
-    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
-        return StyleableProperties.cssMetaDataList;
-    }
-
-    //================================================================================
-    // Override Methods
-    //================================================================================
-
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        return new MFXCheckboxSkin(this);
-    }
-
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
-
-    @Override
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return MFXCheckbox.getControlCssMetaDataList();
-    }
+	@Override
+	public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+		return MFXCheckbox.getControlCssMetaDataList();
+	}
 }

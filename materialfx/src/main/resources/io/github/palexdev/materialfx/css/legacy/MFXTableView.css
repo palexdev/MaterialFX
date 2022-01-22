@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -18,74 +18,74 @@
 
 /* Base */
 .mfx-legacy-table-view {
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
-    -fx-border-color: lightgray;
-    -fx-background-radius: 2;
-    -fx-border-radius: 2;
-    -fx-padding: 0 0 10 0;
+	-fx-focus-color: transparent;
+	-fx-faint-focus-color: transparent;
+	-fx-border-color: lightgray;
+	-fx-background-radius: 2;
+	-fx-border-radius: 2;
+	-fx-padding: 0 0 10 0;
 }
 
 /* Look up colors */
 
 .mfx-legacy-table-view {
-    -mfx-selection-bar: transparent;
-    -mfx-selection-bar-non-focused: transparent;
-    -mfx-box-border: transparent;
-    -fx-table-cell-border-color: transparent;
+	-mfx-selection-bar: transparent;
+	-mfx-selection-bar-non-focused: transparent;
+	-mfx-box-border: transparent;
+	-fx-table-cell-border-color: transparent;
 
-    -fx-selection-bar: -mfx-selection-bar;
-    -fx-selection-bar-non-focused: -mfx-selection-bar;
-    -fx-box-border: -mfx-box-border;
+	-fx-selection-bar: -mfx-selection-bar;
+	-fx-selection-bar-non-focused: -mfx-selection-bar;
+	-fx-box-border: -mfx-box-border;
 
-    -mfx-track-color: rgb(225, 225, 225);
-    -mfx-thumb-color: rgb(157, 157, 157);
-    -mfx-thumb-hover-color: rgb(88, 88, 88);
+	-mfx-track-color: rgb(225, 225, 225);
+	-mfx-thumb-color: rgb(157, 157, 157);
+	-mfx-thumb-hover-color: rgb(88, 88, 88);
 }
 
 .mfx-legacy-table-view .column-header,
 .mfx-legacy-table-view .column-header-background,
 .mfx-legacy-table-view .column-header-background .filler {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
+	-fx-background-color: transparent;
+	-fx-border-color: transparent;
 }
 
 .mfx-legacy-table-view .column-header {
-    -fx-border-color: #f3f3f3 #f3f3f3 #f3f3f3 transparent;
-    -fx-border-width: 0 2 0 0;
+	-fx-border-color: #f3f3f3 #f3f3f3 #f3f3f3 transparent;
+	-fx-border-width: 0 2 0 0;
 }
 
 .mfx-legacy-table-view .column-header .label {
-    -fx-text-fill: #2e3440;
-    -fx-padding: 16 0 16 0;
+	-fx-text-fill: #2e3440;
+	-fx-padding: 16 0 16 0;
 }
 
 .mfx-legacy-table-view .column-header .arrow,
 .mfx-legacy-table-view .column-header .sort-order-dot {
-    -fx-background-color: #2e3440;
+	-fx-background-color: #2e3440;
 }
 
 .mfx-legacy-table-view .column-header:last-visible {
-    -fx-border-width: 0 2 0 1;
+	-fx-border-width: 0 2 0 1;
 }
 
 .mfx-legacy-table-view .column-header-background {
-    -fx-border-width: 0 0 1 0;
-    -fx-border-color: #F3F3F3;
+	-fx-border-width: 0 0 1 0;
+	-fx-border-color: #F3F3F3;
 }
 
 .mfx-legacy-table-view .column-overlay {
-    -fx-background-color: rgb(180, 180, 255);
+	-fx-background-color: rgb(180, 180, 255);
 }
 
 .mfx-legacy-table-view .column-resize-line,
 .mfx-legacy-table-view .column-drag-header {
-    -fx-background-color: rgb(150, 180, 255);
+	-fx-background-color: rgb(150, 180, 255);
 }
 
 /* Remove JavaFX crap */
 .mfx-legacy-table-view > .virtual-flow > .corner {
-    -fx-background-color: transparent;
+	-fx-background-color: transparent;
 }
 
 .mfx-legacy-table-view > .virtual-flow > .scroll-bar,
@@ -93,93 +93,93 @@
 .mfx-legacy-table-view > .virtual-flow > .scroll-bar .increment-arrow,
 .mfx-legacy-table-view > .virtual-flow > .scroll-bar .decrement-button,
 .mfx-legacy-table-view > .virtual-flow > .scroll-bar .increment-button {
-    -fx-pref-width: 0;
-    -fx-pref-height: 0;
+	-fx-pref-width: 0;
+	-fx-pref-height: 0;
 }
 
 .mfx-legacy-table-view .scroll-bar:horizontal .increment-button,
 .mfx-legacy-table-view .scroll-bar:horizontal .decrement-button {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0.0em;
-    -fx-padding: 0.0 0.0 10.0 0.0;
+	-fx-background-color: transparent;
+	-fx-background-radius: 0.0em;
+	-fx-padding: 0.0 0.0 10.0 0.0;
 }
 
 
 .mfx-legacy-table-view .scroll-bar:vertical .increment-button,
 .mfx-legacy-table-view .scroll-bar:vertical .decrement-button {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0.0em;
-    -fx-padding: 0.0 10.0 0.0 0.0;
+	-fx-background-color: transparent;
+	-fx-background-radius: 0.0em;
+	-fx-padding: 0.0 10.0 0.0 0.0;
 
 }
 
 .mfx-legacy-table-view .scroll-bar .increment-arrow,
 .mfx-legacy-table-view .scroll-bar .decrement-arrow {
-    -fx-shape: " ";
-    -fx-padding: 0.15em 0.0;
+	-fx-shape: " ";
+	-fx-padding: 0.15em 0.0;
 }
 
 .mfx-legacy-table-view .scroll-bar:horizontal .increment-arrow,
 .mfx-legacy-table-view .scroll-bar:horizontal .decrement-arrow {
-    -fx-shape: " ";
-    -fx-padding: 0.0 0.05em;
+	-fx-shape: " ";
+	-fx-padding: 0.0 0.05em;
 }
 
 .mfx-legacy-table-view .scroll-bar:vertical .increment-arrow,
 .mfx-legacy-table-view .scroll-bar:vertical .decrement-arrow {
-    -fx-shape: " ";
-    -fx-padding: 0.0 0.05em;
+	-fx-shape: " ";
+	-fx-padding: 0.0 0.05em;
 }
 
 /* Customize ScrollBars */
 
 .mfx-legacy-table-view .mfx-scroll-bar:horizontal .track {
-    -fx-background-color: -mfx-track-color;
-    -fx-border-color: transparent;
-    -fx-background-radius: 2.0em;
-    -fx-border-radius: 2.0em;
-    -fx-background-insets: 3;
+	-fx-background-color: -mfx-track-color;
+	-fx-border-color: transparent;
+	-fx-background-radius: 2.0em;
+	-fx-border-radius: 2.0em;
+	-fx-background-insets: 3;
 }
 
 .mfx-legacy-table-view .mfx-scroll-bar:vertical .track {
-    -fx-background-color: -mfx-track-color;
-    -fx-border-color: transparent;
-    -fx-background-radius: 2.0em;
-    -fx-border-radius: 2.0em;
-    -fx-background-insets: 3;
+	-fx-background-color: -mfx-track-color;
+	-fx-border-color: transparent;
+	-fx-background-radius: 2.0em;
+	-fx-border-radius: 2.0em;
+	-fx-background-insets: 3;
 }
 
 .mfx-legacy-table-view .mfx-scroll-bar .decrement-arrow,
 .mfx-legacy-table-view .mfx-scroll-bar .increment-arrow {
-    -fx-pref-width: 0;
-    -fx-pref-height: 0;
+	-fx-pref-width: 0;
+	-fx-pref-height: 0;
 }
 
 .mfx-legacy-table-view .mfx-scroll-bar:vertical {
-    -fx-background-color: transparent;
-    -fx-pref-width: 12;
-    -fx-pref-height: 12;
-    -fx-padding: 5 0.5 5 0.5;
+	-fx-background-color: transparent;
+	-fx-pref-width: 12;
+	-fx-pref-height: 12;
+	-fx-padding: 5 0.5 5 0.5;
 }
 
 .mfx-legacy-table-view .mfx-scroll-bar:horizontal {
-    -fx-background-color: transparent;
-    -fx-pref-width: 12;
-    -fx-pref-height: 12;
-    -fx-padding: 0.5 5 0.5 5;
+	-fx-background-color: transparent;
+	-fx-pref-width: 12;
+	-fx-pref-height: 12;
+	-fx-padding: 0.5 5 0.5 5;
 }
 
 .mfx-legacy-table-view .mfx-scroll-bar:horizontal .thumb,
 .mfx-legacy-table-view .mfx-scroll-bar:vertical .thumb {
-    -fx-background-color: -mfx-thumb-color;
-    -fx-background-insets: 2.0, 0.0, 0.0;
-    -fx-background-radius: 2.0em;
+	-fx-background-color: -mfx-thumb-color;
+	-fx-background-insets: 2.0, 0.0, 0.0;
+	-fx-background-radius: 2.0em;
 }
 
 .mfx-legacy-table-view .mfx-scroll-bar:horizontal .thumb:hover,
 .mfx-legacy-table-view .mfx-scroll-bar:vertical .thumb:hover {
-    -fx-background-color: -mfx-thumb-hover-color;
-    -fx-background-insets: 1.5, 0.0, 0.0;
-    -fx-background-radius: 2.0em;
+	-fx-background-color: -mfx-thumb-hover-color;
+	-fx-background-insets: 1.5, 0.0, 0.0;
+	-fx-background-radius: 2.0em;
 }
 

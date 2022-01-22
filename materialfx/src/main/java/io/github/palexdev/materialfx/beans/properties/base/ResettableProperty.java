@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -22,36 +22,37 @@ import javafx.beans.property.Property;
 
 /**
  * Base interface for all resettable properties.
+ *
  * @param <T>
  */
 public interface ResettableProperty<T> extends Property<T> {
 
-    /**
-     * Sets the property's value to the default value.
-     */
-    default void reset() {
-        setValue(getDefaultValue());
-    }
+	/**
+	 * Sets the property's value to the default value.
+	 */
+	default void reset() {
+		setValue(getDefaultValue());
+	}
 
-    boolean isFireChangeOnReset();
+	boolean isFireChangeOnReset();
 
-    /**
-     * Specifies if the property should fire a change event when it is reset or not.
-     */
-    void setFireChangeOnReset(boolean fireChangeOnReset);
+	/**
+	 * Specifies if the property should fire a change event when it is reset or not.
+	 */
+	void setFireChangeOnReset(boolean fireChangeOnReset);
 
-    /**
-     * Specifies if the property has been reset.
-     */
-    boolean hasBeenReset();
+	/**
+	 * Specifies if the property has been reset.
+	 */
+	boolean hasBeenReset();
 
-    /**
-     * @return the property's default value
-     */
-    T getDefaultValue();
+	/**
+	 * @return the property's default value
+	 */
+	T getDefaultValue();
 
-    /**
-     * Sets the property's default value to the given value.
-     */
-    void setDefaultValue(T defaultValue);
+	/**
+	 * Sets the property's default value to the given value.
+	 */
+	void setDefaultValue(T defaultValue);
 }

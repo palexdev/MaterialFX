@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -24,22 +24,22 @@ import java.util.Iterator;
 import java.util.Stack;
 
 public class TreeItemIterator<T> implements Iterator<AbstractMFXTreeItem<T>> {
-    private final Stack<AbstractMFXTreeItem<T>> stack = new Stack<>();
+	private final Stack<AbstractMFXTreeItem<T>> stack = new Stack<>();
 
-    public TreeItemIterator(AbstractMFXTreeItem<T> item) {
-        stack.push(item);
-    }
+	public TreeItemIterator(AbstractMFXTreeItem<T> item) {
+		stack.push(item);
+	}
 
-    @Override
-    public boolean hasNext() {
-        return !stack.isEmpty();
-    }
+	@Override
+	public boolean hasNext() {
+		return !stack.isEmpty();
+	}
 
-    @Override
-    public AbstractMFXTreeItem<T> next() {
-        AbstractMFXTreeItem<T> nextItem = stack.pop();
-        nextItem.getItems().forEach(stack::push);
+	@Override
+	public AbstractMFXTreeItem<T> next() {
+		AbstractMFXTreeItem<T> nextItem = stack.pop();
+		nextItem.getItems().forEach(stack::push);
 
-        return nextItem;
-    }
+		return nextItem;
+	}
 }

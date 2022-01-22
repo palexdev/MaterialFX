@@ -1,0 +1,133 @@
+/*
+ * Copyright (C) 2022 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import '../fonts/Fonts.css';
+@import 'Common.css';
+@import 'MFXColors.css';
+
+/**************************************************
+ * Date Pickers
+**************************************************/
+#custDatePicker {
+	-fx-background-color: #007BF6;
+	-fx-border-color: transparent;
+	-fx-border-radius: 0;
+
+	-fx-font-family: "Visby Round CF Medium";
+	-fx-text-fill: white;
+}
+
+#custDatePicker .floating-text {
+	-fx-background-color: transparent;
+
+	-fx-font-family: "Visby Round CF Demi Bold";
+	-fx-text-fill: white;
+}
+
+#custDatePicker .icon {
+	-mfx-color: white;
+}
+
+#custDatePicker .date-picker-popup .content {
+	-fx-background-color: #007BF6;
+	-fx-border-color: transparent;
+	-fx-border-radius: 0;
+}
+
+#custDatePicker .date-picker-popup .left-arrow:disabled,
+#custDatePicker .date-picker-popup .right-arrow:disabled {
+	-fx-opacity: 0.8;
+}
+
+#custDatePicker .date-picker-popup .left-arrow .mfx-font-icon,
+#custDatePicker .date-picker-popup .right-arrow .mfx-font-icon {
+	-mfx-color: white;
+}
+
+#custDatePicker .date-picker-popup .months-combo,
+#custDatePicker .date-picker-popup .years-combo {
+	-fx-border-color: transparent;
+	-fx-border-radius: 0;
+	-fx-background-color: white;
+	-fx-text-fill: -mfx-text-he;
+
+	-fx-padding: 4;
+	-fx-background-insets: 0;
+	-fx-font-family: "Visby Round CF Medium";
+}
+
+#custDatePicker .date-picker-popup .months-combo:focused,
+#custDatePicker .date-picker-popup .years-combo:focused {
+	-fx-text-fill: #007BF6;
+}
+
+#custDatePicker .date-picker-popup .months-combo:focused .caret .mfx-font-icon,
+#custDatePicker .date-picker-popup .years-combo:focused .caret .mfx-font-icon {
+	-mfx-color: #007BF6;
+}
+
+#custDatePicker .date-picker-popup .months-combo .virtual-flow,
+#custDatePicker .date-picker-popup .years-combo .virtual-flow {
+	-track-color: derive(#007BF6, 100%);
+	-thumb-color: derive(#007BF6, 70%);
+	-thumb-hover-color: derive(#007BF6, 45%);
+}
+
+#custDatePicker .date-picker-popup .months-combo .virtual-flow .mfx-combo-box-cell,
+#custDatePicker .date-picker-popup .years-combo .virtual-flow .mfx-combo-box-cell {
+	-fx-font-family: 'Visby Round CF Medium';
+}
+
+#custDatePicker .date-picker-popup .months-combo .virtual-flow .mfx-combo-box-cell:selected .label,
+#custDatePicker .date-picker-popup .years-combo .virtual-flow .mfx-combo-box-cell:selected .label {
+	-fx-text-fill: #007BF6;
+}
+
+#custDatePicker .date-picker-popup .months-combo .virtual-flow .mfx-combo-box-cell:hover,
+#custDatePicker .date-picker-popup .years-combo .virtual-flow .mfx-combo-box-cell:hover,
+#custDatePicker .date-picker-popup .months-combo .virtual-flow .mfx-combo-box-cell:selected,
+#custDatePicker .date-picker-popup .years-combo .virtual-flow .mfx-combo-box-cell:selected {
+	-fx-background-color: derive(#007BF6, 130%);
+}
+
+#custDatePicker .date-picker-popup .week-day {
+	-fx-font-family: 'Visby Round CF Bold';
+	-fx-text-fill: white;
+}
+
+#custDatePicker .date-picker-popup .mfx-date-cell {
+	-fx-font-family: 'Visby Round CF Medium';
+	-fx-text-fill: white;
+}
+
+#custDatePicker .date-picker-popup .mfx-date-cell:extra {
+	-fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+#custDatePicker .date-picker-popup .mfx-date-cell:current {
+	-fx-background-color: transparent;
+	-fx-border-color: white;
+	-fx-border-width: 2;
+	-fx-font-family: 'Visby Round CF Demi Bold';
+}
+
+#custDatePicker .date-picker-popup .mfx-date-cell:selected {
+	-fx-background-color: white;
+	-fx-font-family: 'Visby Round CF Bold';
+	-fx-text-fill: #007BF6;
+}

@@ -1,0 +1,171 @@
+/*
+ * Copyright (C) 2022 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import "Fonts.css";
+@import "MFXColors.css";
+
+/********************
+Base
+********************/
+.mfx-dialog {
+	-fx-background-color: white;
+	-fx-background-radius: 10;
+	-fx-border-color: #ebebeb;
+	-fx-border-radius: 10;
+	-fx-padding: 10;
+}
+
+.mfx-dialog #alwaysOnTop:hover {
+	-fx-background-color: derive(-mfx-purple, 140%);
+}
+
+.mfx-dialog #alwaysOnTop:hover .mfx-font-icon {
+	-mfx-color: derive(-mfx-purple, 30%);
+}
+
+.mfx-dialog:always-on-top #alwaysOnTop {
+	-fx-background-color: derive(-mfx-purple, 140%);
+}
+
+.mfx-dialog:always-on-top #alwaysOnTop .mfx-font-icon {
+	-mfx-color: derive(-mfx-purple, 30%);
+}
+
+.mfx-dialog #minimize:hover {
+	-fx-background-color: derive(-mfx-blue, 105%);
+}
+
+.mfx-dialog #minimize:hover .mfx-font-icon {
+	-mfx-color: -mfx-blue;
+}
+
+.mfx-dialog #close:hover {
+	-fx-background-color: derive(-mfx-red, 90%);
+}
+
+.mfx-dialog #close:hover .mfx-font-icon {
+	-mfx-color: -mfx-red;
+}
+
+.mfx-dialog .header-label {
+	-fx-font-family: "Open Sans Bold";
+	-fx-font-size: 14;
+	-fx-text-fill: -mfx-text-he;
+	-fx-graphic-text-gap: 10;
+}
+
+.mfx-dialog .header-label .text {
+	-fx-font-smoothing-type: lcd;
+}
+
+.mfx-dialog .content-container {
+	-fx-padding: 10 0 10 0;
+}
+
+.mfx-dialog .content-container .scroll-bar:vertical {
+	-fx-pref-width: 15;
+}
+
+.mfx-dialog .content {
+	-fx-font-family: "Open Sans Regular";
+	-fx-text-fill: -mfx-text-he;
+}
+
+.mfx-dialog .content .text {
+	-fx-font-smoothing-type: lcd;
+}
+
+.mfx-dialog .actions-pane .mfx-button {
+	-fx-background-color: transparent;
+	-fx-background-radius: 5;
+	-fx-padding: 7 10 7 10;
+
+	-fx-font-family: "Open Sans Bold";
+	-fx-text-fill: -mfx-text-he;
+}
+
+.mfx-dialog .actions-pane .mfx-button .mfx-ripple-generator {
+	-mfx-auto-clip: true;
+	-mfx-background-opacity: 0.3;
+	-mfx-ripple-radius: 50;
+}
+
+.mfx-dialog .actions-pane .mfx-button .text {
+	-fx-font-smoothing-type: lcd;
+}
+
+.mfx-dialog .actions-pane .mfx-button:hover {
+	-fx-background-color: #ededf0;
+}
+
+/********************
+Info
+********************/
+.mfx-info-dialog .header-label .mfx-font-icon {
+	-mfx-color: derive(-mfx-blue, 60%);
+}
+
+.mfx-info-dialog .actions-pane .mfx-button {
+	-fx-text-fill: derive(-mfx-blue, -20%);
+}
+
+.mfx-info-dialog .actions-pane .mfx-button .mfx-ripple-generator {
+	-mfx-ripple-color: derive(-mfx-blue, 80%);
+}
+
+.mfx-info-dialog .actions-pane .mfx-button:hover {
+	-fx-background-color: derive(-mfx-blue, 110%);
+}
+
+/********************
+Warn
+********************/
+.mfx-warn-dialog .header-label .mfx-font-icon {
+	-mfx-color: derive(-mfx-orange, 35%);
+}
+
+.mfx-warn-dialog .actions-pane .mfx-button {
+	-fx-text-fill: derive(-mfx-orange, -5%);
+}
+
+.mfx-warn-dialog .actions-pane .mfx-button .mfx-ripple-generator {
+	-mfx-ripple-color: derive(-mfx-orange, 60%);
+}
+
+.mfx-warn-dialog .actions-pane .mfx-button:hover {
+	-fx-background-color: derive(-mfx-orange, 90%);
+}
+
+/********************
+Error
+********************/
+.mfx-error-dialog .header-label .mfx-font-icon {
+	-mfx-color: derive(-mfx-red, 20%);
+}
+
+.mfx-error-dialog .actions-pane .mfx-button {
+	-fx-text-fill: derive(-mfx-red, -5%);
+}
+
+.mfx-error-dialog .actions-pane .mfx-button .mfx-ripple-generator {
+	-mfx-ripple-color: derive(-mfx-red, 65%);
+}
+
+.mfx-error-dialog .actions-pane .mfx-button:hover {
+	-fx-background-color: derive(-mfx-red, 95%);
+}

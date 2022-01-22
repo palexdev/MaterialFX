@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -24,23 +24,23 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class TreeItemStream {
-    public static <T> Stream<AbstractMFXTreeItem<T>> stream(AbstractMFXTreeItem<T> item) {
-        return asStream(new TreeItemIterator<>(item));
-    }
+	public static <T> Stream<AbstractMFXTreeItem<T>> stream(AbstractMFXTreeItem<T> item) {
+		return asStream(new TreeItemIterator<>(item));
+	}
 
-    private static <T> Stream<AbstractMFXTreeItem<T>> asStream(TreeItemIterator<T> iterator) {
-        Iterable<AbstractMFXTreeItem<T>> iterable = () -> iterator;
+	private static <T> Stream<AbstractMFXTreeItem<T>> asStream(TreeItemIterator<T> iterator) {
+		Iterable<AbstractMFXTreeItem<T>> iterable = () -> iterator;
 
-        return StreamSupport.stream(
-                iterable.spliterator(),
-                false
-        );
-    }
+		return StreamSupport.stream(
+				iterable.spliterator(),
+				false
+		);
+	}
 
-    public static <T> Stream<AbstractMFXTreeItem<T>> flattenTree(final AbstractMFXTreeItem<T> item) {
-        return Stream.concat(
-                Stream.of(item),
-                item.getItems().stream().flatMap(TreeItemStream::flattenTree)
-        );
-    }
+	public static <T> Stream<AbstractMFXTreeItem<T>> flattenTree(final AbstractMFXTreeItem<T> item) {
+		return Stream.concat(
+				Stream.of(item),
+				item.getItems().stream().flatMap(TreeItemStream::flattenTree)
+		);
+	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -19,5 +19,5 @@
 /* This insets value is needed for fixing a strange layout issue
     that occurs whe the border is set to whatever color */
 .mfx-tree-item {
-    -fx-border-insets: -1;
+	-fx-border-insets: -1;
 }

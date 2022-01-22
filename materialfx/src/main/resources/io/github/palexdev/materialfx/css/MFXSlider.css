@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -20,71 +20,71 @@
 
 /* COLORS */
 .mfx-slider {
-    -mfx-main-color: rgb(98, 0, 238);
-    -mfx-main-color-hover: rgba(98, 0, 238, 0.1);
-    -mfx-main-color-pressed: rgba(98, 0, 238, 0.3);
-    -mfx-disabled-color: rgb(158, 158, 158);
+	-mfx-main-color: rgb(98, 0, 238);
+	-mfx-main-color-hover: rgba(98, 0, 238, 0.1);
+	-mfx-main-color-pressed: rgba(98, 0, 238, 0.3);
+	-mfx-disabled-color: rgb(158, 158, 158);
 }
 
 /* MAIN STYLING */
 .mfx-slider .track,
 .mfx-slider .bar {
-    -fx-arc-height: 6;
-    -fx-arc-width: 6;
+	-fx-arc-height: 6;
+	-fx-arc-width: 6;
 }
 
 .mfx-slider .track {
-    -fx-fill: derive(-mfx-main-color, 140%);
+	-fx-fill: derive(-mfx-main-color, 140%);
 }
 
 .mfx-slider .bar {
-    -fx-fill: -mfx-main-color;
+	-fx-fill: -mfx-main-color;
 }
 
 .mfx-slider .thumb-container .thumb {
-    -mfx-color: -mfx-main-color;
+	-mfx-color: -mfx-main-color;
 }
 
 .mfx-slider .thumb-container .thumb-radius {
-    -mfx-color: transparent;
+	-mfx-color: transparent;
 }
 
 .mfx-slider .thumb-container:hover .thumb-radius {
-    -mfx-color: -mfx-main-color-hover;
+	-mfx-color: -mfx-main-color-hover;
 }
 
 .mfx-slider .thumb-container:pressed .thumb-radius {
-    -mfx-color: -mfx-main-color-pressed;
+	-mfx-color: -mfx-main-color-pressed;
 }
 
 .mfx-slider .thumb-container .mfx-ripple-generator {
-    -mfx-ripple-color: -mfx-main-color;
+	-mfx-ripple-color: -mfx-main-color;
 }
 
 /* TICKS STYLING */
 .mfx-slider .tick-even,
 .mfx-slider .tick-odd {
-    -mfx-color: derive(-mfx-main-color, 30%);
+	-mfx-color: derive(-mfx-main-color, 30%);
 }
 
 .mfx-slider .axis-minor-tick-mark {
-    -fx-stroke: -mfx-main-color-hover;
+	-fx-stroke: -mfx-main-color-hover;
 }
 
 /* POPUP */
 #popupContent {
-    -fx-background-color: #6E6E6E;
-    -fx-background-radius: 6;
+	-fx-background-color: #6E6E6E;
+	-fx-background-radius: 6;
 }
 
 #popupText {
-    -fx-font-family: "Open Sans SemiBold";
-    -fx-font-size: 13;
-    -fx-text-fill: white;
+	-fx-font-family: "Open Sans SemiBold";
+	-fx-font-size: 13;
+	-fx-text-fill: white;
 }
 
 #popupCaret {
-    -mfx-color: #6E6E6E;
+	-mfx-color: #6E6E6E;
 }
 
 /* DISABLED */
@@ -92,14 +92,14 @@
 .mfx-slider:disabled .tick-even,
 .mfx-slider:disabled .tick-odd,
 .mfx-slider:disabled .thumb-container .thumb {
-    -mfx-color: -mfx-disabled-color;
-    -fx-fill: -mfx-disabled-color;
+	-mfx-color: -mfx-disabled-color;
+	-fx-fill: -mfx-disabled-color;
 }
 
 .mfx-slider:disabled .track {
-    -fx-fill: derive(-mfx-disabled-color, 75%);
+	-fx-fill: derive(-mfx-disabled-color, 75%);
 }
 
 .mfx-slider:disabled .axis-minor-tick-mark {
-    -fx-stroke: derive(-mfx-disabled-color, 60%)
+	-fx-stroke: derive(-mfx-disabled-color, 60%)
 }

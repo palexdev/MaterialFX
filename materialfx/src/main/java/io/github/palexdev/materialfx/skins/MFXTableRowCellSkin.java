@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -18,10 +18,12 @@
 
 package io.github.palexdev.materialfx.skins;
 
+import io.github.palexdev.materialfx.controls.BoundLabel;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
-import javafx.scene.control.Label;
+import javafx.scene.Node;
 import javafx.scene.control.SkinBase;
 import javafx.scene.layout.HBox;
+import javafx.scene.shape.Rectangle;
 
 /**
  * Default skin implementation for {@link MFXTableRowCell}.
@@ -30,68 +32,80 @@ import javafx.scene.layout.HBox;
  * the leading and the trailing nodes specified by {@link MFXTableRowCell#leadingGraphicProperty()},
  * {@link MFXTableRowCell#trailingGraphicProperty()}
  */
-public class MFXTableRowCellSkin extends SkinBase<MFXTableRowCell> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final HBox container;
-    private final Label label;
+public class MFXTableRowCellSkin<T, E> extends SkinBase<MFXTableRowCell<T, E>> {
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final HBox container;
+	private final BoundLabel label;
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXTableRowCellSkin(MFXTableRowCell rowCell) {
-        super(rowCell);
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXTableRowCellSkin(MFXTableRowCell<T, E> rowCell) {
+		super(rowCell);
 
-        label = new Label();
-        label.setId("dataLabel");
-        label.textProperty().bind(rowCell.textProperty());
+		label = new BoundLabel(rowCell);
 
-        container = new HBox(label);
-        container.spacingProperty().bind(rowCell.graphicTextGapProperty());
-        container.alignmentProperty().bind(rowCell.rowAlignmentProperty());
+		container = new HBox(rowCell.getGraphicTextGap(), label);
+		container.alignmentProperty().bind(rowCell.alignmentProperty());
 
-        if (rowCell.getLeadingGraphic() != null) {
-            container.getChildren().add(0, rowCell.getLeadingGraphic());
-        }
-        if (rowCell.getTrailingGraphic() != null) {
-            container.getChildren().add(rowCell.getTrailingGraphic());
-        }
+		Node leading = rowCell.getLeadingGraphic();
+		Node trailing = rowCell.getTrailingGraphic();
 
-        getChildren().setAll(container);
+		if (leading != null) container.getChildren().add(0, leading);
+		if (trailing != null) container.getChildren().add(trailing);
 
-        setListeners();
-    }
+		clip();
+		getChildren().setAll(container);
+		addListeners();
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
+	//================================================================================
+	// Methods
+	//================================================================================
 
-    /**
-     * Adds listeners for:
-     * <p>
-     * <p> - {@link MFXTableRowCell#leadingGraphicProperty()}: to allow changing the leading icon.
-     * <p> - {@link MFXTableRowCell#trailingGraphicProperty()}: to allow changing the trailing icon.
-     */
-    private void setListeners() {
-        MFXTableRowCell rowCell = getSkinnable();
+	/**
+	 * Specifies the behavior for the following changes/events:
+	 * <p> - leading graphic
+	 * <p> - trailing graphic
+	 */
+	private void addListeners() {
+		MFXTableRowCell<T, E> rowCell = getSkinnable();
 
-        rowCell.leadingGraphicProperty().addListener((observable, oldValue, newValue) -> {
-            if (oldValue != null) {
-                container.getChildren().remove(oldValue);
-            }
-            if (newValue != null) {
-                container.getChildren().add(0, newValue);
-            }
-        });
+		rowCell.leadingGraphicProperty().addListener((observable, oldValue, newValue) -> {
+			if (oldValue != null) container.getChildren().remove(oldValue);
+			if (newValue != null) container.getChildren().add(0, newValue);
+		});
+		rowCell.trailingGraphicProperty().addListener((observable, oldValue, newValue) -> {
+			if (oldValue != null) container.getChildren().remove(oldValue);
+			if (newValue != null) container.getChildren().add(newValue);
+		});
+	}
 
-        rowCell.trailingGraphicProperty().addListener((observable, oldValue, newValue) -> {
-            if (oldValue != null) {
-                container.getChildren().remove(oldValue);
-            }
-            if (newValue != null) {
-                container.getChildren().add(newValue);
-            }
-        });
-    }
+	/**
+	 * Responsible for clipping the cell.
+	 * This is needed for nodes that are not text nodes, to also hide graphic.
+	 */
+	protected void clip() {
+		MFXTableRowCell<T, E> rowCell = getSkinnable();
+		Rectangle clip = new Rectangle();
+		clip.widthProperty().bind(rowCell.widthProperty());
+		clip.heightProperty().bind(rowCell.heightProperty());
+		rowCell.setClip(clip);
+	}
+
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
+	@Override
+	protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+		MFXTableRowCell<T, E> rowCell = getSkinnable();
+		double leading = rowCell.getLeadingGraphic() != null ? rowCell.getLeadingGraphic().prefWidth(-1) : 0;
+		double trailing = rowCell.getTrailingGraphic() != null ? rowCell.getTrailingGraphic().prefWidth(-1) : 0;
+		return Math.max(
+				super.computePrefWidth(height, topInset, rightInset, bottomInset, leftInset),
+				leftInset + leading + label.prefWidth(-1) + trailing + rightInset
+		);
+	}
 }

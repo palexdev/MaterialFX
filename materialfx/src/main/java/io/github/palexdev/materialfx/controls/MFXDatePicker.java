@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -19,548 +19,539 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
-import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
+import io.github.palexdev.materialfx.beans.Alignment;
+import io.github.palexdev.materialfx.beans.NumberRange;
+import io.github.palexdev.materialfx.beans.PositionBean;
+import io.github.palexdev.materialfx.beans.properties.NumberRangeProperty;
+import io.github.palexdev.materialfx.beans.properties.functional.BiFunctionProperty;
+import io.github.palexdev.materialfx.beans.properties.functional.ConsumerProperty;
+import io.github.palexdev.materialfx.beans.properties.functional.FunctionProperty;
+import io.github.palexdev.materialfx.beans.properties.functional.SupplierProperty;
+import io.github.palexdev.materialfx.controls.cell.MFXDateCell;
+import io.github.palexdev.materialfx.enums.FloatMode;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
-import io.github.palexdev.materialfx.skins.MFXDatePickerContent;
+import io.github.palexdev.materialfx.skins.MFXDatePickerSkin;
+import io.github.palexdev.materialfx.utils.DateTimeUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.css.*;
-import javafx.geometry.*;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.PopupControl;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.StrokeLineCap;
+import io.github.palexdev.materialfx.utils.others.ReusableScheduledExecutor;
+import io.github.palexdev.materialfx.utils.others.dates.DateStringConverter;
+import io.github.palexdev.materialfx.utils.others.dates.DayOfWeekStringConverter;
+import io.github.palexdev.materialfx.utils.others.dates.MonthStringConverter;
+import javafx.beans.property.*;
+import javafx.css.PseudoClass;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
+import javafx.scene.control.Skin;
+import javafx.util.StringConverter;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.time.*;
+import java.time.format.FormatStyle;
+import java.time.format.TextStyle;
+import java.time.temporal.ChronoUnit;
+import java.util.Locale;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
- * This is the implementation of a date picker following Google's material design guidelines in JavaFX.
- * <p>
- * Extends {@code VBox}, redefines the style class to "mfx-date-picker" for usage in CSS.
- * <p>A few notes:</p>
- * <p>
- * Extends {@code VBox} rather than extending {@code DatePicker} because JavaFX's date picker code is a huge mess
- * and also bad designed.
- * Rather than using a {@code ComboBox} this control uses a simple {@code Label} with a {@code MFXFontIcon}.
- * <p>
- * The {@code Label} value is bound to the {@code DatePicker} value and it's formatted using the set {@link #dateFormatter}.
- * <p>
- * To get the selected date use {@link #getDate()}.
- * <p>
- * You can also retrieve the instance of the {@code DatePicker} by using {@link #getDatePicker()},
- * however I don't recommend it since this control doesn't use anything other than its value.
+ * A new, completely made from scratch, modern {@code DatePicker} for JavaFX.
+ * <p></p>
+ * A date picker is basically a text field which shows a popup containing a calendar
+ * for a specific month. For this reason, extends {@link MFXTextField}.
+ * <p></p>
+ * Compared to the previous implementation (that was just a wrapper for the original
+ * DatePicker), and the JavaFX's one, the new implementation is much simpler and customizable.
+ * <p></p>
+ * The main features of this new date picker are:
+ * <p> - Floating text (inherited from {@link MFXTextField})
+ * <p> - Allows to fully control the popup (offset, alignment)
+ * <p> - Has three separate converters to convert {@link LocalDate}, {@link Month} and {@link DayOfWeek} to/from String.
+ * Those are specified with {@link Supplier}s. The default converters always take into account the date picker's {@link #localeProperty()}
+ * <p> - Has a cell factory function to change the cells
+ * <p> - Allows specifying what to do when editing the text on confirm or cancel (by default, specifies in the skin, ENTER to commit
+ * and Ctrl+Shift+Z to cancel
+ * <p> - Allows to easily change the language by setting the {@link #localeProperty()}
+ * <p> - Has a property to get the current date, plus it's possible to automatically or programmatically update it as days pass
+ * <p> - Allows to specify the range of years for the date picker
+ * <p> - Allows to specify the starting {@link YearMonth} of the calendar
+ * <p> - Also adds a new PseudoClass that activates when the popup opens
+ * <p> - Since inherits from {@link MFXTextField}, it can be also used as a Label, disabling edit and selection.
+ * <p></p>
+ * The next one is probably a very unique one. Unlike the old one or the JavaFX's one, this date picker
+ * allows you to easily change the way the calendar is filled by setting the {@link #gridAlgorithmProperty()}.
+ * By default the date picker uses {@link DateTimeUtils#fullIntMonthMatrix(Locale, YearMonth)} to generate a 6x7
+ * grid (rows x columns, it's a bi-dimensional array)
  */
-public class MFXDatePicker extends VBox {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private static final StyleablePropertyFactory<MFXDatePicker> FACTORY = new StyleablePropertyFactory<>(VBox.getClassCssMetaData());
-    private final String STYLE_CLASS = "mfx-date-picker";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXDatePicker.css");
-
-    private final DatePicker datePicker;
-    private final ObjectProperty<DateTimeFormatter> dateFormatter = new SimpleObjectProperty<>(DateTimeFormatter.ofPattern("dd/M/yyyy"));
-
-    private StackPane stackPane;
-    private Label value;
-    private MFXFontIcon calendar;
-    private Line line;
-    private PopupControl popup;
-    private MFXDatePickerContent datePickerContent;
-    private MFXCircleRippleGenerator rippleGenerator;
-
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXDatePicker() {
-        this.datePicker = new DatePicker();
-        initialize();
-    }
-
-    public MFXDatePicker(LocalDate localDate) {
-        this.datePicker = new DatePicker(localDate);
-        initialize();
-    }
-
-    //================================================================================
-    // Methods
-    //================================================================================
-    private void initialize() {
-        getStyleClass().add(STYLE_CLASS);
-
-        setMinWidth(92);
-        setMaxSize(USE_PREF_SIZE, USE_PREF_SIZE);
-
-        value = new Label("");
-        value.getStyleClass().setAll("value");
-        value.setMinWidth(64);
-        calendar = new MFXFontIcon("mfx-calendar-semi-black");
-        calendar.getStyleClass().add("calendar-icon");
-        calendar.setColor(getPickerColor());
-        calendar.setSize(20);
-        stackPane = new StackPane(value, calendar);
-        stackPane.setPadding(new Insets(5, -2.5, 5, 5));
-        stackPane.setAlignment(Pos.BOTTOM_LEFT);
-        StackPane.setAlignment(calendar, Pos.BOTTOM_RIGHT);
-
-        line = new Line();
-        line.getStyleClass().add("line");
-        line.setManaged(false);
-        line.setSmooth(true);
-        line.strokeWidthProperty().bind(lineStrokeWidth);
-        line.strokeLineCapProperty().bind(lineStrokeCap);
-        line.setStroke(getLineColor());
-        line.endXProperty().bind(widthProperty().add(10));
-
-        popup = new PopupControl();
-        datePickerContent = new MFXDatePickerContent(datePicker.getValue(), getDateFormatter());
-        popup.getScene().setRoot(datePickerContent);
-        popup.setAutoHide(true);
-
-        getChildren().addAll(stackPane, line);
-        addListeners();
-
-        if (datePicker.getValue() != null) {
-            value.setText(datePicker.getValue().format(getDateFormatter()));
-        }
-
-        datePickerContent.updateColor((Color) getPickerColor());
-
-        rippleGenerator = new MFXCircleRippleGenerator(this);
-        rippleGenerator.setManaged(false);
-        rippleGenerator.setAnimateBackground(false);
-        rippleGenerator.setAnimationSpeed(2.0);
-        rippleGenerator.setClipSupplier(() -> null);
-        rippleGenerator.setRadiusMultiplier(1.7);
-        rippleGenerator.setRippleColor(Color.rgb(98, 0, 238, 0.3));
-        rippleGenerator.setRipplePositionFunction(event -> {
-            RipplePosition ripplePosition = new RipplePosition();
-            ripplePosition.setXPosition(calendar.getBoundsInParent().getCenterX());
-            ripplePosition.setYPosition(calendar.getBoundsInParent().getCenterY());
-            return ripplePosition;
-        });
-        getChildren().add(0, rippleGenerator);
-    }
-
-    /**
-     * Adds listeners to date picker content currentDateProperty, to {@link #dateFormatter}, to {@link #pickerColor},
-     * to {@link #lineColor}, to calendar icon's {@link MFXFontIcon#colorProperty()}, to {@link #colorText} and disabled property.
-     * <p>
-     * Adds event handler to calendar icon.
-     * <p>
-     * Binds date picker content animateCalendarProperty to {@link #animateCalendar}
-     */
-    private void addListeners() {
-        calendar.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            rippleGenerator.generateRipple(null);
-            if (!popup.isShowing()) {
-                Point2D point = NodeUtils.pointRelativeTo(this, datePickerContent, HPos.CENTER, VPos.BOTTOM, 0, 0, true);
-                popup.show(this, snapPositionX(point.getX() - 4), snapPositionY(point.getY() + 2));
-            } else {
-                popup.hide();
-            }
-        });
-
-        datePickerContent.currentDateProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                return;
-            }
-
-            datePicker.setValue(newValue);
-            value.setText(newValue.format(datePickerContent.getDateFormatter()));
-        });
-
-        datePickerContent.currentDateProperty().addListener((observable, oldValue, newValue) -> {
-            if (!isCloseOnDaySelected()) {
-                return;
-            }
-
-            if (newValue == null || oldValue == null) {
-                return;
-            }
-
-            if (oldValue.getYear() == newValue.getYear() ||
-                    oldValue.getMonth() == newValue.getMonth()) {
-                if (oldValue.getDayOfMonth() != newValue.getDayOfMonth()) {
-                    popup.hide();
-                }
-            }
-        });
-
-        dateFormatter.addListener((observable, oldValue, newValue) -> {
-            LocalDate date = LocalDate.parse(value.getText(), oldValue);
-            value.setText(date.format(newValue));
-            datePickerContent.setDateFormatter(newValue);
-        });
-
-        pickerColor.addListener((observable, oldValue, newValue) -> {
-            Color color;
-            if (newValue instanceof Color) {
-                color = (Color) newValue;
-            } else {
-                throw new IllegalStateException("Paint values are not supported, change it to Color");
-            }
-
-            calendar.setColor(color);
-            datePickerContent.updateColor(color);
-            if (isColorText()) {
-                value.setTextFill(newValue);
-            } else {
-                value.setTextFill(Color.BLACK);
-            }
-        });
-        lineColor.addListener((observable, oldValue, newValue) -> {
-            if (!isDisabled()) {
-                line.setStroke(newValue);
-            }
-        });
-        calendar.colorProperty().addListener((observable, oldValue, newValue) -> {
-            if (!isDisabled()) {
-                calendar.setColor(newValue);
-            } else {
-                calendar.setColor(Color.LIGHTGRAY);
-            }
-        });
-        colorText.addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                value.setTextFill(getPickerColor());
-            } else {
-                value.setTextFill(Color.BLACK);
-            }
-        });
-
-        datePickerContent.animateCalendarProperty().bind(animateCalendar);
-
-        disabledProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                line.setStroke(Color.LIGHTGRAY);
-                calendar.setColor(Color.LIGHTGRAY);
-            } else {
-                line.setStroke(getLineColor());
-                calendar.setColor(getPickerColor());
-            }
-        });
-
-        popup.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getCode() == KeyCode.ENTER && isCloseOnEnter()) {
-                popup.hide();
-            }
-        });
-    }
-
-    public MFXDatePickerContent getContent() {
-        return datePickerContent;
-    }
-
-    public DateTimeFormatter getDateFormatter() {
-        return dateFormatter.get();
-    }
-
-    public ObjectProperty<DateTimeFormatter> dateFormatterProperty() {
-        return dateFormatter;
-    }
-
-    public void setDateFormatter(DateTimeFormatter dateFormatter) {
-        this.dateFormatter.set(dateFormatter);
-    }
-
-    //================================================================================
-    // Styleable Properties
-    //================================================================================
-    private final StyleableObjectProperty<Paint> pickerColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.PICKER_COLOR,
-            this,
-            "pickerColor",
-            Color.rgb(98, 0, 238)
-    );
-
-    private final StyleableObjectProperty<Paint> lineColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.LINE_COLOR,
-            this,
-            "lineColor",
-            Color.rgb(98, 0, 238, 0.7)
-    );
-
-    private final StyleableDoubleProperty lineStrokeWidth = new SimpleStyleableDoubleProperty(
-            StyleableProperties.LINE_STROKE_WIDTH,
-            this,
-            "lineStrokeWidth",
-            2.0
-    );
-
-    private final StyleableObjectProperty<StrokeLineCap> lineStrokeCap = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.LINE_STROKE_CAP,
-            this,
-            "lineStrokeCap",
-            StrokeLineCap.ROUND
-    );
-
-    private final StyleableBooleanProperty colorText = new SimpleStyleableBooleanProperty(
-            StyleableProperties.COLOR_TEXT,
-            this,
-            "colorText",
-            false
-    );
-
-    private final StyleableBooleanProperty closeOnDaySelected = new SimpleStyleableBooleanProperty(
-            StyleableProperties.CLOSE_ON_DAY_SELECTED,
-            this,
-            "closeOnDaySelected",
-            true
-    );
-
-    private final StyleableBooleanProperty closeOnEnter = new SimpleStyleableBooleanProperty(
-            StyleableProperties.CLOSE_ON_ENTER,
-            this,
-            "closeOnEnter",
-            false
-    );
-
-    private final StyleableBooleanProperty animateCalendar = new SimpleStyleableBooleanProperty(
-            StyleableProperties.ANIMATE_CALENDAR,
-            this,
-            "animateCalendar",
-            true
-    );
-
-    public Paint getPickerColor() {
-        return pickerColor.get();
-    }
-
-    /**
-     * Specifies the main color of the date picker and its content.
-     */
-    public StyleableObjectProperty<Paint> pickerColorProperty() {
-        return pickerColor;
-    }
-
-    public void setPickerColor(Paint pickerColor) {
-        this.pickerColor.set(pickerColor);
-    }
-
-    public Paint getLineColor() {
-        return lineColor.get();
-    }
-
-    /**
-     * Specifies the line color of the date picker.
-     */
-    public StyleableObjectProperty<Paint> lineColorProperty() {
-        return lineColor;
-    }
-
-    public void setLineColor(Paint lineColor) {
-        this.lineColor.set(lineColor);
-    }
-
-    public double getLineStrokeWidth() {
-        return lineStrokeWidth.get();
-    }
-
-    /**
-     * Specifies the line's stroke width.
-     */
-    public StyleableDoubleProperty lineStrokeWidthProperty() {
-        return lineStrokeWidth;
-    }
-
-    public void setLineStrokeWidth(double lineStrokeWidth) {
-        this.lineStrokeWidth.set(lineStrokeWidth);
-    }
-
-    public StrokeLineCap getLineStrokeCap() {
-        return lineStrokeCap.get();
-    }
-
-    /**
-     * Specifies the line's stroke cap.
-     */
-    public StyleableObjectProperty<StrokeLineCap> lineStrokeCapProperty() {
-        return lineStrokeCap;
-    }
-
-    public void setLineStrokeCap(StrokeLineCap lineStrokeCap) {
-        this.lineStrokeCap.set(lineStrokeCap);
-    }
-
-    public boolean isColorText() {
-        return colorText.get();
-    }
-
-    /**
-     * Specifies if the date picker text should be colored too.
-     */
-    public StyleableBooleanProperty colorTextProperty() {
-        return colorText;
-    }
-
-    public void setColorText(boolean colorText) {
-        this.colorText.set(colorText);
-    }
-
-    public boolean isCloseOnDaySelected() {
-        return closeOnDaySelected.get();
-    }
-
-    /**
-     * Specifies if the date picker popup should close on day selected.
-     */
-    public StyleableBooleanProperty closeOnDaySelectedProperty() {
-        return closeOnDaySelected;
-    }
-
-    public void setCloseOnDaySelected(boolean closeOnDaySelected) {
-        this.closeOnDaySelected.set(closeOnDaySelected);
-    }
-
-    public boolean isCloseOnEnter() {
-        return closeOnEnter.get();
-    }
-
-    /**
-     * Specifies if the date picker popup should close on ENTER pressed.
-     */
-    public StyleableBooleanProperty closeOnEnterProperty() {
-        return closeOnEnter;
-    }
-
-    public void setCloseOnEnter(boolean closeOnEnter) {
-        this.closeOnEnter.set(closeOnEnter);
-    }
-
-    public boolean isAnimateCalendar() {
-        return animateCalendar.get();
-    }
-
-    /**
-     * Specifies if the month change should be animated.
-     */
-    public StyleableBooleanProperty animateCalendarProperty() {
-        return animateCalendar;
-    }
-
-    public void setAnimateCalendar(boolean animateCalendar) {
-        this.animateCalendar.set(animateCalendar);
-    }
-
-    //================================================================================
-    // CssMetaData
-    //================================================================================
-    private static class StyleableProperties {
-        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
-
-        private static final CssMetaData<MFXDatePicker, Paint> PICKER_COLOR =
-                FACTORY.createPaintCssMetaData(
-                        "-mfx-main-color",
-                        MFXDatePicker::pickerColorProperty,
-                        Color.rgb(98, 0, 238)
-                );
-
-        private static final CssMetaData<MFXDatePicker, Paint> LINE_COLOR =
-                FACTORY.createPaintCssMetaData(
-                        "-mfx-line-color",
-                        MFXDatePicker::lineColorProperty,
-                        Color.rgb(90, 0, 238, 0.7)
-                );
-
-        private static final CssMetaData<MFXDatePicker, Number> LINE_STROKE_WIDTH =
-                FACTORY.createSizeCssMetaData(
-                        "-mfx-line-stroke-width",
-                        MFXDatePicker::lineStrokeWidthProperty,
-                        2.0
-                );
-
-        private static final CssMetaData<MFXDatePicker, StrokeLineCap> LINE_STROKE_CAP =
-                FACTORY.createEnumCssMetaData(
-                        StrokeLineCap.class,
-                        "-mfx-line-stroke-cap",
-                        MFXDatePicker::lineStrokeCapProperty,
-                        StrokeLineCap.ROUND
-                );
-
-        private static final CssMetaData<MFXDatePicker, Boolean> COLOR_TEXT =
-                FACTORY.createBooleanCssMetaData(
-                        "-mfx-color-text",
-                        MFXDatePicker::colorTextProperty,
-                        false
-                );
-
-        private static final CssMetaData<MFXDatePicker, Boolean> CLOSE_ON_DAY_SELECTED =
-                FACTORY.createBooleanCssMetaData(
-                        "-mfx-close-on-day-selected",
-                        MFXDatePicker::closeOnDaySelectedProperty,
-                        true
-                );
-
-        private static final CssMetaData<MFXDatePicker, Boolean> CLOSE_ON_ENTER =
-                FACTORY.createBooleanCssMetaData(
-                        "-mfx-close-on-enter",
-                        MFXDatePicker::closeOnEnterProperty,
-                        false
-                );
-
-
-        private static final CssMetaData<MFXDatePicker, Boolean> ANIMATE_CALENDAR =
-                FACTORY.createBooleanCssMetaData(
-                        "-mfx-animate-calendar",
-                        MFXDatePicker::animateCalendarProperty,
-                        true
-                );
-
-        static {
-            cssMetaDataList = List.of(
-                    PICKER_COLOR, COLOR_TEXT, CLOSE_ON_DAY_SELECTED, ANIMATE_CALENDAR,
-                    LINE_COLOR, LINE_STROKE_WIDTH, LINE_STROKE_CAP
-            );
-        }
-
-    }
-
-    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
-        return StyleableProperties.cssMetaDataList;
-    }
-
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
-
-    @Override
-    public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
-        return MFXDatePicker.getControlCssMetaDataList();
-    }
-
-    @Override
-    protected void layoutChildren() {
-        super.layoutChildren();
-
-        double ly = snapPositionY(stackPane.getBoundsInParent().getMaxY() + (line.getStrokeWidth() / 2.5));
-        line.relocate(-3, ly);
-    }
-
-    //================================================================================
-    // Delegate Methods
-    //================================================================================
-    public DatePicker getDatePicker() {
-        return datePicker;
-    }
-
-    public LocalDate getDate() {
-        return datePicker.getValue();
-    }
+public class MFXDatePicker extends MFXTextField {
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final String STYLE_CLASS = "mfx-date-picker";
+	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXDatePicker.css");
+
+	// Popup Properties
+	private final ReadOnlyBooleanWrapper showing = new ReadOnlyBooleanWrapper(false);
+	private final ObjectProperty<Alignment> popupAlignment = new SimpleObjectProperty<>(Alignment.of(HPos.CENTER, VPos.BOTTOM));
+	private final DoubleProperty popupOffsetX = new SimpleDoubleProperty(0);
+	private final DoubleProperty popupOffsetY = new SimpleDoubleProperty(3);
+
+	private final ObjectProperty<LocalDate> value = new SimpleObjectProperty<>();
+	private final SupplierProperty<StringConverter<LocalDate>> converterSupplier = new SupplierProperty<>();
+	private final SupplierProperty<StringConverter<Month>> monthConverterSupplier = new SupplierProperty<>();
+	private final SupplierProperty<StringConverter<DayOfWeek>> dayOfWeekConverterSupplier = new SupplierProperty<>();
+	private final FunctionProperty<LocalDate, MFXDateCell> cellFactory = new FunctionProperty<>();
+	private final ConsumerProperty<String> onCommit = new ConsumerProperty<>(s -> setValue(getConverterSupplier().get().fromString(s)));
+	private final ConsumerProperty<String> onCancel = new ConsumerProperty<>(s -> setText(getConverterSupplier().get().toString(getValue())));
+
+	private final ObjectProperty<Locale> locale = new SimpleObjectProperty<>(Locale.getDefault()) {
+		@Override
+		public void set(Locale newValue) {
+			if (newValue == null) {
+				super.set(Locale.getDefault());
+				return;
+			}
+			super.set(newValue);
+		}
+	};
+	private final ReadOnlyObjectWrapper<LocalDate> currentDate = new ReadOnlyObjectWrapper<>(LocalDate.now());
+	private final NumberRangeProperty<Integer> yearsRange = new NumberRangeProperty<>(NumberRange.of(1900, 2100)) {
+		@Override
+		public void set(NumberRange<Integer> newValue) {
+			if (newValue == null) {
+				super.set(NumberRange.of(1900, 2100));
+				return;
+			}
+			super.set(newValue);
+		}
+	};
+	private final BiFunctionProperty<Locale, YearMonth, Integer[][]> gridAlgorithm = new BiFunctionProperty<>(DateTimeUtils::fullIntMonthMatrix) {
+		@Override
+		public void set(BiFunction<Locale, YearMonth, Integer[][]> newValue) {
+			if (newValue == null) {
+				super.set(DateTimeUtils::partialIntMonthMatrix);
+				return;
+			}
+			super.set(newValue);
+		}
+	};
+	private YearMonth startingYearMonth;
+	private boolean closePopupOnChange = true;
+	private final ReusableScheduledExecutor executor;
+
+	protected static final PseudoClass POPUP_OPEN_PSEUDO_CLASS = PseudoClass.getPseudoClass("popup");
+
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXDatePicker() {
+		this(Locale.getDefault());
+	}
+
+	public MFXDatePicker(Locale locale) {
+		this(locale, YearMonth.now());
+	}
+
+	public MFXDatePicker(Locale locale, YearMonth startingYearMonth) {
+		setLocale(locale);
+		this.startingYearMonth = startingYearMonth;
+		this.executor = new ReusableScheduledExecutor(Executors.newScheduledThreadPool(
+				1,
+				r -> {
+					Thread thread = new Thread(r);
+					thread.setDaemon(true);
+					return thread;
+				}
+		));
+		initialize();
+	}
+
+	//================================================================================
+	// Methods
+	//================================================================================
+	private void initialize() {
+		getStyleClass().add(STYLE_CLASS);
+		setPrefWidth(200);
+		setFloatMode(FloatMode.DISABLED);
+
+		showing.addListener(invalidated -> pseudoClassStateChanged(POPUP_OPEN_PSEUDO_CLASS, showing.get()));
+
+		defaultCellFactory();
+		defaultConverters();
+		defaultIcon();
+	}
+
+	/**
+	 * Sets/Re-sets the default cell factory.
+	 */
+	public void defaultCellFactory() {
+		setCellFactory(date -> new MFXDateCell(this, date));
+	}
+
+	/**
+	 * Sets/Re-sets the default converters for {@link LocalDate}, {@link Month}, {@link DayOfWeek}.
+	 * <p></p>
+	 * For:
+	 * <p> - LocalDate: uses {@link DateStringConverter} with {@link FormatStyle#MEDIUM}
+	 * <p> - Month: uses {@link MonthStringConverter} with the date picker's locale and {@link TextStyle#FULL}
+	 * <p> - DayOfWeek: uses {@link DayOfWeekStringConverter} with the date picker's locale and {@link TextStyle#SHORT}
+	 */
+	public void defaultConverters() {
+		setConverterSupplier(() -> new DateStringConverter(FormatStyle.MEDIUM));
+		setMonthConverterSupplier(() -> new MonthStringConverter(getLocale(), TextStyle.FULL));
+		setDayOfWeekConverterSupplier(() -> new DayOfWeekStringConverter(getLocale(), TextStyle.SHORT));
+	}
+
+	/**
+	 * Sets/Re-sets the default icon to open the popup.
+	 */
+	public void defaultIcon() {
+		MFXFontIcon calendar = new MFXFontIcon("mfx-calendar-alt-semi-dark", 20);
+		calendar.getStyleClass().add("icon");
+		MFXIconWrapper wrapped = new MFXIconWrapper(calendar, 30);
+		wrapped.rippleGeneratorBehavior(event -> {
+			if (event == null) {
+				return PositionBean.of(wrapped.getSize() / 2, wrapped.getSize() / 2);
+			} else {
+				return PositionBean.of(event.getX(), event.getY());
+			}
+		});
+		NodeUtils.makeRegionCircular(wrapped);
+		setTrailingIcon(wrapped);
+	}
+
+	/**
+	 * Shows the popup.
+	 */
+	public void show() {
+		setShowing(true);
+	}
+
+	/**
+	 * Hides the popup.
+	 */
+	public void hide() {
+		setShowing(false);
+	}
+
+	/**
+	 * If the date picker is editable and the text has been changed, this method
+	 * is responsible for deciding what to do with the new text.
+	 * <p></p>
+	 * By default this implementation calls the specified {@link #onCommitProperty()} consumer
+	 * to perform an action on commit. So, instead of overriding the method you can easily modify
+	 * its behavior by changing the consumer.
+	 */
+	public void commit(String text) {
+		if (getOnCommit() != null) {
+			getOnCommit().accept(text);
+		}
+	}
+
+	/**
+	 * If the date picker is editable and the text has been changed, this method
+	 * is responsible for deciding what to do with the new text.
+	 * <p></p>
+	 * By default this implementation calls the specified {@link #onCancelProperty()} consumer
+	 * to perform an action on cancel. So, instead of overriding the method you can easily modify
+	 * its behavior by changing the consumer.
+	 */
+	public void cancel(String text) {
+		if (getOnCancel() != null) {
+			getOnCancel().accept(text);
+		}
+	}
+
+	/**
+	 * Starts the executor responsible for updating the current day property
+	 * once per day.
+	 */
+	public void startCurrentDayUpdater() {
+		long midnight = LocalDateTime.now().until(LocalDate.now().plusDays(1).atStartOfDay(), ChronoUnit.MINUTES);
+		executor.scheduleAtFixedRate(this::updateCurrentDate, midnight, TimeUnit.DAYS.toMinutes(1), TimeUnit.MINUTES);
+	}
+
+	/**
+	 * Stops the executor responsible for updating the current day property.
+	 */
+	public void stopCurrentDayUpdater() {
+		executor.cancelNow();
+	}
+
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
+	@Override
+	protected Skin<?> createDefaultSkin() {
+		return new MFXDatePickerSkin(this, boundField);
+	}
+
+	@Override
+	public String getUserAgentStylesheet() {
+		return STYLESHEET;
+	}
+
+	//================================================================================
+	// Getters/Setters
+	//================================================================================
+	public boolean isShowing() {
+		return showing.get();
+	}
+
+	/**
+	 * Specifies whether the popup is showing.
+	 */
+	public ReadOnlyBooleanProperty showingProperty() {
+		return showing.getReadOnlyProperty();
+	}
+
+	private void setShowing(boolean showing) {
+		this.showing.set(showing);
+	}
+
+	public Alignment getPopupAlignment() {
+		return popupAlignment.get();
+	}
+
+	/**
+	 * Specifies the popup's alignment.
+	 */
+	public ObjectProperty<Alignment> popupAlignmentProperty() {
+		return popupAlignment;
+	}
+
+	public void setPopupAlignment(Alignment popupAlignment) {
+		this.popupAlignment.set(popupAlignment);
+	}
+
+	public double getPopupOffsetX() {
+		return popupOffsetX.get();
+	}
+
+	/**
+	 * Specifies the popup's x offset.
+	 */
+	public DoubleProperty popupOffsetXProperty() {
+		return popupOffsetX;
+	}
+
+	public void setPopupOffsetX(double popupOffsetX) {
+		this.popupOffsetX.set(popupOffsetX);
+	}
+
+	public double getPopupOffsetY() {
+		return popupOffsetY.get();
+	}
+
+	/**
+	 * Specifies the popup's y offset.
+	 */
+	public DoubleProperty popupOffsetYProperty() {
+		return popupOffsetY;
+	}
+
+	public void setPopupOffsetY(double popupOffsetY) {
+		this.popupOffsetY.set(popupOffsetY);
+	}
+
+	public Locale getLocale() {
+		return locale.get();
+	}
+
+	/**
+	 * Specifies the {@link Locale} used by this date picker.
+	 * The Locale is mainly responsible for changing the language and the
+	 * grid disposition (different week start for example)
+	 */
+	public ObjectProperty<Locale> localeProperty() {
+		return locale;
+	}
+
+	public void setLocale(Locale locale) {
+		this.locale.set(locale);
+	}
+
+	public LocalDate getValue() {
+		return value.get();
+	}
+
+	/**
+	 * Specifies the current selected date.
+	 */
+	public ObjectProperty<LocalDate> valueProperty() {
+		return value;
+	}
+
+	public void setValue(LocalDate value) {
+		this.value.set(value);
+	}
+
+	public Supplier<StringConverter<LocalDate>> getConverterSupplier() {
+		return converterSupplier.get();
+	}
+
+	/**
+	 * Specifies the {@link Supplier} used to create a {@link StringConverter} capable of converting {@link LocalDate}s.
+	 */
+	public SupplierProperty<StringConverter<LocalDate>> converterSupplierProperty() {
+		return converterSupplier;
+	}
+
+	public void setConverterSupplier(Supplier<StringConverter<LocalDate>> converterSupplier) {
+		this.converterSupplier.set(converterSupplier);
+	}
+
+	public Supplier<StringConverter<Month>> getMonthConverterSupplier() {
+		return monthConverterSupplier.get();
+	}
+
+	/**
+	 * Specifies the {@link Supplier} used to create a {@link StringConverter} capable of converting {@link Month}s.
+	 */
+	public SupplierProperty<StringConverter<Month>> monthConverterSupplierProperty() {
+		return monthConverterSupplier;
+	}
+
+	public void setMonthConverterSupplier(Supplier<StringConverter<Month>> monthConverterSupplier) {
+		this.monthConverterSupplier.set(monthConverterSupplier);
+	}
+
+	public Supplier<StringConverter<DayOfWeek>> getDayOfWeekConverterSupplier() {
+		return dayOfWeekConverterSupplier.get();
+	}
+
+	/**
+	 * Specifies the {@link Supplier} used to create a {@link StringConverter} capable of converting {@link DayOfWeek}s.
+	 */
+	public SupplierProperty<StringConverter<DayOfWeek>> dayOfWeekConverterSupplierProperty() {
+		return dayOfWeekConverterSupplier;
+	}
+
+	public void setDayOfWeekConverterSupplier(Supplier<StringConverter<DayOfWeek>> dayOfWeekConverterSupplier) {
+		this.dayOfWeekConverterSupplier.set(dayOfWeekConverterSupplier);
+	}
+
+	public Consumer<String> getOnCommit() {
+		return onCommit.get();
+	}
+
+	/**
+	 * Specifies the action to perform on {@link #commit(String)}.
+	 */
+	public ConsumerProperty<String> onCommitProperty() {
+		return onCommit;
+	}
+
+	public void setOnCommit(Consumer<String> onCommit) {
+		this.onCommit.set(onCommit);
+	}
+
+	public Consumer<String> getOnCancel() {
+		return onCancel.get();
+	}
+
+	/**
+	 * Specifies the action to perform on {@link #cancel(String)}.
+	 */
+	public ConsumerProperty<String> onCancelProperty() {
+		return onCancel;
+	}
+
+	public void setOnCancel(Consumer<String> onCancel) {
+		this.onCancel.set(onCancel);
+	}
+
+	public Function<LocalDate, MFXDateCell> getCellFactory() {
+		return cellFactory.get();
+	}
+
+	/**
+	 * Specifies the function used to create the day cells in the grid.
+	 */
+	public ObjectProperty<Function<LocalDate, MFXDateCell>> cellFactoryProperty() {
+		return cellFactory;
+	}
+
+	public void setCellFactory(Function<LocalDate, MFXDateCell> cellFactory) {
+		this.cellFactory.set(cellFactory);
+	}
+
+	public LocalDate getCurrentDate() {
+		return currentDate.get();
+	}
+
+	/**
+	 * Specifies the current date.
+	 */
+	public ReadOnlyObjectProperty<LocalDate> currentDateProperty() {
+		return currentDate.getReadOnlyProperty();
+	}
+
+	/**
+	 * Updates the current date property with {@link LocalDate#now()}
+	 */
+	public void updateCurrentDate() {
+		this.currentDate.set(LocalDate.now());
+	}
+
+	public NumberRange<Integer> getYearsRange() {
+		return yearsRange.get();
+	}
+
+	/**
+	 * Specifies the years range of the date picker.
+	 */
+	public NumberRangeProperty<Integer> yearsRangeProperty() {
+		return yearsRange;
+	}
+
+	public void setYearsRange(NumberRange<Integer> yearsRange) {
+		this.yearsRange.set(yearsRange);
+	}
+
+	public BiFunction<Locale, YearMonth, Integer[][]> getGridAlgorithm() {
+		return gridAlgorithm.get();
+	}
+
+	/**
+	 * Specifies the {@link BiFunction} used to generate the month grid which is a bi-dimensional array of
+	 * integer values.
+	 */
+	public BiFunctionProperty<Locale, YearMonth, Integer[][]> gridAlgorithmProperty() {
+		return gridAlgorithm;
+	}
+
+	public void setGridAlgorithm(BiFunction<Locale, YearMonth, Integer[][]> gridAlgorithm) {
+		this.gridAlgorithm.set(gridAlgorithm);
+	}
+
+	/**
+	 * @return the date picker's starting {@link YearMonth}
+	 */
+	public YearMonth getStartingYearMonth() {
+		return startingYearMonth;
+	}
+
+	/**
+	 * Sets the {@link YearMonth} at which the date picker will start.
+	 * <p>
+	 * Note that this will be relevant only for the first initialization. Setting
+	 * this afterwards won't take any effect.
+	 */
+	public void setStartingYearMonth(YearMonth startingYearMonth) {
+		this.startingYearMonth = startingYearMonth;
+	}
+
+	/**
+	 * @return whether the popup should stay open on value change or close
+	 */
+	public boolean isClosePopupOnChange() {
+		return closePopupOnChange;
+	}
+
+	public void setClosePopupOnChange(boolean closePopupOnChange) {
+		this.closePopupOnChange = closePopupOnChange;
+	}
 }

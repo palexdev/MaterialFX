@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -17,9 +17,16 @@
  */
 
 * {
-    -mfx-blue: #2196f3;
-    -mfx-charcoal: #445055;
-    -mfx-green: #4caf50;
-    -mfx-purple: #673AB7;
-    -mfx-red: #EF6E6B;
+	-mfx-blue: #2196f3;
+	-mfx-charcoal: #445055;
+	-mfx-green: #4caf50;
+	-mfx-onyx: #353935;
+	-mfx-orange: #ff9800;
+	-mfx-purple: #7a0ed9;
+	-mfx-red: #EF6E6B;
+	-mfx-yellow: #FFEA00;
+
+	-mfx-text-he: rgba(0, 0, 0, 0.87); /* High Emphasis */
+	-mfx-text-me: rgba(0, 0, 0, 0.60); /* Medium Emphasis*/
+	-mfx-text-disabled: rgba(0, 0, 0, 0.38); /* Disabled */
 }

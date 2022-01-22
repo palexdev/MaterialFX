@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright (C) 2022 Parisi Alessandro
+  ~ This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+  ~
+  ~ MaterialFX is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ MaterialFX is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<GridPane hgap="20.0" maxHeight="-Infinity" maxWidth="-Infinity" styleClass="grid-pane"
+          stylesheets="@../css/ListViews.css" vgap="20.0" xmlns="http://javafx.com/javafx/17"
+          xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="io.github.palexdev.materialfx.demo.controllers.ListViewsController">
+    <columnConstraints>
+        <ColumnConstraints halignment="CENTER"/>
+        <ColumnConstraints halignment="CENTER"/>
+        <ColumnConstraints halignment="CENTER"/>
+        <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="20.0"/>
+        <ColumnConstraints halignment="CENTER" minWidth="10.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="64.0" vgrow="SOMETIMES"/>
+        <RowConstraints prefHeight="32.0"/>
+        <RowConstraints minHeight="10.0" prefHeight="64.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="64.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="64.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+    </rowConstraints>
+    <padding>
+        <Insets bottom="20.0" left="30.0" right="30.0" top="20.0"/>
+    </padding>
+    <StackPane minHeight="150.0" minWidth="300.0" styleClass="grid-background" GridPane.columnSpan="3"
+               GridPane.rowSpan="2147483647">
+        <GridPane.margin>
+            <Insets left="-15.0" right="-15.0"/>
+        </GridPane.margin>
+    </StackPane>
+    <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="header-label" text="Lists"
+           GridPane.columnSpan="3"/>
+    <Label styleClass="sub-header-label" text="Default" GridPane.rowIndex="1"/>
+    <MFXListView fx:id="list" prefWidth="170.0" GridPane.rowIndex="2" GridPane.rowSpan="3">
+        <GridPane.margin>
+            <Insets bottom="15.0"/>
+        </GridPane.margin>
+    </MFXListView>
+    <Label styleClass="sub-header-label" text="Custom" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+    <MFXListView id="custList" fx:id="custList" prefWidth="170.0" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                 GridPane.rowSpan="3">
+        <GridPane.margin>
+            <Insets bottom="15.0"/>
+        </GridPane.margin>
+    </MFXListView>
+    <Label styleClass="sub-header-label" text="Check List" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+    <MFXCheckListView fx:id="checkList" prefWidth="170.0" GridPane.columnIndex="2" GridPane.rowIndex="2"
+                      GridPane.rowSpan="3">
+        <GridPane.margin>
+            <Insets bottom="15.0"/>
+        </GridPane.margin>
+    </MFXCheckListView>
+    <MFXButton minHeight="32.0" onAction="#changeColors" text="Change Scrollbar Colors" GridPane.columnIndex="1"
+               GridPane.rowIndex="5">
+        <GridPane.margin>
+            <Insets bottom="20.0"/>
+        </GridPane.margin>
+    </MFXButton>
+    <StackPane prefHeight="150.0" prefWidth="200.0" styleClass="grid-background" GridPane.columnIndex="4"
+               GridPane.rowSpan="2147483647">
+        <GridPane.margin>
+            <Insets left="-15.0" right="-15.0"/>
+        </GridPane.margin>
+    </StackPane>
+    <Label styleClass="header-label" text="Legacy" GridPane.columnIndex="4"/>
+    <MFXListView fx:id="legacyList" prefWidth="170.0" GridPane.columnIndex="4" GridPane.rowIndex="2"
+                 GridPane.rowSpan="3">
+        <GridPane.margin>
+            <Insets bottom="15.0"/>
+        </GridPane.margin>
+    </MFXListView>
+    <MFXButton minHeight="32.0" onAction="#changeDepth" text="3D/2D" GridPane.columnIndex="1" GridPane.rowIndex="6">
+        <GridPane.margin>
+            <Insets bottom="20.0"/>
+        </GridPane.margin>
+    </MFXButton>
+</GridPane>

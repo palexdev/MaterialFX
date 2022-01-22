@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -18,131 +18,213 @@
 
 package io.github.palexdev.materialfx.demo.controllers;
 
-import io.github.palexdev.materialfx.controls.MFXDialog;
-import io.github.palexdev.materialfx.controls.MFXNotification;
-import io.github.palexdev.materialfx.controls.SimpleMFXNotificationPane;
-import io.github.palexdev.materialfx.controls.base.AbstractMFXDialog;
-import io.github.palexdev.materialfx.controls.enums.DialogType;
-import io.github.palexdev.materialfx.controls.factories.MFXDialogFactory;
-import io.github.palexdev.materialfx.notifications.NotificationPos;
-import io.github.palexdev.materialfx.notifications.NotificationsManager;
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXIconWrapper;
+import io.github.palexdev.materialfx.controls.MFXNotificationCenter;
+import io.github.palexdev.materialfx.controls.MFXSimpleNotification;
+import io.github.palexdev.materialfx.controls.cell.MFXNotificationCell;
+import io.github.palexdev.materialfx.demo.MFXDemoResourcesLoader;
+import io.github.palexdev.materialfx.demo.model.Model;
+import io.github.palexdev.materialfx.enums.NotificationPos;
+import io.github.palexdev.materialfx.enums.NotificationState;
+import io.github.palexdev.materialfx.factories.InsetsFactory;
+import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.materialfx.notifications.MFXNotificationCenterSystem;
+import io.github.palexdev.materialfx.notifications.MFXNotificationSystem;
+import io.github.palexdev.materialfx.notifications.base.INotification;
+import io.github.palexdev.materialfx.utils.RandomUtils;
+import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
-import javafx.util.Duration;
-import org.kordamp.ikonli.javafx.FontIcon;
-
-import java.util.Random;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 public class NotificationsController {
-    private final Random random = new Random(System.currentTimeMillis());
 
-    private final String title = "MaterialFX Notification System";
-    private final String dummy =
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. " +
-                    "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, " +
-                    "when an unknown printer took a galley of type and scrambled it to make a type specimen book. " +
-                    "It has survived not only five centuries, but also the leap into electronic typesetting, " +
-                    "remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, " +
-                    "and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
+	public NotificationsController(Stage stage) {
+		Platform.runLater(() -> {
+			MFXNotificationSystem.instance().initOwner(stage);
+			MFXNotificationCenterSystem.instance().initOwner(stage);
 
-    @FXML
-    void showTopLeft() {
-        NotificationPos pos = NotificationPos.TOP_LEFT;
-        showNotification(pos);
-    }
+			MFXNotificationCenter center = MFXNotificationCenterSystem.instance().getCenter();
+			center.setCellFactory(notification -> new MFXNotificationCell(center, notification) {
+				{
+					setPrefHeight(400);
+				}
+			});
+		});
+	}
 
-    @FXML
-    void showTopCenter() {
-        NotificationPos pos = NotificationPos.TOP_CENTER;
-        showNotification(pos);
-    }
+	@FXML
+	void showTopLeft(ActionEvent event) {
+		MFXNotificationSystem.instance()
+				.setPosition(NotificationPos.TOP_LEFT)
+				.publish(createNotification());
+	}
 
-    @FXML
-    void showTopRight() {
-        NotificationPos pos = NotificationPos.TOP_RIGHT;
-        showNotification(pos);
-    }
+	@FXML
+	void showTopCenter(ActionEvent event) {
+		MFXNotificationSystem.instance()
+				.setPosition(NotificationPos.TOP_CENTER)
+				.publish(createNotification());
+	}
 
-    @FXML
-    void showBottomLeft() {
-        NotificationPos pos = NotificationPos.BOTTOM_LEFT;
-        showNotification(pos);
-    }
+	@FXML
+	void showTopRight(ActionEvent event) {
+		MFXNotificationSystem.instance()
+				.setPosition(NotificationPos.TOP_RIGHT)
+				.publish(createNotification());
+	}
 
-    @FXML
-    void showBottomCenter() {
-        NotificationPos pos = NotificationPos.BOTTOM_CENTER;
-        showNotification(pos);
-    }
+	@FXML
+	void showBottomLeft(ActionEvent event) {
+		MFXNotificationSystem.instance()
+				.setPosition(NotificationPos.BOTTOM_LEFT)
+				.publish(createNotification());
+	}
 
-    @FXML
-    void showBottomRight() {
-        NotificationPos pos = NotificationPos.BOTTOM_RIGHT;
-        showNotification(pos);
-    }
+	@FXML
+	void showBottomCenter(ActionEvent event) {
+		MFXNotificationSystem.instance()
+				.setPosition(NotificationPos.BOTTOM_LEFT)
+				.publish(createNotification());
+	}
 
-    private void showNotification(NotificationPos pos) {
-        MFXNotification notification = buildNotification();
-        NotificationsManager.send(pos, notification);
-    }
+	@FXML
+	void showBottomRight(ActionEvent event) {
+		MFXNotificationSystem.instance()
+				.setPosition(NotificationPos.BOTTOM_RIGHT)
+				.publish(createNotification());
+	}
 
-    private MFXNotification buildNotification() {
-        Region template = getRandomTemplate();
-        MFXNotification notification = new MFXNotification(template, true, true);
-        notification.setHideAfterDuration(Duration.seconds(3));
+	@FXML
+	void showTopLeftNC(ActionEvent event) {
+		MFXNotificationCenterSystem.instance()
+				.setPosition(NotificationPos.TOP_LEFT)
+				.publish(createNotification());
+	}
 
-        if (template instanceof SimpleMFXNotificationPane) {
-            SimpleMFXNotificationPane pane = (SimpleMFXNotificationPane) template;
-            pane.setCloseHandler(closeEvent -> notification.hideNotification());
-        } else {
-            MFXDialog dialog = (MFXDialog) template;
-            dialog.setCloseHandler(closeEvent -> notification.hideNotification());
-        }
+	@FXML
+	void showTopCenterNC(ActionEvent event) {
+		MFXNotificationCenterSystem.instance()
+				.setPosition(NotificationPos.TOP_CENTER)
+				.publish(createNotification());
+	}
 
-        return notification;
-    }
+	@FXML
+	void showTopRightNC(ActionEvent event) {
+		MFXNotificationCenterSystem.instance()
+				.setPosition(NotificationPos.TOP_RIGHT)
+				.publish(createNotification());
+	}
 
-    private Region getRandomTemplate() {
-        final int rand = random.nextInt(4);
+	@FXML
+	void showBottomLeftNC(ActionEvent event) {
+		MFXNotificationCenterSystem.instance()
+				.setPosition(NotificationPos.BOTTOM_LEFT)
+				.publish(createNotification());
+	}
 
-        switch (rand) {
-            case 0:
-                FontIcon icon1 = new FontIcon("fas-info-circle");
-                icon1.setIconColor(Color.LIGHTBLUE);
-                icon1.setIconSize(15);
-                return new SimpleMFXNotificationPane(
-                        icon1,
-                        "Dummy Notification",
-                        title,
-                        dummy
-                );
-            case 1:
-                FontIcon icon2 = new FontIcon("fas-cocktail");
-                icon2.setIconColor(Color.GREEN);
-                icon2.setIconSize(15);
-                return new SimpleMFXNotificationPane(
-                        icon2,
-                        "Fast Food",
-                        title,
-                        "Hello username, your order is on the way!"
-                );
-            case 2:
-                FontIcon icon3 = new FontIcon("fab-whatsapp");
-                icon3.setIconColor(Color.GREEN);
-                icon3.setIconSize(15);
-                return new SimpleMFXNotificationPane(
-                        icon3,
-                        "Whatsapp Notification",
-                        title,
-                        "Hi Mark, it's been ages since we last spoke!\nHow are you?"
-                );
-            case 3:
-                AbstractMFXDialog dialog = MFXDialogFactory.buildDialog(DialogType.WARNING, "Warning Dialog as Notification", "Disk space is running low, better watch out...");
-                dialog.setVisible(true);
-                return dialog;
-            default:
-                return null;
-        }
-    }
+	@FXML
+	void showBottomCenterNC(ActionEvent event) {
+		MFXNotificationCenterSystem.instance()
+				.setPosition(NotificationPos.BOTTOM_CENTER)
+				.publish(createNotification());
+	}
+
+	@FXML
+	void showBottomRightNC(ActionEvent event) {
+		MFXNotificationCenterSystem.instance()
+				.setPosition(NotificationPos.BOTTOM_RIGHT)
+				.publish(createNotification());
+	}
+
+	private INotification createNotification() {
+		ExampleNotification notification = new ExampleNotification();
+		notification.setContentText(RandomUtils.randFromArray(Model.randomText));
+		return notification;
+	}
+
+	private static class ExampleNotification extends MFXSimpleNotification {
+		private final StringProperty headerText = new SimpleStringProperty("Notification Header");
+		private final StringProperty contentText = new SimpleStringProperty();
+
+		public ExampleNotification() {
+
+			MFXIconWrapper icon = new MFXIconWrapper(RandomUtils.randFromArray(Model.notificationsIcons).getDescription(), 16, 32);
+			Label headerLabel = new Label();
+			headerLabel.textProperty().bind(headerText);
+			MFXIconWrapper readIcon = new MFXIconWrapper("mfx-eye", 16, 32);
+			((MFXFontIcon) readIcon.getIcon()).descriptionProperty().bind(Bindings.createStringBinding(
+					() -> (getState() == NotificationState.READ) ? "mfx-eye" : "mfx-eye-slash",
+					notificationStateProperty()
+			));
+			StackPane.setAlignment(readIcon, Pos.CENTER_RIGHT);
+			StackPane placeHolder = new StackPane(readIcon);
+			placeHolder.setMaxWidth(Double.MAX_VALUE);
+			HBox.setHgrow(placeHolder, Priority.ALWAYS);
+			HBox header = new HBox(10, icon, headerLabel, placeHolder);
+			header.setAlignment(Pos.CENTER_LEFT);
+			header.setPadding(InsetsFactory.of(5, 0, 5, 0));
+			header.setMaxWidth(Double.MAX_VALUE);
+
+
+			Label contentLabel = new Label();
+			contentLabel.getStyleClass().add("content");
+			contentLabel.textProperty().bind(contentText);
+			contentLabel.setWrapText(true);
+			contentLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+			contentLabel.setAlignment(Pos.TOP_LEFT);
+
+			MFXButton action1 = new MFXButton("Action 1");
+			MFXButton action2 = new MFXButton("Action 2");
+			HBox actionsBar = new HBox(15, action1, action2);
+			actionsBar.getStyleClass().add("actions-bar");
+			actionsBar.setAlignment(Pos.CENTER_RIGHT);
+			actionsBar.setPadding(InsetsFactory.all(5));
+
+			BorderPane container = new BorderPane();
+			container.getStyleClass().add("notification");
+			container.setTop(header);
+			container.setCenter(contentLabel);
+			container.setBottom(actionsBar);
+			container.getStylesheets().add(MFXDemoResourcesLoader.load("css/ExampleNotification.css"));
+			container.setMinHeight(200);
+			container.setMaxWidth(400);
+
+			setContent(container);
+		}
+
+		public String getHeaderText() {
+			return headerText.get();
+		}
+
+		public StringProperty headerTextProperty() {
+			return headerText;
+		}
+
+		public void setHeaderText(String headerText) {
+			this.headerText.set(headerText);
+		}
+
+		public String getContentText() {
+			return contentText.get();
+		}
+
+		public StringProperty contentTextProperty() {
+			return contentText;
+		}
+
+		public void setContentText(String contentText) {
+			this.contentText.set(contentText);
+		}
+	}
 }

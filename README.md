@@ -10,7 +10,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/palexdev/MaterialFX">
-    <img src=https://imgur.com/qBOvrWD.png" alt="Logo" width="720">
+    <img src=https://imgur.com/7NdnoFl.png" alt="Logo">
   </a>
 </p>
 
@@ -18,7 +18,7 @@
 <h3 align="center">MaterialFX</h3>
 
 <p align="center">
-    MaterialFX is an open source Java library which provides material components for JavaFX
+    MaterialFX is an open source Java library which provides material design components for JavaFX
     <br />
     <a href="https://github.com/palexdev/MaterialFX/wiki"><strong>Explore the wiki »</strong></a>
     <br />
@@ -35,12 +35,14 @@
 ## Table of Contents
 
 * [About the Project and History of JavaFX](#about-the-project-and-history-of-javafx)
+* [About the Logo](#about-the-logo)
 * [Some GIFs](#preview-gifs)
 * [Getting Started](#getting-started)
     * [Build](#build)
     * [Usage](#usage)
         * [Gradle](#gradle)
         * [Maven](#maven)
+* [Changelog](#changelog)
 * [Roadmap](#roadmap)
 * [Contributing](#contributing)
 * [License](#license)
@@ -74,104 +76,102 @@ That's where this project comes in. The aim of my project is to bring components
 Google's material design guidelines to JavaFX. The second purpose is to provide a successor to the already
 available [JFoenix](https://github.com/jfoenixadmin/JFoenix) library, which is a bit old and has a lot of issues.
 
-In recent months the project has evolved a lot, to the point that it is no longer a simple substitute.
-To date MaterialFX offers not only restyled controls, but also: new and unique controls such as the Stepper, controls completely redone from scratch such as ComboBoxes or TableViews (and many others), and many utilities for JavaFX and Java (NodeUtils, ColorUtils, StringUtils ...).
+In recent months the project has evolved a lot, to the point that it is no longer a simple substitute.  
+To date MaterialFX offers not only restyled controls, but also: new and unique controls such as the Stepper,
+controls completely redone from scratch such as ComboBoxes or TableViews (and many others),
+and many utilities for JavaFX and Java (NodeUtils, ColorUtils, StringUtils ...).
+
+<!-- ABOUT THE PROJECT -->
+
+## About The Logo
+MaterialFX v11.13.0 brought a lot of fixes and new features, but it also brought a new logo, something that is more
+meaningful for me and that somewhat represents the new version.  
+The new logo is a Phoenix, the immortal bird from Greek mythology, associated to regeneration/rebirth.
+When a Phoenix dies it obtains new life by raising from its ashes.  
+MaterialFX v11.13.0 fixed many critical bugs and broken features, I like to think that it is reborn from
+the previous version, so I thought a new logo would have been a good idea. 
 
 <!-- PREVIEW GIFS -->
 
 ## Preview GIFs
 
-#### Imgur Link: [Gallery](https://gifyu.com/album/cU3)
+#### Imgur Link: [Gallery](https://imgur.com/a/IrDirnI)
 
 <i>
 <details>
 <summary>Buttons</summary>
 <br>
-<img src="https://s6.gifyu.com/images/Buttons.gif" alt="Buttons" border="0">
+<img src="https://imgur.com/jATdGFL.gif" alt="Buttons" border="0">
 </details>
 <p></p>
 
 <details>
-<summary>CheckBoxes</summary>
+<summary>Check Boxes, Radio Buttons and Toggles</summary>
 <br>
-<img src="https://s6.gifyu.com/images/Checkboxes.gif" alt="Checkboxes" border="0">
+<img src="https://imgur.com/ArUhH58.gif" alt="Checkboxes" border="0">
 </details>
 <p></p>
 
 <details>
-<summary>ComboBoxes</summary>
+<summary>Combo Boxes</summary>
 <br>
-<img src="https://s6.gifyu.com/images/Comboboxes.gif" alt="Comboboxes" border="0">
-</details>
-<p></p>
-
-<details>
-<summary>DatePickers</summary>
-<br>
-<img src="https://s6.gifyu.com/images/Datepickers.gif" alt="Datepickers" border="0">
+<img src="https://imgur.com/BO0twpA.gif" alt="Comboboxes" border="0">
 </details>
 <p></p>
 
 <details>
 <summary>Dialogs</summary>
 <br>
-<img src="https://s6.gifyu.com/images/Dialogs843efeb715dfd031.gif" alt="Dialogs" border="0">
+<img src="https://imgur.com/LsxGeJh.gif" alt="Dialogs" border="0">
+</details>
+
+<p></p>
+<details>
+<summary>Fields</summary>
+<br>
+<img src="https://imgur.com/XT2iVU7.gif" alt="Fields" border="0">
 </details>
 <p></p>
 
 <details>
-<summary>Labels</summary>
+<summary>Lists</summary>
 <br>
-<img src="https://s6.gifyu.com/images/Labels.gif" alt="Labels" border="0">
-</details>
-<p></p>
-
-<details>
-<summary>ListViews</summary>
-<br>
-<img src="https://s6.gifyu.com/images/Listviews.gif" alt="Listviews" border="0">
+<img src="https://imgur.com/4Ckdn5z.gif" alt="Listviews" border="0">
 </details>
 <p></p>
 
 <details>
 <summary>Notifications</summary>
 <br>
-<img src="https://s6.gifyu.com/images/Notifications.gif" alt="Notifications" border="0">
+<img src="https://imgur.com/lgex2yO.gif" alt="Notifications" border="0">
 </details>
 <p></p>
 
 <details>
-<summary>ProgressBars</summary>
+<summary>Pickers</summary>
 <br>
-<img src="https://s6.gifyu.com/images/Progressbars.gif" alt="Progressbars" border="0">
+<img src="https://imgur.com/J3v3i9w.gif" alt="Pickers" border="0">
 </details>
 <p></p>
 
 <details>
-<summary>ProgressSpinners</summary>
+<summary>Progress</summary>
 <br>
-<img src="https://s6.gifyu.com/images/Progressspinners.gif" alt="Progressspinners" border="0">
+<img src="https://imgur.com/2E6X3uJ.gif" alt="Progress" border="0">
 </details>
 <p></p>
 
 <details>
-<summary>RadioButtons</summary>
+<summary>Scroll Panes</summary>
 <br>
-<img src="https://s6.gifyu.com/images/Radiobuttons.gif" alt="Radiobuttons" border="0">
-</details>
-<p></p>
-
-<details>
-<summary>ScrollPanes</summary>
-<br>
-<img src="https://s6.gifyu.com/images/Scrollpanes.gif" alt="Scrollpanes" border="0">
+<img src="https://imgur.com/8Jxu3TM.gif" alt="Scrollpanes" border="0">
 </details>
 <p></p>
 
 <details>
 <summary>Sliders</summary>
 <br>
-<img src="https://s6.gifyu.com/images/Sliders.gif" alt="Sliders" border="0">
+<img src="https://imgur.com/nOrsa1n.gif" alt="Sliders" border="0">
 </details>
 <p></p>
 
@@ -179,38 +179,16 @@ To date MaterialFX offers not only restyled controls, but also: new and unique c
 <details>
 <summary>Stepper</summary>
 <br>
-<img src="https://s6.gifyu.com/images/Stepper.gif" alt="Stepper" border="0">
+<img src="https://imgur.com/nEgV9F1.gif" alt="Stepper" border="0">
 </details>
 <p></p>
 
 <details>
-<summary>TableViews</summary>
+<summary>Tables</summary>
 <br>
-<img src="https://s6.gifyu.com/images/Tableviews.gif" alt="Tableviews" border="0">
+<img src="https://imgur.com/nj6xhUT.gif" alt="Tableviews" border="0">
 </details>
 <p></p>
-
-<details>
-<summary>TextFields</summary>
-<br>
-<img src="https://s6.gifyu.com/images/Textfields.gif" alt="Textfields" border="0">
-</details>
-<p></p>
-
-<details>
-<summary>Toggles</summary>
-<br>
-<img src="https://s6.gifyu.com/images/Toggles.gif" alt="Toggles" border="0">
-</details>
-<p></p>
-
-<details>
-<summary>FontResources</summary>
-<br>
-<img src="https://s6.gifyu.com/images/Fontresources.gif" alt="Radiobuttons" border="0">
-</details>
-<p></p>
-</i>
 
 <!-- GETTING STARTED -->
 
@@ -229,7 +207,10 @@ To run the main demo, execute the following command:
 
     gradlew run
 
-**NOTE** : MaterialFX requires **Java 11** and above.
+**NOTE**: MaterialFX requires **Java 11** and above.
+  
+**NOTE**: Starting from version 11.14.0 (next major version), MaterialFX will transition to
+Java 17 and bump version to 17.x.x. What will happen to version 11 is still to be decided
 
 ### Usage
 
@@ -241,7 +222,7 @@ repositories {
 }
 
 dependencies {
-implementation 'io.github.palexdev:materialfx:11.12.0'
+implementation 'io.github.palexdev:materialfx:11.13.0'
 }
 ```
 
@@ -251,15 +232,20 @@ implementation 'io.github.palexdev:materialfx:11.12.0'
 <dependency>
   <groupId>io.github.palexdev</groupId>
   <artifactId>materialfx</artifactId>
-  <version>11.12.0</version>
+  <version>11.13.0</version>
 </dependency>
 ```
 
 <!-- ROADMAP -->
 
+## Changelog
+See the [CHANGELOG](https://github.com/palexdev/MaterialFX/blob/main/CHANGELOG.md) file for a list of changes per version.
+
+<!-- ROADMAP -->
+
 ## Roadmap
 
-See the [open issues](https://github.com/palexdev/MaterialFX/issues) for a list of proposed features (and known issues).  
+See the [Open Issues](https://github.com/palexdev/MaterialFX/issues) for a list of proposed features (and known issues).  
 See the [ROADMAP](https://github.com/palexdev/MaterialFX/blob/main/ROADMAP.md) for a list of implemented and upcoming features.
 
 <!-- CONTRIBUTING -->
@@ -294,10 +280,14 @@ Project Link: [https://github.com/palexdev/MaterialFX](https://github.com/palexd
 
 #### Donation
 
-Ever since I was a kid I have always liked programming, I find it interesting and often funny too, however it can also
-be a difficult and stressful job at times. This is my first public project, and I'm dedicating a lot of time to it. This
-is an open source library of course and everyone can use it for free, but if you feel like it you can make a small
-donation here. [![Donate](https://img.shields.io/badge/$-support-green.svg?style=flat-square)](https://bit.ly/31XB8zD)
+It's been more than a year since I started developing MaterialFX. Implementing cool looking, fully functional controls,
+introducing new components and features as well as providing many utilities for JavaFX and Java is really hard,
+especially considering that developing for JavaFX also means to deal with its closeness, its bugs, its annoying
+design decisions. Many times I've honestly been on the verge of giving up because sometimes it's really too much
+stress to handle.  
+**But**, today MaterialFX is a great library, supported by many people and I'm proud of it.
+If you are using MaterialFX in your projects and feel like it, I recently activated [GitHub Sponsors](https://github.com/sponsors/palexdev) so
+you can easily donate/sponsor.
 
 <!-- SUPPORTERS -->
 
@@ -308,6 +298,10 @@ donation here. [![Donate](https://img.shields.io/badge/$-support-green.svg?style
 - Yiding He
 - Alaa Abu Zidan
 - Ultraviolet-Ninja
-- *Your name can be here by supporting me at this link, [Support](https://bit.ly/31XB8zD)*
+- Sourabh Bhat
+- Mohammad Chaudhry (thank you very much for the huge donation, YOU are the legend)
+- Yahia Rehab
+- Mauro de Wit
+- *Your name can be here by supporting me at this link, [GitHub Sponsors](https://github.com/sponsors/palexdev)*
 
 Thank you very very much to all supporters, to all people who contribute to the project, to all people that thanked me, you really made my day

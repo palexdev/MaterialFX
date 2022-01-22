@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -19,15 +19,14 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.controls.base.MFXLabeled;
 import io.github.palexdev.materialfx.skins.MFXRadioButtonSkin;
+import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import javafx.css.*;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Skin;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,201 +34,226 @@ import java.util.List;
  * <p>
  * Extends {@code RadioButton}, redefines the style class to "mfx-radio-button" for usage in CSS and
  * includes a {@code RippleGenerator} to generate ripple effects on click.
+ * <p></p>
+ * It also introduces some new features like:
+ * <p> - {@link #contentDispositionProperty()}: to control the radio position
+ * <p> - {@link #gapProperty()}: to control the gap between the radio button and the text
+ * <p> - {@link #radioGapProperty()}: to control the gap between the outer and inner circle
+ * <p> - {@link #radiusProperty()}: to control the circles' radius
+ * <p> - {@link #textExpandProperty()}: to control the text size and the checkbox layout (see documentation)
  */
-public class MFXRadioButton extends RadioButton {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private static final StyleablePropertyFactory<MFXRadioButton> FACTORY = new StyleablePropertyFactory<>(RadioButton.getClassCssMetaData());
-    private final String STYLE_CLASS = "mfx-radio-button";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXRadioButton.css");
+public class MFXRadioButton extends RadioButton implements MFXLabeled {
+	//================================================================================
+	// Properties
+	//================================================================================
+	private static final StyleablePropertyFactory<MFXRadioButton> FACTORY = new StyleablePropertyFactory<>(RadioButton.getClassCssMetaData());
+	private final String STYLE_CLASS = "mfx-radio-button";
+	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXRadioButton.css");
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXRadioButton() {
-        setText("RadioButton");
-        initialize();
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXRadioButton() {
+		this("");
+	}
 
-    public MFXRadioButton(String s) {
-        super(s);
-        initialize();
-    }
+	public MFXRadioButton(String text) {
+		super(text);
+		initialize();
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
-    private void initialize() {
-        getStyleClass().add(STYLE_CLASS);
-    }
+	//================================================================================
+	// Methods
+	//================================================================================
+	private void initialize() {
+		getStyleClass().add(STYLE_CLASS);
+	}
 
-    //================================================================================
-    // Styleable Properties
-    //================================================================================
-    private final StyleableObjectProperty<Paint> selectedColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.SELECTED_COLOR,
-            this,
-            "selectedColor",
-            Color.rgb(15, 157, 88)
-    );
+	//================================================================================
+	// Styleable Properties
+	//================================================================================
+	private final StyleableObjectProperty<ContentDisplay> contentDisposition = new SimpleStyleableObjectProperty<>(
+			StyleableProperties.CONTENT_DISPOSITION,
+			this,
+			"contentDisposition",
+			ContentDisplay.LEFT
+	) {
+		@Override
+		public StyleOrigin getStyleOrigin() {
+			return StyleOrigin.USER_AGENT;
+		}
+	};
 
-    private final StyleableObjectProperty<Paint> unSelectedColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.UNSELECTED_COLOR,
-            this,
-            "unSelectedColor",
-            Color.rgb(90, 90, 90)
-    );
+	private final StyleableDoubleProperty gap = new SimpleStyleableDoubleProperty(
+			StyleableProperties.GAP,
+			this,
+			"gap",
+			8.0
+	);
 
-    private final StyleableObjectProperty<Paint> selectedTextColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.SELECTED_TEXT_COLOR,
-            this,
-            "selectedTextColor",
-            Color.rgb(15, 157, 88)
-    );
+	private final StyleableDoubleProperty radioGap = new SimpleStyleableDoubleProperty(
+			StyleableProperties.RADIO_GAP,
+			this,
+			"radioGap",
+			3.5
+	) {
+		@Override
+		public StyleOrigin getStyleOrigin() {
+			return StyleOrigin.USER_AGENT;
+		}
+	};
 
-    private final StyleableObjectProperty<Paint> unSelectedTextColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.UNSELECTED_TEXT_COLOR,
-            this,
-            "unSelectedTextColor",
-            Color.rgb(0, 0, 0)
-    );
+	private final StyleableDoubleProperty radius = new SimpleStyleableDoubleProperty(
+			StyleableProperties.RADIUS,
+			this,
+			"radius",
+			8.0
+	);
 
-    private final StyleableBooleanProperty changeTextColor = new SimpleStyleableBooleanProperty(
-            StyleableProperties.CHANGE_TEXT_COLOR,
-            this,
-            "changeTextColor",
-            true
-    );
+	private final StyleableBooleanProperty textExpand = new SimpleStyleableBooleanProperty(
+			StyleableProperties.TEXT_EXPAND,
+			this,
+			"textExpand",
+			false
+	);
 
-    public Paint getSelectedColor() {
-        return selectedColor.get();
-    }
+	public ContentDisplay getContentDisposition() {
+		return contentDisposition.get();
+	}
 
-    public StyleableObjectProperty<Paint> selectedColorProperty() {
-        return selectedColor;
-    }
+	public StyleableObjectProperty<ContentDisplay> contentDispositionProperty() {
+		return contentDisposition;
+	}
 
-    public void setSelectedColor(Paint selectedColor) {
-        this.selectedColor.set(selectedColor);
-    }
+	public void setContentDisposition(ContentDisplay contentDisposition) {
+		this.contentDisposition.set(contentDisposition);
+	}
 
-    public Paint getUnSelectedColor() {
-        return unSelectedColor.get();
-    }
+	public double getGap() {
+		return gap.get();
+	}
 
-    public StyleableObjectProperty<Paint> unSelectedColorProperty() {
-        return unSelectedColor;
-    }
+	public StyleableDoubleProperty gapProperty() {
+		return gap;
+	}
 
-    public void setUnSelectedColor(Paint unSelectedColor) {
-        this.unSelectedColor.set(unSelectedColor);
-    }
+	public void setGap(double gap) {
+		this.gap.set(gap);
+	}
 
-    public Paint getSelectedTextColor() {
-        return selectedTextColor.get();
-    }
+	public double getRadioGap() {
+		return radioGap.get();
+	}
 
-    public StyleableObjectProperty<Paint> selectedTextColorProperty() {
-        return selectedTextColor;
-    }
+	/**
+	 * Specifies the gap between the outer and the inner circles of the radio button.
+	 */
+	public StyleableDoubleProperty radioGapProperty() {
+		return radioGap;
+	}
 
-    public void setSelectedTextColor(Paint selectedTextColor) {
-        this.selectedTextColor.set(selectedTextColor);
-    }
+	public void setRadioGap(double radioGap) {
+		this.radioGap.set(radioGap);
+	}
 
-    public Paint getUnSelectedTextColor() {
-        return unSelectedTextColor.get();
-    }
+	public double getRadius() {
+		return radius.get();
+	}
 
-    public StyleableObjectProperty<Paint> unSelectedTextColorProperty() {
-        return unSelectedTextColor;
-    }
+	/**
+	 * Specifies the radius of the radio button.
+	 */
+	public StyleableDoubleProperty radiusProperty() {
+		return radius;
+	}
 
-    public void setUnSelectedTextColor(Paint unSelectedTextColor) {
-        this.unSelectedTextColor.set(unSelectedTextColor);
-    }
+	public void setRadius(double radius) {
+		this.radius.set(radius);
+	}
 
-    public boolean isChangeTextColor() {
-        return changeTextColor.get();
-    }
+	public boolean isTextExpand() {
+		return textExpand.get();
+	}
 
-    public StyleableBooleanProperty changeTextColorProperty() {
-        return changeTextColor;
-    }
+	public StyleableBooleanProperty textExpandProperty() {
+		return textExpand;
+	}
 
-    public void setChangeTextColor(boolean changeTextColor) {
-        this.changeTextColor.set(changeTextColor);
-    }
+	public void setTextExpand(boolean textExpand) {
+		this.textExpand.set(textExpand);
+	}
 
-    //================================================================================
-    // CssMetaData
-    //================================================================================
-    private static class StyleableProperties {
-        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+	//================================================================================
+	// CssMetaData
+	//================================================================================
+	private static class StyleableProperties {
+		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
-        private static final CssMetaData<MFXRadioButton, Paint> SELECTED_COLOR =
-                FACTORY.createPaintCssMetaData(
-                        "-mfx-selected-color",
-                        MFXRadioButton::selectedColorProperty,
-                        Color.rgb(15, 157, 88)
-                );
+		private static final CssMetaData<MFXRadioButton, ContentDisplay> CONTENT_DISPOSITION =
+				FACTORY.createEnumCssMetaData(
+						ContentDisplay.class,
+						"-mfx-content-disposition",
+						MFXRadioButton::contentDispositionProperty,
+						ContentDisplay.LEFT
+				);
 
-        private static final CssMetaData<MFXRadioButton, Paint> UNSELECTED_COLOR =
-                FACTORY.createPaintCssMetaData(
-                        "-mfx-unselected-color",
-                        MFXRadioButton::unSelectedColorProperty,
-                        Color.rgb(90, 90, 90)
-                );
+		private static final CssMetaData<MFXRadioButton, Number> GAP =
+				FACTORY.createSizeCssMetaData(
+						"-mfx-gap",
+						MFXRadioButton::gapProperty,
+						8.0
+				);
 
-        private static final CssMetaData<MFXRadioButton, Paint> SELECTED_TEXT_COLOR =
-                FACTORY.createPaintCssMetaData(
-                        "-mfx-selected-text-color",
-                        MFXRadioButton::selectedTextColorProperty,
-                        Color.rgb(15, 157, 88)
-                );
+		private static final CssMetaData<MFXRadioButton, Number> RADIO_GAP =
+				FACTORY.createSizeCssMetaData(
+						"-mfx-radio-gap",
+						MFXRadioButton::radioGapProperty,
+						3.5
+				);
 
-        private static final CssMetaData<MFXRadioButton, Paint> UNSELECTED_TEXT_COLOR =
-                FACTORY.createPaintCssMetaData(
-                        "-mfx-unselected-text-color",
-                        MFXRadioButton::unSelectedTextColorProperty,
-                        Color.rgb(0, 0, 0)
-                );
+		private static final CssMetaData<MFXRadioButton, Number> RADIUS =
+				FACTORY.createSizeCssMetaData(
+						"-mfx-radius",
+						MFXRadioButton::radiusProperty,
+						8.0
+				);
 
-        private static final CssMetaData<MFXRadioButton, Boolean> CHANGE_TEXT_COLOR =
-                FACTORY.createBooleanCssMetaData(
-                        "-mfx-change-text-color",
-                        MFXRadioButton::changeTextColorProperty,
-                        true
-                );
+		private static final CssMetaData<MFXRadioButton, Boolean> TEXT_EXPAND =
+				FACTORY.createBooleanCssMetaData(
+						"-mfx-text-expand",
+						MFXRadioButton::textExpandProperty,
+						false
+				);
 
-        static {
-            List<CssMetaData<? extends Styleable, ?>> rdbCssMetaData = new ArrayList<>(RadioButton.getClassCssMetaData());
-            Collections.addAll(rdbCssMetaData, SELECTED_COLOR, UNSELECTED_COLOR, SELECTED_TEXT_COLOR, UNSELECTED_TEXT_COLOR, CHANGE_TEXT_COLOR);
-            cssMetaDataList = Collections.unmodifiableList(rdbCssMetaData);
-        }
+		static {
+			cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
+					RadioButton.getClassCssMetaData(),
+					CONTENT_DISPOSITION, GAP, RADIO_GAP,
+					RADIUS, TEXT_EXPAND
+			);
+		}
 
-    }
+	}
 
-    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
-        return StyleableProperties.cssMetaDataList;
-    }
+	public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
+		return StyleableProperties.cssMetaDataList;
+	}
 
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        return new MFXRadioButtonSkin(this);
-    }
+	//================================================================================
+	// Override Methods
+	//================================================================================
+	@Override
+	protected Skin<?> createDefaultSkin() {
+		return new MFXRadioButtonSkin(this);
+	}
 
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
+	@Override
+	public String getUserAgentStylesheet() {
+		return STYLESHEET;
+	}
 
-    @Override
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return MFXRadioButton.getControlCssMetaDataList();
-    }
+	@Override
+	public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+		return MFXRadioButton.getControlCssMetaDataList();
+	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -26,58 +26,58 @@ import java.util.LinkedList;
  * by the new one.
  */
 public class CircularQueue<E> extends LinkedList<E> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private int size;
+	//================================================================================
+	// Properties
+	//================================================================================
+	private int size;
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public CircularQueue(int size) {
-        super();
-        this.size = size;
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public CircularQueue(int size) {
+		super();
+		this.size = size;
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
+	//================================================================================
+	// Methods
+	//================================================================================
 
-    /**
-     * Sets the maximum size of the queue and removes exceeding elements
-     * if the specified size is lesser than the number of elements.
-     *
-     * @param size The new desired size
-     * @throws IllegalArgumentException if the desired size is 0
-     */
-    public void setSize(int size) {
-        if (size == 0) {
-            throw new IllegalArgumentException("Size cannot be 0!!");
-        }
+	/**
+	 * Sets the maximum size of the queue and removes exceeding elements
+	 * if the specified size is lesser than the number of elements.
+	 *
+	 * @param size The new desired size
+	 * @throws IllegalArgumentException if the desired size is 0
+	 */
+	public void setSize(int size) {
+		if (size == 0) {
+			throw new IllegalArgumentException("Size cannot be 0!");
+		}
 
-        if (size < super.size()) {
-            for (int i = 0; i < (super.size() - size); i++) {
-                super.remove();
-            }
-        }
-        this.size = size;
-    }
+		if (size < super.size()) {
+			for (int i = 0; i < (super.size() - size); i++) {
+				super.remove();
+			}
+		}
+		this.size = size;
+	}
 
-    //================================================================================
-    // Override Methods
-    //================================================================================
+	//================================================================================
+	// Override Methods
+	//================================================================================
 
-    /**
-     * Adds the specified element to the queue and if it is full removes the oldest element
-     * and then adds the new one.
-     * <p></p>
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean add(E e) {
-        if (super.size() == this.size) {
-            super.remove();
-        }
-        return super.add(e);
-    }
+	/**
+	 * Adds the specified element to the queue and if it is full removes the oldest element
+	 * and then adds the new one.
+	 * <p></p>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean add(E e) {
+		if (super.size() == this.size) {
+			super.remove();
+		}
+		return super.add(e);
+	}
 }

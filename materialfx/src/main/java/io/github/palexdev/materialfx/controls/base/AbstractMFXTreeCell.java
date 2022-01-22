@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -48,113 +48,113 @@ import javafx.scene.layout.HBox;
  * @param <T> The type of the data within TreeItem.
  */
 public abstract class AbstractMFXTreeCell<T> extends HBox {
-    //================================================================================
-    // Properties
-    //================================================================================
-    protected final ObjectProperty<? super Node> disclosureNode = new SimpleObjectProperty<>();
-    private final DoubleProperty fixedCellSize = new SimpleDoubleProperty();
+	//================================================================================
+	// Properties
+	//================================================================================
+	protected final ObjectProperty<? super Node> disclosureNode = new SimpleObjectProperty<>();
+	private final DoubleProperty fixedCellSize = new SimpleDoubleProperty();
 
-    private static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
-    private final BooleanProperty selected = new SimpleBooleanProperty(false);
+	private static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
+	private final BooleanProperty selected = new SimpleBooleanProperty(false);
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public AbstractMFXTreeCell(AbstractMFXTreeItem<T> item) {
-        this(item, 27);
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public AbstractMFXTreeCell(AbstractMFXTreeItem<T> item) {
+		this(item, 27);
+	}
 
-    public AbstractMFXTreeCell(AbstractMFXTreeItem<T> item, double fixedHeight) {
-        this.fixedCellSize.set(fixedHeight);
+	public AbstractMFXTreeCell(AbstractMFXTreeItem<T> item, double fixedHeight) {
+		this.fixedCellSize.set(fixedHeight);
 
-        setMinHeight(USE_PREF_SIZE);
-        setMaxHeight(USE_PREF_SIZE);
-        prefHeightProperty().bind(fixedCellSize);
+		setMinHeight(USE_PREF_SIZE);
+		setMaxHeight(USE_PREF_SIZE);
+		prefHeightProperty().bind(fixedCellSize);
 
-        initialize(item);
-        render(item.getData());
-    }
+		initialize(item);
+		render(item.getData());
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
+	//================================================================================
+	// Methods
+	//================================================================================
 
-    /**
-     * Sets the alignment to CENTER_LEFT, the spacing to 5,
-     * adds the needed listeners and binds the {@link #selectedProperty()} to the item's
-     * {@link MFXTreeItem#selectedProperty()}
-     */
-    private void initialize(AbstractMFXTreeItem<T> item) {
-        setAlignment(Pos.CENTER_LEFT);
-        setSpacing(5);
+	/**
+	 * Sets the alignment to CENTER_LEFT, the spacing to 5,
+	 * adds the needed listeners and binds the {@link #selectedProperty()} to the item's
+	 * {@link MFXTreeItem#selectedProperty()}
+	 */
+	private void initialize(AbstractMFXTreeItem<T> item) {
+		setAlignment(Pos.CENTER_LEFT);
+		setSpacing(5);
 
-        addListeners();
-        selected.bind(item.selectedProperty());
-    }
+		addListeners();
+		selected.bind(item.selectedProperty());
+	}
 
-    /**
-     * Adds a listener to the selected property to change the PseudoClass state.
-     */
-    private void addListeners() {
-        selected.addListener(invalidate -> pseudoClassStateChanged(SELECTED_PSEUDO_CLASS, selected.get()));
-    }
+	/**
+	 * Adds a listener to the selected property to change the PseudoClass state.
+	 */
+	private void addListeners() {
+		selected.addListener(invalidate -> pseudoClassStateChanged(SELECTED_PSEUDO_CLASS, selected.get()));
+	}
 
-    public double getFixedCellSize() {
-        return fixedCellSize.get();
-    }
+	public double getFixedCellSize() {
+		return fixedCellSize.get();
+	}
 
-    public DoubleProperty fixedCellSizeProperty() {
-        return fixedCellSize;
-    }
+	public DoubleProperty fixedCellSizeProperty() {
+		return fixedCellSize;
+	}
 
-    public void setFixedCellSize(double fixedCellSize) {
-        this.fixedCellSize.set(fixedCellSize);
-    }
+	public void setFixedCellSize(double fixedCellSize) {
+		this.fixedCellSize.set(fixedCellSize);
+	}
 
-    public boolean isSelected() {
-        return selected.get();
-    }
+	public boolean isSelected() {
+		return selected.get();
+	}
 
-    public BooleanProperty selectedProperty() {
-        return selected;
-    }
+	public BooleanProperty selectedProperty() {
+		return selected;
+	}
 
-    //================================================================================
-    // Abstract Methods
-    //================================================================================
+	//================================================================================
+	// Abstract Methods
+	//================================================================================
 
-    /**
-     * Each cell must have a disclosure node (the node to expand/collapse the item), therefore
-     * it needs to specify how to create it.
-     */
-    protected abstract void defaultDisclosureNode();
+	/**
+	 * Each cell must have a disclosure node (the node to expand/collapse the item), therefore
+	 * it needs to specify how to create it.
+	 */
+	protected abstract void defaultDisclosureNode();
 
-    /**
-     * @return the cell's disclosure node instance
-     */
-    public abstract Node getDisclosureNode();
+	/**
+	 * @return the cell's disclosure node instance
+	 */
+	public abstract Node getDisclosureNode();
 
-    /**
-     * Sets the cell's disclosure node to the specified node.
-     *
-     * @param <N> the specified parameter N should be a subclass of Node
-     */
-    public abstract <N extends Node> void setDisclosureNode(N node);
+	/**
+	 * Sets the cell's disclosure node to the specified node.
+	 *
+	 * @param <N> the specified parameter N should be a subclass of Node
+	 */
+	public abstract <N extends Node> void setDisclosureNode(N node);
 
-    /**
-     * Specifies how the cell should represent the item's data, whether it is a node,
-     * a primitive type or something else.
-     *
-     * @param data the item's data
-     */
-    protected abstract void render(T data);
+	/**
+	 * Specifies how the cell should represent the item's data, whether it is a node,
+	 * a primitive type or something else.
+	 *
+	 * @param data the item's data
+	 */
+	protected abstract void render(T data);
 
-    /**
-     * This methods is needed for updating the cell when the item state changes.
-     * For example the disclosure node is added to all cells and should have the same size in each
-     * cell for layout reasons (think at how the HBox works and what would happen if you don't have the
-     * disclosure node) but by default it has not the icon because it is added only when the items list
-     * is not empty, when it changes from empty to full or vice versa the icon is added/removed.
-     */
-    public abstract void updateCell(MFXTreeItem<T> item);
+	/**
+	 * This methods is needed for updating the cell when the item state changes.
+	 * For example the disclosure node is added to all cells and should have the same size in each
+	 * cell for layout reasons (think at how the HBox works and what would happen if you don't have the
+	 * disclosure node) but by default it has not the icon because it is added only when the items list
+	 * is not empty, when it changes from empty to full or vice versa the icon is added/removed.
+	 */
+	public abstract void updateCell(MFXTreeItem<T> item);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -27,19 +27,19 @@ import java.net.URL;
  */
 public class MFXDemoResourcesLoader {
 
-    private MFXDemoResourcesLoader() {
-    }
+	private MFXDemoResourcesLoader() {
+	}
 
-    public static URL loadURL(String path) {
-        return MFXDemoResourcesLoader.class.getResource(path);
-    }
+	public static URL loadURL(String path) {
+		return MFXDemoResourcesLoader.class.getResource(path);
+	}
 
-    public static String load(String path) {
-        return loadURL(path).toString();
-    }
+	public static String load(String path) {
+		return loadURL(path).toString();
+	}
 
-    public static InputStream loadStream(String name) {
-        return MFXDemoResourcesLoader.class.getResourceAsStream(name);
-    }
+	public static InputStream loadStream(String name) {
+		return MFXDemoResourcesLoader.class.getResourceAsStream(name);
+	}
 
 }

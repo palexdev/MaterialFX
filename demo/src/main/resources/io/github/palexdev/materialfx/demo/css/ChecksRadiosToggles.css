@@ -1,0 +1,147 @@
+/*
+ * Copyright (C) 2022 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import '../fonts/Fonts.css';
+@import 'Common.css';
+@import 'MFXColors.css';
+
+
+/**************************************************
+ * Checkboxes
+**************************************************/
+.mfx-checkbox {
+	-fx-font-family: 'Visby Round CF Medium';
+	-fx-text-fill: -mfx-text-he;
+}
+
+.mfx-checkbox .text {
+	-fx-font-smoothing-type: lcd;
+}
+
+#customCheck {
+	-mfx-main: -common-gradient;
+	-mfx-gray: #5E0BA8;
+	-fx-text-fill: #5E0BA8;
+}
+
+#customCheck .box .mark {
+	-mfx-description: "mfx-x-alt";
+}
+
+#customCheck:indeterminate .box .mark {
+	-mfx-description: "mfx-hyphen";
+}
+
+#customCheck .mfx-ripple-generator {
+	-mfx-ripple-color: -common-gradient;
+	-fx-opacity: 0.4;
+}
+
+/**************************************************
+ * Radios
+**************************************************/
+.mfx-radio-button {
+	-fx-font-family: 'Visby Round CF Medium';
+	-fx-text-fill: -mfx-text-he;
+}
+
+.mfx-radio-button .text {
+	-fx-font-smoothing-type: lcd;
+}
+
+#customRadio {
+	-mfx-main: -common-gradient;
+	-mfx-gray: #5E0BA8;
+	-fx-text-fill: #5E0BA8;
+}
+
+#customRadio .mfx-ripple-generator {
+	-mfx-ripple-color: -common-gradient;
+	-fx-opacity: 0.5;
+}
+
+/**************************************************
+ * Toggle Buttons
+**************************************************/
+.mfx-toggle-button {
+	-fx-font-family: 'Visby Round CF Medium';
+	-fx-text-fill: -mfx-text-he;
+}
+
+.mfx-toggle-button .text {
+	-fx-font-smoothing-type: lcd;
+}
+
+#customToggleButton {
+	-mfx-main: -common-gradient;
+	-mfx-secondary: #5E0BA8;
+	-fx-text-fill: #5E0BA8;
+}
+
+#customToggleButton .mfx-ripple-generator {
+	-mfx-ripple-color: -common-gradient;
+	-fx-opacity: 0.5;
+}
+
+/**************************************************
+ * Toggle Nodes
+**************************************************/
+.mfx-circle-toggle-node {
+	-fx-font-family: 'Visby Round CF Medium';
+	-fx-text-fill: -mfx-text-he;
+
+}
+
+.mfx-rectangle-toggle-node {
+	-fx-font-family: 'Visby Round CF Medium';
+	-fx-text-fill: -mfx-text-he;
+	-fx-min-height: 40;
+}
+
+#customCircle,
+#customRectangle {
+	-mfx-selected-color: -common-gradient;
+	-mfx-selected-border-color: transparent;
+	-fx-text-fill: #5E0BA8;
+}
+
+#customCircle:selected .mfx-font-icon,
+#customRectangle:selected .mfx-font-icon {
+	-mfx-color: white;
+}
+
+#customCircle:selected .mfx-ripple-generator,
+#customRectangle:selected .mfx-ripple-generator {
+	-mfx-paused: true;
+}
+
+#customRectangle:selected {
+	-fx-text-fill: white;
+}
+
+/**************************************************
+ * Others
+**************************************************/
+.mfx-button {
+	-fx-font-family: 'Visby Round CF Medium';
+	-fx-text-fill: -mfx-text-he;
+}
+
+.mfx-button .text {
+	-fx-font-smoothing-type: lcd;
+}

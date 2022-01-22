@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -17,14 +17,23 @@
  */
 
 .mfx-progress-spinner:determinate .arc {
-    -fx-stroke: #0F9D58;
+	-fx-stroke: #0F9D58;
 }
 
 .mfx-progress-spinner .percentage {
-    -fx-font-family: "Comfortaa Medium";
-    -fx-font-smoothing-type: gray;
+	-fx-font-family: "Open Sans SemiBold";
+	-fx-font-smoothing-type: gray;
+	-fx-text-fill: -mfx-text-he;
 }
 
 .mfx-progress-spinner:determinate .percentage {
-    -fx-fill: #4d4d4d;
+	-fx-fill: #4d4d4d;
+}
+
+.mfx-progress-spinner:disabled .arc {
+	visibility: hidden;
+}
+
+.mfx-progress-spinner:disabled .track {
+	-fx-stroke: #bcbcbc;
 }

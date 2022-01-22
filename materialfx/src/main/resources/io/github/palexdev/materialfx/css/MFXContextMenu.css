@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -16,17 +16,24 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-.mfx-context-menu {
-    -fx-background-color: white;
-    -fx-background-radius: 5;
-    -fx-border-color: #ADB5BD;
-    -fx-border-radius: 5;
-    -fx-padding: 1;
+@import "MFXScrollPane.css";
+
+.mfx-context-menu .line-separator {
+	-fx-stroke: #e1e1e1;
+	-fx-stroke-width: 0.5;
 }
 
-.separator {
-    -fx-border-color: #ADB5BD;
-    -fx-stroke-width: 0.5;
-    -fx-opacity: 0.5;
+.mfx-context-menu .mfx-scroll-pane {
+	-fx-background-color: white;
+	-fx-background-radius: 5;
+	-fx-background-insets: 1;
+	-fx-border-color: lightgray;
+	-fx-border-radius: 5;
+	-fx-padding: 5;
+	-fx-max-height: 300;
+}
+
+.mfx-context-menu .mfx-scroll-pane .viewport {
+	-fx-background-color: transparent;
 }
 

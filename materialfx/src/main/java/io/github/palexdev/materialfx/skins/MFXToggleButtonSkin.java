@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -18,166 +18,124 @@
 
 package io.github.palexdev.materialfx.skins;
 
+import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.controls.MFXToggleButton;
 import io.github.palexdev.materialfx.effects.DepthLevel;
+import io.github.palexdev.materialfx.effects.Interpolators;
 import io.github.palexdev.materialfx.effects.MFXDepthManager;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.materialfx.effects.ripple.RipplePosition;
-import io.github.palexdev.materialfx.utils.AnimationUtils;
+import io.github.palexdev.materialfx.skins.base.MFXLabeledSkinBase;
 import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
+import io.github.palexdev.materialfx.utils.AnimationUtils.TimelineBuilder;
 import io.github.palexdev.materialfx.utils.NodeUtils;
-import javafx.animation.Interpolator;
 import javafx.beans.binding.Bindings;
-import javafx.scene.Cursor;
-import javafx.scene.control.skin.ToggleButtonSkin;
+import javafx.geometry.Pos;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.util.Duration;
 
 /**
  * This is the implementation of the {@code Skin} associated with every {@link MFXToggleButton}.
  */
-public class MFXToggleButtonSkin extends ToggleButtonSkin {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final StackPane container;
-    private final Circle circle;
-    final double circleRadius;
-    private final Line line;
-    private final MFXCircleRippleGenerator rippleGenerator;
+public class MFXToggleButtonSkin extends MFXLabeledSkinBase<MFXToggleButton> {
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final StackPane toggleContainer;
+	private final Circle circle;
+	private final Line line;
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXToggleButtonSkin(MFXToggleButton toggleButton) {
-        super(toggleButton);
+	private final MFXCircleRippleGenerator rippleGenerator;
 
-        circleRadius = toggleButton.getSize();
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXToggleButtonSkin(MFXToggleButton toggleButton) {
+		super(toggleButton);
 
-        line = new Line();
-        line.setStroke(toggleButton.isSelected() ? toggleButton.getToggleLineColor() : toggleButton.getUnToggleLineColor());
-        line.setStartX(0);
-        line.setStartY(0);
-        line.setEndX(circleRadius * 2 + 4);
-        line.setEndY(0);
-        line.setStrokeWidth(circleRadius * 1.5);
-        line.setStrokeLineCap(StrokeLineCap.ROUND);
-        line.setSmooth(true);
+		// Line
+		line = new Line();
+		line.getStyleClass().add("line");
+		line.endXProperty().bind(toggleButton.lengthProperty().subtract(line.strokeWidthProperty()));
+		line.strokeWidthProperty().bind(toggleButton.radiusProperty().multiply(1.5));
+		line.setSmooth(true);
 
-        circle = new Circle(circleRadius);
-        circle.setFill(toggleButton.isSelected() ? toggleButton.getToggleColor() : toggleButton.getUnToggleColor());
-        circle.setTranslateX(-circleRadius);
-        circle.setSmooth(true);
-        circle.setEffect(MFXDepthManager.shadowOf(DepthLevel.LEVEL1));
+		// Circle
+		circle = new Circle();
+		circle.getStyleClass().add("circle");
+		circle.radiusProperty().bind(toggleButton.radiusProperty());
+		circle.setSmooth(true);
+		circle.setEffect(MFXDepthManager.shadowOf(DepthLevel.LEVEL1));
 
-        container = new StackPane();
-        container.getStyleClass().setAll("container");
-        container.getChildren().addAll(line, circle);
-        container.setCursor(Cursor.HAND);
-        container.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-        container.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-        container.setPrefSize(50, 40);
+		// Ripple Generator, Line, Circle container
+		toggleContainer = new StackPane(line, circle);
+		toggleContainer.setAlignment(Pos.CENTER_LEFT);
+		toggleContainer.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+		toggleContainer.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+		toggleContainer.setPickOnBounds(false);
 
-        rippleGenerator = new MFXCircleRippleGenerator(container);
-        container.getChildren().add(0, rippleGenerator);
+		rippleGenerator = new MFXCircleRippleGenerator(toggleContainer);
+		rippleGenerator.setAnimateBackground(false);
+		rippleGenerator.setClipSupplier(() -> null);
+		rippleGenerator.setRipplePositionFunction(event -> {
+			PositionBean position = new PositionBean();
+			position.xProperty().bind(Bindings.createDoubleBinding(
+					() -> circle.localToParent(circle.getLayoutBounds()).getCenterX(),
+					circle.translateXProperty()
+			));
+			position.yProperty().bind(Bindings.createDoubleBinding(
+					() -> circle.localToParent(circle.getLayoutBounds()).getCenterY(),
+					circle.layoutBoundsProperty()
+			));
+			return position;
+		});
+		toggleContainer.getChildren().add(0, rippleGenerator);
 
-        toggleButton.setGraphic(container);
+		// Control's top container
+		updateAlignment();
+		initContainer();
 
-        setupRippleGenerator();
-        setListeners();
-    }
+		getChildren().setAll(topContainer);
+		addListeners();
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
+	//================================================================================
+	// Methods
+	//================================================================================
+	private void buildAndPlayAnimation(boolean selection) {
+		double endX = selection ? line.getBoundsInParent().getMaxX() - circle.getRadius() * 2 : 0;
+		TimelineBuilder.build()
+				.add(
+						KeyFrames.of(0, event -> rippleGenerator.generateRipple(null)),
+						KeyFrames.of(150, circle.translateXProperty(), endX, Interpolators.INTERPOLATOR_V1)
+				)
+				.getAnimation().play();
+	}
 
-    /**
-     * Adds listeners for: selected, size and skin(workaround) properties.
-     */
-    private void setListeners() {
-        MFXToggleButton toggleButton = (MFXToggleButton) getSkinnable();
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
+	@Override
+	protected void addListeners() {
+		super.addListeners();
+		MFXToggleButton toggleButton = getSkinnable();
 
-        toggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                line.setStroke(toggleButton.getToggleLineColor());
-                rippleGenerator.setRippleColor(toggleButton.getToggleLineColor());
-                circle.setFill(toggleButton.getToggleColor());
-            } else {
-                line.setStroke(toggleButton.getUnToggleLineColor());
-                rippleGenerator.setRippleColor(toggleButton.getUnToggleLineColor());
-                circle.setFill(toggleButton.getUnToggleColor());
-            }
-        });
+		toggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> buildAndPlayAnimation(newValue));
+		NodeUtils.waitForSkin(
+				toggleButton,
+				() -> {
+					double endX = toggleButton.isSelected() ? line.getLayoutBounds().getWidth() - circle.getRadius() * 2 : 0;
+					TimelineBuilder.build().add(KeyFrames.of(150, circle.translateXProperty(), endX, Interpolators.INTERPOLATOR_V1)).getAnimation().play();
+				},
+				false,
+				true
+		);
+	}
 
-        toggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> buildAndPlayAnimation(newValue));
-
-        toggleButton.sizeProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.doubleValue() < oldValue.doubleValue()) {
-                double translateX = newValue.doubleValue() + oldValue.doubleValue();
-                circle.setTranslateX(translateX + 2);
-            }
-        });
-
-        /*
-         * Workaround
-         * When the control is created the Skin is still null, so if the ToggleButton is set
-         * to be selected the animation won't be played. To fix this add a listener to the
-         * control's skinProperty, when the skin is not null and the ToggleButton isSelected,
-         * play the animation.
-         */
-        NodeUtils.waitForSkin(toggleButton, () -> {
-            if (toggleButton.isSelected()) {
-                buildAndPlayAnimation(true);
-            }
-        }, true, false);
-    }
-
-    protected void setupRippleGenerator() {
-        MFXToggleButton toggleButton = (MFXToggleButton) getSkinnable();
-
-        rippleGenerator.setAnimateBackground(false);
-        rippleGenerator.setAnimationSpeed(1.5);
-        rippleGenerator.setClipSupplier(() -> null);
-        rippleGenerator.setRippleColor(toggleButton.isSelected() ? toggleButton.getUnToggleLineColor() : toggleButton.getToggleLineColor());
-        rippleGenerator.setRipplePositionFunction(mouseEvent -> {
-            RipplePosition position = new RipplePosition();
-            position.xPositionProperty().bind(Bindings.createDoubleBinding(
-                    () -> circle.getBoundsInParent().getCenterX(),
-                    circle.boundsInParentProperty()
-            ));
-            position.yPositionProperty().bind(Bindings.createDoubleBinding(
-                    () -> circle.localToParent(circle.getLayoutBounds()).getCenterY(),
-                    circle.layoutBoundsProperty()
-            ));
-            return position;
-        });
-        rippleGenerator.setRippleRadius(circleRadius * 1.2);
-    }
-
-    /**
-     * Re-builds and plays the translation animation every time the control is selected/unselected.
-     *
-     * @param isSelected The control's state
-     */
-    private void buildAndPlayAnimation(boolean isSelected) {
-        AnimationUtils.TimelineBuilder.build()
-                .add(
-                        KeyFrames.of(Duration.ZERO, event -> rippleGenerator.generateRipple(null)),
-                        KeyFrames.of(150, circle.translateXProperty(), computeTranslateX(isSelected), Interpolator.EASE_BOTH)
-                ).getAnimation().play();
-    }
-
-    /**
-     * Computes the final x coordinate of the translate animation.
-     *
-     * @param isSelected The control's state
-     * @return The final x coordinate.
-     */
-    private double computeTranslateX(boolean isSelected) {
-        return isSelected ? (line.getEndX() - circleRadius) : (-circleRadius);
-    }
+	@Override
+	protected Pane getControlContainer() {
+		return toggleContainer;
+	}
 }

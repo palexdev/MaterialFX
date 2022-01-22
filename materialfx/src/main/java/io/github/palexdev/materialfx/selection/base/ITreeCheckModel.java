@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -27,8 +27,11 @@ import static io.github.palexdev.materialfx.controls.MFXCheckTreeItem.CheckTreeI
  * Public API used by any MFXCheckTreeView.
  */
 public interface ITreeCheckModel<T> extends ITreeSelectionModel<T> {
-    void scanTree(MFXCheckTreeItem<T> item);
-    void check(MFXCheckTreeItem<T> item, CheckTreeItemEvent<?> event);
-    void clearChecked();
-    ListProperty<MFXCheckTreeItem<T>> getCheckedItems();
+	void scanTree(MFXCheckTreeItem<T> item);
+
+	void check(MFXCheckTreeItem<T> item, CheckTreeItemEvent<?> event);
+
+	void clearChecked();
+
+	ListProperty<MFXCheckTreeItem<T>> getCheckedItems();
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -17,103 +17,115 @@
  */
 
 .mfx-scroll-pane {
-    -mfx-track-color: rgb(230, 230, 230);
-    -mfx-thumb-color: rgb(137, 137, 137);
-    -mfx-thumb-hover-color: rgb(89, 88, 91);
+	-fx-background-color: white;
 
-    -fx-background-color: white;
+	-track-color: rgb(230, 230, 230);
+	-thumb-color: rgb(137, 137, 137);
+	-thumb-hover-color: rgb(89, 88, 91);
 }
 
-.mfx-scroll-pane .viewport {
-    -fx-background-color: white;
-}
-
-.mfx-scroll-pane * {
-    -fx-background-color: white;
-}
-
+/* Remove JavaFX crap */
 .mfx-scroll-pane:focused {
-    -fx-background-color: white;
+	-fx-background-color: white;
 }
 
 .mfx-scroll-pane > .corner {
-    -fx-background-color: transparent;
+	-fx-background-color: transparent;
 }
 
-.mfx-scroll-pane .scroll-bar {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-focus-color: transparent;
-    -fx-background-insets: 100%;
-    -fx-border-insets: 100%;
+.mfx-scroll-pane .viewport {
+	-fx-background-color: transparent;
 }
 
-.mfx-scroll-pane .scroll-bar:horizontal .track {
-    -fx-background-color: -mfx-track-color;
-    -fx-border-color: transparent;
-    -fx-background-radius: 2.0em;
-    -fx-border-radius: 2.0em;
-    -fx-background-insets: 3.5 4 3.5 4;
+.mfx-scroll-pane .scroll-bar,
+.mfx-scroll-pane .scroll-bar .decrement-arrow,
+.mfx-scroll-pane .scroll-bar .increment-arrow {
+	-fx-pref-width: 0;
+	-fx-pref-height: 0;
 }
 
-.mfx-scroll-pane .scroll-bar:vertical .track {
-    -fx-background-color: -mfx-track-color;
-    -fx-border-color: transparent;
-    -fx-background-radius: 2.0em;
-    -fx-border-radius: 2.0em;
-    -fx-background-insets: 4 3.5 4 3.5;
-}
 
 .mfx-scroll-pane .scroll-bar:horizontal .increment-button,
 .mfx-scroll-pane .scroll-bar:horizontal .decrement-button {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0.0em;
-    -fx-padding: 0.0 0.0 10.0 0.0;
+	-fx-background-color: transparent;
+	-fx-background-radius: 0.0em;
+	-fx-padding: 0.0 0.0 10.0 0.0;
 }
 
 .mfx-scroll-pane .scroll-bar:vertical .increment-button,
 .mfx-scroll-pane .scroll-bar:vertical .decrement-button {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0.0em;
-    -fx-padding: 0.0 10.0 0.0 0.0;
+	-fx-background-color: transparent;
+	-fx-background-radius: 0.0em;
+	-fx-padding: 0.0 10.0 0.0 0.0;
 
 }
 
 .mfx-scroll-pane .scroll-bar .increment-arrow,
 .mfx-scroll-pane .scroll-bar .decrement-arrow {
-    -fx-shape: " ";
-    -fx-padding: 0.15em 0.0;
+	-fx-shape: " ";
+	-fx-padding: 0.15em 0.0;
 }
 
 .mfx-scroll-pane .scroll-bar:horizontal .increment-arrow,
 .mfx-scroll-pane .scroll-bar:horizontal .decrement-arrow {
-    -fx-shape: " ";
-    -fx-padding: 0.0 0.05em;
+	-fx-shape: " ";
+	-fx-padding: 0.0 0.05em;
 }
 
 .mfx-scroll-pane .scroll-bar:vertical .increment-arrow,
 .mfx-scroll-pane .scroll-bar:vertical .decrement-arrow {
-    -fx-shape: " ";
-    -fx-padding: 0.0 0.05em;
+	-fx-shape: " ";
+	-fx-padding: 0.0 0.05em;
+}
+
+/* Customize ScrollBars */
+
+.mfx-scroll-pane .scroll-bar:horizontal .track {
+	-fx-background-color: -track-color;
+	-fx-border-color: transparent;
+	-fx-background-radius: 2.0em;
+	-fx-border-radius: 2.0em;
+	-fx-background-insets: 3;
+}
+
+.mfx-scroll-pane .scroll-bar:vertical .track {
+	-fx-background-color: -track-color;
+	-fx-border-color: transparent;
+	-fx-background-radius: 2.0em;
+	-fx-border-radius: 2.0em;
+	-fx-background-insets: 3;
+}
+
+.mfx-scroll-pane .scroll-bar .decrement-arrow,
+.mfx-scroll-pane .scroll-bar .increment-arrow {
+	-fx-pref-width: 0;
+	-fx-pref-height: 0;
+}
+
+.mfx-scroll-pane .scroll-bar:vertical {
+	-fx-background-color: transparent;
+	-fx-pref-width: 12;
+	-fx-pref-height: 12;
+	-fx-padding: 5 0.5 5 0.5;
+}
+
+.mfx-scroll-pane .scroll-bar:horizontal {
+	-fx-background-color: transparent;
+	-fx-pref-width: 12;
+	-fx-pref-height: 12;
+	-fx-padding: 0.5 5 0.5 5;
 }
 
 .mfx-scroll-pane .scroll-bar:horizontal .thumb,
 .mfx-scroll-pane .scroll-bar:vertical .thumb {
-    -fx-background-color: -mfx-thumb-color;
-    -fx-background-insets: 2.0, 0.0, 0.0;
-    -fx-background-radius: 2.0em;
+	-fx-background-color: -thumb-color;
+	-fx-background-insets: 2.0, 0.0, 0.0;
+	-fx-background-radius: 2.0em;
 }
 
 .mfx-scroll-pane .scroll-bar:horizontal .thumb:hover,
 .mfx-scroll-pane .scroll-bar:vertical .thumb:hover {
-    -fx-background-color: -mfx-thumb-hover-color;
-    -fx-background-insets: 1.5, 0.0, 0.0;
-    -fx-background-radius: 2.0em;
-}
-
-.mfx-scroll-pane .scroll-bar:horizontal .thumb:pressed,
-.mfx-scroll-pane .scroll-bar:vertical .thumb:pressed {
-    -fx-background-color: -mfx-thumb-hover-color;
-    -fx-background-insets: 1.5, 0.0, 0.0;
-    -fx-background-radius: 2.0em;
+	-fx-background-color: -thumb-hover-color;
+	-fx-background-insets: 1.5, 0.0, 0.0;
+	-fx-background-radius: 2.0em;
 }

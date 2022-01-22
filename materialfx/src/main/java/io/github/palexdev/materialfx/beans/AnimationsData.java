@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -28,52 +28,52 @@ import javafx.util.Duration;
  * an action to perform when the animation ends.
  */
 public class AnimationsData {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final Node node;
-    private final Duration duration;
-    private final EventHandler<ActionEvent> onFinished;
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final Node node;
+	private final Duration duration;
+	private final EventHandler<ActionEvent> onFinished;
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public AnimationsData(Node node, Duration duration, EventHandler<ActionEvent> onFinished) {
-        this.node = node;
-        this.duration = duration;
-        this.onFinished = onFinished;
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public AnimationsData(Node node, Duration duration, EventHandler<ActionEvent> onFinished) {
+		this.node = node;
+		this.duration = duration;
+		this.onFinished = onFinished;
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
-    public Node node() {
-        return node;
-    }
+	//================================================================================
+	// Methods
+	//================================================================================
+	public Node node() {
+		return node;
+	}
 
-    public Duration duration() {
-        return duration;
-    }
+	public Duration duration() {
+		return duration;
+	}
 
-    public EventHandler<ActionEvent> onFinished() {
-        return onFinished;
-    }
+	public EventHandler<ActionEvent> onFinished() {
+		return onFinished;
+	}
 
-    //================================================================================
-    // Static Methods
-    //================================================================================
+	//================================================================================
+	// Static Methods
+	//================================================================================
 
-    /**
-     * Builds a new AnimationsData object with the given node and duration, the action is set to null.
-     */
-    public static AnimationsData of(Node node, Duration duration) {
-        return of(node, duration, null);
-    }
+	/**
+	 * Builds a new AnimationsData object with the given node and duration, the action is set to null.
+	 */
+	public static AnimationsData of(Node node, Duration duration) {
+		return of(node, duration, null);
+	}
 
-    /**
-     * Builds a new AnimationsData object with the given node and duration and action.
-     */
-    public static AnimationsData of(Node node, Duration duration, EventHandler<ActionEvent> onFinished) {
-        return new AnimationsData(node, duration, onFinished);
-    }
+	/**
+	 * Builds a new AnimationsData object with the given node and duration and action.
+	 */
+	public static AnimationsData of(Node node, Duration duration, EventHandler<ActionEvent> onFinished) {
+		return new AnimationsData(node, duration, onFinished);
+	}
 }

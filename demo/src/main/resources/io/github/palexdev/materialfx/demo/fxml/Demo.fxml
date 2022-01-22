@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright (C) 2022 Parisi Alessandro
+  ~ This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+  ~
+  ~ MaterialFX is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ MaterialFX is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<?import io.github.palexdev.materialfx.controls.MFXScrollPane?>
+<?import io.github.palexdev.materialfx.font.MFXFontIcon?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<AnchorPane fx:id="rootPane" prefHeight="720.0" prefWidth="1280.0" styleClass="rootPane" stylesheets="@../css/Demo.css"
+            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="io.github.palexdev.materialfx.demo.controllers.DemoController">
+    <HBox fx:id="windowHeader" alignment="CENTER_RIGHT" layoutY="6.0" prefHeight="50.0" prefWidth="1281.0"
+          spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <padding>
+            <Insets right="10.0"/>
+        </padding>
+        <MFXFontIcon fx:id="alwaysOnTopIcon" description="mfx-circle" size="15.0" styleClass="always-on-top-icon"/>
+        <MFXFontIcon fx:id="minimizeIcon" description="mfx-circle" size="15.0" styleClass="minimize-icon"/>
+        <MFXFontIcon fx:id="closeIcon" description="mfx-circle" size="15.0" styleClass="close-icon"/>
+    </HBox>
+    <VBox layoutX="227.0" layoutY="51.0" prefWidth="250.0" styleClass="sidebar" AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <padding>
+            <Insets bottom="10.0" left="10.0" top="60.0"/>
+        </padding>
+        <Label graphicTextGap="15.0" styleClass="header" text="MaterialFX">
+            <graphic>
+                <MFXFontIcon description="mfx-logo" size="52.0"/>
+            </graphic>
+        </Label>
+        <Label styleClass="menu-label" text="Components">
+            <VBox.margin>
+                <Insets left="5.0" top="40.0"/>
+            </VBox.margin>
+        </Label>
+        <MFXScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+            <VBox.margin>
+                <Insets bottom="10.0" left="5.0" top="15.0"/>
+            </VBox.margin>
+            <padding>
+                <Insets right="10.0"/>
+            </padding>
+            <VBox fx:id="navBar" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0"
+                  styleClass="navbar"/>
+        </MFXScrollPane>
+    </VBox>
+    <StackPane fx:id="contentPane" layoutX="252.0" layoutY="52.0" prefHeight="150.0" prefWidth="200.0"
+               AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="252.0" AnchorPane.rightAnchor="10.0"
+               AnchorPane.topAnchor="51.0"/>
+</AnchorPane>

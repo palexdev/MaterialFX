@@ -1,0 +1,36 @@
+/*
+ * Copyright (C) 2022 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+.mfx-check-list-view {
+	-mfx-track-color: rgb(230, 230, 230);
+	-mfx-thumb-color: rgb(137, 137, 137);
+	-mfx-thumb-hover-color: rgb(89, 88, 91);
+}
+
+.virtual-flow .scroll-bar .track {
+	-fx-background-color: -mfx-track-color;
+}
+
+.virtual-flow .scroll-bar .thumb {
+	-fx-background-color: -mfx-thumb-color;
+}
+
+.virtual-flow .scroll-bar .thumb:pressed,
+.virtual-flow .scroll-bar .thumb:hover {
+	-fx-background-color: -mfx-thumb-hover-color;
+}

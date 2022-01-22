@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -30,32 +30,48 @@ import javafx.scene.input.MouseEvent;
  */
 public class ToggleButtonsUtil {
 
-    private static final EventHandler<MouseEvent> consumeMouseEventFilter = (MouseEvent mouseEvent) -> {
-        if (((Toggle) mouseEvent.getSource()).isSelected()) {
-            mouseEvent.consume();
-        }
-    };
+	private static final EventHandler<MouseEvent> consumeMouseEventFilter = (MouseEvent mouseEvent) -> {
+		if (((Toggle) mouseEvent.getSource()).isSelected()) {
+			mouseEvent.consume();
+		}
+	};
 
-    private static void addConsumeMouseEventFilter(Toggle toggle) {
-        ((ToggleButton) toggle).addEventFilter(MouseEvent.MOUSE_PRESSED, consumeMouseEventFilter);
-        ((ToggleButton) toggle).addEventFilter(MouseEvent.MOUSE_RELEASED, consumeMouseEventFilter);
-        ((ToggleButton) toggle).addEventFilter(MouseEvent.MOUSE_CLICKED, consumeMouseEventFilter);
-    }
+	private static void addConsumeMouseEventFilter(Toggle toggle) {
+		((ToggleButton) toggle).addEventFilter(MouseEvent.MOUSE_PRESSED, consumeMouseEventFilter);
+		((ToggleButton) toggle).addEventFilter(MouseEvent.MOUSE_RELEASED, consumeMouseEventFilter);
+		((ToggleButton) toggle).addEventFilter(MouseEvent.MOUSE_CLICKED, consumeMouseEventFilter);
+	}
 
-    /**
-     * Adds a handler to the given {@code ToggleGroup} to make sure there's always at least
-     * one {@code ToggleButton} selected.
-     *
-     * @param toggleGroup The given ToggleGroup
-     */
-    public static void addAlwaysOneSelectedSupport(final ToggleGroup toggleGroup) {
-        toggleGroup.getToggles().addListener((ListChangeListener.Change<? extends Toggle> c) -> {
-            while (c.next()) {
-                for (final Toggle addedToggle : c.getAddedSubList()) {
-                    addConsumeMouseEventFilter(addedToggle);
-                }
-            }
-        });
-        toggleGroup.getToggles().forEach(ToggleButtonsUtil::addConsumeMouseEventFilter);
-    }
+	/**
+	 * Adds a handler to the given {@code ToggleGroup} to make sure there's always at least
+	 * one {@code ToggleButton} selected.
+	 *
+	 * @param toggleGroup The given ToggleGroup
+	 */
+	public static void addAlwaysOneSelectedSupport(final ToggleGroup toggleGroup) {
+		toggleGroup.getToggles().addListener((ListChangeListener.Change<? extends Toggle> c) -> {
+			while (c.next()) {
+				for (final Toggle addedToggle : c.getAddedSubList()) {
+					addConsumeMouseEventFilter(addedToggle);
+				}
+			}
+		});
+		toggleGroup.getToggles().forEach(ToggleButtonsUtil::addConsumeMouseEventFilter);
+	}
+
+	/**
+	 * Copied from {@link ToggleGroup}. It's a package-private method that is used in Toggles
+	 * when the selection state changes and a toggle group is set.
+	 */
+	public static void clearSelectedToggle(ToggleGroup toggleGroup) {
+		Toggle selectedToggle = toggleGroup.getSelectedToggle();
+		if (!selectedToggle.isSelected()) {
+			for (Toggle toggle : toggleGroup.getToggles()) {
+				if (toggle.isSelected()) {
+					return;
+				}
+			}
+		}
+		toggleGroup.selectToggle(null);
+	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -17,18 +17,22 @@
  */
 
 .mfx-progress-bar .track {
-    -fx-fill: #E0E0E0;
+	-fx-fill: #E0E0E0;
 }
 
 .mfx-progress-bar .bar1,
 .mfx-progress-bar:indeterminate .bar1,
 .mfx-progress-bar:indeterminate .bar2 {
-    -fx-fill: #0F9D58;
+	-fx-fill: #0F9D58;
 }
 
 .mfx-progress-bar .track,
 .mfx-progress-bar .bar1,
 .mfx-progress-bar .bar2 {
-    -fx-arc-height: 6;
-    -fx-arc-width: 6;
+	-fx-arc-height: 6;
+	-fx-arc-width: 6;
+}
+
+.mfx-progress-bar:disabled .track {
+	-fx-fill: #bcbcbc;
 }

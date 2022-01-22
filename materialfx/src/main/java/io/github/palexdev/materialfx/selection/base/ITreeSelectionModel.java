@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -26,11 +26,17 @@ import javafx.scene.input.MouseEvent;
  * Public API used by any MFXTreeView.
  */
 public interface ITreeSelectionModel<T> {
-    void scanTree(AbstractMFXTreeItem<T> item);
-    void select(AbstractMFXTreeItem<T> item, MouseEvent mouseEvent);
-    void clearSelection();
-    AbstractMFXTreeItem<T> getSelectedItem();
-    ListProperty<AbstractMFXTreeItem<T>> getSelectedItems();
-    boolean allowsMultipleSelection();
-    void setAllowsMultipleSelection(boolean multipleSelection);
+	void scanTree(AbstractMFXTreeItem<T> item);
+
+	void select(AbstractMFXTreeItem<T> item, MouseEvent mouseEvent);
+
+	void clearSelection();
+
+	AbstractMFXTreeItem<T> getSelectedItem();
+
+	ListProperty<AbstractMFXTreeItem<T>> getSelectedItems();
+
+	boolean allowsMultipleSelection();
+
+	void setAllowsMultipleSelection(boolean multipleSelection);
 }

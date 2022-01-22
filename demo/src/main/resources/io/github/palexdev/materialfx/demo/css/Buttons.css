@@ -1,0 +1,73 @@
+/*
+ * Copyright (C) 2022 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import '../fonts/Fonts.css';
+@import 'Common.css';
+@import 'MFXColors.css';
+
+.mfx-button {
+	-fx-font-family: 'Visby Round CF Medium';
+	-fx-text-fill: -mfx-text-he;
+}
+
+.mfx-button .mfx-ripple-generator {
+	-mfx-ripple-radius: 40;
+	-mfx-auto-clip: true;
+}
+
+.mfx-button .text {
+	-fx-font-smoothing-type: lcd;
+}
+
+#custom {
+	-fx-background-color: -mfx-purple;
+	-fx-text-fill: white
+}
+
+.outline-button {
+	-fx-background-color: transparent;
+	-fx-border-color: -mfx-purple;
+	-fx-border-radius: 3;
+
+	-fx-text-fill: -mfx-purple;
+}
+
+.outline-button:hover,
+.outline-button:focused {
+	-fx-background-color: -mfx-purple;
+	-fx-text-fill: white;
+}
+
+
+.link-button {
+	-fx-background-color: transparent;
+	-fx-border-radius: 3;
+	-fx-text-fill: #0096FF;
+	-fx-underline: true;
+	-fx-cursor: hand;
+}
+
+.link-button:armed,
+.link-button:focused {
+	-fx-border-color: #006BFF;
+	-fx-text-fill: #006BFF;
+}
+
+.link-button .mfx-ripple-generator {
+	-mfx-ripple-color: #D9E9FF;
+}

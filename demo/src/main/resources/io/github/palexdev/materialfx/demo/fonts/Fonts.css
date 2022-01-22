@@ -1,0 +1,304 @@
+/*
+ * Copyright (C) 2022 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@font-face {
+	font-family: 'Comfortaa Bold';
+	font-weight: bold;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/Comfortaa/Comfortaa-Bold.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Comfortaa Light';
+	font-weight: 300px;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/Comfortaa/Comfortaa-Light.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Comfortaa Medium';
+	font-weight: 500px;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/Comfortaa/Comfortaa-Medium.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Comfortaa Regular';
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/Comfortaa/Comfortaa-Regular.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Comfortaa SemiBold';
+	font-weight: 600px;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/Comfortaa/Comfortaa-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Open Sans Bold';
+	font-weight: bold;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/OpenSans/OpenSans-Bold.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Open Sans BoldItalic';
+	font-weight: bold;
+	font-style: italic;
+	font-display: swap;
+	src: url('../fonts/OpenSans/OpenSans-BoldItalic.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Open Sans ExtraBold';
+	font-weight: 800px;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/OpenSans/OpenSans-ExtraBold.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Open Sans ExtraBoldItalic';
+	font-weight: 800px;
+	font-style: italic;
+	font-display: swap;
+	src: url('../fonts/OpenSans/OpenSans-ExtraBoldItalic.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Open Sans Light';
+	font-weight: 300px;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/OpenSans/OpenSans-Light.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Open Sans LightItalic';
+	font-weight: 300px;
+	font-style: italic;
+	font-display: swap;
+	src: url('../fonts/OpenSans/OpenSans-LightItalic.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Open Sans Italic';
+	font-weight: normal;
+	font-style: italic;
+	font-display: swap;
+	src: url('../fonts/OpenSans/OpenSans-Italic.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Open Sans SemiBold';
+	font-weight: 600px;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/OpenSans/OpenSans-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Open Sans Regular';
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/OpenSans/OpenSans-Regular.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Open Sans SemiBoldItalic';
+	font-weight: 600px;
+	font-style: italic;
+	font-display: swap;
+	src: url('../fonts/OpenSans/OpenSans-SemiBoldItalic.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto Black';
+	font-weight: 900px;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/Roboto/Roboto-Black.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto BlackItalic';
+	font-weight: 900px;
+	font-style: italic;
+	font-display: swap;
+	src: url('../fonts/Roboto/Roboto-BlackItalic.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto Bold';
+	font-weight: bold;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/Roboto/Roboto-Bold.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto BoldItalic';
+	font-weight: bold;
+	font-style: italic;
+	font-display: swap;
+	src: url('../fonts/Roboto/Roboto-BoldItalic.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto Light';
+	font-weight: 300px;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/Roboto/Roboto-Light.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto Italic';
+	font-weight: normal;
+	font-style: italic;
+	font-display: swap;
+	src: url('../fonts/Roboto/Roboto-Italic.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto LightItalic';
+	font-weight: 300px;
+	font-style: italic;
+	font-display: swap;
+	src: url('../fonts/Roboto/Roboto-LightItalic.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto Medium';
+	font-weight: 500px;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/Roboto/Roboto-Medium.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto MediumItalic';
+	font-weight: 500px;
+	font-style: italic;
+	font-display: swap;
+	src: url('../fonts/Roboto/Roboto-MediumItalic.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto Regular';
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/Roboto/Roboto-Regular.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto ThinItalic';
+	font-weight: 100px;
+	font-style: italic;
+	font-display: swap;
+	src: url('../fonts/Roboto/Roboto-ThinItalic.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto Thin';
+	font-weight: 100px;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/Roboto/Roboto-Thin.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Varela Round';
+	font-weight: normal;
+	font-display: swap;
+	src: url('../fonts/Varela/VarelaRound-Regular.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Visby Round CF Demi';
+	font-weight: 600;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/Visby/VisbyRoundCF-DemiBold.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Visby Round CF Extra';
+	font-weight: bold;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/Visby/VisbyRoundCF-ExtraBold.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Visby Round CF';
+	font-weight: bold;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/Visby/VisbyRoundCF-Bold.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Visby Round CF';
+	font-weight: 900;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/Visby/VisbyRoundCF-Heavy.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Visby Round CF Extra';
+	font-weight: 200;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/Visby/VisbyRoundCF-ExtraLight.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Visby Round CF';
+	font-weight: 300;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/Visby/VisbyRoundCF-Light.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Visby Round CF';
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/Visby/VisbyRoundCF-Medium.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Visby Round CF';
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+	src: url('../fonts/Visby/VisbyRoundCF-Regular.ttf') format('truetype');
+}

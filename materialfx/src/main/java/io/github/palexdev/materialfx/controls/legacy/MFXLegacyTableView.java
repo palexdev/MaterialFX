@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -31,43 +31,43 @@ import javafx.scene.control.TableView;
  * @param <S>
  */
 public class MFXLegacyTableView<S> extends TableView<S> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final String STYLE_CLASS = "mfx-legacy-table-view";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/MFXTableView.css");
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final String STYLE_CLASS = "mfx-legacy-table-view";
+	private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/MFXTableView.css");
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXLegacyTableView() {
-        initialize();
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXLegacyTableView() {
+		initialize();
+	}
 
-    public MFXLegacyTableView(ObservableList<S> items) {
-        super(items);
-        initialize();
-    }
+	public MFXLegacyTableView(ObservableList<S> items) {
+		super(items);
+		initialize();
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
-    private void initialize() {
-        getStyleClass().add(STYLE_CLASS);
-        setRowFactory(row -> new MFXLegacyTableRow<>());
-        setFixedCellSize(27);
-    }
+	//================================================================================
+	// Methods
+	//================================================================================
+	private void initialize() {
+		getStyleClass().add(STYLE_CLASS);
+		setRowFactory(row -> new MFXLegacyTableRow<>());
+		setFixedCellSize(27);
+	}
 
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        return new MFXLegacyTableViewSkin<>(this);
-    }
+	//================================================================================
+	// Override Methods
+	//================================================================================
+	@Override
+	protected Skin<?> createDefaultSkin() {
+		return new MFXLegacyTableViewSkin<>(this);
+	}
 
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
+	@Override
+	public String getUserAgentStylesheet() {
+		return STYLESHEET;
+	}
 }

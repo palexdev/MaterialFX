@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -34,16 +34,16 @@ import javafx.scene.paint.Color;
  * graphic, however it should be acceptable and I believe this is still better than having no graphic at all.
  */
 public class MFXSnapshotWrapper {
-    private final WritableImage snapshot;
+	private final WritableImage snapshot;
 
-    public MFXSnapshotWrapper(Node node) {
-        SnapshotParameters snapshotParameters = new SnapshotParameters();
-        snapshotParameters.setFill(Color.TRANSPARENT);
-        snapshotParameters.setDepthBuffer(true);
-        snapshot = node.snapshot(snapshotParameters, null);
-    }
+	public MFXSnapshotWrapper(Node node) {
+		SnapshotParameters snapshotParameters = new SnapshotParameters();
+		snapshotParameters.setFill(Color.TRANSPARENT);
+		snapshotParameters.setDepthBuffer(true);
+		snapshot = node.snapshot(snapshotParameters, null);
+	}
 
-    public Node getGraphic() {
-        return new ImageView(snapshot);
-    }
+	public Node getGraphic() {
+		return new ImageView(snapshot);
+	}
 }

@@ -1,0 +1,7 @@
+.mfx-grid-row:hover {
+	-fx-background-color: lightblue;
+}
+
+.mfx-grid-row:selected {
+	-fx-background-color: lightgreen;
+}

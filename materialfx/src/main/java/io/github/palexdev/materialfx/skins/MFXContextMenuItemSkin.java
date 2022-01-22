@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -17,73 +17,109 @@
  */
 
 package io.github.palexdev.materialfx.skins;
+
+import io.github.palexdev.materialfx.controls.BoundLabel;
+import io.github.palexdev.materialfx.controls.MFXContextMenu;
 import io.github.palexdev.materialfx.controls.MFXContextMenuItem;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
-import javafx.geometry.VPos;
+import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.SkinBase;
+import javafx.scene.control.Tooltip;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.RowConstraints;
-
-import java.util.ArrayList;
-import java.util.List;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.stage.Window;
 
 /**
- * This is a basic implementation of a {@code Skin} used by every {@link MFXContextMenuItem}.
- * <p>
- * It is basically an HBox which contains two labels to show the text and the accelerator.
+ * Skin associated with every {@link MFXContextMenuItem} by default.
+ * <p></p>
+ * This skin is composed of a top container, which is a {@link HBox},
+ * a {@link MFXIconWrapper} to contain the icon and two labels to show
+ * the item's text and the accelerator.
  */
 public class MFXContextMenuItemSkin extends SkinBase<MFXContextMenuItem> {
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final HBox container;
+	private final MFXIconWrapper icon;
+	private final BoundLabel label;
+	private final Label accelerator;
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXContextMenuItemSkin(MFXContextMenuItem item) {
-        super(item);
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXContextMenuItemSkin(MFXContextMenuItem item) {
+		super(item);
 
-        MFXIconWrapper iconWrapper = new MFXIconWrapper(null, 24);
-        iconWrapper.iconProperty().bind(item.iconProperty());
+		label = new BoundLabel(item);
+		label.graphicProperty().unbind();
+		label.setGraphic(null);
 
-        Label text = new Label();
-        text.textProperty().bind(item.textProperty());
-        text.minWidthProperty().bind(item.textWidthProperty());
-        text.alignmentProperty().bind(item.textAlignmentProperty());
-        text.paddingProperty().bind(item.textInsetsProperty());
+		icon = new MFXIconWrapper(null, 24);
+		icon.setIcon(item.getGraphic());
+		icon.iconProperty().bind(item.graphicProperty());
 
-        Label accelerator = new Label();
-        accelerator.getStyleClass().add("accelerator");
-        accelerator.textProperty().bind(item.acceleratorProperty());
-        accelerator.minWidthProperty().bind(item.acceleratorWidthProperty());
-        accelerator.alignmentProperty().bind(item.acceleratorAlignmentProperty());
-        accelerator.paddingProperty().bind(item.acceleratorInsetsProperty());
+		accelerator = new Label();
+		accelerator.getStyleClass().add("accelerator");
+		accelerator.textProperty().bind(item.acceleratorProperty());
+		accelerator.setAlignment(Pos.CENTER_RIGHT);
+		accelerator.setMaxWidth(Double.MAX_VALUE);
+		HBox.setHgrow(accelerator, Priority.ALWAYS);
 
-        GridPane gridPane = new GridPane();
-        gridPane.vgapProperty().bind(item.spacingProperty());
-        gridPane.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+		container = new HBox(10, icon, label, accelerator);
+		container.setAlignment(Pos.CENTER_LEFT);
 
-        List<ColumnConstraints> columnConstraints = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            ColumnConstraints cc = new ColumnConstraints();
-            cc.setPrefWidth(Region.USE_COMPUTED_SIZE);
+		if (item.getTooltipSupplier() != null) {
+			Tooltip tooltip = item.getTooltipSupplier().get();
+			if (tooltip != null) item.setTooltip(tooltip);
+		}
 
-            columnConstraints.add(cc);
-        }
-        gridPane.getColumnConstraints().setAll(columnConstraints);
+		addListeners();
+		getChildren().setAll(container);
+	}
 
-        RowConstraints rowConstraints = new RowConstraints();
-        rowConstraints.setMinHeight(27);
-        rowConstraints.setPrefHeight(Region.USE_COMPUTED_SIZE);
-        rowConstraints.setValignment(VPos.CENTER);
-        gridPane.getRowConstraints().setAll(rowConstraints);
+	//================================================================================
+	// Methods
+	//================================================================================
+	private void addListeners() {
+		MFXContextMenuItem item = getSkinnable();
 
-        gridPane.add(iconWrapper, 0, 0);
-        gridPane.add(text, 1, 0);
-        gridPane.add(accelerator, 2, 0);
+		item.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+			Scene scene = item.getScene();
+			Window window = scene.getWindow();
+			if (window instanceof MFXContextMenu) {
+				window.hide();
+			}
+		});
 
-        getChildren().setAll(gridPane);
-        item.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> text.requestFocus());
-    }
+		item.tooltipSupplierProperty().addListener((observable, oldValue, newValue) -> {
+			item.setTooltip(null);
+			if (newValue != null) {
+				Tooltip tooltip = item.getTooltipSupplier().get();
+				if (tooltip != null) item.setTooltip(tooltip);
+			}
+		});
+
+		item.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+			if (event.getButton() != MouseButton.PRIMARY) return;
+			item.fireEvent(new ActionEvent());
+		});
+	}
+
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
+	@Override
+	protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+		return leftInset +
+				icon.getSize() +
+				Math.abs(label.snappedLeftInset()) + label.prefWidth(-1) + Math.abs(label.snappedRightInset()) +
+				accelerator.snappedLeftInset() + accelerator.prefWidth(-1) + accelerator.snappedRightInset() +
+				rightInset;
+	}
 }

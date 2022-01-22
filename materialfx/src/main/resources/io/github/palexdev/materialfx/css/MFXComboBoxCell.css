@@ -1,0 +1,43 @@
+/*
+ * Copyright (C) 2022 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import "Fonts.css";
+@import "MFXColors.css";
+
+.mfx-combo-box-cell {
+	-mfx-main: -mfx-purple;
+	-mfx-hover: rgba(98, 0, 238, 0.1);
+	-mfx-selected: rgba(98, 0, 238, 0.2);
+
+	-fx-background-color: transparent;
+	-fx-background-radius: 5;
+	-fx-padding: 5;
+}
+
+.mfx-combo-box-cell:hover {
+	-fx-background-color: -mfx-hover;
+}
+
+.mfx-combo-box-cell:selected {
+	-fx-background-color: -mfx-selected;
+}
+
+.mfx-combo-box-cell .data-label {
+	-fx-font-family: "Open Sans Regular";
+	-fx-text-fill: -mfx-text-he;
+}

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -17,25 +17,30 @@
  */
 
 .mfx-filter-dialog {
-    -mfx-base-color: rgb(76, 0, 225);
+	-mfx-base-color: rgb(76, 0, 225);
 }
 
 .mfx-filter-dialog #headerLabel {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -mfx-font-family: "Open Sans SemiBold";
+	-fx-background-color: transparent;
+	-fx-border-color: transparent;
+	-mfx-font-family: "Open Sans SemiBold";
 }
 
 .mfx-filter-dialog .mfx-button {
-    -fx-border-color: -mfx-base-color;
-    -fx-border-radius: 5;
-    -fx-font-family: "Open Sans SemiBold";
+	-fx-border-color: -mfx-base-color;
+	-fx-border-radius: 5;
+	-fx-font-family: "Open Sans SemiBold";
 }
 
 .mfx-filter-dialog .mfx-button .text {
-    -fx-fill: -mfx-base-color;
+	-fx-fill: -mfx-base-color;
 }
 
 .mfx-filter-dialog .mfx-button .mfx-ripple-generator {
-    -mfx-ripple-color: derive(-mfx-base-color, 150%)
+	-mfx-ripple-color: derive(-mfx-base-color, 150%)
+}
+
+.mfx-filter-dialog .mfx-list-view .mfx-list-cell:hover {
+	-fx-background-color: transparent;
+	-fx-border-color: transparent;
 }

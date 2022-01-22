@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -25,20 +25,20 @@ import javafx.scene.text.Font;
  * Handler for MaterialFX font resources.
  */
 public class FontHandler {
-    private static final Font resources;
+	private static final Font resources;
 
-    private FontHandler() {
-    }
+	private FontHandler() {
+	}
 
-    static {
-        resources = Font.loadFont(MFXResourcesLoader.loadStream("fonts/MFXResources.ttf"), 10);
-    }
+	static {
+		resources = Font.loadFont(MFXResourcesLoader.loadStream("fonts/MFXResources.ttf"), 10);
+	}
 
-    public static Font getResources() {
-        return resources;
-    }
+	public static Font getResources() {
+		return resources;
+	}
 
-    public static char getCode(String description) {
-        return FontResources.findByDescription(description).getCode();
-    }
+	public static char getCode(String description) {
+		return FontResources.findByDescription(description).getCode();
+	}
 }

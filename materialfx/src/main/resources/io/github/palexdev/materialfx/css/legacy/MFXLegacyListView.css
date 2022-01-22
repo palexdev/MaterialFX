@@ -1,0 +1,138 @@
+/*
+ * Copyright (C) 2022 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/* Base */
+.mfx-legacy-list-view {
+	-fx-focus-color: transparent;
+	-fx-faint-focus-color: transparent;
+	/*-fx-background-insets: 1;*/
+	-fx-border-color: transparent;
+}
+
+/* Look up colors */
+.mfx-legacy-list-view {
+	-mfx-selection-bar: transparent;
+	-mfx-selection-bar-non-focused: transparent;
+	-mfx-box-border: transparent;
+
+	-fx-selection-bar: -mfx-selection-bar;
+	-fx-selection-bar-non-focused: -mfx-selection-bar;
+	-fx-box-border: -mfx-box-border;
+
+	-mfx-track-color: rgb(230, 230, 230);
+	-mfx-thumb-color: rgb(137, 137, 137);
+	-mfx-thumb-hover-color: rgb(89, 88, 91);
+}
+
+/* Remove JavaFX crap */
+.mfx-legacy-list-view > .virtual-flow > .corner {
+	-fx-background-color: transparent;
+}
+
+.mfx-legacy-list-view > .virtual-flow > .scroll-bar,
+.mfx-legacy-list-view > .virtual-flow > .scroll-bar .decrement-arrow,
+.mfx-legacy-list-view > .virtual-flow > .scroll-bar .increment-arrow,
+.mfx-legacy-list-view > .virtual-flow > .scroll-bar .decrement-button,
+.mfx-legacy-list-view > .virtual-flow > .scroll-bar .increment-button {
+	-fx-pref-width: 0;
+	-fx-pref-height: 0;
+}
+
+
+.mfx-legacy-list-view .scroll-bar:horizontal .increment-button,
+.mfx-legacy-list-view .scroll-bar:horizontal .decrement-button {
+	-fx-background-color: transparent;
+	-fx-background-radius: 0.0em;
+	-fx-padding: 0.0 0.0 10.0 0.0;
+}
+
+.mfx-legacy-list-view .scroll-bar:vertical .increment-button,
+.mfx-legacy-list-view .scroll-bar:vertical .decrement-button {
+	-fx-background-color: transparent;
+	-fx-background-radius: 0.0em;
+	-fx-padding: 0.0 10.0 0.0 0.0;
+
+}
+
+.mfx-legacy-list-view .scroll-bar .increment-arrow,
+.mfx-legacy-list-view .scroll-bar .decrement-arrow {
+	-fx-shape: " ";
+	-fx-padding: 0.15em 0.0;
+}
+
+.mfx-legacy-list-view .scroll-bar:horizontal .increment-arrow,
+.mfx-legacy-list-view .scroll-bar:horizontal .decrement-arrow {
+	-fx-shape: " ";
+	-fx-padding: 0.0 0.05em;
+}
+
+.mfx-legacy-list-view .scroll-bar:vertical .increment-arrow,
+.mfx-legacy-list-view .scroll-bar:vertical .decrement-arrow {
+	-fx-shape: " ";
+	-fx-padding: 0.0 0.05em;
+}
+
+/* Customize ScrollBars */
+.mfx-legacy-list-view .mfx-scroll-bar:horizontal .track {
+	-fx-background-color: -mfx-track-color;
+	-fx-border-color: transparent;
+	-fx-background-radius: 2.0em;
+	-fx-border-radius: 2.0em;
+}
+
+.mfx-legacy-list-view .mfx-scroll-bar:vertical .track {
+	-fx-background-color: -mfx-track-color;
+	-fx-border-color: transparent;
+	-fx-background-radius: 2.0em;
+	-fx-border-radius: 2.0em;
+}
+
+.mfx-legacy-list-view .mfx-scroll-bar .decrement-arrow,
+.mfx-legacy-list-view .mfx-scroll-bar .increment-arrow {
+	-fx-pref-width: 0;
+	-fx-pref-height: 0;
+}
+
+.mfx-legacy-list-view .mfx-scroll-bar:vertical {
+	-fx-background-color: transparent;
+	-fx-pref-width: 12;
+	-fx-pref-height: 12;
+	-fx-padding: 5 0.5 20 0.5;
+}
+
+.mfx-legacy-list-view .mfx-scroll-bar:horizontal {
+	-fx-background-color: transparent;
+	-fx-pref-width: 12;
+	-fx-pref-height: 12;
+	-fx-padding: 0.5 20 0.5 5;
+}
+
+.mfx-legacy-list-view .mfx-scroll-bar:horizontal .thumb,
+.mfx-legacy-list-view .mfx-scroll-bar:vertical .thumb {
+	-fx-background-color: -mfx-thumb-color;
+	-fx-background-insets: 2.0, 0.0, 0.0;
+	-fx-background-radius: 2.0em;
+}
+
+.mfx-legacy-list-view .mfx-scroll-bar:horizontal .thumb:hover,
+.mfx-legacy-list-view .mfx-scroll-bar:vertical .thumb:hover {
+	-fx-background-color: -mfx-thumb-hover-color;
+	-fx-background-insets: 1.5, 0.0, 0.0;
+	-fx-background-radius: 2.0em;
+}
+

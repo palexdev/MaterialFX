@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -16,15 +16,59 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*================================================================================*/
-/* Ripple
-/*================================================================================*/
+@import "Fonts.css";
+@import "MFXColors.css";
+
 .mfx-checkbox {
-    -fx-border-insets: -1 -3 -1 -1;
-    -fx-background-insets: -1 -3 -1 -1;
+	-mfx-main: #6200EE;
+	-mfx-secondary: #424242;
+
+	-fx-font-family: "Open Sans Regular";
+	-fx-text-fill: -mfx-text-he;
+}
+
+.mfx-checkbox .box {
+	-fx-background-color: transparent;
+	-fx-background-radius: 2;
+
+	-fx-border-color: -mfx-secondary;
+	-fx-border-radius: 2;
+	-fx-border-width: 1.5;
+
+	-fx-padding: 4;
+}
+
+.mfx-checkbox .box .mark {
+	visibility: hidden;
+	-mfx-color: white;
+	-mfx-description: "mfx-variant7-mark";
+	-mfx-size: 12;
 }
 
 .mfx-checkbox .ripple-container .mfx-ripple-generator {
-    -mfx-ripple-color: rgb(190, 190, 190);
+	-mfx-animation-speed: 1.5;
+	-mfx-ripple-color: derive(-mfx-main, 110%);
+	-mfx-ripple-radius: 16;
+}
+
+.mfx-checkbox:selected .box,
+.mfx-checkbox:indeterminate .box {
+	-fx-background-color: -mfx-main;
+	-fx-border-color: -mfx-main;
+}
+
+.mfx-checkbox:selected .box .mark {
+	visibility: visible;
+}
+
+.mfx-checkbox:selected:disabled .box,
+.mfx-checkbox:indeterminate:disabled .box {
+	-fx-background-color: -mfx-secondary;
+	-fx-border-color: -mfx-secondary;
+}
+
+.mfx-checkbox:indeterminate .box .mark {
+	visibility: visible;
+	-mfx-description: "mfx-minus";
 }
 

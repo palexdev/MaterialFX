@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -24,8 +24,8 @@ import javafx.animation.Animation;
  * RippleGenerators only accept ripple types that implement this interface.
  */
 public interface IRipple {
-    /**
-     * Every ripple type should specify its animation.
-     */
-    Animation getAnimation();
+	/**
+	 * Every ripple type should specify its animation.
+	 */
+	Animation getAnimation();
 }

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright (C) 2022 Parisi Alessandro
+  ~ This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+  ~
+  ~ MaterialFX is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ MaterialFX is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<GridPane alignment="CENTER" hgap="20.0" styleClass="grid-pane" stylesheets="@../css/Sliders.css" vgap="20.0"
+          xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="io.github.palexdev.materialfx.demo.controllers.SlidersController">
+    <columnConstraints>
+        <ColumnConstraints halignment="LEFT" minWidth="10.0"/>
+        <ColumnConstraints halignment="CENTER"/>
+        <ColumnConstraints halignment="CENTER" prefWidth="20.0"/>
+        <ColumnConstraints halignment="LEFT"/>
+        <ColumnConstraints halignment="CENTER" minWidth="10.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="32.0"/>
+        <RowConstraints prefHeight="64.0"/>
+        <RowConstraints prefHeight="64.0"/>
+        <RowConstraints prefHeight="64.0"/>
+        <RowConstraints minHeight="10.0" prefHeight="32.0"/>
+        <RowConstraints minHeight="10.0" prefHeight="200.0"/>
+    </rowConstraints>
+    <padding>
+        <Insets bottom="20.0" left="30.0" right="30.0" top="20.0"/>
+    </padding>
+    <StackPane minHeight="150.0" minWidth="300.0" styleClass="grid-background" GridPane.columnSpan="2147483647"
+               GridPane.rowSpan="2147483647">
+        <opaqueInsets>
+            <Insets/>
+        </opaqueInsets>
+        <GridPane.margin>
+            <Insets left="-15.0" right="-15.0"/>
+        </GridPane.margin>
+    </StackPane>
+    <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+           styleClass="header-label" text="Sliders" GridPane.columnSpan="2147483647"/>
+    <Label styleClass="sub-header-label" text="Default" GridPane.rowIndex="1"/>
+    <MFXSlider prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+    <Label styleClass="sub-header-label" text="Custom" GridPane.rowIndex="2"/>
+    <MFXSlider id="customSlider" fx:id="customSlider" popupSide="OTHER_SIDE" prefWidth="150.0" GridPane.columnIndex="1"
+               GridPane.rowIndex="2"/>
+    <MFXSlider disable="true" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+    <Label styleClass="sub-header-label" text="Disabled" GridPane.rowIndex="3"/>
+    <Label styleClass="sub-header-label" text="Bidirectional" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+    <MFXSlider min="-100.0" prefWidth="150.0" GridPane.columnIndex="4" GridPane.rowIndex="1"/>
+    <Label styleClass="sub-header-label" text="Ticks" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+    <MFXSlider minorTicksCount="4" prefWidth="150.0" showMajorTicks="true" showMinorTicks="true"
+               sliderMode="SNAP_TO_TICKS" tickUnit="20.0" GridPane.columnIndex="4" GridPane.rowIndex="2"/>
+    <Label styleClass="sub-header-label" text="Decimal Precision to 2" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
+    <MFXSlider decimalPrecision="2" prefWidth="150.0" GridPane.columnIndex="4" GridPane.rowIndex="3"/>
+    <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="header-label" text="Vertical Sliders"
+           GridPane.columnSpan="2147483647" GridPane.rowIndex="4"/>
+    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnSpan="2147483647"
+          GridPane.rowIndex="5" GridPane.rowSpan="2147483647">
+        <MFXSlider orientation="VERTICAL" prefWidth="150.0"/>
+        <MFXSlider min="-100.0" minorTicksCount="4" orientation="VERTICAL" popupSide="OTHER_SIDE" prefWidth="150.0"
+                   showMajorTicks="true" showMinorTicks="true" sliderMode="SNAP_TO_TICKS"/>
+        <MFXSlider disable="true" orientation="VERTICAL" prefWidth="150.0"/>
+    </HBox>
+</GridPane>

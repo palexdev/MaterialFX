@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -16,16 +16,24 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+@import "Fonts.css";
+@import "MFXColors.css";
+
+.mfx-button {
+	-fx-font-family: "Open Sans Regular";
+	-fx-text-fill: -mfx-text-he;
+}
+
 .mfx-button:armed,
 .mfx-button:hover,
 .mfx-button:focused,
 .mfx-button {
-    -fx-background-radius: 3px;
-    -fx-background-insets: 0px;
+	-fx-background-radius: 3px;
+	-fx-background-insets: 0px;
 }
 
 .mfx-button,
 .mfx-button:armed,
 .mfx-button:focused {
-    -fx-background-color: white;
+	-fx-background-color: white;
 }

@@ -1,0 +1,242 @@
+/*
+ * Copyright (C) 2022 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import "MFXColors.css";
+@import "Fonts.css";
+
+.mfx-notification-center {
+	-fx-background-color: transparent;
+}
+
+/*************************
+Notifications Container
+*************************/
+.mfx-notification-center .popup .notifications-container {
+	-fx-background-color: white;
+	-fx-background-radius: 5;
+	-fx-border-color: lightgray;
+	-fx-border-radius: 5;
+	-fx-border-width: 0.7;
+	-fx-padding: 5 0 5 0;
+}
+
+/*************************
+Notifications Icon
+*************************/
+.mfx-notification-center .notifications-icon {
+	-fx-background-color: white;
+	-fx-background-radius: 100%;
+	-fx-border-color: lightgray;
+	-fx-border-radius: 100%;
+}
+
+.mfx-notification-center .counter {
+	-fx-background-color: -mfx-purple;
+	-fx-background-radius: 100%;
+}
+
+.mfx-notification-center .counter .text {
+	-fx-fill: white;
+	-fx-font-family: "Open Sans Bold";
+	-fx-font-smoothing-type: gray;
+}
+
+/*************************
+Header
+*************************/
+.mfx-notification-center .popup .notifications-container .header {
+	-fx-border-color: transparent transparent lightgray transparent;
+	-fx-border-width: 0.7;
+	-fx-padding: 5 0 5 0;
+}
+
+.mfx-notification-center .popup .notifications-container .header .mfx-text-field {
+	-mfx-float-mode: disabled;
+	-fx-border-color: transparent;
+	-fx-font-family: "Open Sans SemiBold";
+	-fx-font-size: 14;
+	-fx-text-fill: -mfx-onyx;
+}
+
+.mfx-notification-center .popup .notifications-container .header .mfx-toggle-button {
+	-mfx-toggle-color: -mfx-purple;
+	-mfx-untoggle-line-color: derive(-mfx-onyx, 30%);
+
+	-fx-font-family: "Open Sans SemiBold";
+	-fx-font-size: 12;
+	-fx-text-fill: -mfx-onyx;
+	-fx-font-smoothing-type: gray;
+}
+
+/*************************
+Virtual Flow
+*************************/
+.virtual-flow {
+	-fx-background-color: transparent;
+
+	-track-color: rgb(230, 230, 230);
+	-thumb-color: rgb(137, 137, 137);
+	-thumb-hover-color: rgb(89, 88, 91);
+}
+
+/* Remove JavaFX crap */
+.scroll-bar,
+.scroll-bar .decrement-arrow,
+.scroll-bar .increment-arrow {
+	-fx-pref-width: 0;
+	-fx-pref-height: 0;
+}
+
+
+.scroll-bar:horizontal .increment-button,
+.scroll-bar:horizontal .decrement-button {
+	-fx-background-color: transparent;
+	-fx-background-radius: 0.0em;
+	-fx-padding: 0.0 0.0 10.0 0.0;
+}
+
+.scroll-bar:vertical .increment-button,
+.scroll-bar:vertical .decrement-button {
+	-fx-background-color: transparent;
+	-fx-background-radius: 0.0em;
+	-fx-padding: 0.0 10.0 0.0 0.0;
+
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+	-fx-shape: " ";
+	-fx-padding: 0.15em 0.0;
+}
+
+.scroll-bar:horizontal .increment-arrow,
+.scroll-bar:horizontal .decrement-arrow {
+	-fx-shape: " ";
+	-fx-padding: 0.0 0.05em;
+}
+
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow {
+	-fx-shape: " ";
+	-fx-padding: 0.0 0.05em;
+}
+
+/* Customize ScrollBars */
+
+.scroll-bar:horizontal .track {
+	-fx-background-color: -track-color;
+	-fx-border-color: transparent;
+	-fx-background-radius: 2.0em;
+	-fx-border-radius: 2.0em;
+	-fx-background-insets: 3;
+}
+
+.scroll-bar:vertical .track {
+	-fx-background-color: -track-color;
+	-fx-border-color: transparent;
+	-fx-background-radius: 2.0em;
+	-fx-border-radius: 2.0em;
+	-fx-background-insets: 3;
+}
+
+.scroll-bar .decrement-arrow,
+.scroll-bar .increment-arrow {
+	-fx-pref-width: 0;
+	-fx-pref-height: 0;
+}
+
+.scroll-bar:vertical {
+	-fx-background-color: transparent;
+	-fx-pref-width: 12;
+	-fx-pref-height: 12;
+	-fx-padding: 5 0.5 5 0.5;
+}
+
+.scroll-bar:horizontal {
+	-fx-background-color: transparent;
+	-fx-pref-width: 12;
+	-fx-pref-height: 12;
+	-fx-padding: 0.5 5 0.5 5;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+	-fx-background-color: -thumb-color;
+	-fx-background-insets: 2.0, 0.0, 0.0;
+	-fx-background-radius: 2.0em;
+}
+
+.scroll-bar:horizontal .thumb:hover,
+.scroll-bar:vertical .thumb:hover {
+	-fx-background-color: -thumb-hover-color;
+	-fx-background-insets: 1.5, 0.0, 0.0;
+	-fx-background-radius: 2.0em;
+}
+
+.mfx-notification-center .popup .notifications-container .virtual-flow .mfx-notification-cell #check {
+	-mfx-checked-color: -mfx-purple;
+	-mfx-unchecked-color: -mfx-onyx;
+}
+
+.mfx-notification-center .popup .notifications-container .virtual-flow .mfx-notification-cell #check .ripple-container .mfx-ripple-generator {
+	-mfx-ripple-color: derive(-mfx-purple, 125%);
+}
+
+.mfx-notification-center .popup .notifications-container .virtual-flow .mfx-notification-cell .mfx-text-field {
+	-mfx-float-mode: disabled;
+	-fx-border-color: transparent;
+}
+
+/*************************
+Actions
+*************************/
+.mfx-notification-center .actions {
+	-fx-border-color: lightgray transparent transparent transparent;
+	-fx-border-width: 0.7;
+	-fx-padding: 10;
+}
+
+.mfx-notification-center .actions .mfx-font-icon {
+	-mfx-color: -mfx-onyx;
+}
+
+.mfx-notification-center .notifications-container .actions .mfx-icon-wrapper .mfx-ripple-generator {
+	-mfx-ripple-radius: 24;
+	-mfx-ripple-color: derive(-mfx-purple, 150%)
+}
+
+/*************************
+Context Menu
+*************************/
+.mfx-notification-center .mfx-context-menu .mfx-scroll-pane {
+	-fx-min-width: 200;
+}
+
+.mfx-notification-center .mfx-context-menu .separator {
+	-fx-padding: 5 0 5 0;
+	-fx-font-family: "Open Sans SemiBold";
+	-fx-text-fill: -mfx-text-he;
+}
+
+.mfx-notification-center .mfx-context-menu .mfx-menu-item .mfx-icon-wrapper {
+	-mfx-size: 0;
+}
+
+.mfx-notification-center .mfx-context-menu .mfx-menu-item:hover {
+	-fx-background-color: derive(-mfx-purple, 150%);
+}

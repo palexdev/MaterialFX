@@ -1,0 +1,81 @@
+/*
+ * Copyright (C) 2022 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import '../fonts/Fonts.css';
+@import 'Common.css';
+@import 'MFXColors.css';
+
+#customSlider:range1 .thumb,
+#customSlider:range1 .track {
+	-mfx-color: -mfx-red;
+	-fx-fill: derive(-mfx-red, 85%)
+}
+
+#customSlider:range1 .bar {
+	-fx-fill: -mfx-red;
+}
+
+#customSlider:range2 .thumb,
+#customSlider:range2 .track {
+	-mfx-color: -mfx-blue;
+	-fx-fill: derive(-mfx-blue, 85%)
+}
+
+#customSlider:range2 .bar {
+	-fx-fill: -mfx-blue;
+}
+
+#customSlider:range3 .bar,
+#customSlider:range3 .thumb {
+	-mfx-color: -mfx-green;
+	-fx-fill: -mfx-green;
+}
+
+#customSlider:range3 .track {
+	-fx-fill: derive(-mfx-green, 85%);
+}
+
+#customSlider:range1 .thumb-container:hover .thumb-radius,
+#customSlider:range1 .thumb-container:pressed .thumb-radius {
+	-mfx-color: derive(-mfx-red, 85%);
+	-fx-opacity: 0.5;
+}
+
+#customSlider:range2 .thumb-container:hover .thumb-radius,
+#customSlider:range2 .thumb-container:pressed .thumb-radius {
+	-mfx-color: derive(-mfx-blue, 85%);
+	-fx-opacity: 0.5;
+}
+
+#customSlider:range3 .thumb-container:hover .thumb-radius,
+#customSlider:range3 .thumb-container:pressed .thumb-radius {
+	-mfx-color: derive(-mfx-green, 70%);
+	-fx-opacity: 0.5;
+}
+
+#customSlider:range1 .thumb-container .mfx-ripple-generator {
+	-mfx-ripple-color: -mfx-red;
+}
+
+#customSlider:range2 .thumb-container .mfx-ripple-generator {
+	-mfx-ripple-color: -mfx-blue;
+}
+
+#customSlider:range3 .thumb-container .mfx-ripple-generator {
+	-mfx-ripple-color: -mfx-green;
+}

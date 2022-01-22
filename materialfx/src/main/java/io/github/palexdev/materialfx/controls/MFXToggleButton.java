@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Parisi Alessandro
+ * Copyright (C) 2022 Parisi Alessandro
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
  *
  * MaterialFX is free software: you can redistribute it and/or modify
@@ -19,277 +19,370 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.beans.properties.EventHandlerProperty;
+import io.github.palexdev.materialfx.controls.base.MFXLabeled;
 import io.github.palexdev.materialfx.skins.MFXToggleButtonSkin;
+import io.github.palexdev.materialfx.utils.ColorUtils;
+import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
+import io.github.palexdev.materialfx.utils.ToggleButtonsUtil;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.css.*;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.control.Skin;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
  * This is the implementation of a toggle button following Google's material design guidelines in JavaFX.
  * <p>
- * Extends {@code ToggleButton}, redefines the style class to "mfx-toggle-button" for usage in CSS and
- * includes a {@code RippleGenerator}(in the Skin) to generate ripple effect when toggled/un-toggled.
+ * Extends {@link Labeled} and implements {@link Toggle} and {@link MFXLabeled}, its CSS selector is "-mfx-toggle-button",
+ * includes a {@code RippleGenerator}(in the Skin) to generate ripple effect when selected/unselected.
+ * <p></p>
+ * It also introduces some new features like:
+ * <p> - {@link #contentDispositionProperty()}: to control the toggle position
+ * <p> - {@link #gapProperty()}: to control the gap between the toggle and the text
+ * <p> - {@link #lengthProperty()}: to control the toggle's line width
+ * <p> - {@link #radiusProperty()}: to control the toggle's circle radius
+ * <p> - {@link #textExpandProperty()}: to control the text size and the checkbox layout (see documentation)
  */
-public class MFXToggleButton extends ToggleButton {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private static final StyleablePropertyFactory<MFXToggleButton> FACTORY = new StyleablePropertyFactory<>(ToggleButton.getClassCssMetaData());
-    private final String STYLE_CLASS = "mfx-toggle-button";
-    private final String STYLESHEET = MFXResourcesLoader.load("css/MFXToggleButton.css");
+public class MFXToggleButton extends Labeled implements Toggle, MFXLabeled {
+	//================================================================================
+	// Properties
+	//================================================================================
+	private static final StyleablePropertyFactory<MFXToggleButton> FACTORY = new StyleablePropertyFactory<>(Labeled.getClassCssMetaData());
+	private final String STYLE_CLASS = "mfx-toggle-button";
+	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXToggleButton.css");
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXToggleButton() {
-        setText("ToggleButton");
-        initialize();
-    }
+	private final ObjectProperty<ToggleGroup> toggleGroup = new SimpleObjectProperty<>();
+	private final BooleanProperty selected = new SimpleBooleanProperty(false);
+	protected static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
 
-    public MFXToggleButton(String text) {
-        super(text);
-        initialize();
-    }
+	private final EventHandlerProperty<ActionEvent> onAction = new EventHandlerProperty<>() {
+		@Override
+		protected void invalidated() {
+			setEventHandler(ActionEvent.ACTION, get());
+		}
+	};
 
-    public MFXToggleButton(String text, Node graphic) {
-        super(text, graphic);
-        initialize();
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXToggleButton() {
+		this("");
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
-    private void initialize() {
-        this.getStyleClass().add(STYLE_CLASS);
+	public MFXToggleButton(String text) {
+		this(text, null);
+	}
 
-        toggleColor.addListener((observable, oldValue, newValue) -> {
-            if (isAutomaticColorAdjustment()) {
-                Color color = ((Color) newValue).desaturate().desaturate().brighter();
-                toggleLineColor.set(color);
-            }
-        });
-    }
+	public MFXToggleButton(String text, Node graphic) {
+		super(text, graphic);
+		initialize();
+	}
 
-    //================================================================================
-    // Styleable Properties
-    //================================================================================
+	private void initialize() {
+		getStyleClass().add(STYLE_CLASS);
+		setBehavior();
+	}
 
-    /**
-     * Specifies the color of the "circle" when toggled.
-     *
-     * @see Color
-     */
-    private final StyleableObjectProperty<Paint> toggleColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.TOGGLE_COLOR,
-            this,
-            "toggleColor",
-            Color.rgb(0, 150, 136)
-    );
+	//================================================================================
+	// Methods
+	//================================================================================
+	protected void setBehavior() {
+		addEventFilter(MouseEvent.MOUSE_CLICKED, event -> fire());
 
-    /**
-     * Specifies the color of the "circle" when un-toggled.
-     *
-     * @see Color
-     */
-    private final StyleableObjectProperty<Paint> unToggleColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.UNTOGGLE_COLOR,
-            this,
-            "unToggleColor",
-            Color.rgb(250, 250, 250)
-    );
+		toggleGroup.addListener((observable, oldTg, newTg) -> {
+			if (newTg != null && newTg.getToggles().contains(this)) {
+				if (oldTg != null) oldTg.getToggles().remove(this);
+				newTg.getToggles().add(this);
+			} else if (newTg == null) {
+				oldTg.getToggles().remove(this);
+			}
+		});
 
-    /**
-     * Specifies the color of the "line" when toggled.
-     *
-     * @see Color
-     */
-    private final StyleableObjectProperty<Paint> toggleLineColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.TOGGLE_LINE_COLOR,
-            this,
-            "toggleLineColor",
-            Color.rgb(119, 194, 187)
-    );
+		selected.addListener(invalidated -> {
+			pseudoClassStateChanged(SELECTED_PSEUDO_CLASS, isSelected());
+			ToggleGroup tg = getToggleGroup();
+			if (tg != null) {
+				if (isSelected()) {
+					tg.selectToggle(this);
+				} else if (tg.getSelectedToggle() == this) {
+					ToggleButtonsUtil.clearSelectedToggle(tg);
+				}
+			}
+		});
+	}
 
-    /**
-     * Specifies the color of the line when un-toggled.
-     *
-     * @see Color
-     */
-    private final StyleableObjectProperty<Paint> unToggleLineColor = new SimpleStyleableObjectProperty<>(
-            StyleableProperties.UNTOGGLE_LINE_COLOR,
-            this,
-            "unToggleLineColor",
-            Color.rgb(153, 153, 153)
-    );
+	/**
+	 * Changes the state of the toggle button if not disabled.
+	 */
+	public void fire() {
+		if (!isDisabled()) {
+			setSelected(!isSelected());
+			fireEvent(new ActionEvent());
+		}
+	}
 
-    /**
-     * Specifies the size of the toggle button.
-     * <p>
-     * NOTE: Optimal values are from 8 upwards.
-     */
-    private final StyleableDoubleProperty size = new SimpleStyleableDoubleProperty(
-            StyleableProperties.SIZE,
-            this,
-            "size",
-            10.0
-    );
+	@Override
+	public ToggleGroup getToggleGroup() {
+		return toggleGroup.get();
+	}
 
-    /**
-     * When this is set to true and toggle color is changed the un-toggle color is automatically adjusted.
-     * <p>
-     * NOTE: This works only if changing toggle color, if un-toggle color is changed the toggle color won't be automatically adjusted.
-     * You can see this behavior in the demo.
-     */
-    private final BooleanProperty automaticColorAdjustment = new SimpleBooleanProperty(false);
+	@Override
+	public ObjectProperty<ToggleGroup> toggleGroupProperty() {
+		return toggleGroup;
+	}
 
-    public Paint getToggleColor() {
-        return toggleColor.get();
-    }
+	@Override
+	public void setToggleGroup(ToggleGroup toggleGroup) {
+		this.toggleGroup.set(toggleGroup);
+	}
 
-    public StyleableObjectProperty<Paint> toggleColorProperty() {
-        return toggleColor;
-    }
+	@Override
+	public boolean isSelected() {
+		return selected.get();
+	}
 
-    public void setToggleColor(Paint toggleColor) {
-        this.toggleColor.set(toggleColor);
-    }
+	@Override
+	public BooleanProperty selectedProperty() {
+		return selected;
+	}
 
-    public Paint getUnToggleColor() {
-        return unToggleColor.get();
-    }
+	@Override
+	public void setSelected(boolean selected) {
+		this.selected.set(selected);
+	}
 
-    public StyleableObjectProperty<Paint> unToggleColorProperty() {
-        return unToggleColor;
-    }
+	public EventHandler<ActionEvent> getOnAction() {
+		return onAction.get();
+	}
 
-    public void setUnToggleColor(Paint unToggleColor) {
-        this.unToggleColor.set(unToggleColor);
-    }
+	/**
+	 * Specifies the action to perform when the toggle button is selected/unselected.
+	 */
+	public EventHandlerProperty<ActionEvent> onActionProperty() {
+		return onAction;
+	}
 
-    public Paint getToggleLineColor() {
-        return toggleLineColor.get();
-    }
+	public void setOnAction(EventHandler<ActionEvent> onAction) {
+		this.onAction.set(onAction);
+	}
 
-    public StyleableObjectProperty<Paint> toggleLineColorProperty() {
-        return toggleLineColor;
-    }
+	//================================================================================
+	// Styleable Properties
+	//================================================================================
+	private final StyleableObjectProperty<ContentDisplay> contentDisposition = new SimpleStyleableObjectProperty<>(
+			StyleableProperties.CONTENT_DISPOSITION,
+			this,
+			"contentDisposition",
+			ContentDisplay.LEFT
+	);
 
-    public void setToggleLineColor(Paint toggleLineColor) {
-        this.toggleLineColor.set(toggleLineColor);
-    }
+	private final StyleableDoubleProperty gap = new SimpleStyleableDoubleProperty(
+			StyleableProperties.GAP,
+			this,
+			"gap",
+			8.0
+	);
 
-    public Paint getUnToggleLineColor() {
-        return unToggleLineColor.get();
-    }
+	private final StyleableDoubleProperty length = new SimpleStyleableDoubleProperty(
+			StyleableProperties.LENGTH,
+			this,
+			"length",
+			36.0
+	);
 
-    public StyleableObjectProperty<Paint> unToggleLineColorProperty() {
-        return unToggleLineColor;
-    }
+	private final StyleableDoubleProperty radius = new SimpleStyleableDoubleProperty(
+			StyleableProperties.RADIUS,
+			this,
+			"radius",
+			10.0
+	);
 
-    public void setUnToggleLineColor(Paint unToggleLineColor) {
-        this.unToggleLineColor.set(unToggleLineColor);
-    }
+	private final StyleableBooleanProperty textExpand = new SimpleStyleableBooleanProperty(
+			StyleableProperties.TEXT_EXPAND,
+			this,
+			"textExpand",
+			false
+	);
 
-    public double getSize() {
-        return size.get();
-    }
+	public ContentDisplay getContentDisposition() {
+		return contentDisposition.get();
+	}
 
-    public StyleableDoubleProperty sizeProperty() {
-        return size;
-    }
+	public StyleableObjectProperty<ContentDisplay> contentDispositionProperty() {
+		return contentDisposition;
+	}
 
-    public void setSize(double size) {
-        this.size.set(size);
-    }
+	public void setContentDisposition(ContentDisplay contentDisposition) {
+		this.contentDisposition.set(contentDisposition);
+	}
 
-    public boolean isAutomaticColorAdjustment() {
-        return automaticColorAdjustment.get();
-    }
+	public double getGap() {
+		return gap.get();
+	}
 
-    public BooleanProperty automaticColorAdjustmentProperty() {
-        return automaticColorAdjustment;
-    }
+	public StyleableDoubleProperty gapProperty() {
+		return gap;
+	}
 
-    public void setAutomaticColorAdjustment(boolean automaticColorAdjustment) {
-        this.automaticColorAdjustment.set(automaticColorAdjustment);
-    }
+	public void setGap(double gap) {
+		this.gap.set(gap);
+	}
 
-    //================================================================================
-    // CssMetaData
-    //================================================================================
-    private static class StyleableProperties {
-        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+	public double getLength() {
+		return length.get();
+	}
 
-        private static final CssMetaData<MFXToggleButton, Paint> TOGGLE_COLOR =
-                FACTORY.createPaintCssMetaData(
-                        "-mfx-toggle-color",
-                        MFXToggleButton::toggleColorProperty,
-                        Color.rgb(0, 150, 136)
-                );
+	/**
+	 * Specifies the length of the toggle button's line.
+	 */
+	public StyleableDoubleProperty lengthProperty() {
+		return length;
+	}
 
-        private static final CssMetaData<MFXToggleButton, Paint> UNTOGGLE_COLOR =
-                FACTORY.createPaintCssMetaData(
-                        "-mfx-untoggle-color",
-                        MFXToggleButton::unToggleColorProperty,
-                        Color.rgb(250, 250, 250)
-                );
+	public void setLength(double length) {
+		this.length.set(length);
+	}
 
-        private static final CssMetaData<MFXToggleButton, Paint> TOGGLE_LINE_COLOR =
-                FACTORY.createPaintCssMetaData(
-                        "-mfx-toggle-line-color",
-                        MFXToggleButton::toggleLineColorProperty,
-                        Color.rgb(119, 194, 187)
-                );
+	public double getRadius() {
+		return radius.get();
+	}
 
-        private static final CssMetaData<MFXToggleButton, Paint> UNTOGGLE_LINE_COLOR =
-                FACTORY.createPaintCssMetaData(
-                        "-mfx-untoggle-line-color",
-                        MFXToggleButton::unToggleLineColorProperty,
-                        Color.rgb(153, 153, 153)
-                );
+	/**
+	 * Specifies the radius of the toggle button's circle.
+	 */
+	public StyleableDoubleProperty radiusProperty() {
+		return radius;
+	}
 
-        private static final CssMetaData<MFXToggleButton, Number> SIZE =
-                FACTORY.createSizeCssMetaData(
-                        "-mfx-size",
-                        MFXToggleButton::sizeProperty,
-                        10.0
-                );
+	public void setRadius(double radius) {
+		this.radius.set(radius);
+	}
 
-        static {
-            List<CssMetaData<? extends Styleable, ?>> tobCssMetaData = new ArrayList<>(ToggleButton.getClassCssMetaData());
-            Collections.addAll(tobCssMetaData, TOGGLE_COLOR, UNTOGGLE_COLOR, TOGGLE_LINE_COLOR, UNTOGGLE_LINE_COLOR, SIZE);
-            cssMetaDataList = Collections.unmodifiableList(tobCssMetaData);
-        }
-    }
+	public boolean isTextExpand() {
+		return textExpand.get();
+	}
 
-    public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
-        return StyleableProperties.cssMetaDataList;
-    }
+	public StyleableBooleanProperty textExpandProperty() {
+		return textExpand;
+	}
 
-    //================================================================================
-    // Override Methods
-    //================================================================================
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        return new MFXToggleButtonSkin(this);
-    }
+	public void setTextExpand(boolean textExpand) {
+		this.textExpand.set(textExpand);
+	}
 
-    @Override
-    public String getUserAgentStylesheet() {
-        return STYLESHEET;
-    }
+	/**
+	 * Sets the colors of the toggle button when selected.
+	 * <p>
+	 * The color is set inline by using {@link Node#setStyle(String)}, the
+	 * set CSS value is the "-mfx-main" property.
+	 */
+	public void setMainColor(Color color) {
+		setStyle("-mfx-main: " + ColorUtils.toCss(color) + ";\n");
+	}
 
-    @Override
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return MFXToggleButton.getControlCssMetaDataList();
-    }
+	/**
+	 * Sets the colors of the toggle button when not selected.
+	 * <p>
+	 * The color is set inline by using {@link Node#setStyle(String)}, the
+	 * set CSS value is the "-mfx-secondary" property.
+	 */
+	public void setSecondaryColor(Color color) {
+		setStyle("-mfx-secondary: " + ColorUtils.toCss(color) + ";\n");
+	}
+
+	/**
+	 * Combines {@link #setMainColor(Color)} and {@link #setSecondaryColor(Color)}
+	 * into one method.
+	 * <p>
+	 * If you want to set both colors then you <b>must</b> use this method
+	 * since multiple calls to {@link Node#setStyle(String)} retain only the
+	 * last specified style.
+	 */
+	public void setColors(Color main, Color secondary) {
+		setStyle(
+				"-mfx-main: " + ColorUtils.toCss(main) + ";\n" +
+						"-mfx-secondary: " + ColorUtils.toCss(secondary) + ";\n"
+		);
+	}
+
+	//================================================================================
+	// CssMetaData
+	//================================================================================
+	private static class StyleableProperties {
+		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+
+		private static final CssMetaData<MFXToggleButton, ContentDisplay> CONTENT_DISPOSITION =
+				FACTORY.createEnumCssMetaData(
+						ContentDisplay.class,
+						"-mfx-content-disposition",
+						MFXToggleButton::contentDispositionProperty,
+						ContentDisplay.LEFT
+				);
+
+		private static final CssMetaData<MFXToggleButton, Number> GAP =
+				FACTORY.createSizeCssMetaData(
+						"-mfx-gap",
+						MFXToggleButton::gapProperty,
+						8.0
+				);
+
+		private static final CssMetaData<MFXToggleButton, Number> LENGTH =
+				FACTORY.createSizeCssMetaData(
+						"-mfx-length",
+						MFXToggleButton::lengthProperty,
+						36.0
+				);
+
+		private static final CssMetaData<MFXToggleButton, Number> RADIUS =
+				FACTORY.createSizeCssMetaData(
+						"-mfx-radius",
+						MFXToggleButton::radiusProperty,
+						10.0
+				);
+
+		private static final CssMetaData<MFXToggleButton, Boolean> TEXT_EXPAND =
+				FACTORY.createBooleanCssMetaData(
+						"-mfx-text-expand",
+						MFXToggleButton::textExpandProperty,
+						false
+				);
+
+		static {
+			cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
+					Labeled.getClassCssMetaData(),
+					CONTENT_DISPOSITION, GAP, LENGTH, RADIUS, TEXT_EXPAND
+			);
+		}
+	}
+
+	public static List<CssMetaData<? extends Styleable, ?>> getControlCssMetaDataList() {
+		return StyleableProperties.cssMetaDataList;
+	}
+
+	//================================================================================
+	// Override Methods
+	//================================================================================
+	@Override
+	protected Skin<?> createDefaultSkin() {
+		return new MFXToggleButtonSkin(this);
+	}
+
+	@Override
+	public String getUserAgentStylesheet() {
+		return STYLESHEET;
+	}
+
+	@Override
+	public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+		return MFXToggleButton.getControlCssMetaDataList();
+	}
 }
