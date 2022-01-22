@@ -27,7 +27,6 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.scenicview.ScenicView;
 
 public class Demo extends Application {
 
@@ -44,7 +43,5 @@ public class Demo extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("MaterialFX Demo");
 		primaryStage.show();
-
-		ScenicView.show(scene);
 	}
 }

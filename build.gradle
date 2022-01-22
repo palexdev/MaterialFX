@@ -1,6 +1,16 @@
+buildscript {
+    repositories {
+        gradlePluginPortal()
+    }
+
+    dependencies {
+        classpath 'org.javamodularity:moduleplugin:1.8.10' // Workaround for broken javafxplugin
+    }
+}
+
 plugins {
     id 'java-library'
-    id 'org.openjfx.javafxplugin' version '0.0.10' apply false
+    id 'org.openjfx.javafxplugin' version '0.0.11' apply false
 }
 
 group 'io.github.palexdev'
