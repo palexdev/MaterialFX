@@ -38,13 +38,28 @@ application {
 }
 
 jlink {
-    imageZip = file("$buildDir/$rootProject.name-$rootProject.version" + '.zip')
+    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
     launcher {
         mainClass = "io.github.palexdev.materialfx.demo.Demo"
         name = 'MaterialFX Demo'
     }
     jpackage {
         imageOptions = ['--icon', 'src/main/resources/logo.ico']
+    }
+
+    targetPlatform("linux-x64") {
+        jdkHome = jdkDownload("https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-linux_x64.tar.gz")
+        addExtraModulePath("/home/palexdev/Documents/JavaFX_jmods/linux_x64")
+    }
+
+    targetPlatform("win") {
+        jdkHome = jdkDownload("https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-win_x64.zip")
+        addExtraModulePath("/home/palexdev/Documents/JavaFX_jmods/win_x64")
+    }
+
+    targetPlatform("mac") {
+        jdkHome = jdkDownload("https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-macosx_x64.tar.gz")
+        addExtraModulePath("/home/palexdev/Documents/JavaFX_jmods/mac_x64")
     }
 }
 
