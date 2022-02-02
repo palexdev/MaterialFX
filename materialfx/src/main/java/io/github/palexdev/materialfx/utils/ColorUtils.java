@@ -25,7 +25,8 @@ import javafx.scene.paint.*;
  */
 public class ColorUtils {
 
-	private ColorUtils() {}
+	private ColorUtils() {
+	}
 
 	/**
 	 * Converts a JavaFX Paint object to the right CSS string.
@@ -33,6 +34,8 @@ public class ColorUtils {
 	 * Supports: {@link Color}, {@link LinearGradient}, {@link RadialGradient}.
 	 */
 	public static String toCss(Paint paint) {
+		if (paint == null) return "";
+
 		if (paint instanceof LinearGradient) {
 			LinearGradient gradient = (LinearGradient) paint;
 			return linearGradientToString(gradient);
@@ -52,6 +55,7 @@ public class ColorUtils {
 	 * @return the rgb function as a string
 	 */
 	public static String rgb(Color color) {
+		if (color == null) return "";
 		return String.format("rgb(%d, %d, %d)",
 				(int) (255 * color.getRed()),
 				(int) (255 * color.getGreen()),
@@ -64,6 +68,7 @@ public class ColorUtils {
 	 * @return the rgba function as a string
 	 */
 	public static String rgba(Color color) {
+		if (color == null) return "";
 		return String.format("rgba(%d, %d, %d, %s)",
 				(int) (255 * color.getRed()),
 				(int) (255 * color.getGreen()),
@@ -92,6 +97,7 @@ public class ColorUtils {
 	 * @see Stop
 	 */
 	public static String linearGradientToString(LinearGradient gradient) {
+		if (gradient == null) return "";
 		final StringBuilder s = new StringBuilder("linear-gradient(from ")
 				.append(lengthToString(gradient.getStartX(), gradient.isProportional()))
 				.append(" ").append(lengthToString(gradient.getStartY(), gradient.isProportional()))
@@ -128,6 +134,7 @@ public class ColorUtils {
 	 * @see Stop
 	 */
 	public static String radialGradientToString(RadialGradient gradient) {
+		if (gradient == null) return "";
 		final StringBuilder s = new StringBuilder("radial-gradient(focus-angle ").append(gradient.getFocusAngle())
 				.append("deg, focus-distance ").append(gradient.getFocusDistance() * 100)
 				.append("% , center ").append(lengthToString(gradient.getCenterX(), gradient.isProportional()))
@@ -161,6 +168,128 @@ public class ColorUtils {
 	 */
 	public static String stopToString(Stop stop) {
 		return rgba(stop.getColor()) + " " + stop.getOffset() * 100 + "%";
+	}
+
+	/**
+	 * Converts the given color to a String
+	 * in hexadecimal format.
+	 */
+	public static String toWeb(Color color) {
+		if (color == null) return "";
+		String cs = color.toString();
+		return "#" + cs.substring(2, cs.length() - 2);
+	}
+
+	/**
+	 * Converts the given color to a String
+	 * in hexadecimal format, also includes the color's opacity.
+	 */
+	public static String toWebAlpha(Color color) {
+		if (color == null) return "";
+		return "#" + color.toString().substring(2);
+	}
+
+	/**
+	 * Converts the given color to a String
+	 * in HSL format.
+	 */
+	public static String toHSL(Color color) {
+		if (color == null) return "";
+
+		double[] rgb = colorToArray(color);
+		double r = rgb[0];
+		double g = rgb[1];
+		double b = rgb[2];
+
+		double min = Math.min(r, Math.min(g, b));
+		double max = Math.max(r, Math.max(g, b));
+
+		// Hue
+		double h = 0;
+		if (max == min) {
+			h = 0;
+		} else if (max == r) {
+			h = ((60 * (g - b) / (max - min)) + 360) % 360;
+		} else if (max == g) {
+			h = (60 * (b - r) / (max - min)) + 120;
+		} else if (max == b) {
+			h = (60 * (r - g) / (max - min)) + 240;
+		}
+
+		// Luminance
+		double l = (max + min) / 2;
+
+		// Saturation
+		double s = 0;
+		if (max == min) {
+			s = 0;
+		} else if (l <= 0.5f) {
+			s = (max - min) / (max + min);
+		} else {
+			s = (max - min) / (2 - max - min);
+		}
+
+		return "hsl(" + Math.round(h) + "deg, " + Math.round(s * 100) + "%, " + Math.round(l * 100) + "%)";
+	}
+
+	/**
+	 * Converts the given color to a String
+	 * in HSB format.
+	 */
+	public static String toHSB(Color color) {
+		if (color == null) return "";
+
+		double[] rgb = colorToArray(color);
+		double r = rgb[0];
+		double g = rgb[1];
+		double b = rgb[2];
+
+		double max = Math.max(Math.max(r, g), b);
+		double min = Math.min(Math.min(r, g), b);
+		double delta = max - min;
+
+		double brightness;
+		double saturation;
+		double hue;
+
+		// Brightness
+		brightness = max;
+
+		// Saturation
+		if (max != 0) {
+			saturation = delta / max;
+		} else {
+			saturation = 0;
+		}
+
+		// Hue
+		if (saturation == 0) {
+			hue = 0;
+		} else {
+			double tmpR = (max - r) / delta;
+			double tmpG = (max - g) / delta;
+			double tmpB = (max - b) / delta;
+			if (r == max)
+				hue = tmpB - tmpG;
+			else if (g == max)
+				hue = 2.0 + tmpR - tmpB;
+			else
+				hue = 4.0 + tmpG - tmpR;
+			hue = hue / 6.0;
+			if (hue < 0)
+				hue = hue + 1.0;
+		}
+		hue *= 360;
+
+		return "hsb(" + Math.round(hue) + "deg, " + Math.round(saturation * 100) + "%, " + Math.round(brightness * 100) + "%)";
+	}
+
+	private static double[] colorToArray(Color color) {
+		return new double[]{
+				color.getRed(),
+				color.getGreen(),
+				color.getBlue()
+		};
 	}
 
 	private static String lengthToString(double value, boolean proportional) {

@@ -80,9 +80,7 @@ public class MFXTableRowCell<T, E> extends Labeled {
 
 	public MFXTableRowCell(Function<T, E> extractor, Function<E, String> converter) {
 		this.extractor = extractor;
-		this.converter = FunctionalStringConverter.converter(s -> {
-			throw new UnsupportedOperationException();
-		}, converter);
+		this.converter = FunctionalStringConverter.to(converter);
 		initialize();
 	}
 

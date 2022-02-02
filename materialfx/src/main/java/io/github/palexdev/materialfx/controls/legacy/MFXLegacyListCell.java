@@ -227,7 +227,7 @@ public class MFXLegacyListCell<T> extends ListCell<T> {
 	}
 
 	//================================================================================
-	// CssMetaData
+	// CSSMetaData
 	//================================================================================
 	private static class StyleableProperties {
 		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;

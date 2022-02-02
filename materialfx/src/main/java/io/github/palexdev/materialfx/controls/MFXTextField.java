@@ -804,7 +804,7 @@ public class MFXTextField extends TextField implements Validated, MFXMenuControl
 	}
 
 	//================================================================================
-	// CssMetaData
+	// CSSMetaData
 	//================================================================================
 	private static class StyleableProperties {
 		private static final StyleablePropertyFactory<MFXTextField> FACTORY = new StyleablePropertyFactory<>(TextField.getClassCssMetaData());

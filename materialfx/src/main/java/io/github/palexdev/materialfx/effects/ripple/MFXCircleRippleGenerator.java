@@ -573,7 +573,7 @@ public class MFXCircleRippleGenerator extends AbstractMFXRippleGenerator<CircleR
 	}
 
 	//================================================================================
-	// CssMetaData
+	// CSSMetaData
 	//================================================================================
 	private static class StyleableProperties {
 		private static final StyleablePropertyFactory<MFXCircleRippleGenerator> FACTORY = new StyleablePropertyFactory<>(AbstractMFXRippleGenerator.getClassCssMetaData());

@@ -310,7 +310,7 @@ public class MFXLegacyComboBox<T> extends ComboBox<T> implements Validated {
 	}
 
 	//================================================================================
-	// CssMetaData
+	// CSSMetaData
 	//================================================================================
 	private static class StyleableProperties {
 		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;

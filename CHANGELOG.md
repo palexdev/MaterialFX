@@ -12,6 +12,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Removed** for now removed features. 
 - **Fixed** for any bug fixes.
 
+## [Unreleased]
+### Added
+- New control MFXMagnifierPane
+- ColorUtils: added some new methods to convert Colors to Strings
+- FunctionalStringConverter: added two new convenience methods
+- New utils class SwingFXUtils (copied from javafx.embed.swing)
+
+### Changed
+- ColorUtils: changed some method to be null-safe
+
 ## [11.13.0] - 22-01-2022
 _This version won't follow the above scheme as the amount of changes and commits is simply too huge and there would be no
 way to correctly show all the changes without making mistakes (duplicates, "overlapping" changes...), for this reason

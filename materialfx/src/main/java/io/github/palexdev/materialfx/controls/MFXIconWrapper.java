@@ -223,7 +223,7 @@ public class MFXIconWrapper extends StackPane {
 	}
 
 	//================================================================================
-	// CssMetaData
+	// CSSMetaData
 	//================================================================================
 	private static class StyleableProperties {
 		private static final StyleablePropertyFactory<MFXIconWrapper> FACTORY = new StyleablePropertyFactory<>(StackPane.getClassCssMetaData());

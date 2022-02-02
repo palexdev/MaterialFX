@@ -154,9 +154,7 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 		});
 
 		// Default converter
-		setConverter(FunctionalStringConverter.converter(s -> {
-			throw new UnsupportedOperationException();
-		}, Object::toString));
+		setConverter(FunctionalStringConverter.to(Object::toString));
 
 		showing.addListener(invalidated -> pseudoClassStateChanged(POPUP_OPEN_PSEUDO_CLASS, showing.get()));
 
@@ -412,7 +410,7 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 	}
 
 	//================================================================================
-	// CssMetaData
+	// CSSMetaData
 	//================================================================================
 	private static class StyleableProperties {
 		private static final StyleablePropertyFactory<MFXComboBox<?>> FACTORY = new StyleablePropertyFactory<>(MFXTextField.getClassCssMetaData());
