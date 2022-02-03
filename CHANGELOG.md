@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ColorUtils: added some new methods to convert Colors to Strings
 - FunctionalStringConverter: added two new convenience methods
 - New utils class SwingFXUtils (copied from javafx.embed.swing)
+- Added fluent API builders for MaterialFX components and JavaFX Panes, as requested by #78
 
 ### Changed
 - ColorUtils: changed some method to be null-safe
