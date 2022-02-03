@@ -24,6 +24,7 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.dialogs.MFXDialogs;
 import io.github.palexdev.materialfx.enums.StepperToggleState;
 import io.github.palexdev.materialfx.enums.TextPosition;
+import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.validation.MFXValidator;
 import javafx.scene.control.SkinBase;
 import javafx.scene.input.MouseEvent;
@@ -119,7 +120,7 @@ public class MFXStepperToggleSkin extends SkinBase<MFXStepperToggle> {
 		MFXDialogs.error()
 				.setShowAlwaysOnTop(false)
 				.setShowMinimize(false)
-				.setHeaderText("Invalid Fields...")
+				.setHeaderText(I18N.getOrDefault("stepperToggle.invalidFields"))
 				.makeScrollable(true)
 				.setContentText(validator.validateToString())
 				.toStageDialogBuilder()

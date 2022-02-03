@@ -26,6 +26,7 @@ import io.github.palexdev.materialfx.beans.properties.styleable.StyleableObjectP
 import io.github.palexdev.materialfx.controls.base.MFXMenuControl;
 import io.github.palexdev.materialfx.enums.FloatMode;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.skins.MFXTextFieldSkin;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import io.github.palexdev.materialfx.validation.MFXValidator;
@@ -209,49 +210,49 @@ public class MFXTextField extends TextField implements Validated, MFXMenuControl
 	public void defaultContextMenu() {
 		MFXContextMenuItem copyItem = MFXContextMenuItem.Builder.build()
 				.setIcon(new MFXFontIcon("mfx-content-copy", 14))
-				.setText("Copy")
+				.setText(I18N.getOrDefault("textField.contextMenu.copy"))
 				.setAccelerator("Ctrl + C")
 				.setOnAction(event -> copy())
 				.get();
 
 		MFXContextMenuItem cutItem = MFXContextMenuItem.Builder.build()
 				.setIcon(new MFXFontIcon("mfx-content-cut", 14))
-				.setText("Cut")
+				.setText(I18N.getOrDefault("textField.contextMenu.cut"))
 				.setAccelerator("Ctrl + X")
 				.setOnAction(event -> cut())
 				.get();
 
 		MFXContextMenuItem pasteItem = MFXContextMenuItem.Builder.build()
 				.setIcon(new MFXFontIcon("mfx-content-paste", 14))
-				.setText("Paste")
+				.setText(I18N.getOrDefault("textField.contextMenu.paste"))
 				.setAccelerator("Ctrl + V")
 				.setOnAction(event -> paste())
 				.get();
 
 		MFXContextMenuItem deleteItem = MFXContextMenuItem.Builder.build()
 				.setIcon(new MFXFontIcon("mfx-delete-alt", 16))
-				.setText("Delete")
+				.setText(I18N.getOrDefault("textField.contextMenu.delete"))
 				.setAccelerator("Ctrl + D")
 				.setOnAction(event -> deleteText(getSelection()))
 				.get();
 
 		MFXContextMenuItem selectAllItem = MFXContextMenuItem.Builder.build()
 				.setIcon(new MFXFontIcon("mfx-select-all", 16))
-				.setText("Select All")
+				.setText(I18N.getOrDefault("textField.contextMenu.selectAll"))
 				.setAccelerator("Ctrl + A")
 				.setOnAction(event -> selectAll())
 				.get();
 
 		MFXContextMenuItem redoItem = MFXContextMenuItem.Builder.build()
 				.setIcon(new MFXFontIcon("mfx-redo", 12))
-				.setText("Redo")
+				.setText(I18N.getOrDefault("textField.contextMenu.redo"))
 				.setAccelerator("Ctrl + Y")
 				.setOnAction(event -> redo())
 				.get();
 
 		MFXContextMenuItem undoItem = MFXContextMenuItem.Builder.build()
 				.setIcon(new MFXFontIcon("mfx-undo", 12))
-				.setText("Undo")
+				.setText(I18N.getOrDefault("textField.contextMenu.undo"))
 				.setAccelerator("Ctrl + Z")
 				.setOnAction(event -> undo())
 				.get();

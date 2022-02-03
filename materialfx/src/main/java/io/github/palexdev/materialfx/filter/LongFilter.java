@@ -20,6 +20,7 @@ package io.github.palexdev.materialfx.filter;
 
 import io.github.palexdev.materialfx.beans.BiPredicateBean;
 import io.github.palexdev.materialfx.filter.base.NumberFilter;
+import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.utils.FXCollectors;
 import javafx.collections.ObservableList;
 import javafx.util.StringConverter;
@@ -59,12 +60,12 @@ public class LongFilter<T> extends NumberFilter<T, Long> {
 	@Override
 	protected ObservableList<BiPredicateBean<Long, Long>> defaultPredicates() {
 		return Stream.<BiPredicateBean<Long, Long>>of(
-				new BiPredicateBean<>("is", Long::equals),
-				new BiPredicateBean<>("is not", (aLong, aLong2) -> !aLong.equals(aLong2)),
-				new BiPredicateBean<>("greater than", (aLong, aLong2) -> aLong > aLong2),
-				new BiPredicateBean<>("greater or equal to", (aLong, aLong2) -> aLong >= aLong2),
-				new BiPredicateBean<>("lesser than", (aLong, aLong2) -> aLong < aLong2),
-				new BiPredicateBean<>("lesser or equal to", (aLong, aLong2) -> aLong <= aLong2)
+				new BiPredicateBean<>(I18N.getOrDefault("filter.is"), Long::equals),
+				new BiPredicateBean<>(I18N.getOrDefault("filter.isNot"), (aLong, aLong2) -> !aLong.equals(aLong2)),
+				new BiPredicateBean<>(I18N.getOrDefault("filter.greater"), (aLong, aLong2) -> aLong > aLong2),
+				new BiPredicateBean<>(I18N.getOrDefault("filter.greaterEqual"), (aLong, aLong2) -> aLong >= aLong2),
+				new BiPredicateBean<>(I18N.getOrDefault("filter.lesser"), (aLong, aLong2) -> aLong < aLong2),
+				new BiPredicateBean<>(I18N.getOrDefault("filter.lesserEqual"), (aLong, aLong2) -> aLong <= aLong2)
 		).collect(FXCollectors.toList());
 	}
 

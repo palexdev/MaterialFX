@@ -23,6 +23,7 @@ import io.github.palexdev.materialfx.controls.BoundTextField;
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.cell.MFXFilterComboBoxCell;
+import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.virtualizedfx.cell.Cell;
 import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
 import javafx.geometry.Orientation;
@@ -107,7 +108,7 @@ public class MFXFilterComboBoxSkin<T> extends MFXComboBoxSkin<T> {
 		MFXFilterComboBox<T> comboBox = getComboBox();
 		TransformableList<T> filterList = comboBox.getFilterList();
 
-		MFXTextField searchField = new MFXTextField("", "Search...");
+		MFXTextField searchField = new MFXTextField("", I18N.getOrDefault("filterCombo.search"));
 		searchField.getStyleClass().add("search-field");
 		searchField.textProperty().bindBidirectional(comboBox.searchTextProperty());
 		searchField.setMaxWidth(Double.MAX_VALUE);

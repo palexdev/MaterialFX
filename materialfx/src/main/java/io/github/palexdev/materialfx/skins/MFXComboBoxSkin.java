@@ -119,6 +119,13 @@ public class MFXComboBoxSkin<T> extends MFXTextFieldSkin {
 			popup.hide();
 		});
 		comboBox.valueProperty().addListener(invalidated -> Event.fireEvent(comboBox, new ActionEvent()));
+
+		comboBox.delegateSelectionProperty().addListener((observable, oldValue, newValue) -> {
+			if (!comboBox.isAllowEdit() && !comboBox.isSelectable()) comboBox.selectRange(0, 0);
+		});
+		comboBox.focusedProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue && !comboBox.isSelectable()) comboBox.selectRange(0, 0);
+		});
 	}
 
 	/**

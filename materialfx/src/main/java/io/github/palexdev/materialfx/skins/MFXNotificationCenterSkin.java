@@ -25,6 +25,7 @@ import io.github.palexdev.materialfx.controls.cell.MFXNotificationCell;
 import io.github.palexdev.materialfx.enums.NotificationCounterStyle;
 import io.github.palexdev.materialfx.enums.NotificationState;
 import io.github.palexdev.materialfx.factories.InsetsFactory;
+import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.notifications.base.INotification;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
@@ -75,7 +76,7 @@ public class MFXNotificationCenterSkin extends SkinBase<MFXNotificationCenter> {
 		headerLabel.setMaxWidth(Double.MAX_VALUE);
 		HBox.setHgrow(headerLabel, Priority.ALWAYS);
 
-		MFXToggleButton dndToggle = new MFXToggleButton("Do not disturb");
+		MFXToggleButton dndToggle = new MFXToggleButton(I18N.getOrDefault("notificationCenter.dnd"));
 		dndToggle.setContentDisplay(ContentDisplay.RIGHT);
 		dndToggle.setGraphicTextGap(15);
 		notificationCenter.doNotDisturbProperty().bindBidirectional(dndToggle.selectedProperty());

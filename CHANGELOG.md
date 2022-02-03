@@ -14,24 +14,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+
 - New control MFXMagnifierPane
 - ColorUtils: added some new methods to convert Colors to Strings
 - FunctionalStringConverter: added two new convenience methods
 - New utils class SwingFXUtils (copied from javafx.embed.swing)
 - Added fluent API builders for MaterialFX components and JavaFX Panes, as requested by #78
+- Added resource bundles and API for internationalization
 
 ### Changed
+
 - ColorUtils: changed some method to be null-safe
+- MFXFilterPaneSkin: properly compute the minimum width
+- MFXTableViewSkin: allow to drag the filter dialog
+
+### Fixed
+
+- MFXComboBoxSkin: ensure the caret position is at 0 if the combo box is not selectable
+- MFXTableViewSkin: ensure the dialog is on foreground
 
 ## [11.13.0] - 22-01-2022
-_This version won't follow the above scheme as the amount of changes and commits is simply too huge and there would be no
-way to correctly show all the changes without making mistakes (duplicates, "overlapping" changes...), for this reason
+
+_This version won't follow the above scheme as the amount of changes and commits is simply too huge and there would be
+no way to correctly show all the changes without making mistakes (duplicates, "overlapping" changes...), for this reason
 I'll try to sum up only the major changes below._
 
 - The demo has been completely remade
 - Added new beans and properties
 - Added new mechanisms for bindings
-- Added new collections, in particular an ObservableList that combines the capabilities of JavaFX's FilteredList and SortedList.
+- Added new collections, in particular an ObservableList that combines the capabilities of JavaFX's FilteredList and
+  SortedList.
 Also those two are read-only, but MaterialFX also offers a version that allows to directly make changes to the source list
 - ReactFX, Flowless removed in favor of my own Virtual Flow implementation, VirtualizedFX. As a result all controls having lists have been reworked.
 - The table view has been reworked as well to use a Virtual Flow (scrollable) so it's efficiency is now on a whole new level. There's also a paginated

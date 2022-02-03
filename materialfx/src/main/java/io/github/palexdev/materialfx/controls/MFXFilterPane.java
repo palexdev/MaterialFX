@@ -22,6 +22,7 @@ import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.FilterBean;
 import io.github.palexdev.materialfx.enums.ChainMode;
 import io.github.palexdev.materialfx.filter.base.AbstractFilter;
+import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.skins.MFXFilterPaneSkin;
 import io.github.palexdev.materialfx.utils.PredicateUtils;
 import javafx.beans.property.SimpleStringProperty;
@@ -140,7 +141,7 @@ public class MFXFilterPane<T> extends Control {
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-filter-pane";
 	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXFilterPane.css");
-	private final StringProperty headerText = new SimpleStringProperty("Filters");
+	private final StringProperty headerText = new SimpleStringProperty(I18N.getOrDefault("filterPane.headerText"));
 	private final ObservableList<AbstractFilter<T, ?>> filters = FXCollections.observableArrayList();
 	private final ObservableList<FilterBean<T, ?>> activeFilters = FXCollections.observableArrayList();
 
