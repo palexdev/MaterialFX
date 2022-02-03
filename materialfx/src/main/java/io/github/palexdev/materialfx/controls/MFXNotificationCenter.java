@@ -24,6 +24,7 @@ import io.github.palexdev.materialfx.controls.base.MFXMenuControl;
 import io.github.palexdev.materialfx.controls.cell.MFXNotificationCell;
 import io.github.palexdev.materialfx.enums.NotificationCounterStyle;
 import io.github.palexdev.materialfx.enums.NotificationState;
+import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.notifications.base.INotification;
 import io.github.palexdev.materialfx.selection.MultipleSelectionModel;
 import io.github.palexdev.materialfx.skins.MFXNotificationCenterSkin;
@@ -106,7 +107,7 @@ public class MFXNotificationCenter extends Control implements MFXMenuControl {
 	private final LongBinding unreadCountBinding;
 
 	private final ObjectProperty<NotificationCounterStyle> counterStyle = new SimpleObjectProperty<>(NUMBER);
-	private final StringProperty headerTextProperty = new SimpleStringProperty("Notifications");
+	private final StringProperty headerTextProperty = new SimpleStringProperty(I18N.getOrDefault("notificationCenter.header"));
 	private final BooleanProperty doNotDisturb = new SimpleBooleanProperty(false);
 	private final BooleanProperty showing = new SimpleBooleanProperty(false);
 
@@ -213,7 +214,7 @@ public class MFXNotificationCenter extends Control implements MFXMenuControl {
 	 */
 	protected void defaultContextMenu() {
 		MFXContextMenuItem selectAll = MFXContextMenuItem.Builder.build()
-				.setText("Select All")
+				.setText(I18N.getOrDefault("notificationCenter.contextMenu.selectAll"))
 				.setOnAction(event -> {
 					if (notifications.isEmpty()) return;
 					setSelectionMode(true);
@@ -222,7 +223,7 @@ public class MFXNotificationCenter extends Control implements MFXMenuControl {
 				}).get();
 
 		MFXContextMenuItem selectRead = MFXContextMenuItem.Builder.build()
-				.setText("Select Read")
+				.setText(I18N.getOrDefault("notificationCenter.contextMenu.selectRead"))
 				.setOnAction(event -> {
 					if (notifications.isEmpty()) return;
 
@@ -235,7 +236,7 @@ public class MFXNotificationCenter extends Control implements MFXMenuControl {
 				}).get();
 
 		MFXContextMenuItem selectUnread = MFXContextMenuItem.Builder.build()
-				.setText("Select Unread")
+				.setText(I18N.getOrDefault("notificationCenter.contextMenu.selectUnread"))
 				.setOnAction(event -> {
 					if (notifications.isEmpty()) return;
 					setSelectionMode(true);
@@ -247,22 +248,22 @@ public class MFXNotificationCenter extends Control implements MFXMenuControl {
 				}).get();
 
 		MFXContextMenuItem clearSelection = MFXContextMenuItem.Builder.build()
-				.setText("Clear Selection")
+				.setText(I18N.getOrDefault("notificationCenter.contextMenu.clearSelection"))
 				.setOnAction(event -> selectionModel.clearSelection())
 				.get();
 
 		MFXContextMenuItem sortByState = MFXContextMenuItem.Builder.build()
-				.setText("Sort By State")
+				.setText(I18N.getOrDefault("notificationCenter.contextMenu.sortState"))
 				.setOnAction(event -> notifications.setComparator(Comparator.comparing(INotification::getState)))
 				.get();
 
 		MFXContextMenuItem sortByTime = MFXContextMenuItem.Builder.build()
-				.setText("Sort By Time")
+				.setText(I18N.getOrDefault("notificationCenter.contextMenu.sortTime"))
 				.setOnAction(event -> notifications.setComparator(Comparator.comparing(INotification::getTime)))
 				.get();
 
 		MFXContextMenuItem reverseSort = MFXContextMenuItem.Builder.build()
-				.setText("Reverse Sort")
+				.setText(I18N.getOrDefault("notificationCenter.contextMenu.reverseSort"))
 				.setOnAction(event -> {
 					if (notifications.getComparator() == null) return;
 					Comparator<INotification> comparator = notifications.getComparator();
@@ -270,32 +271,32 @@ public class MFXNotificationCenter extends Control implements MFXMenuControl {
 				}).get();
 
 		MFXContextMenuItem filterRead = MFXContextMenuItem.Builder.build()
-				.setText("Filter By Read")
+				.setText(I18N.getOrDefault("notificationCenter.contextMenu.filterRead"))
 				.setOnAction(event -> notifications.setPredicate(notification -> notification.getState() == NotificationState.READ))
 				.get();
 
 		MFXContextMenuItem filterUnread = MFXContextMenuItem.Builder.build()
-				.setText("Filter By Unread")
+				.setText(I18N.getOrDefault("notificationCenter.contextMenu.filterUnread"))
 				.setOnAction(event -> notifications.setPredicate(notification -> notification.getState() == NotificationState.UNREAD))
 				.get();
 
 		MFXContextMenuItem clearFilter = MFXContextMenuItem.Builder.build()
-				.setText("Clear Filter")
+				.setText(I18N.getOrDefault("notificationCenter.contextMenu.clearFilter"))
 				.setOnAction(event -> notifications.setPredicate(null))
 				.get();
 
 		MFXContextMenuItem clearSort = MFXContextMenuItem.Builder.build()
-				.setText("Clear Sort")
+				.setText(I18N.getOrDefault("notificationCenter.contextMenu.clearSort"))
 				.setOnAction(event -> notifications.setComparator(null))
 				.get();
 
 
 		contextMenu = MFXContextMenu.Builder.build(virtualFlow)
-				.addSeparator(new Label("Selection"))
+				.addSeparator(new Label(I18N.getOrDefault("notificationCenter.contextMenu.selectionSeparator")))
 				.addItems(selectAll, selectRead, selectUnread, clearSelection)
-				.addSeparator(new Label("Sorting"))
+				.addSeparator(new Label(I18N.getOrDefault("notificationCenter.contextMenu.sortingSeparator")))
 				.addItems(sortByState, sortByTime, reverseSort, clearSort)
-				.addSeparator(new Label("Filtering"))
+				.addSeparator(new Label(I18N.getOrDefault("notificationCenter.contextMenu.filterSeparator")))
 				.addItems(filterRead, filterUnread, clearFilter)
 				.setPopupStyleableParent(this)
 				.installAndGet();

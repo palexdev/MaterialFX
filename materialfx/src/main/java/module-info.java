@@ -21,6 +21,11 @@ module MaterialFX {
 	exports io.github.palexdev.materialfx.bindings;
 	exports io.github.palexdev.materialfx.bindings.base;
 
+	// Builders Package
+	exports io.github.palexdev.materialfx.builders.base;
+	exports io.github.palexdev.materialfx.builders.control;
+	exports io.github.palexdev.materialfx.builders.layout;
+
 	// Collections Package
 	exports io.github.palexdev.materialfx.collections;
 
@@ -53,6 +58,9 @@ module MaterialFX {
 
 	// Font Package
 	exports io.github.palexdev.materialfx.font;
+
+	// I18N Package
+	exports io.github.palexdev.materialfx.i18n;
 
 	// Notifications Package
 	exports io.github.palexdev.materialfx.notifications;

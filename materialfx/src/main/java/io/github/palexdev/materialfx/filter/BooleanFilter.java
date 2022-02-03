@@ -20,6 +20,7 @@ package io.github.palexdev.materialfx.filter;
 
 import io.github.palexdev.materialfx.beans.BiPredicateBean;
 import io.github.palexdev.materialfx.filter.base.AbstractFilter;
+import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.utils.FXCollectors;
 import javafx.collections.ObservableList;
 import javafx.util.StringConverter;
@@ -55,8 +56,8 @@ public class BooleanFilter<T> extends AbstractFilter<T, Boolean> {
 	@Override
 	protected ObservableList<BiPredicateBean<Boolean, Boolean>> defaultPredicates() {
 		return Stream.<BiPredicateBean<Boolean, Boolean>>of(
-				new BiPredicateBean<>("is", Boolean::equals),
-				new BiPredicateBean<>("is not", (aBoolean, aBoolean2) -> !aBoolean.equals(aBoolean2))
+				new BiPredicateBean<>(I18N.getOrDefault("filter.is"), Boolean::equals),
+				new BiPredicateBean<>(I18N.getOrDefault("filter.isNot"), (aBoolean, aBoolean2) -> !aBoolean.equals(aBoolean2))
 		).collect(FXCollectors.toList());
 	}
 

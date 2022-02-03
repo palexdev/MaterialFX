@@ -20,6 +20,7 @@ package io.github.palexdev.materialfx.filter;
 
 import io.github.palexdev.materialfx.beans.BiPredicateBean;
 import io.github.palexdev.materialfx.filter.base.AbstractFilter;
+import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.utils.FXCollectors;
 import io.github.palexdev.materialfx.utils.StringUtils;
 import javafx.collections.ObservableList;
@@ -76,17 +77,17 @@ public class StringFilter<T> extends AbstractFilter<T, String> {
 	@Override
 	protected ObservableList<BiPredicateBean<String, String>> defaultPredicates() {
 		return Stream.<BiPredicateBean<String, String>>of(
-				new BiPredicateBean<>("contains", String::contains),
-				new BiPredicateBean<>("contains ignore case", StringUtils::containsIgnoreCase),
-				new BiPredicateBean<>("contains any", StringUtils::containsAny),
-				new BiPredicateBean<>("contains all", StringUtils::containsAll),
-				new BiPredicateBean<>("ends with", String::endsWith),
-				new BiPredicateBean<>("ends with ignore case", StringUtils::endsWithIgnoreCase),
-				new BiPredicateBean<>("equals", String::equals),
-				new BiPredicateBean<>("equals ignore case", String::equalsIgnoreCase),
-				new BiPredicateBean<>("is not equal to", (aString, aString2) -> !aString.equals(aString2)),
-				new BiPredicateBean<>("starts with", String::startsWith),
-				new BiPredicateBean<>("starts with ignore case", StringUtils::startsWithIgnoreCase)
+				new BiPredicateBean<>(I18N.getOrDefault("filter.contains"), String::contains),
+				new BiPredicateBean<>(I18N.getOrDefault("filter.containsIgnCase"), StringUtils::containsIgnoreCase),
+				new BiPredicateBean<>(I18N.getOrDefault("filter.containsAny"), StringUtils::containsAny),
+				new BiPredicateBean<>(I18N.getOrDefault("filter.containsAll"), StringUtils::containsAll),
+				new BiPredicateBean<>(I18N.getOrDefault("filter.endsWith"), String::endsWith),
+				new BiPredicateBean<>(I18N.getOrDefault("filter.endsWithIgnCase"), StringUtils::endsWithIgnoreCase),
+				new BiPredicateBean<>(I18N.getOrDefault("filter.equals"), String::equals),
+				new BiPredicateBean<>(I18N.getOrDefault("filter.equalsIgnCase"), String::equalsIgnoreCase),
+				new BiPredicateBean<>(I18N.getOrDefault("filter.notEqual"), (aString, aString2) -> !aString.equals(aString2)),
+				new BiPredicateBean<>(I18N.getOrDefault("filter.startsWith"), String::startsWith),
+				new BiPredicateBean<>(I18N.getOrDefault("filter.startsWithIgnCase"), StringUtils::startsWithIgnoreCase)
 		).collect(FXCollectors.toList());
 	}
 

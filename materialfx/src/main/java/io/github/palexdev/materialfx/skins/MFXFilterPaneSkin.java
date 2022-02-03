@@ -35,6 +35,7 @@ import io.github.palexdev.materialfx.filter.EnumFilter;
 import io.github.palexdev.materialfx.filter.base.AbstractFilter;
 import io.github.palexdev.materialfx.filter.base.NumberFilter;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.ListProperty;
@@ -94,7 +95,7 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
 
 		Region header = buildHeader();
 
-		Label filtersLabel = new Label("Active filters");
+		Label filtersLabel = new Label(I18N.getOrDefault("filterPane.activeFilters"));
 		filtersLabel.getStyleClass().add("header-label");
 		VBox.setMargin(filtersLabel, InsetsFactory.top(15));
 
@@ -240,7 +241,7 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
 			}
 		};
 		searchField.setFloatMode(FloatMode.DISABLED);
-		searchField.setPromptText("Type in your filter value...");
+		searchField.setPromptText(I18N.getOrDefault("filterPane.searchField"));
 		searchField.textProperty().bindBidirectional(query);
 
 		MFXComboBox<Object> enumsCombo = new MFXComboBox<>() {
@@ -308,7 +309,7 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
 		});
 		filterCombo.selectFirst();
 
-		MFXButton addButton = new MFXButton("Add filter") {
+		MFXButton addButton = new MFXButton(I18N.getOrDefault("filterPane.addFilter")) {
 			@Override
 			public String getUserAgentStylesheet() {
 				return filterPane.getUserAgentStylesheet();
@@ -406,6 +407,11 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
 	//================================================================================
 	// Overridden Methods
 	//================================================================================
+	@Override
+	protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+		return leftInset + filterBuilder.prefWidth(-1) + rightInset;
+	}
+
 	@Override
 	protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
 		return getSkinnable().prefWidth(-1);

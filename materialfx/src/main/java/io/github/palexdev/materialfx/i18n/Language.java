@@ -16,33 +16,35 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.enums;
+package io.github.palexdev.materialfx.i18n;
 
-import io.github.palexdev.materialfx.i18n.I18N;
+import java.util.Locale;
 
 /**
- * Enumeration to specify how two predicates should be chained.
- * Also specify how a ChainMode enumeration should be represented in UI.
+ * Enumerator to list all the supported {@link Locale}s by MaterialFX.
+ * <p>
+ * Every {@code Language} enumeration is associated with a {@code Locale}.
+ * <p>
+ * The enumerator also specifies the project's default language, {@link #defaultLanguage()}.
  */
-public enum ChainMode {
-	AND("&"),
-	OR(I18N.getOrDefault("chainMode.or"));
+public enum Language {
+	ENGLISH(Locale.ENGLISH),
+	ITALIANO(Locale.ITALIAN);
 
-	public static boolean useAlternativeAnd = false;
-	private final String text;
+	private final Locale locale;
 
-	ChainMode(String text) {
-		this.text = text;
+	Language(Locale locale) {
+		this.locale = locale;
 	}
 
-	public String text() {
-		return this == AND && useAlternativeAnd ? I18N.getOrDefault("chainMode.alternativeAnd") : this.text;
+	public Locale getLocale() {
+		return locale;
 	}
 
 	/**
-	 * Chains the given two boolean values according to the given {@link ChainMode}.
+	 * @return the project's default language, {@link Language#ENGLISH}
 	 */
-	public static boolean chain(ChainMode mode, boolean first, boolean second) {
-		return (mode == AND) ? first && second : first || second;
+	public static Language defaultLanguage() {
+		return ENGLISH;
 	}
 }
