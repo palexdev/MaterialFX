@@ -110,6 +110,10 @@ import java.util.List;
  * Considering that the other option would have been re-implementing a TextField completely from scratch (really hard task)
  * this is the best option as of now. Even just a custom skin would not work (yep I tried) since black magic is involved
  * in the default one, better not mess with that or something will break for sure, yay for spaghetti coding JavaFX devs :D
+ * <p></p>
+ * <b>Note 3: </b>Since MFXTextFields (and all subclasses) are basically a wrapper for a TextField, and considered how focus
+ * works for them. To make focus behavior consistent in CSS, MFXTextField introduces a new PseudoClass "focus-within" which will
+ * be activated every time the inner TextField is focused and deactivated when it loses focus
  */
 public class MFXTextField extends TextField implements Validated, MFXMenuControl {
 	//================================================================================

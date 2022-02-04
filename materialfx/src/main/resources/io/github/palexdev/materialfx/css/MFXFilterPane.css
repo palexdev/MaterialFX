@@ -132,7 +132,7 @@ Filter Builder
 	-fx-text-fill: -mfx-main;
 }
 
-.mfx-filter-pane .mfx-combo-box:focused {
+.mfx-filter-pane .mfx-combo-box:focus-within {
 	-fx-background-color: -mfx-main;
 	-fx-background-insets: 0;
 	-fx-border-color: transparent;
@@ -146,7 +146,7 @@ Filter Builder
 	-mfx-ripple-color: #C68EF8;
 }
 
-.mfx-filter-pane .mfx-combo-box:focused .caret .mfx-font-icon {
+.mfx-filter-pane .mfx-combo-box:focus-within .caret .mfx-font-icon {
 	-mfx-color: white;
 }
 
@@ -161,7 +161,7 @@ Filter Builder
 	-fx-font-family: "Open Sans SemiBold";
 }
 
-.mfx-filter-pane .mfx-text-field:focused {
+.mfx-filter-pane .mfx-text-field:focus-within {
 	-fx-background-insets: 0;
 	-fx-border-width: 1;
 	-fx-border-insets: 0;

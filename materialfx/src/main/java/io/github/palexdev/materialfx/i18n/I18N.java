@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.i18n;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
@@ -26,8 +25,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.stage.Stage;
 
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -43,16 +40,12 @@ public class I18N {
 	//================================================================================
 	// Properties
 	//================================================================================
-	private static final URLClassLoader loader;
 	private static final ObjectProperty<Locale> locale = new SimpleObjectProperty<>();
 
 	//================================================================================
 	// Static Block
 	//================================================================================
 	static {
-		URL[] urls = new URL[]{MFXResourcesLoader.loadURL("i18n")};
-		loader = new URLClassLoader(urls);
-
 		setLanguage(Language.defaultLanguage());
 		locale.addListener(invalidated -> Locale.setDefault(getLocale()));
 	}
@@ -158,11 +151,10 @@ public class I18N {
 	}
 
 	/**
-	 * Responsible for loading a {@link ResourceBundle} for the given Locale.
-	 * Uses {@link URLClassLoader} to load the resource.
+	 * Responsible for loading a {@link ResourceBundle} for the given Locale
 	 */
 	private static ResourceBundle getBundle(Locale locale) {
-		return ResourceBundle.getBundle(getBundleBaseName(), locale, loader);
+		return ResourceBundle.getBundle(getBundleBaseName(), locale);
 	}
 
 	//================================================================================
@@ -200,6 +192,6 @@ public class I18N {
 	 * @return the {@link ResourceBundle}'s base name
 	 */
 	public static String getBundleBaseName() {
-		return "mfxlang";
+		return "io.github.palexdev.materialfx.i18n.mfxlang";
 	}
 }

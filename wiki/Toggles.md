@@ -2,7 +2,7 @@
 
 ## Preview
 
-<img src="https://imgur.com/ArUhH58.gif" alt="Checkboxes" border="0">
+<img src="https://imgur.com/ArUhH58.gif" alt="Checkboxes">
 
 ## MFXToggleButtons
 
@@ -41,6 +41,12 @@
 - .mfx-toggle-button .line (the toggle's line)
 
 - .mfx-toggle-button .circle (the toggle's circle)
+
+### PseudoClasses
+
+| PseudoClass | Description                                       |
+| ----------- | ------------------------------------------------- |
+| ":selected" | Allows to customize the toggle when it's selected |
 
 ## MFXCircleToggleNodes
 

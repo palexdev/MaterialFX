@@ -2,7 +2,7 @@
 
 ## Preview
 
-<img src="https://imgur.com/nEgV9F1.gif" alt="Stepper" border="0">
+<img src="https://imgur.com/nEgV9F1.gif" alt="Stepper">
 
 ## MFXSteppers
 

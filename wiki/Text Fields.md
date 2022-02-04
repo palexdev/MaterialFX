@@ -2,7 +2,7 @@
 
 ## Preview
 
-<img src="https://imgur.com/XT2iVU7.gif" alt="Fields" border="0">
+<img src="https://imgur.com/XT2iVU7.gif" alt="Fields">
 
 ## MFXTextFields
 

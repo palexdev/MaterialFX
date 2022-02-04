@@ -14,7 +14,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-
 - New control MFXMagnifierPane
 - ColorUtils: added some new methods to convert Colors to Strings
 - FunctionalStringConverter: added two new convenience methods
@@ -23,18 +22,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added resource bundles and API for internationalization
 
 ### Changed
-
 - ColorUtils: changed some method to be null-safe
 - MFXFilterPaneSkin: properly compute the minimum width
 - MFXTableViewSkin: allow to drag the filter dialog
 
 ### Fixed
-
 - MFXComboBoxSkin: ensure the caret position is at 0 if the combo box is not selectable
 - MFXTableViewSkin: ensure the dialog is on foreground
+- MFXTextField and all subclasses: fixed an issue with CSS and :focused PseudoClass. It was being ignored in some cases,
+  probably because the inner TextField was stealing the focus to the actual control. To fix this we use a new
+  PseudoClass ":focus-within" to specify that the inner field is focused, so the control should be considered focused as
+  well
+- I18N: do not use URLClassLoader to load the ResourceBundles as using MaterialFX is other projects would lead to a
+  MissingResourceException, instead change the bundle base name returned by getBundleBaseName() with the complete path
+  to the bundles
 
 ## [11.13.0] - 22-01-2022
-
 _This version won't follow the above scheme as the amount of changes and commits is simply too huge and there would be
 no way to correctly show all the changes without making mistakes (duplicates, "overlapping" changes...), for this reason
 I'll try to sum up only the major changes below._
@@ -43,19 +46,25 @@ I'll try to sum up only the major changes below._
 - Added new beans and properties
 - Added new mechanisms for bindings
 - Added new collections, in particular an ObservableList that combines the capabilities of JavaFX's FilteredList and
-  SortedList.
-Also those two are read-only, but MaterialFX also offers a version that allows to directly make changes to the source list
-- ReactFX, Flowless removed in favor of my own Virtual Flow implementation, VirtualizedFX. As a result all controls having lists have been reworked.
-- The table view has been reworked as well to use a Virtual Flow (scrollable) so it's efficiency is now on a whole new level. There's also a paginated
-version of the table (like before) but it still uses a Virtual Flow, which of course makes it efficient
-- MFXLabels have been deprecated and removed as now MaterialFX follows Material Design's text fields. The new MFXTextFields are the best thing you're gonna see
-on JavaFX. They have all the features defined by Material Design principles and also more. They now offer a floating label that can have 4 states: disabled, above, border, inline.
-Oh, they can also be set to behave like Labels, no need to have duplicate controls (Label and TextFields), since they offer the same functionalities duh.
+  SortedList. Also those two are read-only, but MaterialFX also offers a version that allows to directly make changes to
+  the source list
+- ReactFX, Flowless removed in favor of my own Virtual Flow implementation, VirtualizedFX. As a result all controls
+  having lists have been reworked.
+- The table view has been reworked as well to use a Virtual Flow (scrollable) so it's efficiency is now on a whole new
+  level. There's also a paginated version of the table (like before) but it still uses a Virtual Flow, which of course
+  makes it efficient
+- MFXLabels have been deprecated and removed as now MaterialFX follows Material Design's text fields. The new
+  MFXTextFields are the best thing you're gonna see on JavaFX. They have all the features defined by Material Design
+  principles and also more. They now offer a floating label that can have 4 states: disabled, above, border, inline. Oh,
+  they can also be set to behave like Labels, no need to have duplicate controls (Label and TextFields), since they
+  offer the same functionalities duh.
 - Many controls (such as combo boxes, date pickers) now extends MFXTextField, so they inherit all its features.
-- Almost all controls have been reviewed/remade to make them fully functional (there were a lot of issues with CSS not working properly).
+- Almost all controls have been reviewed/remade to make them fully functional (there were a lot of issues with CSS not
+  working properly).
 - The Filter API has been reviewed and now it's more powerful than ever with the new MFXFilterPane.
-- The Validation API has been reviewed as well, it is as powerful as before thanks to JavaFX properties and observables, but it's much more flexible. It's up to the user now
-to decide when and how to validate a control. Also an important design choice has been made here. Many validation frameworks for JavaFX also offer a way to decorate a control,
+- The Validation API has been reviewed as well, it is as powerful as before thanks to JavaFX properties and observables,
+  but it's much more flexible. It's up to the user now to decide when and how to validate a control. Also an important
+  design choice has been made here. Many validation frameworks for JavaFX also offer a way to decorate a control,
 but I decided to not to that as it would violate the Single Responsibility Principle! Validation has nothing to do with UI, plus depending on the fanciness of your App it's up to
 you to decide how the validation controls will look like!
 - Dialogs and Notifications have been reviewed as well. The dialogs have been simplified, and for notifications there are now two separate systems.

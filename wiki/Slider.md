@@ -2,7 +2,7 @@
 
 ## Preview
 
-<img src="https://imgur.com/nOrsa1n.gif" alt="Sliders" border="0">
+<img src="https://imgur.com/nOrsa1n.gif" alt="Sliders">
 
 ## MFXSliders
 
