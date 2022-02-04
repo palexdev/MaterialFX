@@ -184,10 +184,10 @@ public class StringUtils {
 		} else {
 			long minutes = elapsedSeconds / 60;
 			if (minutes < 60) {
-				return minutes + I18N.getOrDefault("stringUtil.minutes");
+				return I18N.getOrDefault("stringUtil.minutes", minutes);
 			} else {
 				long hours = minutes / 60;
-				return hours < 24 ? hours + I18N.getOrDefault("stringUtils.hours") : hours / 24 + I18N.getOrDefault("stringUtils.days");
+				return hours < 24 ? I18N.getOrDefault("stringUtils.hours", hours) : I18N.getOrDefault("stringUtils.days", hours / 24);
 			}
 		}
 	}
