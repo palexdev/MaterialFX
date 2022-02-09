@@ -63,7 +63,7 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 	private final BoundTextField boundField;
 	private final Label floatingText;
 
-	private static final PseudoClass FOCUSED_PSEUDO_CLASS = PseudoClass.getPseudoClass("focused");
+	private static final PseudoClass FOCUS_WITHIN_PSEUDO_CLASS = PseudoClass.getPseudoClass("focus-within");
 
 	private final ObjectProperty<PositionBean> floatingPos = new SimpleObjectProperty<>(PositionBean.of(0, 0));
 	private final BooleanExpression floating;
@@ -148,7 +148,7 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 		textField.focusedProperty().addListener((observable, oldValue, newValue) -> boundField.requestFocus());
 		boundField.focusedProperty().addListener((observable, oldValue, newValue) -> {
 			textField.requestLayout();
-			pseudoClassStateChanged(FOCUSED_PSEUDO_CLASS, newValue);
+			pseudoClassStateChanged(FOCUS_WITHIN_PSEUDO_CLASS, newValue);
 		});
 
 		// Icons

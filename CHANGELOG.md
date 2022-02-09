@@ -20,13 +20,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New utils class SwingFXUtils (copied from javafx.embed.swing)
 - Added fluent API builders for MaterialFX components and JavaFX Panes, as requested by #78
 - Added resource bundles and API for internationalization
+- Added new control, MFXSpinner
 
 ### Changed
 - ColorUtils: changed some method to be null-safe
 - MFXFilterPaneSkin: properly compute the minimum width
 - MFXTableViewSkin: allow to drag the filter dialog
+- MFXIconWrapper: added handler to acquire focus
 
 ### Fixed
+
 - MFXComboBoxSkin: ensure the caret position is at 0 if the combo box is not selectable
 - MFXTableViewSkin: ensure the dialog is on foreground
 - MFXTextField and all subclasses: fixed an issue with CSS and :focused PseudoClass. It was being ignored in some cases,
@@ -36,6 +39,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - I18N: do not use URLClassLoader to load the ResourceBundles as using MaterialFX is other projects would lead to a
   MissingResourceException, instead change the bundle base name returned by getBundleBaseName() with the complete path
   to the bundles
+- BoundTextField: remove text formatter binding as it was causing an exception, also it works anyway, so it was
+  unnecessary
+- MFXIconWrapper: fix NullPointerException when creating an empty wrapper
+- ListChangeProcessor: fix computeRemoval() method returning negative indexes
+- ListChangeProcessor: fix findShift() method by including the given index in the count too
 
 ## [11.13.0] - 22-01-2022
 _This version won't follow the above scheme as the amount of changes and commits is simply too huge and there would be

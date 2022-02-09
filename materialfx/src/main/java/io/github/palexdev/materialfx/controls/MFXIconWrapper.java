@@ -140,6 +140,7 @@ public class MFXIconWrapper extends StackPane {
 		setMinSize(USE_PREF_SIZE, USE_PREF_SIZE);
 		setMaxSize(USE_PREF_SIZE, USE_PREF_SIZE);
 
+		addEventHandler(MouseEvent.MOUSE_PRESSED, event -> requestFocus());
 		icon.addListener((observable, oldValue, newValue) -> {
 			super.getChildren().remove(oldValue);
 			manageIcon(newValue);
@@ -187,8 +188,8 @@ public class MFXIconWrapper extends StackPane {
 	protected void layoutChildren() {
 		super.layoutChildren();
 
-		if (getSize() == -1) {
-			Node icon = getIcon();
+		Node icon = getIcon();
+		if (icon != null && getSize() == -1) {
 			double iW = icon.prefWidth(-1);
 			double iH = icon.prefHeight(-1);
 			Insets padding = getPadding();

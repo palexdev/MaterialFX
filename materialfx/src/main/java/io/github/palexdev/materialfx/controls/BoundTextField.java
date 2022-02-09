@@ -63,7 +63,6 @@ public class BoundTextField extends TextField {
 		setEditable(textField.isEditable());
 		setAlignment(textField.getAlignment());
 		setPrefColumnCount(textField.getPrefColumnCount());
-		setTextFormatter(textField.getTextFormatter());
 		selectRange(textField.getSelection().getStart(), textField.getSelection().getEnd());
 		positionCaret(textField.getCaretPosition());
 
@@ -74,7 +73,6 @@ public class BoundTextField extends TextField {
 		editableProperty().bind(textField.editableProperty());
 		alignmentProperty().bind(textField.alignmentProperty());
 		prefColumnCountProperty().bind(textField.prefColumnCountProperty());
-		textFormatterProperty().bind(textField.textFormatterProperty());
 	}
 
 	@Override

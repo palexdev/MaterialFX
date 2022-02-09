@@ -34,6 +34,7 @@ module MaterialFX {
 	exports io.github.palexdev.materialfx.controls.base;
 	exports io.github.palexdev.materialfx.controls.cell;
 	exports io.github.palexdev.materialfx.controls.legacy;
+	exports io.github.palexdev.materialfx.controls.models.spinner;
 
 	// CSS Package
 	exports io.github.palexdev.materialfx.css;
@@ -61,6 +62,9 @@ module MaterialFX {
 
 	// I18N Package
 	exports io.github.palexdev.materialfx.i18n;
+
+	// Layout Package
+	exports io.github.palexdev.materialfx.layout;
 
 	// Notifications Package
 	exports io.github.palexdev.materialfx.notifications;
