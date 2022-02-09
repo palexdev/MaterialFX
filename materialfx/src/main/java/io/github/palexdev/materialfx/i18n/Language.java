@@ -28,9 +28,11 @@ import java.util.Locale;
  * The enumerator also specifies the project's default language, {@link #defaultLanguage()}.
  */
 public enum Language {
+	ARABIC(Locale.forLanguageTag("ar")),
 	ENGLISH(Locale.ENGLISH),
+	FRENCH(Locale.FRENCH),
 	ITALIANO(Locale.ITALIAN),
-	FRANCAIS(Locale.FRENCH);
+	RUSSIAN(Locale.forLanguageTag("ru"));
 
 	private final Locale locale;
 

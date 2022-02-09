@@ -6,14 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 (Date format is dd-MM-yyyy)
 
 ## Type of Changes
+
 - **Added** for new features.
 - **Changed** for changes in existing functionality.
 - **Deprecated** for soon-to-be removed features.
-- **Removed** for now removed features. 
+- **Removed** for now removed features.
 - **Fixed** for any bug fixes.
 
-## [Unreleased]
+[//]: ##[Unreleased]
+
+## [11.13.2] - 09-02-2022
+
 ### Added
+
 - New control MFXMagnifierPane
 - ColorUtils: added some new methods to convert Colors to Strings
 - FunctionalStringConverter: added two new convenience methods
@@ -29,7 +34,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MFXIconWrapper: added handler to acquire focus
 
 ### Fixed
-
 - MFXComboBoxSkin: ensure the caret position is at 0 if the combo box is not selectable
 - MFXTableViewSkin: ensure the dialog is on foreground
 - MFXTextField and all subclasses: fixed an issue with CSS and :focused PseudoClass. It was being ignored in some cases,

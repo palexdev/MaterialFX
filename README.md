@@ -1,6 +1,7 @@
 [![HitCount](http://hits.dwyl.com/PAlex404/MaterialFX.svg)](http://hits.dwyl.com/PAlex404/MaterialFX)
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/palexdev/materialfx/Java%20CI%20with%20Gradle?label=github%20build&style=flat-square)
 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/io.github.palexdev/materialfx?server=https%3A%2F%2Fs01.oss.sonatype.org&style=flat-square)
+[![javadoc](https://javadoc.io/badge2/io.github.palexdev/materialfx/javadoc.svg?logo=java)](https://javadoc.io/doc/io.github.palexdev/materialfx)
 ![GitHub issues](https://img.shields.io/github/issues-raw/palexdev/materialfx?style=flat-square)
 ![GitHub pull requests](https://img.shields.io/github/issues-pr/palexdev/materialfx?style=flat-square)
 ![GitHub](https://img.shields.io/github/license/palexdev/materialfx?style=flat-square)
@@ -38,10 +39,11 @@
 * [About the Logo](#about-the-logo)
 * [Some GIFs](#preview-gifs)
 * [Getting Started](#getting-started)
-    * [Build](#build)
-    * [Usage](#usage)
-        * [Gradle](#gradle)
-        * [Maven](#maven)
+  * [Build](#build)
+  * [Usage](#usage)
+    * [Gradle](#gradle)
+    * [Maven](#maven)
+* [Documentation](#documentation)
 * [Changelog](#changelog)
 * [Roadmap](#roadmap)
 * [Contributing](#contributing)
@@ -222,31 +224,42 @@ repositories {
 }
 
 dependencies {
-  implementation 'io.github.palexdev:materialfx:11.13.1'
+  implementation 'io.github.palexdev:materialfx:11.13.2'
 }
 ```
 
 ###### Maven
 
 ```xml
+
 <dependency>
   <groupId>io.github.palexdev</groupId>
   <artifactId>materialfx</artifactId>
-  <version>11.13.1</version>
+  <version>11.13.2</version>
 </dependency>
 ```
 
-<!-- ROADMAP -->
+<!-- DOCUMENTATION -->
+
+## Documentation
+
+You can read MaterialFX's documentation at [javadoc.io](https://javadoc.io/doc/io.github.palexdev/materialfx)
+
+<!-- CHANGELOG -->
 
 ## Changelog
-See the [CHANGELOG](https://github.com/palexdev/MaterialFX/blob/main/CHANGELOG.md) file for a list of changes per version.
+
+See the [CHANGELOG](https://github.com/palexdev/MaterialFX/blob/main/CHANGELOG.md) file for a list of changes per
+version.
 
 <!-- ROADMAP -->
 
 ## Roadmap
 
-See the [Open Issues](https://github.com/palexdev/MaterialFX/issues) for a list of proposed features (and known issues).  
-See the [ROADMAP](https://github.com/palexdev/MaterialFX/blob/main/ROADMAP.md) for a list of implemented and upcoming features.
+See the [Open Issues](https://github.com/palexdev/MaterialFX/issues) for a list of proposed features (and known issues)
+.  
+See the [ROADMAP](https://github.com/palexdev/MaterialFX/blob/main/ROADMAP.md) for a list of implemented and upcoming
+features.
 
 <!-- CONTRIBUTING -->
 
