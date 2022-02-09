@@ -28,24 +28,25 @@ import java.util.Locale;
  * The enumerator also specifies the project's default language, {@link #defaultLanguage()}.
  */
 public enum Language {
-	ENGLISH(Locale.ENGLISH),
-	ITALIANO(Locale.ITALIAN),
-	FRANCAIS(Locale.FRENCH);
+    ENGLISH(Locale.ENGLISH),
+    ITALIANO(Locale.ITALIAN),
+    FRANCAIS(Locale.FRENCH),
+    ARABIC(Locale.forLanguageTag("ar"));
 
-	private final Locale locale;
+    private final Locale locale;
 
-	Language(Locale locale) {
-		this.locale = locale;
-	}
+    Language(Locale locale) {
+        this.locale = locale;
+    }
 
-	/**
-	 * @return the project's default language, {@link Language#ENGLISH}
-	 */
-	public static Language defaultLanguage() {
-		return ENGLISH;
-	}
+    /**
+     * @return the project's default language, {@link Language#ENGLISH}
+     */
+    public static Language defaultLanguage() {
+        return ENGLISH;
+    }
 
-	public Locale getLocale() {
-		return locale;
-	}
+    public Locale getLocale() {
+        return locale;
+    }
 }
