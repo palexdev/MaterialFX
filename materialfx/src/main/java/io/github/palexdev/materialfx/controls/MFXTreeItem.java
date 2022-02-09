@@ -223,7 +223,7 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
 	}
 
 	//================================================================================
-	// CssMetaData
+	// CSSMetaData
 	//================================================================================
 	private static class StyleableProperties {
 		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;

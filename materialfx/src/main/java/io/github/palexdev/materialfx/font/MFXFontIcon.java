@@ -186,7 +186,7 @@ public class MFXFontIcon extends Text {
 	}
 
 	//================================================================================
-	// CssMetaData
+	// CSSMetaData
 	//================================================================================
 	public static class StyleableProperties {
 		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;

@@ -2,7 +2,7 @@
 
 ## Preview
 
-<img src="https://imgur.com/nj6xhUT.gif" alt="Tableviews" border="0">
+<img src="https://imgur.com/nj6xhUT.gif" alt="Tableviews">
 
 ## MFXTableViews
 

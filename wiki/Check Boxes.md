@@ -2,7 +2,7 @@
 
 ## Preview
 
-<img src="https://imgur.com/ArUhH58.gif" alt="Checkboxes" border="0">
+<img src="https://imgur.com/ArUhH58.gif" alt="Checkboxes">
 
 ## MFXCheckBoxes
 

@@ -2,7 +2,7 @@
 
 ## Preview
 
-<img src="https://imgur.com/4Ckdn5z.gif" alt="Listviews" border="0">
+<img src="https://imgur.com/4Ckdn5z.gif" alt="Listviews">
 
 ## MFXListViews
 

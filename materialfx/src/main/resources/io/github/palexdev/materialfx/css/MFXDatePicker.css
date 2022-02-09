@@ -32,7 +32,7 @@ Date Picker
 	-mfx-ripple-color: #F3F1F6;
 }
 
-.mfx-date-picker:focused .icon {
+.mfx-date-picker:focus-within .icon {
 	-mfx-color: -mfx-purple;
 }
 
@@ -73,8 +73,8 @@ Popup
 	-fx-font-family: "Open Sans SemiBold";
 }
 
-.mfx-date-picker .date-picker-popup .months-combo:focused,
-.mfx-date-picker .date-picker-popup .years-combo:focused {
+.mfx-date-picker .date-picker-popup .months-combo:focus-within,
+.mfx-date-picker .date-picker-popup .years-combo:focus-within {
 	-fx-background-color: #f8f7fa;
 	-fx-text-fill: -mfx-purple;
 }

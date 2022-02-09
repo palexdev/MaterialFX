@@ -69,11 +69,11 @@
 	-fx-padding: 3 -3 0 3;
 }
 
-#customNCombo2:focused {
+#customNCombo2:focus-within {
 	-fx-border-color: transparent transparent -common-gradient transparent;
 }
 
-#customNCombo2:focused .caret .mfx-font-icon {
+#customNCombo2:focus-within .caret .mfx-font-icon {
 	-mfx-color: #ff5d53;
 }
 

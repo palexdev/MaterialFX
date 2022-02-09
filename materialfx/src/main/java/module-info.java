@@ -21,6 +21,11 @@ module MaterialFX {
 	exports io.github.palexdev.materialfx.bindings;
 	exports io.github.palexdev.materialfx.bindings.base;
 
+	// Builders Package
+	exports io.github.palexdev.materialfx.builders.base;
+	exports io.github.palexdev.materialfx.builders.control;
+	exports io.github.palexdev.materialfx.builders.layout;
+
 	// Collections Package
 	exports io.github.palexdev.materialfx.collections;
 
@@ -29,6 +34,7 @@ module MaterialFX {
 	exports io.github.palexdev.materialfx.controls.base;
 	exports io.github.palexdev.materialfx.controls.cell;
 	exports io.github.palexdev.materialfx.controls.legacy;
+	exports io.github.palexdev.materialfx.controls.models.spinner;
 
 	// CSS Package
 	exports io.github.palexdev.materialfx.css;
@@ -53,6 +59,12 @@ module MaterialFX {
 
 	// Font Package
 	exports io.github.palexdev.materialfx.font;
+
+	// I18N Package
+	exports io.github.palexdev.materialfx.i18n;
+
+	// Layout Package
+	exports io.github.palexdev.materialfx.layout;
 
 	// Notifications Package
 	exports io.github.palexdev.materialfx.notifications;

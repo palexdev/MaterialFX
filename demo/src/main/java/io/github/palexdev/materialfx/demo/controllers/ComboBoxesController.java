@@ -97,12 +97,7 @@ public class ComboBoxesController implements Initializable {
 						"""
 		).install();
 
-		StringConverter<Person> converter = FunctionalStringConverter.converter(
-				s -> {
-					throw new UnsupportedOperationException();
-				},
-				person -> person.getName() + " " + person.getSurname()
-		);
+		StringConverter<Person> converter = FunctionalStringConverter.to(person -> (person == null) ? "" : person.getName() + " " + person.getSurname());
 		Function<String, Predicate<Person>> filterFunction = s -> person -> StringUtils.containsIgnoreCase(converter.toString(person), s);
 		filterCombo.setItems(people);
 		filterCombo.setConverter(converter);

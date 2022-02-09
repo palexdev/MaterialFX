@@ -29,7 +29,7 @@
 	-mfx-ripple-radius: 14;
 }
 
-.mfx-combo-box:focused .caret .mfx-font-icon {
+.mfx-combo-box:focus-within .caret .mfx-font-icon {
 	-mfx-color: -mfx-main;
 }
 

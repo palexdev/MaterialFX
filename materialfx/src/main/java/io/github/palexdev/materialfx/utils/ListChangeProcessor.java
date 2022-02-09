@@ -84,7 +84,7 @@ public class ListChangeProcessor {
 				tmp.add(i);
 				continue;
 			}
-			int index = i - findShift(removed, i);
+			int index = Math.max(i - findShift(removed, i), 0);
 			tmp.add(index);
 		}
 		indexes = tmp;
@@ -92,10 +92,10 @@ public class ListChangeProcessor {
 
 	/**
 	 * Iterates over the given Set of removed indexes to count the number
-	 * of indexes that are lesser than the given index.
+	 * of indexes that are lesser or equal to the given index.
 	 */
 	private int findShift(Set<Integer> removed, int index) {
-		return (int) removed.stream().filter(i -> i < index).count();
+		return (int) removed.stream().filter(i -> i <= index).count();
 	}
 
 	//================================================================================

@@ -45,7 +45,7 @@
 	-fx-font-smoothing-type: lcd;
 }
 
-.mfx-text-field:focused {
+.mfx-text-field:focus-within {
 	-fx-background-insets: 2;
 	-fx-border-color: -mfx-main;
 	-fx-border-width: 1.5;
@@ -61,7 +61,7 @@
 	-fx-background-color: white;
 }
 
-.mfx-text-field:focused .floating-text {
+.mfx-text-field:focus-within .floating-text {
 	-fx-text-fill: -mfx-main;
 }
 

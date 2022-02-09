@@ -2,7 +2,7 @@
 
 ## Preview
 
-<img src="https://imgur.com/J3v3i9w.gif" alt="Pickers" border="0">
+<img src="https://imgur.com/J3v3i9w.gif" alt="Pickers">
 
 ## MFXDatePickers
 

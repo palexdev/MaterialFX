@@ -2,7 +2,7 @@
 
 ## Preview
 
-<img src="https://imgur.com/BO0twpA.gif" alt="Comboboxes" border="0">
+<img src="https://imgur.com/BO0twpA.gif" alt="Comboboxes">
 
 ## MFXComboBoxes
 
@@ -52,8 +52,16 @@
 - .mfx-combo-box .combo-popup .virtual-flow .mfx-combo-box-cell
 
 - .mfx-combo-box .combo-popup .virtual-flow .data-label (the cell's text)
-  
+
   *There are other selectors, but they are the same as MFXTextField, refer to its wiki*
+
+### PseudoClasses
+
+| PseudoClass | Description                                                                                                                                 |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| :popup      | Activated when the popup is shown and deactivated when the popup is hidden.<br/>Allows to customize the combo box when the popup is showing |
+
+*Also inherits all new PseudoClasses from MFXTextField since it extends it*
 
 ## MFXFilterComboBoxes
 
@@ -82,4 +90,9 @@
 
 ### CSS Selectors
 
-*This combo box has the same CSS selectors as MFXComboBox, the only difference is that the base style class is .mfx-filter-combo-box*
+*This combo box has the same CSS selectors as MFXComboBox, the only difference is that the base style class is
+.mfx-filter-combo-box*
+
+### PseudoClasses
+
+*This combo box has the same new PseudoClasses as MFXComboBox*

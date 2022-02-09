@@ -224,7 +224,7 @@ repositories {
 }
 
 dependencies {
-implementation 'io.github.palexdev:materialfx:11.13.0'
+  implementation 'io.github.palexdev:materialfx:11.13.1'
 }
 ```
 
@@ -234,7 +234,7 @@ implementation 'io.github.palexdev:materialfx:11.13.0'
 <dependency>
   <groupId>io.github.palexdev</groupId>
   <artifactId>materialfx</artifactId>
-  <version>11.13.0</version>
+  <version>11.13.1</version>
 </dependency>
 ```
 <!-- DOCUMENTATION -->

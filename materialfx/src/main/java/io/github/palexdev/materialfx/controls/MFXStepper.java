@@ -589,7 +589,7 @@ public class MFXStepper extends Control {
 	}
 
 	//================================================================================
-	// CssMetaData
+	// CSSMetaData
 	//================================================================================
 	private static class StyleableProperties {
 		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;

@@ -54,23 +54,18 @@ public class ListViewsController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		ObservableList<String> strings = Model.strings;
 		ObservableList<Person> people = Model.people;
-		StringConverter<Person> personConverter = FunctionalStringConverter.converter(
-				s -> {
-					throw new UnsupportedOperationException();
-				},
-				person -> (person == null) ? "" : person.getName() + " " + person.getSurname()
-		);
+		StringConverter<Person> converter = FunctionalStringConverter.to(person -> (person == null) ? "" : person.getName() + " " + person.getSurname());
 
 		list.setItems(strings);
 		custList.setItems(people);
 		checkList.setItems(strings);
-		custList.setConverter(personConverter);
+		custList.setConverter(converter);
 		custList.setCellFactory(person -> new PersonCellFactory(custList, person));
 		custList.features().enableBounceEffect();
 		custList.features().enableSmoothScrolling(0.5);
 
 		legacyList.setItems(people);
-		legacyList.setConverter(personConverter);
+		legacyList.setConverter(converter);
 	}
 
 	@FXML

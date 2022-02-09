@@ -93,11 +93,13 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
 		filterDialog = MFXDialogs.filter(filterPane)
 				.setShowMinimize(false)
 				.toStageDialogBuilder()
+				.setDraggable(true)
 				.setOwnerNode(container)
 				.setCenterInOwnerNode(true)
 				.initOwner(tableView.getScene().getWindow())
 				.initModality(Modality.APPLICATION_MODAL)
 				.get();
+		filterDialog.setOnShown(event -> filterDialog.toFront());
 
 		getChildren().setAll(container);
 		addListeners();

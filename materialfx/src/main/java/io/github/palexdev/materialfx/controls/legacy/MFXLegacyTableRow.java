@@ -159,7 +159,7 @@ public class MFXLegacyTableRow<T> extends TableRow<T> {
 	}
 
 	//================================================================================
-	// CssMetaData
+	// CSSMetaData
 	//================================================================================
 	private static class StyleableProperties {
 		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;

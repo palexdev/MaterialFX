@@ -88,6 +88,7 @@ public class OnInvalidated<T> extends When<T> {
 	 * then adds the listener to the specified {@link ObservableValue} and finally puts the Observable and
 	 * the OnInvalidated construct in the map.
 	 */
+	@Override
 	public OnInvalidated<T> listen() {
 		if (oneShot) {
 			listener = invalidated -> {

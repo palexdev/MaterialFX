@@ -1,7 +1,7 @@
 package properties;
 
 import io.github.palexdev.materialfx.beans.properties.synced.SynchronizedObjectProperty;
-import io.github.palexdev.materialfx.demo.model.SimplePerson;
+import io.github.palexdev.materialfx.demo.model.Person;
 import io.github.palexdev.materialfx.utils.ExecutionUtils;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -10,10 +10,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SynchronizedObjectTests {
-	private final ObjectProperty<SimplePerson> objectProperty = new SimpleObjectProperty<>();
+	private final ObjectProperty<Person> objectProperty = new SimpleObjectProperty<>();
 
 	@BeforeEach
 	public void setUp() {
@@ -22,28 +22,28 @@ public class SynchronizedObjectTests {
 
 	@Test
 	public void testSync() {
-		SynchronizedObjectProperty<SimplePerson> synced = new SynchronizedObjectProperty<>();
-		synced.setAndWait(new SimplePerson("Jack"), objectProperty);
-		objectProperty.set(new SimplePerson("Rose"));
+		SynchronizedObjectProperty<Person> synced = new SynchronizedObjectProperty<>();
+		synced.setAndWait(new Person("Jack"), objectProperty);
+		objectProperty.set(new Person("Rose"));
 		assertEquals("Jack", synced.get().getName());
 		assertEquals("Rose", objectProperty.get().getName());
 	}
 
 	@Test
 	public void testBind() {
-		SynchronizedObjectProperty<SimplePerson> synced = new SynchronizedObjectProperty<>();
+		SynchronizedObjectProperty<Person> synced = new SynchronizedObjectProperty<>();
 		synced.bind(objectProperty);
-		objectProperty.set(new SimplePerson("Mark"));
+		objectProperty.set(new Person("Mark"));
 		assertEquals("Mark", synced.get().getName());
 		assertEquals("Mark", objectProperty.get().getName());
 	}
 
 	@Test
 	public void testBindBidirectional() {
-		AtomicReference<SimplePerson> aValue = new AtomicReference<>();
-		AtomicReference<SimplePerson> bValue = new AtomicReference<>();
+		AtomicReference<Person> aValue = new AtomicReference<>();
+		AtomicReference<Person> bValue = new AtomicReference<>();
 
-		SynchronizedObjectProperty<SimplePerson> synced = new SynchronizedObjectProperty<>();
+		SynchronizedObjectProperty<Person> synced = new SynchronizedObjectProperty<>();
 		synced.bindBidirectional(objectProperty);
 
 		ExecutionUtils.executeWhen(
@@ -53,7 +53,7 @@ public class SynchronizedObjectTests {
 				(oldValue, newValue) -> newValue != null,
 				true
 		);
-		objectProperty.set(new SimplePerson("Jack"));
+		objectProperty.set(new Person("Jack"));
 		assertEquals("Jack", aValue.get().getName());
 		assertEquals("Jack", objectProperty.get().getName());
 
@@ -64,16 +64,16 @@ public class SynchronizedObjectTests {
 				(oldValue, newValue) -> newValue != null,
 				true
 		);
-		synced.set(new SimplePerson("Rose"));
+		synced.set(new Person("Rose"));
 		assertEquals("Rose", bValue.get().getName());
 		assertEquals("Rose", synced.get().getName());
 	}
 
 	@Test
 	public void testFailSync() {
-		SynchronizedObjectProperty<SimplePerson> synced1 = new SynchronizedObjectProperty<>();
-		SynchronizedObjectProperty<SimplePerson> synced2 = new SynchronizedObjectProperty<>();
-		synced1.setAndWait(new SimplePerson("Mark"), synced2);
-		assertThrows(IllegalArgumentException.class, () -> synced2.setAndWait(new SimplePerson("Leia"), synced1));
+		SynchronizedObjectProperty<Person> synced1 = new SynchronizedObjectProperty<>();
+		SynchronizedObjectProperty<Person> synced2 = new SynchronizedObjectProperty<>();
+		synced1.setAndWait(new Person("Mark"), synced2);
+		assertThrows(IllegalArgumentException.class, () -> synced2.setAndWait(new Person("Leia"), synced1));
 	}
 }

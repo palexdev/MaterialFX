@@ -50,7 +50,7 @@
 }
 
 .mfx-filter-combo-box .combo-popup .search-field,
-.mfx-filter-combo-box .combo-popup .search-field:focused {
+.mfx-filter-combo-box .combo-popup .search-field:focus-within {
 	-fx-border-width: 1;
 	-fx-background-insets: 0;
 	-fx-border-color: lightgray;

@@ -392,7 +392,7 @@ public class MFXPasswordField extends MFXTextField {
 	}
 
 	//================================================================================
-	// CssMetaData
+	// CSSMetaData
 	//================================================================================
 	private static class StyleableProperties {
 		private static final StyleablePropertyFactory<MFXPasswordField> FACTORY = new StyleablePropertyFactory<>(MFXTextField.getClassCssMetaData());

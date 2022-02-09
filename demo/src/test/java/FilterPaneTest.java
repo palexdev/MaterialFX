@@ -4,7 +4,7 @@ import io.github.palexdev.materialfx.controls.BoundTextField;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXFilterPane;
 import io.github.palexdev.materialfx.controls.MFXTextField;
-import io.github.palexdev.materialfx.demo.model.Machine;
+import io.github.palexdev.materialfx.demo.model.Device;
 import io.github.palexdev.materialfx.dialogs.MFXDialogs;
 import io.github.palexdev.materialfx.dialogs.MFXStageDialog;
 import io.github.palexdev.materialfx.factories.InsetsFactory;
@@ -55,10 +55,10 @@ public class FilterPaneTest extends Application {
 				.setOverlayClose(true)
 				.get();
 
-		MFXFilterPane<Machine> filterPane = new MFXFilterPane<>();
+		MFXFilterPane<Device> filterPane = new MFXFilterPane<>();
 		filterPane.getStylesheets().add(MFXResourcesLoader.load("css/MFXFilterPane.css"));
-		filterPane.getFilters().add(new EnumFilter<>("State", Machine::getState, Machine.State.class));
-		filterPane.getFilters().add(new IntegerFilter<>("Machine ID", Machine::getID));
+		filterPane.getFilters().add(new EnumFilter<>("State", Device::getState, Device.State.class));
+		filterPane.getFilters().add(new IntegerFilter<>("Machine ID", Device::getID));
 
 		MFXButton button = new MFXButton("Show Dialog");
 		button.setOnAction(event -> {

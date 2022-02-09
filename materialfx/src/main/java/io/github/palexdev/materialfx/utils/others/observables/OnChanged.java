@@ -88,6 +88,7 @@ public class OnChanged<T> extends When<T> {
 	 * then adds the listener to the specified {@link ObservableValue} and finally puts the Observable and
 	 * the OnChanged construct in the map.
 	 */
+	@Override
 	public OnChanged<T> listen() {
 		if (oneShot) {
 			listener = (observable, oldValue, newValue) -> {

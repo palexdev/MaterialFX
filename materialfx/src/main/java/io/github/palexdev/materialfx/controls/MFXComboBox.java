@@ -29,6 +29,7 @@ import io.github.palexdev.materialfx.beans.properties.styleable.StyleableBoolean
 import io.github.palexdev.materialfx.controls.base.MFXCombo;
 import io.github.palexdev.materialfx.controls.cell.MFXComboBoxCell;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.selection.ComboBoxSelectionModel;
 import io.github.palexdev.materialfx.skins.MFXComboBoxSkin;
 import io.github.palexdev.materialfx.utils.ListChangeProcessor;
@@ -154,9 +155,7 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 		});
 
 		// Default converter
-		setConverter(FunctionalStringConverter.converter(s -> {
-			throw new UnsupportedOperationException();
-		}, Object::toString));
+		setConverter(FunctionalStringConverter.to(t -> t != null ? t.toString() : ""));
 
 		showing.addListener(invalidated -> pseudoClassStateChanged(POPUP_OPEN_PSEUDO_CLASS, showing.get()));
 
@@ -171,31 +170,31 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 	public void defaultContextMenu() {
 		MFXContextMenuItem selectFirst = MFXContextMenuItem.Builder.build()
 				.setIcon(new MFXFontIcon("mfx-first-page", 16))
-				.setText("Select First")
+				.setText(I18N.getOrDefault("comboBox.contextMenu.selectFirst"))
 				.setOnAction(event -> selectFirst())
 				.get();
 
 		MFXContextMenuItem selectNext = MFXContextMenuItem.Builder.build()
 				.setIcon(new MFXFontIcon("mfx-next", 18))
-				.setText("Select Next")
+				.setText(I18N.getOrDefault("comboBox.contextMenu.selectNext"))
 				.setOnAction(event -> selectNext())
 				.get();
 
 		MFXContextMenuItem selectPrevious = MFXContextMenuItem.Builder.build()
 				.setIcon(new MFXFontIcon("mfx-back", 18))
-				.setText("Select Previous")
+				.setText(I18N.getOrDefault("comboBox.contextMenu.selectPrevious"))
 				.setOnAction(event -> selectPrevious())
 				.get();
 
 		MFXContextMenuItem selectLast = MFXContextMenuItem.Builder.build()
 				.setIcon(new MFXFontIcon("mfx-last-page", 16))
-				.setText("Select Last")
+				.setText(I18N.getOrDefault("comboBox.contextMenu.selectLast"))
 				.setOnAction(event -> selectLast())
 				.get();
 
 		MFXContextMenuItem resetSelection = MFXContextMenuItem.Builder.build()
 				.setIcon(new MFXFontIcon("mfx-x", 16))
-				.setText("Clear Selection")
+				.setText(I18N.getOrDefault("comboBox.contextMenu.clearSelection"))
 				.setOnAction(event -> clearSelection())
 				.get();
 
@@ -412,7 +411,7 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 	}
 
 	//================================================================================
-	// CssMetaData
+	// CSSMetaData
 	//================================================================================
 	private static class StyleableProperties {
 		private static final StyleablePropertyFactory<MFXComboBox<?>> FACTORY = new StyleablePropertyFactory<>(MFXTextField.getClassCssMetaData());

@@ -18,6 +18,8 @@
 
 package io.github.palexdev.materialfx.utils;
 
+import io.github.palexdev.materialfx.i18n.I18N;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -178,14 +180,14 @@ public class StringUtils {
 	 */
 	public static String timeToHumanReadable(long elapsedSeconds) {
 		if (elapsedSeconds < 60) {
-			return "Just now";
+			return I18N.getOrDefault("stringUtil.now");
 		} else {
 			long minutes = elapsedSeconds / 60;
 			if (minutes < 60) {
-				return minutes + " min ago";
+				return I18N.getOrDefault("stringUtil.minutes", minutes);
 			} else {
 				long hours = minutes / 60;
-				return hours < 24 ? hours + " hours ago" : hours / 24 + " days ago";
+				return hours < 24 ? I18N.getOrDefault("stringUtils.hours", hours) : I18N.getOrDefault("stringUtils.days", hours / 24);
 			}
 		}
 	}

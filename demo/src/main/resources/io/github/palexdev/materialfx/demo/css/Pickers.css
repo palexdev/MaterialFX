@@ -71,13 +71,13 @@
 	-fx-font-family: "Visby Round CF Medium";
 }
 
-#custDatePicker .date-picker-popup .months-combo:focused,
-#custDatePicker .date-picker-popup .years-combo:focused {
+#custDatePicker .date-picker-popup .months-combo:focus-within,
+#custDatePicker .date-picker-popup .years-combo:focus-within {
 	-fx-text-fill: #007BF6;
 }
 
-#custDatePicker .date-picker-popup .months-combo:focused .caret .mfx-font-icon,
-#custDatePicker .date-picker-popup .years-combo:focused .caret .mfx-font-icon {
+#custDatePicker .date-picker-popup .months-combo:focus-within .caret .mfx-font-icon,
+#custDatePicker .date-picker-popup .years-combo:focus-within .caret .mfx-font-icon {
 	-mfx-color: #007BF6;
 }
 

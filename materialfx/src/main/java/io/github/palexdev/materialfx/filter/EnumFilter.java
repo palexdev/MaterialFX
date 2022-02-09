@@ -20,6 +20,7 @@ package io.github.palexdev.materialfx.filter;
 
 import io.github.palexdev.materialfx.beans.BiPredicateBean;
 import io.github.palexdev.materialfx.filter.base.AbstractFilter;
+import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.utils.EnumStringConverter;
 import io.github.palexdev.materialfx.utils.FXCollectors;
 import javafx.collections.ObservableList;
@@ -70,8 +71,8 @@ public class EnumFilter<T, E extends Enum<E>> extends AbstractFilter<T, E> {
 	@Override
 	protected ObservableList<BiPredicateBean<E, E>> defaultPredicates() {
 		return Stream.<BiPredicateBean<E, E>>of(
-				new BiPredicateBean<>("is", Enum::equals),
-				new BiPredicateBean<>("is not", (anEnum, anEnum2) -> !anEnum.equals(anEnum2))
+				new BiPredicateBean<>(I18N.getOrDefault("filter.is"), Enum::equals),
+				new BiPredicateBean<>(I18N.getOrDefault("filter.isNot"), (anEnum, anEnum2) -> !anEnum.equals(anEnum2))
 		).collect(FXCollectors.toList());
 	}
 

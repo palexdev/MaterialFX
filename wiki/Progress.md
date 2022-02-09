@@ -2,7 +2,7 @@
 
 ## Preview
 
-<img src="https://imgur.com/2E6X3uJ.gif" alt="Progress" border="0">
+<img src="https://imgur.com/2E6X3uJ.gif" alt="Progress">
 
 ## MFXProgressBars
 

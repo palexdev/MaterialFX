@@ -18,13 +18,15 @@
 
 package io.github.palexdev.materialfx.enums;
 
+import io.github.palexdev.materialfx.i18n.I18N;
+
 /**
  * Enumeration to specify how two predicates should be chained.
  * Also specify how a ChainMode enumeration should be represented in UI.
  */
 public enum ChainMode {
 	AND("&"),
-	OR("or");
+	OR(I18N.getOrDefault("chainMode.or"));
 
 	public static boolean useAlternativeAnd = false;
 	private final String text;
@@ -34,7 +36,7 @@ public enum ChainMode {
 	}
 
 	public String text() {
-		return this == AND && useAlternativeAnd ? "and" : this.text;
+		return this == AND && useAlternativeAnd ? I18N.getOrDefault("chainMode.alternativeAnd") : this.text;
 	}
 
 	/**

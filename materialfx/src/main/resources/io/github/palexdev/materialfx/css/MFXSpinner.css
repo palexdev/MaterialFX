@@ -1,0 +1,66 @@
+/*
+ * Copyright (C) 2022 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import "MFXColors.css";
+@import "MFXTextField.css";
+
+.mfx-spinner {
+	-fx-background-color: white;
+	-fx-background-radius: 5;
+	-fx-border-color: lightgray;
+	-fx-border-radius: 5;
+	-fx-padding: 5 10 5 10;
+}
+
+.mfx-spinner:focused,
+.mfx-spinner:focus-within {
+	-fx-border-color: -mfx-purple;
+}
+
+.mfx-spinner .mfx-text-field {
+	-fx-background-insets: 0;
+	-fx-border-color: transparent;
+	-fx-border-width: 1;
+	-fx-border-insets: 0;
+	-fx-padding: 5 10 5 10;
+}
+
+.mfx-spinner .mfx-icon-wrapper {
+	-fx-background-color: derive(-mfx-purple, 155%);
+	-mfx-size: 27;
+}
+
+.mfx-spinner .mfx-icon-wrapper:focused,
+.mfx-spinner .mfx-icon-wrapper:hover {
+	-fx-background-color: derive(-mfx-purple, 50%);
+}
+
+.mfx-spinner .mfx-icon-wrapper:focused .mfx-font-icon,
+.mfx-spinner .mfx-icon-wrapper:hover .mfx-font-icon {
+	-mfx-color: white;
+}
+
+.mfx-spinner .mfx-icon-wrapper .mfx-font-icon {
+	-mfx-color: -mfx-purple;
+	-mfx-size: 14;
+}
+
+.mfx-spinner .mfx-icon-wrapper .mfx-ripple-generator {
+	-mfx-ripple-radius: 24;
+	-mfx-ripple-color: rgba(255, 255, 255, 0.5);
+}

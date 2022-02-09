@@ -26,6 +26,7 @@ import io.github.palexdev.materialfx.controls.MFXStepperToggle.MFXStepperToggleE
 import io.github.palexdev.materialfx.effects.ripple.RippleClipType;
 import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.factories.RippleClipTypeFactory;
+import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.*;
@@ -130,13 +131,13 @@ public class MFXStepperSkin extends SkinBase<MFXStepper> {
 				stepperBar.heightProperty()
 		));
 
-		nextButton = new MFXButton("Next");
+		nextButton = new MFXButton(I18N.getOrDefault("stepper.next"));
 		nextButton.setManaged(false);
 		nextButton.getRippleGenerator().setClipSupplier(() ->
 				new RippleClipTypeFactory(RippleClipType.ROUNDED_RECTANGLE, 34, 34).build(nextButton)
 		);
 
-		previousButton = new MFXButton("Previous");
+		previousButton = new MFXButton(I18N.getOrDefault("stepper.previous"));
 		previousButton.setManaged(false);
 		previousButton.getRippleGenerator().setClipSupplier(() ->
 				new RippleClipTypeFactory(RippleClipType.ROUNDED_RECTANGLE, 34, 34).build(previousButton)

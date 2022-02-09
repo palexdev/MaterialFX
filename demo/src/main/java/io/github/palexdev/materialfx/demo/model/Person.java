@@ -25,6 +25,11 @@ public class Person {
 	private final String surname;
 	private int age;
 
+	public Person(String name) {
+		this.name = name;
+		this.surname = "";
+	}
+
 	public Person(String name, String surname) {
 		this.name = name;
 		this.surname = surname;
