@@ -30,8 +30,9 @@ import java.util.Locale;
 public enum Language {
     ENGLISH(Locale.ENGLISH),
     ITALIANO(Locale.ITALIAN),
-    FRANCAIS(Locale.FRENCH),
-    ARABIC(Locale.forLanguageTag("ar"));
+    FRENCH(Locale.FRENCH),
+    ARABIC(Locale.forLanguageTag("ar")),
+    RUSSIAN(Locale.forLanguageTag("ru"));
 
     private final Locale locale;
 
