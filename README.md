@@ -240,11 +240,9 @@ dependencies {
 ```
 
 <!-- DOCUMENTATION -->
-
 ## Documentation
-
 You can read MaterialFX's documentation at [javadoc.io](https://javadoc.io/doc/io.github.palexdev/materialfx)
-
+                                                                    
 <!-- CHANGELOG -->
 
 ## Changelog
