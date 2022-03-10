@@ -1,5 +1,6 @@
 module MaterialFX.Demo {
 	requires MaterialFX;
+	requires VirtualizedFX;
 
 	requires jdk.localedata;
 

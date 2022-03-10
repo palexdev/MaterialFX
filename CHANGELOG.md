@@ -15,6 +15,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [//]: ##[Unreleased]
 
+## [11.13.3] - 10-03-2022
+
+### Added
+
+- MFXTextField: added a label to specify the unit of measure (optional, leave blank string to remove)
+
+### Changed
+
+- Update Gradle plugins
+- Update VirtualizedFX to 11.2.5
+- Improve ROADMAP
+
 ## [11.13.2] - 09-02-2022
 
 ### Added

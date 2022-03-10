@@ -62,6 +62,7 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 	//================================================================================
 	private final BoundTextField boundField;
 	private final Label floatingText;
+	private final Label mUnitLabel;
 
 	private static final PseudoClass FOCUS_WITHIN_PSEUDO_CLASS = PseudoClass.getPseudoClass("focus-within");
 
@@ -87,13 +88,18 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 		floatingText.getTransforms().addAll(scale, translate);
 		if (textField.getFloatMode() == FloatMode.DISABLED) floatingText.setVisible(false);
 
+		mUnitLabel = new Label();
+		mUnitLabel.getStyleClass().setAll("measure-unit");
+		mUnitLabel.textProperty().bind(textField.measureUnitProperty());
+		mUnitLabel.visibleProperty().bind(textField.measureUnitProperty().isNotNull().and(textField.measureUnitProperty().isNotEmpty()));
+
 		floating = Bindings.createBooleanBinding(
 				() -> getFloatY() != 0,
 				floatingPos
 		);
 		textField.floatingProperty().bind(floating);
 
-		getChildren().setAll(floatingText, boundField);
+		getChildren().setAll(floatingText, boundField, mUnitLabel);
 
 		if (!shouldFloat()) {
 			scale.setX(1);
@@ -142,6 +148,7 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 			textField.requestLayout();
 		});
 		textField.floatingTextGapProperty().addListener((observable, oldValue, newValue) -> textField.requestLayout());
+		textField.measureUnitGapProperty().addListener((observable, oldValue, newValue) -> textField.requestLayout());
 		textField.borderGapProperty().addListener((observable, oldValue, newValue) -> textField.requestLayout());
 
 		// Focus Handling
@@ -242,19 +249,6 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 	}
 
 	@Override
-	protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-		MFXTextField textField = getSkinnable();
-		Node leading = textField.getLeadingIcon();
-		Node trailing = textField.getTrailingIcon();
-		double gap = textField.getGraphicTextGap();
-		return leftInset +
-				(leading != null ? leading.prefWidth(-1) + gap : 0) +
-				Math.max(boundField.prefWidth(-1), floatingText.prefWidth(-1)) +
-				(trailing != null ? trailing.prefWidth(-1) + gap : 0) +
-				rightInset;
-	}
-
-	@Override
 	protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
 		MFXTextField textField = getSkinnable();
 		FloatMode floatMode = textField.getFloatMode();
@@ -286,6 +280,20 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 	}
 
 	@Override
+	protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+		MFXTextField textField = getSkinnable();
+		Node leading = textField.getLeadingIcon();
+		Node trailing = textField.getTrailingIcon();
+		double gap = textField.getGraphicTextGap();
+		double mUnitGap = textField.getMeasureUnitGap();
+		return leftInset +
+				(leading != null ? leading.prefWidth(-1) + gap : 0) +
+				Math.max(boundField.prefWidth(-1) + mUnitLabel.prefWidth(-1) + mUnitGap, floatingText.prefWidth(-1)) +
+				(trailing != null ? trailing.prefWidth(-1) + gap : 0) +
+				rightInset;
+	}
+
+	@Override
 	protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
 		if (getSkinnable().getMaxWidth() == Double.MAX_VALUE) return Double.MAX_VALUE;
 		return getSkinnable().prefWidth(-1);
@@ -303,6 +311,7 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 		Node leading = textField.getLeadingIcon();
 		Node trailing = textField.getTrailingIcon();
 		double graphicTextGap = textField.getGraphicTextGap();
+		double mUnitGap = textField.getMeasureUnitGap();
 		FloatMode floatMode = textField.getFloatMode();
 		VPos textVAlignment = (floatMode != FloatMode.INLINE) ? VPos.CENTER : VPos.BOTTOM;
 		double scaleValue = (floatMode == FloatMode.ABOVE && !textField.scaleOnAbove()) ? 1 : this.scaleValue;
@@ -357,6 +366,18 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 		);
 		floatingText.resizeRelocate(floatPos.getX(), floatPos.getY(), floatW, floatH);
 
+		// Position the Label responsible for showing the measure unit
+		double unitW = mUnitLabel.prefWidth(-1);
+		double unitH = mUnitLabel.prefHeight(-1);
+		PositionBean unitPos = PositionUtils.computePosition(
+				textField,
+				mUnitLabel,
+				x, y, w, h, 0,
+				Insets.EMPTY,
+				HPos.RIGHT, textVAlignment
+		);
+		mUnitLabel.resizeRelocate(unitPos.getX(), unitPos.getY(), unitW, unitH);
+
 		// The text is always positioned to the LEFT of the Pane, the vertical alignment
 		// depends on the FloatMode, BOTTOM if FloatMode.INLINE, CENTER in every other mode
 		//
@@ -364,7 +385,8 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 		// minus the icon's width and gap
 		double textW = w -
 				(leading != null ? leading.prefWidth(-1) + graphicTextGap : 0) -
-				(trailing != null ? trailing.prefWidth(-1) + graphicTextGap : 0);
+				(trailing != null ? trailing.prefWidth(-1) + graphicTextGap : 0) -
+				unitW - mUnitGap;
 		double textH = boundField.prefHeight(-1);
 		PositionBean textPos = PositionUtils.computePosition(
 				textField,

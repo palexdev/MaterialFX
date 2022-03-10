@@ -65,6 +65,11 @@
 	-fx-text-fill: -mfx-main;
 }
 
+.mfx-text-field .measure-unit {
+	-fx-font-family: "Open Sans Regular";
+	-fx-text-fill: -mfx-text-he;
+}
+
 .mfx-text-field .text-field {
 	-fx-text-box-border: transparent;
 	-fx-background-color: transparent;

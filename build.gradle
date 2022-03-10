@@ -1,10 +1,10 @@
 plugins {
     id 'java-library'
-    id 'org.openjfx.javafxplugin' version '0.0.11' apply false
+    id 'org.openjfx.javafxplugin' version '0.0.12' apply false
 }
 
 group 'io.github.palexdev'
-version '11.13.2'
+version '11.13.3'
 
 repositories {
     mavenCentral()
