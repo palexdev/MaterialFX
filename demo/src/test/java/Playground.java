@@ -1,72 +1,35 @@
-import fr.brouillard.oss.cssfx.CSSFX;
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXSpinner;
-import io.github.palexdev.materialfx.controls.models.spinner.ListSpinnerModel;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.scenicview.ScenicView;
 
-import java.util.List;
-
 public class Playground extends Application {
+	private final double w = 445;
+	private final double h = 270;
 
 	@Override
 	public void start(Stage primaryStage) {
-		CSSFX.start();
-		BorderPane borderPane = new BorderPane();
+		VBox vBox = new VBox(10);
+		vBox.setAlignment(Pos.CENTER);
 
-		ObservableList<String> strings = FXCollections.observableArrayList(
-				"String 1",
-				"String 2",
-				"String 3",
-				"String 4",
-				"String 5",
-				"String 6",
-				"String 7",
-				"String 8"
-		);
+		MFXTextField textField = new MFXTextField("15.0", "", "Pixels");
 
-		MFXSpinner<String> spinner = new MFXSpinner<>();
-		spinner.getStylesheets().add(MFXResourcesLoader.load("css/MFXSpinner.css"));
-		spinner.setSpinnerModel(new ListSpinnerModel<>());
-		spinner.getSpinnerModel().setWrapAround(true);
-		((ListSpinnerModel<String>) spinner.getSpinnerModel()).setItems(strings);
-		spinner.setTextTransformer((focused, text) -> ((!focused || !spinner.isEditable()) && !text.isEmpty()) ? text + " cm" : text);
-
-		MFXButton add = new MFXButton("Add");
-		add.setOnAction(event -> ((ListSpinnerModel<String>) spinner.getSpinnerModel()).getItems().addAll(2, List.of("String Added 1", "String Added 2")));
-		MFXButton remove = new MFXButton("Remove");
-		remove.setOnAction(event -> ((ListSpinnerModel<String>) spinner.getSpinnerModel()).getItems().clear());
-		MFXButton removeSel = new MFXButton("Remove Selected");
-		removeSel.setOnAction(event -> ((ListSpinnerModel<String>) spinner.getSpinnerModel()).getItems().remove(((ListSpinnerModel<String>) spinner.getSpinnerModel()).getCurrentIndex()));
-		MFXButton replace = new MFXButton("Replace");
-		replace.setOnAction(event -> ((ListSpinnerModel<String>) spinner.getSpinnerModel()).getItems().set(((ListSpinnerModel<String>) spinner.getSpinnerModel()).getCurrentIndex(), "Replaced"));
-		MFXButton change = new MFXButton("Change List");
-		change.setOnAction(event -> {
-			ListSpinnerModel<String> model = (ListSpinnerModel<String>) spinner.getSpinnerModel();
-			model.setItems(FXCollections.observableArrayList(
-					"String 9",
-					"String 10",
-					"String 11",
-					"String 12",
-					"String 1234567890"
-			));
+		MFXButton button = new MFXButton("Change Measure Unit");
+		button.setOnAction(event -> {
+			String measureUnit = textField.getMeasureUnit();
+			measureUnit = (measureUnit == null || measureUnit.isEmpty()) ? "px" : "cm";
+			textField.setMeasureUnit(measureUnit);
 		});
-		HBox box = new HBox(15, add, remove, removeSel, replace, change);
-		box.setAlignment(Pos.CENTER);
 
-		borderPane.setCenter(spinner);
-		borderPane.setBottom(box);
-		Scene scene = new Scene(borderPane, 800, 600);
+		vBox.getChildren().addAll(button, textField);
+		Scene scene = new Scene(vBox, 800, 800);
 		primaryStage.setScene(scene);
 		primaryStage.show();
+
 		ScenicView.show(scene);
 	}
 }

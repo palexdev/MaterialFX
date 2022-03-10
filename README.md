@@ -39,10 +39,10 @@
 * [About the Logo](#about-the-logo)
 * [Some GIFs](#preview-gifs)
 * [Getting Started](#getting-started)
-    * [Build](#build)
-    * [Usage](#usage)
-        * [Gradle](#gradle)
-        * [Maven](#maven)
+  * [Build](#build)
+  * [Usage](#usage)
+    * [Gradle](#gradle)
+    * [Maven](#maven)
 * [Documentation](#documentation)
 * [Changelog](#changelog)
 * [Roadmap](#roadmap)
@@ -231,12 +231,14 @@ dependencies {
 ###### Maven
 
 ```xml
+
 <dependency>
   <groupId>io.github.palexdev</groupId>
   <artifactId>materialfx</artifactId>
   <version>11.13.2</version>
 </dependency>
 ```
+
 <!-- DOCUMENTATION -->
 ## Documentation
 You can read MaterialFX's documentation at [javadoc.io](https://javadoc.io/doc/io.github.palexdev/materialfx)
@@ -244,14 +246,18 @@ You can read MaterialFX's documentation at [javadoc.io](https://javadoc.io/doc/i
 <!-- CHANGELOG -->
 
 ## Changelog
-See the [CHANGELOG](https://github.com/palexdev/MaterialFX/blob/main/CHANGELOG.md) file for a list of changes per version.
+
+See the [CHANGELOG](https://github.com/palexdev/MaterialFX/blob/main/CHANGELOG.md) file for a list of changes per
+version.
 
 <!-- ROADMAP -->
 
 ## Roadmap
 
-See the [Open Issues](https://github.com/palexdev/MaterialFX/issues) for a list of proposed features (and known issues).  
-See the [ROADMAP](https://github.com/palexdev/MaterialFX/blob/main/ROADMAP.md) for a list of implemented and upcoming features.
+See the [Open Issues](https://github.com/palexdev/MaterialFX/issues) for a list of proposed features (and known issues)
+.  
+See the [ROADMAP](https://github.com/palexdev/MaterialFX/blob/main/ROADMAP.md) for a list of implemented and upcoming
+features.
 
 <!-- CONTRIBUTING -->
 

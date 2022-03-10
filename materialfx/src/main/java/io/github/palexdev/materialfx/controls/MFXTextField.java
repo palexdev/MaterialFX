@@ -137,6 +137,8 @@ public class MFXTextField extends TextField implements Validated, MFXMenuControl
 	};
 	private static final PseudoClass FLOATING_PSEUDO_CLASS = PseudoClass.getPseudoClass("floating");
 
+	private final StringProperty measureUnit = new SimpleStringProperty("");
+
 	protected final MFXValidator validator = new MFXValidator();
 	protected MFXContextMenu contextMenu;
 
@@ -579,6 +581,24 @@ public class MFXTextField extends TextField implements Validated, MFXMenuControl
 		return floating;
 	}
 
+	public String getMeasureUnit() {
+		return measureUnit.get();
+	}
+
+	/**
+	 * Specifies the unit of measure of the field.
+	 * <p></p>
+	 * This is useful of course when dealing with numeric fields that represent for example:
+	 * weight, volume, length and so on...
+	 */
+	public StringProperty measureUnitProperty() {
+		return measureUnit;
+	}
+
+	public void setMeasureUnit(String measureUnit) {
+		this.measureUnit.set(measureUnit);
+	}
+
 	//================================================================================
 	// Styleable Properties
 	//================================================================================
@@ -629,6 +649,13 @@ public class MFXTextField extends TextField implements Validated, MFXMenuControl
 			this,
 			"graphicTextGap",
 			10.0
+	);
+
+	private final StyleableDoubleProperty measureUnitGap = new StyleableDoubleProperty(
+			StyleableProperties.MEASURE_UNIT_GAP,
+			this,
+			"measureUnitGap",
+			5.0
 	);
 
 	private final StyleableBooleanProperty scaleOnAbove = new StyleableBooleanProperty(
@@ -778,6 +805,21 @@ public class MFXTextField extends TextField implements Validated, MFXMenuControl
 		this.scaleOnAbove.set(scaleOnAbove);
 	}
 
+	public double getMeasureUnitGap() {
+		return measureUnitGap.get();
+	}
+
+	/**
+	 * Specifies the gap between the field and the measure unit label.
+	 */
+	public StyleableDoubleProperty measureUnitGapProperty() {
+		return measureUnitGap;
+	}
+
+	public void setMeasureUnitGap(double measureUnitGap) {
+		this.measureUnitGap.set(measureUnitGap);
+	}
+
 	public Color getTextFill() {
 		return textFill.get();
 	}
@@ -865,6 +907,13 @@ public class MFXTextField extends TextField implements Validated, MFXMenuControl
 						10.0
 				);
 
+		private static final CssMetaData<MFXTextField, Number> MEASURE_UNIT_GAP =
+				FACTORY.createSizeCssMetaData(
+						"-mfx-measure-unit-gap",
+						MFXTextField::measureUnitGapProperty,
+						5.0
+				);
+
 		private static final CssMetaData<MFXTextField, Boolean> SCALE_ON_ABOVE =
 				FACTORY.createBooleanCssMetaData(
 						"-mfx-scale-on-above",
@@ -890,7 +939,7 @@ public class MFXTextField extends TextField implements Validated, MFXMenuControl
 			cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
 					TextField.getClassCssMetaData(),
 					ANIMATED, CARET_VISIBLE, BORDER_GAP,
-					EDITABLE, FLOAT_MODE, FLOATING_TEXT_GAP, GRAPHIC_TEXT_GAP,
+					EDITABLE, FLOAT_MODE, FLOATING_TEXT_GAP, GRAPHIC_TEXT_GAP, MEASURE_UNIT_GAP,
 					SCALE_ON_ABOVE, TEXT_FILL, TEXT_LIMIT
 			);
 		}
