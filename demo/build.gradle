@@ -29,11 +29,12 @@ dependencies {
 }
 
 application {
+    setMainModule("MaterialFX.Demo")
     String main = project.findProperty("chooseMain").toString()
     if (main != "null" && !main.trim().isEmpty()) {
-        getMainClass().set(moduleName.concat('/').concat(main))
+        setMainClassName(main)
     } else {
-        getMainClass().set("io.github.palexdev.materialfx.demo.Demo")
+        setMainClassName("io.github.palexdev.materialfx.demo.Demo")
     }
 }
 
@@ -63,6 +64,17 @@ jlink {
     }
 }
 
+
+compileTestJava {
+    moduleOptions {
+        compileOnClasspath = true
+    }
+}
+
 test {
     useJUnitPlatform()
+
+    moduleOptions {
+        runOnClasspath = true
+    }
 }
