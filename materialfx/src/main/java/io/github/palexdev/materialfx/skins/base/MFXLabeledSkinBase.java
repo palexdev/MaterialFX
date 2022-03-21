@@ -128,7 +128,9 @@ public abstract class MFXLabeledSkinBase<C extends Labeled & MFXLabeled> extends
 				BorderPane.setMargin(text, InsetsFactory.left(gap));
 				break;
 			}
-			case GRAPHIC_ONLY:
+			case GRAPHIC_ONLY: {
+				break;
+			}
 			case CENTER: {
 				topContainer.setCenter(controlContainer);
 				BorderPane.setMargin(text, InsetsFactory.none());
@@ -175,8 +177,12 @@ public abstract class MFXLabeledSkinBase<C extends Labeled & MFXLabeled> extends
 				minW = Math.max(getControlContainer().prefWidth(-1), text.prefWidth(-1));
 				break;
 			}
-			case CENTER:
 			case GRAPHIC_ONLY: {
+				Node graphic = labeled.getGraphic();
+				minW = (graphic != null) ? graphic.prefWidth(-1) : 0.0;
+				break;
+			}
+			case CENTER: {
 				minW = getControlContainer().prefWidth(-1);
 			}
 		}

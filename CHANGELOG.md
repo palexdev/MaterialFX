@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changes
 
 - Added/Updated some font resources
+- Allow controls using MFXLabeledSkinBase to display only the graphic node
+- Improve width/height computation for MFXRectangleToggleNode
 
 ## [11.13.3] - 10-03-2022
 

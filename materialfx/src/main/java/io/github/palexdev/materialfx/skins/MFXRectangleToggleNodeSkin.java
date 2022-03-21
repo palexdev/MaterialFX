@@ -173,7 +173,7 @@ public class MFXRectangleToggleNodeSkin extends SkinBase<MFXRectangleToggleNode>
 	// Override Methods
 	//================================================================================
 	@Override
-	protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+	protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
 		MFXRectangleToggleNode toggleNode = getSkinnable();
 		Node graphic = toggleNode.getGraphic();
 		if (graphic != null) {
@@ -190,6 +190,16 @@ public class MFXRectangleToggleNodeSkin extends SkinBase<MFXRectangleToggleNode>
 				textWidth +
 				(trailing != null ? trailing.prefWidth(-1) + gap : 0) +
 				rightInset;
+	}
+
+	@Override
+	protected double computePrefHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+		MFXRectangleToggleNode toggleNode = getSkinnable();
+		Node graphic = toggleNode.getGraphic();
+		if (graphic != null) {
+			return topInset + graphic.prefHeight(-1) + bottomInset;
+		}
+		return super.computePrefHeight(width, topInset, rightInset, bottomInset, leftInset);
 	}
 
 	@Override
