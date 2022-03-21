@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - New control: MFXTitledPane
 
+### Changes
+
+- Added/Updated some font resources
+
 ## [11.13.3] - 10-03-2022
 
 ### Added

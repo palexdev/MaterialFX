@@ -71,7 +71,7 @@ public class DialogsController {
 
 	@FXML
 	private void openInfo(ActionEvent event) {
-		MFXFontIcon infoIcon = new MFXFontIcon("mfx-info-circle-filled", 18);
+		MFXFontIcon infoIcon = new MFXFontIcon("mfx-info-circle", 18);
 		dialogContent.setHeaderIcon(infoIcon);
 		dialogContent.setHeaderText("This is a generic info dialog");
 		convertDialogTo("mfx-info-dialog");
