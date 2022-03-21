@@ -1,0 +1,39 @@
+@import "Fonts.css";
+@import "MFXColors.css";
+
+.mfx-titled-pane {
+	-fx-background-color: white;
+	-fx-background-radius: 6;
+	-fx-border-color: lightgray;
+	-fx-border-radius: 6;
+}
+
+.mfx-titled-pane:focused {
+	-fx-border-color: -mfx-purple;
+}
+
+.mfx-titled-pane .header-pane {
+	-fx-padding: 5;
+}
+
+.mfx-titled-pane .header-pane .header-label {
+	-fx-font-family: "Open Sans SemiBold";
+	-fx-text-fill: -mfx-text-he;
+}
+
+.mfx-titled-pane:focused .header-pane .mfx-icon-wrapper .mfx-font-icon {
+	-mfx-color: -mfx-purple;
+}
+
+.mfx-titled-pane .header-pane .mfx-icon-wrapper .mfx-ripple-generator {
+	-mfx-ripple-color: derive(-mfx-purple, 145%);
+}
+
+.mfx-titled-pane .content-pane {
+	-fx-padding: 10 5 10 5;
+	-fx-border-color: lightgray transparent transparent transparent;
+}
+
+.mfx-titled-pane:focused .content-pane {
+	-fx-border-color: -mfx-purple transparent transparent transparent;
+}

@@ -13,13 +13,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Removed** for now removed features.
 - **Fixed** for any bug fixes.
 
-[//]: ##[Unreleased]
+## [Unreleased] - 21-03-2022
+
+### Added
+
+- New control: MFXTitledPane
 
 ## [11.13.3] - 10-03-2022
+
 ### Added
+
 - MFXTextField: added a label to specify the unit of measure (optional, leave blank string to remove)
 
 ### Changed
+
 - Update Gradle plugins
 - Update VirtualizedFX to 11.2.5
 - Improve ROADMAP

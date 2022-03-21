@@ -16,34 +16,13 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import 'Fonts.css';
-@import 'MFXColors.css';
+package io.github.palexdev.materialfx.enums;
 
-.header-label {
-	-fx-font-family: 'Visby Round CF Bold';
-	-fx-font-size: 14;
-	-fx-text-fill: -mfx-text-he;
-}
+import io.github.palexdev.materialfx.controls.MFXTitledPane;
 
-.header-label .text {
-	-fx-font-smoothing-type: lcd;
-}
-
-.sub-header-label {
-	-fx-font-family: 'Visby Round CF Demi Bold';
-	-fx-text-fill: -mfx-text-he;
-}
-
-.sub-header-label .text {
-	-fx-font-smoothing-type: lcd;
-}
-
-.grid-pane {
-	-fx-background-color: transparent;
-}
-
-.grid-background {
-	-fx-background-color: white;
-	-fx-background-radius: 10;
-	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.12, -1.0, 2.0);
+/**
+ * Enumeration used by {@link MFXTitledPane} to specify the header's position.
+ */
+public enum HeaderPosition {
+	TOP, RIGHT, BOTTOM, LEFT
 }
