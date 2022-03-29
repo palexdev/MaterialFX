@@ -24,7 +24,7 @@ import io.github.palexdev.materialfx.controls.base.MFXLabeled;
 import io.github.palexdev.materialfx.skins.MFXToggleButtonSkin;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
-import io.github.palexdev.materialfx.utils.ToggleButtonsUtil;
+import io.github.palexdev.materialfx.utils.ToggleUtils;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -114,7 +114,7 @@ public class MFXToggleButton extends Labeled implements Toggle, MFXLabeled {
 				if (isSelected()) {
 					tg.selectToggle(this);
 				} else if (tg.getSelectedToggle() == this) {
-					ToggleButtonsUtil.clearSelectedToggle(tg);
+					ToggleUtils.clearSelectedToggle(tg);
 				}
 			}
 		});

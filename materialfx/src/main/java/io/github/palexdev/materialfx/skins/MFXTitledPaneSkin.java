@@ -85,7 +85,6 @@ public class MFXTitledPaneSkin extends SkinBase<MFXTitledPane> {
 		contentPane = new StackPane();
 		contentPane.getStyleClass().add("content-pane");
 		if (content != null) contentPane.getChildren().add(content);
-		contentPane.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
 		clip = new Rectangle();
 		clip();
@@ -185,16 +184,20 @@ public class MFXTitledPaneSkin extends SkinBase<MFXTitledPane> {
 		switch (position) {
 			case RIGHT:
 				bp.setRight(header);
+				contentPane.setMinSize(Region.USE_PREF_SIZE, Region.USE_COMPUTED_SIZE);
 				break;
 			case BOTTOM:
 				bp.setBottom(header);
+				contentPane.setMinSize(Region.USE_COMPUTED_SIZE, Region.USE_PREF_SIZE);
 				break;
 			case LEFT:
 				bp.setLeft(header);
+				contentPane.setMinSize(Region.USE_PREF_SIZE, Region.USE_COMPUTED_SIZE);
 				break;
 			case TOP:
 			default:
 				bp.setTop(header);
+				contentPane.setMinSize(Region.USE_COMPUTED_SIZE, Region.USE_PREF_SIZE);
 		}
 	}
 

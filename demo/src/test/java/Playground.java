@@ -1,13 +1,9 @@
-import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXTextField;
-import io.github.palexdev.materialfx.controls.MFXToggleButton;
-import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.materialfx.controls.MFXTitledPane;
+import io.github.palexdev.materialfx.enums.HeaderPosition;
 import javafx.application.Application;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import org.scenicview.ScenicView;
 
@@ -17,24 +13,13 @@ public class Playground extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-		VBox vBox = new VBox(10);
-		vBox.setAlignment(Pos.CENTER);
+		BorderPane bp = new BorderPane();
 
-		MFXTextField textField = new MFXTextField("15.0", "", "Pixels");
+		MFXTitledPane tp = new MFXTitledPane("SideBar", new Rectangle(200, 1200));
+		tp.setHeaderPos(HeaderPosition.LEFT);
+		bp.setRight(tp);
 
-		MFXButton button = new MFXButton("Change Measure Unit");
-		button.setOnAction(event -> {
-			String measureUnit = textField.getMeasureUnit();
-			measureUnit = (measureUnit == null || measureUnit.isEmpty()) ? "px" : "cm";
-			textField.setMeasureUnit(measureUnit);
-		});
-
-		MFXToggleButton tb = new MFXToggleButton("Text", MFXFontIcon.getRandomIcon(24, Color.BLACK));
-		tb.setContentDisposition(ContentDisplay.GRAPHIC_ONLY);
-		tb.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-
-		vBox.getChildren().addAll(button, textField, tb);
-		Scene scene = new Scene(vBox, 800, 800);
+		Scene scene = new Scene(bp, 1440, 900);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 

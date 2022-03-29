@@ -79,11 +79,11 @@ public class PositionUtils {
 	//================================================================================
 	public static PositionBean computePosition(Region parent, Node child, double areaX, double areaY, double areaWidth, double areaHeight,
 	                                           double areaBaselineOffset, Insets margin, HPos hAlignment, VPos vAlignment) {
-		return computePosition(parent, child, areaX, areaY, areaWidth, areaHeight, areaBaselineOffset, margin, hAlignment, vAlignment, true);
+		return computePosition(parent, child, areaX, areaY, areaWidth, areaHeight, areaBaselineOffset, margin, hAlignment, vAlignment, true, true);
 	}
 
 	public static PositionBean computePosition(Region parent, Node child, double areaX, double areaY, double areaWidth, double areaHeight,
-	                                           double areaBaselineOffset, Insets margin, HPos hAlignment, VPos vAlignment, boolean snapToPixel) {
+	                                           double areaBaselineOffset, Insets margin, HPos hAlignment, VPos vAlignment, boolean snapToPixel, boolean computeSizes) {
 
 		Insets snappedMargin = margin == null ? Insets.EMPTY : margin;
 		if (snapToPixel) {
@@ -95,12 +95,12 @@ public class PositionUtils {
 			);
 		}
 
-		double xPosition = computeXPosition(parent, child, areaX, areaWidth, snappedMargin, false, hAlignment, snapToPixel);
-		double yPosition = computeYPosition(parent, child, areaY, areaHeight, areaBaselineOffset, snappedMargin, false, vAlignment, snapToPixel);
+		double xPosition = computeXPosition(parent, child, areaX, areaWidth, snappedMargin, false, hAlignment, snapToPixel, computeSizes);
+		double yPosition = computeYPosition(parent, child, areaY, areaHeight, areaBaselineOffset, snappedMargin, false, vAlignment, snapToPixel, computeSizes);
 		return PositionBean.of(xPosition, yPosition);
 	}
 
-	public static double computeXPosition(Region parent, Node child, double areaX, double areaWidth, Insets margin, boolean snapMargin, HPos hAlignment, boolean snapToPixel) {
+	public static double computeXPosition(Region parent, Node child, double areaX, double areaWidth, Insets margin, boolean snapMargin, HPos hAlignment, boolean snapToPixel, boolean computeSizes) {
 		Insets snappedMargin = margin == null ? Insets.EMPTY : margin;
 		if (snapMargin) {
 			snappedMargin = InsetsFactory.of(
@@ -113,12 +113,12 @@ public class PositionUtils {
 
 		final double leftMargin = snappedMargin.getLeft();
 		final double rightMargin = snappedMargin.getRight();
-		final double xOffset = leftMargin + computeXOffset(areaWidth - leftMargin - rightMargin, child.getLayoutBounds().getWidth(), hAlignment);
+		final double xOffset = leftMargin + computeXOffset(areaWidth - leftMargin - rightMargin, computeSizes ? child.prefWidth(-1) : child.getLayoutBounds().getWidth(), hAlignment);
 		final double xPosition = areaX + xOffset;
 		return snapToPixel ? parent.snapPositionX(xPosition) : xPosition;
 	}
 
-	public static double computeYPosition(Region parent, Node child, double areaY, double areaHeight, double areaBaselineOffset, Insets margin, boolean snapMargin, VPos vAlignment, boolean snapToPixel) {
+	public static double computeYPosition(Region parent, Node child, double areaY, double areaHeight, double areaBaselineOffset, Insets margin, boolean snapMargin, VPos vAlignment, boolean snapToPixel, boolean computeSizes) {
 		Insets snappedMargin = margin == null ? Insets.EMPTY : margin;
 		if (snapMargin) {
 			snappedMargin = InsetsFactory.of(
@@ -135,13 +135,12 @@ public class PositionUtils {
 		if (vAlignment == VPos.BASELINE) {
 			double bo = child.getBaselineOffset();
 			if (bo == Node.BASELINE_OFFSET_SAME_AS_HEIGHT) {
-				// We already know the layout bounds at this stage, so we can use them
-				yOffset = areaBaselineOffset - child.getLayoutBounds().getHeight();
+				yOffset = areaBaselineOffset - (computeSizes ? child.prefHeight(-1) : child.getLayoutBounds().getHeight());
 			} else {
 				yOffset = areaBaselineOffset - bo;
 			}
 		} else {
-			yOffset = topMargin + computeYOffset(areaHeight - topMargin - bottomMargin, child.getLayoutBounds().getHeight(), vAlignment);
+			yOffset = topMargin + computeYOffset(areaHeight - topMargin - bottomMargin, computeSizes ? child.prefHeight(-1) : child.getLayoutBounds().getHeight(), vAlignment);
 		}
 		final double yPosition = areaY + yOffset;
 		return snapToPixel ? parent.snapPositionY(yPosition) : yPosition;

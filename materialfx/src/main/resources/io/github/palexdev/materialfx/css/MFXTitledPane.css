@@ -1,5 +1,6 @@
 @import "Fonts.css";
 @import "MFXColors.css";
+@import "MFXScrollPane.css";
 
 .mfx-titled-pane {
 	-fx-background-color: white;
@@ -30,8 +31,9 @@
 }
 
 .mfx-titled-pane .content-pane {
-	-fx-padding: 10 5 10 5;
+	-fx-background-color: transparent;
 	-fx-border-color: lightgray transparent transparent transparent;
+	-fx-padding: 10 5 10 5;
 }
 
 .mfx-titled-pane:focused .content-pane {

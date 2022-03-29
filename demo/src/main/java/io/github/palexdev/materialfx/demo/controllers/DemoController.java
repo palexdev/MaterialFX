@@ -23,7 +23,7 @@ import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.ScrollUtils;
-import io.github.palexdev.materialfx.utils.ToggleButtonsUtil;
+import io.github.palexdev.materialfx.utils.ToggleUtils;
 import io.github.palexdev.materialfx.utils.others.loader.MFXLoader;
 import io.github.palexdev.materialfx.utils.others.loader.MFXLoaderBean;
 import javafx.application.Platform;
@@ -79,7 +79,7 @@ public class DemoController implements Initializable {
 	public DemoController(Stage stage) {
 		this.stage = stage;
 		this.toggleGroup = new ToggleGroup();
-		ToggleButtonsUtil.addAlwaysOneSelectedSupport(toggleGroup);
+		ToggleUtils.addAlwaysOneSelectedSupport(toggleGroup);
 	}
 
 	@Override

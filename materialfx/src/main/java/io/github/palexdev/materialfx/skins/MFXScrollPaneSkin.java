@@ -19,8 +19,13 @@
 package io.github.palexdev.materialfx.skins;
 
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
+import javafx.geometry.Orientation;
+import javafx.scene.Node;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.skin.ScrollPaneSkin;
 import javafx.scene.layout.StackPane;
+
+import java.util.Set;
 
 /**
  * Skin used for {@link MFXScrollPane}, this class' purpose is to
@@ -34,5 +39,13 @@ public class MFXScrollPaneSkin extends ScrollPaneSkin {
 		super(scrollPane);
 		StackPane viewPort = (StackPane) scrollPane.lookup(".viewport");
 		viewPort.setCache(false);
+
+		Set<Node> nodes = scrollPane.lookupAll(".scroll-bar");
+		nodes.forEach(node -> {
+			if (node instanceof ScrollBar) {
+				ScrollBar sb = ((ScrollBar) node);
+				sb.getStyleClass().add(sb.getOrientation() == Orientation.VERTICAL ? "vBar" : "hBar");
+			}
+		});
 	}
 }

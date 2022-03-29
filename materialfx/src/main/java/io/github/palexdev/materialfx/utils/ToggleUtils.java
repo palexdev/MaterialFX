@@ -28,7 +28,7 @@ import javafx.scene.input.MouseEvent;
 /**
  * Utils class for {@code ToggleButtons}.
  */
-public class ToggleButtonsUtil {
+public class ToggleUtils {
 
 	private static final EventHandler<MouseEvent> consumeMouseEventFilter = (MouseEvent mouseEvent) -> {
 		if (((Toggle) mouseEvent.getSource()).isSelected()) {
@@ -56,7 +56,7 @@ public class ToggleButtonsUtil {
 				}
 			}
 		});
-		toggleGroup.getToggles().forEach(ToggleButtonsUtil::addConsumeMouseEventFilter);
+		toggleGroup.getToggles().forEach(ToggleUtils::addConsumeMouseEventFilter);
 	}
 
 	/**
@@ -73,5 +73,11 @@ public class ToggleButtonsUtil {
 			}
 		}
 		toggleGroup.selectToggle(null);
+	}
+
+	public static void addTogglesTo(ToggleGroup tg, Toggle... toggles) {
+		for (Toggle toggle : toggles) {
+			toggle.setToggleGroup(tg);
+		}
 	}
 }

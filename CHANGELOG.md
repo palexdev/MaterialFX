@@ -18,12 +18,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - New control: MFXTitledPane
+- Added some new resources
 
 ### Changes
 
 - Added/Updated some font resources
 - Allow controls using MFXLabeledSkinBase to display only the graphic node
 - Improve width/height computation for MFXRectangleToggleNode
+- MFXScrollPane: added method to compute the full size of a scroll pane (including scroll bars)
+- Renamed ToggleButtonsUtil to ToggleUtils, and added a utility method to quickly add several toggles to a group
+
+### Fixed
+
+- MFXTitledPaneSkin: minSize of the content pane should be set according to the position
+- PositionUtils: fix compute position methods, as sometimes "getLayoutBounds().getHeight()" can return 0. Added a
+  parameter to specify whether the sizes must be computed instead of using the layoutBounds
 
 ## [11.13.3] - 10-03-2022
 

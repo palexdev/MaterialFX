@@ -19,11 +19,13 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
+import io.github.palexdev.materialfx.beans.SizeBean;
 import io.github.palexdev.materialfx.skins.MFXScrollPaneSkin;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Skin;
 import javafx.scene.paint.Color;
@@ -40,6 +42,8 @@ public class MFXScrollPane extends ScrollPane {
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-scroll-pane";
 	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXScrollPane.css");
+	private ScrollBar vBar;
+	private ScrollBar hBar;
 
 	//================================================================================
 	// Constructors
@@ -59,6 +63,28 @@ public class MFXScrollPane extends ScrollPane {
 	private void initialize() {
 		getStyleClass().add(STYLE_CLASS);
 		addListeners();
+	}
+
+	public SizeBean getFullSizes() {
+		ScrollBar vBar = (this.vBar != null) ? this.vBar : (ScrollBar) lookup(".vBar");
+		ScrollBar hBar = (this.hBar != null) ? this.hBar : (ScrollBar) lookup(".hBar");
+
+		this.vBar = vBar;
+		this.hBar = hBar;
+
+		double vBarW = (vBar != null) ?
+				vBar.snappedLeftInset() + vBar.prefWidth(-1) + vBar.snappedRightInset() :
+				0.0;
+
+		double hBarH = (hBar != null) ?
+				hBar.snappedTopInset() + hBar.prefHeight(-1) + hBar.snappedBottomInset() :
+				0.0;
+
+		double contentW = (getContent() != null) ? getContent().prefWidth(-1) : 0.0;
+		double contentH = (getContent() != null) ? getContent().prefHeight(-1) : 0.0;
+		double fullW = snappedLeftInset() + contentW + snappedRightInset() + vBarW;
+		double fullH = snappedTopInset() + contentH + snappedBottomInset() + hBarH;
+		return SizeBean.of(fullW, fullH);
 	}
 
 	//================================================================================
