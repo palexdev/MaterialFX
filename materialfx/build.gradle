@@ -26,6 +26,10 @@ dependencies {
     implementation 'io.github.palexdev:virtualizedfx:11.2.5'
 }
 
+javafx {
+    configuration = "compileOnly"
+}
+
 javadoc {
     excludes = ['**/*.html', 'META-INF/**']
 
