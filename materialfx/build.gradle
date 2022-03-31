@@ -21,9 +21,12 @@ compileJava {
 
 dependencies {
     testImplementation('junit:junit:4.13.2')
-    implementation 'com.vanniktech:gradle-maven-publish-plugin:0.19.0'
 
-    implementation 'io.github.palexdev:virtualizedfx:11.2.5'
+    implementation 'io.github.palexdev:virtualizedfx:11.2.6'
+}
+
+javafx {
+    configuration = 'compileOnly'
 }
 
 javadoc {
@@ -70,7 +73,7 @@ jar {
 shadowJar {
     mergeServiceFiles()
     dependencies {
-        include(dependency('io.github.palexdev:virtualizedfx:11.2.5'))
+        include(dependency('io.github.palexdev:virtualizedfx:11.2.6'))
     }
 }
 
@@ -95,10 +98,6 @@ build {
     dependsOn shadowJar, copyJar, removeBnd
 }
 
-allprojects {
-    plugins.withId("com.vanniktech.maven.publish") {
-        mavenPublish {
-            sonatypeHost = "S01"
-        }
-    }
+mavenPublish {
+    sonatypeHost = "S01"
 }
