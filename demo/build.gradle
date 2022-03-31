@@ -49,18 +49,15 @@ jlink {
     }
 
     targetPlatform("linux-x64") {
-        jdkHome = jdkDownload("https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-linux_x64.tar.gz")
-        addExtraModulePath("/home/palexdev/Documents/JavaFX_jmods/linux_x64")
+        jdkHome = jdkDownload("https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-fx-jdk17.0.2-linux_x64.tar.gz")
     }
 
     targetPlatform("win") {
-        jdkHome = jdkDownload("https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-win_x64.zip")
-        addExtraModulePath("/home/palexdev/Documents/JavaFX_jmods/win_x64")
+        jdkHome = jdkDownload("https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-fx-jdk17.0.2-win_x64.zip")
     }
 
     targetPlatform("mac") {
-        jdkHome = jdkDownload("https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-macosx_x64.tar.gz")
-        addExtraModulePath("/home/palexdev/Documents/JavaFX_jmods/mac_x64")
+        jdkHome = jdkDownload("https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-fx-jdk17.0.2-macosx_x64.tar.gz")
     }
 }
 
