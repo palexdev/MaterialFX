@@ -15,11 +15,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [//]: ##[Unreleased]
 
+## [11.13.4] - 31-03-2022
+
+### Fixed
+
+- Fixed Maven POM
+- Fixed MFXTextField bug which was causing improper text fill in specific occasions
+
 ## [11.13.3] - 10-03-2022
+
 ### Added
+
 - MFXTextField: added a label to specify the unit of measure (optional, leave blank string to remove)
 
 ### Changed
+
 - Update Gradle plugins
 - Update VirtualizedFX to 11.2.5
 - Improve ROADMAP
