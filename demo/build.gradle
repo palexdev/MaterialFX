@@ -1,3 +1,5 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
 plugins {
     id 'application'
     id 'org.beryx.jlink' version '2.25.0'
@@ -26,6 +28,20 @@ dependencies {
     implementation 'org.kordamp.ikonli:ikonli-fontawesome5-pack:12.2.0'
     implementation 'io.github.palexdev:virtualizedfx:11.2.6'
     implementation project(':materialfx')
+}
+
+compileTestJava {
+    moduleOptions {
+        compileOnClasspath = true
+    }
+}
+
+test {
+    useJUnitPlatform()
+
+    moduleOptions {
+        runOnClasspath = true
+    }
 }
 
 application {
@@ -66,17 +82,15 @@ jlink {
     addExtraDependencies('javafx')
 }
 
-
-compileTestJava {
-    moduleOptions {
-        compileOnClasspath = true
+task doPackageAll {
+    if (Os.isFamily(Os.FAMILY_UNIX)) {
+        exec {
+            executable "$projectDir/scripts/JLinkPackage.sh"
+            args = ["$buildDir"]
+        }
     }
 }
 
-test {
-    useJUnitPlatform()
-
-    moduleOptions {
-        runOnClasspath = true
-    }
+jlinkZip.doLast {
+    doPackageAll
 }
