@@ -1,31 +1,41 @@
-import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.scenicview.ScenicView;
 
+import java.text.DecimalFormat;
+import java.text.ParsePosition;
+
 public class Playground extends Application {
-	private final double w = 445;
-	private final double h = 270;
 
 	@Override
 	public void start(Stage primaryStage) {
 		VBox vBox = new VBox(10);
 		vBox.setAlignment(Pos.CENTER);
 
-		MFXTextField textField = new MFXTextField("15.0", "", "Pixels");
+		DecimalFormat format = new DecimalFormat("#.0");
+		MFXTextField field = new MFXTextField("", "", "Numbers");
+		field.delegateSetTextFormatter(new TextFormatter<>(c ->
+		{
+			if (c.getControlNewText().isEmpty()) {
+				return c;
+			}
 
-		MFXButton button = new MFXButton("Change Measure Unit");
-		button.setOnAction(event -> {
-			String measureUnit = textField.getMeasureUnit();
-			measureUnit = (measureUnit == null || measureUnit.isEmpty()) ? "px" : "cm";
-			textField.setMeasureUnit(measureUnit);
-		});
+			ParsePosition parsePosition = new ParsePosition(0);
+			Object object = format.parse(c.getControlNewText(), parsePosition);
 
-		vBox.getChildren().addAll(button, textField);
+			if (object == null || parsePosition.getIndex() < c.getControlNewText().length()) {
+				return null;
+			} else {
+				return c;
+			}
+		}));
+
+		vBox.getChildren().addAll(field);
 		Scene scene = new Scene(vBox, 800, 800);
 		primaryStage.setScene(scene);
 		primaryStage.show();

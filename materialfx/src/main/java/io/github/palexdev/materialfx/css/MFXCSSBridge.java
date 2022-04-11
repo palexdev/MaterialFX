@@ -22,7 +22,6 @@ import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Parent;
-import javafx.scene.layout.Region;
 
 /**
  * Helper class which is responsible for parsing the stylesheets for a given {@link Parent}.
@@ -64,12 +63,6 @@ public class MFXCSSBridge {
 		stylesheets.clear();
 		if (parent == null) return;
 
-		if (parent instanceof Region) {
-			Region region = (Region) parent;
-			if (region.getUserAgentStylesheet() != null && !region.getUserAgentStylesheet().isEmpty()) {
-				stylesheets.add(region.getUserAgentStylesheet());
-			}
-		}
 		stylesheets.addAll(parent.getStylesheets());
 	}
 

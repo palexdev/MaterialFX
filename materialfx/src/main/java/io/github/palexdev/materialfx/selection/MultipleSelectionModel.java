@@ -172,6 +172,14 @@ public class MultipleSelectionModel<T> extends AbstractMultipleSelectionModel<T>
 	}
 
 	/**
+	 * Delegate method for {@link MultipleSelectionManager#getSelectedValues()}.
+	 */
+	@Override
+	public List<T> getSelectedValues() {
+		return selectionManager.getSelectedValues();
+	}
+
+	/**
 	 * Delegate method for {@link MultipleSelectionManager#allowsMultipleSelection()}.
 	 */
 	@Override

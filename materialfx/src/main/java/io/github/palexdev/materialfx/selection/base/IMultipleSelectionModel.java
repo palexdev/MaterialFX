@@ -21,7 +21,9 @@ package io.github.palexdev.materialfx.selection.base;
 import javafx.beans.property.MapProperty;
 import javafx.collections.ObservableMap;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Public API that every MultipleSelectionModel must implement.
@@ -107,6 +109,13 @@ public interface IMultipleSelectionModel<T> {
 	 * Replaces the selection with the given {@link ObservableMap}.
 	 */
 	void setSelection(ObservableMap<Integer, T> newSelection);
+
+	/**
+	 * Returns an unmodifiable {@link List} containing all the selected values extracted from
+	 * {@link Map#values()}.
+	 * The values order is kept since the selection is backed by a {@link LinkedHashMap}.
+	 */
+	List<T> getSelectedValues();
 
 	/**
 	 * Specifies if this model allows multiple selection or should act like
