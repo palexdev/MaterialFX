@@ -109,6 +109,7 @@ public class MFXTextFieldSkin extends SkinBase<MFXTextField> {
 		if (textField.getLeadingIcon() != null) getChildren().add(textField.getLeadingIcon());
 		if (textField.getTrailingIcon() != null) getChildren().add(textField.getTrailingIcon());
 
+		updateTextColor(textField.getTextFill());
 		addListeners();
 	}
 

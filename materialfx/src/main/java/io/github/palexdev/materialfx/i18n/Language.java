@@ -32,7 +32,9 @@ public enum Language {
 	ENGLISH(Locale.ENGLISH),
 	FRENCH(Locale.FRENCH),
 	ITALIANO(Locale.ITALIAN),
-	RUSSIAN(Locale.forLanguageTag("ru"));
+	RUSSIAN(Locale.forLanguageTag("ru")),
+	SIMPLIFIED_CHINESE(Locale.SIMPLIFIED_CHINESE),
+	TRADITIONAL_CHINESE(Locale.TRADITIONAL_CHINESE);
 
 	private final Locale locale;
 

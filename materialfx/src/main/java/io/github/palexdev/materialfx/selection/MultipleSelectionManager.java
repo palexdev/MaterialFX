@@ -145,10 +145,12 @@ public class MultipleSelectionManager<T> {
 		if (indexes.isEmpty()) return;
 
 		if (allowsMultipleSelection) {
-			Set<Integer> indexesSet = new HashSet<>(indexes);
+			Set<Integer> indexesSet = new LinkedHashSet<>(indexes);
 			Map<Integer, T> newSelection = indexesSet.stream().collect(Collectors.toMap(
 					i -> i,
-					i -> selectionModel.getItems().get(i)
+					i -> selectionModel.getItems().get(i),
+					(t, t2) -> t2,
+					LinkedHashMap::new
 			));
 			selection.putAll(newSelection);
 		} else {
@@ -254,17 +256,17 @@ public class MultipleSelectionManager<T> {
 	}
 
 	/**
-	 * Builds a new observable hash map backed by a {@link TreeMap}.
+	 * Builds a new observable hash map backed by a {@link LinkedHashMap}.
 	 */
 	protected ObservableMap<Integer, T> getMap() {
-		return FXCollections.observableMap(new TreeMap<>());
+		return FXCollections.observableMap(new LinkedHashMap<>());
 	}
 
 	/**
-	 * Builds a new observable hash map backed by a {@link TreeMap}, initialized with the given map.
+	 * Builds a new observable hash map backed by a {@link LinkedHashMap}, initialized with the given map.
 	 */
 	protected ObservableMap<Integer, T> getMap(Map<Integer, T> map) {
-		return FXCollections.observableMap(new TreeMap<>(map));
+		return FXCollections.observableMap(new LinkedHashMap<>(map));
 	}
 
 
@@ -295,6 +297,15 @@ public class MultipleSelectionManager<T> {
 	 */
 	public void setSelection(ObservableMap<Integer, T> selection) {
 		this.selection.set(selection);
+	}
+
+	/**
+	 * Returns an unmodifiable {@link List} containing all the selected values extracted from
+	 * {@link Map#values()}.
+	 * The values order is kept since the selection is backed by a {@link LinkedHashMap}.
+	 */
+	public List<T> getSelectedValues() {
+		return List.copyOf(selection.values());
 	}
 
 	/**

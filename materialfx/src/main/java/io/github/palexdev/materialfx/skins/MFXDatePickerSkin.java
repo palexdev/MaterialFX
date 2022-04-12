@@ -22,6 +22,7 @@ import io.github.palexdev.materialfx.beans.NumberRange;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXDateCell;
 import io.github.palexdev.materialfx.utils.DateTimeUtils;
+import io.github.palexdev.materialfx.utils.ExecutionUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -99,7 +100,12 @@ public class MFXDatePickerSkin extends MFXTextFieldSkin {
 	public MFXDatePickerSkin(MFXDatePicker datePicker, BoundTextField boundField) {
 		super(datePicker, boundField);
 
-		popup = new MFXPopup();
+		popup = new MFXPopup() {
+			@Override
+			public String getUserAgentStylesheet() {
+				return datePicker.getUserAgentStylesheet();
+			}
+		};
 		popup.getStyleClass().add("date-picker-popup");
 		popup.setPopupStyleableParent(datePicker);
 		popup.setAutoHide(true);
@@ -128,7 +134,20 @@ public class MFXDatePickerSkin extends MFXTextFieldSkin {
 	// Methods
 	//================================================================================
 	protected void initialize() {
+		MFXDatePicker datePicker = getDatePicker();
 		popup.setContent(createPopupContent());
+
+		LocalDate date = datePicker.getValue();
+		if (date != null) {
+			updateValue(date);
+			ExecutionUtils.executeWhen(
+					datePicker.delegateSelectedTextProperty(),
+					(oldValue, newValue) -> datePicker.positionCaret(newValue.length()),
+					false,
+					(oldValue, newValue) -> !newValue.isEmpty(),
+					true
+			);
+		}
 	}
 
 	protected void setBehavior() {
@@ -275,7 +294,12 @@ public class MFXDatePickerSkin extends MFXTextFieldSkin {
 	protected Node createPopupContent() {
 		MFXDatePicker datePicker = getDatePicker();
 
-		MFXComboBox<Month> monthCombo = new MFXComboBox<>(FXCollections.observableArrayList(Month.values()));
+		MFXComboBox<Month> monthCombo = new MFXComboBox<>(FXCollections.observableArrayList(Month.values())) {
+			@Override
+			public String getUserAgentStylesheet() {
+				return datePicker.getUserAgentStylesheet();
+			}
+		};
 		monthCombo.getStyleClass().add("months-combo");
 		monthCombo.converterProperty().bind(Bindings.createObjectBinding(
 				() -> datePicker.getMonthConverterSupplier().get(),
@@ -288,7 +312,12 @@ public class MFXDatePickerSkin extends MFXTextFieldSkin {
 			updateGrid();
 		});
 
-		MFXComboBox<Integer> yearCombo = new MFXComboBox<>(years);
+		MFXComboBox<Integer> yearCombo = new MFXComboBox<>(years) {
+			@Override
+			public String getUserAgentStylesheet() {
+				return datePicker.getUserAgentStylesheet();
+			}
+		};
 		yearCombo.getStyleClass().add("years-combo");
 		yearCombo.selectItem(currentYearMonth.getYear());
 		yearCombo.valueProperty().addListener((observable, oldValue, newValue) -> {

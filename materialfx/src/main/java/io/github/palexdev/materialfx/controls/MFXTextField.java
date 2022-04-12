@@ -41,6 +41,7 @@ import javafx.scene.Node;
 import javafx.scene.control.IndexRange;
 import javafx.scene.control.Skin;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.paint.Color;
 
@@ -420,6 +421,21 @@ public class MFXTextField extends TextField implements Validated, MFXMenuControl
 	@Override
 	public void replaceSelection(String replacement) {
 		boundField.replaceSelection(replacement);
+	}
+
+	public TextFormatter<?> delegateGetTextFormatter() {
+		return boundField.getTextFormatter();
+	}
+
+	/**
+	 * Specifies the {@link BoundTextField} text formatter.
+	 */
+	public ObjectProperty<TextFormatter<?>> delegateTextFormatterProperty() {
+		return boundField.textFormatterProperty();
+	}
+
+	public void delegateSetTextFormatter(TextFormatter<?> textFormatter) {
+		boundField.setTextFormatter(textFormatter);
 	}
 
 	public int delegateGetAnchor() {

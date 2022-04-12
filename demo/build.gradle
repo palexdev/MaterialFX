@@ -1,3 +1,5 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
 plugins {
     id 'application'
     id 'org.beryx.jlink' version '2.25.0'
@@ -20,12 +22,26 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 
     implementation name: 'scenicview'
-    implementation "fr.brouillard.oss:cssfx:11.4.0"
+    implementation("fr.brouillard.oss:cssfx:11.4.0") { exclude group: 'org.openjfx' }
     implementation 'org.kordamp.ikonli:ikonli-core:12.2.0'
     implementation 'org.kordamp.ikonli:ikonli-javafx:12.2.0'
     implementation 'org.kordamp.ikonli:ikonli-fontawesome5-pack:12.2.0'
-    implementation 'io.github.palexdev:virtualizedfx:11.2.5'
+    implementation 'io.github.palexdev:virtualizedfx:11.2.6'
     implementation project(':materialfx')
+}
+
+compileTestJava {
+    moduleOptions {
+        compileOnClasspath = true
+    }
+}
+
+test {
+    useJUnitPlatform()
+
+    moduleOptions {
+        runOnClasspath = true
+    }
 }
 
 application {
@@ -62,19 +78,21 @@ jlink {
         jdkHome = jdkDownload("https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-macosx_x64.tar.gz")
         addExtraModulePath("/home/palexdev/Documents/JavaFX_jmods/mac_x64")
     }
+
+    addExtraDependencies('javafx')
 }
 
-
-compileTestJava {
-    moduleOptions {
-        compileOnClasspath = true
+task doPackageAll {
+    doLast {
+        if (Os.isFamily(Os.FAMILY_UNIX)) {
+            exec {
+                executable "$projectDir/scripts/JLinkPackage.sh"
+                args = ["$buildDir"]
+            }
+        }
     }
 }
 
-test {
-    useJUnitPlatform()
-
-    moduleOptions {
-        runOnClasspath = true
-    }
+jlinkZip.doLast {
+    doPackageAll
 }

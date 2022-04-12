@@ -1,0 +1,72 @@
+/*
+ * Copyright (C) 2022 Parisi Alessandro
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX).
+ *
+ * MaterialFX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
+ */
+.mfx-filter-combo-box {
+	-fx-background-color: derive(#323232, 20%);
+	-fx-border-color: transparent;
+	-mfx-caret-visible: false;
+	-mfx-float-mode: disabled;
+	-fx-text-fill: white;
+}
+
+.mfx-filter-combo-box .caret .mfx-ripple-generator {
+	-mfx-ripple-color: rgba(255, 255, 255, 0.2);
+}
+
+.mfx-filter-combo-box .caret .mfx-font-icon {
+	-mfx-color: white
+}
+
+.mfx-filter-combo-box .combo-popup .search-container {
+	-fx-background-color: derive(#323232, 20%);
+	-fx-background-radius: 5;
+	-fx-border-color: transparent;
+	-fx-padding: 10 5 5 5;
+}
+
+.mfx-filter-combo-box .combo-popup .search-field {
+	-fx-background-color: derive(#323232, 20%);
+	-fx-text-fill: white;
+}
+
+.mfx-filter-combo-box .combo-popup .search-field .text-field {
+	-fx-prompt-text-fill: #ebebeb;
+}
+
+.mfx-filter-combo-box .combo-popup .virtual-flow {
+	-fx-background-color: transparent;
+}
+
+.mfx-filter-combo-box .combo-popup .virtual-flow .mfx-combo-box-cell .data-label {
+	-fx-text-fill: white;
+}
+
+.mfx-filter-combo-box .combo-popup .virtual-flow .mfx-combo-box-cell:hover {
+	-fx-background-color: white;
+}
+
+.mfx-filter-combo-box .combo-popup .virtual-flow .mfx-combo-box-cell:hover .data-label {
+	-fx-text-fill: rgba(0, 0, 0, 0.87);
+}
+
+.mfx-filter-combo-box .combo-popup .virtual-flow .mfx-combo-box-cell:selected {
+	-fx-background-color: white;
+}
+
+.mfx-filter-combo-box .combo-popup .virtual-flow .mfx-combo-box-cell:selected .data-label {
+	-fx-text-fill: rgb(0, 0, 0, 0.87);
+}
