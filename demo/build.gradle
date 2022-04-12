@@ -83,10 +83,12 @@ jlink {
 }
 
 task doPackageAll {
-    if (Os.isFamily(Os.FAMILY_UNIX)) {
-        exec {
-            executable "$projectDir/scripts/JLinkPackage.sh"
-            args = ["$buildDir"]
+    doLast {
+        if (Os.isFamily(Os.FAMILY_UNIX)) {
+            exec {
+                executable "$projectDir/scripts/JLinkPackage.sh"
+                args = ["$buildDir"]
+            }
         }
     }
 }
