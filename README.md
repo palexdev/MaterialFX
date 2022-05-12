@@ -99,7 +99,6 @@ the previous version, so I thought a new logo would have been a good idea.
 
 #### Imgur Link: [Gallery](https://imgur.com/a/IrDirnI)
 
-<i>
 <details>
 <summary>Buttons</summary>
 <br>
