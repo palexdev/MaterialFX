@@ -4,10 +4,16 @@ daysUntilStale: 28
 daysUntilClose: 7
 # Issues with these labels will never be considered stale
 exemptLabels:
-  - pinned
+  - bug
+  - css
+  - documentation
+  - enhancement
   - help wanted
+  - pinned
+  - question
   - roadmap
   - staging
+  - to-evaluate
   - wip
 # Label to use when marking an issue as stale
 staleLabel: stale
