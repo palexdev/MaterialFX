@@ -20,6 +20,7 @@ package io.github.palexdev.materialfx.utils.others.observables;
 
 import javafx.beans.value.ObservableValue;
 
+import java.lang.ref.WeakReference;
 import java.util.WeakHashMap;
 
 /**
@@ -42,7 +43,7 @@ public abstract class When<T> {
 	//================================================================================
 	// Properties
 	//================================================================================
-	protected static final WeakHashMap<ObservableValue<?>, When<?>> whens = new WeakHashMap<>();
+	protected static final WeakHashMap<ObservableValue<?>, WeakReference<When<?>>> whens = new WeakHashMap<>();
 	protected final ObservableValue<T> observableValue;
 	protected boolean oneShot = false;
 
@@ -103,8 +104,9 @@ public abstract class When<T> {
 	 * If a When constructs exists for the given {@link ObservableValue},
 	 * {@link #dispose()} is invoked.
 	 */
-	public static void disposeFor(ObservableValue<?> observableValue) {
-		When<?> remove = whens.remove(observableValue);
-		if (remove != null) remove.dispose();
-	}
+    public static void disposeFor(ObservableValue<?> observableValue) {
+        WeakReference<When<?>> removedRef = whens.remove(observableValue);
+        var remove = removedRef != null ? removedRef.get() : null;
+        if (remove != null) remove.dispose();
+    }
 }
