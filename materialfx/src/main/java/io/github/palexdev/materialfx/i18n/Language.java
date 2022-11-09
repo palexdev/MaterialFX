@@ -29,6 +29,7 @@ import java.util.Locale;
  */
 public enum Language {
 	ARABIC(Locale.forLanguageTag("ar")),
+	CZECH(Locale.forLanguageTag("cs-cz")),
 	ENGLISH(Locale.ENGLISH),
 	FRENCH(Locale.FRENCH),
 	ITALIANO(Locale.ITALIAN),
