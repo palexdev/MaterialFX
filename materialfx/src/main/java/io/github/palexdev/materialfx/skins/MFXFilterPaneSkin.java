@@ -21,6 +21,7 @@ package io.github.palexdev.materialfx.skins;
 import io.github.palexdev.materialfx.beans.BiPredicateBean;
 import io.github.palexdev.materialfx.beans.FilterBean;
 import io.github.palexdev.materialfx.controls.*;
+import io.github.palexdev.materialfx.controls.cell.MFXComboBoxCell;
 import io.github.palexdev.materialfx.dialogs.MFXDialogs;
 import io.github.palexdev.materialfx.dialogs.MFXGenericDialog;
 import io.github.palexdev.materialfx.dialogs.MFXStageDialog;
@@ -254,6 +255,14 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
 		enumsCombo.valueProperty().addListener((observable, oldValue, newValue) -> setQuery(newValue.toString()));
 		enumsCombo.setManaged(false);
 		enumsCombo.setVisible(false);
+                enumsCombo.setCellFactory((t) -> {
+                return new MFXComboBoxCell<>(enumsCombo, t) {
+                        @Override
+                        public String getUserAgentStylesheet() {
+                            return filterPane.getUserAgentStylesheet();
+                        }
+                    };
+                });
 
 		MFXComboBox<Boolean> booleansCombo = new MFXComboBox<>(FXCollections.observableArrayList(true, false)) {
 			@Override
@@ -265,6 +274,14 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
 		booleansCombo.valueProperty().addListener((observable, oldValue, newValue) -> setQuery(newValue.toString()));
 		booleansCombo.setManaged(false);
 		booleansCombo.setVisible(false);
+                booleansCombo.setCellFactory((t) -> {
+                return new MFXComboBoxCell<>(booleansCombo, t) {
+                        @Override
+                        public String getUserAgentStylesheet() {
+                            return filterPane.getUserAgentStylesheet();
+                        }
+                    };
+                });
 
 		MFXComboBox<BiPredicateBean<?, ?>> predicatesCombo = new MFXComboBox<>(predicates) {
 			@Override
@@ -274,6 +291,14 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
 		};
 		predicatesCombo.setFloatMode(FloatMode.DISABLED);
 		predicatesCombo.getStyleClass().add("predicates-combo");
+                predicatesCombo.setCellFactory((p) -> {
+                return new MFXComboBoxCell<>(predicatesCombo, p) {
+                        @Override
+                        public String getUserAgentStylesheet() {
+                            return filterPane.getUserAgentStylesheet();
+                        }
+                    };
+                });
 
 		MFXComboBox<AbstractFilter<T, ?>> filterCombo = new MFXComboBox<>(filterPane.getFilters()) {
 			@Override
@@ -308,6 +333,14 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
 			}
 		});
 		filterCombo.selectFirst();
+                filterCombo.setCellFactory((t) -> {
+                return new MFXComboBoxCell<>(filterCombo, t) {
+                        @Override
+                        public String getUserAgentStylesheet() {
+                            return filterPane.getUserAgentStylesheet();
+                        }
+                    };
+                });
 
 		MFXButton addButton = new MFXButton(I18N.getOrDefault("filterPane.addFilter")) {
 			@Override
