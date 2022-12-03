@@ -1,0 +1,52 @@
+plugins {
+    id 'java-library'
+    id 'org.openjfx.javafxplugin' version "$jfxPlugin" apply false
+    id 'org.beryx.jlink' version "$jlink" apply false
+    id 'com.vanniktech.maven.publish' version "$mavenPublishPlugin" apply false
+}
+
+group 'io.github.palexdev'
+
+subprojects {
+    apply plugin: "java-library"
+    apply plugin: "org.openjfx.javafxplugin"
+    apply plugin: "com.vanniktech.maven.publish"
+
+    repositories {
+        mavenCentral()
+    }
+
+    configurations {
+        testImplementation.extendsFrom compileOnly
+    }
+
+    dependencies {
+        testImplementation "org.junit.jupiter:junit-jupiter-api:$junit"
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit"
+    }
+
+    javafx {
+        version = "$jfx"
+        modules = ["javafx.controls", "javafx.fxml"]
+        configuration = "compileOnly"
+    }
+
+    compileJava {
+        sourceCompatibility = "$jdk"
+        targetCompatibility = "$jdk"
+    }
+
+    compileTestJava {
+        // TODO this is temporary
+        sourceCompatibility = "17"
+        targetCompatibility = "17"
+    }
+
+    test {
+        useJUnitPlatform()
+
+    }
+}
+
+
+

@@ -1,0 +1,14 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
+version = "$mfxlocalization"
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+    tasks.withType(Jar).each { it.archiveBaseName.set("mfxlocalization") }
+}
+
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.S01)
+    signAllPublications()
+}

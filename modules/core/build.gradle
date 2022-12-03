@@ -1,0 +1,20 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
+version = "$mfxcore"
+
+dependencies {
+    api(project(":localization"))
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+    tasks.withType(Jar).each { it.archiveBaseName.set("mfxcore") }
+}
+
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.S01)
+    signAllPublications()
+}
+
+

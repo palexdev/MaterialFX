@@ -1,0 +1,11 @@
+include 'core'
+include 'localization'
+include 'resources'
+include 'materialfx'
+
+rootProject.name = 'MaterialFX'
+rootProject.children.each { project ->
+    {
+        project.projectDir = file("modules/$project.name")
+    }
+}
