@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Modules" pattern="file[MaterialFX.core*]:*//*||file[MaterialFX.resources*]:*//*||file[MaterialFX.localization*]:*//*||file[MaterialFX.materialfx*]:*//*" />
+</component>
