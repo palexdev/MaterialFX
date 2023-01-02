@@ -166,9 +166,6 @@ public class MFXProgressSpinner extends ProgressIndicator {
 			Color.web("#0F9D58")
 	);
 
-	/**
-	 * Specifies the radius of the spinner.
-	 */
 	private final StyleableDoubleProperty radius = new StyleableDoubleProperty(
 			StyleableProperties.RADIUS,
 			this,
@@ -176,9 +173,6 @@ public class MFXProgressSpinner extends ProgressIndicator {
 			Region.USE_COMPUTED_SIZE
 	);
 
-	/**
-	 * Specifies the starting angle of the animation.
-	 */
 	private final StyleableDoubleProperty startingAngle = new StyleableDoubleProperty(
 			StyleableProperties.STARTING_ANGLE,
 			this,

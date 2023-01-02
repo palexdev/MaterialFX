@@ -224,7 +224,7 @@ repositories {
 }
 
 dependencies {
-  implementation 'io.github.palexdev:materialfx:11.13.5'
+  implementation 'io.github.palexdev:materialfx:11.13.6'
 }
 ```
 
@@ -235,7 +235,7 @@ dependencies {
 <dependency>
   <groupId>io.github.palexdev</groupId>
   <artifactId>materialfx</artifactId>
-  <version>11.13.5</version>
+  <version>11.13.6</version>
 </dependency>
 ```
 
@@ -310,7 +310,9 @@ you can easily donate/sponsor.
 - Aloento
 - Mauro de Wit
 - Mohammad Chaudhry (thank you very much for the huge donation, YOU are the legend)
+- Jtpatato21
 - Sourabh Bhat
+- stefanofornari (thank you very much for the big donation!)
 - Ultraviolet-Ninja
 - Yahia Rehab
 - Yiding He

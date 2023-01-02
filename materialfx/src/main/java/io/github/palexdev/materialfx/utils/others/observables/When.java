@@ -82,6 +82,10 @@ public abstract class When<T> {
 		return this;
 	}
 
+	protected void addConstruct(ObservableValue<?> observable, When<?> when) {
+		whens.put(observable, new WeakReference<>(when));
+	}
+
 	//================================================================================
 	// Static Methods
 	//================================================================================
@@ -105,8 +109,8 @@ public abstract class When<T> {
 	 * {@link #dispose()} is invoked.
 	 */
     public static void disposeFor(ObservableValue<?> observableValue) {
-        WeakReference<When<?>> removedRef = whens.remove(observableValue);
-        var remove = removedRef != null ? removedRef.get() : null;
+	    WeakReference<When<?>> removedRef = whens.remove(observableValue);
+	    When<?> remove = removedRef != null ? removedRef.get() : null;
         if (remove != null) remove.dispose();
     }
 }

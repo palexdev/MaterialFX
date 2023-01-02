@@ -25,9 +25,9 @@ import javafx.util.StringConverter;
 /**
  * Defines the public API for all models to be used with {@link MFXSpinner}.
  * <p>
- * {@code SpinnerModel} is basically an helper class to allow the spinner to work on any object
+ * {@code SpinnerModel} is basically a helper class to allow the spinner to work on any object
  * type as long as a model exists for it. The model is responsible for changing the spinner's value by
- * going forward or backwards ({@link #next() or {@link #previous()}}.
+ * going forward or backwards ({@link #next()} or {@link #previous()}).
  * <p>
  * Along this core functionality the model also specifies a {@link StringConverter} which will be
  * used to convert the T value to a String, which will be the spinner's text.

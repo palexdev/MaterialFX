@@ -16,6 +16,20 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.13.6] - 02-01-2023
+
+This minor version includes a bunch of kindly submitted PRs and some minor refactor.
+Also, Gradle has been updated to version 7.6
+PRs such as:
+
+- Fix for memory leak caused by When construct, #210
+- Fix for combobox list view not using combo's cell factory
+- Fix for FilterPaneSkin's combo boxes not having correct styles
+- Add BigDecimal filter
+- Add czech and spanish languages
+
+Many thanks to @stefanofornari for its donation and contributions to the project!
+
 ## [11.13.5] - 11-04-2022
 
 ## Changed
