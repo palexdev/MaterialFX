@@ -21,6 +21,7 @@ package io.github.palexdev.materialfx.utils.others.observables;
 import javafx.beans.InvalidationListener;
 import javafx.beans.value.ObservableValue;
 
+import java.lang.ref.WeakReference;
 import java.util.function.Consumer;
 
 /**
@@ -100,7 +101,7 @@ public class OnInvalidated<T> extends When<T> {
 		}
 
 		observableValue.addListener(listener);
-		whens.put(observableValue, this);
+		whens.put(observableValue, new WeakReference<>(this));
 		return this;
 	}
 
