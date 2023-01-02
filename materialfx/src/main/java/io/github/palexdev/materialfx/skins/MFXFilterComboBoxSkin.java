@@ -116,7 +116,7 @@ public class MFXFilterComboBoxSkin<T> extends MFXComboBoxSkin<T> {
 
 		SimpleVirtualFlow<T, Cell<T>> virtualFlow = new SimpleVirtualFlow<>(
 				filterList,
-				t -> new MFXFilterComboBoxCell<>(comboBox, filterList, t),
+				comboBox.getCellFactory(),
 				Orientation.VERTICAL
 		);
 		virtualFlow.cellFactoryProperty().bind(comboBox.cellFactoryProperty());
