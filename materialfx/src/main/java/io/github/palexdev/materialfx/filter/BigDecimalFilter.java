@@ -22,10 +22,10 @@ import io.github.palexdev.materialfx.beans.BiPredicateBean;
 import io.github.palexdev.materialfx.filter.base.NumberFilter;
 import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.utils.FXCollectors;
-import java.math.BigDecimal;
 import javafx.collections.ObservableList;
 import javafx.util.StringConverter;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -40,16 +40,18 @@ import java.util.stream.Stream;
  * <p> - "greater or equal to": checks if a float is greater or equal to another float
  * <p> - "lesser than": checks if a float is lesser than another float
  * <p> - "lesser or equal to": checks if a float is lesser or equal to another float
- *
+ * <p></p>
  * Example:
- * <code>
- *    MFXPaginatedTableView transactions = ...;
- *    transactions.getFilters().addAll(
- *      ...
- *      new BigDecimalFilter<>("amount", Transaction::amount),
- *      ...
- *    );
- * </code>
+ * <pre>
+ * {@code
+ *     MFXTableView table = ...;
+ *     table.getFilters.addAll(
+ *         ...
+ *         new BigDecimalFilter<>("A big filter", ...),
+ *         ...
+ *     );
+ * }
+ * </pre>
  */
 public class BigDecimalFilter<T> extends NumberFilter<T, BigDecimal> {
 
