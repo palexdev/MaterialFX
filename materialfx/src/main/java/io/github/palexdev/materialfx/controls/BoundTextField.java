@@ -84,6 +84,36 @@ public class BoundTextField extends TextField {
 		textField = null;
 	}
 
+	@Override
+	public void copy() {
+		if (textField instanceof MFXPasswordField) {
+			MFXPasswordField passwordField = (MFXPasswordField) textField;
+			if (!passwordField.isAllowCopy())
+				return;
+		}
+		super.copy();
+	}
+
+	@Override
+	public void cut() {
+		if (textField instanceof MFXPasswordField) {
+			MFXPasswordField passwordField = (MFXPasswordField) textField;
+			if (!passwordField.isAllowCut())
+				return;
+		}
+		super.cut();
+	}
+
+	@Override
+	public void paste() {
+		if (textField instanceof MFXPasswordField) {
+			MFXPasswordField passwordField = (MFXPasswordField) textField;
+			if (!passwordField.isAllowPaste())
+				return;
+		}
+		super.paste();
+	}
+
 	private class CustomTextFieldSkin extends TextFieldSkin {
 		private final StringBinding textBinding;
 

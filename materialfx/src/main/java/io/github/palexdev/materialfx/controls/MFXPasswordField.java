@@ -22,6 +22,7 @@ import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableBooleanProperty;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableStringProperty;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import javafx.beans.binding.Bindings;
@@ -185,7 +186,7 @@ public class MFXPasswordField extends MFXTextField {
 				.setIcon(new MFXFontIcon("mfx-delete-alt", 16))
 				.setText("Delete")
 				.setAccelerator("Ctrl + D")
-				.setOnAction(event -> deleteText(getSelection()))
+				.setOnAction(event -> boundField.deleteText(delegateGetSelection()))
 				.get();
 
 		MFXContextMenuItem selectAllItem = MFXContextMenuItem.Builder.build()
@@ -197,17 +198,19 @@ public class MFXPasswordField extends MFXTextField {
 
 		MFXContextMenuItem redoItem = MFXContextMenuItem.Builder.build()
 				.setIcon(new MFXFontIcon("mfx-redo", 12))
-				.setText("Redo")
+				.setText(I18N.getOrDefault("textField.contextMenu.redo"))
 				.setAccelerator("Ctrl + Y")
-				.setOnAction(event -> redo())
+				.setOnAction(event -> boundField.redo())
 				.get();
+		redoItem.disableProperty().bind(delegateRedoableProperty().not());
 
 		MFXContextMenuItem undoItem = MFXContextMenuItem.Builder.build()
 				.setIcon(new MFXFontIcon("mfx-undo", 12))
-				.setText("Undo")
+				.setText(I18N.getOrDefault("textField.contextMenu.undo"))
 				.setAccelerator("Ctrl + Z")
-				.setOnAction(event -> undo())
+				.setOnAction(event -> boundField.undo())
 				.get();
+		undoItem.disableProperty().bind(delegateUndoableProperty().not());
 
 		contextMenu = MFXContextMenu.Builder.build(this)
 				.addItems(copyItem, cutItem, pasteItem, deleteItem, selectAllItem)

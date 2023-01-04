@@ -43,6 +43,8 @@ import javafx.scene.control.Skin;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 
 import java.util.List;
@@ -207,10 +209,15 @@ public class MFXTextField extends TextField implements Validated, MFXMenuControl
 	private void initialize() {
 		getStyleClass().setAll(STYLE_CLASS);
 		setPrefColumnCount(6);
+		setFocusTraversable(false);
 		floating.addListener(invalidated -> pseudoClassStateChanged(FLOATING_PSEUDO_CLASS, floating.get()));
 		allowEditProperty().bindBidirectional(editableProperty());
 
 		addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
+		addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+			if (event.getCode() == KeyCode.D && event.isControlDown())
+				boundField.deleteText(delegateGetSelection());
+		});
 		defaultContextMenu();
 	}
 
@@ -240,7 +247,7 @@ public class MFXTextField extends TextField implements Validated, MFXMenuControl
 				.setIcon(new MFXFontIcon("mfx-delete-alt", 16))
 				.setText(I18N.getOrDefault("textField.contextMenu.delete"))
 				.setAccelerator("Ctrl + D")
-				.setOnAction(event -> deleteText(getSelection()))
+				.setOnAction(event -> boundField.deleteText(delegateGetSelection()))
 				.get();
 
 		MFXContextMenuItem selectAllItem = MFXContextMenuItem.Builder.build()
@@ -254,15 +261,17 @@ public class MFXTextField extends TextField implements Validated, MFXMenuControl
 				.setIcon(new MFXFontIcon("mfx-redo", 12))
 				.setText(I18N.getOrDefault("textField.contextMenu.redo"))
 				.setAccelerator("Ctrl + Y")
-				.setOnAction(event -> redo())
+				.setOnAction(event -> boundField.redo())
 				.get();
+		redoItem.disableProperty().bind(delegateRedoableProperty().not());
 
 		MFXContextMenuItem undoItem = MFXContextMenuItem.Builder.build()
 				.setIcon(new MFXFontIcon("mfx-undo", 12))
 				.setText(I18N.getOrDefault("textField.contextMenu.undo"))
 				.setAccelerator("Ctrl + Z")
-				.setOnAction(event -> undo())
+				.setOnAction(event -> boundField.undo())
 				.get();
+		undoItem.disableProperty().bind(delegateUndoableProperty().not());
 
 		contextMenu = MFXContextMenu.Builder.build(this)
 				.addItems(copyItem, cutItem, pasteItem, deleteItem, selectAllItem)
@@ -514,6 +523,15 @@ public class MFXTextField extends TextField implements Validated, MFXMenuControl
 	public ReadOnlyBooleanProperty delegateFocusedProperty() {
 		return boundField.focusedProperty();
 	}
+
+	/**
+	 * Specifies whether the {@link BoundTextField} it focus traversable.
+	 */
+	public BooleanProperty delegateFocusTraversableProperty() { return boundField.focusTraversableProperty(); }
+
+	public void delegateSetFocusTraversable(boolean value) { boundField.setFocusTraversable(value); }
+
+	public boolean delegateIsFocusTraversable() { return boundField.isFocusTraversable(); }
 
 	//================================================================================
 	// Validation
