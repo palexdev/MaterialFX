@@ -524,14 +524,20 @@ public class MFXTextField extends TextField implements Validated, MFXMenuControl
 		return boundField.focusedProperty();
 	}
 
+	public void delegateSetFocusTraversable(boolean value) {
+		boundField.setFocusTraversable(value);
+	}
+
 	/**
 	 * Specifies whether the {@link BoundTextField} it focus traversable.
 	 */
-	public BooleanProperty delegateFocusTraversableProperty() { return boundField.focusTraversableProperty(); }
+	public BooleanProperty delegateFocusTraversableProperty() {
+		return boundField.focusTraversableProperty();
+	}
 
-	public void delegateSetFocusTraversable(boolean value) { boundField.setFocusTraversable(value); }
-
-	public boolean delegateIsFocusTraversable() { return boundField.isFocusTraversable(); }
+	public boolean delegateIsFocusTraversable() {
+		return boundField.isFocusTraversable();
+	}
 
 	//================================================================================
 	// Validation
