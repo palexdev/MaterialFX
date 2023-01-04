@@ -160,7 +160,7 @@ public class MFXPasswordField extends MFXTextField {
 
 		MFXContextMenuItem copyItem = MFXContextMenuItem.Builder.build()
 				.setIcon(new MFXFontIcon("mfx-content-copy", 14))
-				.setText("Copy")
+				.setText(I18N.getOrDefault("textField.contextMenu.copy"))
 				.setAccelerator("Ctrl + C")
 				.setOnAction(event -> copy())
 				.get();
@@ -168,7 +168,7 @@ public class MFXPasswordField extends MFXTextField {
 
 		MFXContextMenuItem cutItem = MFXContextMenuItem.Builder.build()
 				.setIcon(new MFXFontIcon("mfx-content-cut", 14))
-				.setText("Cut")
+				.setText(I18N.getOrDefault("textField.contextMenu.cut"))
 				.setAccelerator("Ctrl + X")
 				.setOnAction(event -> cut())
 				.get();
@@ -176,7 +176,7 @@ public class MFXPasswordField extends MFXTextField {
 
 		MFXContextMenuItem pasteItem = MFXContextMenuItem.Builder.build()
 				.setIcon(new MFXFontIcon("mfx-content-paste", 14))
-				.setText("Paste")
+				.setText(I18N.getOrDefault("textField.contextMenu.paste"))
 				.setAccelerator("Ctrl + V")
 				.setOnAction(event -> paste())
 				.get();
@@ -184,14 +184,14 @@ public class MFXPasswordField extends MFXTextField {
 
 		MFXContextMenuItem deleteItem = MFXContextMenuItem.Builder.build()
 				.setIcon(new MFXFontIcon("mfx-delete-alt", 16))
-				.setText("Delete")
+				.setText(I18N.getOrDefault("textField.contextMenu.delete"))
 				.setAccelerator("Ctrl + D")
 				.setOnAction(event -> boundField.deleteText(delegateGetSelection()))
 				.get();
 
 		MFXContextMenuItem selectAllItem = MFXContextMenuItem.Builder.build()
 				.setIcon(new MFXFontIcon("mfx-select-all", 16))
-				.setText("Select All")
+				.setText(I18N.getOrDefault("textField.contextMenu.selectAll"))
 				.setAccelerator("Ctrl + A")
 				.setOnAction(event -> selectAll())
 				.get();
