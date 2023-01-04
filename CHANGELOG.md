@@ -16,6 +16,18 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.13.8] - 04-01-2023
+
+## Fixed
+
+- Fixed some I18N issues
+
+## [11.13.7] - 04-01-2023
+
+## Fixed
+
+- Fixed some issues for MFXTextField based controls
+
 ## [11.13.6] - 02-01-2023
 
 This minor version includes a bunch of kindly submitted PRs and some minor refactor.
