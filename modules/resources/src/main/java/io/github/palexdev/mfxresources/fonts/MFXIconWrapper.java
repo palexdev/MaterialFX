@@ -92,6 +92,10 @@ public class MFXIconWrapper extends StackPane {
 			manageChildren();
 		});
 		size.addListener((observable, oldValue, newValue) -> setPrefSize(newValue.doubleValue(), oldValue.doubleValue()));
+		rHandler = e -> {
+			if (e.getButton() == MouseButton.PRIMARY)
+				rg.generateRipple(e);
+		};
 	}
 
 	/**
@@ -128,10 +132,7 @@ public class MFXIconWrapper extends StackPane {
 
 		rg = new MFXCircleRippleGenerator(this);
 		rg.setRipplePositionFunction(positionFunction);
-		rHandler = e -> {
-			if (e.getButton() == MouseButton.PRIMARY)
-				rg.generateRipple(e);
-		};
+		addEventHandler(MouseEvent.MOUSE_PRESSED, rHandler);
 		manageChildren();
 		setEnableRipple(true);
 		return this;

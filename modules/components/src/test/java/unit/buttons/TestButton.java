@@ -46,17 +46,20 @@ public class TestButton {
 	}
 
 	@Test
-	void testSizes(FxRobot robot) throws InterruptedException {
+	void testSizes(FxRobot robot) {
 		// Test Pref
-		button.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+		robot.interact(() -> button.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE));
 		assertEquals(snappedBoundWidth(button), button.getWidth());
 		assertEquals(snappedBoundHeight(button), button.getHeight());
 
 		// Test max
-		button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		button.applyCss();
-		button.layout();
-		Toolkit.getToolkit().requestNextPulse();
+		robot.interact(() -> {
+			button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+			button.applyCss();
+			button.layout();
+			button.requestLayout();
+			Toolkit.getToolkit().requestNextPulse();
+		});
 		assertEquals(100.0, button.getWidth());
 		assertEquals(100.0, button.getHeight());
 	}
