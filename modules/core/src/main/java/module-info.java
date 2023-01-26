@@ -4,7 +4,7 @@ module mfx.core {
 	requires transitive javafx.graphics;
 	requires transitive java.desktop;
 
-	requires transitive MFXLocalization;
+	requires transitive mfx.localization;
 
 	// Animations
 	exports io.github.palexdev.mfxcore.animations;
