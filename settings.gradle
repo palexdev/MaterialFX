@@ -1,7 +1,8 @@
+include 'components'
 include 'core'
+include 'effects'
 include 'localization'
 include 'resources'
-include 'materialfx'
 
 rootProject.name = 'MaterialFX'
 rootProject.children.each { project ->

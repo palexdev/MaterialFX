@@ -23,6 +23,9 @@ subprojects {
     dependencies {
         testImplementation "org.junit.jupiter:junit-jupiter-api:$junit"
         testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit"
+
+        testImplementation "org.testfx:testfx-junit5:$testfx"
+        testImplementation "io.github.palexdev:scenicview:$scenicView"
     }
 
     javafx {
@@ -31,20 +34,28 @@ subprojects {
         configuration = "compileOnly"
     }
 
+    configurations {
+        testImplementation.extendsFrom compileOnly
+    }
+
     compileJava {
         sourceCompatibility = "$jdk"
         targetCompatibility = "$jdk"
     }
 
     compileTestJava {
-        // TODO this is temporary
-        sourceCompatibility = "17"
-        targetCompatibility = "17"
+        sourceCompatibility = "$testJdk"
+        targetCompatibility = "$testJdk"
+        moduleOptions {
+            compileOnClasspath = true
+        }
     }
 
     test {
         useJUnitPlatform()
-
+        moduleOptions {
+            runOnClasspath = true
+        }
     }
 }
 

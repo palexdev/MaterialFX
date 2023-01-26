@@ -148,10 +148,27 @@ public class TextUtils {
 	 */
 	public static double computeLabelWidth(Label label) {
 		Node graphic = label.getGraphic();
+		double gap = (graphic != null) ? label.getGraphicTextGap() : 0.0;
 		return label.snappedLeftInset() +
 				(graphic != null ? graphic.getBoundsInParent().getWidth() : 0) +
 				TextUtils.computeTextWidth(label.getFont(), label.getText()) +
 				label.snappedRightInset() +
-				label.getGraphicTextGap();
+				gap;
+	}
+
+	/**
+	 * Computes the min height for the specified {@link Label} so that all the text is visible.
+	 * <p>
+	 * Uses {@link #computeTextHeight(Font, String)}, but also takes into account the label's
+	 * graphic bounds (if not null).
+	 * <p></p>
+	 * Note: this works only after the label has been laid out.
+	 */
+	public static double computeLabelHeight(Label label) {
+		Node graphic = label.getGraphic();
+		return label.snappedTopInset() +
+				(graphic != null ? graphic.getBoundsInParent().getHeight() : 0) +
+				TextUtils.computeTextHeight(label.getFont(), label.getText()) +
+				label.snappedTopInset();
 	}
 }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SassLintProjectComponent">
+    <option name="configFile" value="$PROJECT_DIR$/modules/resources/src/main/resources/io/github/palexdev/mfxresources/sass/.sass-lint.yml" />
+    <option name="lintExecutable" value="/usr/bin/sass-lint" />
+    <option name="nodeInterpreter" value="/usr/bin/node" />
+    <option name="pluginEnabled" value="true" />
+  </component>
+</project>

@@ -1,0 +1,109 @@
+// DISPLAY
+@mixin display_large() {
+  -fx-font-family: "Roboto Regular";
+  -fx-font-weight: 400;
+  -fx-font-size: 57px;
+  -fx-line-spacing: 64px;
+}
+
+@mixin display_medium() {
+  -fx-font-family: "Roboto Regular";
+  -fx-font-weight: 400;
+  -fx-font-size: 45px;
+  -fx-line-spacing: 52px;
+}
+
+@mixin display_small() {
+  -fx-font-family: "Roboto Regular";
+  -fx-font-weight: 400;
+  -fx-font-size: 36px;
+  -fx-line-spacing: 44px;
+}
+
+// HEADLINE
+@mixin headline_large() {
+  -fx-font-family: "Roboto Regular";
+  -fx-font-weight: 400;
+  -fx-font-size: 32px;
+  -fx-line-spacing: 40px;
+}
+
+@mixin headline_medium() {
+  -fx-font-family: "Roboto Regular";
+  -fx-font-weight: 400;
+  -fx-font-size: 28px;
+  -fx-line-spacing: 36px;
+}
+
+@mixin headline_small() {
+  -fx-font-family: "Roboto Regular";
+  -fx-font-weight: 400;
+  -fx-font-size: 24px;
+  -fx-line-spacing: 32px;
+}
+
+// BODY
+@mixin body_large() {
+  -fx-font-family: "Roboto Regular";
+  -fx-font-weight: 400;
+  -fx-font-size: 16px;
+  -fx-line-spacing: 24px;
+}
+
+@mixin body_medium() {
+  -fx-font-family: "Roboto Regular";
+  -fx-font-weight: 400;
+  -fx-font-size: 14px;
+  -fx-line-spacing: 20px;
+}
+
+@mixin body_small() {
+  -fx-font-family: "Roboto Regular";
+  -fx-font-weight: 400;
+  -fx-font-size: 12px;
+  -fx-line-spacing: 16px;
+}
+
+// LABEL
+@mixin label_large() {
+  -fx-font-family: "Roboto Medium";
+  -fx-font-weight: 500;
+  -fx-font-size: 14px;
+  -fx-line-spacing: 20px;
+}
+
+@mixin label_medium() {
+  -fx-font-family: "Roboto Medium";
+  -fx-font-weight: 500;
+  -fx-font-size: 12px;
+  -fx-line-spacing: 16px;
+}
+
+@mixin label_small() {
+  -fx-font-family: "Roboto Medium";
+  -fx-font-weight: 500;
+  -fx-font-size: 11px;
+  -fx-line-spacing: 16px;
+}
+
+// TITLE
+@mixin title_large() {
+  -fx-font-family: "Roboto Regular";
+  -fx-font-weight: 500;
+  -fx-font-size: 22px;
+  -fx-line-spacing: 28px;
+}
+
+@mixin title_medium() {
+  -fx-font-family: "Roboto Medium";
+  -fx-font-weight: 500;
+  -fx-font-size: 16px;
+  -fx-line-spacing: 24px;
+}
+
+@mixin title_small() {
+  -fx-font-family: "Roboto Medium";
+  -fx-font-weight: 500;
+  -fx-font-size: 14px;
+  -fx-line-spacing: 20px;
+}

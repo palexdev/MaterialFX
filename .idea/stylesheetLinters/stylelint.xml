@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="StylelintConfiguration">
+    <config-file value="$USER_HOME$/node_modules/stylelint-config-recommended-scss/index.js" />
+    <file-patterns value="{**/*,*}.{sass,scss,css}" />
+  </component>
+</project>

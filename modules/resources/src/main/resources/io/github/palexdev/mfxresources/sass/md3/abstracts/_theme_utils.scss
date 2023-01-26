@@ -1,0 +1,28 @@
+@use 'sass:map';
+@use 'sass:math';
+@use '../tokens/tokens' as *;
+
+/// Checks id a theme is light, as specified in the _tokens.scss stylesheet
+@function isLightVariant() {
+  @return $variant == 'light'
+}
+
+/// Extracts a color from the $palette given the type (primary, secondary, etc..) and its tone
+///
+/// @param {string} $colorType which color of the palette
+/// @param {number} $tone the tone of the color from the palette
+/// @return {color} the color extracted from the palette with the given tone
+@function get_palette_color($color_type, $tone) {
+  $cTone: math.clamp(0, $tone, 100);
+  $key: '--md-ref-palette-' + $color_type + $cTone;
+  @return map.get($palette, $key)
+}
+
+/// Extracts a color from the $scheme given the type (primary, secondary, etc..)
+///
+/// @param {string} $colorType which color of the palette
+/// @return {color} the color extracted from the scheme
+@function get_scheme_color($color_type) {
+  $key: '--md-sys-color-' + $color_type;
+  @return map.get($scheme, $key);
+}

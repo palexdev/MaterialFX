@@ -1,0 +1,52 @@
+@use 'sass:map';
+@use 'sass:math';
+@use 'theme_utils' as *;
+@use '../tokens/tokens' as *;
+
+/// Returns a percentage corresponding to the given elevation value.
+/// Valid elevation values go from 0 to 5.
+@function get_percent_elevation($level) {
+  $cLevel: math.clamp(0, $level, 5);
+  @return map.get($elevation, $cLevel);
+}
+
+/// Returns a percentage corresponding to the given layer state, as described by MD3 guidelines.
+/// Valid values are: 'hover', 'focus/focused', 'pressed', 'dragged'.
+@function get_percent_state_layer($state) {
+  @return map.get($interaction_states, $state);
+}
+
+/// Mixes two colors according to the levels described by MD3 guidelines, each level corresponds to a certain percentage.
+///
+/// @param {color} $color1 this is the color that will be applied on the second, in MD3 this is the surface tint color
+/// @param {color} $color2 this is the color that will receive the first on top, in the specified level/percentage
+@function compute_elevation($color1, $color2, $level) {
+  $percent: get_percent_elevation($level);
+  @return mix($color1, $color2, $percent);
+}
+
+/// Shortcut function to elevate the 'surface' color of the scheme to the given level, by applying
+/// the 'surface-tint' color of the scheme on it.
+@function elevate_surface($level) {
+  $percent: get_percent_elevation($level);
+  $tint: get_scheme_color('surface-tint');
+  $surface: get_scheme_color('surface');
+  @return mix($tint, $surface, $percent);
+}
+
+/// Shortcut function to compute the color of a surface given its state.
+/// MD3 components have many layers/containers that are used to simulate elevation and interaction states.
+/// This is not really feasible for a desktop UI, where using as less sub-components as possible is recommended for
+/// performance reasons.
+/// So the other way to compute the color given an interaction state, is to mix the two colors.
+/// The part that is not explicitly explained by the guidelines is that you can have both the elevation and interaction
+/// layers 'active' at the same time. This means that the resulting color is the result of: computing the elevation
+/// color (which itself is blend/mix operation) and then mix it with the interaction layer color.
+@function compute_state_layer($background, $layer_color, $state) {
+  @return mix($layer_color, $background, get_percent_state_layer($state));
+}
+
+// TODO docs
+@function get_shape($type) {
+  @return unquote(map.get($shapes, $type));
+}

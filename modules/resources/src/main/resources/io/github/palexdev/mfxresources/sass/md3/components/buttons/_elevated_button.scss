@@ -1,0 +1,61 @@
+@use '../../abstracts/elevation_utils' as *;
+@use '../../abstracts/theme_utils' as *;
+@use '../../tokens/typography' as *;
+
+/****************************************************************************************************
+ * Elevated Buttons
+ ****************************************************************************************************/
+.mfx-button.elevated {
+  @include label_large();
+  -fx-text-fill: get_scheme_color('primary');
+  -fx-background-color: elevate_surface(1);
+  -fx-background-radius: 20px;
+  // TODO add shadow
+  -fx-pref-height: 40px;
+  -fx-padding: 0px 24px 0px 24px;
+  -fx-graphic-text-gap: 8px;
+}
+
+.mfx-button.elevated:with-icon-left {
+  -fx-padding: 0px 16px 0px 24px;
+}
+
+.mfx-button.elevated:with-icon-right {
+  -fx-padding: 0px 24px 0px 16px;
+}
+
+.mfx-button.elevated .mfx-font-icon {
+  -mfx-color: get_scheme_color('primary');
+  -mfx-size: 18px;
+}
+
+.mfx-button.elevated:disabled {
+  -fx-background-color: rgba(get_scheme_color('on-surface'), 12%);
+  // TODO elevation goes to 0 (remove shadow)
+  -fx-text-fill: rgba(get_scheme_color('on-surface'), 38%);
+}
+
+.mfx-button.elevated:disabled .mfx-font-icon {
+  -mfx-color: rgba(get_scheme_color('on-surface'), 38%);
+}
+
+.mfx-button.elevated:hover {
+  $bcolor: elevate_surface(2);
+  $layer_color: get_scheme_color('primary');
+  -fx-background-color: compute_state_layer($bcolor, $layer_color, 'hover');
+  // TODO elevation goes to 2
+}
+
+.mfx-button.elevated:focused {
+  $bcolor: elevate_surface(1);
+  $layer_color: get_scheme_color('primary');
+  -fx-background-color: compute_state_layer($bcolor, $layer_color, 'focused');
+  // TODO elevation goes to 1
+}
+
+.mfx-button.elevated:pressed {
+  $bcolor: elevate_surface(1);
+  $layer_color: get_scheme_color('primary');
+  -fx-background-color: compute_state_layer($bcolor, $layer_color, 'pressed');
+  // TODO elevation goes to 1
+}

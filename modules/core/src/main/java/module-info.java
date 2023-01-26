@@ -1,4 +1,4 @@
-module MFXCore {
+module mfx.core {
 	requires transitive javafx.controls;
 	requires transitive javafx.fxml;
 	requires transitive javafx.graphics;
@@ -23,6 +23,10 @@ module MFXCore {
 	exports io.github.palexdev.mfxcore.base.properties.styleable;
 	exports io.github.palexdev.mfxcore.base.properties.synced;
 
+	// Behavior
+	exports io.github.palexdev.mfxcore.behavior;
+	exports io.github.palexdev.mfxcore.behavior.actions;
+
 	// Builders
 	exports io.github.palexdev.mfxcore.builders;
 	exports io.github.palexdev.mfxcore.builders.base;
@@ -34,10 +38,6 @@ module MFXCore {
 
 	// Controls
 	exports io.github.palexdev.mfxcore.controls;
-
-	// Effects
-	exports io.github.palexdev.mfxcore.effects;
-	exports io.github.palexdev.mfxcore.effects.ripple;
 
 	// Enums
 	exports io.github.palexdev.mfxcore.enums;

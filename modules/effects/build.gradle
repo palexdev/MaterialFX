@@ -1,0 +1,16 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
+version = "$mfxeffects"
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+    tasks.withType(Jar).each { it.archiveBaseName.set("mfxeffects") }
+}
+
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.S01)
+    signAllPublications()
+}
+
+

@@ -18,8 +18,12 @@
 
 package io.github.palexdev.mfxcore.observables;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.value.ObservableValue;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.WeakHashMap;
 
 /**
@@ -46,11 +50,17 @@ public abstract class When<T> {
 	protected final ObservableValue<T> observableValue;
 	protected boolean oneShot = false;
 
+	protected final Set<Observable> invalidatingObservables;
+	protected InvalidationListener invalidationListener;
+
 	//================================================================================
 	// Constructors
 	//================================================================================
 	protected When(ObservableValue<T> observableValue) {
 		this.observableValue = observableValue;
+
+		this.invalidatingObservables = new HashSet<>();
+		this.invalidationListener = o -> invalidate();
 	}
 
 	//================================================================================
@@ -58,11 +68,25 @@ public abstract class When<T> {
 	//================================================================================
 	public abstract When<T> listen();
 
-	public abstract void dispose();
-
 	//================================================================================
 	// Methods
 	//================================================================================
+
+	/**
+	 * Adds an {@link Observable} to listen to, when it changes it will cause the invalidation of this construct
+	 * by calling {@link #invalidate()}.
+	 */
+	public When<T> invalidating(Observable obs) {
+		invalidatingObservables.add(obs);
+		return this;
+	}
+
+	/**
+	 * The default implementation does nothing.
+	 */
+	protected When<T> invalidate() {
+		return this;
+	}
 
 	/**
 	 * @return whether the construct is "one-shot"
@@ -79,6 +103,17 @@ public abstract class When<T> {
 	public When<T> oneShot() {
 		this.oneShot = true;
 		return this;
+	}
+
+	/**
+	 * Removes all the invalidating sources added through {@link #invalidating(Observable)} and removes the listener
+	 * from them.
+	 */
+	protected void dispose() {
+		invalidatingObservables.forEach(o -> o.removeListener(invalidationListener));
+		invalidatingObservables.clear();
+		if (invalidationListener != null)
+			invalidationListener = null;
 	}
 
 	//================================================================================

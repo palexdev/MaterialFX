@@ -1,6 +1,14 @@
-module MFXResources {
+module mfx.resources {
+	requires mfx.effects;
+
 	requires transitive javafx.graphics;
 
+	// Base
+	exports io.github.palexdev.mfxresources;
+
+	// Builders
 	exports io.github.palexdev.mfxresources.builders;
-	exports io.github.palexdev.mfxresources.font;
+
+	// Fonts
+	exports io.github.palexdev.mfxresources.fonts;
 }

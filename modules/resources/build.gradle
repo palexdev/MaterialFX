@@ -1,11 +1,48 @@
 import com.vanniktech.maven.publish.SonatypeHost
 
+plugins {
+    id 'io.miret.etienne.sass' version "$gradleSass"
+}
+
 version = "$mfxresources"
+
+dependencies {
+    api(project(":effects"))
+
+    testImplementation "org.kordamp.ikonli:ikonli-fluentui-pack:$ikonli"
+    testImplementation "org.kordamp.ikonli:ikonli-win10-pack:$ikonli"
+}
 
 java {
     withSourcesJar()
     withJavadocJar()
     tasks.withType(Jar).each { it.archiveBaseName.set("mfxresources") }
+}
+
+sass {
+    // dart-sass version to use:
+    version = '1.57.1'
+
+    // Directory where to install dart-sass:
+    directory = file("${rootDir}/.gradle/sass")
+
+    // Base URL where to download dart-sass from:
+    baseUrl = 'https://github.com/sass/dart-sass/releases/download'
+
+    // Disable automatic copying to war (default is enabled):
+    noAutoCopy()
+}
+
+compileSass {
+    String baseDir = "io/github/palexdev/mfxresources/sass"
+    sourceDir = project.file("src/main/resources/" + baseDir)
+    outputDir = project.file("src/main/resources/" + baseDir)
+    sourceMap = none
+}
+
+processResources {
+    // This makes gradle compile sass to css before copying the resources
+    dependsOn compileSass
 }
 
 mavenPublishing {

@@ -1,0 +1,21 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
+version = "$mfx"
+
+dependencies {
+    api(project(":core"))
+    api(project(":localization"))
+    api(project(":resources"))
+    api "io.github.palexdev:virtualizedfx:$vfx"
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+    tasks.withType(Jar).each { it.archiveBaseName.set("components") }
+}
+
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.S01)
+    signAllPublications()
+}

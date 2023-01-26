@@ -19,6 +19,7 @@
 package io.github.palexdev.mfxcore.observables;
 
 import io.github.palexdev.mfxcore.base.TriConsumer;
+import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
@@ -163,6 +164,8 @@ public class OnChanged<T> extends When<T> {
 	 * So, builds the {@link ChangeListener} according to the {@link #isOneShot()} parameter,
 	 * then adds the listener to the specified {@link ObservableValue} and finally puts the Observable and
 	 * the OnChanged construct in the map.
+	 * <p></p>
+	 * Before activating the listener, it also activates all the invalidating sources added through {@link #invalidating(Observable)}.
 	 */
 	@Override
 	public OnChanged<T> listen() {
@@ -185,18 +188,33 @@ public class OnChanged<T> extends When<T> {
 			};
 		}
 
+		invalidatingObservables.forEach(o -> o.addListener(invalidationListener));
 		observableValue.addListener(listener);
 		whens.put(observableValue, this);
 		return this;
 	}
 
 	/**
+	 * When one of the invalidating sources added through {@link #invalidating(Observable)} changes, this method will be
+	 * invoked and causes {@link #executeNow(Supplier)} to execute. The condition function is supplied with 'null' as the
+	 * old value, and {@link ObservableValue#getValue()} as the new value.
+	 */
+	@Override
+	protected When<T> invalidate() {
+		executeNow(() -> condition.apply(null, observableValue.getValue()));
+		return this;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
 	 * Disposes the {@code OnChanged} construct by removing the {@link ChangeListener}
 	 * from the {@link ObservableValue}, then sets the listener to null and finally removes
 	 * the observable from the map.
 	 */
 	@Override
 	public void dispose() {
+		super.dispose();
 		if (observableValue != null && listener != null) {
 			observableValue.removeListener(listener);
 			listener = null;

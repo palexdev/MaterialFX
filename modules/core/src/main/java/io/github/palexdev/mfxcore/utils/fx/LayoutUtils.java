@@ -24,6 +24,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.layout.Region;
 
 public class LayoutUtils {
@@ -151,5 +152,21 @@ public class LayoutUtils {
 
 	public static double boundHeight(Node node) {
 		return boundedSize(node.minHeight(-1), node.prefHeight(-1), node.maxHeight(-1));
+	}
+
+	public static double snappedBoundWidth(Node node) {
+		Parent p = node.getParent();
+		if (p instanceof Region) {
+			return ((Region) p).snapSizeX(boundWidth(node));
+		}
+		return boundWidth(node);
+	}
+
+	public static double snappedBoundHeight(Node node) {
+		Parent p = node.getParent();
+		if (p instanceof Region) {
+			return ((Region) p).snapSizeY(boundHeight(node));
+		}
+		return boundHeight(node);
 	}
 }

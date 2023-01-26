@@ -1,0 +1,31 @@
+$variant: 'light' !default;
+$palette: () !default;
+$scheme: () !default;
+$elevation: (
+  0: 0%,
+  1: 5%,
+  2: 8%,
+  3: 11%,
+  4: 12%,
+  5: 14%,
+) !default;
+$interaction_states: (
+  'hover': 8%,
+  'focus': 12%,
+  'focused': 12%,
+  'pressed': 12%,
+  'dragged': 16%,
+);
+$shapes: (
+  'none': '0px',
+  'extra-small': '4px',
+  'extra-small-top': '4px 4px 0px 0px',
+  'small': '8px',
+  'medium': '12px',
+  'large': '16px',
+  'large-end': '0px 16px 16px 0px',
+  'large-top': '16px 16px 0px 0px',
+  'extra-large': '28px',
+  'extra-large-top': '28px 28px 0px 0px',
+  'full': '100%',
+);

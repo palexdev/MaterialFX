@@ -21,7 +21,7 @@
 	font-weight: bold;
 	font-style: normal;
 	font-display: swap;
-	src: url('../fonts/Comfortaa/Comfortaa-Bold.ttf') format('truetype');
+	src: url('../Comfortaa/Comfortaa-Bold.ttf') format('truetype');
 }
 
 @font-face {
@@ -29,7 +29,7 @@
 	font-weight: 300px;
 	font-style: normal;
 	font-display: swap;
-	src: url('../fonts/Comfortaa/Comfortaa-Light.ttf') format('truetype');
+	src: url('../Comfortaa/Comfortaa-Light.ttf') format('truetype');
 }
 
 @font-face {
@@ -37,7 +37,7 @@
 	font-weight: 500px;
 	font-style: normal;
 	font-display: swap;
-	src: url('../fonts/Comfortaa/Comfortaa-Medium.ttf') format('truetype');
+	src: url('../Comfortaa/Comfortaa-Medium.ttf') format('truetype');
 }
 
 @font-face {
@@ -45,7 +45,7 @@
 	font-weight: normal;
 	font-style: normal;
 	font-display: swap;
-	src: url('../fonts/Comfortaa/Comfortaa-Regular.ttf') format('truetype');
+	src: url('../Comfortaa/Comfortaa-Regular.ttf') format('truetype');
 }
 
 @font-face {
@@ -53,5 +53,5 @@
 	font-weight: 600px;
 	font-style: normal;
 	font-display: swap;
-	src: url('../fonts/Comfortaa/Comfortaa-SemiBold.ttf') format('truetype');
+	src: url('../Comfortaa/Comfortaa-SemiBold.ttf') format('truetype');
 }
