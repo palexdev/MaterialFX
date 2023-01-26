@@ -21,7 +21,7 @@ java {
 
 sass {
     // dart-sass version to use:
-    version = '1.57.1'
+    version = "$sass"
 
     // Directory where to install dart-sass:
     directory = file("${rootDir}/.gradle/sass")

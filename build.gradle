@@ -12,9 +12,12 @@ subprojects {
     apply plugin: "org.openjfx.javafxplugin"
     apply plugin: "com.vanniktech.maven.publish"
 
-    tasks.whenTaskAdded { task ->
-        if (task.name.contains("javaSourcesJar") || task.name.contains("simpleJavadocJar")) {
-            task.enabled = false
+    gradle.taskGraph.whenReady { graph ->
+        if (graph.hasTask(javaSourcesJar)) {
+            javaSourcesJar.enabled = false
+        }
+        if (graph.hasTask(simpleJavadocJar)) {
+            simpleJavadocJar.enabled = false
         }
     }
 
