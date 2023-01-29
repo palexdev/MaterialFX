@@ -18,15 +18,17 @@
 
 package io.github.palexdev.mfxeffects.ripple;
 
+import io.github.palexdev.mfxeffects.animations.Animations.KeyFrames;
+import io.github.palexdev.mfxeffects.animations.Animations.TimelineBuilder;
 import io.github.palexdev.mfxeffects.beans.Position;
 import io.github.palexdev.mfxeffects.ripple.base.Ripple;
 import io.github.palexdev.mfxeffects.ripple.base.RippleGenerator;
-import javafx.animation.*;
+import javafx.animation.Animation;
+import javafx.animation.Timeline;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Circle;
 
 import static javafx.animation.Interpolator.LINEAR;
-import static javafx.util.Duration.millis;
 
 /**
  * Most common type of ripple, extends {@link Circle} and implements {@link Ripple}.
@@ -70,10 +72,10 @@ public class CircleRipple extends Circle implements Ripple<Circle> {
 	 */
 	@Override
 	public Animation animation(RippleGenerator rg) {
-		return new Timeline(
-				new KeyFrame(millis(400), new KeyValue(radiusProperty(), computeTargetRadius(rg), LINEAR)),
-				new KeyFrame(millis(700), new KeyValue(opacityProperty(), 0.0, LINEAR))
-		);
+		return TimelineBuilder.build()
+				.add(KeyFrames.of(400, radiusProperty(), computeTargetRadius(rg), LINEAR))
+				.add(KeyFrames.of(700, opacityProperty(), 0.0, LINEAR))
+				.getAnimation();
 	}
 
 	/**

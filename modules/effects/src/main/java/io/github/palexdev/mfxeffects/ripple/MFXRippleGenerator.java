@@ -18,11 +18,18 @@
 
 package io.github.palexdev.mfxeffects.ripple;
 
+import io.github.palexdev.mfxeffects.animations.Animations.AbstractBuilder;
+import io.github.palexdev.mfxeffects.animations.Animations.KeyFrames;
+import io.github.palexdev.mfxeffects.animations.Animations.ParallelBuilder;
+import io.github.palexdev.mfxeffects.animations.Animations.TimelineBuilder;
 import io.github.palexdev.mfxeffects.beans.Position;
 import io.github.palexdev.mfxeffects.ripple.base.Ripple;
 import io.github.palexdev.mfxeffects.ripple.base.RippleGenerator;
 import io.github.palexdev.mfxeffects.utils.StyleUtils;
-import javafx.animation.*;
+import javafx.animation.Animation;
+import javafx.animation.Interpolator;
+import javafx.animation.ParallelTransition;
+import javafx.animation.Timeline;
 import javafx.css.*;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
@@ -33,7 +40,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
-import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,7 +47,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static javafx.util.Duration.millis;
+import static javafx.util.Duration.ZERO;
 
 /**
  * Basic implementation of the ripple effect described by Material Design guidelines, adapted to JavaFX.
@@ -177,16 +183,16 @@ public class MFXRippleGenerator extends Region implements RippleGenerator {
 		rNode.setFill(getRippleColor());
 		rNode.setOpacity(getRippleOpacity());
 
-		ParallelTransition pt = new ParallelTransition();
-		pt.setRate(getAnimationSpeed());
-		Animation rAnimation = ripple.animation(this);
-		Animation bAnimation = backgroundAnimation();
-		pt.getChildren().add(rAnimation);
-		if (bAnimation != null) pt.getChildren().add(bAnimation);
+		AbstractBuilder pt = ParallelBuilder.build()
+				.setRate(getAnimationSpeed())
+				.add(ripple.animation(this))
+				.setOnFinished(e -> getChildren().remove(rNode));
 
-		pt.setOnFinished(e -> getChildren().remove(rNode));
+		Animation bAnimation;
+		if ((bAnimation = backgroundAnimation()) != null) pt.add(bAnimation);
+
 		getChildren().add(rNode);
-		pt.play();
+		pt.getAnimation().play();
 	}
 
 	/**
@@ -216,13 +222,12 @@ public class MFXRippleGenerator extends Region implements RippleGenerator {
 
 		shape.setFill(getBackgroundColor());
 		shape.setOpacity(0.0);
-		Timeline t = new Timeline(
-				new KeyFrame(Duration.ZERO, e -> getChildren().add(0, shape)),
-				new KeyFrame(millis(250), new KeyValue(shape.opacityProperty(), getBackgroundOpacity())),
-				new KeyFrame(millis(500), new KeyValue(shape.opacityProperty(), 0, Interpolator.LINEAR))
-		);
-		t.setOnFinished(e -> getChildren().remove(shape));
-		return t;
+		return TimelineBuilder.build()
+				.add(KeyFrames.of(ZERO, e -> getChildren().add(0, shape)))
+				.add(KeyFrames.of(250, shape.opacityProperty(), getBackgroundOpacity()))
+				.add(KeyFrames.of(500, shape.opacityProperty(), 0.0, Interpolator.LINEAR))
+				.setOnFinished(e -> getChildren().remove(shape))
+				.getAnimation();
 	}
 
 	/**

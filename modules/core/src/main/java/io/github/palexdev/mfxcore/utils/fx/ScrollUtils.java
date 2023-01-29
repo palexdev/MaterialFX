@@ -18,12 +18,8 @@
 
 package io.github.palexdev.mfxcore.utils.fx;
 
-import io.github.palexdev.mfxcore.animations.AnimationFactory;
-import io.github.palexdev.mfxcore.animations.Animations.PauseBuilder;
-import javafx.animation.Animation;
+import javafx.animation.*;
 import javafx.animation.Animation.Status;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Control;
@@ -42,6 +38,7 @@ import java.util.stream.Collectors;
  * Utility class for JavaFX's ScrollPanes.
  */
 public class ScrollUtils {
+	private static final Interpolator INTERPOLATOR_V1 = Interpolator.SPLINE(0.25, 0.1, 0.25, 1);
 
 	public enum ScrollDirection {
 		UP(-1), RIGHT(1), DOWN(1), LEFT(-1);
@@ -254,13 +251,19 @@ public class ScrollUtils {
 					}
 
 					if (newValue) {
-						AnimationFactory.FADE_IN.build(scrollBar, fadeSpeedMillis).play();
+						Timeline t = new Timeline(
+								new KeyFrame(Duration.ZERO, new KeyValue(scrollBar.opacityProperty(), 0, INTERPOLATOR_V1)),
+								new KeyFrame(Duration.millis(fadeSpeedMillis), new KeyValue(scrollBar.opacityProperty(), 1.0, INTERPOLATOR_V1))
+						);
+						t.play();
 					} else {
-						PauseBuilder.build()
-								.setDuration(hideAfterMillis)
-								.setOnFinished(event -> AnimationFactory.FADE_OUT.build(scrollBar, fadeSpeedMillis).play())
-								.getAnimation()
-								.play();
+						Timeline t = new Timeline(
+								new KeyFrame(Duration.ZERO, new KeyValue(scrollBar.opacityProperty(), 1.0, INTERPOLATOR_V1)),
+								new KeyFrame(Duration.millis(fadeSpeedMillis), new KeyValue(scrollBar.opacityProperty(), 0.0, INTERPOLATOR_V1))
+						);
+						PauseTransition pt = new PauseTransition(Duration.millis(hideAfterMillis));
+						pt.setOnFinished(e -> t.play());
+						pt.play();
 					}
 				});
 			});

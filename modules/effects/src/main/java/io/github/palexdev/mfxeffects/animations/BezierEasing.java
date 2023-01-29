@@ -16,7 +16,7 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.mfxcore.animations;
+package io.github.palexdev.mfxeffects.animations;
 
 import javafx.animation.Interpolator;
 

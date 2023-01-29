@@ -45,7 +45,7 @@ public abstract class SkinBase<C extends Control, B extends BehaviorBase<C>> ext
 	//================================================================================
 	// Abstract Methods
 	//================================================================================
-	protected abstract void initBehavior();
+	protected abstract void initBehavior(B behavior);
 
 	//================================================================================
 	// Delegate Methods
@@ -93,6 +93,6 @@ public abstract class SkinBase<C extends Control, B extends BehaviorBase<C>> ext
 		if (behavior == null)
 			throw new IllegalArgumentException("The behavior cannot be null");
 		this.behavior = behavior;
-		initBehavior();
+		initBehavior(behavior);
 	}
 }

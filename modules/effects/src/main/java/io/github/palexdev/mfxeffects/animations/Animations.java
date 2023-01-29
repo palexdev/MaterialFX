@@ -16,9 +16,10 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.mfxcore.animations;
+package io.github.palexdev.mfxeffects.animations;
 
-import io.github.palexdev.mfxcore.base.beans.AnimationsData;
+import io.github.palexdev.mfxeffects.beans.AnimationsData;
+import io.github.palexdev.mfxeffects.enums.Interpolators;
 import javafx.animation.*;
 import javafx.beans.binding.BooleanExpression;
 import javafx.beans.value.WritableValue;
@@ -54,7 +55,7 @@ public class Animations {
 	 */
 	public static void disableTemporarily(Duration duration, Node node) {
 		node.setDisable(true);
-		Animations.PauseBuilder.build()
+		PauseBuilder.build()
 				.setOnFinished(event -> node.setDisable(false))
 				.setDuration(duration)
 				.getAnimation()
@@ -707,12 +708,12 @@ public class Animations {
 		// Methods
 		//================================================================================
 
-		public Animations.PauseBuilder setDelay(Duration duration) {
+		public PauseBuilder setDelay(Duration duration) {
 			pauseTransition.setDelay(duration);
 			return this;
 		}
 
-		public Animations.PauseBuilder setDelay(double millis) {
+		public PauseBuilder setDelay(double millis) {
 			pauseTransition.setDelay(Duration.millis(millis));
 			return this;
 		}

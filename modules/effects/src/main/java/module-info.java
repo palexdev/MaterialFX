@@ -1,6 +1,9 @@
 module mfx.effects {
 	requires transitive javafx.controls;
 
+	// Animations
+	exports io.github.palexdev.mfxeffects.animations;
+
 	// Base
 	exports io.github.palexdev.mfxeffects;
 

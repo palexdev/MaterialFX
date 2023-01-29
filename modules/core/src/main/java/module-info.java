@@ -6,9 +6,6 @@ module mfx.core {
 
 	requires transitive mfx.localization;
 
-	// Animations
-	exports io.github.palexdev.mfxcore.animations;
-
 	// Base
 	exports io.github.palexdev.mfxcore.base;
 	exports io.github.palexdev.mfxcore.base.beans;
