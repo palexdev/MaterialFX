@@ -18,7 +18,7 @@
 
 package io.github.palexdev.mfxeffects.builders;
 
-import io.github.palexdev.mfxeffects.ripple.RippleClipType;
+import io.github.palexdev.mfxeffects.enums.RippleClipType;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;

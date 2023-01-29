@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * Copyright (C) 2023 Parisi Alessandro - alessandro.parisi406@gmail.com
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
  *
  * MaterialFX is free software: you can redistribute it and/or
@@ -16,16 +16,13 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.mfxeffects.ripple.base;
+package app;
 
-import javafx.animation.Animation;
+import javafx.application.Application;
 
-/**
- * RippleGenerators only accept ripple types that implement this interface.
- */
-public interface IRipple {
-	/**
-	 * Every ripple type should specify its animation.
-	 */
-	Animation getAnimation();
+public class EffectsLauncher {
+
+	public static void main(String[] args) {
+		Application.launch(RippleTest.class, args);
+	}
 }

@@ -18,9 +18,10 @@
 
 package io.github.palexdev.mfxeffects.ripple;
 
-import io.github.palexdev.mfxeffects.DepthLevel;
-import io.github.palexdev.mfxeffects.Interpolators;
+import io.github.palexdev.mfxeffects.enums.DepthLevel;
+import io.github.palexdev.mfxeffects.enums.Interpolators;
 import io.github.palexdev.mfxeffects.builders.RippleClipTypeBuilder;
+import io.github.palexdev.mfxeffects.enums.RippleClipType;
 import javafx.animation.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;

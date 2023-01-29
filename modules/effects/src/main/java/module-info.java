@@ -10,6 +10,9 @@ module mfx.effects {
 	// Builders
 	exports io.github.palexdev.mfxeffects.builders;
 
+	// Enums
+	exports io.github.palexdev.mfxeffects.enums;
+
 	// Ripple
 	exports io.github.palexdev.mfxeffects.ripple;
 	exports io.github.palexdev.mfxeffects.ripple.base;

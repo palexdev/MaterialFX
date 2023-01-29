@@ -18,6 +18,7 @@
 
 package io.github.palexdev.mfxeffects;
 
+import io.github.palexdev.mfxeffects.enums.DepthLevel;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
