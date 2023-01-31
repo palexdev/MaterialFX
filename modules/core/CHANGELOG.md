@@ -16,6 +16,13 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.2.1] - 31-01-2023
+
+## Changed
+
+- Moved animations API to effects module
+- SkinBase: pass the behavior object to initialize as argument to initBehavior()
+
 ## [11.2.0] - 26-01-2023
 
 ## Added

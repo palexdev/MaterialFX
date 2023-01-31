@@ -16,6 +16,14 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.0.2] - 31-01-2023
+
+## Changed
+
+- Small refactors due to Animations API being moved from core module
+- Adapted shadows to Material Design 3
+- Added some methods to ElevationLevel enum
+
 ## [11.0.1] - 26-01-2023
 
 ## Added
