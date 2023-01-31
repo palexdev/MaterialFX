@@ -18,7 +18,7 @@
 
 package io.github.palexdev.mfxeffects.ripple;
 
-import io.github.palexdev.mfxeffects.enums.DepthLevel;
+import io.github.palexdev.mfxeffects.enums.ElevationLevel;
 import io.github.palexdev.mfxeffects.enums.Interpolators;
 import io.github.palexdev.mfxeffects.builders.RippleClipTypeBuilder;
 import io.github.palexdev.mfxeffects.enums.RippleClipType;
@@ -38,7 +38,7 @@ import javafx.util.Duration;
 
 import java.util.List;
 
-import static io.github.palexdev.mfxeffects.MFXDepthManager.shadowOf;
+import static io.github.palexdev.mfxeffects.MFXElevationManager.shadowOf;
 
 /**
  * Convenience class for creating highly customizable ripple effects.
@@ -56,7 +56,7 @@ public class RippleGenerator extends Group {
 	private final Region region;
 
 	private RippleClipTypeBuilder rippleClipTypeBuilder = new RippleClipTypeBuilder(RippleClipType.RECTANGLE);
-	private DepthLevel level = null;
+	private ElevationLevel level = null;
 	//private final Interpolator rippleInterpolator = Interpolator.SPLINE(0.1, 0.50, 0.3, 0.85);
 	private final StyleableObjectProperty<Paint> rippleColor = new SimpleStyleableObjectProperty<>(
 			StyleableProperties.RIPPLE_COLOR,
@@ -101,7 +101,7 @@ public class RippleGenerator extends Group {
 		});
 	}
 
-	public RippleGenerator(Region region, DepthLevel shadowLevel) {
+	public RippleGenerator(Region region, ElevationLevel shadowLevel) {
 		this(region);
 		this.level = shadowLevel;
 	}
@@ -111,7 +111,7 @@ public class RippleGenerator extends Group {
 		this.rippleClipTypeBuilder = factory;
 	}
 
-	public RippleGenerator(Region region, DepthLevel shadowLevel, RippleClipTypeBuilder factory) {
+	public RippleGenerator(Region region, ElevationLevel shadowLevel, RippleClipTypeBuilder factory) {
 		this(region, shadowLevel);
 		this.rippleClipTypeBuilder = factory;
 	}

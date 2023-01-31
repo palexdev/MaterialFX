@@ -18,12 +18,37 @@
 
 package app;
 
+import io.github.palexdev.mfxeffects.enums.ElevationLevel;
 import javafx.application.Application;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.stage.Stage;
 
-public class EffectsLauncher {
+public class ShadowsTest extends Application {
 
-	public static void main(String[] args) {
-		//System.setProperty("prism.vsync", "false");
-		Application.launch(ShadowsTest.class, args);
+	@Override
+	public void start(Stage primaryStage) {
+		HBox box = new HBox(30);
+		box.setAlignment(Pos.CENTER);
+
+		for (ElevationLevel level : ElevationLevel.values()) {
+			box.getChildren().add(createRegion(level));
+		}
+
+		Scene scene = new Scene(box, 800, 800);
+		primaryStage.setScene(scene);
+		primaryStage.show();
+	}
+
+	private Region createRegion(ElevationLevel elevation) {
+		Region r = new Region();
+		r.setPrefSize(100, 50);
+		r.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+		r.setPickOnBounds(false);
+		r.setEffect(elevation.toShadow());
+		r.setStyle("-fx-background-color: red");
+		return r;
 	}
 }

@@ -18,7 +18,7 @@
 
 package io.github.palexdev.mfxeffects;
 
-import io.github.palexdev.mfxeffects.enums.DepthLevel;
+import io.github.palexdev.mfxeffects.enums.ElevationLevel;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
@@ -27,9 +27,9 @@ import javafx.scene.paint.Color;
  * Utility class which manages a preset number of {@code DropShadow} effects ordered by {@code DepthLevel}, but
  * it also allows to create custom {@code DropShadow} effects with {@link #shadowOf(Color, double, double, double, double)}.
  * <p></p>
- * {@link DepthLevel}
+ * {@link ElevationLevel}
  */
-public class MFXDepthManager {
+public class MFXElevationManager {
 
 	/**
 	 * Returns a new instance of {@code DropShadow} with the specified characteristics.
@@ -54,7 +54,7 @@ public class MFXDepthManager {
 	 * @param level The desired {@code DepthLevel} between 1 and 5
 	 * @return The desired {@code DropShadow} effect
 	 */
-	public static DropShadow shadowOf(DepthLevel level) {
+	public static DropShadow shadowOf(ElevationLevel level) {
 		return new DropShadow(
 				BlurType.GAUSSIAN,
 				level.getColor(),
@@ -78,10 +78,10 @@ public class MFXDepthManager {
 	 * @param delta The number of levels to shift
 	 * @return The final {@code DropShadow} effect}
 	 * <p></p>
-	 * {@link #nextLevel(DepthLevel)}
+	 * {@link #nextLevel(ElevationLevel)}
 	 */
-	public static DropShadow shadowOf(DepthLevel level, int delta) {
-		DepthLevel endLevel = level;
+	public static DropShadow shadowOf(ElevationLevel level, int delta) {
+		ElevationLevel endLevel = level;
 		for (int i = 0; i < delta; i++) {
 			endLevel = nextLevel(endLevel);
 		}
@@ -93,9 +93,9 @@ public class MFXDepthManager {
 	 *
 	 * @param startLevel The starting {@code DepthLevel}
 	 * @return The {@code DropShadow} effect associated to the next {@code DepthLevel}
-	 * @see DepthLevel
+	 * @see ElevationLevel
 	 */
-	private static DepthLevel nextLevel(DepthLevel startLevel) {
-		return !(startLevel.equals(DepthLevel.LEVEL5)) ? startLevel.next() : DepthLevel.LEVEL5;
+	private static ElevationLevel nextLevel(ElevationLevel startLevel) {
+		return !(startLevel.equals(ElevationLevel.LEVEL5)) ? startLevel.next() : ElevationLevel.LEVEL5;
 	}
 }
