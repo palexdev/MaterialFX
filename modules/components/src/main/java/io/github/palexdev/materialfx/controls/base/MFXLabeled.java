@@ -27,6 +27,14 @@ import javafx.scene.control.Labeled;
 
 import java.util.function.Supplier;
 
+/**
+ * Base class for MaterialFX controls that are text based. The idea is to have a separate hierarchy of components from the JavaFX one,
+ * * that perfectly integrates with the new Behavior and Theming APIs.
+ * <p>
+ * Extends {@link Labeled} and implements both {@link WithBehavior} and {@link MFXStyleable}.
+ *
+ * @param <B> the behavior type used by the control
+ */
 public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends Labeled implements WithBehavior<B>, MFXStyleable {
 	//================================================================================
 	// Properties
@@ -58,14 +66,17 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 	//================================================================================
 	// Getters/Setters
 	//================================================================================
+	@Override
 	public Supplier<B> getBehaviorProvider() {
 		return behaviorProvider.get();
 	}
 
+	@Override
 	public SupplierProperty<B> behaviorProviderProperty() {
 		return behaviorProvider;
 	}
 
+	@Override
 	public void setBehaviorProvider(Supplier<B> behaviorProvider) {
 		this.behaviorProvider.set(behaviorProvider);
 	}

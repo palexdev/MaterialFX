@@ -26,3 +26,22 @@
   $key: '--md-sys-color-' + $color_type;
   @return map.get($scheme, $key);
 }
+
+/// Returns a percentage corresponding to the given layer state, as described by MD3 guidelines.
+/// Valid values are: 'hover', 'focus/focused', 'pressed', 'dragged'.
+@function get_percent_state_layer($state) {
+  @return map.get($interaction_states, $state);
+}
+
+/// Shortcut function to compute the color of a surface given its state.
+/// MD3 components have many layers/containers that are used to simulate elevation and interaction states.
+/// This is not really feasible for a desktop UI, where using as less sub-components as possible is recommended for
+/// performance reasons.
+/// So the other way to compute the color given an interaction state, is to mix the two colors.
+/// The part that is not explicitly explained by the guidelines is that you can have both the elevation and interaction
+/// layers 'active' at the same time. This means that the resulting color is the result of: computing the elevation
+/// color (which itself is blend/mix operation) and then mix it with the interaction layer color.
+@function state_layer($surface, $overlay_color, $state) {
+  $percent: get_percent_state_layer($state);
+  @return $surface, rgba(get_scheme_color($overlay_color), $percent);
+}

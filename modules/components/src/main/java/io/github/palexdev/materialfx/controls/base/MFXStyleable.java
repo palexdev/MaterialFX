@@ -20,6 +20,9 @@ package io.github.palexdev.materialfx.controls.base;
 
 import java.util.List;
 
+/**
+ * Public API for all MaterialFX components that are styleable and integrated with the new Theming system.
+ */
 public interface MFXStyleable {
 
 	List<String> defaultStyleClasses();

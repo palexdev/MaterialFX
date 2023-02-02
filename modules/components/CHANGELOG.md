@@ -16,6 +16,17 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.15.1] - 02-02-2023
+
+## Added
+
+- Implemented all variants of MFXButton
+
+## Changed
+
+- Implemented MFXButtonBehavior
+- MFXButtonSkin: add ripple effect, adapt to changes made in SkinBase
+
 ## [11.15.0] - 26-01-2023
 
 ## Added

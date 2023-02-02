@@ -17,97 +17,97 @@
  */
 
 @font-face {
-	font-family: 'Roboto Black';
-	font-weight: 900px;
-	font-style: normal;
-	font-display: swap;
-	src: url('../Roboto/Roboto-Black.ttf') format('truetype');
+  font-family: 'Roboto Black';
+  font-weight: 900px;
+  font-style: normal;
+  font-display: swap;
+  src: url('../../fonts/Roboto/Roboto-Black.ttf') format('truetype');
 }
 
 @font-face {
-	font-family: 'Roboto BlackItalic';
-	font-weight: 900px;
-	font-style: italic;
-	font-display: swap;
-	src: url('../Roboto/Roboto-BlackItalic.ttf') format('truetype');
+  font-family: 'Roboto BlackItalic';
+  font-weight: 900px;
+  font-style: italic;
+  font-display: swap;
+  src: url('../../fonts/Roboto/Roboto-BlackItalic.ttf') format('truetype');
 }
 
 @font-face {
-	font-family: 'Roboto Bold';
-	font-weight: bold;
-	font-style: normal;
-	font-display: swap;
-	src: url('../Roboto/Roboto-Bold.ttf') format('truetype');
+  font-family: 'Roboto Bold';
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+  src: url('../../fonts/Roboto/Roboto-Bold.ttf') format('truetype');
 }
 
 @font-face {
-	font-family: 'Roboto BoldItalic';
-	font-weight: bold;
-	font-style: italic;
-	font-display: swap;
-	src: url('../Roboto/Roboto-BoldItalic.ttf') format('truetype');
+  font-family: 'Roboto BoldItalic';
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+  src: url('../../fonts/Roboto/Roboto-BoldItalic.ttf') format('truetype');
 }
 
 @font-face {
-	font-family: 'Roboto Light';
-	font-weight: 300px;
-	font-style: normal;
-	font-display: swap;
-	src: url('../Roboto/Roboto-Light.ttf') format('truetype');
+  font-family: 'Roboto Light';
+  font-weight: 300px;
+  font-style: normal;
+  font-display: swap;
+  src: url('../../fonts/Roboto/Roboto-Light.ttf') format('truetype');
 }
 
 @font-face {
-	font-family: 'Roboto Italic';
-	font-weight: normal;
-	font-style: italic;
-	font-display: swap;
-	src: url('../Roboto/Roboto-Italic.ttf') format('truetype');
+  font-family: 'Roboto Italic';
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+  src: url('../../fonts/Roboto/Roboto-Italic.ttf') format('truetype');
 }
 
 @font-face {
-	font-family: 'Roboto LightItalic';
-	font-weight: 300px;
-	font-style: italic;
-	font-display: swap;
-	src: url('../Roboto/Roboto-LightItalic.ttf') format('truetype');
+  font-family: 'Roboto LightItalic';
+  font-weight: 300px;
+  font-style: italic;
+  font-display: swap;
+  src: url('../../fonts/Roboto/Roboto-LightItalic.ttf') format('truetype');
 }
 
 @font-face {
-	font-family: 'Roboto Medium';
-	font-weight: 500px;
-	font-style: normal;
-	font-display: swap;
-	src: url('../Roboto/Roboto-Medium.ttf') format('truetype');
+  font-family: 'Roboto Medium';
+  font-weight: 500px;
+  font-style: normal;
+  font-display: swap;
+  src: url('../../fonts/Roboto/Roboto-Medium.ttf') format('truetype');
 }
 
 @font-face {
-	font-family: 'Roboto MediumItalic';
-	font-weight: 500px;
-	font-style: italic;
-	font-display: swap;
-	src: url('../Roboto/Roboto-MediumItalic.ttf') format('truetype');
+  font-family: 'Roboto MediumItalic';
+  font-weight: 500px;
+  font-style: italic;
+  font-display: swap;
+  src: url('../../fonts/Roboto/Roboto-MediumItalic.ttf') format('truetype');
 }
 
 @font-face {
-	font-family: 'Roboto Regular';
-	font-weight: normal;
-	font-style: normal;
-	font-display: swap;
-	src: url('../Roboto/Roboto-Regular.ttf') format('truetype');
+  font-family: 'Roboto Regular';
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+  src: url('../../fonts/Roboto/Roboto-Regular.ttf') format('truetype');
 }
 
 @font-face {
-	font-family: 'Roboto ThinItalic';
-	font-weight: 100px;
-	font-style: italic;
-	font-display: swap;
-	src: url('../Roboto/Roboto-ThinItalic.ttf') format('truetype');
+  font-family: 'Roboto ThinItalic';
+  font-weight: 100px;
+  font-style: italic;
+  font-display: swap;
+  src: url('../../fonts/Roboto/Roboto-ThinItalic.ttf') format('truetype');
 }
 
 @font-face {
-	font-family: 'Roboto Thin';
-	font-weight: 100px;
-	font-style: normal;
-	font-display: swap;
-	src: url('../Roboto/Roboto-Thin.ttf') format('truetype');
+  font-family: 'Roboto Thin';
+  font-weight: 100px;
+  font-style: normal;
+  font-display: swap;
+  src: url('../../fonts/Roboto/Roboto-Thin.ttf') format('truetype');
 }

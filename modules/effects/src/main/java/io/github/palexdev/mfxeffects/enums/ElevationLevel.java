@@ -20,6 +20,7 @@ package io.github.palexdev.mfxeffects.enums;
 
 import io.github.palexdev.mfxeffects.animations.Animations.KeyFrames;
 import io.github.palexdev.mfxeffects.animations.Animations.TimelineBuilder;
+import io.github.palexdev.mfxeffects.animations.BezierEasing;
 import javafx.animation.Interpolator;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
@@ -98,12 +99,12 @@ public enum ElevationLevel {
 	}
 
 	public void animateTo(DropShadow current, ElevationLevel next) {
-		Interpolator i = Interpolators.INTERPOLATOR_V2.toInterpolator();
+		Interpolator i = BezierEasing.EASE;
 		TimelineBuilder.build()
-				.add(KeyFrames.of(200, current.radiusProperty(), next.getRadius(), i))
-				.add(KeyFrames.of(200, current.spreadProperty(), next.getSpread(), i))
-				.add(KeyFrames.of(150, current.offsetXProperty(), next.getOffsetX(), i))
-				.add(KeyFrames.of(150, current.offsetYProperty(), next.getOffsetY(), i))
+				.add(KeyFrames.of(50, current.offsetXProperty(), next.getOffsetX(), i))
+				.add(KeyFrames.of(50, current.offsetYProperty(), next.getOffsetY(), i))
+				.add(KeyFrames.of(50, current.radiusProperty(), next.getRadius(), i))
+				.add(KeyFrames.of(50, current.spreadProperty(), next.getSpread(), i))
 				.getAnimation().play();
 	}
 

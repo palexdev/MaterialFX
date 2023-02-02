@@ -1,5 +1,8 @@
 import com.vanniktech.maven.publish.SonatypeHost
 
+import java.nio.file.Files
+import java.nio.file.StandardOpenOption
+
 plugins {
     id 'io.miret.etienne.sass' version "$gradleSass"
 }
@@ -40,9 +43,31 @@ compileSass {
     sourceMap = none
 }
 
+tasks.register('postProcessCss') {
+    doLast {
+        String baseDir = "io/github/palexdev/mfxresources/sass"
+        File outputDir = project.file("src/main/resources/" + baseDir)
+        outputDir.eachFileRecurse(groovy.io.FileType.FILES) {
+            if (it.name.endsWith('.css')) {
+                String newText = it.text.replaceAll('[}]\n(?=\\S)', '}' + System.lineSeparator().repeat(2))
+                        .replaceAll('[;]\n(?=[/])', ';' + System.lineSeparator().repeat(2))
+                        .replaceAll("(, )(?=(.mfx))", "," + System.lineSeparator())
+                Files.writeString(
+                        it.toPath(),
+                        newText,
+                        StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING
+                )
+            }
+        }
+    }
+    mustRunAfter compileSass
+    doNotTrackState("CSS must be post processed always to make sure it's correct")
+}
+
 processResources {
     // This makes gradle compile sass to css before copying the resources
     dependsOn compileSass
+    dependsOn postProcessCss
 }
 
 mavenPublishing {

@@ -16,13 +16,14 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package interactive;
+package app;
 
+import app.buttons.ButtonsPlayground;
 import javafx.application.Application;
 
-public class Launcher {
+public class ComponentsLauncher {
 
 	public static void main(String[] args) {
-		Application.launch(ButtonsTest.class);
+		Application.launch(ButtonsPlayground.class, args);
 	}
 }

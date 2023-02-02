@@ -18,12 +18,54 @@
 
 package io.github.palexdev.materialfx.behaviors;
 
-import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.buttons.MFXButton;
+import io.github.palexdev.materialfx.skins.MFXButtonSkin;
 import io.github.palexdev.mfxcore.behavior.BehaviorBase;
+import io.github.palexdev.mfxeffects.ripple.MFXRippleGenerator;
+import javafx.scene.input.MouseEvent;
 
+/**
+ * This is the default behavior used by all {@link MFXButton}s.
+ * <p>
+ * Defines the actions to:
+ * <p> - generate ripples
+ * <p> - handle mouse press
+ * <p> - handle mouse click
+ */
 public class MFXButtonBehavior extends BehaviorBase<MFXButton> {
 
+	//================================================================================
+	// Constructors
+	//================================================================================
 	public MFXButtonBehavior(MFXButton node) {
 		super(node);
+	}
+
+	//================================================================================
+	// Methods
+	//================================================================================
+
+	/**
+	 * Instructs the given {@link MFXRippleGenerator} to generate a ripple for the given
+	 * {@link MouseEvent}.
+	 * <p></p>
+	 * The parameters are given by the default skin, {@link MFXButtonSkin}, associated to each button.
+	 */
+	public void generateRipple(MFXRippleGenerator rg, MouseEvent me) {
+		rg.generate(me);
+	}
+
+	/**
+	 * Requests focus on mouse pressed.
+	 */
+	public void mousePressed() {
+		getNode().requestFocus();
+	}
+
+	/**
+	 * Calls {@link MFXButton#fire()} on mouse clicked.
+	 */
+	public void mouseClicked() {
+		getNode().fire();
 	}
 }

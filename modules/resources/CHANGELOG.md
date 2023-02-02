@@ -16,6 +16,21 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.1.1] - 02-02-2023
+
+## Added
+
+- Added styles for all the button variants
+- Expose all the tokens in the generated CSS theme, so that user can easily extend a theme and have the palette and
+  color scheme as look-ups
+
+## Changed
+
+- MFXFontIcon: use old properties name in CSS
+- MFXIconWrapper: use the new ripple generator
+- Fix fonts path and add a single CSS file which imports all of them
+- Added some new utils to MD3 sass, some were moved
+
 ## [11.1.0] - 26-01-2023
 
 ## Added

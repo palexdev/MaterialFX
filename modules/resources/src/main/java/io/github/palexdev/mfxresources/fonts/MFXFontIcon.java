@@ -232,7 +232,7 @@ public class MFXFontIcon extends Text {
 	/**
 	 * Specifies the color of the icon.
 	 * <p></p>
-	 * Settable in CSS via the property: '-color'.
+	 * Settable in CSS via the property: '-mfx-color'.
 	 */
 	public StyleableObjectProperty<Color> colorProperty() {
 		return color;
@@ -249,7 +249,7 @@ public class MFXFontIcon extends Text {
 	/**
 	 * Specifies the icon's description/name inside the icon font pack.
 	 * <p></p>
-	 * Settable in CSS via the property: '-description'.
+	 * Settable in CSS via the property: '-mfx-description'.
 	 */
 	public StyleableStringProperty descriptionProperty() {
 		return description;
@@ -269,7 +269,7 @@ public class MFXFontIcon extends Text {
 	 * <p>
 	 * On change this will automatically call {@link #setFontSize(double)}.
 	 * <p></p>
-	 * Settable in CSS via the property: '-size'.
+	 * Settable in CSS via the property: '-mfx-size'.
 	 */
 	public StyleableDoubleProperty sizeProperty() {
 		return size;
@@ -289,20 +289,20 @@ public class MFXFontIcon extends Text {
 
 		private static final CssMetaData<MFXFontIcon, Color> COLOR =
 				FACTORY.createColorCssMetaData(
-						"-color",
+						"-mfx-color",
 						MFXFontIcon::colorProperty,
 						Color.web("#454545")
 				);
 
 		private static final CssMetaData<MFXFontIcon, String> DESCRIPTION =
 				FACTORY.createStringCssMetaData(
-						"-description",
+						"-mfx-description",
 						MFXFontIcon::descriptionProperty
 				);
 
 		private static final CssMetaData<MFXFontIcon, Number> SIZE =
 				FACTORY.createSizeCssMetaData(
-						"-size",
+						"-mfx-size",
 						MFXFontIcon::sizeProperty,
 						16.0
 				);

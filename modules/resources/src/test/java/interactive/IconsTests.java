@@ -41,11 +41,8 @@ import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
-import org.testfx.util.WaitForAsyncUtils;
 
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -218,14 +215,12 @@ public class IconsTests {
 			wrapper.getIcon().setDescription(FontAwesomeRegular.SQUARE.getDescription());
 			wrapper.setStyle("-mfx-enable-ripple: true;\n-mfx-round: true;\n");
 		});
-		wrapper.getRippleGenerator().setRippleRadius(128.0);
-		wrapper.getRippleGenerator().setOnAnimationFinished(e -> ripple.set(true));
+		wrapper.getRippleGenerator().setRipplePrefSize(128.0);
 		assertNotNull(wrapper.getClip());
 		assertEquals(2, wrapper.getChildren().size());
 		robot.clickOn(wrapper);
-		WaitForAsyncUtils.waitFor(1, TimeUnit.SECONDS, CompletableFuture.supplyAsync(ripple::get));
-		Thread.sleep(sleep);
-		assertTrue(ripple.get());
+		Thread.sleep(1000);
+		assertEquals(0, wrapper.getRippleGenerator().getChildrenUnmodifiable().size());
 
 		robot.interact(() -> wrapper.setStyle(null));
 		assertNull(wrapper.getClip());

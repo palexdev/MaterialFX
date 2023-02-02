@@ -16,6 +16,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.0.3] - 02-02-2023
+
+## Changed
+
+- Slight change to shadow transitions
+
 ## [11.0.2] - 31-01-2023
 
 ## Changed

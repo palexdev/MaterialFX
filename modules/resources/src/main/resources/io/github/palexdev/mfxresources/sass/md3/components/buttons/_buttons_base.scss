@@ -1,0 +1,91 @@
+@use '../../abstracts/elevation_utils' as *;
+@use '../../abstracts/ripple_utils' as *;
+@use '../../abstracts/theme_utils' as *;
+@use '../../tokens/typography' as *;
+
+$padding: 0px 24px 0px 24px !default;
+$padding-i-left: 0px 24px 0px 16px !default;
+$padding-i-right: 0px 16px 0px 24px !default;
+
+@mixin base($surface, $onSurface, $text, $surfaceTint, $elevation) {
+  @include label_large();
+  -fx-text-fill: get_scheme_color($text);
+  @if (type-of($surface) == color) {
+    -fx-background-color: $surface;
+  } @else {
+    -fx-background-color: elevate($surface, $surfaceTint, $elevation);
+  }
+  -fx-background-radius: 20px;
+  -fx-pref-height: 40px;
+  -fx-padding: $padding;
+  -fx-graphic-text-gap: 8px;
+  -mfx-elevation: unquote("LEVEL" + $elevation);
+}
+
+@mixin outline() {
+  -fx-border-color: get_scheme_color('outline');
+  -fx-border-radius: 20px;
+
+  &:disabled {
+    -fx-border-color: rgba(get_scheme_color('outline'), 12%);
+  }
+}
+
+@mixin disabled() {
+  &:disabled {
+    -fx-text-fill: rgba(get_scheme_color('on-surface'), 38%);
+    -fx-background-color: rgba(get_scheme_color('on-surface'), 12%);
+    -mfx-elevation: LEVEL0;
+  }
+}
+
+@mixin hover($surface, $surfaceTint, $elevation) {
+  &:hover {
+    @if (type-of($surface) != string) {
+      -fx-background-color: $surface;
+    } @else {
+      $bcolor: elevate($surface, $surfaceTint, $elevation);
+      -fx-background-color: state_layer($bcolor, $surfaceTint, 'hover');
+    }
+    -mfx-elevation: unquote("LEVEL" + $elevation);
+  }
+}
+
+@mixin focus_press($surface, $surfaceTint, $elevation) {
+  &:focused,
+  &:pressed {
+    @if (type-of($surface) != string) {
+      -fx-background-color: $surface;
+    } @else {
+      $bcolor: elevate($surface, $surfaceTint, $elevation);
+      -fx-background-color: state_layer($bcolor, $surfaceTint, 'focused');
+    }
+    -mfx-elevation: unquote("LEVEL" + $elevation);
+  }
+}
+
+@mixin icon($color) {
+  .mfx-font-icon {
+    -mfx-color: get_scheme_color($color);
+    -mfx-size: 18px;
+  }
+
+  &:disabled .mfx-font-icon {
+    -mfx-color: rgba(get_scheme_color('on-surface'), 38%);
+  }
+
+  &:with-icon-left {
+    -fx-padding: $padding-i-left;
+  }
+
+  &:with-icon-right {
+    -fx-padding: $padding-i-right;
+  }
+
+}
+
+@mixin ripple($color) {
+  .mfx-ripple-generator {
+    -mfx-ripple-color: ripple($color);
+  }
+}

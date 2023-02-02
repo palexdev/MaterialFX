@@ -23,16 +23,31 @@ import javafx.scene.Node;
 
 import java.util.function.Supplier;
 
+/**
+ * Public API for all components that want to integrate with the new Behavior API.
+ *
+ * @param <B> the type of behavior the component will use
+ */
 public interface WithBehavior<B extends BehaviorBase<? extends Node>> {
 
+	/**
+	 * @return a {@link Supplier} that is the provider for the default behavior used by the component.
+	 */
 	Supplier<B> defaultBehaviorProvider();
 
 	void setBehaviorProvider(Supplier<B> factory);
 
+	/**
+	 * Specifies the {@link Supplier} used to produce a behavior object for the component.
+	 */
 	SupplierProperty<B> behaviorProviderProperty();
 
 	Supplier<B> getBehaviorProvider();
 
+	/**
+	 * Restores the components behavior to the default one using {@link #defaultBehaviorProvider()}
+	 * and {@link #setBehaviorProvider(Supplier)}.
+	 */
 	default void setDefaultBehaviorProvider() {
 		setBehaviorProvider(defaultBehaviorProvider());
 	}

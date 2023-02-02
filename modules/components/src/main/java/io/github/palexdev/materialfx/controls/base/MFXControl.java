@@ -27,16 +27,21 @@ import javafx.scene.control.Control;
 
 import java.util.function.Supplier;
 
+/**
+ * Base class for MaterialFX controls. The idea is to have a separate hierarchy of components from the JavaFX one,
+ * that perfectly integrates with the new Behavior and Theming APIs.
+ * <p>
+ * Extends {@link Control} and implements both {@link WithBehavior} and {@link MFXStyleable}.
+ * <p></p>
+ * Components that primarily deal with text should extend {@link MFXLabeled} instead.
+ *
+ * @param <B> the behavior type used by the control
+ */
 public abstract class MFXControl<B extends BehaviorBase<? extends Node>> extends Control implements WithBehavior<B>, MFXStyleable {
 	//================================================================================
 	// Properties
 	//================================================================================
 	private final SupplierProperty<B> behaviorProvider = new SupplierProperty<>();
-
-	//================================================================================
-	// Abstract Methods
-	//================================================================================
-	public abstract void defaultBehaviorFactory();
 
 	//================================================================================
 	// Overridden Methods
@@ -49,14 +54,17 @@ public abstract class MFXControl<B extends BehaviorBase<? extends Node>> extends
 	//================================================================================
 	// Getters/Setters
 	//================================================================================
+	@Override
 	public Supplier<B> getBehaviorProvider() {
 		return behaviorProvider.get();
 	}
 
+	@Override
 	public SupplierProperty<B> behaviorProviderProperty() {
 		return behaviorProvider;
 	}
 
+	@Override
 	public void setBehaviorProvider(Supplier<B> behaviorProvider) {
 		this.behaviorProvider.set(behaviorProvider);
 	}

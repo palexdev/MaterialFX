@@ -16,12 +16,19 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.mfxcore.behavior;
+package app.others.ui;
 
-import javafx.scene.Node;
+import javafx.scene.Scene;
 
-public class EmptyBehavior extends BehaviorBase<Node> {
-	public EmptyBehavior(Node node) {
-		super(node);
+public interface MultipleViewApp<T> {
+
+	void registerViews();
+
+	T defaultView();
+
+	String getStylesheet();
+
+	default void loadStyleSheet(Scene scene) {
+		scene.getStylesheets().add(getStylesheet());
 	}
 }

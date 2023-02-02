@@ -16,10 +16,10 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package unit.buttons;
+package interactive;
 
 import com.sun.javafx.tk.Toolkit;
-import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.buttons.MFXButton;
 import javafx.scene.Scene;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;

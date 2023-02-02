@@ -87,6 +87,7 @@ import static javafx.util.Duration.ZERO;
  * <p> 2) You can set the visibility to hidden, {@link #visibleProperty()}
  * <p> 3) You can set the ripples opacity to 0, {@link #rippleOpacityProperty()}
  */
+// TODO next improvement is to keep the ripple until the mouse is released (?)
 public class MFXRippleGenerator extends Region implements RippleGenerator {
 	//================================================================================
 	// Properties

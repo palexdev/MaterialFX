@@ -19,7 +19,7 @@
 package io.github.palexdev.mfxresources.fonts;
 
 import io.github.palexdev.mfxeffects.beans.Position;
-import io.github.palexdev.mfxeffects.ripple.MFXCircleRippleGenerator;
+import io.github.palexdev.mfxeffects.ripple.MFXRippleGenerator;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
@@ -59,7 +59,7 @@ public class MFXIconWrapper extends StackPane {
 	private final String STYLE_CLASS = "mfx-icon-wrapper";
 
 	private final ObjectProperty<MFXFontIcon> icon = new SimpleObjectProperty<>();
-	private MFXCircleRippleGenerator rg;
+	private MFXRippleGenerator rg;
 	private EventHandler<MouseEvent> rHandler;
 
 	//================================================================================
@@ -94,7 +94,7 @@ public class MFXIconWrapper extends StackPane {
 		size.addListener((observable, oldValue, newValue) -> setPrefSize(newValue.doubleValue(), oldValue.doubleValue()));
 		rHandler = e -> {
 			if (e.getButton() == MouseButton.PRIMARY)
-				rg.generateRipple(e);
+				rg.generate(e);
 		};
 	}
 
@@ -130,8 +130,8 @@ public class MFXIconWrapper extends StackPane {
 		if (rg != null)
 			throw new IllegalStateException("Ripple generator has already been enabled for this icon!");
 
-		rg = new MFXCircleRippleGenerator(this);
-		rg.setRipplePositionFunction(positionFunction);
+		rg = new MFXRippleGenerator(this);
+		rg.setPositionFunction(positionFunction);
 		addEventHandler(MouseEvent.MOUSE_PRESSED, rHandler);
 		manageChildren();
 		setEnableRipple(true);
@@ -390,10 +390,10 @@ public class MFXIconWrapper extends StackPane {
 	//================================================================================
 
 	/**
-	 * @return the {@link MFXCircleRippleGenerator} instance for this wrapper, note that
+	 * @return the {@link MFXRippleGenerator} instance for this wrapper, note that
 	 * if the generator is not enabled this will return null
 	 */
-	public MFXCircleRippleGenerator getRippleGenerator() {
+	public MFXRippleGenerator getRippleGenerator() {
 		return rg;
 	}
 
