@@ -7,14 +7,14 @@ module mfx.components {
 	requires transitive mfx.resources;
 
 	// Behaviors
-	exports io.github.palexdev.materialfx.behaviors;
+	exports io.github.palexdev.mfxcomponents.behaviors;
 
 	// Controls
-	exports io.github.palexdev.materialfx.controls.buttons;
+	exports io.github.palexdev.mfxcomponents.controls.buttons;
 
 	// Skins
-	exports io.github.palexdev.materialfx.skins;
+	exports io.github.palexdev.mfxcomponents.skins;
 
 	// Theming
-	exports io.github.palexdev.materialfx.theming;
+	exports io.github.palexdev.mfxcomponents.theming;
 }

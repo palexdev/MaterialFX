@@ -16,11 +16,11 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.controls.buttons;
+package io.github.palexdev.mfxcomponents.controls.buttons;
 
-import io.github.palexdev.materialfx.behaviors.MFXButtonBehavior;
-import io.github.palexdev.materialfx.controls.base.MFXLabeled;
-import io.github.palexdev.materialfx.skins.MFXButtonSkin;
+import io.github.palexdev.mfxcomponents.behaviors.MFXButtonBehavior;
+import io.github.palexdev.mfxcomponents.controls.base.MFXLabeled;
+import io.github.palexdev.mfxcomponents.skins.MFXButtonSkin;
 import io.github.palexdev.mfxcore.base.properties.EventHandlerProperty;
 import io.github.palexdev.mfxcore.controls.SkinBase;
 import io.github.palexdev.mfxcore.observables.When;

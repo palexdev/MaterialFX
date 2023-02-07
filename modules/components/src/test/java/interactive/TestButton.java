@@ -19,7 +19,7 @@
 package interactive;
 
 import com.sun.javafx.tk.Toolkit;
-import io.github.palexdev.materialfx.controls.buttons.MFXButton;
+import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
 import javafx.scene.Scene;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;

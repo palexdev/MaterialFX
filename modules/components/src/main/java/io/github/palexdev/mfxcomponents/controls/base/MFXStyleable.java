@@ -16,30 +16,14 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.theming;
+package io.github.palexdev.mfxcomponents.controls.base;
 
-import javafx.css.PseudoClass;
-import javafx.scene.Node;
+import java.util.List;
 
 /**
- * This enumerator keeps references to custom {@link PseudoClass}es needed by MaterialFX components.
+ * Public API for all MaterialFX components that are styleable and integrated with the new Theming system.
  */
-public enum PseudoClasses {
-	WITH_ICON_LEFT(PseudoClass.getPseudoClass("with-icon-left")),
-	WITH_ICON_RIGHT(PseudoClass.getPseudoClass("with-icon-right")),
-	;
+public interface MFXStyleable {
 
-	private final PseudoClass pseudoClass;
-
-	PseudoClasses(PseudoClass pseudoClass) {
-		this.pseudoClass = pseudoClass;
-	}
-
-	public void setOn(Node node, boolean state) {
-		node.pseudoClassStateChanged(pseudoClass, state);
-	}
-
-	public PseudoClass getPseudoClass() {
-		return pseudoClass;
-	}
+	List<String> defaultStyleClasses();
 }

@@ -21,7 +21,7 @@ package app.buttons;
 import app.others.ui.MultipleViewApp;
 import app.others.ui.TitledFlowPane;
 import app.others.ui.ViewSwitcher;
-import io.github.palexdev.materialfx.controls.buttons.*;
+import io.github.palexdev.mfxcomponents.controls.buttons.*;
 import io.github.palexdev.mfxresources.MFXResources;
 import io.github.palexdev.mfxresources.fonts.IconsProviders;
 import javafx.application.Application;

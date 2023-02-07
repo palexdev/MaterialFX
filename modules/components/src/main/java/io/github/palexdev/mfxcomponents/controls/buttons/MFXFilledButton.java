@@ -16,39 +16,39 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.controls.buttons;
+package io.github.palexdev.mfxcomponents.controls.buttons;
 
 import javafx.scene.Node;
 
 import java.util.List;
 
 /**
- * Extension and variant of {@link MFXButton}, redefines the default style class to: '.mfx-button.tonal-filled'.
+ * Extension and variant of {@link MFXButton}, redefines the default style class to: '.mfx-button.filled'.
  *
  * @see <a href="https://www.w3schools.com/cssref/css_selectors.php">CSS Selectors</a>
  */
-public class MFXTonalFilledButton extends MFXButton {
+public class MFXFilledButton extends MFXButton {
 
 	//================================================================================
-	// Contractors
+	// Constructors
 	//================================================================================
-
-	public MFXTonalFilledButton() {
+	public MFXFilledButton() {
 	}
 
-	public MFXTonalFilledButton(String text) {
+	public MFXFilledButton(String text) {
 		super(text);
 	}
 
-	public MFXTonalFilledButton(String text, Node icon) {
+	public MFXFilledButton(String text, Node icon) {
 		super(text, icon);
 	}
 
 	//================================================================================
 	// Overridden Methods
 	//================================================================================
+
 	@Override
 	public List<String> defaultStyleClasses() {
-		return List.of("mfx-button", "tonal-filled");
+		return List.of("mfx-button", "filled");
 	}
 }

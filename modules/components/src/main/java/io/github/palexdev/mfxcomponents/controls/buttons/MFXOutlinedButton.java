@@ -16,7 +16,7 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.controls.buttons;
+package io.github.palexdev.mfxcomponents.controls.buttons;
 
 import javafx.scene.Node;
 

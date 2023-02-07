@@ -16,10 +16,10 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.behaviors;
+package io.github.palexdev.mfxcomponents.behaviors;
 
-import io.github.palexdev.materialfx.controls.buttons.MFXButton;
-import io.github.palexdev.materialfx.skins.MFXButtonSkin;
+import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
+import io.github.palexdev.mfxcomponents.skins.MFXButtonSkin;
 import io.github.palexdev.mfxcore.behavior.BehaviorBase;
 import io.github.palexdev.mfxeffects.ripple.MFXRippleGenerator;
 import javafx.scene.input.MouseEvent;

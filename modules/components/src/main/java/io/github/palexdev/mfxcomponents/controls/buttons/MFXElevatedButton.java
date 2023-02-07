@@ -16,7 +16,7 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.controls.buttons;
+package io.github.palexdev.mfxcomponents.controls.buttons;
 
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableObjectProperty;
 import io.github.palexdev.mfxcore.utils.fx.StyleUtils;
@@ -123,14 +123,14 @@ public class MFXElevatedButton extends MFXButton {
 	// CssMetaData
 	//================================================================================
 	private static class StyleableProperties {
-		private static final StyleablePropertyFactory<io.github.palexdev.materialfx.controls.buttons.MFXElevatedButton> FACTORY = new StyleablePropertyFactory<>(MFXButton.getClassCssMetaData());
+		private static final StyleablePropertyFactory<io.github.palexdev.mfxcomponents.controls.buttons.MFXElevatedButton> FACTORY = new StyleablePropertyFactory<>(MFXButton.getClassCssMetaData());
 		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
-		private static final CssMetaData<io.github.palexdev.materialfx.controls.buttons.MFXElevatedButton, ElevationLevel> ELEVATION =
+		private static final CssMetaData<io.github.palexdev.mfxcomponents.controls.buttons.MFXElevatedButton, ElevationLevel> ELEVATION =
 				FACTORY.createEnumCssMetaData(
 						ElevationLevel.class,
 						"-mfx-elevation",
-						io.github.palexdev.materialfx.controls.buttons.MFXElevatedButton::elevationProperty
+						io.github.palexdev.mfxcomponents.controls.buttons.MFXElevatedButton::elevationProperty
 				);
 
 		static {
