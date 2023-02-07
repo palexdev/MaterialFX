@@ -16,6 +16,13 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.15.2] - 07-02-2023
+
+## Changed
+
+- Rename materialfx package to mfxcomponents, for consistency with other modules
+- Make buttons use the new SceneBuilder integration API mentioned above
+
 ## [11.15.1] - 02-02-2023
 
 ## Added

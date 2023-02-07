@@ -16,6 +16,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.2.3] - 07-02-2023
+
+## Added
+
+- Introduce convenience API for components developers that want to easily integrate with SceneBuilder
+
 ## [11.2.2] - 02-02-2023
 
 ## Changed
