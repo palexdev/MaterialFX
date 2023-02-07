@@ -4,6 +4,7 @@ version = "$mfx"
 
 dependencies {
     api(project(":core"))
+    api(project(':effects'))
     api(project(":localization"))
     api(project(":resources"))
     api "io.github.palexdev:virtualizedfx:$vfx"

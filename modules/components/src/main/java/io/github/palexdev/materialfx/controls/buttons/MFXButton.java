@@ -23,6 +23,9 @@ import io.github.palexdev.materialfx.controls.base.MFXLabeled;
 import io.github.palexdev.materialfx.skins.MFXButtonSkin;
 import io.github.palexdev.mfxcore.base.properties.EventHandlerProperty;
 import io.github.palexdev.mfxcore.controls.SkinBase;
+import io.github.palexdev.mfxcore.observables.When;
+import io.github.palexdev.mfxcore.utils.fx.SceneBuilderIntegration;
+import io.github.palexdev.mfxresources.MFXResources;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -119,6 +122,18 @@ public class MFXButton extends MFXLabeled<MFXButtonBehavior> {
 	private void initialize() {
 		getStyleClass().setAll(defaultStyleClasses());
 		setDefaultBehaviorProvider();
+
+		// SceneBuilder integration
+		SceneBuilderIntegration.ifInSceneBuilder(() -> setText("Button"));
+		SceneBuilderIntegration.ifInSceneBuilder(() -> {
+			String theme = MFXResources.load("sass/md3/mfx-light.css");
+			When.onChanged(sceneProperty())
+					.condition((o, n) -> n != null && !n.getStylesheets().contains(theme))
+					.then((o, n) -> n.getStylesheets().add(theme))
+					.oneShot()
+					.listen();
+		});
+		// TODO theme integration with SceneBuilder will change once base themes and MFXThemeManager are implemented
 	}
 
 	/**

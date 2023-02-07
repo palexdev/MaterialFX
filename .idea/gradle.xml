@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/modules/core" />
             <option value="$PROJECT_DIR$/modules/effects" />
             <option value="$PROJECT_DIR$/modules/localization" />
+            <option value="$PROJECT_DIR$/modules/release" />
             <option value="$PROJECT_DIR$/modules/resources" />
           </set>
         </option>

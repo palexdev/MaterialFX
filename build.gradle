@@ -52,18 +52,24 @@ subprojects {
         targetCompatibility = "$jdk"
     }
 
+    // The ':all' module is ignored since it is a placeholder module and there is no module-info.java,
+    // making moduleOptions fail
     compileTestJava {
         sourceCompatibility = "$testJdk"
         targetCompatibility = "$testJdk"
-        moduleOptions {
-            compileOnClasspath = true
+        if (project.name != 'release') {
+            moduleOptions {
+                compileOnClasspath = true
+            }
         }
     }
 
     test {
         useJUnitPlatform()
-        moduleOptions {
-            runOnClasspath = true
+        if (project.name != 'release') {
+            moduleOptions {
+                runOnClasspath = true
+            }
         }
     }
 }

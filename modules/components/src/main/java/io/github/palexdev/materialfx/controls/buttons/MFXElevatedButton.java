@@ -42,11 +42,10 @@ public class MFXElevatedButton extends MFXButton {
 	// Constructors
 	//================================================================================
 	public MFXElevatedButton() {
-		this("");
 	}
 
 	public MFXElevatedButton(String text) {
-		this(text, null);
+		super(text, null);
 	}
 
 	public MFXElevatedButton(String text, Node icon) {

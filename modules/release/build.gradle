@@ -1,0 +1,42 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
+plugins {
+    id 'com.github.johnrengelman.shadow' version "$shadowJarPlugin"
+}
+
+version = "$mfx"
+
+dependencies {
+    api(project(':core'))
+    api(project(':components'))
+    api(project(":effects"))
+    api(project(':localization'))
+    api(project(':resources'))
+    api "io.github.palexdev:virtualizedfx:$vfx"
+}
+
+java {
+    tasks.withType(Jar).each { it.archiveBaseName.set("materialfx-all") }
+}
+
+// TODO rename materialfx package to mfxcomponents
+shadowJar {
+    mergeServiceFiles()
+    dependencies {
+        include(project(':core'))
+        include(project(':components'))
+        include(project(":effects"))
+        include(project(':localization'))
+        include(project(':resources'))
+    }
+}
+
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.S01)
+    signAllPublications()
+}
+
+jar {
+    enabled = false
+    dependsOn(shadowJar { classifier = null })
+}

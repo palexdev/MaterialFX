@@ -2,6 +2,7 @@ include 'components'
 include 'core'
 include 'effects'
 include 'localization'
+include 'release'
 include 'resources'
 
 rootProject.name = 'MaterialFX'
