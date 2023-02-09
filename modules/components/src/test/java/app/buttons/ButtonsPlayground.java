@@ -22,8 +22,12 @@ import app.others.ui.MultipleViewApp;
 import app.others.ui.TitledFlowPane;
 import app.others.ui.ViewSwitcher;
 import io.github.palexdev.mfxcomponents.controls.buttons.*;
+import io.github.palexdev.mfxcomponents.controls.fab.MFXExtendedFab;
+import io.github.palexdev.mfxcomponents.controls.fab.MFXFab;
+import io.github.palexdev.mfxcomponents.theming.enums.FABVariants;
+import io.github.palexdev.mfxcore.builders.InsetsBuilder;
 import io.github.palexdev.mfxresources.MFXResources;
-import io.github.palexdev.mfxresources.fonts.IconsProviders;
+import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.css.PseudoClass;
@@ -33,13 +37,15 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.util.function.BiFunction;
 
 import static io.github.palexdev.mfxresources.fonts.IconsProviders.FONTAWESOME_SOLID;
+import static io.github.palexdev.mfxresources.fonts.IconsProviders.randomIcon;
 
 public class ButtonsPlayground extends Application implements MultipleViewApp<String> {
 	//================================================================================
@@ -64,7 +70,11 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
 
 		header.getSelectionModel().selectFirst();
 
-		Scene scene = new Scene(root, 800, 800);
+		ScrollPane sp = new ScrollPane(root);
+		sp.setFitToWidth(true);
+		sp.setFitToHeight(true);
+
+		Scene scene = new Scene(sp, 800, 800);
 		loadStyleSheet(scene);
 		stage.setScene(scene);
 		stage.setTitle("Buttons Playground");
@@ -80,6 +90,8 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
 		switcher.register("tonal-filled-buttons", s -> tfbView());
 		switcher.register("outlined-buttons", s -> obView());
 		switcher.register("text-buttons", s -> tbView());
+		switcher.register("fabs", s -> fabView());
+		switcher.register("extended-fabs", s -> extendedFabView());
 	}
 
 	@Override
@@ -97,31 +109,55 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
 	//================================================================================
 
 	private Node ebView() {
-		return createButtonsView(MFXElevatedButton::new);
+		return createButtonsView("Elevated Buttons", MFXElevatedButton::new);
 	}
 
 	private Node fbView() {
-		return createButtonsView(MFXFilledButton::new);
+		return createButtonsView("Filled Buttons", MFXFilledButton::new);
 	}
 
 	private Node tfbView() {
-		return createButtonsView(MFXTonalFilledButton::new);
+		return createButtonsView("Tonal Filled Buttons", MFXTonalFilledButton::new);
 	}
 
 	private Node obView() {
-		return createButtonsView(MFXOutlinedButton::new);
+		return createButtonsView("Outlined Buttons", MFXOutlinedButton::new);
 	}
 
 	private Node tbView() {
-		return createButtonsView(600, MFXTextButton::new);
+		return createButtonsView("Text Buttons", 600, MFXTextButton::new);
 	}
 
-	private Node createButtonsView(BiFunction<String, Node, MFXButton> generator) {
-		return createButtonsView(700, generator);
+	private Node fabView() {
+		VBox box = new VBox(50);
+		box.setAlignment(Pos.TOP_CENTER);
+		box.setPadding(InsetsBuilder.all(10));
+		Node def = createFabsView("Floating Action Buttons", (s, i) -> new MFXFab(i));
+		Node surf = createFabsView("Floating Action Buttons (Surface)", (s, i) -> new MFXFab(i).setVariants(FABVariants.SURFACE));
+		Node sdy = createFabsView("Floating Action Buttons (Secondary)", (s, i) -> new MFXFab(i).setVariants(FABVariants.SECONDARY));
+		Node tty = createFabsView("Floating Action Buttons (Tertiary)", (s, i) -> new MFXFab(i).setVariants(FABVariants.TERTIARY));
+		box.getChildren().addAll(def, surf, sdy, tty);
+		return box;
 	}
 
-	private Node createButtonsView(double length, BiFunction<String, Node, MFXButton> generator) {
-		TitledFlowPane tfp = new TitledFlowPane("Filled Buttons");
+	private Node extendedFabView() {
+		VBox box = new VBox(50);
+		box.setAlignment(Pos.TOP_CENTER);
+		box.setPadding(InsetsBuilder.all(10));
+		Node def = createExtendedFabView("Extended FABs", MFXExtendedFab::new);
+		Node surf = createExtendedFabView("Extended FABs (Surface)", (s, i) -> new MFXExtendedFab(s, i).setVariants(FABVariants.SURFACE));
+		Node sdy = createExtendedFabView("Extended FABs (Secondary)", (s, i) -> new MFXExtendedFab(s, i).setVariants(FABVariants.SECONDARY));
+		Node tty = createExtendedFabView("Extended FABs (Tertiary)", (s, i) -> new MFXExtendedFab(s, i).setVariants(FABVariants.TERTIARY));
+		box.getChildren().addAll(def, surf, sdy, tty);
+		return box;
+	}
+
+	private Node createButtonsView(String title, BiFunction<String, Node, MFXButton> generator) {
+		return createButtonsView(title, 700, generator);
+	}
+
+	private Node createButtonsView(String title, double length, BiFunction<String, Node, MFXButton> generator) {
+		TitledFlowPane tfp = new TitledFlowPane(title);
 		tfp.setMaxWidth(length);
 
 		MFXButton btn0 = generator.apply("Enabled", null);
@@ -129,8 +165,8 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
 		MFXButton btn2 = generator.apply("Hovered", null);
 		MFXButton btn3 = generator.apply("Focused", null);
 		MFXButton btn4 = generator.apply("Pressed", null);
-		MFXButton btn5 = generator.apply("Icon Left", IconsProviders.randomIcon(FONTAWESOME_SOLID, 24.0, Color.TRANSPARENT));
-		MFXButton btn6 = generator.apply("Icon Right", IconsProviders.randomIcon(FONTAWESOME_SOLID, 24.0, Color.TRANSPARENT));
+		MFXButton btn5 = generator.apply("Icon Left", randomIcon(FONTAWESOME_SOLID));
+		MFXButton btn6 = generator.apply("Icon Right", randomIcon(FONTAWESOME_SOLID));
 		btn6.setContentDisplay(ContentDisplay.RIGHT);
 
 		btn1.setDisable(true);
@@ -143,5 +179,76 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
 
 		tfp.add(btn0, btn1, btn2, btn3, btn4, btn5, btn6);
 		return tfp;
+	}
+
+	private Node createFabsView(String title, BiFunction<String, MFXFontIcon, MFXFab> generator) {
+		return createFabsView(title, 700, generator);
+	}
+
+	private Node createFabsView(String title, double length, BiFunction<String, MFXFontIcon, MFXFab> generator) {
+		TitledFlowPane defTfp = new TitledFlowPane(title);
+		defTfp.setMaxWidth(length);
+
+		MFXButton btn0 = generator.apply("Enabled", randomIcon(FONTAWESOME_SOLID));
+		MFXButton btn1 = generator.apply("Disabled", randomIcon(FONTAWESOME_SOLID));
+		MFXButton btn2 = generator.apply("Hovered", randomIcon(FONTAWESOME_SOLID));
+		MFXButton btn3 = generator.apply("Focused", randomIcon(FONTAWESOME_SOLID));
+		MFXButton btn4 = generator.apply("Pressed", randomIcon(FONTAWESOME_SOLID));
+		MFXFab btn5 = generator.apply("Small", randomIcon(FONTAWESOME_SOLID));
+		MFXFab btn6 = generator.apply("Large", randomIcon(FONTAWESOME_SOLID));
+		MFXFab btn7 = generator.apply("Large Lowered", randomIcon(FONTAWESOME_SOLID));
+		MFXFab btn8 = generator.apply("Lowered Large", randomIcon(FONTAWESOME_SOLID));
+
+		btn1.setDisable(true);
+		btn2.setMouseTransparent(true);
+		btn2.pseudoClassStateChanged(PseudoClass.getPseudoClass("hover"), true);
+		btn3.setMouseTransparent(true);
+		btn3.pseudoClassStateChanged(PseudoClass.getPseudoClass("focused"), true);
+		btn4.setMouseTransparent(true);
+		btn4.pseudoClassStateChanged(PseudoClass.getPseudoClass("pressed"), true);
+		btn5.addVariants(FABVariants.SMALL);
+		btn6.addVariants(FABVariants.LARGE);
+		btn7.addVariants(FABVariants.LARGE, FABVariants.LOWERED);
+		btn8.addVariants(FABVariants.LOWERED, FABVariants.LARGE);
+
+		defTfp.add(btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8);
+		return defTfp;
+	}
+
+	private Node createExtendedFabView(String title, BiFunction<String, MFXFontIcon, MFXExtendedFab> generator) {
+		return createExtendedFabView(title, 700, generator);
+	}
+
+	private Node createExtendedFabView(String title, double length, BiFunction<String, MFXFontIcon, MFXExtendedFab> generator) {
+		TitledFlowPane defTfp = new TitledFlowPane(title);
+		defTfp.setMaxWidth(length);
+
+		MFXButton btn0 = generator.apply("Enabled", randomIcon(FONTAWESOME_SOLID));
+		MFXButton btn1 = generator.apply("Disabled", randomIcon(FONTAWESOME_SOLID));
+		MFXButton btn2 = generator.apply("Hovered", randomIcon(FONTAWESOME_SOLID));
+		MFXButton btn3 = generator.apply("Focused", randomIcon(FONTAWESOME_SOLID));
+		MFXButton btn4 = generator.apply("Pressed", randomIcon(FONTAWESOME_SOLID));
+		MFXExtendedFab btn5 = generator.apply("Text Only", randomIcon(FONTAWESOME_SOLID));
+		MFXExtendedFab btn6 = generator.apply("Icon to Right", randomIcon(FONTAWESOME_SOLID));
+		MFXExtendedFab btn7 = generator.apply("Lowered Text Only", randomIcon(FONTAWESOME_SOLID));
+		MFXExtendedFab btn8 = generator.apply("Lowered Icon to Right", randomIcon(FONTAWESOME_SOLID));
+
+		btn1.setDisable(true);
+		btn2.setMouseTransparent(true);
+		btn2.pseudoClassStateChanged(PseudoClass.getPseudoClass("hover"), true);
+		btn3.setMouseTransparent(true);
+		btn3.pseudoClassStateChanged(PseudoClass.getPseudoClass("focused"), true);
+		btn4.setMouseTransparent(true);
+		btn4.pseudoClassStateChanged(PseudoClass.getPseudoClass("pressed"), true);
+
+		btn5.setContentDisplay(ContentDisplay.TEXT_ONLY);
+		btn6.setContentDisplay(ContentDisplay.RIGHT);
+		btn7.addVariants(FABVariants.LOWERED);
+		btn7.setContentDisplay(ContentDisplay.TEXT_ONLY);
+		btn8.addVariants(FABVariants.LOWERED);
+		btn8.setContentDisplay(ContentDisplay.RIGHT);
+
+		defTfp.add(btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8);
+		return defTfp;
 	}
 }

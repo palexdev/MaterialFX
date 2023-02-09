@@ -16,30 +16,19 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.mfxcomponents.theming;
+package io.github.palexdev.mfxcomponents.theming.base;
 
-import javafx.css.PseudoClass;
-import javafx.scene.Node;
+import io.github.palexdev.mfxcomponents.theming.enums.FABVariants;
 
 /**
- * This enumerator keeps references to custom {@link PseudoClass}es needed by MaterialFX components.
+ * Depending on the components and the design guidelines, sometimes certain UI elements can have variants
+ * that mainly change in style.
+ * <p>
+ * This API allows in such cases to define variants by specifying a style class that can be applied to a component.
+ * <p></p>
+ * This is typically implemented by Enumerators, see {@link FABVariants} as an example. The public API allows other APIs
+ * (such as {@link WithVariants}) to apply the variant style class to the component.
  */
-public enum PseudoClasses {
-	WITH_ICON_LEFT(PseudoClass.getPseudoClass("with-icon-left")),
-	WITH_ICON_RIGHT(PseudoClass.getPseudoClass("with-icon-right")),
-	;
-
-	private final PseudoClass pseudoClass;
-
-	PseudoClasses(PseudoClass pseudoClass) {
-		this.pseudoClass = pseudoClass;
-	}
-
-	public void setOn(Node node, boolean state) {
-		node.pseudoClassStateChanged(pseudoClass, state);
-	}
-
-	public PseudoClass getPseudoClass() {
-		return pseudoClass;
-	}
+public interface Variant {
+	String variantStyleClass();
 }

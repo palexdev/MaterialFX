@@ -15,7 +15,7 @@ $ripple: 'primary';
   buttons_base.$padding: 0px 12px 0px 12px;
   buttons_base.$padding-i-left: 0px 16px 0px 12px;
   buttons_base.$padding-i-right: 0px 12px 0px 16px;
-  @include buttons_base.base($surface, $surface, $text, $surface, 0);
+  @include buttons_base.base($surface, $surface, $text, 0);
   @include buttons_base.disabled();
   @include buttons_base.hover(state_layer($surface, 'primary', 'hover'), $surface, 2);
   @include buttons_base.focus_press(state_layer($surface, 'primary', 'pressed'), $surface, 1);

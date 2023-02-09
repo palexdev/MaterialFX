@@ -18,8 +18,12 @@
 
 package io.github.palexdev.mfxcore.utils.fx;
 
+import java.io.IOException;
 import java.lang.StackWalker.Option;
 import java.lang.StackWalker.StackFrame;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.Set;
 
 /**
@@ -45,6 +49,7 @@ public class SceneBuilderIntegration {
 	private static Boolean inSceneBuilder = null;
 	private static int depth = 10;
 	private static boolean isDepthInvalid = false;
+	public static final Path DEFAULT_DEBUG_FILE = Path.of(System.getProperty("user.home") + "/SceneBuilderIntegrationDebug.log");
 
 	//================================================================================
 	// Constructors
@@ -92,5 +97,20 @@ public class SceneBuilderIntegration {
 	public static void setDepth(int depth) {
 		SceneBuilderIntegration.depth = depth;
 		SceneBuilderIntegration.isDepthInvalid = true;
+	}
+
+	/**
+	 * Creates a new file at the given {@link Path} if non-existent, then writes the given debug String
+	 * in it. The 'truncate' boolean flag specifies whether to append the string or clear the file content first.
+	 * <p></p>
+	 * For the path you can also use {@link #DEFAULT_DEBUG_FILE} which points at the 'user.home' directory, and
+	 * creates a 'SceneBuilderIntegrationDebug.log' file in it.
+	 */
+	public static void debug(Path file, boolean truncate, String debug) {
+		try {
+			StandardOpenOption wrOpt = truncate ? StandardOpenOption.TRUNCATE_EXISTING : StandardOpenOption.APPEND;
+			Files.writeString(file, debug + "\n", StandardOpenOption.CREATE, StandardOpenOption.WRITE, wrOpt);
+		} catch (IOException ignored) {
+		}
 	}
 }

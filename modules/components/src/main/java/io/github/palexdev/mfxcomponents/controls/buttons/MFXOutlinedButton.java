@@ -33,10 +33,11 @@ public class MFXOutlinedButton extends MFXButton {
 	// Constructors
 	//================================================================================
 	public MFXOutlinedButton() {
+		this("");
 	}
 
 	public MFXOutlinedButton(String text) {
-		super(text);
+		this(text, null);
 	}
 
 	public MFXOutlinedButton(String text, Node icon) {

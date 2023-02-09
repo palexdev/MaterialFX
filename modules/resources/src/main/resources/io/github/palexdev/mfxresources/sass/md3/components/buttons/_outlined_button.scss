@@ -5,7 +5,6 @@
  ****************************************************************************************************/
 
 $surface: 'surface';
-$onSurface: 'primary';
 $surfaceTint: 'primary';
 $text: 'primary';
 $icon: 'primary';
@@ -13,7 +12,7 @@ $ripple: 'primary';
 
 .mfx-button.outlined {
   @include buttons_base.outline();
-  @include buttons_base.base($surface, $onSurface, $text, $surfaceTint, 0);
+  @include buttons_base.base($surface, $surfaceTint, $text, 0);
   @include buttons_base.disabled();
   @include buttons_base.hover($surface, $surfaceTint, 0);
   @include buttons_base.focus_press($surface, $surfaceTint, 0);

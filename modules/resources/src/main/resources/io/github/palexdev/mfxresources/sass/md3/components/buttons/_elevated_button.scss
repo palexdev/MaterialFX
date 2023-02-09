@@ -4,14 +4,13 @@
  * Elevated Buttons
  ****************************************************************************************************/
 $surface: 'surface';
-$onSurface: 'on-surface';
 $surfaceTint: 'surface-tint';
 $text: 'primary';
 $icon: 'primary';
 $ripple: 'primary';
 
 .mfx-button.elevated {
-  @include buttons_base.base($surface, $onSurface, $text, $surfaceTint, 1);
+  @include buttons_base.base($surface, $surfaceTint, $text, 1);
   @include buttons_base.disabled();
   @include buttons_base.hover($surface, $surfaceTint, 2);
   @include buttons_base.focus_press($surface, $surfaceTint, 1);

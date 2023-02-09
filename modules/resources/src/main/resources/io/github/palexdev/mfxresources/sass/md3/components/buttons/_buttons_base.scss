@@ -7,7 +7,7 @@ $padding: 0px 24px 0px 24px !default;
 $padding-i-left: 0px 24px 0px 16px !default;
 $padding-i-right: 0px 16px 0px 24px !default;
 
-@mixin base($surface, $onSurface, $text, $surfaceTint, $elevation) {
+@mixin base($surface, $surfaceTint, $text, $elevation) {
   @include label_large();
   -fx-text-fill: get_scheme_color($text);
   @if (type-of($surface) == color) {
@@ -16,9 +16,9 @@ $padding-i-right: 0px 16px 0px 24px !default;
     -fx-background-color: elevate($surface, $surfaceTint, $elevation);
   }
   -fx-background-radius: 20px;
-  -fx-pref-height: 40px;
   -fx-padding: $padding;
   -fx-graphic-text-gap: 8px;
+  -mfx-init-height: 40px;
   -mfx-elevation: unquote("LEVEL" + $elevation);
 }
 
@@ -81,7 +81,6 @@ $padding-i-right: 0px 16px 0px 24px !default;
   &:with-icon-right {
     -fx-padding: $padding-i-right;
   }
-
 }
 
 @mixin ripple($color) {

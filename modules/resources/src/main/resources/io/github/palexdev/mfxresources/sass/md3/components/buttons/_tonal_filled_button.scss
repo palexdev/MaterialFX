@@ -4,14 +4,13 @@
  * Tonal Filled Buttons
  ****************************************************************************************************/
 $surface: 'secondary-container';
-$onSurface: 'on-secondary-container';
 $surfaceTint: 'on-secondary-container';
 $text: 'on-secondary-container';
 $icon: 'on-secondary-container';
 $ripple: 'on-secondary-container';
 
 .mfx-button.tonal-filled {
-  @include buttons_base.base($surface, $onSurface, $text, $surfaceTint, 0);
+  @include buttons_base.base($surface, $surfaceTint, $text, 0);
   @include buttons_base.disabled();
   @include buttons_base.hover($surface, $surfaceTint, 1);
   @include buttons_base.focus_press($surface, $surfaceTint, 0);

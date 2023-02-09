@@ -10,11 +10,14 @@ module mfx.components {
 	exports io.github.palexdev.mfxcomponents.behaviors;
 
 	// Controls
+	exports io.github.palexdev.mfxcomponents.controls.base;
 	exports io.github.palexdev.mfxcomponents.controls.buttons;
+	exports io.github.palexdev.mfxcomponents.controls.fab;
 
 	// Skins
 	exports io.github.palexdev.mfxcomponents.skins;
 
 	// Theming
-	exports io.github.palexdev.mfxcomponents.theming;
+	exports io.github.palexdev.mfxcomponents.theming.base;
+	exports io.github.palexdev.mfxcomponents.theming.enums;
 }

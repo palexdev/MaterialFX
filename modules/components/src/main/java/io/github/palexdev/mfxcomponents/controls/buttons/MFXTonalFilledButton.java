@@ -34,10 +34,11 @@ public class MFXTonalFilledButton extends MFXButton {
 	//================================================================================
 
 	public MFXTonalFilledButton() {
+		this("");
 	}
 
 	public MFXTonalFilledButton(String text) {
-		super(text);
+		this(text, null);
 	}
 
 	public MFXTonalFilledButton(String text, Node icon) {

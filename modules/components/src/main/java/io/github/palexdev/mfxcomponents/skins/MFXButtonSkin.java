@@ -20,7 +20,8 @@ package io.github.palexdev.mfxcomponents.skins;
 
 import io.github.palexdev.mfxcomponents.behaviors.MFXButtonBehavior;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
-import io.github.palexdev.mfxcomponents.theming.PseudoClasses;
+import io.github.palexdev.mfxcomponents.controls.fab.MFXFab;
+import io.github.palexdev.mfxcomponents.theming.enums.PseudoClasses;
 import io.github.palexdev.mfxcore.controls.BoundLabel;
 import io.github.palexdev.mfxcore.controls.SkinBase;
 import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
@@ -76,7 +77,6 @@ public class MFXButtonSkin extends SkinBase<MFXButton, MFXButtonBehavior> {
 	/**
 	 * Adds the following listeners:
 	 * <p> - A listener on the {@link MFXButton#behaviorProviderProperty()} to update the control's behavior when the provider changes
-	 * <p> - A listener on the {@link MFXButton#graphicProperty()} to update the graphic node when it changes
 	 * <p> - A listener on the {@link MFXButton#contentDisplayProperty()} to activate/disable the pseudo classes
 	 * {@link PseudoClasses#WITH_ICON_LEFT} and {@link PseudoClasses#WITH_ICON_RIGHT} accordingly
 	 */
@@ -86,24 +86,20 @@ public class MFXButtonSkin extends SkinBase<MFXButton, MFXButtonBehavior> {
 				.then((o, n) -> setBehavior(n.get()))
 				.executeNow()
 				.listen();
-		onChanged(button.graphicProperty())
-				.then((o, n) -> {
-					if (o != null) getChildren().remove(o);
-					if (n != null) getChildren().add(n);
-				})
-				.executeNow()
-				.listen();
-		onChanged(button.contentDisplayProperty())
-				.then((o, n) -> {
-					Node graphic = button.getGraphic();
-					boolean wil = (graphic != null) && (n == ContentDisplay.LEFT);
-					boolean wir = (graphic != null) && (n == ContentDisplay.RIGHT);
-					PseudoClasses.WITH_ICON_LEFT.setOn(button, wil);
-					PseudoClasses.WITH_ICON_RIGHT.setOn(button, wir);
-				})
-				.executeNow()
-				.invalidating(button.graphicProperty())
-				.listen();
+
+		if (!(button instanceof MFXFab)) {
+			onChanged(button.contentDisplayProperty())
+					.then((o, n) -> {
+						Node graphic = button.getGraphic();
+						boolean wil = (graphic != null) && (n == ContentDisplay.LEFT);
+						boolean wir = (graphic != null) && (n == ContentDisplay.RIGHT);
+						PseudoClasses.WITH_ICON_LEFT.setOn(button, wil);
+						PseudoClasses.WITH_ICON_RIGHT.setOn(button, wir);
+					})
+					.executeNow()
+					.invalidating(button.graphicProperty())
+					.listen();
+		}
 	}
 
 	//================================================================================
@@ -162,7 +158,7 @@ public class MFXButtonSkin extends SkinBase<MFXButton, MFXButtonBehavior> {
 	@Override
 	public void dispose() {
 		MFXButton button = getSkinnable();
-		disposeFor(button.graphicProperty());
+		disposeFor(button.behaviorProviderProperty());
 		disposeFor(button.contentDisplayProperty());
 		super.dispose();
 	}

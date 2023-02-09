@@ -42,10 +42,11 @@ public class MFXElevatedButton extends MFXButton {
 	// Constructors
 	//================================================================================
 	public MFXElevatedButton() {
+		this("");
 	}
 
 	public MFXElevatedButton(String text) {
-		super(text, null);
+		this(text, null);
 	}
 
 	public MFXElevatedButton(String text, Node icon) {
@@ -74,7 +75,8 @@ public class MFXElevatedButton extends MFXButton {
 	private final StyleableObjectProperty<ElevationLevel> elevation = new StyleableObjectProperty<>(
 			StyleableProperties.ELEVATION,
 			this,
-			"elevation"
+			"elevation",
+			ElevationLevel.LEVEL0
 	) {
 		@Override
 		public void set(ElevationLevel newValue) {
@@ -95,7 +97,7 @@ public class MFXElevatedButton extends MFXButton {
 			}
 
 			ElevationLevel oldValue = get();
-			if (oldValue != newValue)
+			if (oldValue != null && newValue != null && oldValue != newValue)
 				oldValue.animateTo((DropShadow) effect, newValue);
 			super.set(newValue);
 		}
@@ -123,14 +125,15 @@ public class MFXElevatedButton extends MFXButton {
 	// CssMetaData
 	//================================================================================
 	private static class StyleableProperties {
-		private static final StyleablePropertyFactory<io.github.palexdev.mfxcomponents.controls.buttons.MFXElevatedButton> FACTORY = new StyleablePropertyFactory<>(MFXButton.getClassCssMetaData());
+		private static final StyleablePropertyFactory<MFXElevatedButton> FACTORY = new StyleablePropertyFactory<>(MFXButton.getClassCssMetaData());
 		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
-		private static final CssMetaData<io.github.palexdev.mfxcomponents.controls.buttons.MFXElevatedButton, ElevationLevel> ELEVATION =
+		private static final CssMetaData<MFXElevatedButton, ElevationLevel> ELEVATION =
 				FACTORY.createEnumCssMetaData(
 						ElevationLevel.class,
 						"-mfx-elevation",
-						io.github.palexdev.mfxcomponents.controls.buttons.MFXElevatedButton::elevationProperty
+						MFXElevatedButton::elevationProperty,
+						ElevationLevel.LEVEL0
 				);
 
 		static {

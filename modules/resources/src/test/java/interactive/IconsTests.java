@@ -44,7 +44,6 @@ import org.testfx.framework.junit5.Start;
 
 import java.util.Optional;
 import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -187,7 +186,7 @@ public class IconsTests {
 	}
 
 	@Test
-	void testWrap(FxRobot robot) throws InterruptedException, TimeoutException {
+	void testWrap(FxRobot robot) throws InterruptedException {
 		StackPane root = setupStage();
 		MFXIconWrapper wrapper = new MFXFontIcon(FontAwesomeSolid.CIRCLE.getDescription(), 64.0).wrap();
 		robot.interact(() -> root.getChildren().setAll(wrapper));
@@ -210,7 +209,6 @@ public class IconsTests {
 		));
 		Thread.sleep(sleep);
 
-		AtomicBoolean ripple = new AtomicBoolean(false);
 		robot.interact(() -> {
 			wrapper.getIcon().setDescription(FontAwesomeRegular.SQUARE.getDescription());
 			wrapper.setStyle("-mfx-enable-ripple: true;\n-mfx-round: true;\n");
@@ -225,6 +223,10 @@ public class IconsTests {
 		robot.interact(() -> wrapper.setStyle(null));
 		assertNull(wrapper.getClip());
 		assertEquals(1, wrapper.getChildren().size());
+
+		new MFXIconWrapper();
+		new MFXIconWrapper(null);
+		new MFXIconWrapper(null, 32.0);
 	}
 
 	private StackPane setupStage() {

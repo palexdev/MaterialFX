@@ -33,10 +33,11 @@ public class MFXFilledButton extends MFXButton {
 	// Constructors
 	//================================================================================
 	public MFXFilledButton() {
+		this("");
 	}
 
 	public MFXFilledButton(String text) {
-		super(text);
+		this(text, null);
 	}
 
 	public MFXFilledButton(String text, Node icon) {

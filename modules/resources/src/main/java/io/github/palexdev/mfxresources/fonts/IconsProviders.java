@@ -96,10 +96,47 @@ public enum IconsProviders implements IconProvider {
 	}
 
 	/**
+	 * Creates a new {@link MFXFontIcon} with a random icon description extracted from the values of "this" enumerator
+	 * constant.
+	 */
+	public MFXFontIcon randomIcon() {
+		MFXFontIcon icon = new MFXFontIcon();
+		String desc;
+		switch (this) {
+			case FONTAWESOME_BRANDS: {
+				icon.setIconsProvider(FONTAWESOME_BRANDS);
+				desc = EnumUtils.randomEnum(FontAwesomeBrands.class).getDescription();
+				break;
+			}
+			case FONTAWESOME_REGULAR: {
+				icon.setIconsProvider(FONTAWESOME_REGULAR);
+				desc = EnumUtils.randomEnum(FontAwesomeRegular.class).getDescription();
+				break;
+			}
+			case FONTAWESOME_SOLID: {
+				icon.setIconsProvider(FONTAWESOME_SOLID);
+				desc = EnumUtils.randomEnum(FontAwesomeSolid.class).getDescription();
+				break;
+			}
+			default:
+				return icon;
+		}
+		icon.setDescription(desc);
+		return icon;
+	}
+
+	/**
 	 * Same as {@link #randomIcon(double, Color)}, allows usage from a static context.
 	 */
 	public static MFXFontIcon randomIcon(IconsProviders provider, double size, Color color) {
 		return provider.randomIcon(size, color);
+	}
+
+	/**
+	 * Same as {@link #randomIcon()}, allows usage from a static context.
+	 */
+	public static MFXFontIcon randomIcon(IconsProviders provider) {
+		return provider.randomIcon();
 	}
 
 	/**

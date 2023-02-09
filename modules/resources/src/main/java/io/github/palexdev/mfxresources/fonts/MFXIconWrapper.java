@@ -20,8 +20,7 @@ package io.github.palexdev.mfxresources.fonts;
 
 import io.github.palexdev.mfxeffects.beans.Position;
 import io.github.palexdev.mfxeffects.ripple.MFXRippleGenerator;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import io.github.palexdev.mfxresources.base.properties.IconProperty;
 import javafx.collections.ObservableList;
 import javafx.css.*;
 import javafx.event.EventHandler;
@@ -58,7 +57,7 @@ public class MFXIconWrapper extends StackPane {
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-icon-wrapper";
 
-	private final ObjectProperty<MFXFontIcon> icon = new SimpleObjectProperty<>();
+	private final IconProperty icon = new IconProperty();
 	private MFXRippleGenerator rg;
 	private EventHandler<MouseEvent> rHandler;
 
@@ -404,7 +403,7 @@ public class MFXIconWrapper extends StackPane {
 	/**
 	 * Specifies the currently contained {@link MFXFontIcon}.
 	 */
-	public ObjectProperty<MFXFontIcon> iconProperty() {
+	public IconProperty iconProperty() {
 		return icon;
 	}
 

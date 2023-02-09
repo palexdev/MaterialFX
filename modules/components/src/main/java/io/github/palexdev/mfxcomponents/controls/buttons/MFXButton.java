@@ -122,18 +122,7 @@ public class MFXButton extends MFXLabeled<MFXButtonBehavior> {
 	private void initialize() {
 		getStyleClass().setAll(defaultStyleClasses());
 		setDefaultBehaviorProvider();
-
-		// SceneBuilder integration
-		SceneBuilderIntegration.ifInSceneBuilder(() -> setText("Button"));
-		SceneBuilderIntegration.ifInSceneBuilder(() -> {
-			String theme = MFXResources.load("sass/md3/mfx-light.css");
-			When.onChanged(sceneProperty())
-					.condition((o, n) -> n != null && !n.getStylesheets().contains(theme))
-					.then((o, n) -> n.getStylesheets().add(theme))
-					.oneShot()
-					.listen();
-		});
-		// TODO theme integration with SceneBuilder will change once base themes and MFXThemeManager are implemented
+		sceneBuilderIntegration();
 	}
 
 	/**
@@ -160,6 +149,20 @@ public class MFXButton extends MFXLabeled<MFXButtonBehavior> {
 	@Override
 	protected SkinBase<?, ?> createDefaultSkin() {
 		return new MFXButtonSkin(this);
+	}
+
+	@Override
+	protected void sceneBuilderIntegration() {
+		SceneBuilderIntegration.ifInSceneBuilder(() -> setText("Button"));
+		SceneBuilderIntegration.ifInSceneBuilder(() -> {
+			String theme = MFXResources.load("sass/md3/mfx-light.css");
+			When.onChanged(sceneProperty())
+					.condition((o, n) -> n != null && !n.getStylesheets().contains(theme))
+					.then((o, n) -> n.getStylesheets().add(theme))
+					.oneShot()
+					.listen();
+		});
+		// TODO theme integration with SceneBuilder will change once base themes and MFXThemeManager are implemented
 	}
 
 	//================================================================================

@@ -1,0 +1,155 @@
+@use 'buttons_base';
+@use '../../abstracts/elevation_utils' as *;
+@use '../../abstracts/theme_utils' as *;
+
+// Base mixins, these are different from common buttons base
+@mixin fab_base($surface, $surfaceTint, $elevation) {
+  -fx-background-color: get_scheme_color($surface);
+  -fx-background-radius: 16px;
+  -mfx-init-height: 56px;
+  -mfx-init-width: 56px;
+  -mfx-elevation: unquote("LEVEL" + $elevation);
+
+  &.small {
+    -fx-background-radius: 12px;
+    -mfx-init-height: 40px;
+    -mfx-init-width: 40px;
+  }
+
+  &.large {
+    -fx-background-radius: 28px;
+    -mfx-init-height: 96px;
+    -mfx-init-width: 96px;
+  }
+}
+
+@mixin fab_lowered($def_elevation, $hover_elevation, $focus_press_elevation) {
+  &.lowered {
+    -mfx-elevation: unquote("LEVEL" + $def_elevation);
+  }
+
+  &.lowered:hover {
+    -mfx-elevation: unquote("LEVEL" + $hover_elevation);
+  }
+
+  &.lowered:focused,
+  &.lowered:pressed {
+    -mfx-elevation: unquote("LEVEL" + $focus_press_elevation);
+  }
+}
+
+@mixin fab_disabled() {
+  &:disabled > .label {
+    -fx-opacity: 1.0;
+  }
+}
+
+@mixin fab_hover($surface, $surfaceTint, $elevation) {
+  &:hover {
+    -fx-background-color: state_layer(get_scheme_color($surface), $surfaceTint, 'hover');
+    -mfx-elevation: unquote("LEVEL" + $elevation);
+  }
+}
+
+@mixin fab_focus_press($surface, $surfaceTint, $elevation) {
+  &:focused,
+  &:pressed {
+    -fx-background-color: state_layer(get_scheme_color($surface), $surfaceTint, 'focused');
+    -mfx-elevation: unquote("LEVEL" + $elevation);
+  }
+}
+
+@mixin fab_icon($color) {
+  $s_size: 24px;
+  $m_size: 24px;
+  $l_size: 36px;
+
+  .mfx-font-icon {
+    -mfx-color: get_scheme_color($color);
+    -mfx-size: $m_size;
+  }
+
+  &.small .mfx-font-icon {
+    -mfx-size: $s_size;
+  }
+
+  &.large .mfx-font-icon {
+    -mfx-size: $l_size;
+  }
+}
+
+/****************************************************************************************************
+ * FAB Primary
+ ****************************************************************************************************/
+$pmy_surface: 'primary-container';
+$pmy_tint: 'on-primary-container';
+$pmy_text: 'primary-container';
+$pmy_icon: 'on-primary-container';
+$pmy_ripple: 'on-primary-container';
+
+.mfx-button.fab {
+  @include fab_base($pmy_surface, $pmy_tint, 3);
+  @include fab_disabled();
+  @include fab_hover($pmy_surface, $pmy_tint, 4);
+  @include fab_focus_press($pmy_surface, $pmy_tint, 3);
+  @include fab_icon($pmy_icon);
+  @include buttons_base.ripple($pmy_ripple);
+  @include fab_lowered(1, 2, 1);
+}
+
+/****************************************************************************************************
+ * FAB Surface
+ ****************************************************************************************************/
+$sfe_surface: 'surface';
+$sfe_tint: 'primary';
+$sfe_text: 'surface';
+$sfe_icon: 'primary';
+$sfe_ripple: 'primary';
+
+.mfx-button.fab.surface {
+  @include fab_base($sfe_surface, $sfe_tint, 3);
+  @include fab_disabled();
+  @include fab_hover($sfe_surface, $sfe_tint, 4);
+  @include fab_focus_press($sfe_surface, $sfe_tint, 3);
+  @include fab_icon($sfe_icon);
+  @include buttons_base.ripple($sfe_ripple);
+  @include fab_lowered(1, 2, 1);
+}
+
+/****************************************************************************************************
+ * FAB Secondary
+ ****************************************************************************************************/
+$sdy_surface: 'secondary-container';
+$sdy_tint: 'on-secondary-container';
+$sdy_text: 'secondary-container';
+$sdy_icon: 'on-secondary-container';
+$sdy_ripple: 'on-secondary-container';
+
+.mfx-button.fab.secondary {
+  @include fab_base($sdy_surface, $sdy_tint, 3);
+  @include fab_disabled();
+  @include fab_hover($sdy_surface, $sdy_tint, 4);
+  @include fab_focus_press($sdy_surface, $sdy_tint, 3);
+  @include fab_icon($sdy_icon);
+  @include buttons_base.ripple($sdy_ripple);
+  @include fab_lowered(1, 2, 1);
+}
+
+/****************************************************************************************************
+ * FAB Tertiary
+ ****************************************************************************************************/
+$tty_surface: 'tertiary-container';
+$tty_tint: 'on-tertiary-container';
+$tty_text: 'tertiary-container';
+$tty_icon: 'on-tertiary-container';
+$tty_ripple: 'on-tertiary-container';
+
+.mfx-button.fab.tertiary {
+  @include fab_base($tty_surface, $tty_tint, 3);
+  @include fab_disabled();
+  @include fab_hover($tty_surface, $tty_tint, 4);
+  @include fab_focus_press($tty_surface, $tty_tint, 3);
+  @include fab_icon($tty_icon);
+  @include buttons_base.ripple($tty_ripple);
+  @include fab_lowered(1, 2, 1);
+}

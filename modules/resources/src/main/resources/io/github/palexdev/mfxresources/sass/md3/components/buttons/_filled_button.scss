@@ -4,14 +4,13 @@
  * Filled Buttons
  ****************************************************************************************************/
 $surface: 'primary';
-$onSurface: 'on-primary';
 $surfaceTint: 'on-primary';
 $text: 'on-primary';
 $icon: 'on-primary';
 $ripple: 'on-primary';
 
 .mfx-button.filled {
-  @include buttons_base.base($surface, $onSurface, $text, $surfaceTint, 0);
+  @include buttons_base.base($surface, $surfaceTint, $text, 0);
   @include buttons_base.disabled();
   @include buttons_base.hover($surface, $surfaceTint, 1);
   @include buttons_base.focus_press($surface, $surfaceTint, 0);

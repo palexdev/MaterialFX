@@ -3,8 +3,11 @@ module mfx.resources {
 
 	requires transitive javafx.graphics;
 
-	// Base
+	// Root
 	exports io.github.palexdev.mfxresources;
+
+	// Base
+	exports io.github.palexdev.mfxresources.base.properties;
 
 	// Builders
 	exports io.github.palexdev.mfxresources.builders;

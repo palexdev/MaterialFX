@@ -101,10 +101,10 @@ public enum ElevationLevel {
 	public void animateTo(DropShadow current, ElevationLevel next) {
 		Interpolator i = BezierEasing.EASE;
 		TimelineBuilder.build()
-				.add(KeyFrames.of(50, current.offsetXProperty(), next.getOffsetX(), i))
-				.add(KeyFrames.of(50, current.offsetYProperty(), next.getOffsetY(), i))
-				.add(KeyFrames.of(50, current.radiusProperty(), next.getRadius(), i))
-				.add(KeyFrames.of(50, current.spreadProperty(), next.getSpread(), i))
+				.add(KeyFrames.of(1, current.offsetXProperty(), next.getOffsetX(), i))
+				.add(KeyFrames.of(1, current.offsetYProperty(), next.getOffsetY(), i))
+				.add(KeyFrames.of(250, current.radiusProperty(), next.getRadius(), i))
+				.add(KeyFrames.of(250, current.spreadProperty(), next.getSpread(), i))
 				.getAnimation().play();
 	}
 
