@@ -16,6 +16,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.0.4] - 09-02-2023
+
+## Changed
+
+- ElevationLevel: hopefully for the last time, improve the shadows transition animation
+
 ## [11.0.3] - 02-02-2023
 
 ## Changed

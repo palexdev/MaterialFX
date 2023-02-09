@@ -16,6 +16,13 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.16.0] - 09-02-2023
+
+- Bump components and release modules to version 11.16.0
+- Bump core module to version 11.2.4
+- Bump effects module to version 11.0.4
+- Bump resources module to version 11.2.0
+
 ## [11.15.2] - 07-02-2023
 
 - This new module allows to pack all MaterialFX dependencies in a single artifact. This allows easy utilization in

@@ -16,6 +16,19 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.2.0] - 09-02-2023
+
+## Added
+
+- Added two new properties for MFXFontIcons and MFXIconWrappers
+- IconsProviders: added a new no-arg method to create a random MFXFontIcon
+- Added stylesheets for FABs
+
+## Changed
+
+- Buttons: use the new init sizes properties instead of the JavaFX's ones (pref).
+- Buttons: remove the onSurface parameter as it was unused
+
 ## [11.1.2] - 07-02-2023
 
 ## Changed

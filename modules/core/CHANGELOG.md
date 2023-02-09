@@ -16,6 +16,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.2.4] - 09-02-2023
+
+## Added
+
+- SceneBuilderIntegration: added new method for debugging while in SceneBuilder
+
 ## [11.2.3] - 07-02-2023
 
 ## Added
