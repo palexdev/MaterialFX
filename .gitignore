@@ -42,4 +42,3 @@ bin/
 .DS_Store
 
 scenicView.properties
-modules/resources/src/main/resources/io/github/palexdev/mfxresources/sass/md3/*.css

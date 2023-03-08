@@ -1,0 +1,10 @@
+[
+  {
+    "name": "Default",
+    "desc": "Write documentation for the new added Curves, and document the all the other related changes (add videos from Flutter too)",
+    "fFile": "/modules/effects/src/main/java/io/github/palexdev/mfxeffects/animations/motion/Motion.java",
+    "files": [
+      "/modules/effects/src/main/java/io/github/palexdev/mfxeffects/animations/motion/Motion.java"
+    ]
+  }
+]
