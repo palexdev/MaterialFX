@@ -23,12 +23,15 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Ported many of the Curves/Interpolators used by the Flutter framework for animations to JavaFX
 - Animations: Added new method to TimelineBuilder
 - Introduced Offset bean needed by some Flutter Curves
+- Introduce new container capable of replicating the Container Transform animations as shown by Material 3 guidelines
+- Imported and allow export of some beans and utilities from MFXCore
 
 ## Changed
 
 - AnimationFactory: allow to build animations with a specific Interpolator or a default one
 - Improved efficiency of MFXRippleGenerators when disabled through the visible property. This was needed especially
   because in CSS you cannot set the disable state but only the visibility
+- Moved Curve to new base package
 
 ## Removed
 

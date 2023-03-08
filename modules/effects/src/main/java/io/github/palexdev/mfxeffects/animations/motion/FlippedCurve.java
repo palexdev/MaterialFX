@@ -18,7 +18,7 @@
 
 package io.github.palexdev.mfxeffects.animations.motion;
 
-import io.github.palexdev.mfxeffects.animations.motion.base.Curve;
+import io.github.palexdev.mfxeffects.animations.base.Curve;
 
 /**
  * This {@link Curve} is capable of flipping the motion of other curves:

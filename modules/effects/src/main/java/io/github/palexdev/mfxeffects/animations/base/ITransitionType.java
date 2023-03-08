@@ -16,28 +16,14 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.mfxeffects.animations.motion;
+package io.github.palexdev.mfxeffects.animations.base;
 
-import io.github.palexdev.mfxeffects.animations.base.Curve;
+import io.github.palexdev.mfxeffects.animations.TransitionPane;
+import javafx.animation.Animation;
+import javafx.scene.Node;
 
-/**
- * A sawtooth curve that repeats a given number of times over the unit interval.
- * <p>
- * The curve rises linearly from 0.0 to 1.0 and then falls discontinuously back
- * to 0.0 each iteration.
- * <p>
- * <a href=https://flutter.github.io/assets-for-api-docs/assets/animation/curve_sawtooth.mp4>SawTooth</a>
- */
-public class SawTooth extends Curve {
-	private final int count;
+public interface ITransitionType {
+	Animation open(TransitionPane pane, Node openNode, Node closedNode);
 
-	public SawTooth(int count) {
-		this.count = count;
-	}
-
-	@Override
-	public double curve(double t) {
-		t *= count;
-		return t - (int) t;
-	}
+	Animation close(TransitionPane pane, Node openNode, Node closedNode);
 }

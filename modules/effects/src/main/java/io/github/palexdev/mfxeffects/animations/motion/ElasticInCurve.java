@@ -18,7 +18,7 @@
 
 package io.github.palexdev.mfxeffects.animations.motion;
 
-import io.github.palexdev.mfxeffects.animations.motion.base.Curve;
+import io.github.palexdev.mfxeffects.animations.base.Curve;
 
 /**
  * An oscillating curve that grows in {@code magnitude} while overshooting its bounds.

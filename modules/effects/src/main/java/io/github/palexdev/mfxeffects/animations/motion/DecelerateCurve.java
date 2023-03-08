@@ -18,7 +18,7 @@
 
 package io.github.palexdev.mfxeffects.animations.motion;
 
-import io.github.palexdev.mfxeffects.animations.motion.base.Curve;
+import io.github.palexdev.mfxeffects.animations.base.Curve;
 
 /**
  * A curve where the rate of change starts out quickly and then decelerates; an

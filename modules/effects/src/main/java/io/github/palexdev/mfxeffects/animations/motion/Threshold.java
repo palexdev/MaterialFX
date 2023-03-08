@@ -18,7 +18,7 @@
 
 package io.github.palexdev.mfxeffects.animations.motion;
 
-import io.github.palexdev.mfxeffects.animations.motion.base.Curve;
+import io.github.palexdev.mfxeffects.animations.base.Curve;
 
 /**
  * A curve that is 0.0 until it hits the threshold, then it jumps to 1.0.
