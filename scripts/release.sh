@@ -1,5 +1,6 @@
 #!/bin/bash
-set -x
+
+#set -x
 args=("$@")
 
 function printHelp() {
