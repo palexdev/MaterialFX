@@ -3,12 +3,15 @@ module mfx.effects {
 
 	// Animations
 	exports io.github.palexdev.mfxeffects.animations;
+	exports io.github.palexdev.mfxeffects.animations.motion;
+	exports io.github.palexdev.mfxeffects.animations.motion.base;
 
 	// Base
 	exports io.github.palexdev.mfxeffects;
 
 	// Beans
 	exports io.github.palexdev.mfxeffects.beans;
+	exports io.github.palexdev.mfxeffects.beans.base;
 
 	// Builders
 	exports io.github.palexdev.mfxeffects.builders;

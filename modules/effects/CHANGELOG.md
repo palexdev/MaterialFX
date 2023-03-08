@@ -16,6 +16,25 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [Unreleased] - 08-03-2023
+
+## Added
+
+- Ported many of the Curves/Interpolators used by the Flutter framework for animations to JavaFX
+- Animations: Added new method to TimelineBuilder
+- Introduced Offset bean needed by some Flutter Curves
+
+## Changed
+
+- AnimationFactory: allow to build animations with a specific Interpolator or a default one
+- Improved efficiency of MFXRippleGenerators when disabled through the visible property. This was needed especially
+  because in CSS you cannot set the disable state but only the visibility
+
+## Removed
+
+- Removed BezierEasing implementation class in favor of the implementation offered by Flutter, Cubic.java, which is much
+  simpler and more performant
+
 ## [11.0.4] - 09-02-2023
 
 ## Changed

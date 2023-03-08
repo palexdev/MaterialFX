@@ -33,12 +33,12 @@ import javafx.util.Duration;
 public enum AnimationFactory {
 	FADE_IN {
 		@Override
-		public Timeline build(Node node, double durationMillis) {
+		public Timeline build(Node node, double durationMillis, Interpolator i) {
 			AnimationFactory.resetNode(node);
-			KeyValue keyValue1 = new KeyValue(node.opacityProperty(), 0, INTERPOLATOR_V1);
+			KeyValue keyValue1 = new KeyValue(node.opacityProperty(), 0, i);
 			KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-			KeyValue keyValue2 = new KeyValue(node.opacityProperty(), 1.0, INTERPOLATOR_V1);
+			KeyValue keyValue2 = new KeyValue(node.opacityProperty(), 1.0, i);
 			KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
 			return new Timeline(keyFrame1, keyFrame2);
@@ -46,12 +46,12 @@ public enum AnimationFactory {
 	},
 	FADE_OUT {
 		@Override
-		public Timeline build(Node node, double durationMillis) {
+		public Timeline build(Node node, double durationMillis, Interpolator i) {
 			AnimationFactory.resetNode(node);
-			KeyValue keyValue1 = new KeyValue(node.opacityProperty(), 1.0, INTERPOLATOR_V1);
+			KeyValue keyValue1 = new KeyValue(node.opacityProperty(), 1.0, i);
 			KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-			KeyValue keyValue2 = new KeyValue(node.opacityProperty(), 0, INTERPOLATOR_V1);
+			KeyValue keyValue2 = new KeyValue(node.opacityProperty(), 0, i);
 			KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
 			return new Timeline(keyFrame1, keyFrame2);
@@ -59,12 +59,12 @@ public enum AnimationFactory {
 	},
 	SLIDE_IN_BOTTOM {
 		@Override
-		public Timeline build(Node node, double durationMillis) {
+		public Timeline build(Node node, double durationMillis, Interpolator i) {
 			AnimationFactory.resetNode(node);
-			KeyValue keyValue1 = new KeyValue(node.translateYProperty(), -node.getBoundsInParent().getHeight() * 2, INTERPOLATOR_V1);
+			KeyValue keyValue1 = new KeyValue(node.translateYProperty(), -node.getBoundsInParent().getHeight() * 2, i);
 			KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-			KeyValue keyValue2 = new KeyValue(node.translateYProperty(), 0, INTERPOLATOR_V1);
+			KeyValue keyValue2 = new KeyValue(node.translateYProperty(), 0, i);
 			KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
 			return new Timeline(keyFrame1, keyFrame2);
@@ -72,12 +72,12 @@ public enum AnimationFactory {
 	},
 	SLIDE_OUT_BOTTOM {
 		@Override
-		public Timeline build(Node node, double durationMillis) {
+		public Timeline build(Node node, double durationMillis, Interpolator i) {
 			AnimationFactory.resetNode(node);
-			KeyValue keyValue1 = new KeyValue(node.translateYProperty(), 0, INTERPOLATOR_V1);
+			KeyValue keyValue1 = new KeyValue(node.translateYProperty(), 0, i);
 			KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-			KeyValue keyValue2 = new KeyValue(node.translateYProperty(), node.getBoundsInParent().getHeight() * 2, INTERPOLATOR_V1);
+			KeyValue keyValue2 = new KeyValue(node.translateYProperty(), node.getBoundsInParent().getHeight() * 2, i);
 			KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
 			return new Timeline(keyFrame1, keyFrame2);
@@ -85,12 +85,12 @@ public enum AnimationFactory {
 	},
 	SLIDE_IN_LEFT {
 		@Override
-		public Timeline build(Node node, double durationMillis) {
+		public Timeline build(Node node, double durationMillis, Interpolator i) {
 			AnimationFactory.resetNode(node);
-			KeyValue keyValue1 = new KeyValue(node.translateXProperty(), -node.getBoundsInParent().getWidth() * 2, INTERPOLATOR_V1);
+			KeyValue keyValue1 = new KeyValue(node.translateXProperty(), -node.getBoundsInParent().getWidth() * 2, i);
 			KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-			KeyValue keyValue2 = new KeyValue(node.translateXProperty(), 0, INTERPOLATOR_V1);
+			KeyValue keyValue2 = new KeyValue(node.translateXProperty(), 0, i);
 			KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
 			return new Timeline(keyFrame1, keyFrame2);
@@ -98,12 +98,12 @@ public enum AnimationFactory {
 	},
 	SLIDE_OUT_LEFT {
 		@Override
-		public Timeline build(Node node, double durationMillis) {
+		public Timeline build(Node node, double durationMillis, Interpolator i) {
 			AnimationFactory.resetNode(node);
-			KeyValue keyValue1 = new KeyValue(node.translateXProperty(), 0, INTERPOLATOR_V1);
+			KeyValue keyValue1 = new KeyValue(node.translateXProperty(), 0, i);
 			KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-			KeyValue keyValue2 = new KeyValue(node.translateXProperty(), -node.getBoundsInParent().getWidth() * 2, INTERPOLATOR_V1);
+			KeyValue keyValue2 = new KeyValue(node.translateXProperty(), -node.getBoundsInParent().getWidth() * 2, i);
 			KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
 			return new Timeline(keyFrame1, keyFrame2);
@@ -111,12 +111,12 @@ public enum AnimationFactory {
 	},
 	SLIDE_IN_RIGHT {
 		@Override
-		public Timeline build(Node node, double durationMillis) {
+		public Timeline build(Node node, double durationMillis, Interpolator i) {
 			AnimationFactory.resetNode(node);
-			KeyValue keyValue1 = new KeyValue(node.translateXProperty(), node.getBoundsInParent().getWidth() * 2, INTERPOLATOR_V1);
+			KeyValue keyValue1 = new KeyValue(node.translateXProperty(), node.getBoundsInParent().getWidth() * 2, i);
 			KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-			KeyValue keyValue2 = new KeyValue(node.translateXProperty(), 0, INTERPOLATOR_V1);
+			KeyValue keyValue2 = new KeyValue(node.translateXProperty(), 0, i);
 			KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
 			return new Timeline(keyFrame1, keyFrame2);
@@ -124,12 +124,12 @@ public enum AnimationFactory {
 	},
 	SLIDE_OUT_RIGHT {
 		@Override
-		public Timeline build(Node node, double durationMillis) {
+		public Timeline build(Node node, double durationMillis, Interpolator i) {
 			AnimationFactory.resetNode(node);
-			KeyValue keyValue1 = new KeyValue(node.translateXProperty(), 0, INTERPOLATOR_V1);
+			KeyValue keyValue1 = new KeyValue(node.translateXProperty(), 0, i);
 			KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-			KeyValue keyValue2 = new KeyValue(node.translateXProperty(), node.getBoundsInParent().getWidth() * 2, INTERPOLATOR_V1);
+			KeyValue keyValue2 = new KeyValue(node.translateXProperty(), node.getBoundsInParent().getWidth() * 2, i);
 			KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
 			return new Timeline(keyFrame1, keyFrame2);
@@ -137,12 +137,12 @@ public enum AnimationFactory {
 	},
 	SLIDE_IN_TOP {
 		@Override
-		public Timeline build(Node node, double durationMillis) {
+		public Timeline build(Node node, double durationMillis, Interpolator i) {
 			AnimationFactory.resetNode(node);
-			KeyValue keyValue1 = new KeyValue(node.translateYProperty(), node.getBoundsInParent().getHeight() * 2, INTERPOLATOR_V1);
+			KeyValue keyValue1 = new KeyValue(node.translateYProperty(), node.getBoundsInParent().getHeight() * 2, i);
 			KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-			KeyValue keyValue2 = new KeyValue(node.translateYProperty(), 0, INTERPOLATOR_V1);
+			KeyValue keyValue2 = new KeyValue(node.translateYProperty(), 0, i);
 			KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
 			return new Timeline(keyFrame1, keyFrame2);
@@ -150,12 +150,12 @@ public enum AnimationFactory {
 	},
 	SLIDE_OUT_TOP {
 		@Override
-		public Timeline build(Node node, double durationMillis) {
+		public Timeline build(Node node, double durationMillis, Interpolator i) {
 			AnimationFactory.resetNode(node);
-			KeyValue keyValue1 = new KeyValue(node.translateYProperty(), 0, INTERPOLATOR_V1);
+			KeyValue keyValue1 = new KeyValue(node.translateYProperty(), 0, i);
 			KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
 
-			KeyValue keyValue2 = new KeyValue(node.translateYProperty(), -node.getBoundsInParent().getHeight() * 2, INTERPOLATOR_V1);
+			KeyValue keyValue2 = new KeyValue(node.translateYProperty(), -node.getBoundsInParent().getHeight() * 2, i);
 			KeyFrame keyFrame2 = new KeyFrame(Duration.millis(durationMillis), keyValue2);
 
 			return new Timeline(keyFrame1, keyFrame2);
@@ -172,5 +172,19 @@ public enum AnimationFactory {
 		}
 	}
 
-	public abstract Timeline build(Node node, double durationMillis);
+	/**
+	 * Calls {@link #build(Node, double, Interpolator)} with {@link #INTERPOLATOR_V1} as the default interpolator.
+	 */
+	public Timeline build(Node node, double durationMillis) {
+		return build(node, durationMillis, INTERPOLATOR_V1);
+	}
+
+	/**
+	 * Each enum constant will produce a {@link Timeline} with the given parameters.
+	 *
+	 * @param node           the {@link Node} on which perform the animation
+	 * @param durationMillis the duration of the animation in milliseconds
+	 * @param i              the {@link Interpolator} used by the animations
+	 */
+	public abstract Timeline build(Node node, double durationMillis, Interpolator i);
 }

@@ -83,7 +83,7 @@ import static javafx.util.Duration.ZERO;
  * for the generator accordingly, more info here {@link #autoClipProperty()} and here {@link #buildClip()}
  * <p></p>
  * Last but not least, know that there are 3 main ways to stop the generator if you don't want it on added controls:
- * <p> 1) You can disable the generator just like any other node with {@link #disableProperty()} (best way)
+ * <p> 1) You can disable the generator just like any other node with {@link #disableProperty()}
  * <p> 2) You can set the visibility to hidden, {@link #visibleProperty()}
  * <p> 3) You can set the ripples opacity to 0, {@link #rippleOpacityProperty()}
  */
@@ -172,7 +172,7 @@ public class MFXRippleGenerator extends Region implements RippleGenerator {
 	 */
 	@Override
 	public void generate(MouseEvent me) {
-		if (isDisabled()) return;
+		if (isDisabled() || !isVisible() || getRippleOpacity() <= 0) return;
 		if (isCheckBounds() && !isWithinBounds(me)) return;
 		if (getClip() != null) setClip(null);
 		setClip(buildClip());
@@ -319,7 +319,12 @@ public class MFXRippleGenerator extends Region implements RippleGenerator {
 			this,
 			"backgroundColor",
 			Color.LIGHTGRAY
-	);
+	) {
+		@Override
+		public StyleOrigin getStyleOrigin() {
+			return StyleOrigin.USER_AGENT;
+		}
+	};
 
 	private final StyleableDoubleProperty backgroundOpacity = new SimpleStyleableDoubleProperty(
 			StyleableProperties.BACKGROUND_OPACITY,

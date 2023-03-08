@@ -534,6 +534,15 @@ public class Animations {
 		}
 
 		/**
+		 * Adds the specified KeyFrame to the timeline only if the given condition is true.
+		 */
+		public TimelineBuilder addConditional(Supplier<Boolean> condition, KeyFrame keyFrame) {
+			if (condition.get())
+				timeline.getKeyFrames().add(keyFrame);
+			return this;
+		}
+
+		/**
 		 * Builds a KeyFrame to hide the given Window by fading it out.
 		 *
 		 * @param duration the fade animation speed
