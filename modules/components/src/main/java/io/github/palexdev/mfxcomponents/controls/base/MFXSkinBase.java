@@ -18,6 +18,7 @@
 
 package io.github.palexdev.mfxcomponents.controls.base;
 
+import io.github.palexdev.mfxcomponents.layout.MFXResizable;
 import io.github.palexdev.mfxcore.behavior.BehaviorBase;
 import io.github.palexdev.mfxcore.behavior.WithBehavior;
 import javafx.beans.InvalidationListener;
@@ -43,7 +44,7 @@ import java.util.Optional;
  * <p> - the Behavior, defines what the component can do and how
  * <p>
  * So, as you may guess, there must be an 'infrastructure' that makes all these three parts communicate with each other.
- * The behavior may need to be connected with the specs of the component, as well as with its subcomponents defined in
+ * The behavior may need to be connected with the specs of the component, as well as with the subcomponents defined in
  * its view.
  * <p>
  * {@link MFXControl} and {@link MFXLabeled} are a bridge between these three parts. They retain the reference of the current
@@ -57,6 +58,9 @@ import java.util.Optional;
  * <p> - Having a behavior class and set the provider on the component
  * <p> - Override the {@link #initBehavior(BehaviorBase)} to initialize the behavior if needed
  * <p> - Initialization and changes to the behavior provider are automatically handled, hassle-free
+ * <p></p>
+ * Last but not least, this skin makes all the methods responsible for computing the component' sizes {@code public}, this
+ * is for the integration with the {@link MFXResizable} API.
  */
 public abstract class MFXSkinBase<C extends Control & WithBehavior<B>, B extends BehaviorBase<C>> extends javafx.scene.control.SkinBase<C> {
 
@@ -118,6 +122,41 @@ public abstract class MFXSkinBase<C extends Control & WithBehavior<B>, B extends
 	public <E extends Event> void handleAsFilter(Node node, EventType<E> eventType, EventHandler<E> handler) {
 		Optional.ofNullable(getBehavior()).ifPresent(b -> b.filter(node, eventType, handler));
 	}
+
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
+
+	@Override
+	public double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+		return super.computeMinWidth(height, topInset, rightInset, bottomInset, leftInset);
+	}
+
+	@Override
+	public double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+		return super.computeMinHeight(width, topInset, rightInset, bottomInset, leftInset);
+	}
+
+	@Override
+	public double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+		return super.computeMaxWidth(height, topInset, rightInset, bottomInset, leftInset);
+	}
+
+	@Override
+	public double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+		return super.computeMaxHeight(width, topInset, rightInset, bottomInset, leftInset);
+	}
+
+	@Override
+	public double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+		return super.computePrefWidth(height, topInset, rightInset, bottomInset, leftInset);
+	}
+
+	@Override
+	public double computePrefHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+		return super.computePrefHeight(width, topInset, rightInset, bottomInset, leftInset);
+	}
+
 
 	//================================================================================
 	// Getters/Setters

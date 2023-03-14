@@ -19,11 +19,16 @@
 package io.github.palexdev.mfxcomponents.controls.base;
 
 import io.github.palexdev.mfxcomponents.behaviors.MFXFabBehavior;
+import io.github.palexdev.mfxcomponents.layout.LayoutStrategy;
+import io.github.palexdev.mfxcomponents.layout.LayoutStrategy.Defaults;
+import io.github.palexdev.mfxcomponents.layout.MFXResizable;
 import io.github.palexdev.mfxcore.base.properties.functional.SupplierProperty;
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableDoubleProperty;
 import io.github.palexdev.mfxcore.behavior.BehaviorBase;
 import io.github.palexdev.mfxcore.behavior.WithBehavior;
 import io.github.palexdev.mfxcore.utils.fx.StyleUtils;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
@@ -37,7 +42,7 @@ import java.util.function.Supplier;
  * Base class for MaterialFX controls that are text based. The idea is to have a separate hierarchy of components from the JavaFX one,
  * that perfectly integrates with the new Behavior, Skin and Theming APIs.
  * <p>
- * Extends {@link Labeled} and implements both {@link WithBehavior} and {@link MFXStyleable}.
+ * Extends {@link Labeled} and implements {@link WithBehavior}, {@link MFXStyleable} and {@link MFXResizable}.
  * Enforces the use of {@link MFXSkinBase} instances as Skin implementations and makes the {@link #createDefaultSkin()}
  * final thus denying users to override it. To set custom skins you should override the new provided method {@link #buildSkin()}.
  * <p>
@@ -57,12 +62,16 @@ import java.util.function.Supplier;
  * <p></p>
  * Design guidelines (like MD3), may specify in the components' specs the initial/minimum sizes for each component.
  * For this specific purpose, there are two properties that can be set in CSS: {@link #initHeightProperty()}, {@link #initWidthProperty()}.
+ * <p>
+ * Since this always implements {@link MFXResizable}, it redefines the JavaFX's layout strategy by extending it to take
+ * into account the aforementioned sizes.
  *
  * @param <B> the behavior type used by the control
  * @see MFXSkinBase
+ * @see MFXResizable
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
-public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends Labeled implements WithBehavior<B>, MFXStyleable {
+public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends Labeled implements WithBehavior<B>, MFXStyleable, MFXResizable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -76,6 +85,13 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 			behavior = get().get();
 			MFXSkinBase skin = ((MFXSkinBase) getSkin());
 			if (skin != null && behavior != null) skin.initBehavior(behavior);
+		}
+	};
+
+	private final ObjectProperty<LayoutStrategy> layoutStrategy = new SimpleObjectProperty<>(defaultLayoutStrategy()) {
+		@Override
+		protected void invalidated() {
+			onLayoutStrategyChanged();
 		}
 	};
 
@@ -107,20 +123,14 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 	//================================================================================
 
 	/**
-	 * Applies the sizes specified by {@link #initHeightProperty()} and {@link #initWidthProperty()},
-	 * both set in a CSS stylesheet.
-	 * <p>
-	 * By default, this sets the component's pref height and width, can be overridden to change the behavior.
+	 * This is automatically invoked when either {@link #initHeightProperty()} or {@link #initWidthProperty()} change.
+	 * By default, this method triggers a layout request.
 	 * <p></p>
-	 * By default, the values are set only if the pref height and width are greater than 0, because
-	 * with 'init' sizes we suppose that the components sizes upon creation are still 0
-	 * The 'force' boolean parameter will skip the check and set them anyway.
+	 * The consequence is that the current set {@link LayoutStrategy} will be used to re-compute the component's sizes, and
+	 * if it takes into account those init sizes, the component will resize accordingly.
 	 */
-	protected void applyInitSizes(boolean force) {
-		double ih = getInitHeight();
-		double iw = getInitWidth();
-		if (force || getPrefHeight() <= 0.0) setPrefHeight(ih);
-		if (force || getPrefWidth() <= 0.0) setPrefWidth(iw);
+	protected void onInitSizesChanged() {
+		requestLayout();
 	}
 
 	/**
@@ -134,33 +144,45 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 	// Overridden Methods
 	//================================================================================
 	@Override
+	public void onLayoutStrategyChanged() {
+		requestLayout();
+	}
+
+	@Override
+	public LayoutStrategy defaultLayoutStrategy() {
+		return LayoutStrategy.defaultStrategy()
+				.setPrefWidthFunction(Defaults.DEF_PREF_WIDTH_FUNCTION.andThen(r -> Math.max(r, getInitWidth())))
+				.setPrefHeightFunction(Defaults.DEF_PREF_HEIGHT_FUNCTION.andThen(r -> Math.max(r, getInitHeight())));
+	}
+
+	@Override
 	public double computeMinWidth(double height) {
-		return super.computeMinWidth(height);
+		return getLayoutStrategy().computeMinWidth(this);
 	}
 
 	@Override
 	public double computeMinHeight(double width) {
-		return super.computeMinHeight(width);
+		return getLayoutStrategy().computeMinHeight(this);
 	}
 
 	@Override
 	public double computePrefWidth(double height) {
-		return super.computePrefWidth(height);
+		return getLayoutStrategy().computePrefWidth(this);
 	}
 
 	@Override
 	public double computePrefHeight(double width) {
-		return super.computePrefHeight(width);
+		return getLayoutStrategy().computePrefHeight(this);
 	}
 
 	@Override
 	public double computeMaxWidth(double height) {
-		return super.computeMaxWidth(height);
+		return getLayoutStrategy().computeMaxWidth(this);
 	}
 
 	@Override
 	public double computeMaxHeight(double width) {
-		return super.computeMaxHeight(width);
+		return getLayoutStrategy().computeMaxHeight(this);
 	}
 
 	/**
@@ -180,17 +202,6 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 	//================================================================================
 	// Styleable Properties
 	//================================================================================
-	// TODO should this be handled by the skin? (could also be handled in the overridden methods above though)
-	// TODO if so, should we add a switch to override this behavior so that a user doesn't have to create a custom skin?
-	// TODO One idea is to have 'Layout Strategies'. The problem is, let's suppose component A overrides the computePrefWidth method
-	// TODO and then a component B want to override it again, but it needs to original computation, the one produced by the superclass of A
-	// TODO there would be no way to regain the old computation unless copy-paste of code.
-	// TODO With 'Layout Strategies' components could define functions for each of the computation methods (min, pref and max sizes),
-	// TODO avoiding at least code duplication
-	//
-	// TODO these are officially DEPRECATED as for some reason they cause a huge performance overhead
-	// TODO 'Layout Strategies' may be a good alternative at this point, although values would be hard coded, still pretty
-	// TODO easy to replace though
 	private final StyleableDoubleProperty initHeight = new StyleableDoubleProperty(
 			StyleableProperties.INIT_HEIGHT,
 			this,
@@ -198,9 +209,8 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 			USE_COMPUTED_SIZE
 	) {
 		@Override
-		public void set(double v) {
-			super.set(v);
-			applyInitSizes(false);
+		public void invalidated() {
+			onInitSizesChanged();
 		}
 	};
 
@@ -211,9 +221,8 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 			USE_COMPUTED_SIZE
 	) {
 		@Override
-		public void set(double v) {
-			super.set(v);
-			applyInitSizes(false);
+		public void invalidated() {
+			onInitSizesChanged();
 		}
 	};
 
@@ -237,7 +246,8 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 	 * overwrite the value in some cases. To overcome this, the size can be set via code, this property
 	 * just offers a way to specify the height in CSS and still apply it via code.
 	 * <p>
-	 * The way initial sizes are applied is managed by {@link #applyInitSizes(boolean)}.
+	 * The way initial sizes are applied depends on the set {@link LayoutStrategy}, when this changes the layout request
+	 * is automatically triggered by {@link #onInitSizesChanged()}.
 	 * <p></p>
 	 * Can be set in CSS via the property: '-mfx-init-height'.
 	 */
@@ -262,7 +272,8 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 	 * overwrite the value in some cases. To overcome this, the size can be set via code, this property
 	 * just offers a way to specify the width in CSS and still apply it via code.
 	 * <p>
-	 * The way initial sizes are applied is managed by {@link #applyInitSizes(boolean)}.
+	 * The way initial sizes are applied depends on the set {@link LayoutStrategy}, when this changes the layout request
+	 * is automatically triggered by {@link #onInitSizesChanged()}.
 	 * <p></p>
 	 * Can be set in CSS via the property: '-mfx-init-width'.
 	 */
@@ -358,5 +369,20 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 	@Override
 	public void setBehaviorProvider(Supplier<B> behaviorProvider) {
 		this.behaviorProvider.set(behaviorProvider);
+	}
+
+	@Override
+	public LayoutStrategy getLayoutStrategy() {
+		return layoutStrategy.get();
+	}
+
+	@Override
+	public ObjectProperty<LayoutStrategy> layoutStrategyProperty() {
+		return layoutStrategy;
+	}
+
+	@Override
+	public void setLayoutStrategy(LayoutStrategy layoutStrategy) {
+		this.layoutStrategy.set(layoutStrategy);
 	}
 }

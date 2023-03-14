@@ -19,11 +19,15 @@
 package io.github.palexdev.mfxcomponents.controls.base;
 
 import io.github.palexdev.mfxcomponents.behaviors.MFXFabBehavior;
+import io.github.palexdev.mfxcomponents.layout.LayoutStrategy;
+import io.github.palexdev.mfxcomponents.layout.MFXResizable;
 import io.github.palexdev.mfxcore.base.properties.functional.SupplierProperty;
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableDoubleProperty;
 import io.github.palexdev.mfxcore.behavior.BehaviorBase;
 import io.github.palexdev.mfxcore.behavior.WithBehavior;
 import io.github.palexdev.mfxcore.utils.fx.StyleUtils;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
@@ -37,7 +41,7 @@ import java.util.function.Supplier;
  * Base class for MaterialFX controls. The idea is to have a separate hierarchy of components from the JavaFX one,
  * that perfectly integrates with the new Behavior and Theming APIs.
  * <p>
- * Extends {@link Control} and implements both {@link WithBehavior} and {@link MFXStyleable}.
+ * Extends {@link Control} and implements, {@link WithBehavior}, {@link MFXStyleable} and {@link MFXResizable}.
  * Enforces the use of {@link MFXSkinBase} instances as Skin implementations and makes the {@link #createDefaultSkin()}
  * final thus denying users to override it. To set custom skins you should override the new provided method {@link #buildSkin()}.
  * <p>
@@ -59,11 +63,16 @@ import java.util.function.Supplier;
  * <p></p>
  * Design guidelines (like MD3), may specify in the components' specs the initial/minimum sizes for each component.
  * For this specific purpose, there are two properties that can be set in CSS: {@link #initHeightProperty()}, {@link #initWidthProperty()}.
+ * <p>
+ * Since this always implements {@link MFXResizable}, it redefines the JavaFX's layout strategy by extending it to take
+ * into account the aforementioned sizes.
  *
  * @param <B> the behavior type used by the control
+ * @see MFXSkinBase
+ * @see MFXResizable
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
-public abstract class MFXControl<B extends BehaviorBase<? extends Node>> extends Control implements WithBehavior<B>, MFXStyleable {
+public abstract class MFXControl<B extends BehaviorBase<? extends Node>> extends Control implements WithBehavior<B>, MFXStyleable, MFXResizable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -80,6 +89,13 @@ public abstract class MFXControl<B extends BehaviorBase<? extends Node>> extends
 		}
 	};
 
+	private final ObjectProperty<LayoutStrategy> layoutStrategy = new SimpleObjectProperty<>(LayoutStrategy.defaultStrategy()) {
+		@Override
+		protected void invalidated() {
+			onLayoutStrategyChanged();
+		}
+	};
+
 	//================================================================================
 	// Abstract Methods
 	//================================================================================
@@ -90,20 +106,14 @@ public abstract class MFXControl<B extends BehaviorBase<? extends Node>> extends
 	//================================================================================
 
 	/**
-	 * Applies the sizes specified by {@link #initHeightProperty()} and {@link #initWidthProperty()},
-	 * both set in a CSS stylesheet.
-	 * <p>
-	 * By default, this sets the component's pref height and width, can be overridden to change the behavior.
+	 * This is automatically invoked when either {@link #initHeightProperty()} or {@link #initWidthProperty()} change.
+	 * By default, this method triggers a layout request.
 	 * <p></p>
-	 * By default, the values are set only if the pref height and width are greater than 0, because
-	 * with 'init' sizes we suppose that the components sizes upon creation are still 0
-	 * The 'force' boolean parameter will skip the check and set them anyway.
+	 * The consequence is that the current set {@link LayoutStrategy} will be used to re-compute the component's sizes, and
+	 * if it takes into account those init sizes, the component will resize accordingly.
 	 */
-	protected void applyInitSizes(boolean force) {
-		double ih = getInitHeight();
-		double iw = getInitWidth();
-		if (force || getPrefHeight() <= 0.0) setPrefHeight(ih);
-		if (force || getPrefWidth() <= 0.0) setPrefWidth(iw);
+	protected void onInitSizesChanged() {
+		requestLayout();
 	}
 
 	/**
@@ -117,33 +127,38 @@ public abstract class MFXControl<B extends BehaviorBase<? extends Node>> extends
 	// Overridden Methods
 	//================================================================================
 	@Override
+	public void onLayoutStrategyChanged() {
+		requestLayout();
+	}
+
+	@Override
 	public double computeMinWidth(double height) {
-		return super.computeMinWidth(height);
+		return getLayoutStrategy().computeMinWidth(this);
 	}
 
 	@Override
 	public double computeMinHeight(double width) {
-		return super.computeMinHeight(width);
+		return getLayoutStrategy().computeMinHeight(this);
 	}
 
 	@Override
 	public double computePrefWidth(double height) {
-		return super.computePrefWidth(height);
+		return getLayoutStrategy().computePrefWidth(this);
 	}
 
 	@Override
 	public double computePrefHeight(double width) {
-		return super.computePrefHeight(width);
+		return getLayoutStrategy().computePrefHeight(this);
 	}
 
 	@Override
 	public double computeMaxWidth(double height) {
-		return super.computeMaxWidth(height);
+		return getLayoutStrategy().computeMaxWidth(this);
 	}
 
 	@Override
 	public double computeMaxHeight(double width) {
-		return super.computeMaxHeight(width);
+		return getLayoutStrategy().computeMaxHeight(this);
 	}
 
 	@Override
@@ -163,9 +178,8 @@ public abstract class MFXControl<B extends BehaviorBase<? extends Node>> extends
 			USE_COMPUTED_SIZE
 	) {
 		@Override
-		public void set(double v) {
-			super.set(v);
-			applyInitSizes(false);
+		public void invalidated() {
+			onInitSizesChanged();
 		}
 	};
 
@@ -176,9 +190,8 @@ public abstract class MFXControl<B extends BehaviorBase<? extends Node>> extends
 			USE_COMPUTED_SIZE
 	) {
 		@Override
-		public void set(double v) {
-			super.set(v);
-			applyInitSizes(false);
+		public void invalidated() {
+			onInitSizesChanged();
 		}
 	};
 
@@ -187,7 +200,7 @@ public abstract class MFXControl<B extends BehaviorBase<? extends Node>> extends
 	}
 
 	/**
-	 * Specifies the component's initial height when created.
+	 * Specifies the component's initial height upon creation.
 	 * <p></p>
 	 * This can be useful when using components that define certain sizes by specs, in
 	 * SceneBuilder and other similar cases. One could also use the '-fx-pref-height' CSS
@@ -195,7 +208,8 @@ public abstract class MFXControl<B extends BehaviorBase<? extends Node>> extends
 	 * overwrite the value in some cases. To overcome this, the size can be set via code, this property
 	 * just offers a way to specify the height in CSS and still apply it via code.
 	 * <p>
-	 * The way initial sizes are applied is managed by {@link #applyInitSizes(boolean)}.
+	 * The way initial sizes are applied depends on the set {@link LayoutStrategy}, when this changes the layout request
+	 * is automatically triggered by {@link #onInitSizesChanged()}.
 	 * <p></p>
 	 * Can be set in CSS via the property: '-mfx-init-height'.
 	 */
@@ -220,7 +234,8 @@ public abstract class MFXControl<B extends BehaviorBase<? extends Node>> extends
 	 * overwrite the value in some cases. To overcome this, the size can be set via code, this property
 	 * just offers a way to specify the width in CSS and still apply it via code.
 	 * <p>
-	 * The way initial sizes are applied is managed by {@link #applyInitSizes(boolean)}.
+	 * The way initial sizes are applied depends on the set {@link LayoutStrategy}, when this changes the layout request
+	 * is automatically triggered by {@link #onInitSizesChanged()}.
 	 * <p></p>
 	 * Can be set in CSS via the property: '-mfx-init-width'.
 	 */
@@ -291,5 +306,20 @@ public abstract class MFXControl<B extends BehaviorBase<? extends Node>> extends
 	@Override
 	public void setBehaviorProvider(Supplier<B> behaviorProvider) {
 		this.behaviorProvider.set(behaviorProvider);
+	}
+
+	@Override
+	public LayoutStrategy getLayoutStrategy() {
+		return layoutStrategy.get();
+	}
+
+	@Override
+	public ObjectProperty<LayoutStrategy> layoutStrategyProperty() {
+		return layoutStrategy;
+	}
+
+	@Override
+	public void setLayoutStrategy(LayoutStrategy layoutStrategy) {
+		this.layoutStrategy.set(layoutStrategy);
 	}
 }

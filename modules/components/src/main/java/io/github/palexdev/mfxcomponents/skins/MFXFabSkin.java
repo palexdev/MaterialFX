@@ -80,19 +80,18 @@ public class MFXFabSkin extends MFXButtonSkin {
 	}
 
 	@Override
-	protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+	public double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
 		return Region.USE_COMPUTED_SIZE;
 	}
 
 	@Override
-	protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+	public double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
 		MFXFabBase fab = getFab();
 		MFXFontIcon icon = fab.getIcon();
 		double iW = (icon != null) ? icon.getLayoutBounds().getWidth() : 0.0;
-		double w = fab.isExtended() ?
+		return fab.isExtended() ?
 				leftInset + iW + TextUtils.computeTextWidth(fab.getFont(), fab.getText()) + rightInset :
 				leftInset + iW + rightInset;
-		return Math.max(w, fab.getInitWidth());
 	}
 
 	@Override

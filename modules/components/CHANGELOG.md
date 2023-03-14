@@ -27,6 +27,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added preliminary implementation of MFXThemeManager (atm just to simplify dev)
 - Added a new class that is capable of generating CSS stylesheets via code and it's super useful. It even allows you to
   use multiple selectors and pseudo classes
+- New API to allow MaterialFX controls to easily change their sizing/layout strategy by simply setting a property
+  instead of creating custom skins, custom components or overriding methods inline
+- Added tests for the new LayoutStrategy and MFXResizable APIs
 
 ## Changed
 
@@ -44,10 +47,21 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   instance of MFXFabBehavior
 - MFXButtonSkin: bind text node opacity to the new property of MFXLabeled
 - MFXButtonSkin: no need for the listener on the behaviorProvider property (good for memory and performance)
+- Make both MFXControl and MFXLabeled implement the new MFXResizable API for integration with LayoutStrategy
+- MFXSkinBase: make size computation methods public for integration with MFXResizable and LayoutStrategy
+- Reworked and renamed applyInitSizes(...) to onInitSizesChanged(). Init sizes now are taken into account by the new
+  LayoutStrategy API
+- MFXFabSkin: do not take into account the init width as it is used by the LayoutStrategy now
 
 ## Removed
 
 - MFXExtendedFab has been removed to avoid code duplication
+
+## Fixed
+
+- Fixed critical bug related to the initWidth and initHeight new styleable properties. For some reason they were causing
+  the CSS to be reapplied continuously, causing memory leaks and a huge performance hit over time. Override
+  invalidated() instead on set(...)
 
 ## [11.16.0] - 09-02-2023
 

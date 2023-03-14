@@ -112,7 +112,7 @@ public class MFXButtonSkin extends MFXSkinBase<MFXButton, MFXButtonBehavior> {
 	}
 
 	@Override
-	protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+	public double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
 		MFXButton button = getSkinnable();
 		double insets = leftInset + rightInset;
 		double tW = TextUtils.computeTextWidth(label.getFont(), label.getText());
@@ -122,7 +122,7 @@ public class MFXButtonSkin extends MFXSkinBase<MFXButton, MFXButtonBehavior> {
 	}
 
 	@Override
-	protected double computePrefHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+	public double computePrefHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
 		MFXButton button = getSkinnable();
 		double insets = topInset + bottomInset;
 		double tH = TextUtils.computeTextHeight(label.getFont(), label.getText());
@@ -131,12 +131,12 @@ public class MFXButtonSkin extends MFXSkinBase<MFXButton, MFXButtonBehavior> {
 	}
 
 	@Override
-	protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+	public double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
 		return getSkinnable().prefWidth(height);
 	}
 
 	@Override
-	protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+	public double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
 		return getSkinnable().prefHeight(width);
 	}
 

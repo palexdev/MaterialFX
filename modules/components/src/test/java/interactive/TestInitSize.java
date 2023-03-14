@@ -22,7 +22,7 @@ import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXFilledButton;
 import io.github.palexdev.mfxcomponents.controls.fab.MFXFab;
 import io.github.palexdev.mfxcomponents.theming.enums.FABVariants;
-import io.github.palexdev.mfxresources.MFXResources;
+import io.github.palexdev.mfxcomponents.theming.enums.MFXThemeManager;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -114,7 +114,7 @@ public class TestInitSize {
 	private StackPane setupStage() {
 		try {
 			Scene scene = new Scene(new StackPane(), 200, 200);
-			scene.getStylesheets().add(MFXResources.load("sass/md3/mfx-light.css")); // TODO change once Theme Manager API is done
+			MFXThemeManager.LIGHT.addOn(scene);
 			FxToolkit.setupStage(s -> s.setScene(scene));
 		} catch (TimeoutException e) {
 			throw new RuntimeException(e);

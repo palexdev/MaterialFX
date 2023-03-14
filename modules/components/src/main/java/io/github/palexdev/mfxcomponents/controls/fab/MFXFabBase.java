@@ -140,9 +140,16 @@ public class MFXFabBase extends MFXElevatedButton {
 	//================================================================================
 	// Overridden Methods
 	//================================================================================
+
 	@Override
-	protected void applyInitSizes(boolean force) {
-		super.applyInitSizes(force);
+	public void onLayoutStrategyChanged() {
+		if (getSkin() == null) return;
+		getFabBehavior().ifPresent(b -> b.extend(false));
+	}
+
+	@Override
+	protected void onInitSizesChanged() {
+		super.onInitSizesChanged();
 
 		// This usually happens when the FAB changes between standard and extended
 		// In such cases it's important to ensure minimum sizes are correct

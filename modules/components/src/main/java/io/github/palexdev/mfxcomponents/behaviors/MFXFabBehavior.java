@@ -177,7 +177,7 @@ public class MFXFabBehavior extends MFXButtonBehavior {
 	@SuppressWarnings("JavadocReference")
 	protected double computeWidth() {
 		MFXFabBase fab = getFab();
-		return fab.computePrefWidth(-1);
+		return fab.computePrefWidth(fab.getHeight());
 	}
 
 	/**
