@@ -16,6 +16,39 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [Unreleased] - 14-03-2023
+
+## Added
+
+- Added specific behavior for FABs as shown by the M3 guidelines
+- MFXLabeled: added property that allows to control the text opacity (see recent changes to BoundLabel in core module)
+- Implement specific skin for FABs
+- Added EXTENDED variant for FABs
+- Added preliminary implementation of MFXThemeManager (atm just to simplify dev)
+- Added a new class that is capable of generating CSS stylesheets via code and it's super useful. It even allows you to
+  use multiple selectors and pseudo classes
+
+## Changed
+
+- MFXButtonBehavior: fire an action only on PRIMARY mouse clicks by default
+- Moved SkinBase from core module and renamed it to MFXSkinBase
+- MFXSkinBase now doesn't keep the reference to the current behavior object, instead it is stored in the component base
+  class (MFXControl or MFXLabeled)
+- MFXControl and MFXLabeled will now automatically handle behavior creation and initialization
+- For the above change, they now enforce the use of buildSkin() to create the default skin, and make createDefaultSkin()
+  a final method, this is needed for a reliable initialization of the behavior
+- MFXControl and MFXLabeled now override all the size methods to be public
+- MFXFabBase now has a property which allows to setup the FAB as a standard one or an extended one
+- MFXFabBase: since now FABs have their own specific behavior, to avoid code duplication a method has been added to
+  retrieve the FAB behavior reference, it returns an Optional since the behavior could be null or could not be an
+  instance of MFXFabBehavior
+- MFXButtonSkin: bind text node opacity to the new property of MFXLabeled
+- MFXButtonSkin: no need for the listener on the behaviorProvider property (good for memory and performance)
+
+## Removed
+
+- MFXExtendedFab has been removed to avoid code duplication
+
 ## [11.16.0] - 09-02-2023
 
 ## Added

@@ -19,11 +19,10 @@
 package io.github.palexdev.mfxcomponents.skins;
 
 import io.github.palexdev.mfxcomponents.behaviors.MFXButtonBehavior;
+import io.github.palexdev.mfxcomponents.controls.base.MFXSkinBase;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
-import io.github.palexdev.mfxcomponents.controls.fab.MFXFab;
 import io.github.palexdev.mfxcomponents.theming.enums.PseudoClasses;
 import io.github.palexdev.mfxcore.controls.BoundLabel;
-import io.github.palexdev.mfxcore.controls.SkinBase;
 import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
 import io.github.palexdev.mfxcore.utils.fx.TextUtils;
 import io.github.palexdev.mfxeffects.ripple.MFXRippleGenerator;
@@ -38,17 +37,17 @@ import static io.github.palexdev.mfxcore.observables.When.onChanged;
 /**
  * Default skin implementation for {@link MFXButton}s.
  * <p>
- * Extends {@link SkinBase} allowing seamless integration with the new Behavior API. This
+ * Extends {@link MFXSkinBase} allowing seamless integration with the new Behavior API. This
  * skin uses behaviors of type {@link MFXButtonBehavior}.
  * <p></p>
  * The layout is simple, there are just the label to show the text and the {@link MFXRippleGenerator} to generate ripples.
  */
-public class MFXButtonSkin extends SkinBase<MFXButton, MFXButtonBehavior> {
+public class MFXButtonSkin extends MFXSkinBase<MFXButton, MFXButtonBehavior> {
 	//================================================================================
 	// Properties
 	//================================================================================
-	private final BoundLabel label;
-	private final MFXRippleGenerator rg;
+	protected final BoundLabel label;
+	protected final MFXRippleGenerator rg;
 
 	//================================================================================
 	// Constructors
@@ -58,6 +57,8 @@ public class MFXButtonSkin extends SkinBase<MFXButton, MFXButtonBehavior> {
 
 		// Init nodes
 		label = new BoundLabel(button);
+		label.onSetTextNode(n -> n.opacityProperty().bind(button.textOpacityProperty()));
+
 		rg = new MFXRippleGenerator(button);
 		rg.setManaged(false);
 		rg.setAnimateBackground(false);
@@ -76,30 +77,22 @@ public class MFXButtonSkin extends SkinBase<MFXButton, MFXButtonBehavior> {
 
 	/**
 	 * Adds the following listeners:
-	 * <p> - A listener on the {@link MFXButton#behaviorProviderProperty()} to update the control's behavior when the provider changes
 	 * <p> - A listener on the {@link MFXButton#contentDisplayProperty()} to activate/disable the pseudo classes
 	 * {@link PseudoClasses#WITH_ICON_LEFT} and {@link PseudoClasses#WITH_ICON_RIGHT} accordingly
 	 */
-	private void addListeners() {
+	protected void addListeners() {
 		MFXButton button = getSkinnable();
-		onChanged(button.behaviorProviderProperty())
-				.then((o, n) -> setBehavior(n.get()))
+		onChanged(button.contentDisplayProperty())
+				.then((o, n) -> {
+					Node graphic = button.getGraphic();
+					boolean wil = (graphic != null) && (n == ContentDisplay.LEFT);
+					boolean wir = (graphic != null) && (n == ContentDisplay.RIGHT);
+					PseudoClasses.WITH_ICON_LEFT.setOn(button, wil);
+					PseudoClasses.WITH_ICON_RIGHT.setOn(button, wir);
+				})
 				.executeNow()
+				.invalidating(button.graphicProperty())
 				.listen();
-
-		if (!(button instanceof MFXFab)) {
-			onChanged(button.contentDisplayProperty())
-					.then((o, n) -> {
-						Node graphic = button.getGraphic();
-						boolean wil = (graphic != null) && (n == ContentDisplay.LEFT);
-						boolean wir = (graphic != null) && (n == ContentDisplay.RIGHT);
-						PseudoClasses.WITH_ICON_LEFT.setOn(button, wil);
-						PseudoClasses.WITH_ICON_RIGHT.setOn(button, wir);
-					})
-					.executeNow()
-					.invalidating(button.graphicProperty())
-					.listen();
-		}
 	}
 
 	//================================================================================
@@ -114,8 +107,8 @@ public class MFXButtonSkin extends SkinBase<MFXButton, MFXButtonBehavior> {
 	protected void initBehavior(MFXButtonBehavior behavior) {
 		MFXButton button = getSkinnable();
 		handle(button, MouseEvent.MOUSE_PRESSED, e -> behavior.generateRipple(rg, e));
-		handle(button, MouseEvent.MOUSE_PRESSED, e -> behavior.mousePressed());
-		handle(button, MouseEvent.MOUSE_CLICKED, e -> behavior.mouseClicked());
+		handle(button, MouseEvent.MOUSE_PRESSED, behavior::mousePressed);
+		handle(button, MouseEvent.MOUSE_CLICKED, behavior::mouseClicked);
 	}
 
 	@Override
@@ -158,7 +151,7 @@ public class MFXButtonSkin extends SkinBase<MFXButton, MFXButtonBehavior> {
 	@Override
 	public void dispose() {
 		MFXButton button = getSkinnable();
-		disposeFor(button.behaviorProviderProperty());
+		label.getTextNode().ifPresent(n -> n.opacityProperty().unbind());
 		disposeFor(button.contentDisplayProperty());
 		super.dispose();
 	}

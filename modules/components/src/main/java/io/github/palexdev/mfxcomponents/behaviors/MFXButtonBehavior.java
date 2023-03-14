@@ -22,6 +22,7 @@ import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
 import io.github.palexdev.mfxcomponents.skins.MFXButtonSkin;
 import io.github.palexdev.mfxcore.behavior.BehaviorBase;
 import io.github.palexdev.mfxeffects.ripple.MFXRippleGenerator;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 /**
@@ -52,20 +53,22 @@ public class MFXButtonBehavior extends BehaviorBase<MFXButton> {
 	 * The parameters are given by the default skin, {@link MFXButtonSkin}, associated to each button.
 	 */
 	public void generateRipple(MFXRippleGenerator rg, MouseEvent me) {
+		if (me.getButton() != MouseButton.PRIMARY) return;
 		rg.generate(me);
 	}
 
 	/**
 	 * Requests focus on mouse pressed.
 	 */
-	public void mousePressed() {
+	public void mousePressed(MouseEvent me) {
 		getNode().requestFocus();
 	}
 
 	/**
 	 * Calls {@link MFXButton#fire()} on mouse clicked.
 	 */
-	public void mouseClicked() {
+	public void mouseClicked(MouseEvent me) {
+		if (me.getButton() != MouseButton.PRIMARY) return;
 		getNode().fire();
 	}
 }

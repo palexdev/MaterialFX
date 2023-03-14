@@ -16,22 +16,38 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app;
+package io.github.palexdev.mfxcomponents.theming.enums;
 
-import app.buttons.ButtonsPlayground;
-import javafx.application.Application;
+import io.github.palexdev.mfxresources.MFXResources;
+import javafx.scene.Scene;
 
-public class ComponentsLauncher {
+import java.net.URL;
 
-	public static void main(String[] args) {
-		//System.setProperty("prism.order", "sw");
-		//System.setProperty("prism.text", "t2k");
-		//System.setProperty("prism.lcdtext", "false");
-		//System.setProperty("prism.vsync", "false");
-		//System.setProperty("prism.showdirty", "true");
-		//System.setProperty("prism.forceGPU","true");
-		//System.setProperty("prism.verbose", "true");
-		//System.setProperty("javafx.animation.fullspeed", "true");
-		Application.launch(ButtonsPlayground.class, args);
+public enum MFXThemeManager {
+	LIGHT("sass/md3/mfx-light.css"),
+	;
+
+	private final String path;
+
+	MFXThemeManager(String path) {
+		this.path = path;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void addOn(Scene scene) {
+		String stylesheet = load();
+		if (!scene.getStylesheets().contains(stylesheet))
+			scene.getStylesheets().add(stylesheet);
+	}
+
+	public String load() {
+		return MFXResources.load(getPath());
+	}
+
+	public URL loadURL() {
+		return MFXResources.loadURL(getPath());
 	}
 }

@@ -556,7 +556,7 @@
 /****************************************************************************************************
  * Extended FAB Primary
  ****************************************************************************************************/
-.mfx-button.extended-fab {
+.mfx-button.fab-extended {
   -fx-font-family: "Roboto Medium";
   -fx-font-weight: 500;
   -fx-font-size: 14px;
@@ -570,55 +570,55 @@
   -mfx-elevation: LEVEL3;
 }
 
-.mfx-button.extended-fab:disabled > .label {
+.mfx-button.fab-extended:disabled > .label {
   -fx-opacity: 1;
 }
 
-.mfx-button.extended-fab:hover {
+.mfx-button.fab-extended:hover {
   -fx-background-color: #EADDFF, rgba(33, 0, 93, 0.08);
   -mfx-elevation: LEVEL4;
 }
 
-.mfx-button.extended-fab:focused,
-.mfx-button.extended-fab:pressed {
+.mfx-button.fab-extended:focused,
+.mfx-button.fab-extended:pressed {
   -fx-background-color: #EADDFF, rgba(33, 0, 93, 0.12);
   -mfx-elevation: LEVEL3;
 }
 
-.mfx-button.extended-fab:with-icon-left {
+.mfx-button.fab-extended:with-icon-left {
   -fx-padding: 0px 20px 0px 16px;
 }
 
-.mfx-button.extended-fab:with-icon-right {
+.mfx-button.fab-extended:with-icon-right {
   -fx-padding: 0px 16px 0px 20px;
 }
 
-.mfx-button.extended-fab .mfx-font-icon {
+.mfx-button.fab-extended .mfx-font-icon {
   -mfx-color: #21005D;
   -mfx-size: 24px;
 }
 
-.mfx-button.extended-fab .mfx-ripple-generator {
+.mfx-button.fab-extended .mfx-ripple-generator {
   -mfx-ripple-color: rgba(33, 0, 93, 0.12);
 }
 
-.mfx-button.extended-fab.lowered {
+.mfx-button.fab-extended.lowered {
   -mfx-elevation: LEVEL1;
 }
 
-.mfx-button.extended-fab.lowered:hover {
+.mfx-button.fab-extended.lowered:hover {
   -mfx-elevation: LEVEL2;
 }
 
-.mfx-button.extended-fab.lowered:focused,
-.mfx-button.extended-fab.lowered:pressed {
+.mfx-button.fab-extended.lowered:focused,
+.mfx-button.fab-extended.lowered:pressed {
   -mfx-elevation: LEVEL1;
 }
 
 /****************************************************************************************************
  * Extended FAB Surface
  ****************************************************************************************************/
-.mfx-button.extended-fab.surface {
+.mfx-button.fab-extended.surface {
   -fx-font-family: "Roboto Medium";
   -fx-font-weight: 500;
   -fx-font-size: 14px;
@@ -632,55 +632,55 @@
   -mfx-elevation: LEVEL3;
 }
 
-.mfx-button.extended-fab.surface:disabled > .label {
+.mfx-button.fab-extended.surface:disabled > .label {
   -fx-opacity: 1;
 }
 
-.mfx-button.extended-fab.surface:hover {
+.mfx-button.fab-extended.surface:hover {
   -fx-background-color: #FFFBFE, rgba(103, 80, 164, 0.08);
   -mfx-elevation: LEVEL4;
 }
 
-.mfx-button.extended-fab.surface:focused,
-.mfx-button.extended-fab.surface:pressed {
+.mfx-button.fab-extended.surface:focused,
+.mfx-button.fab-extended.surface:pressed {
   -fx-background-color: #FFFBFE, rgba(103, 80, 164, 0.12);
   -mfx-elevation: LEVEL3;
 }
 
-.mfx-button.extended-fab.surface:with-icon-left {
+.mfx-button.fab-extended.surface:with-icon-left {
   -fx-padding: 0px 20px 0px 16px;
 }
 
-.mfx-button.extended-fab.surface:with-icon-right {
+.mfx-button.fab-extended.surface:with-icon-right {
   -fx-padding: 0px 16px 0px 20px;
 }
 
-.mfx-button.extended-fab.surface .mfx-font-icon {
+.mfx-button.fab-extended.surface .mfx-font-icon {
   -mfx-color: #6750A4;
   -mfx-size: 24px;
 }
 
-.mfx-button.extended-fab.surface .mfx-ripple-generator {
+.mfx-button.fab-extended.surface .mfx-ripple-generator {
   -mfx-ripple-color: rgba(103, 80, 164, 0.12);
 }
 
-.mfx-button.extended-fab.surface.lowered {
+.mfx-button.fab-extended.surface.lowered {
   -mfx-elevation: LEVEL1;
 }
 
-.mfx-button.extended-fab.surface.lowered:hover {
+.mfx-button.fab-extended.surface.lowered:hover {
   -mfx-elevation: LEVEL2;
 }
 
-.mfx-button.extended-fab.surface.lowered:focused,
-.mfx-button.extended-fab.surface.lowered:pressed {
+.mfx-button.fab-extended.surface.lowered:focused,
+.mfx-button.fab-extended.surface.lowered:pressed {
   -mfx-elevation: LEVEL1;
 }
 
 /****************************************************************************************************
  * Extended FAB Secondary
  ****************************************************************************************************/
-.mfx-button.extended-fab.secondary {
+.mfx-button.fab-extended.secondary {
   -fx-font-family: "Roboto Medium";
   -fx-font-weight: 500;
   -fx-font-size: 14px;
@@ -694,55 +694,55 @@
   -mfx-elevation: LEVEL3;
 }
 
-.mfx-button.extended-fab.secondary:disabled > .label {
+.mfx-button.fab-extended.secondary:disabled > .label {
   -fx-opacity: 1;
 }
 
-.mfx-button.extended-fab.secondary:hover {
+.mfx-button.fab-extended.secondary:hover {
   -fx-background-color: #E8DEF8, rgba(29, 25, 43, 0.08);
   -mfx-elevation: LEVEL4;
 }
 
-.mfx-button.extended-fab.secondary:focused,
-.mfx-button.extended-fab.secondary:pressed {
+.mfx-button.fab-extended.secondary:focused,
+.mfx-button.fab-extended.secondary:pressed {
   -fx-background-color: #E8DEF8, rgba(29, 25, 43, 0.12);
   -mfx-elevation: LEVEL3;
 }
 
-.mfx-button.extended-fab.secondary:with-icon-left {
+.mfx-button.fab-extended.secondary:with-icon-left {
   -fx-padding: 0px 20px 0px 16px;
 }
 
-.mfx-button.extended-fab.secondary:with-icon-right {
+.mfx-button.fab-extended.secondary:with-icon-right {
   -fx-padding: 0px 16px 0px 20px;
 }
 
-.mfx-button.extended-fab.secondary .mfx-font-icon {
+.mfx-button.fab-extended.secondary .mfx-font-icon {
   -mfx-color: #1D192B;
   -mfx-size: 24px;
 }
 
-.mfx-button.extended-fab.secondary .mfx-ripple-generator {
+.mfx-button.fab-extended.secondary .mfx-ripple-generator {
   -mfx-ripple-color: rgba(29, 25, 43, 0.12);
 }
 
-.mfx-button.extended-fab.secondary.lowered {
+.mfx-button.fab-extended.secondary.lowered {
   -mfx-elevation: LEVEL1;
 }
 
-.mfx-button.extended-fab.secondary.lowered:hover {
+.mfx-button.fab-extended.secondary.lowered:hover {
   -mfx-elevation: LEVEL2;
 }
 
-.mfx-button.extended-fab.secondary.lowered:focused,
-.mfx-button.extended-fab.secondary.lowered:pressed {
+.mfx-button.fab-extended.secondary.lowered:focused,
+.mfx-button.fab-extended.secondary.lowered:pressed {
   -mfx-elevation: LEVEL1;
 }
 
 /****************************************************************************************************
  * Extended FAB Tertiary
  ****************************************************************************************************/
-.mfx-button.extended-fab.tertiary {
+.mfx-button.fab-extended.tertiary {
   -fx-font-family: "Roboto Medium";
   -fx-font-weight: 500;
   -fx-font-size: 14px;
@@ -756,48 +756,48 @@
   -mfx-elevation: LEVEL3;
 }
 
-.mfx-button.extended-fab.tertiary:disabled > .label {
+.mfx-button.fab-extended.tertiary:disabled > .label {
   -fx-opacity: 1;
 }
 
-.mfx-button.extended-fab.tertiary:hover {
+.mfx-button.fab-extended.tertiary:hover {
   -fx-background-color: #FFD8E4, rgba(49, 17, 29, 0.08);
   -mfx-elevation: LEVEL4;
 }
 
-.mfx-button.extended-fab.tertiary:focused,
-.mfx-button.extended-fab.tertiary:pressed {
+.mfx-button.fab-extended.tertiary:focused,
+.mfx-button.fab-extended.tertiary:pressed {
   -fx-background-color: #FFD8E4, rgba(49, 17, 29, 0.12);
   -mfx-elevation: LEVEL3;
 }
 
-.mfx-button.extended-fab.tertiary:with-icon-left {
+.mfx-button.fab-extended.tertiary:with-icon-left {
   -fx-padding: 0px 20px 0px 16px;
 }
 
-.mfx-button.extended-fab.tertiary:with-icon-right {
+.mfx-button.fab-extended.tertiary:with-icon-right {
   -fx-padding: 0px 16px 0px 20px;
 }
 
-.mfx-button.extended-fab.tertiary .mfx-font-icon {
+.mfx-button.fab-extended.tertiary .mfx-font-icon {
   -mfx-color: #31111D;
   -mfx-size: 24px;
 }
 
-.mfx-button.extended-fab.tertiary .mfx-ripple-generator {
+.mfx-button.fab-extended.tertiary .mfx-ripple-generator {
   -mfx-ripple-color: rgba(49, 17, 29, 0.12);
 }
 
-.mfx-button.extended-fab.tertiary.lowered {
+.mfx-button.fab-extended.tertiary.lowered {
   -mfx-elevation: LEVEL1;
 }
 
-.mfx-button.extended-fab.tertiary.lowered:hover {
+.mfx-button.fab-extended.tertiary.lowered:hover {
   -mfx-elevation: LEVEL2;
 }
 
-.mfx-button.extended-fab.tertiary.lowered:focused,
-.mfx-button.extended-fab.tertiary.lowered:pressed {
+.mfx-button.fab-extended.tertiary.lowered:focused,
+.mfx-button.fab-extended.tertiary.lowered:pressed {
   -mfx-elevation: LEVEL1;
 }
 

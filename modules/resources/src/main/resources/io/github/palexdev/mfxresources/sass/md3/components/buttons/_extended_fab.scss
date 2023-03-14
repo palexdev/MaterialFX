@@ -75,7 +75,7 @@ $pmy_text: 'on-primary-container';
 $pmy_icon: 'on-primary-container';
 $pmy_ripple: 'on-primary-container';
 
-.mfx-button.extended-fab {
+.mfx-button.fab-extended {
   @include fab_base($pmy_surface, $pmy_tint, $pmy_text, 3);
   @include fab_disabled();
   @include fab_hover($pmy_surface, $pmy_tint, 4);
@@ -94,7 +94,7 @@ $sfe_text: 'primary';
 $sfe_icon: 'primary';
 $sfe_ripple: 'primary';
 
-.mfx-button.extended-fab.surface {
+.mfx-button.fab-extended.surface {
   @include fab_base($sfe_surface, $sfe_tint, $sfe_text, 3);
   @include fab_disabled();
   @include fab_hover($sfe_surface, $sfe_tint, 4);
@@ -113,7 +113,7 @@ $sdy_text: 'on-secondary-container';
 $sdy_icon: 'on-secondary-container';
 $sdy_ripple: 'on-secondary-container';
 
-.mfx-button.extended-fab.secondary {
+.mfx-button.fab-extended.secondary {
   @include fab_base($sdy_surface, $sdy_tint, $sdy_text, 3);
   @include fab_disabled();
   @include fab_hover($sdy_surface, $sdy_tint, 4);
@@ -132,7 +132,7 @@ $tty_text: 'on-tertiary-container';
 $tty_icon: 'on-tertiary-container';
 $tty_ripple: 'on-tertiary-container';
 
-.mfx-button.extended-fab.tertiary {
+.mfx-button.fab-extended.tertiary {
   @include fab_base($tty_surface, $tty_tint, $tty_text, 3);
   @include fab_disabled();
   @include fab_hover($tty_surface, $tty_tint, 4);

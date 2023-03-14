@@ -18,14 +18,13 @@
 
 package io.github.palexdev.mfxcomponents.theming.enums;
 
-import io.github.palexdev.mfxcomponents.controls.fab.MFXExtendedFab;
 import io.github.palexdev.mfxcomponents.controls.fab.MFXFab;
 import io.github.palexdev.mfxcomponents.theming.base.Variant;
 
 /**
- * Enumerator implementing {@link Variant} to define the variants of {@link MFXFab} and {@link MFXExtendedFab}.
+ * Enumerator implementing {@link Variant} to define the variants of {@link MFXFab}.
  * <p></p>
- * Note that {@link MFXExtendedFab} doesn't have 'small' and 'large' variants, applying those will likely result
+ * Note that extended FABs doesn't have 'small' and 'large' variants, applying those will likely result
  * in un-styled components.
  */
 public enum FABVariants implements Variant {
@@ -35,6 +34,10 @@ public enum FABVariants implements Variant {
 	SURFACE("surface"),
 	SECONDARY("secondary"),
 	TERTIARY("tertiary"),
+	// TODO this is a good way of managing it without relying on PseudoClasses
+	// TODO the only improvement I'd make is to have a bunch of methods here responsible for applying the variant
+	// TODO 'fab-extended' should be applied only after 'fab' is removed
+	EXTENDED("fab-extended"),
 	;
 
 	private final String styleClass;

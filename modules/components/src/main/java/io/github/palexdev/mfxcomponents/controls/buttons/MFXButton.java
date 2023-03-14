@@ -20,9 +20,9 @@ package io.github.palexdev.mfxcomponents.controls.buttons;
 
 import io.github.palexdev.mfxcomponents.behaviors.MFXButtonBehavior;
 import io.github.palexdev.mfxcomponents.controls.base.MFXLabeled;
+import io.github.palexdev.mfxcomponents.controls.base.MFXSkinBase;
 import io.github.palexdev.mfxcomponents.skins.MFXButtonSkin;
 import io.github.palexdev.mfxcore.base.properties.EventHandlerProperty;
-import io.github.palexdev.mfxcore.controls.SkinBase;
 import io.github.palexdev.mfxcore.observables.When;
 import io.github.palexdev.mfxcore.utils.fx.SceneBuilderIntegration;
 import io.github.palexdev.mfxresources.MFXResources;
@@ -147,7 +147,7 @@ public class MFXButton extends MFXLabeled<MFXButtonBehavior> {
 	}
 
 	@Override
-	protected SkinBase<?, ?> createDefaultSkin() {
+	protected MFXSkinBase<?, ?> buildSkin() {
 		return new MFXButtonSkin(this);
 	}
 

@@ -18,11 +18,11 @@
 
 package io.github.palexdev.mfxcomponents.controls.base;
 
+import io.github.palexdev.mfxcomponents.behaviors.MFXFabBehavior;
 import io.github.palexdev.mfxcore.base.properties.functional.SupplierProperty;
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableDoubleProperty;
 import io.github.palexdev.mfxcore.behavior.BehaviorBase;
 import io.github.palexdev.mfxcore.behavior.WithBehavior;
-import io.github.palexdev.mfxcore.controls.SkinBase;
 import io.github.palexdev.mfxcore.utils.fx.StyleUtils;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
@@ -38,6 +38,22 @@ import java.util.function.Supplier;
  * that perfectly integrates with the new Behavior and Theming APIs.
  * <p>
  * Extends {@link Control} and implements both {@link WithBehavior} and {@link MFXStyleable}.
+ * Enforces the use of {@link MFXSkinBase} instances as Skin implementations and makes the {@link #createDefaultSkin()}
+ * final thus denying users to override it. To set custom skins you should override the new provided method {@link #buildSkin()}.
+ * <p>
+ * I wanted to avoid adding a listener of the skin property for memory and performance reasons. Every time a skin is created
+ * it's needed to pass the current built behavior to the skin for initialization. A good hook place for this call was the
+ * {@link #createDefaultSkin()} method, but this would make it harder for users to override it because then you would also
+ * have to take into account the behavior initialization. Having a new method maintains the usual simplicity of setting
+ * custom skins while avoiding listeners for better performance.
+ * <p></p>
+ * The integration with the new Behavior API is achieved by having a specific property, {@link #behaviorProviderProperty()},
+ * which allows to change at any time the component's behavior. The property automatically handles initialization and disposal
+ * of behaviors. A reference to th current built behavior object is kept to be retrieved via {@link #getBehavior()}.
+ * <p>
+ * In MaterialFX, the Behavior API is not a closed API, it's not meant to be private. A user can always take it and invoke
+ * its methods directly, extend it, suppress it, do whatever you like. Also, some components' behavior may specify methods
+ * that are meant to be called by the user when needed, see {@link MFXFabBehavior} as an example.
  * <p></p>
  * Components that primarily deal with text should extend {@link MFXLabeled} instead.
  * <p></p>
@@ -46,11 +62,28 @@ import java.util.function.Supplier;
  *
  * @param <B> the behavior type used by the control
  */
+@SuppressWarnings({"unchecked", "rawtypes"})
 public abstract class MFXControl<B extends BehaviorBase<? extends Node>> extends Control implements WithBehavior<B>, MFXStyleable {
 	//================================================================================
 	// Properties
 	//================================================================================
-	private final SupplierProperty<B> behaviorProvider = new SupplierProperty<>();
+	private B behavior;
+	private final SupplierProperty<B> behaviorProvider = new SupplierProperty<>() {
+		@Override
+		protected void invalidated() {
+			if (behavior != null) {
+				behavior.dispose();
+			}
+			behavior = get().get();
+			MFXSkinBase skin = (MFXSkinBase) getSkin();
+			if (skin != null && behavior != null) skin.initBehavior(behavior);
+		}
+	};
+
+	//================================================================================
+	// Abstract Methods
+	//================================================================================
+	protected abstract MFXSkinBase<?, ?> buildSkin();
 
 	//================================================================================
 	// Methods
@@ -84,8 +117,40 @@ public abstract class MFXControl<B extends BehaviorBase<? extends Node>> extends
 	// Overridden Methods
 	//================================================================================
 	@Override
-	protected SkinBase<?, ?> createDefaultSkin() {
-		return null;
+	public double computeMinWidth(double height) {
+		return super.computeMinWidth(height);
+	}
+
+	@Override
+	public double computeMinHeight(double width) {
+		return super.computeMinHeight(width);
+	}
+
+	@Override
+	public double computePrefWidth(double height) {
+		return super.computePrefWidth(height);
+	}
+
+	@Override
+	public double computePrefHeight(double width) {
+		return super.computePrefHeight(width);
+	}
+
+	@Override
+	public double computeMaxWidth(double height) {
+		return super.computeMaxWidth(height);
+	}
+
+	@Override
+	public double computeMaxHeight(double width) {
+		return super.computeMaxHeight(width);
+	}
+
+	@Override
+	protected final MFXSkinBase<?, ?> createDefaultSkin() {
+		MFXSkinBase skin = buildSkin();
+		if (behavior != null) skin.initBehavior(behavior);
+		return skin;
 	}
 
 	//================================================================================
@@ -117,7 +182,7 @@ public abstract class MFXControl<B extends BehaviorBase<? extends Node>> extends
 		}
 	};
 
-	protected final double getInitHeight() {
+	public final double getInitHeight() {
 		return initHeight.get();
 	}
 
@@ -142,7 +207,7 @@ public abstract class MFXControl<B extends BehaviorBase<? extends Node>> extends
 		this.initHeight.set(initHeight);
 	}
 
-	protected final double getInitWidth() {
+	public final double getInitWidth() {
 		return initWidth.get();
 	}
 
@@ -208,6 +273,11 @@ public abstract class MFXControl<B extends BehaviorBase<? extends Node>> extends
 	//================================================================================
 	// Getters/Setters
 	//================================================================================
+	@Override
+	public B getBehavior() {
+		return behavior;
+	}
+
 	@Override
 	public Supplier<B> getBehaviorProvider() {
 		return behaviorProvider.get();

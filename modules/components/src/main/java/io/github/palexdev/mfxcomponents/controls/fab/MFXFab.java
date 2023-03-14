@@ -40,12 +40,19 @@ public class MFXFab extends MFXFabBase implements WithVariants<MFXFab, FABVarian
 	// Constructors
 	//================================================================================
 	public MFXFab() {
-		this(null);
+		this("");
+	}
+
+	public MFXFab(String text) {
+		this(text, null);
 	}
 
 	public MFXFab(MFXFontIcon icon) {
-		super("", icon);
-		initialize();
+		this("", icon);
+	}
+
+	public MFXFab(String text, MFXFontIcon icon) {
+		super(text, icon);
 	}
 
 	/**
@@ -83,11 +90,20 @@ public class MFXFab extends MFXFabBase implements WithVariants<MFXFab, FABVarian
 		return new MFXFab().setVariants(FABVariants.TERTIARY);
 	}
 
-	//================================================================================
-	// Methods
-	//================================================================================
-	private void initialize() {
-		textProperty().addListener(i -> setText(""));
+	/**
+	 * Creates a new {@code MFXFab} with less shadow emphasis.
+	 */
+	public static MFXFab lowered() {
+		return new MFXFab().setVariants(FABVariants.LOWERED);
+	}
+
+	/**
+	 * Creates a new {@link MFXFab} which is extended (shows text).
+	 */
+	public static MFXFab extended() {
+		MFXFab fab = new MFXFab();
+		fab.setExtended(true);
+		return fab;
 	}
 
 	//================================================================================
@@ -95,7 +111,7 @@ public class MFXFab extends MFXFabBase implements WithVariants<MFXFab, FABVarian
 	//================================================================================
 	@Override
 	public List<String> defaultStyleClasses() {
-		return List.of("mfx-button", "fab");
+		return List.of("mfx-button", "fab-base", "fab");
 	}
 
 	@Override
