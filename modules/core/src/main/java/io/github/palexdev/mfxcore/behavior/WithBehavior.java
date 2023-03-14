@@ -31,6 +31,11 @@ import java.util.function.Supplier;
 public interface WithBehavior<B extends BehaviorBase<? extends Node>> {
 
 	/**
+	 * @return the instance of the current behavior object
+	 */
+	B getBehavior();
+
+	/**
 	 * @return a {@link Supplier} that is the provider for the default behavior used by the component.
 	 */
 	Supplier<B> defaultBehaviorProvider();

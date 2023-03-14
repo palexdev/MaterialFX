@@ -16,6 +16,27 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [Unreleased] - 14-03-2023
+
+## Added
+
+- BoundLabel: Added a mechanism to detect and retrieve the node responsible for displaying the label's text. This way
+  custom controls that rely on this can have full control on the actual text node rather than the label as a whole. This
+  mechanism is achieved through overrides rather than listeners, as a consequence there's no performance nor memory
+  overhead
+- Added a new method responsible for registering the When construct. This is responsible for avoiding duplicates in the
+  map (subsequent put) that would probably lead to a memory leak and unexpected behavior
+
+## Changed
+
+- Added method to retrieve the component's behavior object, thus creating a bridge between the Control the View(skin)
+  and the Behavior
+- Moved executeNow(...) methods to the base class for a better fluent API
+
+## Fixed
+
+- When: Implemented fix from #212
+
 ## [11.2.4] - 09-02-2023
 
 ## Added

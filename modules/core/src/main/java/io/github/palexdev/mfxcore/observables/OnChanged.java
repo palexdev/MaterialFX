@@ -189,8 +189,8 @@ public class OnChanged<T> extends When<T> {
 		}
 
 		invalidatingObservables.forEach(o -> o.addListener(invalidationListener));
+		register();
 		observableValue.addListener(listener);
-		whens.put(observableValue, this);
 		return this;
 	}
 

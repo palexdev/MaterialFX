@@ -22,9 +22,11 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.value.ObservableValue;
 
+import java.lang.ref.WeakReference;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.WeakHashMap;
+import java.util.function.Supplier;
 
 /**
  * Useful class to listen to changes for a given {@link ObservableValue} and perform any
@@ -46,7 +48,7 @@ public abstract class When<T> {
 	//================================================================================
 	// Properties
 	//================================================================================
-	protected static final WeakHashMap<ObservableValue<?>, When<?>> whens = new WeakHashMap<>();
+	protected static final WeakHashMap<ObservableValue<?>, WeakReference<When<?>>> whens = new WeakHashMap<>();
 	protected final ObservableValue<T> observableValue;
 	protected boolean oneShot = false;
 
@@ -73,6 +75,19 @@ public abstract class When<T> {
 	//================================================================================
 
 	/**
+	 * This is responsible for registering the {@code When} construct in a map that
+	 * keep references to all the built constructs. This is to avoid garbage collection and to
+	 * handle {@code When}s disposal easily.
+	 * <p></p>
+	 * This should be called by implementations of {@link #listen()}.
+	 */
+	protected final void register() {
+		if (whens.containsKey(observableValue))
+			throw new IllegalArgumentException("Cannot register this When construct as the given observable is already being observed");
+		whens.put(observableValue, new WeakReference<>(this));
+	}
+
+	/**
 	 * Adds an {@link Observable} to listen to, when it changes it will cause the invalidation of this construct
 	 * by calling {@link #invalidate()}.
 	 */
@@ -85,6 +100,23 @@ public abstract class When<T> {
 	 * The default implementation does nothing.
 	 */
 	protected When<T> invalidate() {
+		return this;
+	}
+
+	/**
+	 * Implementation of this should allow executing the specified action before the
+	 * listener is attached to the observable.
+	 * By default, does nothing.
+	 */
+	public When<T> executeNow() {
+		return this;
+	}
+
+	/**
+	 * Calls {@link #executeNow()} if the given condition is true.
+	 */
+	public When<T> executeNow(Supplier<Boolean> condition) {
+		if (condition.get()) executeNow();
 		return this;
 	}
 
@@ -139,7 +171,8 @@ public abstract class When<T> {
 	 * {@link #dispose()} is invoked.
 	 */
 	public static void disposeFor(ObservableValue<?> observableValue) {
-		When<?> remove = whens.remove(observableValue);
+		WeakReference<When<?>> ref = whens.remove(observableValue);
+		When<?> remove = ref != null ? ref.get() : null;
 		if (remove != null) remove.dispose();
 	}
 }
