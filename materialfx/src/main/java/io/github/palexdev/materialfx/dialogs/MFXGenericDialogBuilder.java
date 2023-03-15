@@ -18,6 +18,7 @@
 
 package io.github.palexdev.materialfx.dialogs;
 
+import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
@@ -156,6 +157,14 @@ public class MFXGenericDialogBuilder {
 	 */
 	public MFXGenericDialogBuilder makeScrollable(boolean smoothScrolling) {
 		dialog.buildScrollableContent(smoothScrolling);
+		return this;
+	}
+
+	/**
+	 * Wraps the given content in a {@link MFXScrollPane} which will then be used as the dialog's content.
+	 */
+	public MFXGenericDialogBuilder makeScrollable(Node content, boolean smoothScrolling) {
+		dialog.buildScrollableContent(content, smoothScrolling);
 		return this;
 	}
 

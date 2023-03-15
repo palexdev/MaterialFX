@@ -222,12 +222,20 @@ public class MFXGenericDialog extends AbstractMFXDialog {
 		content.setWrapText(true);
 		content.getStyleClass().add("content");
 		content.textProperty().bind(contentTextProperty());
+		buildScrollableContent(content, smoothScrolling);
+	}
 
+	/**
+	 * Allows to set an arbitrary {@link Node} as content, wrapped in a {@link MFXScrollPane} to make it scrollable.
+	 *
+	 * @param content         the node inside the scroll pane
+	 * @param smoothScrolling to specify whether to use smooth scrolling on the {@link MFXScrollPane}
+	 */
+	protected void buildScrollableContent(Node content, boolean smoothScrolling) {
 		MFXScrollPane scrollPane = new MFXScrollPane(content);
 		scrollPane.getStyleClass().add("content-container");
 		scrollPane.setFitToWidth(true);
 		if (smoothScrolling) ScrollUtils.addSmoothScrolling(scrollPane, 0.5);
-
 		setContent(scrollPane);
 	}
 
