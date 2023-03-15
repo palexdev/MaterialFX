@@ -118,6 +118,20 @@ public interface IMultipleSelectionModel<T> {
 	List<T> getSelectedValues();
 
 	/**
+	 * @return the first selected item or null if selection is empty
+	 */
+	default T getSelectedValue() {
+		return getSelectedValues().isEmpty() ? null : getSelectedValues().get(0);
+	}
+
+	/**
+	 * @return the last selected item or null if selection is empty
+	 */
+	default T getLastSelectedValue() {
+		return getSelectedValues().isEmpty() ? null : getSelectedValues().get(getSelectedValues().size() - 1);
+	}
+
+	/**
 	 * Specifies if this model allows multiple selection or should act like
 	 * a SingleSelectionModel.
 	 */
