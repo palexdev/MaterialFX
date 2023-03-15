@@ -30,7 +30,7 @@ public class MFXDialogs {
 	}
 
 	public static MFXGenericDialogBuilder info() {
-		MFXFontIcon infoIcon = new MFXFontIcon("mfx-info-circle-filled", 18);
+		MFXFontIcon infoIcon = new MFXFontIcon("mfx-info-circle", 18);
 		return MFXGenericDialogBuilder.build().addStyleClasses("mfx-info-dialog").setHeaderIcon(infoIcon);
 	}
 
