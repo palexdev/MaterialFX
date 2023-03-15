@@ -16,6 +16,26 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.13.10] - 15-03-2023
+
+## Added
+
+- Imported CSSFragment from MaterialFX rewrite branch
+
+## Changed
+
+- Upgraded JavaFX to version 19.0.2
+- Upgraded Ikonli to version 12.3.1
+- Upgraded JUnit to version 5.9.1
+- Improvement for issue #235
+- MFXPopup is not set to fix its position automatically, this fixes issue #188
+- Improvement for issue #245, allow dialogs to wrap a user given node in a scroll pane
+
+## Fixed
+
+- Fix exception due to incorrect Font resource description in info dialogs
+- Fix for issue #292, the stage dialog was being created the wrong way
+
 ## [11.13.8] - 04-01-2023
 
 ## Fixed
