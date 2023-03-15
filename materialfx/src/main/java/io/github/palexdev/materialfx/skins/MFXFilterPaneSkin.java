@@ -22,10 +22,7 @@ import io.github.palexdev.materialfx.beans.BiPredicateBean;
 import io.github.palexdev.materialfx.beans.FilterBean;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXComboBoxCell;
-import io.github.palexdev.materialfx.dialogs.MFXDialogs;
-import io.github.palexdev.materialfx.dialogs.MFXGenericDialog;
-import io.github.palexdev.materialfx.dialogs.MFXStageDialog;
-import io.github.palexdev.materialfx.dialogs.MFXStageDialogBuilder;
+import io.github.palexdev.materialfx.dialogs.*;
 import io.github.palexdev.materialfx.effects.ripple.RippleClipType;
 import io.github.palexdev.materialfx.enums.ChainMode;
 import io.github.palexdev.materialfx.enums.FloatMode;
@@ -87,9 +84,10 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
 
 		dialogContent = MFXDialogs.error()
 				.setShowAlwaysOnTop(false)
+				.setShowMinimize(false)
 				.get();
-		dialog = MFXStageDialogBuilder.build()
-				.setContent(dialogContent)
+		dialog = MFXGenericDialogBuilder.build(dialogContent)
+				.toStageDialogBuilder()
 				.initOwner(filterPane.getScene().getWindow())
 				.initModality(Modality.WINDOW_MODAL)
 				.get();
