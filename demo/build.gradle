@@ -2,7 +2,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 plugins {
     id 'application'
-    id 'org.beryx.jlink' version '2.25.0'
+    id 'org.beryx.jlink' version "$jlink"
 }
 
 repositories {
@@ -14,19 +14,19 @@ repositories {
 }
 
 dependencies {
-    testImplementation "org.testfx:testfx-core:4.0.16-alpha"
-    testImplementation "org.testfx:testfx-junit5:4.0.16-alpha"
+    testImplementation "org.testfx:testfx-core:$testfx"
+    testImplementation "org.testfx:testfx-junit5:$testfx"
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testImplementation 'org.junit.platform:junit-platform-suite-api:1.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit"
+    testImplementation "org.junit.platform:junit-platform-suite-api:$junitSuite"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit"
 
-    implementation name: 'scenicview'
-    implementation("fr.brouillard.oss:cssfx:11.4.0") { exclude group: 'org.openjfx' }
-    implementation 'org.kordamp.ikonli:ikonli-core:12.2.0'
-    implementation 'org.kordamp.ikonli:ikonli-javafx:12.2.0'
-    implementation 'org.kordamp.ikonli:ikonli-fontawesome5-pack:12.2.0'
-    implementation 'io.github.palexdev:virtualizedfx:11.2.6'
+    implementation "io.github.palexdev:scenicview:$scenicView"
+    implementation("fr.brouillard.oss:cssfx:$cssfx") { exclude group: 'org.openjfx' }
+    implementation "org.kordamp.ikonli:ikonli-core:$ikonli"
+    implementation "org.kordamp.ikonli:ikonli-javafx:$ikonli"
+    implementation "org.kordamp.ikonli:ikonli-fontawesome5-pack:$ikonli"
+    implementation "io.github.palexdev:virtualizedfx:$vfx"
     implementation project(':materialfx')
 }
 
@@ -82,7 +82,7 @@ jlink {
     addExtraDependencies('javafx')
 }
 
-task doPackageAll {
+tasks.register('doPackageAll') {
     doLast {
         if (Os.isFamily(Os.FAMILY_UNIX)) {
             exec {

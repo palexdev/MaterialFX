@@ -2,9 +2,9 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 plugins {
     id 'java-library'
-    id 'biz.aQute.bnd.builder' version '6.2.0'
-    id 'com.vanniktech.maven.publish' version '0.19.0'
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'biz.aQute.bnd.builder' version "$bnd"
+    id 'com.vanniktech.maven.publish' version "$mavenPublish"
+    id 'com.github.johnrengelman.shadow' version "$shadowJarPlugin"
 }
 
 repositories {
@@ -16,14 +16,15 @@ repositories {
 }
 
 compileJava {
-    sourceCompatibility = '11'
-    targetCompatibility = '11'
+    sourceCompatibility = "$jdk"
+    targetCompatibility = "$jdk"
 }
 
 dependencies {
-    testImplementation('junit:junit:4.13.2')
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit"
 
-    api 'io.github.palexdev:virtualizedfx:11.2.6'
+    api "io.github.palexdev:virtualizedfx:$vfx"
 }
 
 javafx {
@@ -44,12 +45,14 @@ javadoc {
                      'https://openjfx.io/javadoc/17']
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
+tasks.register('javadocJar', Jar) {
+    dependsOn javadoc
     archiveClassifier.set('javadoc')
     from javadoc.destinationDir
 }
 
-task sourcesJarBuild(type: Jar, dependsOn: classes) {
+tasks.register('sourcesJarBuild', Jar) {
+    dependsOn classes
     archiveClassifier.set('sources')
     from sourceSets.main.allSource
 }
@@ -74,11 +77,11 @@ jar {
 shadowJar {
     mergeServiceFiles()
     dependencies {
-        include(dependency('io.github.palexdev:virtualizedfx:11.2.6'))
+        include(dependency("io.github.palexdev:virtualizedfx:$vfx"))
     }
 }
 
-task copyJar(type: Copy) {
+tasks.register('copyJar', Copy) {
     from jar
     if (Os.isFamily(Os.FAMILY_WINDOWS)) {
         into System.getenv("APPDATA") + '/Scene Builder/Library'
@@ -89,7 +92,7 @@ task copyJar(type: Copy) {
     }
 }
 
-task removeBnd(type: Delete) {
+tasks.register('removeBnd', Delete) {
     delete fileTree(project.buildDir) {
         include '**/*.bnd'
     }
