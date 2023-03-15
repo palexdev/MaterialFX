@@ -136,7 +136,7 @@ public class MFXPopup extends PopupControl implements MFXStyleablePopup {
 	// Methods
 	//================================================================================
 	private void initialize() {
-		setAutoFix(false);
+		setAutoFix(true);
 		setAutoHide(true);
 		setHideOnEscape(true);
 
