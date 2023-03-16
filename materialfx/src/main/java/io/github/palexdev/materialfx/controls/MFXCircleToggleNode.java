@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXToggleNode;
 import io.github.palexdev.materialfx.enums.TextPosition;
 import io.github.palexdev.materialfx.skins.MFXCircleToggleNodeSkin;
@@ -42,7 +41,6 @@ public class MFXCircleToggleNode extends AbstractMFXToggleNode {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-circle-toggle-node";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXCircleToggleNode.css");
 
 	//================================================================================
 	// Constructors
@@ -195,10 +193,5 @@ public class MFXCircleToggleNode extends AbstractMFXToggleNode {
 	@Override
 	public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
 		return getControlCssMetaDataList();
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 }

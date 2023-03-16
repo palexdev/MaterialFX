@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.properties.functional.FunctionProperty;
 import io.github.palexdev.materialfx.collections.TransformableList;
 import io.github.palexdev.materialfx.collections.TransformableListWrapper;
@@ -59,7 +58,6 @@ public class MFXTableView<T> extends Control {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-table-view";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTableView.css");
 	protected final SimpleVirtualFlow<T, MFXTableRow<T>> rowsFlow;
 	protected final ReadOnlyBooleanWrapper virtualFlowInitialized = new ReadOnlyBooleanWrapper();
 
@@ -88,12 +86,7 @@ public class MFXTableView<T> extends Control {
 				transformableList,
 				getTableRowFactory(),
 				Orientation.VERTICAL
-		) {
-			@Override
-			public String getUserAgentStylesheet() {
-				return MFXTableView.this.getUserAgentStylesheet();
-			}
-		};
+		);
 		rowsFlow.cellFactoryProperty().bind(tableRowFactoryProperty());
 		VBox.setVgrow(rowsFlow, Priority.ALWAYS);
 
@@ -294,11 +287,6 @@ public class MFXTableView<T> extends Control {
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXTableViewSkin<>(this, rowsFlow);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	@Override

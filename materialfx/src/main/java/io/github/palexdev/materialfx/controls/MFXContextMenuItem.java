@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.properties.EventHandlerProperty;
 import io.github.palexdev.materialfx.beans.properties.functional.SupplierProperty;
 import io.github.palexdev.materialfx.skins.MFXContextMenuItemSkin;
@@ -58,7 +57,6 @@ public class MFXContextMenuItem extends Labeled {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-menu-item";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXContextMenuItem.css");
 
 	private final StringProperty accelerator = new SimpleStringProperty();
 	private final SupplierProperty<Tooltip> tooltipSupplier = new SupplierProperty<>();
@@ -98,11 +96,6 @@ public class MFXContextMenuItem extends Labeled {
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXContextMenuItemSkin(this);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	//================================================================================

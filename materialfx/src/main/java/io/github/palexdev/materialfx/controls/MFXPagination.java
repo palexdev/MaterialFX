@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.properties.functional.FunctionProperty;
 import io.github.palexdev.materialfx.beans.properties.functional.SupplierProperty;
 import io.github.palexdev.materialfx.controls.cell.MFXPage;
@@ -63,7 +62,6 @@ public class MFXPagination extends Control {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-pagination";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXPagination.css");
 
 	private final IntegerProperty currentPage = new SimpleIntegerProperty(1) {
 		@Override
@@ -199,11 +197,6 @@ public class MFXPagination extends Control {
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXPaginationSkin(this);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	//================================================================================

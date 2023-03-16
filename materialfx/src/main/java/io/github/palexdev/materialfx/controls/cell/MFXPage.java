@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls.cell;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.Alignment;
 import io.github.palexdev.materialfx.beans.NumberRange;
 import io.github.palexdev.materialfx.controls.MFXListView;
@@ -55,7 +54,6 @@ public class MFXPage extends Label implements Cell<Integer> {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-page";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXPagination.css");
 
 	private final MFXPagination pagination;
 	private final ReadOnlyIntegerWrapper index = new ReadOnlyIntegerWrapper();
@@ -145,11 +143,6 @@ public class MFXPage extends Label implements Cell<Integer> {
 	@Override
 	public void updateItem(Integer index) {
 		setIndex(index);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	//================================================================================

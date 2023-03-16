@@ -103,12 +103,7 @@ public class MFXFilterComboBoxSkin<T> extends MFXComboBoxSkin<T> {
 		MFXFilterComboBox<T> comboBox = getComboBox();
 		TransformableList<T> filterList = comboBox.getFilterList();
 
-		MFXTextField searchField = new MFXTextField("", I18N.getOrDefault("filterCombo.search")) {
-			@Override
-			public String getUserAgentStylesheet() {
-				return comboBox.getUserAgentStylesheet();
-			}
-		};
+		MFXTextField searchField = new MFXTextField("", I18N.getOrDefault("filterCombo.search"));
 		searchField.getStyleClass().add("search-field");
 		searchField.textProperty().bindBidirectional(comboBox.searchTextProperty());
 		searchField.setMaxWidth(Double.MAX_VALUE);

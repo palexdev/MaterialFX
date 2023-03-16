@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableBooleanProperty;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableDoubleProperty;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableIntegerProperty;
@@ -123,7 +122,6 @@ public class MFXTextField extends TextField implements Validated, MFXMenuControl
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-text-field";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTextField.css");
 	protected final BoundTextField boundField;
 
 	public static final Color DEFAULT_TEXT_COLOR = Color.rgb(0, 0, 0, 0.87);
@@ -297,11 +295,6 @@ public class MFXTextField extends TextField implements Validated, MFXMenuControl
 	@Override
 	public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
 		return MFXTextField.getClassCssMetaData();
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	//================================================================================

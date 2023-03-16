@@ -13,7 +13,7 @@
                     <option value="run"/>
                 </list>
             </option>
-            <option name="vmOptions" value=""/>
+            <option name="vmOptions" value="-Dglass.disableGrab=true"/>
         </ExternalSystemSettings>
         <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
         <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>

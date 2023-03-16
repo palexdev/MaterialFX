@@ -88,12 +88,7 @@ public class MFXContextMenuSkin implements Skin<MFXContextMenu> {
 		};
 		Bindings.bindContent(container.getChildren(), contextMenu.getItems());
 
-		scrollPane = new MFXScrollPane(container) {
-			@Override
-			public String getUserAgentStylesheet() {
-				return contextMenu.getUserAgentStylesheet();
-			}
-		};
+		scrollPane = new MFXScrollPane(container);
 		scrollPane.setFitToWidth(true);
 		scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 		scrollPane.getTransforms().add(scale);

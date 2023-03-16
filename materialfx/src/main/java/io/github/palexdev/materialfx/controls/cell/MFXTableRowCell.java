@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls.cell;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableRow;
 import io.github.palexdev.materialfx.controls.MFXTableView;
@@ -64,7 +63,6 @@ public class MFXTableRowCell<T, E> extends Labeled {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-table-row-cell";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTableView.css");
 
 	private final Function<T, E> extractor;
 	private final StringConverter<E> converter;
@@ -119,11 +117,6 @@ public class MFXTableRowCell<T, E> extends Labeled {
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXTableRowCellSkin<>(this);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	//================================================================================

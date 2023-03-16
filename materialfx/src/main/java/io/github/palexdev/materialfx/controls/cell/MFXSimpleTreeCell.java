@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls.cell;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXTreeItem;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeCell;
@@ -40,7 +39,6 @@ public class MFXSimpleTreeCell<T> extends AbstractMFXTreeCell<T> {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-tree-cell";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTreeCell.css");
 
 	//================================================================================
 	// Constructors
@@ -150,10 +148,5 @@ public class MFXSimpleTreeCell<T> extends AbstractMFXTreeCell<T> {
 		if (item.isStartExpanded()) {
 			disclosureNode.setRotate(90);
 		}
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 }

@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.enums.StepperToggleState;
 import io.github.palexdev.materialfx.enums.TextPosition;
 import io.github.palexdev.materialfx.skins.MFXStepperSkin;
@@ -64,7 +63,6 @@ public class MFXStepperToggle extends Control implements Validated {
 	//================================================================================
 	private static final StyleablePropertyFactory<MFXStepperToggle> FACTORY = new StyleablePropertyFactory<>(Control.getClassCssMetaData());
 	private final String STYLE_CLASS = "mfx-stepper-toggle";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXStepperToggle.css");
 
 	private final MFXValidator validator = new MFXValidator();
 	private final BooleanProperty showErrorIcon = new SimpleBooleanProperty(true);
@@ -387,11 +385,6 @@ public class MFXStepperToggle extends Control implements Validated {
 	@Override
 	public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
 		return MFXStepperToggle.getControlCssMetaDataList();
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	//================================================================================

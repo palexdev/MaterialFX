@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXListView;
 import io.github.palexdev.materialfx.controls.cell.MFXListCell;
 import io.github.palexdev.materialfx.skins.MFXListViewSkin;
@@ -63,7 +62,6 @@ public class MFXListView<T> extends AbstractMFXListView<T, MFXListCell<T>> {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-list-view";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXListView.css");
 	private final SimpleVirtualFlow<T, MFXListCell<T>> virtualFlow;
 	private final ListChangeListener<? super T> itemsChanged = this::itemsChanged;
 
@@ -238,10 +236,5 @@ public class MFXListView<T> extends AbstractMFXListView<T, MFXListCell<T>> {
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXListViewSkin<>(this, virtualFlow);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 }

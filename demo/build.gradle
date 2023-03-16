@@ -57,6 +57,7 @@ application {
     } else {
         setMainClassName("io.github.palexdev.materialfx.demo.Demo")
     }
+    applicationDefaultJvmArgs = ["-Dglass.disableGrab=true"]
 }
 
 jlink {

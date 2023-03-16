@@ -22,15 +22,15 @@
 	-mfx-thumb-hover-color: rgb(89, 88, 91);
 }
 
-.virtual-flow .scroll-bar .track {
+.mfx-check-list-view .virtual-flow .scroll-bar .track {
 	-fx-background-color: -mfx-track-color;
 }
 
-.virtual-flow .scroll-bar .thumb {
+.mfx-check-list-view .virtual-flow .scroll-bar .thumb {
 	-fx-background-color: -mfx-thumb-color;
 }
 
-.virtual-flow .scroll-bar .thumb:pressed,
-.virtual-flow .scroll-bar .thumb:hover {
+.mfx-check-list-view .virtual-flow .scroll-bar .thumb:pressed,
+.mfx-check-list-view .virtual-flow .scroll-bar .thumb:hover {
 	-fx-background-color: -mfx-thumb-hover-color;
 }

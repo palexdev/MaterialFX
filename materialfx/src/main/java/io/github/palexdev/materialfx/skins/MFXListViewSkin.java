@@ -51,7 +51,6 @@ public class MFXListViewSkin<T> extends SkinBase<AbstractMFXListView<T, ?>> {
 		super(listView);
 		hBar = virtualFlow.getHBar();
 		vBar = virtualFlow.getVBar();
-		virtualFlow.getStylesheets().setAll(listView.getUserAgentStylesheet());
 
 		hideBars = AnimationUtils.TimelineBuilder.build()
 				.add(

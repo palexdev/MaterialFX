@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.Alignment;
 import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.beans.properties.EventHandlerProperty;
@@ -92,7 +91,6 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-combo-box";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXComboBox.css");
 
 	private final ReadOnlyBooleanWrapper showing = new ReadOnlyBooleanWrapper(false);
 	private final ObjectProperty<Alignment> popupAlignment = new SimpleObjectProperty<>(Alignment.of(HPos.CENTER, VPos.BOTTOM));
@@ -289,11 +287,6 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 	@Override
 	public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
 		return MFXComboBox.getClassCssMetaData();
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	//================================================================================

@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.NumberRange;
 import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.beans.properties.functional.SupplierProperty;
@@ -115,7 +114,6 @@ public class MFXSlider extends Control {
 	//================================================================================
 	private static final StyleablePropertyFactory<MFXSlider> FACTORY = new StyleablePropertyFactory<>(Control.getClassCssMetaData());
 	private final String STYLE_CLASS = "mfx-slider";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXSlider.css");
 
 	private final DoubleProperty min = new SimpleDoubleProperty() {
 		@Override
@@ -323,7 +321,6 @@ public class MFXSlider extends Control {
 			container.setId("popupContent");
 			container.setAlignment(Pos.TOP_CENTER);
 			container.setMinSize(45, 40);
-			container.getStylesheets().add(STYLESHEET);
 
 			caret.rotateProperty().bind(Bindings.createDoubleBinding(
 					() -> {
@@ -889,10 +886,5 @@ public class MFXSlider extends Control {
 	@Override
 	protected List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
 		return MFXSlider.getControlCssMetaDataList();
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 }

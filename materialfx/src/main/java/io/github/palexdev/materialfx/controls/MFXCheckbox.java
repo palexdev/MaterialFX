@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.MFXLabeled;
 import io.github.palexdev.materialfx.skins.MFXCheckboxSkin;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
@@ -46,7 +45,6 @@ public class MFXCheckbox extends CheckBox implements MFXLabeled {
 	//================================================================================
 	private static final StyleablePropertyFactory<MFXCheckbox> FACTORY = new StyleablePropertyFactory<>(CheckBox.getClassCssMetaData());
 	private final String STYLE_CLASS = "mfx-checkbox";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXCheckBox.css");
 
 	//================================================================================
 	// Constructors
@@ -179,11 +177,6 @@ public class MFXCheckbox extends CheckBox implements MFXLabeled {
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXCheckboxSkin(this);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	@Override

@@ -79,12 +79,7 @@ public class MFXSpinnerSkin<T> extends SkinBase<MFXSpinner<T>> {
 		super(spinner);
 
 		// Text Field
-		field = new MFXTextField() {
-			@Override
-			public String getUserAgentStylesheet() {
-				return spinner.getUserAgentStylesheet();
-			}
-		};
+		field = new MFXTextField();
 		field.setFloatMode(FloatMode.DISABLED);
 		field.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		field.allowEditProperty().bind(spinner.editableProperty());

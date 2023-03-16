@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.collections.TransformableListWrapper;
 import io.github.palexdev.materialfx.controls.base.MFXMenuControl;
 import io.github.palexdev.materialfx.controls.cell.MFXNotificationCell;
@@ -95,7 +94,6 @@ public class MFXNotificationCenter extends Control implements MFXMenuControl {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-notification-center";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXNotificationCenter.css");
 
 	private final TransformableListWrapper<INotification> notifications = new TransformableListWrapper<>(FXCollections.observableArrayList());
 
@@ -138,12 +136,7 @@ public class MFXNotificationCenter extends Control implements MFXMenuControl {
 				notifications,
 				notification -> new MFXNotificationCell(this, notification),
 				Orientation.VERTICAL
-		) {
-			@Override
-			public String getUserAgentStylesheet() {
-				return MFXNotificationCenter.this.getUserAgentStylesheet();
-			}
-		};
+		);
 
 		unreadCountBinding = Bindings.createLongBinding(() ->
 						notifications.stream()
@@ -168,7 +161,6 @@ public class MFXNotificationCenter extends Control implements MFXMenuControl {
 	//================================================================================
 	private void initialize() {
 		getStyleClass().add(STYLE_CLASS);
-		getStylesheets().add(STYLESHEET);
 		setPrefSize(400, 550);
 		defaultContextMenu();
 

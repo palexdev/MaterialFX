@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
 import io.github.palexdev.materialfx.factories.InsetsFactory;
 import io.github.palexdev.materialfx.selection.TreeSelectionModel;
@@ -41,7 +40,6 @@ public class MFXTreeView<T> extends MFXScrollPane {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-tree-view";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTreeView.css");
 
 	private final ObjectProperty<AbstractMFXTreeItem<T>> root = new SimpleObjectProperty<>(null);
 	private final ObjectProperty<ITreeSelectionModel<T>> selectionModel = new SimpleObjectProperty<>(null);
@@ -155,10 +153,6 @@ public class MFXTreeView<T> extends MFXScrollPane {
 	//================================================================================
 	// Override Methods
 	//================================================================================
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
-	}
 
 	/**
 	 * Events class for tree views.

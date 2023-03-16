@@ -101,7 +101,7 @@ public class MFXCheckboxSkin extends MFXLabeledSkinBase<MFXCheckbox> {
 		super.layoutChildren(contentX, contentY, contentWidth, contentHeight);
 
 		double boxSize = box.getSize();
-		Insets boxPadding = box.getPadding();
+		Insets boxPadding = rippleContainer.getPadding();
 		double boxClipRadius = boxPadding.getLeft() + boxSize / 2 + boxPadding.getRight();
 		rippleContainerClip.setRadius(boxClipRadius);
 	}

@@ -227,12 +227,7 @@ public class MFXComboBoxSkin<T> extends MFXTextFieldSkin {
 	 */
 	protected MFXPopup createPopup() {
 		MFXComboBox<T> comboBox = getComboBox();
-		MFXPopup popup = new MFXPopup() {
-			@Override
-			public String getUserAgentStylesheet() {
-				return comboBox.getUserAgentStylesheet();
-			}
-		};
+		MFXPopup popup = new MFXPopup();
 		popup.getStyleClass().add("combo-popup");
 		popup.setPopupStyleableParent(comboBox);
 		popup.setAutoHide(true);
@@ -255,12 +250,7 @@ public class MFXComboBoxSkin<T> extends MFXTextFieldSkin {
 					comboBox.itemsProperty(),
 					comboBox.getCellFactory(),
 					Orientation.VERTICAL
-			) {
-				@Override
-				public String getUserAgentStylesheet() {
-					return comboBox.getUserAgentStylesheet();
-				}
-			};
+			);
 			virtualFlow.cellFactoryProperty().bind(comboBox.cellFactoryProperty());
 			virtualFlow.prefWidthProperty().bind(comboBox.widthProperty());
 

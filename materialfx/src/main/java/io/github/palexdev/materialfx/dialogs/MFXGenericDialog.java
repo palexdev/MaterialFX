@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.dialogs;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.properties.EventHandlerProperty;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
@@ -64,8 +63,6 @@ public class MFXGenericDialog extends AbstractMFXDialog {
 	//================================================================================
 	// Properties
 	//================================================================================
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXDialogs.css");
-
 	protected HBox header;
 	protected Label headerLabel;
 	protected MFXIconWrapper alwaysOnTopIcon;
@@ -290,14 +287,6 @@ public class MFXGenericDialog extends AbstractMFXDialog {
 	 */
 	public void clearActions() {
 		actions.getChildren().clear();
-	}
-
-	//================================================================================
-	// Overridden Methods
-	//================================================================================
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	//================================================================================

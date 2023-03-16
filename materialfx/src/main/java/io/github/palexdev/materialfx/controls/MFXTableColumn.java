@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.properties.functional.ComparatorProperty;
 import io.github.palexdev.materialfx.beans.properties.functional.FunctionProperty;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
@@ -71,7 +70,6 @@ public class MFXTableColumn<T> extends Labeled {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-table-column";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTableView.css");
 
 	private final FunctionProperty<T, MFXTableRowCell<T, ?>> rowCellFactory = new FunctionProperty<>() {
 		@Override
@@ -174,11 +172,6 @@ public class MFXTableColumn<T> extends Labeled {
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXTableColumnSkin<>(this);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	//================================================================================

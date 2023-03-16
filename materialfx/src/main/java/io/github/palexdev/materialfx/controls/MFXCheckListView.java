@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXListView;
 import io.github.palexdev.materialfx.controls.cell.MFXCheckListCell;
 import io.github.palexdev.materialfx.skins.MFXListViewSkin;
@@ -63,7 +62,6 @@ public class MFXCheckListView<T> extends AbstractMFXListView<T, MFXCheckListCell
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-check-list-view";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXCheckListView.css");
 	private final SimpleVirtualFlow<T, MFXCheckListCell<T>> virtualFlow;
 	private final ListChangeListener<? super T> itemsChanged = this::itemsChanged;
 
@@ -242,10 +240,5 @@ public class MFXCheckListView<T> extends AbstractMFXListView<T, MFXCheckListCell
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXListViewSkin<>(this, virtualFlow);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 }

@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.skins.MFXScrollPaneSkin;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import javafx.beans.property.ObjectProperty;
@@ -39,7 +38,6 @@ public class MFXScrollPane extends ScrollPane {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-scroll-pane";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXScrollPane.css");
 
 	//================================================================================
 	// Constructors
@@ -158,10 +156,4 @@ public class MFXScrollPane extends ScrollPane {
 	protected Skin<?> createDefaultSkin() {
 		return new MFXScrollPaneSkin(this);
 	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
-	}
-
 }

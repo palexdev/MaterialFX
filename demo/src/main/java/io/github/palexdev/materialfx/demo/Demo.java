@@ -19,6 +19,8 @@
 package io.github.palexdev.materialfx.demo;
 
 import fr.brouillard.oss.cssfx.CSSFX;
+import io.github.palexdev.materialfx.css.themes.MFXThemeManager;
+import io.github.palexdev.materialfx.css.themes.Themes;
 import io.github.palexdev.materialfx.demo.controllers.DemoController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -38,10 +40,13 @@ public class Demo extends Application {
 		loader.setControllerFactory(c -> new DemoController(primaryStage));
 		Parent root = loader.load();
 		Scene scene = new Scene(root);
+		MFXThemeManager.addOn(scene, Themes.DEFAULT, Themes.LEGACY);
 		scene.setFill(Color.TRANSPARENT);
 		primaryStage.initStyle(StageStyle.TRANSPARENT);
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("MaterialFX Demo");
 		primaryStage.show();
+
+		//ScenicView.show(scene);
 	}
 }

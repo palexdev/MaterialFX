@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls.legacy;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.utils.NodeUtils;
@@ -47,7 +46,6 @@ public class MFXLegacyTableRow<T> extends TableRow<T> {
 	//================================================================================
 	private static final StyleablePropertyFactory<MFXLegacyTableRow<?>> FACTORY = new StyleablePropertyFactory<>(TableRow.getClassCssMetaData());
 	private final String STYLE_CLASS = "mfx-legacy-table-row";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/MFXTableRow.css");
 	private final MFXCircleRippleGenerator rippleGenerator = new MFXCircleRippleGenerator(this);
 
 	//================================================================================
@@ -193,11 +191,6 @@ public class MFXLegacyTableRow<T> extends TableRow<T> {
 	//================================================================================
 	// Override Methods
 	//================================================================================
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
-	}
-
 	@Override
 	public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
 		return getControlCssMetaDataList();

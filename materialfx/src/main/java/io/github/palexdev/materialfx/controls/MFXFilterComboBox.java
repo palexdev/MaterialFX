@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.properties.functional.FunctionProperty;
 import io.github.palexdev.materialfx.collections.TransformableList;
 import io.github.palexdev.materialfx.collections.TransformableListWrapper;
@@ -43,12 +42,12 @@ import java.util.function.Predicate;
  * In addition to the base class futures this adds:
  * <p> - Uses a {@link TransformableListWrapper} to filter the items. You could even sort them by
  * retrieving the list instance and setting a comparator, {@link TransformableList#comparatorProperty()}.
- * Beware to this though, {@link TransformableList#setReversed(boolean)}, it's really important to specify that
+ * Beware of this though, {@link TransformableList#setReversed(boolean)}, it's really important to specify that
  * the comparator is in reverse order otherwise indexes will be inconsistent.
  * <p> - A function that takes the typed search text as an input and builds a {@link Predicate} as a result to
  * filter the list. This means that the user can fully customize how the list is filtered.
  * <p></p>
- * Note: this combo box do not uses {@link MFXComboBoxCell} and while it does allow it it should never be used.
+ * Note: this combo box do not use {@link MFXComboBoxCell} and while it does allow it it should never be used.
  * Use {@link MFXFilterComboBoxCell} instead for consistent selection behavior.
  */
 public class MFXFilterComboBox<T> extends MFXComboBox<T> {
@@ -56,7 +55,6 @@ public class MFXFilterComboBox<T> extends MFXComboBox<T> {
 	// Properties
 	//================================================================================
 	private final String STYLECLASS = "mfx-filter-combo-box";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXFilterComboBox.css");
 
 	private final StringProperty searchText = new SimpleStringProperty();
 	private final TransformableListWrapper<T> filterList = new TransformableListWrapper<>(FXCollections.observableArrayList());
@@ -159,10 +157,5 @@ public class MFXFilterComboBox<T> extends MFXComboBox<T> {
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXFilterComboBoxSkin<>(this, boundField);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 }

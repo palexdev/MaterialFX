@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.MFXLabeled;
 import io.github.palexdev.materialfx.skins.MFXRadioButtonSkin;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
@@ -48,7 +47,6 @@ public class MFXRadioButton extends RadioButton implements MFXLabeled {
 	//================================================================================
 	private static final StyleablePropertyFactory<MFXRadioButton> FACTORY = new StyleablePropertyFactory<>(RadioButton.getClassCssMetaData());
 	private final String STYLE_CLASS = "mfx-radio-button";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXRadioButton.css");
 
 	//================================================================================
 	// Constructors
@@ -245,11 +243,6 @@ public class MFXRadioButton extends RadioButton implements MFXLabeled {
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXRadioButtonSkin(this);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	@Override

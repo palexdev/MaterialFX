@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls.legacy;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.skins.legacy.MFXLegacyListViewSkin;
 import io.github.palexdev.materialfx.utils.ColorUtils;
@@ -48,7 +47,6 @@ public class MFXLegacyListView<T> extends ListView<T> {
 	//================================================================================
 	private static final StyleablePropertyFactory<MFXLegacyListView<?>> FACTORY = new StyleablePropertyFactory<>(ListView.getClassCssMetaData());
 	private final String STYLE_CLASS = "mfx-legacy-list-view";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/MFXLegacyListView.css");
 
 	//================================================================================
 	// Constructors
@@ -265,11 +263,6 @@ public class MFXLegacyListView<T> extends ListView<T> {
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXLegacyListViewSkin<>(this);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	@Override

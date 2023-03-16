@@ -155,7 +155,6 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
 
 		group = new Group(track, ticksGroup, bar, thumb, popup);
 		group.setManaged(false);
-		group.getStylesheets().add(slider.getUserAgentStylesheet());
 		getChildren().setAll(group);
 
 		releaseTimer.setDuration(Duration.millis(800));

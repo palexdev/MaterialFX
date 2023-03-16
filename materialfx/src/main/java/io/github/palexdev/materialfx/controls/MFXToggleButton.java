@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.properties.EventHandlerProperty;
 import io.github.palexdev.materialfx.controls.base.MFXLabeled;
 import io.github.palexdev.materialfx.skins.MFXToggleButtonSkin;
@@ -58,7 +57,6 @@ public class MFXToggleButton extends Labeled implements Toggle, MFXLabeled {
 	//================================================================================
 	private static final StyleablePropertyFactory<MFXToggleButton> FACTORY = new StyleablePropertyFactory<>(Labeled.getClassCssMetaData());
 	private final String STYLE_CLASS = "mfx-toggle-button";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXToggleButton.css");
 
 	private final ObjectProperty<ToggleGroup> toggleGroup = new SimpleObjectProperty<>();
 	private final BooleanProperty selected = new SimpleBooleanProperty(false);
@@ -374,11 +372,6 @@ public class MFXToggleButton extends Labeled implements Toggle, MFXLabeled {
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXToggleButtonSkin(this);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	@Override

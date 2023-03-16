@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.Alignment;
 import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.beans.properties.functional.ConsumerProperty;
@@ -67,7 +66,6 @@ public class MFXTooltip extends MFXPopup {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-tooltip";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTooltip.css");
 	private final ObjectProperty<Node> icon = new SimpleObjectProperty<>();
 	private final StringProperty text = new SimpleStringProperty();
 
@@ -224,11 +222,6 @@ public class MFXTooltip extends MFXPopup {
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXTooltipSkin(this);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	//================================================================================

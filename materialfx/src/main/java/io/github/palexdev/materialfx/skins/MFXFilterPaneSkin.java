@@ -22,7 +22,10 @@ import io.github.palexdev.materialfx.beans.BiPredicateBean;
 import io.github.palexdev.materialfx.beans.FilterBean;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXComboBoxCell;
-import io.github.palexdev.materialfx.dialogs.*;
+import io.github.palexdev.materialfx.dialogs.MFXDialogs;
+import io.github.palexdev.materialfx.dialogs.MFXGenericDialog;
+import io.github.palexdev.materialfx.dialogs.MFXGenericDialogBuilder;
+import io.github.palexdev.materialfx.dialogs.MFXStageDialog;
 import io.github.palexdev.materialfx.effects.ripple.RippleClipType;
 import io.github.palexdev.materialfx.enums.ChainMode;
 import io.github.palexdev.materialfx.enums.FloatMode;
@@ -101,12 +104,7 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
 		filterBuilder = buildFilterBuilder();
 		activeFiltersPane = buildActiveFilters();
 
-		filtersContainer = new MFXScrollPane(activeFiltersPane) {
-			@Override
-			public String getUserAgentStylesheet() {
-				return filterPane.getUserAgentStylesheet();
-			}
-		};
+		filtersContainer = new MFXScrollPane(activeFiltersPane);
 		filtersContainer.setFitToWidth(true);
 		filtersContainer.maxWidthProperty().bind(filterPane.widthProperty());
 
@@ -233,77 +231,31 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
 
 		ListProperty<BiPredicateBean<?, ?>> predicates = new SimpleListProperty<>(FXCollections.observableArrayList());
 
-		MFXTextField searchField = new MFXTextField() {
-			@Override
-			public String getUserAgentStylesheet() {
-				return filterPane.getUserAgentStylesheet();
-			}
-		};
+		MFXTextField searchField = new MFXTextField();
 		searchField.setFloatMode(FloatMode.DISABLED);
 		searchField.setPromptText(I18N.getOrDefault("filterPane.searchField"));
 		searchField.textProperty().bindBidirectional(query);
 
-		MFXComboBox<Object> enumsCombo = new MFXComboBox<>() {
-			@Override
-			public String getUserAgentStylesheet() {
-				return filterPane.getUserAgentStylesheet();
-			}
-		};
+		MFXComboBox<Object> enumsCombo = new MFXComboBox<>();
 		enumsCombo.setFloatMode(FloatMode.DISABLED);
 		enumsCombo.valueProperty().addListener((observable, oldValue, newValue) -> setQuery(newValue.toString()));
 		enumsCombo.setManaged(false);
 		enumsCombo.setVisible(false);
-                enumsCombo.setCellFactory((t) -> {
-                return new MFXComboBoxCell<>(enumsCombo, t) {
-                        @Override
-                        public String getUserAgentStylesheet() {
-                            return filterPane.getUserAgentStylesheet();
-                        }
-                    };
-                });
+		enumsCombo.setCellFactory(t -> new MFXComboBoxCell<>(enumsCombo, t));
 
-		MFXComboBox<Boolean> booleansCombo = new MFXComboBox<>(FXCollections.observableArrayList(true, false)) {
-			@Override
-			public String getUserAgentStylesheet() {
-				return filterPane.getUserAgentStylesheet();
-			}
-		};
+		MFXComboBox<Boolean> booleansCombo = new MFXComboBox<>(FXCollections.observableArrayList(true, false));
 		booleansCombo.setFloatMode(FloatMode.DISABLED);
 		booleansCombo.valueProperty().addListener((observable, oldValue, newValue) -> setQuery(newValue.toString()));
 		booleansCombo.setManaged(false);
 		booleansCombo.setVisible(false);
-                booleansCombo.setCellFactory((t) -> {
-                return new MFXComboBoxCell<>(booleansCombo, t) {
-                        @Override
-                        public String getUserAgentStylesheet() {
-                            return filterPane.getUserAgentStylesheet();
-                        }
-                    };
-                });
+		booleansCombo.setCellFactory(t -> new MFXComboBoxCell<>(booleansCombo, t));
 
-		MFXComboBox<BiPredicateBean<?, ?>> predicatesCombo = new MFXComboBox<>(predicates) {
-			@Override
-			public String getUserAgentStylesheet() {
-				return filterPane.getUserAgentStylesheet();
-			}
-		};
+		MFXComboBox<BiPredicateBean<?, ?>> predicatesCombo = new MFXComboBox<>(predicates);
 		predicatesCombo.setFloatMode(FloatMode.DISABLED);
 		predicatesCombo.getStyleClass().add("predicates-combo");
-                predicatesCombo.setCellFactory((p) -> {
-                return new MFXComboBoxCell<>(predicatesCombo, p) {
-                        @Override
-                        public String getUserAgentStylesheet() {
-                            return filterPane.getUserAgentStylesheet();
-                        }
-                    };
-                });
+		predicatesCombo.setCellFactory(p -> new MFXComboBoxCell<>(predicatesCombo, p));
 
-		MFXComboBox<AbstractFilter<T, ?>> filterCombo = new MFXComboBox<>(filterPane.getFilters()) {
-			@Override
-			public String getUserAgentStylesheet() {
-				return filterPane.getUserAgentStylesheet();
-			}
-		};
+		MFXComboBox<AbstractFilter<T, ?>> filterCombo = new MFXComboBox<>(filterPane.getFilters());
 		filterCombo.setFloatMode(FloatMode.DISABLED);
 		filterCombo.getStyleClass().add("filter-combo");
 		filterCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -331,21 +283,9 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
 			}
 		});
 		filterCombo.selectFirst();
-                filterCombo.setCellFactory((t) -> {
-                return new MFXComboBoxCell<>(filterCombo, t) {
-                        @Override
-                        public String getUserAgentStylesheet() {
-                            return filterPane.getUserAgentStylesheet();
-                        }
-                    };
-                });
+		filterCombo.setCellFactory(t -> new MFXComboBoxCell<>(filterCombo, t));
 
-		MFXButton addButton = new MFXButton(I18N.getOrDefault("filterPane.addFilter")) {
-			@Override
-			public String getUserAgentStylesheet() {
-				return filterPane.getUserAgentStylesheet();
-			}
-		};
+		MFXButton addButton = new MFXButton(I18N.getOrDefault("filterPane.addFilter"));
 		addButton.setOnAction(event -> {
 			if (filterCombo.getSelectedItem() != null
 					&& predicatesCombo.getSelectedItem() != null

@@ -152,7 +152,6 @@ public class MFXStepperSkin extends SkinBase<MFXStepper> {
 		contentPane.getStyleClass().setAll("content-pane");
 
 		BorderPane container = new BorderPane();
-		container.getStylesheets().setAll(stepper.getUserAgentStylesheet());
 		container.setTop(stepperBar);
 		container.setCenter(contentPane);
 		container.setBottom(buttonsBox);

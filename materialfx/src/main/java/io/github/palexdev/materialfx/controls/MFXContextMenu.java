@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.Alignment;
 import io.github.palexdev.materialfx.beans.properties.functional.ConsumerProperty;
 import io.github.palexdev.materialfx.beans.properties.functional.FunctionProperty;
@@ -71,7 +70,6 @@ public class MFXContextMenu extends MFXPopup {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-context-menu";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXContextMenu.css");
 
 	private final ObservableList<Node> items = FXCollections.observableArrayList();
 	private Node owner;
@@ -176,11 +174,6 @@ public class MFXContextMenu extends MFXPopup {
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXContextMenuSkin(this);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	//================================================================================

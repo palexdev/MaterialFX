@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls.legacy;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.skins.legacy.MFXLegacyTableViewSkin;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Skin;
@@ -35,7 +34,6 @@ public class MFXLegacyTableView<S> extends TableView<S> {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-legacy-table-view";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/MFXTableView.css");
 
 	//================================================================================
 	// Constructors
@@ -64,10 +62,5 @@ public class MFXLegacyTableView<S> extends TableView<S> {
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXLegacyTableViewSkin<>(this);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 }

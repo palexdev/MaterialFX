@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.NumberRange;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableDoubleProperty;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableObjectProperty;
@@ -57,7 +56,6 @@ public class MFXProgressSpinner extends ProgressIndicator {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-progress-spinner";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXProgressSpinner.css");
 
 	private final ObservableList<NumberRange<Double>> ranges1 = FXCollections.observableArrayList();
 	private final ObservableList<NumberRange<Double>> ranges2 = FXCollections.observableArrayList();
@@ -338,11 +336,6 @@ public class MFXProgressSpinner extends ProgressIndicator {
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXProgressSpinnerSkin(this);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	@Override

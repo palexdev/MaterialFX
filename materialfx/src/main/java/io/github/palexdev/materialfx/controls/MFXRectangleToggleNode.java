@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXToggleNode;
 import io.github.palexdev.materialfx.effects.ripple.RippleClipType;
 import io.github.palexdev.materialfx.factories.RippleClipTypeFactory;
@@ -45,7 +44,6 @@ public class MFXRectangleToggleNode extends AbstractMFXToggleNode {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-rectangle-toggle-node";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXRectangleToggleNode.css");
 	private final ObjectProperty<RippleClipTypeFactory> rippleClipTypeFactory = new SimpleObjectProperty<>();
 
 	//================================================================================
@@ -104,10 +102,5 @@ public class MFXRectangleToggleNode extends AbstractMFXToggleNode {
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXRectangleToggleNodeSkin(this);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 }

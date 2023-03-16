@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeCell;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
 import io.github.palexdev.materialfx.controls.cell.MFXSimpleTreeCell;
@@ -60,7 +59,6 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
 	//================================================================================
 	private static final StyleablePropertyFactory<MFXTreeItem<?>> FACTORY = new StyleablePropertyFactory<>(MFXTreeItem.getClassCssMetaData());
 	private final String STYLE_CLASS = "mfx-tree-item";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTreeItem.css");
 
 	private final BooleanProperty expanded = new SimpleBooleanProperty(false);
 	private final ReadOnlyBooleanWrapper animationRunning = new ReadOnlyBooleanWrapper(false);
@@ -290,11 +288,6 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
 	@Override
 	public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
 		return MFXTreeItem.getControlCssMetaDataList();
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	/**

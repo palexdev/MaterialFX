@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeCell;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
 import io.github.palexdev.materialfx.controls.cell.MFXCheckTreeCell;
@@ -48,7 +47,6 @@ public class MFXCheckTreeItem<T> extends MFXTreeItem<T> {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-check-tree-item";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTreeItem.css");
 
 	private final BooleanProperty checked = new SimpleBooleanProperty(false);
 	private final BooleanProperty indeterminate = new SimpleBooleanProperty(false);
@@ -137,11 +135,6 @@ public class MFXCheckTreeItem<T> extends MFXTreeItem<T> {
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXCheckTreeItemSkin<>(this);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	//================================================================================

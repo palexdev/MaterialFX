@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
@@ -48,7 +47,6 @@ public class MFXButton extends Button {
 	//================================================================================
 	private static final StyleablePropertyFactory<MFXButton> FACTORY = new StyleablePropertyFactory<>(Button.getClassCssMetaData());
 	private final String STYLE_CLASS = "mfx-button";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXButton.css");
 	private final MFXCircleRippleGenerator rippleGenerator = new MFXCircleRippleGenerator(this);
 
 	//================================================================================
@@ -354,10 +352,5 @@ public class MFXButton extends Button {
 	@Override
 	public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
 		return MFXButton.getControlCssMetaDataList();
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 }

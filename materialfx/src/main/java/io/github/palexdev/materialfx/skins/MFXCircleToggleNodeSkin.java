@@ -52,12 +52,7 @@ public class MFXCircleToggleNodeSkin extends SkinBase<MFXCircleToggleNode> {
 		circle.getStyleClass().add("circle");
 		circle.radiusProperty().bind(toggleNode.sizeProperty());
 
-		label = new MFXTextField() {
-			@Override
-			public String getUserAgentStylesheet() {
-				return toggleNode.getUserAgentStylesheet();
-			}
-		};
+		label = new MFXTextField();
 		label.alignmentProperty().bind(toggleNode.alignmentProperty());
 		label.fontProperty().bind(toggleNode.fontProperty());
 		label.graphicTextGapProperty().bind(toggleNode.graphicTextGapProperty());

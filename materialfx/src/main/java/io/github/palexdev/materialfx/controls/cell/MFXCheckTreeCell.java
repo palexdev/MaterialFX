@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls.cell;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.MFXCheckTreeItem;
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import javafx.beans.property.BooleanProperty;
@@ -35,7 +34,6 @@ public class MFXCheckTreeCell<T> extends MFXSimpleTreeCell<T> {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-check-tree-cell";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXCheckTreeCell.css");
 	private final MFXCheckbox checkbox;
 
 	private static final PseudoClass CHECKED_PSEUDO_CLASS = PseudoClass.getPseudoClass("checked");
@@ -92,10 +90,5 @@ public class MFXCheckTreeCell<T> extends MFXSimpleTreeCell<T> {
 	 */
 	public MFXCheckbox getCheckbox() {
 		return checkbox;
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 }

@@ -35,7 +35,7 @@
 	-fx-border-radius: 2;
 	-fx-border-width: 1.5;
 
-	-fx-padding: 4;
+	-fx-padding: 2;
 }
 
 .mfx-checkbox .box .mark {
@@ -43,6 +43,10 @@
 	-mfx-color: white;
 	-mfx-description: "mfx-variant7-mark";
 	-mfx-size: 12;
+}
+
+.mfx-checkbox .ripple-container {
+	-fx-padding: 4;
 }
 
 .mfx-checkbox .ripple-container .mfx-ripple-generator {

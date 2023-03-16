@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls.cell;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.base.MFXCombo;
 import io.github.palexdev.virtualizedfx.cell.Cell;
@@ -49,7 +48,6 @@ public class MFXComboBoxCell<T> extends HBox implements Cell<T> {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-combo-box-cell";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXComboBoxCell.css");
 
 	protected final ReadOnlyObjectWrapper<T> data = new ReadOnlyObjectWrapper<>();
 	protected final ReadOnlyIntegerWrapper index = new ReadOnlyIntegerWrapper();
@@ -166,11 +164,6 @@ public class MFXComboBoxCell<T> extends HBox implements Cell<T> {
 	@Override
 	public void updateItem(T item) {
 		setData(item);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	//================================================================================

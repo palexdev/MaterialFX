@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
@@ -53,7 +52,6 @@ public class MFXTableRow<T> extends HBox implements Cell<T> {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-table-row";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXTableView.css");
 
 	private final MFXTableView<T> tableView;
 	private final ObservableList<MFXTableRowCell<T, ?>> cells = FXCollections.observableArrayList();
@@ -227,11 +225,6 @@ public class MFXTableRow<T> extends HBox implements Cell<T> {
 	@Override
 	public void updateIndex(int index) {
 		setIndex(tableView.getTransformableList().viewToSource(index));
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	//================================================================================

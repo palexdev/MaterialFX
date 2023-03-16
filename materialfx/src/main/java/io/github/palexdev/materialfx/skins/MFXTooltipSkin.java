@@ -60,12 +60,7 @@ public class MFXTooltipSkin implements Skin<MFXTooltip> {
 		label.graphicProperty().bind(tooltip.iconProperty());
 
 		scale = new Scale(0.1, 0.1, 0, 0);
-		container = new StackPane(label) {
-			@Override
-			public String getUserAgentStylesheet() {
-				return tooltip.getUserAgentStylesheet();
-			}
-		};
+		container = new StackPane(label);
 		container.getStyleClass().add("container");
 		container.getTransforms().addAll(scale);
 		tooltip.setContent(container);

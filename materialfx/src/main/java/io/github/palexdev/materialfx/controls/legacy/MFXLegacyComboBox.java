@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls.legacy;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.MFXSnapshotWrapper;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.skins.legacy.MFXLegacyComboBoxSkin;
@@ -72,7 +71,6 @@ public class MFXLegacyComboBox<T> extends ComboBox<T> implements Validated {
 	//================================================================================
 	private static final StyleablePropertyFactory<MFXLegacyComboBox<?>> FACTORY = new StyleablePropertyFactory<>(ComboBox.getClassCssMetaData());
 	private final String STYLE_CLASS = "mfx-legacy-combo-box";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/legacy/MFXComboBox.css");
 
 	private final MFXValidator validator = new MFXValidator();
 	private final ObjectProperty<Paint> invalidLineColor = new SimpleObjectProperty<>(Color.web("#EF6E6B"));
@@ -376,11 +374,6 @@ public class MFXLegacyComboBox<T> extends ComboBox<T> implements Validated {
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXLegacyComboBoxSkin<>(this);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	@Override

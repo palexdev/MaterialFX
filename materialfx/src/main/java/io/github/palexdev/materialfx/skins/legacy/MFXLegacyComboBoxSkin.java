@@ -92,7 +92,6 @@ public class MFXLegacyComboBoxSkin<T> extends ComboBoxListViewSkin<T> {
 		validate = new Label();
 		validate.setGraphic(warnWrapper);
 		validate.getStyleClass().add("validate-label");
-		validate.getStylesheets().setAll(comboBox.getUserAgentStylesheet());
 		validate.setGraphicTextGap(padding);
 		validate.setVisible(false);
 		validate.setManaged(false);

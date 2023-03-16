@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.Alignment;
 import io.github.palexdev.materialfx.beans.NumberRange;
 import io.github.palexdev.materialfx.beans.PositionBean;
@@ -90,7 +89,6 @@ public class MFXDatePicker extends MFXTextField {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-date-picker";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXDatePicker.css");
 
 	// Popup Properties
 	private final ReadOnlyBooleanWrapper showing = new ReadOnlyBooleanWrapper(false);
@@ -286,11 +284,6 @@ public class MFXDatePicker extends MFXTextField {
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXDatePickerSkin(this, boundField);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	//================================================================================

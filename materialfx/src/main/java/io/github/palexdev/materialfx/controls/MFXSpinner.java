@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.properties.functional.BiFunctionProperty;
 import io.github.palexdev.materialfx.beans.properties.functional.ConsumerProperty;
 import io.github.palexdev.materialfx.beans.properties.functional.SupplierProperty;
@@ -63,7 +62,6 @@ public class MFXSpinner<T> extends Control {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-spinner";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXSpinner.css");
 
 	private final ReadOnlyObjectWrapper<T> value = new ReadOnlyObjectWrapper<>();
 	private final ObjectProperty<SpinnerModel<T>> spinnerModel = new SimpleObjectProperty<>();
@@ -144,11 +142,6 @@ public class MFXSpinner<T> extends Control {
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXSpinnerSkin<>(this);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	//================================================================================

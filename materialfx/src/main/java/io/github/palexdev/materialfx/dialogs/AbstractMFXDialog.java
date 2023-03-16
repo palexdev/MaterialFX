@@ -18,6 +18,8 @@
 
 package io.github.palexdev.materialfx.dialogs;
 
+import io.github.palexdev.materialfx.css.themes.MFXThemeManager;
+import io.github.palexdev.materialfx.css.themes.Themes;
 import javafx.scene.layout.BorderPane;
 
 /**
@@ -41,6 +43,7 @@ public abstract class AbstractMFXDialog extends BorderPane {
 	//================================================================================
 	private void initialize() {
 		getStyleClass().add(STYLE_CLASS);
+		MFXThemeManager.addOn(this, Themes.DEFAULT, Themes.LEGACY);
 		setMinSize(400, 200);
 	}
 

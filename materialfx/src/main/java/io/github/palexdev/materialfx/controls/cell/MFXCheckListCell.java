@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls.cell;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.controls.MFXCheckListView;
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
@@ -46,7 +45,6 @@ public class MFXCheckListCell<T> extends AbstractMFXListCell<T> {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-check-list-cell";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXCheckListCell.css");
 	protected final MFXCircleRippleGenerator rippleGenerator = new MFXCircleRippleGenerator(this);
 
 	private final MFXCheckListView<T> listView;
@@ -60,7 +58,6 @@ public class MFXCheckListCell<T> extends AbstractMFXListCell<T> {
 		super(listView, data);
 		this.listView = listView;
 		checkbox = new MFXCheckbox("");
-		checkbox.getStylesheets().setAll(getUserAgentStylesheet());
 
 		if (!(data instanceof Node)) {
 			label = new Label();
@@ -173,10 +170,5 @@ public class MFXCheckListCell<T> extends AbstractMFXListCell<T> {
 	@Override
 	public Node getNode() {
 		return this;
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 }

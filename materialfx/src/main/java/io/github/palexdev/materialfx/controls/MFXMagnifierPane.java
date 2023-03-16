@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableBooleanProperty;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableDoubleProperty;
@@ -90,7 +89,6 @@ public class MFXMagnifierPane extends Control {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-magnifier";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXMagnifier.css");
 
 	private final ObjectProperty<Node> content = new SimpleObjectProperty<>();
 	private final ObjectProperty<PositionBean> position = new SimpleObjectProperty<>();
@@ -146,11 +144,6 @@ public class MFXMagnifierPane extends Control {
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXMagnifierPaneSkin(this);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	//================================================================================

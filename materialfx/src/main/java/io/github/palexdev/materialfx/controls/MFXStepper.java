@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.properties.EventHandlerProperty;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle.MFXStepperToggleEvent;
 import io.github.palexdev.materialfx.enums.StepperToggleState;
@@ -72,7 +71,6 @@ public class MFXStepper extends Control {
 	//================================================================================
 	private static final StyleablePropertyFactory<MFXStepper> FACTORY = new StyleablePropertyFactory<>(Control.getClassCssMetaData());
 	private final String STYLE_CLASS = "mfx-stepper";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXStepper.css");
 
 	private final ObservableList<MFXStepperToggle> stepperToggles = FXCollections.observableArrayList();
 	private final DoubleProperty animationDuration = new SimpleDoubleProperty(700.0);
@@ -682,11 +680,6 @@ public class MFXStepper extends Control {
 	@Override
 	public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
 		return MFXStepper.getControlCssMetaDataList();
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	//================================================================================

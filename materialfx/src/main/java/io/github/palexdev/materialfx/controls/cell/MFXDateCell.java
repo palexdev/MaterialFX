@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls.cell;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import io.github.palexdev.virtualizedfx.cell.Cell;
 import javafx.beans.binding.Bindings;
@@ -46,7 +45,6 @@ public class MFXDateCell extends Label implements Cell<LocalDate> {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-date-cell";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXDateCell.css");
 
 	private final MFXDatePicker datePicker;
 	private final ReadOnlyObjectWrapper<LocalDate> date = new ReadOnlyObjectWrapper<>();
@@ -126,11 +124,6 @@ public class MFXDateCell extends Label implements Cell<LocalDate> {
 	@Override
 	public void updateItem(LocalDate date) {
 		setDate(date);
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	//================================================================================

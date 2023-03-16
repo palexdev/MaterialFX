@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.NumberRange;
 import io.github.palexdev.materialfx.skins.MFXProgressBarSkin;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
@@ -51,7 +50,6 @@ public class MFXProgressBar extends ProgressBar {
 	//================================================================================
 	private static final StyleablePropertyFactory<MFXProgressBar> FACTORY = new StyleablePropertyFactory<>(ProgressBar.getClassCssMetaData());
 	private final String STYLE_CLASS = "mfx-progress-bar";
-	private final String STYLESHEETS = MFXResourcesLoader.load("css/MFXProgressBar.css");
 
 	private final ObservableList<NumberRange<Double>> ranges1 = FXCollections.observableArrayList();
 	private final ObservableList<NumberRange<Double>> ranges2 = FXCollections.observableArrayList();
@@ -192,10 +190,5 @@ public class MFXProgressBar extends ProgressBar {
 	@Override
 	protected List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
 		return getClassCssMetaData();
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEETS;
 	}
 }

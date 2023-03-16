@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableBooleanProperty;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableStringProperty;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
@@ -57,7 +56,6 @@ public class MFXPasswordField extends MFXTextField {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-password-field";
-	private final String STYLE_SHEET = MFXResourcesLoader.load("css/MFXPasswordField.css");
 
 	public static final String BULLET = "\u25cf";
 	protected static final PseudoClass MASKED_PSEUDO_CLASS = PseudoClass.getPseudoClass("masked");
@@ -266,11 +264,6 @@ public class MFXPasswordField extends MFXTextField {
 	@Override
 	public void selectEndOfNextWord() {
 		boundField.selectAll();
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLE_SHEET;
 	}
 
 	//================================================================================

@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.controls.cell;
 
-import io.github.palexdev.materialfx.MFXResourcesLoader;
 import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.controls.MFXListView;
 import io.github.palexdev.materialfx.controls.cell.base.AbstractMFXListCell;
@@ -45,7 +44,6 @@ public class MFXListCell<T> extends AbstractMFXListCell<T> {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-list-cell";
-	private final String STYLESHEET = MFXResourcesLoader.load("css/MFXListCell.css");
 	protected final MFXCircleRippleGenerator rippleGenerator = new MFXCircleRippleGenerator(this);
 
 	private final Label label;
@@ -136,11 +134,6 @@ public class MFXListCell<T> extends AbstractMFXListCell<T> {
 	@Override
 	public Node getNode() {
 		return this;
-	}
-
-	@Override
-	public String getUserAgentStylesheet() {
-		return STYLESHEET;
 	}
 
 	@Override
