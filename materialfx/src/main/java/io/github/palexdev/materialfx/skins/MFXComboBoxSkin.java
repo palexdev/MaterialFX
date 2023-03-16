@@ -23,6 +23,9 @@ import io.github.palexdev.materialfx.selection.ComboBoxSelectionModel;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
 import io.github.palexdev.virtualizedfx.cell.Cell;
 import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -50,6 +53,8 @@ public class MFXComboBoxSkin<T> extends MFXTextFieldSkin {
 	//================================================================================
 	protected final MFXPopup popup;
 	private EventHandler<MouseEvent> popupManager;
+
+	protected final BooleanProperty vfInitialized = new SimpleBooleanProperty(false);
 	protected SimpleVirtualFlow<T, Cell<T>> virtualFlow;
 
 	//================================================================================
@@ -258,6 +263,16 @@ public class MFXComboBoxSkin<T> extends MFXTextFieldSkin {
 			};
 			virtualFlow.cellFactoryProperty().bind(comboBox.cellFactoryProperty());
 			virtualFlow.prefWidthProperty().bind(comboBox.widthProperty());
+
+			Runnable createBinding = () ->
+					virtualFlow.prefHeightProperty().bind(Bindings.createDoubleBinding(
+							() -> Math.min(comboBox.getRowsCount(), comboBox.getItems().size()) * virtualFlow.getCellHeight(),
+							comboBox.rowsCountProperty(), comboBox.getItems(), virtualFlow.cellFactoryProperty(), vfInitialized
+					));
+			virtualFlow.itemsProperty().addListener((observable, oldValue, newValue) -> {
+				if (newValue != null) createBinding.run();
+			});
+			createBinding.run();
 		}
 		return virtualFlow;
 	}
@@ -274,6 +289,14 @@ public class MFXComboBoxSkin<T> extends MFXTextFieldSkin {
 	//================================================================================
 	// Overridden Methods
 	//================================================================================
+	@Override
+	protected void layoutChildren(double x, double y, double w, double h) {
+		super.layoutChildren(x, y, w, h);
+
+		if (virtualFlow != null && !vfInitialized.get() && virtualFlow.getCellHeight() != 0)
+			vfInitialized.set(true);
+	}
+
 	@Override
 	public void dispose() {
 		super.dispose();

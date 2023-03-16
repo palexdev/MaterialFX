@@ -22,10 +22,9 @@ import io.github.palexdev.materialfx.collections.TransformableList;
 import io.github.palexdev.materialfx.controls.BoundTextField;
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
-import io.github.palexdev.materialfx.controls.cell.MFXFilterComboBoxCell;
 import io.github.palexdev.materialfx.i18n.I18N;
-import io.github.palexdev.virtualizedfx.cell.Cell;
 import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -114,7 +113,7 @@ public class MFXFilterComboBoxSkin<T> extends MFXComboBoxSkin<T> {
 		searchField.textProperty().bindBidirectional(comboBox.searchTextProperty());
 		searchField.setMaxWidth(Double.MAX_VALUE);
 
-		SimpleVirtualFlow<T, Cell<T>> virtualFlow = new SimpleVirtualFlow<>(
+		virtualFlow = new SimpleVirtualFlow<>(
 				filterList,
 				comboBox.getCellFactory(),
 				Orientation.VERTICAL
@@ -126,6 +125,16 @@ public class MFXFilterComboBoxSkin<T> extends MFXComboBoxSkin<T> {
 				popup.hide();
 			}
 		});
+
+		Runnable createBinding = () ->
+				virtualFlow.minHeightProperty().bind(Bindings.createDoubleBinding(
+						() -> Math.min(comboBox.getRowsCount(), comboBox.getItems().size()) * virtualFlow.getCellHeight(),
+						comboBox.rowsCountProperty(), comboBox.getItems(), virtualFlow.cellFactoryProperty(), vfInitialized
+				));
+		virtualFlow.itemsProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue != null) createBinding.run();
+		});
+		createBinding.run();
 
 		VBox container = new VBox(10, searchField, virtualFlow);
 		container.getStyleClass().add("search-container");

@@ -26,6 +26,7 @@ import io.github.palexdev.materialfx.beans.properties.functional.BiFunctionPrope
 import io.github.palexdev.materialfx.beans.properties.functional.ConsumerProperty;
 import io.github.palexdev.materialfx.beans.properties.functional.FunctionProperty;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableBooleanProperty;
+import io.github.palexdev.materialfx.beans.properties.styleable.StyleableIntegerProperty;
 import io.github.palexdev.materialfx.controls.base.MFXCombo;
 import io.github.palexdev.materialfx.controls.cell.MFXComboBoxCell;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
@@ -387,12 +388,34 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 	//================================================================================
 	// Styleable Properties
 	//================================================================================
+	private final StyleableIntegerProperty rowsCount = new StyleableIntegerProperty(
+			StyleableProperties.ROWS_COUNT,
+			this,
+			"rowsCount",
+			10
+	);
+
 	private final StyleableBooleanProperty scrollOnOpen = new StyleableBooleanProperty(
 			StyleableProperties.SCROLL_ON_OPEN,
 			this,
 			"scrollOnOpen",
 			false
 	);
+
+	public int getRowsCount() {
+		return rowsCount.get();
+	}
+
+	/**
+	 * Specifies the number of rows to show in the list, this determines the height of the popup.
+	 */
+	public StyleableIntegerProperty rowsCountProperty() {
+		return rowsCount;
+	}
+
+	public void setRowsCount(int rowsCount) {
+		this.rowsCount.set(rowsCount);
+	}
 
 	public boolean isScrollOnOpen() {
 		return scrollOnOpen.get();
@@ -417,6 +440,13 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 		private static final StyleablePropertyFactory<MFXComboBox<?>> FACTORY = new StyleablePropertyFactory<>(MFXTextField.getClassCssMetaData());
 		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
+		private static final CssMetaData<MFXComboBox<?>, Number> ROWS_COUNT =
+				FACTORY.createSizeCssMetaData(
+						"-mfx-rows-count",
+						MFXComboBox::rowsCountProperty,
+						10
+				);
+
 		private static final CssMetaData<MFXComboBox<?>, Boolean> SCROLL_ON_OPEN =
 				FACTORY.createBooleanCssMetaData(
 						"-mfx-scroll-on-open",
@@ -427,7 +457,7 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 		static {
 			cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
 					MFXTextField.getClassCssMetaData(),
-					SCROLL_ON_OPEN
+					ROWS_COUNT, SCROLL_ON_OPEN
 			);
 		}
 	}
