@@ -31,7 +31,6 @@ import javafx.collections.ObservableList;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -189,11 +188,11 @@ public class MFXIconWrapper extends StackPane {
 		super.layoutChildren();
 
 		Node icon = getIcon();
+		if (getScene() == null || getScene().getWindow() == null) return;
 		if (icon != null && getSize() == -1) {
-			double iW = icon.prefWidth(-1);
-			double iH = icon.prefHeight(-1);
-			Insets padding = getPadding();
-			double size = Math.max(padding.getLeft() + iW + padding.getRight(), padding.getTop() + iH + padding.getBottom());
+			double iW = snapSizeX(icon.prefWidth(-1));
+			double iH = snapSizeY(icon.prefHeight(-1));
+			double size = Math.max(snappedLeftInset() + iW + snappedRightInset(), snappedTopInset() + iH + snappedBottomInset());
 			setSize(size);
 		}
 	}
