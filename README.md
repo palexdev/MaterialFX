@@ -39,13 +39,14 @@
 * [About the Logo](#about-the-logo)
 * [Some GIFs](#preview-gifs)
 * [Getting Started](#getting-started)
-  * [Build](#build)
-  * [Usage](#usage)
-    * [Gradle](#gradle)
-    * [Maven](#maven)
+    * [Build](#build)
+    * [Usage](#usage)
+        * [Gradle](#gradle)
+        * [Maven](#maven)
 * [Documentation](#documentation)
 * [Changelog](#changelog)
 * [Roadmap](#roadmap)
+* [Theming System](#theming-system)
 * [Contributing](#contributing)
 * [License](#license)
 * [Contact](#contact)
@@ -86,12 +87,13 @@ and many utilities for JavaFX and Java (NodeUtils, ColorUtils, StringUtils ...).
 <!-- ABOUT THE PROJECT -->
 
 ## About The Logo
+
 MaterialFX v11.13.0 brought a lot of fixes and new features, but it also brought a new logo, something that is more
 meaningful for me and that somewhat represents the new version.  
 The new logo is a Phoenix, the immortal bird from Greek mythology, associated to regeneration/rebirth.
 When a Phoenix dies it obtains new life by raising from its ashes.  
 MaterialFX v11.13.0 fixed many critical bugs and broken features, I like to think that it is reborn from
-the previous version, so I thought a new logo would have been a good idea. 
+the previous version, so I thought a new logo would have been a good idea.
 
 <!-- PREVIEW GIFS -->
 
@@ -210,7 +212,7 @@ To run the main demo, execute the following command:
     gradlew run
 
 **NOTE**: MaterialFX requires **Java 11** and above.
-  
+
 **NOTE**: Starting from version 11.14.0 (next major version), MaterialFX will transition to
 Java 17 and bump version to 17.x.x. What will happen to version 11 is still to be decided
 
@@ -224,7 +226,7 @@ repositories {
 }
 
 dependencies {
-  implementation 'io.github.palexdev:materialfx:11.13.10'
+    implementation 'io.github.palexdev:materialfx:11.14.0'
 }
 ```
 
@@ -233,16 +235,18 @@ dependencies {
 ```xml
 
 <dependency>
-  <groupId>io.github.palexdev</groupId>
-  <artifactId>materialfx</artifactId>
-  <version>11.13.10</version>
+    <groupId>io.github.palexdev</groupId>
+    <artifactId>materialfx</artifactId>
+    <version>11.14.0</version>
 </dependency>
 ```
 
 <!-- DOCUMENTATION -->
+
 ## Documentation
+
 You can read MaterialFX's documentation at [javadoc.io](https://javadoc.io/doc/io.github.palexdev/materialfx)
-                                                                    
+
 <!-- CHANGELOG -->
 
 ## Changelog
@@ -258,6 +262,109 @@ See the [Open Issues](https://github.com/palexdev/MaterialFX/issues) for a list 
 .  
 See the [ROADMAP](https://github.com/palexdev/MaterialFX/blob/main/ROADMAP.md) for a list of implemented and upcoming
 features.
+
+<!-- THEMING SYSTEM -->
+
+## Theming System
+
+Since MaterialFX 11.14.0 the way controls are styles through CSS has drastically changed. Before telling you about the
+new
+Theming System, and about its pros and cons, let's talk a bit on the history of this project, the causes that brought to
+this drastic change.
+
+When I started developing MaterialFX I was a complete noob, I knew nothing about JavaFX. But I really wanted to use it
+and
+to make it look good. Competitors had broken libraries that made usage difficult for the end user, I didn't like them at
+all.  
+And so the journey begun, MaterialFX is born. Like any newbies, what do you do when you know nothing but want to
+learn?  
+You check others work and try to copy them but still make the changes you want to implement.  
+This lead me to create controls that made use of the infamous `getUserAgentStylesheet()` method. For those of you that
+do not
+know about it, a developer of custom controls is supposed to override that method to provide a CSS stylesheet to define
+the
+author intended style for the custom control.  
+Sounds great right, just the thing I need... Well, I'd say that if only it worked properly. This system has been the
+root
+cause of CSS issues right from the start of the project, with little I could do to fix it **properly**.  
+_(Little secret that almost no one know: I actually sent a PR on the JavaFX repo to improve the system and make it
+dynamic,
+guess what, it's still there lol)_
+
+The two most annoying issues caused by this system are:
+
+1) The little buggers didn't think of nested custom controls. For example, if a custom control(parent) has a skin that
+   uses other
+   custom controls(children), the user agent of the parent will be **completely ignored** by the children, the result is
+   a
+   bunch of children that **cannot** be styled in any way unless you create a custom skin yourself. A fix I implemented
+   for this
+   in the past, was to override inline the `getUserAgentStylesheet()` method of each children node to use the one of the
+   parent,
+   and even this drastic solution was working half the time (didn't work in some user cases)
+2) For some reason, sometimes stylesheets provided by the user were half or completely **ignored** leading to half/not
+   styled(as intended) custom controls. This was the most annoying issue, as the causes would vary from case to case,
+   not always
+   there was a easy/feasible solution, a nightmare, really
+
+**End of the rant**  
+How can I fix it? I asked myself many many times.  
+Recently I've been working on a rewrite of [MaterialFX](https://github.com/palexdec/MaterialFX/tree/rewrite), this new
+version will have controls based on the new Material Design 3 Guidelines, will implement modular themes thanks to the
+usage
+of [SASS](https://sass-lang.com/) and a Theming API that will let user change themes, implement new ones, very easily.  
+So the idea is to backport at least the concept on the main branch at least until the rewrite is done.
+
+**The Theme API**  
+An interface called `Theme` allows users to define custom themes entries. It defines the bare minimum for a theme,
+its path and a way to load it.  
+There are two implementations of this interface:
+
+1) `Themes`: this enumerator defines the default themes of MaterialFX, there is the `DEFAULT` theme that includes the
+   stylesheets
+   of all MaterialFX controls, as well as dialogs, popups, menus, etc...
+2) `Stylesheets`: this enumerator defines all the stylesheets of every single control, allowing the user to not use a
+   theme
+   (for whatever reason) and instead choose which component he wants to style
+
+`MFXThemeManager` is a utility class that will help the user add/set themes and stylesheets (which implement `Theme`) on
+nodes or scenes.
+
+**Pros and Cons**
+
+- The biggest pro is to have a more reliable styling system. With this users shouldn't hava any issue anymore while
+  styling
+  MaterialFX controls with their custom stylesheets. Of course, I consider the system _experimental_, I don't expect to
+  not have even a single report about CSS bugs, but they should be way less and much easier to fix
+- Another pro is to have less code duplication as now I don't need to override the infamous `getUserAgentStylesheet()`
+  anymore anywhere
+- This change should have also impacted on memory usage in a good way as now controls do not store the "url" to their
+  stylesheet anymore
+
+
+- One con is that now themes must be managed by the user. Since controls are not styled by default, the user must
+  use the aforementioned manager or enumerators to load/add the themes on the App.  
+  The preferred way to do so would be to add the themes/stylesheets on the root scene, like this:
+  ```java
+  public class App extends Application {
+  
+    @Override
+    public void start(Stage stage) {
+     ...
+     Scene scene = ...;
+     MFXThemeManager.addOn(scene, Themes.DEFAULT, Themes.LEGACY);
+    }
+  }
+  ```
+- Another con that derives from the above example are dialogs/popups or any separate stage/scene.
+  Since you are applying the themes on the primary stage's scene, it means that all other scenes will be un-styled.
+  **You have to add the Themes on every separate scene**.
+  To simplify things, MaterialFX automatically applies the Themes on its dialogs and popups, but since now they
+  are added to the `getStylesheets()` list it's easy to remove them and define your own
+- The last con I can think of is SceneBuilder. As of now there is no support for it, I have some ideas on how to style
+  controls inside of it though. The issue is that even if I figure out a way, I doubt the system will be flexible.
+  What I mean is, I can probably set the default themes on the SceneBuilder' scene, but it's very unlikely there will
+  be a way to choose which themes/stylesheets will be applied
 
 <!-- CONTRIBUTING -->
 
@@ -297,13 +404,16 @@ especially considering that developing for JavaFX also means to deal with its cl
 design decisions. Many times I've honestly been on the verge of giving up because sometimes it's really too much
 stress to handle.  
 **But**, today MaterialFX is a great library, supported by many people and I'm proud of it.
-If you are using MaterialFX in your projects and feel like it, I recently activated [GitHub Sponsors](https://github.com/sponsors/palexdev) so
+If you are using MaterialFX in your projects and feel like it, I recently
+activated [GitHub Sponsors](https://github.com/sponsors/palexdev) so
 you can easily donate/sponsor.
 
 <!-- SUPPORTERS -->
 
 # Supporters:
-(If you want your github page to be linked here and you didn't specify your username in the donation, feel free to contact me by email and tell me. Also contact me if for some some reason you don't want to be listed here)
+
+(If you want your github page to be linked here and you didn't specify your username in the donation, feel free to
+contact me by email and tell me. Also contact me if for some some reason you don't want to be listed here)
 
 - Alaa Abu Zidan
 - Alex Hawk
@@ -318,4 +428,5 @@ you can easily donate/sponsor.
 - Yiding He
 - *Your name can be here by supporting me at this link, [GitHub Sponsors](https://github.com/sponsors/palexdev)*
 
-Thank you very very much to all supporters, to all people who contribute to the project, to all people that thanked me, you really made my day
+Thank you very very much to all supporters, to all people who contribute to the project, to all people that thanked me,
+you really made my day

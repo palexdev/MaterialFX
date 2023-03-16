@@ -16,6 +16,18 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.14.0] - 16-03-2023
+
+## Changed
+
+- Ditch the user agent stylesheet system in favor of a new theming API
+- MFXIconWrapper: improve layout algorithm for automatic size detection. Do not set size until the Scene is inside a
+  Window as this could lead to wrong icon sizes. Also use snapped sizes
+- MFXComboBox, MFXComboBoxSkin, MFXFilterComboBoxSkin: improvement for issue #243, allow to easily dimension the combo
+  popup by setting the number of rows to show in the list
+- MFXFilterComboBoxSkin: do not create a new instance of SimpleVirtualFlow, use the one in the superclass instead
+- Renamed GenericAddRemoveChange to NonIterableChange as it was causing compilation issues from time to time
+
 ## [11.13.10] - 15-03-2023
 
 ## Added
