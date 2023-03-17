@@ -27,6 +27,8 @@ import io.github.palexdev.materialfx.beans.properties.functional.ConsumerPropert
 import io.github.palexdev.materialfx.beans.properties.functional.FunctionProperty;
 import io.github.palexdev.materialfx.beans.properties.functional.SupplierProperty;
 import io.github.palexdev.materialfx.controls.cell.MFXDateCell;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.enums.FloatMode;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.skins.MFXDatePickerSkin;
@@ -281,6 +283,12 @@ public class MFXDatePicker extends MFXTextField {
 	//================================================================================
 	// Overridden Methods
 	//================================================================================
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.DATE_PICKER;
+	}
+
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXDatePickerSkin(this, boundField);

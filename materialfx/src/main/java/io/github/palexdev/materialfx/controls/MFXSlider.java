@@ -21,6 +21,9 @@ package io.github.palexdev.materialfx.controls;
 import io.github.palexdev.materialfx.beans.NumberRange;
 import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.beans.properties.functional.SupplierProperty;
+import io.github.palexdev.materialfx.controls.base.Themable;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.enums.SliderEnums.SliderMode;
 import io.github.palexdev.materialfx.enums.SliderEnums.SliderPopupSide;
@@ -38,6 +41,7 @@ import javafx.css.*;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.Skin;
@@ -108,7 +112,7 @@ import static io.github.palexdev.materialfx.utils.NodeUtils.isPseudoClassActive;
  * it is invalid but rather the value is clamped between the specified min and max values using {@link NumberUtils#clamp(double, double, double)}.
  * If you don't respect the order you'll end with an inconsistent state and most likely with a messed layout.
  */
-public class MFXSlider extends Control {
+public class MFXSlider extends Control implements Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -197,6 +201,7 @@ public class MFXSlider extends Control {
 
 		defaultThumbSupplier();
 		defaultPopupSupplier();
+		sceneBuilderIntegration();
 	}
 
 	private void addListeners() {
@@ -878,6 +883,17 @@ public class MFXSlider extends Control {
 	//================================================================================
 	// Override Methods
 	//================================================================================
+
+	@Override
+	public Parent toParent() {
+		return this;
+	}
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.SLIDER;
+	}
+
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXSliderSkin(this);

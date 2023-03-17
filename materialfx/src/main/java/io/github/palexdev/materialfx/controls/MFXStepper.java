@@ -20,6 +20,9 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.beans.properties.EventHandlerProperty;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle.MFXStepperToggleEvent;
+import io.github.palexdev.materialfx.controls.base.Themable;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.enums.StepperToggleState;
 import io.github.palexdev.materialfx.skins.MFXStepperSkin;
 import io.github.palexdev.materialfx.utils.NodeUtils;
@@ -65,7 +68,7 @@ import java.util.Objects;
  *
  * @see MFXStepperToggle
  */
-public class MFXStepper extends Control {
+public class MFXStepper extends Control implements Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -96,6 +99,7 @@ public class MFXStepper extends Control {
 		getStyleClass().setAll(STYLE_CLASS);
 		setMinHeight(400);
 		addListeners();
+		sceneBuilderIntegration();
 	}
 
 	/**
@@ -672,6 +676,17 @@ public class MFXStepper extends Control {
 	//================================================================================
 	// Override Methods
 	//================================================================================
+
+	@Override
+	public Parent toParent() {
+		return this;
+	}
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.STEPPER;
+	}
+
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXStepperSkin(this);

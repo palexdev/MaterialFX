@@ -20,12 +20,16 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.beans.properties.EventHandlerProperty;
 import io.github.palexdev.materialfx.beans.properties.functional.SupplierProperty;
+import io.github.palexdev.materialfx.controls.base.Themable;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.skins.MFXContextMenuItemSkin;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.Skin;
 import javafx.scene.control.Tooltip;
@@ -52,7 +56,7 @@ import java.util.function.Supplier;
  * <p></p>
  * A {@link Builder} class is offered to easily build items with fluent api.
  */
-public class MFXContextMenuItem extends Labeled {
+public class MFXContextMenuItem extends Labeled implements Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -93,6 +97,17 @@ public class MFXContextMenuItem extends Labeled {
 	//================================================================================
 	// Overridden Methods
 	//================================================================================
+
+	@Override
+	public Parent toParent() {
+		return this;
+	}
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.CONTEXT_MENU_ITEM;
+	}
+
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXContextMenuItemSkin(this);

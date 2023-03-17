@@ -23,6 +23,8 @@ import io.github.palexdev.materialfx.collections.TransformableList;
 import io.github.palexdev.materialfx.collections.TransformableListWrapper;
 import io.github.palexdev.materialfx.controls.cell.MFXComboBoxCell;
 import io.github.palexdev.materialfx.controls.cell.MFXFilterComboBoxCell;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.skins.MFXFilterComboBoxSkin;
 import io.github.palexdev.materialfx.utils.StringUtils;
 import javafx.beans.InvalidationListener;
@@ -154,6 +156,12 @@ public class MFXFilterComboBox<T> extends MFXComboBox<T> {
 	//================================================================================
 	// Overridden Methods
 	//================================================================================
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.FILTER_COMBO_BOX;
+	}
+
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXFilterComboBoxSkin<>(this, boundField);

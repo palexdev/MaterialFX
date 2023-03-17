@@ -20,11 +20,15 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.beans.properties.functional.FunctionProperty;
 import io.github.palexdev.materialfx.beans.properties.functional.SupplierProperty;
+import io.github.palexdev.materialfx.controls.base.Themable;
 import io.github.palexdev.materialfx.controls.cell.MFXPage;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.skins.MFXPaginationSkin;
 import io.github.palexdev.materialfx.utils.NumberUtils;
 import javafx.beans.property.*;
 import javafx.geometry.Orientation;
+import javafx.scene.Parent;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 
@@ -57,7 +61,7 @@ import java.util.function.Supplier;
  * <p>
  * The {@link #orientationProperty()} allows you to specify the pagination orientation.
  */
-public class MFXPagination extends Control {
+public class MFXPagination extends Control implements Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -101,6 +105,7 @@ public class MFXPagination extends Control {
 	private void initialize() {
 		getStyleClass().add(STYLE_CLASS);
 		defaultIndexesSupplier();
+		sceneBuilderIntegration();
 	}
 
 	/**
@@ -194,6 +199,17 @@ public class MFXPagination extends Control {
 	//================================================================================
 	// Overridden Methods
 	//================================================================================
+
+	@Override
+	public Parent toParent() {
+		return this;
+	}
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.PAGINATION;
+	}
+
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXPaginationSkin(this);

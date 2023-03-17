@@ -19,9 +19,13 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.controls.base.MFXLabeled;
+import io.github.palexdev.materialfx.controls.base.Themable;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.skins.MFXCheckboxSkin;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import javafx.css.*;
+import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Skin;
@@ -39,7 +43,7 @@ import java.util.List;
  * <p> - {@link #gapProperty()}: to control the gap between the checkbox and the text
  * <p> - {@link #textExpandProperty()}: to control the text size and the checkbox layout (see documentation)
  */
-public class MFXCheckbox extends CheckBox implements MFXLabeled {
+public class MFXCheckbox extends CheckBox implements MFXLabeled, Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -63,6 +67,7 @@ public class MFXCheckbox extends CheckBox implements MFXLabeled {
 	//================================================================================
 	private void initialize() {
 		getStyleClass().add(STYLE_CLASS);
+		sceneBuilderIntegration();
 	}
 
 	//================================================================================
@@ -173,6 +178,24 @@ public class MFXCheckbox extends CheckBox implements MFXLabeled {
 	//================================================================================
 	// Override Methods
 	//================================================================================
+	@Override
+	public Parent toParent() {
+		return this;
+	}
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.CHECKBOX;
+	}
+
+	@Override
+	public boolean sceneBuilderIntegration() {
+		if (Themable.super.sceneBuilderIntegration()) {
+			setText("Checkbox");
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	protected Skin<?> createDefaultSkin() {

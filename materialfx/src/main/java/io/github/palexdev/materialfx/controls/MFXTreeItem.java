@@ -21,6 +21,8 @@ package io.github.palexdev.materialfx.controls;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeCell;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
 import io.github.palexdev.materialfx.controls.cell.MFXSimpleTreeCell;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.factories.InsetsFactory;
 import io.github.palexdev.materialfx.selection.TreeSelectionModel;
 import io.github.palexdev.materialfx.selection.base.ITreeSelectionModel;
@@ -278,6 +280,11 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
 	@Override
 	protected void updateChildrenParent(List<? extends AbstractMFXTreeItem<T>> treeItems, final AbstractMFXTreeItem<T> newParent) {
 		treeItems.forEach(item -> item.setItemParent(newParent));
+	}
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.TREE_ITEM;
 	}
 
 	@Override

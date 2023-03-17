@@ -2,6 +2,12 @@ package io.github.palexdev.materialfx.css.themes;
 
 import io.github.palexdev.materialfx.MFXResourcesLoader;
 
+/**
+ * Enumerator implementing {@link Theme} that exposes all the single stylesheets part of MaterialFX relative to each single
+ * control.
+ * <p></p>
+ * Makes use of the cache offered by {@link Theme}, subsequent loads of the same theme will be faster.
+ */
 public enum Stylesheets implements Theme {
 	BUTTON("MFXButton.css"),
 	CHECKBOX("MFXCheckBox.css"),
@@ -57,6 +63,6 @@ public enum Stylesheets implements Theme {
 	@Override
 	public String loadTheme() {
 		if (Helper.isCached(this)) return Helper.getCachedTheme(this);
-		return Helper.cacheTheme(this, MFXResourcesLoader.load(baseDir() + getTheme()));
+		return Helper.cacheTheme(this, MFXResourcesLoader.load(mfxBaseDir() + getTheme()));
 	}
 }

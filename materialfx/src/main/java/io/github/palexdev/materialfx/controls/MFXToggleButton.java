@@ -20,6 +20,9 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.beans.properties.EventHandlerProperty;
 import io.github.palexdev.materialfx.controls.base.MFXLabeled;
+import io.github.palexdev.materialfx.controls.base.Themable;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.skins.MFXToggleButtonSkin;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
@@ -32,6 +35,7 @@ import javafx.css.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -51,7 +55,7 @@ import java.util.List;
  * <p> - {@link #radiusProperty()}: to control the toggle's circle radius
  * <p> - {@link #textExpandProperty()}: to control the text size and the checkbox layout (see documentation)
  */
-public class MFXToggleButton extends Labeled implements Toggle, MFXLabeled {
+public class MFXToggleButton extends Labeled implements Toggle, MFXLabeled, Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -88,6 +92,7 @@ public class MFXToggleButton extends Labeled implements Toggle, MFXLabeled {
 	private void initialize() {
 		getStyleClass().add(STYLE_CLASS);
 		setBehavior();
+		sceneBuilderIntegration();
 	}
 
 	//================================================================================
@@ -369,6 +374,26 @@ public class MFXToggleButton extends Labeled implements Toggle, MFXLabeled {
 	//================================================================================
 	// Override Methods
 	//================================================================================
+
+	@Override
+	public Parent toParent() {
+		return this;
+	}
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.TOGGLE_BUTTON;
+	}
+
+	@Override
+	public boolean sceneBuilderIntegration() {
+		if (Themable.super.sceneBuilderIntegration()) {
+			setText("Toggle");
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXToggleButtonSkin(this);

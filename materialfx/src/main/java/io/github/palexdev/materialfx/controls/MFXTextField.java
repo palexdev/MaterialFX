@@ -23,6 +23,9 @@ import io.github.palexdev.materialfx.beans.properties.styleable.StyleableDoubleP
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableIntegerProperty;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableObjectProperty;
 import io.github.palexdev.materialfx.controls.base.MFXMenuControl;
+import io.github.palexdev.materialfx.controls.base.Themable;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.enums.FloatMode;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.i18n.I18N;
@@ -37,6 +40,7 @@ import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
 import javafx.event.Event;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.IndexRange;
 import javafx.scene.control.Skin;
 import javafx.scene.control.TextField;
@@ -117,7 +121,7 @@ import java.util.List;
  * works for them. To make focus behavior consistent in CSS, MFXTextField introduces a new PseudoClass "focus-within" which will
  * be activated every time the inner TextField is focused and deactivated when it loses focus
  */
-public class MFXTextField extends TextField implements Validated, MFXMenuControl {
+public class MFXTextField extends TextField implements Validated, MFXMenuControl, Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -217,6 +221,7 @@ public class MFXTextField extends TextField implements Validated, MFXMenuControl
 				boundField.deleteText(delegateGetSelection());
 		});
 		defaultContextMenu();
+		sceneBuilderIntegration();
 	}
 
 	public void defaultContextMenu() {
@@ -282,6 +287,16 @@ public class MFXTextField extends TextField implements Validated, MFXMenuControl
 	//================================================================================
 	// Overridden Methods
 	//================================================================================
+	@Override
+	public Parent toParent() {
+		return this;
+	}
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.TEXT_FIELD;
+	}
+
 	@Override
 	public MFXContextMenu getMFXContextMenu() {
 		return contextMenu;

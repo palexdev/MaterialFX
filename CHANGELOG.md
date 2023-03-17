@@ -16,6 +16,18 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.15.0] - 17-03-2023
+
+## Changed
+
+- SizeBean: override toString() methods
+- Improved When, OnChanged and OnInvalidated constructs by importing them from the latest version of MFXCore
+
+## Added
+
+- Implemented API for MaterialFX styleable controls and SceneBuilder support
+- Added utility to detect SceneBuilder at runtime
+
 ## [11.14.0] - 16-03-2023
 
 ## Changed

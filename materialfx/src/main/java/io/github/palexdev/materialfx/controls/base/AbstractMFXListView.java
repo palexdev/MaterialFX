@@ -29,6 +29,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.css.*;
+import javafx.scene.Parent;
 import javafx.scene.control.Control;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -42,7 +43,7 @@ import java.util.List;
  *
  * @param <T> the type of data within the ListView
  */
-public abstract class AbstractMFXListView<T, C extends Cell<T>> extends Control implements IListView<T, C> {
+public abstract class AbstractMFXListView<T, C extends Cell<T>> extends Control implements IListView<T, C>, Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -74,6 +75,7 @@ public abstract class AbstractMFXListView<T, C extends Cell<T>> extends Control 
 	protected void initialize() {
 		setDefaultCellFactory();
 		addBarsListeners();
+		sceneBuilderIntegration();
 	}
 
 	protected void addBarsListeners() {
@@ -180,6 +182,11 @@ public abstract class AbstractMFXListView<T, C extends Cell<T>> extends Control 
 	//================================================================================
 	// Getters/Setters
 	//================================================================================
+	@Override
+	public Parent toParent() {
+		return this;
+	}
+
 	@Override
 	public ObservableList<T> getItems() {
 		return items.get();

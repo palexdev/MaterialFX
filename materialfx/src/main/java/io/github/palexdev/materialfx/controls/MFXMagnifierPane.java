@@ -22,6 +22,9 @@ import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableBooleanProperty;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableDoubleProperty;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableObjectProperty;
+import io.github.palexdev.materialfx.controls.base.Themable;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.skins.MFXMagnifierPaneSkin;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
@@ -36,6 +39,7 @@ import javafx.css.StyleablePropertyFactory;
 import javafx.geometry.VPos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.scene.image.Image;
@@ -84,7 +88,7 @@ import java.util.List;
  * }
  * </pre>
  */
-public class MFXMagnifierPane extends Control {
+public class MFXMagnifierPane extends Control implements Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -117,6 +121,7 @@ public class MFXMagnifierPane extends Control {
 		getStyleClass().add(STYLE_CLASS);
 		setCursor(Cursor.NONE);
 		setSnapToPixel(false);
+		sceneBuilderIntegration();
 	}
 
 	/**
@@ -141,6 +146,16 @@ public class MFXMagnifierPane extends Control {
 	//================================================================================
 	// Overridden Methods
 	//================================================================================
+	@Override
+	public Parent toParent() {
+		return this;
+	}
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.MAGNIFIER;
+	}
+
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXMagnifierPaneSkin(this);

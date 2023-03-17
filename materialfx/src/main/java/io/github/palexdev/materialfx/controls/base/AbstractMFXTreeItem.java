@@ -24,6 +24,7 @@ import io.github.palexdev.materialfx.utils.TreeItemStream;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Parent;
 import javafx.scene.control.Control;
 import javafx.util.Callback;
 
@@ -51,7 +52,7 @@ import java.util.List;
  * @see MFXTreeView
  * @see ITreeSelectionModel
  */
-public abstract class AbstractMFXTreeItem<T> extends Control {
+public abstract class AbstractMFXTreeItem<T> extends Control implements Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -70,6 +71,7 @@ public abstract class AbstractMFXTreeItem<T> extends Control {
 	//================================================================================
 	public AbstractMFXTreeItem(T data) {
 		this.data = data;
+		sceneBuilderIntegration();
 	}
 
 	//================================================================================
@@ -345,5 +347,13 @@ public abstract class AbstractMFXTreeItem<T> extends Control {
 	 */
 	public void setSelected(boolean selected) {
 		this.selected.set(selected);
+	}
+
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
+	@Override
+	public Parent toParent() {
+		return this;
 	}
 }

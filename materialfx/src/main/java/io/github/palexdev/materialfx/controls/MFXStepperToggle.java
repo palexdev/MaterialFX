@@ -18,6 +18,9 @@
 
 package io.github.palexdev.materialfx.controls;
 
+import io.github.palexdev.materialfx.controls.base.Themable;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.enums.StepperToggleState;
 import io.github.palexdev.materialfx.enums.TextPosition;
 import io.github.palexdev.materialfx.skins.MFXStepperSkin;
@@ -31,6 +34,7 @@ import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 
@@ -57,7 +61,7 @@ import java.util.List;
  * add certain conditions/constraints (or even dependencies, other validators) that must be met in order for the state
  * to be COMPLETED and for the {@link MFXStepper} to go to the next toggle.
  */
-public class MFXStepperToggle extends Control implements Validated {
+public class MFXStepperToggle extends Control implements Validated, Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -111,6 +115,7 @@ public class MFXStepperToggle extends Control implements Validated {
 	private void initialize() {
 		getStyleClass().setAll(STYLE_CLASS);
 		addListeners();
+		sceneBuilderIntegration();
 	}
 
 	/**
@@ -377,6 +382,17 @@ public class MFXStepperToggle extends Control implements Validated {
 	//================================================================================
 	// Override Methods
 	//================================================================================
+
+	@Override
+	public Parent toParent() {
+		return this;
+	}
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.STEPPER_TOGGLE;
+	}
+
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXStepperToggleSkin(this);

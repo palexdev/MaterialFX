@@ -18,11 +18,15 @@
 
 package io.github.palexdev.materialfx.controls;
 
+import io.github.palexdev.materialfx.controls.base.Themable;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.skins.MFXScrollPaneSkin;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Skin;
 import javafx.scene.paint.Color;
@@ -33,7 +37,7 @@ import javafx.scene.paint.Paint;
  * <p>
  * Extends {@code ScrollPane} and redefines the style class to "mfx-scroll-pane" for usage in CSS.
  */
-public class MFXScrollPane extends ScrollPane {
+public class MFXScrollPane extends ScrollPane implements Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -57,6 +61,7 @@ public class MFXScrollPane extends ScrollPane {
 	private void initialize() {
 		getStyleClass().add(STYLE_CLASS);
 		addListeners();
+		sceneBuilderIntegration();
 	}
 
 	//================================================================================
@@ -152,6 +157,17 @@ public class MFXScrollPane extends ScrollPane {
 	//================================================================================
 	// Override Methods
 	//================================================================================
+
+	@Override
+	public Parent toParent() {
+		return this;
+	}
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.SCROLL_PANE;
+	}
+
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXScrollPaneSkin(this);

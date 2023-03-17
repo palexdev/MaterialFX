@@ -20,12 +20,16 @@ package io.github.palexdev.materialfx.controls.cell;
 
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.base.MFXCombo;
+import io.github.palexdev.materialfx.controls.base.Themable;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.virtualizedfx.cell.Cell;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -43,7 +47,7 @@ import javafx.util.StringConverter;
  * {@link StringConverter} to convert the data to a String. In case it's null, toString() is
  * called on the data.
  */
-public class MFXComboBoxCell<T> extends HBox implements Cell<T> {
+public class MFXComboBoxCell<T> extends HBox implements Cell<T>, Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -92,6 +96,7 @@ public class MFXComboBoxCell<T> extends HBox implements Cell<T> {
 		getStyleClass().add(STYLE_CLASS);
 		setBehavior();
 		render(getData());
+		sceneBuilderIntegration();
 	}
 
 	/**
@@ -141,6 +146,16 @@ public class MFXComboBoxCell<T> extends HBox implements Cell<T> {
 	//================================================================================
 	// Overridden Methods
 	//================================================================================
+	@Override
+	public Parent toParent() {
+		return this;
+	}
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.COMBO_BOX_CELL;
+	}
+
 	@Override
 	public Node getNode() {
 		return this;

@@ -22,6 +22,8 @@ import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXTreeItem;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeCell;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.scene.Node;
@@ -72,6 +74,7 @@ public class MFXSimpleTreeCell<T> extends AbstractMFXTreeCell<T> {
 				getChildren().set(0, (Node) newValue);
 			}
 		});
+		sceneBuilderIntegration();
 	}
 
 	/**
@@ -148,5 +151,10 @@ public class MFXSimpleTreeCell<T> extends AbstractMFXTreeCell<T> {
 		if (item.isStartExpanded()) {
 			disclosureNode.setRotate(90);
 		}
+	}
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.TREE_CELL;
 	}
 }

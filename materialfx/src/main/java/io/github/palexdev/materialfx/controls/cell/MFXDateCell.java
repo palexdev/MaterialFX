@@ -19,6 +19,9 @@
 package io.github.palexdev.materialfx.controls.cell;
 
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
+import io.github.palexdev.materialfx.controls.base.Themable;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.virtualizedfx.cell.Cell;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
@@ -27,6 +30,7 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 
@@ -40,7 +44,7 @@ import java.time.LocalDate;
  * <p> - current: when the cell's value is equal to {@link MFXDatePicker#currentDateProperty()}
  * <p> - extra: to mark this cells as belonging to a different month
  */
-public class MFXDateCell extends Label implements Cell<LocalDate> {
+public class MFXDateCell extends Label implements Cell<LocalDate>, Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -74,6 +78,7 @@ public class MFXDateCell extends Label implements Cell<LocalDate> {
 		getStyleClass().add(STYLE_CLASS);
 		setAlignment(Pos.CENTER);
 		setBehavior();
+		sceneBuilderIntegration();
 	}
 
 	/**
@@ -116,6 +121,16 @@ public class MFXDateCell extends Label implements Cell<LocalDate> {
 	//================================================================================
 	// Overridden Methods
 	//================================================================================
+	@Override
+	public Parent toParent() {
+		return this;
+	}
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.DATE_CELL;
+	}
+
 	@Override
 	public Node getNode() {
 		return this;

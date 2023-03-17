@@ -20,7 +20,10 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.collections.TransformableListWrapper;
 import io.github.palexdev.materialfx.controls.base.MFXMenuControl;
+import io.github.palexdev.materialfx.controls.base.Themable;
 import io.github.palexdev.materialfx.controls.cell.MFXNotificationCell;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.enums.NotificationCounterStyle;
 import io.github.palexdev.materialfx.enums.NotificationState;
 import io.github.palexdev.materialfx.i18n.I18N;
@@ -40,6 +43,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
+import javafx.scene.Parent;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.Skin;
@@ -89,7 +93,7 @@ import static io.github.palexdev.materialfx.enums.NotificationCounterStyle.NUMBE
  * As you can see it as a LOT to offer, and to be honest it's not everything I wanted to implement, but I decided to
  * restrain myself for now, as adding any other feature would add more and more complexity.
  */
-public class MFXNotificationCenter extends Control implements MFXMenuControl {
+public class MFXNotificationCenter extends Control implements MFXMenuControl, Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -199,6 +203,7 @@ public class MFXNotificationCenter extends Control implements MFXMenuControl {
 		});
 
 		startNotificationsUpdater(60, TimeUnit.SECONDS);
+		sceneBuilderIntegration();
 	}
 
 	/**
@@ -704,6 +709,17 @@ public class MFXNotificationCenter extends Control implements MFXMenuControl {
 	//================================================================================
 	// Overridden Methods
 	//================================================================================
+
+	@Override
+	public Parent toParent() {
+		return this;
+	}
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.NOTIFICATION_CENTER;
+	}
+
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXNotificationCenterSkin(this, virtualFlow);

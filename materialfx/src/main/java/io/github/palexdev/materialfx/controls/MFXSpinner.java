@@ -21,12 +21,16 @@ package io.github.palexdev.materialfx.controls;
 import io.github.palexdev.materialfx.beans.properties.functional.BiFunctionProperty;
 import io.github.palexdev.materialfx.beans.properties.functional.ConsumerProperty;
 import io.github.palexdev.materialfx.beans.properties.functional.SupplierProperty;
+import io.github.palexdev.materialfx.controls.base.Themable;
 import io.github.palexdev.materialfx.controls.models.spinner.SpinnerModel;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.skins.MFXSpinnerSkin;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.beans.property.*;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.scene.input.MouseEvent;
@@ -57,7 +61,7 @@ import java.util.function.Supplier;
  * <p> - You can easily change the icons, {@link #prevIconSupplierProperty()}, {@link #nextIconSupplierProperty()}
  * <p> - You can specify the gap between the text and the icon, {@link #graphicTextGapProperty()}
  */
-public class MFXSpinner<T> extends Control {
+public class MFXSpinner<T> extends Control implements Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -101,6 +105,7 @@ public class MFXSpinner<T> extends Control {
 		});
 
 		defaultIcons();
+		sceneBuilderIntegration();
 	}
 
 	/**
@@ -139,6 +144,17 @@ public class MFXSpinner<T> extends Control {
 	//================================================================================
 	// Overridden Methods
 	//================================================================================
+
+	@Override
+	public Parent toParent() {
+		return this;
+	}
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.SPINNER;
+	}
+
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXSpinnerSkin<>(this);

@@ -21,10 +21,13 @@ package io.github.palexdev.materialfx.controls.cell;
 import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.controls.MFXListView;
 import io.github.palexdev.materialfx.controls.cell.base.AbstractMFXListCell;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectExpression;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -82,6 +85,7 @@ public class MFXListCell<T> extends AbstractMFXListCell<T> {
 		getStyleClass().add(STYLE_CLASS);
 		setupRippleGenerator();
 		render(getData());
+		sceneBuilderIntegration();
 	}
 
 	/**
@@ -132,8 +136,13 @@ public class MFXListCell<T> extends AbstractMFXListCell<T> {
 	}
 
 	@Override
-	public Node getNode() {
+	public Parent toParent() {
 		return this;
+	}
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.LIST_CELL;
 	}
 
 	@Override

@@ -23,6 +23,7 @@ import javafx.beans.property.*;
 import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.layout.HBox;
 
 // TODO implement StringConverter (low priority)
@@ -47,7 +48,7 @@ import javafx.scene.layout.HBox;
  *
  * @param <T> The type of the data within TreeItem.
  */
-public abstract class AbstractMFXTreeCell<T> extends HBox {
+public abstract class AbstractMFXTreeCell<T> extends HBox implements Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -157,4 +158,13 @@ public abstract class AbstractMFXTreeCell<T> extends HBox {
 	 * is not empty, when it changes from empty to full or vice versa the icon is added/removed.
 	 */
 	public abstract void updateCell(MFXTreeItem<T> item);
+
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
+
+	@Override
+	public Parent toParent() {
+		return this;
+	}
 }

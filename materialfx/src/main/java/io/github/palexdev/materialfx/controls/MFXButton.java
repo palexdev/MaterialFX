@@ -19,6 +19,9 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.beans.PositionBean;
+import io.github.palexdev.materialfx.controls.base.Themable;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.enums.ButtonType;
@@ -28,6 +31,7 @@ import javafx.beans.property.*;
 import javafx.css.*;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Skin;
 import javafx.scene.paint.Color;
@@ -41,7 +45,7 @@ import java.util.List;
  * Extends {@code Button}, redefines the style class to "mfx-button" for usage in CSS and
  * includes a {@code RippleGenerator} to generate ripple effects on click.
  */
-public class MFXButton extends Button {
+public class MFXButton extends Button implements Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -80,6 +84,7 @@ public class MFXButton extends Button {
 		getStyleClass().add(STYLE_CLASS);
 		setAlignment(Pos.CENTER);
 		setupRippleGenerator();
+		sceneBuilderIntegration();
 	}
 
 	public MFXCircleRippleGenerator getRippleGenerator() {
@@ -344,6 +349,25 @@ public class MFXButton extends Button {
 	//================================================================================
 	// Override Methods
 	//================================================================================
+	@Override
+	public Parent toParent() {
+		return this;
+	}
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.BUTTON;
+	}
+
+	@Override
+	public boolean sceneBuilderIntegration() {
+		if (Themable.super.sceneBuilderIntegration()) {
+			setText("Button");
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXButtonSkin(this);

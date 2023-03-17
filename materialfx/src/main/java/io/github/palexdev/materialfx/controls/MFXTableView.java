@@ -21,7 +21,10 @@ package io.github.palexdev.materialfx.controls;
 import io.github.palexdev.materialfx.beans.properties.functional.FunctionProperty;
 import io.github.palexdev.materialfx.collections.TransformableList;
 import io.github.palexdev.materialfx.collections.TransformableListWrapper;
+import io.github.palexdev.materialfx.controls.base.Themable;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.filter.base.AbstractFilter;
 import io.github.palexdev.materialfx.selection.MultipleSelectionModel;
 import io.github.palexdev.materialfx.selection.base.IMultipleSelectionModel;
@@ -37,6 +40,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
+import javafx.scene.Parent;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.scene.layout.Priority;
@@ -53,7 +57,7 @@ import java.util.function.Function;
  * @param <T> The type of the data within the table.
  * @see MFXTableViewSkin
  */
-public class MFXTableView<T> extends Control {
+public class MFXTableView<T> extends Control implements Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -114,6 +118,7 @@ public class MFXTableView<T> extends Control {
 
 		getItems().addListener(itemsChanged);
 		getItems().addListener(itemsInvalid);
+		sceneBuilderIntegration();
 	}
 
 	/**
@@ -284,6 +289,17 @@ public class MFXTableView<T> extends Control {
 	//================================================================================
 	// Overridden Methods
 	//================================================================================
+
+	@Override
+	public Parent toParent() {
+		return this;
+	}
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.TABLE_VIEW;
+	}
+
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXTableViewSkin<>(this, rowsFlow);

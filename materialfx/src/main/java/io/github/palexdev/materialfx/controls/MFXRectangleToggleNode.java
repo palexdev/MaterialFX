@@ -19,6 +19,8 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.controls.base.AbstractMFXToggleNode;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.effects.ripple.RippleClipType;
 import io.github.palexdev.materialfx.factories.RippleClipTypeFactory;
 import io.github.palexdev.materialfx.skins.MFXRectangleToggleNodeSkin;
@@ -99,6 +101,12 @@ public class MFXRectangleToggleNode extends AbstractMFXToggleNode {
 	//================================================================================
 	// Override Methods
 	//================================================================================
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.RECTANGLE_TOGGLE_NODE;
+	}
+
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXRectangleToggleNodeSkin(this);

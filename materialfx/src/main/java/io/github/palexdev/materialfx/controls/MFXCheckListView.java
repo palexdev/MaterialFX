@@ -20,6 +20,8 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.controls.base.AbstractMFXListView;
 import io.github.palexdev.materialfx.controls.cell.MFXCheckListCell;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.skins.MFXListViewSkin;
 import io.github.palexdev.materialfx.utils.ListChangeProcessor;
 import io.github.palexdev.virtualizedfx.beans.NumberRange;
@@ -213,6 +215,10 @@ public class MFXCheckListView<T> extends AbstractMFXListView<T, MFXCheckListCell
 	//================================================================================
 	// Override Methods
 	//================================================================================
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.CHECK_LIST_VIEW;
+	}
 
 	/**
 	 * Sets the default factory for the cells.

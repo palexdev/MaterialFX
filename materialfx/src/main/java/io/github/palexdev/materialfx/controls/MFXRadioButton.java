@@ -19,9 +19,13 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.controls.base.MFXLabeled;
+import io.github.palexdev.materialfx.controls.base.Themable;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.skins.MFXRadioButtonSkin;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import javafx.css.*;
+import javafx.scene.Parent;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Skin;
@@ -41,7 +45,7 @@ import java.util.List;
  * <p> - {@link #radiusProperty()}: to control the circles' radius
  * <p> - {@link #textExpandProperty()}: to control the text size and the checkbox layout (see documentation)
  */
-public class MFXRadioButton extends RadioButton implements MFXLabeled {
+public class MFXRadioButton extends RadioButton implements MFXLabeled, Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -65,6 +69,7 @@ public class MFXRadioButton extends RadioButton implements MFXLabeled {
 	//================================================================================
 	private void initialize() {
 		getStyleClass().add(STYLE_CLASS);
+		sceneBuilderIntegration();
 	}
 
 	//================================================================================
@@ -240,6 +245,26 @@ public class MFXRadioButton extends RadioButton implements MFXLabeled {
 	//================================================================================
 	// Override Methods
 	//================================================================================
+
+	@Override
+	public Parent toParent() {
+		return this;
+	}
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.RADIO_BUTTON;
+	}
+
+	@Override
+	public boolean sceneBuilderIntegration() {
+		if (Themable.super.sceneBuilderIntegration()) {
+			setText("Radio");
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXRadioButtonSkin(this);

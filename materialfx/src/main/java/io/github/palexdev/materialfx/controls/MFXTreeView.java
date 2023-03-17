@@ -19,6 +19,8 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.factories.InsetsFactory;
 import io.github.palexdev.materialfx.selection.TreeSelectionModel;
 import io.github.palexdev.materialfx.selection.base.ITreeSelectionModel;
@@ -153,6 +155,11 @@ public class MFXTreeView<T> extends MFXScrollPane {
 	//================================================================================
 	// Override Methods
 	//================================================================================
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.TREE_VIEW;
+	}
 
 	/**
 	 * Events class for tree views.

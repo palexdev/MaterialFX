@@ -20,6 +20,8 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.controls.base.AbstractMFXListView;
 import io.github.palexdev.materialfx.controls.cell.MFXListCell;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.skins.MFXListViewSkin;
 import io.github.palexdev.materialfx.utils.ListChangeProcessor;
 import io.github.palexdev.virtualizedfx.beans.NumberRange;
@@ -213,6 +215,12 @@ public class MFXListView<T> extends AbstractMFXListView<T, MFXListCell<T>> {
 	//================================================================================
 	// Override Methods
 	//================================================================================
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.LIST_VIEW;
+	}
+
 	@Override
 	protected void setDefaultCellFactory() {
 		setCellFactory(item -> new MFXListCell<>(this, item));

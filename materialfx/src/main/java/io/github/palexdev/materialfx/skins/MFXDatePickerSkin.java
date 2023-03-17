@@ -433,7 +433,7 @@ public class MFXDatePickerSkin extends MFXTextFieldSkin {
 					cell = getCell(i, j, null);
 					cell.updateItem(null);
 					cells[i][j] = cell;
-					children.add(cell.getNode());
+					children.add(cell.toParent());
 					continue;
 				}
 
@@ -457,7 +457,7 @@ public class MFXDatePickerSkin extends MFXTextFieldSkin {
 					cells[i][j] = cell;
 				}
 				cell.updateItem(date);
-				children.add(cell.getNode());
+				children.add(cell.toParent());
 			}
 
 			if (!cellsInitialized) {

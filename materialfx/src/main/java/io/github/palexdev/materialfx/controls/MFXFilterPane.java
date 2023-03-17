@@ -19,6 +19,9 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.beans.FilterBean;
+import io.github.palexdev.materialfx.controls.base.Themable;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.enums.ChainMode;
 import io.github.palexdev.materialfx.filter.base.AbstractFilter;
 import io.github.palexdev.materialfx.i18n.I18N;
@@ -29,6 +32,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.scene.Parent;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.scene.input.MouseEvent;
@@ -134,7 +138,7 @@ import java.util.function.Predicate;
  *
  * @param <T>
  */
-public class MFXFilterPane<T> extends Control {
+public class MFXFilterPane<T> extends Control implements Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -143,8 +147,10 @@ public class MFXFilterPane<T> extends Control {
 	private final ObservableList<AbstractFilter<T, ?>> filters = FXCollections.observableArrayList();
 	private final ObservableList<FilterBean<T, ?>> activeFilters = FXCollections.observableArrayList();
 
-	private EventHandler<MouseEvent> onFilter = event -> {};
-	private EventHandler<MouseEvent> onReset = event -> {};
+	private EventHandler<MouseEvent> onFilter = event -> {
+	};
+	private EventHandler<MouseEvent> onReset = event -> {
+	};
 
 	//================================================================================
 	// Constructors
@@ -158,6 +164,7 @@ public class MFXFilterPane<T> extends Control {
 	//================================================================================
 	private void initialize() {
 		getStyleClass().add(STYLE_CLASS);
+		sceneBuilderIntegration();
 	}
 
 	/**
@@ -249,6 +256,17 @@ public class MFXFilterPane<T> extends Control {
 	//================================================================================
 	// Overridden Methods
 	//================================================================================
+
+	@Override
+	public Parent toParent() {
+		return this;
+	}
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.FILTER_PANE;
+	}
+
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXFilterPaneSkin<>(this);

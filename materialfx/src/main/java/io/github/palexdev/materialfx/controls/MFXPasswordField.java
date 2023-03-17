@@ -20,6 +20,8 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableBooleanProperty;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableStringProperty;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.utils.NodeUtils;
@@ -264,6 +266,11 @@ public class MFXPasswordField extends MFXTextField {
 	@Override
 	public void selectEndOfNextWord() {
 		boundField.selectAll();
+	}
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.PASSWORD_FIELD;
 	}
 
 	//================================================================================

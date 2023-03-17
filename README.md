@@ -213,9 +213,6 @@ To run the main demo, execute the following command:
 
 **NOTE**: MaterialFX requires **Java 11** and above.
 
-**NOTE**: Starting from version 11.14.0 (next major version), MaterialFX will transition to
-Java 17 and bump version to 17.x.x. What will happen to version 11 is still to be decided
-
 ### Usage
 
 ###### Gradle
@@ -226,7 +223,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'io.github.palexdev:materialfx:11.14.0'
+    implementation 'io.github.palexdev:materialfx:11.15.0'
 }
 ```
 
@@ -237,7 +234,7 @@ dependencies {
 <dependency>
     <groupId>io.github.palexdev</groupId>
     <artifactId>materialfx</artifactId>
-    <version>11.14.0</version>
+    <version>11.15.0</version>
 </dependency>
 ```
 
@@ -330,7 +327,7 @@ There are two implementations of this interface:
 `MFXThemeManager` is a utility class that will help the user add/set themes and stylesheets (which implement `Theme`) on
 nodes or scenes.
 
-**Pros and Cons**
+**Pros**
 
 - The biggest pro is to have a more reliable styling system. With this users shouldn't hava any issue anymore while
   styling
@@ -341,6 +338,7 @@ nodes or scenes.
 - This change should have also impacted on memory usage in a good way as now controls do not store the "url" to their
   stylesheet anymore
 
+**Cons**
 
 - One con is that now themes must be managed by the user. Since controls are not styled by default, the user must
   use the aforementioned manager or enumerators to load/add the themes on the App.  
@@ -361,10 +359,19 @@ nodes or scenes.
   **You have to add the Themes on every separate scene**.
   To simplify things, MaterialFX automatically applies the Themes on its dialogs and popups, but since now they
   are added to the `getStylesheets()` list it's easy to remove them and define your own
-- The last con I can think of is SceneBuilder. As of now there is no support for it, I have some ideas on how to style
-  controls inside of it though. The issue is that even if I figure out a way, I doubt the system will be flexible.
-  What I mean is, I can probably set the default themes on the SceneBuilder' scene, but it's very unlikely there will
-  be a way to choose which themes/stylesheets will be applied
+- ~~The last con I can think of is SceneBuilder. As of now there is no support for it, I have some ideas on how to style
+  controls inside of it though. The issue is that even if I figure out a way,~~ I doubt the system will be flexible
+  enough.
+  ~~What I mean is, I can probably set the default themes on the SceneBuilder' scene,~~ but it's very unlikely there
+  will
+  be a way to choose which themes/stylesheets will be applied.  
+  Since version 11.15.0, MaterialFX controls are capable of detecting if they are being used in SceneBuilder and can
+  automatically
+  style themselves. From my little testings, it seems that this doesn't break the styling system in any way, I was able
+  to style a button
+  by adding a custom stylesheet on itself or on its parent. There's also an emergency system to completely shut down the
+  SceneBuilder integration, more info
+  here: [Themable](https://github.com/palexdev/MaterialFX/blob/main/materialfx/src/main/java/io/github/palexdev/materialfx/controls/base/Themable.java)
 
 <!-- CONTRIBUTING -->
 

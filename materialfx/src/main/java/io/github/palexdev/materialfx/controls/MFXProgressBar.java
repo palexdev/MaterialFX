@@ -19,12 +19,16 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.beans.NumberRange;
+import io.github.palexdev.materialfx.controls.base.Themable;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.skins.MFXProgressBarSkin;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.css.*;
+import javafx.scene.Parent;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Skin;
 
@@ -44,7 +48,7 @@ import static io.github.palexdev.materialfx.utils.NodeUtils.isPseudoClassActive;
  * <p>
  * I know this may seem a strange approach, but it is much more flexible and allows for a lot more customization.
  */
-public class MFXProgressBar extends ProgressBar {
+public class MFXProgressBar extends ProgressBar implements Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -78,6 +82,7 @@ public class MFXProgressBar extends ProgressBar {
 		setPrefWidth(200);
 
 		addListeners();
+		sceneBuilderIntegration();
 	}
 
 	private void addListeners() {
@@ -182,6 +187,17 @@ public class MFXProgressBar extends ProgressBar {
 	//================================================================================
 	// Override Methods
 	//================================================================================
+
+	@Override
+	public Parent toParent() {
+		return this;
+	}
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.PROGRESS_BAR;
+	}
+
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXProgressBarSkin(this);

@@ -21,6 +21,9 @@ package io.github.palexdev.materialfx.controls;
 import io.github.palexdev.materialfx.beans.NumberRange;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableDoubleProperty;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableObjectProperty;
+import io.github.palexdev.materialfx.controls.base.Themable;
+import io.github.palexdev.materialfx.css.themes.Stylesheets;
+import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.skins.MFXProgressSpinnerSkin;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import javafx.collections.FXCollections;
@@ -30,6 +33,7 @@ import javafx.css.CssMetaData;
 import javafx.css.PseudoClass;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
+import javafx.scene.Parent;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.Skin;
 import javafx.scene.layout.Region;
@@ -51,7 +55,7 @@ import static io.github.palexdev.materialfx.utils.NodeUtils.isPseudoClassActive;
  * <p>
  * I know this may seem a strange approach, but it is much more flexible and allows for a lot more customization.
  */
-public class MFXProgressSpinner extends ProgressIndicator {
+public class MFXProgressSpinner extends ProgressIndicator implements Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -82,6 +86,7 @@ public class MFXProgressSpinner extends ProgressIndicator {
 	private void initialize() {
 		getStyleClass().add(STYLE_CLASS);
 		addListeners();
+		sceneBuilderIntegration();
 	}
 
 	private void addListeners() {
@@ -333,6 +338,17 @@ public class MFXProgressSpinner extends ProgressIndicator {
 	//================================================================================
 	// Override Methods
 	//================================================================================
+
+	@Override
+	public Parent toParent() {
+		return this;
+	}
+
+	@Override
+	public Theme getTheme() {
+		return Stylesheets.PROGRESS_SPINNER;
+	}
+
 	@Override
 	protected Skin<?> createDefaultSkin() {
 		return new MFXProgressSpinnerSkin(this);

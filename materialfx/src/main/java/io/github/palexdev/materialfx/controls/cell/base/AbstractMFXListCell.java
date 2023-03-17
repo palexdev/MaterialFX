@@ -19,12 +19,15 @@
 package io.github.palexdev.materialfx.controls.cell.base;
 
 import io.github.palexdev.materialfx.controls.base.AbstractMFXListView;
+import io.github.palexdev.materialfx.controls.base.Themable;
 import io.github.palexdev.materialfx.selection.MultipleSelectionModel;
 import io.github.palexdev.virtualizedfx.cell.Cell;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -38,7 +41,7 @@ import javafx.scene.layout.HBox;
  *
  * @param <T> the type of data within the ListView
  */
-public abstract class AbstractMFXListCell<T> extends HBox implements Cell<T> {
+public abstract class AbstractMFXListCell<T> extends HBox implements Cell<T>, Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -126,6 +129,16 @@ public abstract class AbstractMFXListCell<T> extends HBox implements Cell<T> {
 	//================================================================================
 	// Override Methods
 	//================================================================================
+
+	@Override
+	public Parent toParent() {
+		return this;
+	}
+
+	@Override
+	public Node getNode() {
+		return this;
+	}
 
 	/**
 	 * Updates the index property of the cell.

@@ -21,9 +21,10 @@ package io.github.palexdev.materialfx.controls.base;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.ToggleButton;
 
-public abstract class AbstractMFXToggleNode extends ToggleButton {
+public abstract class AbstractMFXToggleNode extends ToggleButton implements Themable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -54,6 +55,7 @@ public abstract class AbstractMFXToggleNode extends ToggleButton {
 	//================================================================================
 	private void initialize() {
 		getStyleClass().add(STYLE_CLASS);
+		sceneBuilderIntegration();
 	}
 
 	public Node getLabelLeadingIcon() {
@@ -84,5 +86,22 @@ public abstract class AbstractMFXToggleNode extends ToggleButton {
 
 	public void setLabelTrailingIcon(Node labelTrailingIcon) {
 		this.labelTrailingIcon.set(labelTrailingIcon);
+	}
+
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
+	@Override
+	public Parent toParent() {
+		return this;
+	}
+
+	@Override
+	public boolean sceneBuilderIntegration() {
+		if (Themable.super.sceneBuilderIntegration()) {
+			setText("Toggle");
+			return true;
+		}
+		return false;
 	}
 }

@@ -73,4 +73,16 @@ public class SizeBean {
 	public void setHeight(double height) {
 		this.height.set(height);
 	}
+
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
+
+	@Override
+	public String toString() {
+		return "SizeBean{" +
+				"width=" + width +
+				", height=" + height +
+				'}';
+	}
 }
