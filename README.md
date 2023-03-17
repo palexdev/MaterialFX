@@ -35,6 +35,7 @@
 
 ## Table of Contents
 
+* [Important Notes!](#important-notes)
 * [About the Project and History of JavaFX](#about-the-project-and-history-of-javafx)
 * [About the Logo](#about-the-logo)
 * [Some GIFs](#preview-gifs)
@@ -52,6 +53,13 @@
 * [Contact](#contact)
 * [Donation](#donation)
 * [Supporters](#supporters)
+
+<!-- IMPORTANT NOTES -->
+
+## Important notes
+
+Please, **before** using this library and submitting an issue complaining that controls are **not styled and bugged** check how the **stilying system has changed** since
+version 11.14.0
 
 <!-- ABOUT THE PROJECT -->
 
