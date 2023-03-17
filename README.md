@@ -201,6 +201,7 @@ the previous version, so I thought a new logo would have been a good idea.
 <img src="https://imgur.com/nj6xhUT.gif" alt="Tableviews" border="0">
 </details>
 <p></p>
+</i>
 
 <!-- GETTING STARTED -->
 
