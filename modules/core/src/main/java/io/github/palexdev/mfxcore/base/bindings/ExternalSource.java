@@ -69,7 +69,6 @@ public class ExternalSource<S> extends AbstractSource<S, S> {
 	//================================================================================
 	// Methods
 	//================================================================================
-	// TODO check this documentation
 
 	/**
 	 * Activates this invalidating source by adding a listener to it that will trigger the specified {@link #getAction()}.
@@ -84,7 +83,7 @@ public class ExternalSource<S> extends AbstractSource<S, S> {
 	/**
 	 * Unsupported.
 	 *
-	 * @throws UnsupportedOperationException {@code InvalidatingSources} do not operate on a target
+	 * @throws UnsupportedOperationException {@code ExternalSources} do not operate on a target
 	 */
 	@Override
 	protected void listen(Target<S> target) {
@@ -94,7 +93,7 @@ public class ExternalSource<S> extends AbstractSource<S, S> {
 	/**
 	 * Unsupported.
 	 *
-	 * @throws UnsupportedOperationException {@code InvalidatingSources} are not directly responsible for updating
+	 * @throws UnsupportedOperationException {@code ExternalSources} are not directly responsible for updating
 	 *                                       a target
 	 */
 	@Override
@@ -105,7 +104,7 @@ public class ExternalSource<S> extends AbstractSource<S, S> {
 	/**
 	 * Unsupported.
 	 *
-	 * @throws UnsupportedOperationException {@code InvalidatingSources} are not directly responsible for
+	 * @throws UnsupportedOperationException {@code ExternalSources} are not directly responsible for
 	 *                                       updating sources
 	 */
 	@Override

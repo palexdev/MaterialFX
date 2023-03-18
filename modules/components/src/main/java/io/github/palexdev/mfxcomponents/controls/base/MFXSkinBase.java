@@ -85,8 +85,6 @@ public abstract class MFXSkinBase<C extends Control & WithBehavior<B>, B extends
 	// Delegate Methods
 	//================================================================================
 
-	// TODO behaviors should also integrate with the new When constructs if possible
-
 	/**
 	 * Delegate for {@link BehaviorBase#register(ObservableValue, ChangeListener)}.
 	 * <p>

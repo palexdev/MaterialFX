@@ -20,9 +20,9 @@ package io.github.palexdev.mfxcomponents.controls.fab;
 
 import io.github.palexdev.mfxcomponents.theming.base.WithVariants;
 import io.github.palexdev.mfxcomponents.theming.enums.FABVariants;
+import io.github.palexdev.mfxcomponents.theming.enums.MFXThemeManager;
 import io.github.palexdev.mfxcore.observables.When;
 import io.github.palexdev.mfxcore.utils.fx.SceneBuilderIntegration;
-import io.github.palexdev.mfxresources.MFXResources;
 import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 
 import java.util.List;
@@ -129,9 +129,16 @@ public class MFXFab extends MFXFabBase implements WithVariants<MFXFab, FABVarian
 	}
 
 	@Override
+	public MFXFab removeVariants(FABVariants... variants) {
+		WithVariants.removeVariants(this, variants);
+		onInitSizesChanged();
+		return this;
+	}
+
+	@Override
 	protected void sceneBuilderIntegration() {
 		SceneBuilderIntegration.ifInSceneBuilder(() -> {
-			String theme = MFXResources.load("sass/md3/mfx-light.css");
+			String theme = MFXThemeManager.LIGHT.load();
 			When.onChanged(sceneProperty())
 					.condition((o, n) -> n != null && !n.getStylesheets().contains(theme))
 					.then((o, n) -> n.getStylesheets().add(theme))

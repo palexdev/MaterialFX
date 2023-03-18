@@ -30,5 +30,9 @@ import io.github.palexdev.mfxcomponents.theming.enums.FABVariants;
  * (such as {@link WithVariants}) to apply the variant style class to the component.
  */
 public interface Variant {
+
+	/**
+	 * @return the style class that identifies this variant
+	 */
 	String variantStyleClass();
 }

@@ -32,6 +32,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added method to retrieve the component's behavior object, thus creating a bridge between the Control the View(skin)
   and the Behavior
 - Moved executeNow(...) methods to the base class for a better fluent API
+- When: added non-static method for disposal
 
 ## Fixed
 

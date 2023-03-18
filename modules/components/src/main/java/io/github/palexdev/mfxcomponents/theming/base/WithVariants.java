@@ -21,6 +21,7 @@ package io.github.palexdev.mfxcomponents.theming.base;
 import io.github.palexdev.mfxcomponents.controls.base.MFXControl;
 import io.github.palexdev.mfxcomponents.controls.base.MFXLabeled;
 import io.github.palexdev.mfxcomponents.controls.base.MFXStyleable;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
 
 import java.util.LinkedHashSet;
@@ -74,6 +75,8 @@ public interface WithVariants<N extends Node, V extends Variant> {
 
 	N setVariants(V... variants);
 
+	N removeVariants(V... variants);
+
 	/**
 	 * Adds all the given variants to the given control.
 	 * <p>
@@ -105,6 +108,18 @@ public interface WithVariants<N extends Node, V extends Variant> {
 	}
 
 	/**
+	 * Removes all the given variants from the given control.
+	 */
+	@SafeVarargs
+	static <C extends MFXControl<?>, V extends Variant> C removeVariants(C control, V... variants) {
+		ObservableList<String> styleClass = control.getStyleClass();
+		for (V variant : variants) {
+			styleClass.remove(variant.variantStyleClass());
+		}
+		return control;
+	}
+
+	/**
 	 * Adds all the given variants to the given labeled.
 	 * <p>
 	 * Style classes are filtered by a {@link LinkedHashSet} to avoid duplicates while keeping the specified order.
@@ -131,6 +146,18 @@ public interface WithVariants<N extends Node, V extends Variant> {
 			classes.add(variant.variantStyleClass());
 		}
 		labeled.getStyleClass().setAll(classes);
+		return labeled;
+	}
+
+	/**
+	 * Removes all the given variants from the given labeled.
+	 */
+	@SafeVarargs
+	static <L extends MFXLabeled<?>, V extends Variant> L removeVariants(L labeled, V... variants) {
+		ObservableList<String> styleClass = labeled.getStyleClass();
+		for (V variant : variants) {
+			styleClass.remove(variant.variantStyleClass());
+		}
 		return labeled;
 	}
 }

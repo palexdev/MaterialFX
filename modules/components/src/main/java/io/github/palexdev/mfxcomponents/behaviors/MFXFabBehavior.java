@@ -71,17 +71,9 @@ public class MFXFabBehavior extends MFXButtonBehavior {
 	 * <p></p>
 	 * This is automatically called by the {@link MFXFabBase#extendedProperty()} when it changes.
 	 */
-	// TODO refactor this. Behavior classes should NOT change the component's state
 	public void extend(boolean animate) {
 		MFXFabBase fab = getFab();
 		boolean extended = fab.isExtended();
-		if (extended) {
-			fab.getStyleClass().remove("fab");
-			fab.getStyleClass().add("fab-extended");
-		} else {
-			fab.getStyleClass().remove("fab-extended");
-			fab.getStyleClass().add("fab");
-		}
 		double targetSize = computeWidth();
 		double targetTextOpacity = extended ? 1.0 : 0.0;
 

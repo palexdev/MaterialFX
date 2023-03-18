@@ -148,6 +148,16 @@ public abstract class When<T> {
 			invalidationListener = null;
 	}
 
+	/**
+	 * Attempts to dispose this construct by invoking {@link #disposeFor(ObservableValue)} on the current given
+	 * observable.
+	 * <p></p>
+	 * If the construct has not been registered yet, or the observable is null, nothing will happen.
+	 */
+	public void requestDisposal() {
+		disposeFor(observableValue);
+	}
+
 	//================================================================================
 	// Static Methods
 	//================================================================================

@@ -52,6 +52,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Reworked and renamed applyInitSizes(...) to onInitSizesChanged(). Init sizes now are taken into account by the new
   LayoutStrategy API
 - MFXFabSkin: do not take into account the init width as it is used by the LayoutStrategy now
+- MFXFabBehavior: moved extended variant management in the component class, behaviors should not change the component
+  state
+- WithVariants: added method to remove variants from a component
 
 ## Removed
 

@@ -80,8 +80,6 @@ public interface IBinding<T> {
 		return state() == BindingState.DISPOSED;
 	}
 
-	// TODO note that this checks only the state not MFXBindings
-
 	/**
 	 * Checks if the bindings state is {@link BindingState#BOUND}.
 	 * <p>

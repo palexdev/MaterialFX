@@ -19,7 +19,6 @@ java {
     tasks.withType(Jar).each { it.archiveBaseName.set("materialfx-all") }
 }
 
-// TODO rename materialfx package to mfxcomponents
 shadowJar {
     mergeServiceFiles()
     dependencies {
