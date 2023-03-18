@@ -71,6 +71,7 @@ public class MFXStageDialog extends Stage {
 	private final ObjectProperty<AbstractMFXDialog> content = new SimpleObjectProperty<>();
 
 	private boolean draggable = false;
+
 	private double xPos;
 	private double yPos;
 	private EventHandler<MouseEvent> mousePressed = event -> {
@@ -130,7 +131,42 @@ public class MFXStageDialog extends Stage {
 			initDraggable();
 		});
 
-		addEventHandler(WindowEvent.WINDOW_SHOWN, event -> centerInOwner());
+                //
+                // When centerInownerNode is true, we want to show the dialog
+                // centered in the owner. However JavaFX calculates the actual
+                // width and height of the dialog only when it has to be shown,
+                // therefore there is no way to calculate its position relative
+                // to the owner in advance.
+                //
+                // The workaround is to detect when the dialog with and height
+                // change, so that as soon as there is a value the position of
+                // the dialog can be calculated and the dialog moved.
+                //
+                // Finally, we need anyway to center the dialog any time it is
+                // shown even if the dialog height and with have not changed.
+                //
+                onShowingProperty().set((t) -> {
+                    if (getWidth() == 0)  {
+                        return;
+                    }
+                    if (centerInOwnerNode.getValue()) {
+                        centerXInOwner(getWidth());
+                        centerYInOwner(getHeight());
+                    }
+                });
+
+		getContent().widthProperty().addListener((o, ov, nv) -> {
+                    if (centerInOwnerNode.getValue()) {
+                        centerXInOwner(nv.doubleValue());
+                    }
+                });
+
+                getContent().heightProperty().addListener((o, ov, nv) -> {
+                    if (centerInOwnerNode.getValue()) {
+                        centerYInOwner(nv.doubleValue());
+                    }
+                });
+
 	}
 
 	/**
@@ -178,6 +214,7 @@ public class MFXStageDialog extends Stage {
 	public void showDialog() {
 		scrimOwner();
 		super.show();
+
 	}
 
 	/**
@@ -235,21 +272,27 @@ public class MFXStageDialog extends Stage {
 	}
 
 	/**
-	 * This is responsible for centering the dialog on the {@link #getOwnerNode()} (if enabled).
-	 */
-	protected void centerInOwner() {
-		if (!isCenterInOwnerNode() || ownerNode == null) return;
+        * This is responsible for centering the dialog on the
+        * {@link #getOwnerNode()} (if enabled).
+        */
+       protected void centerXInOwner(double dialogWidth) {
+           Bounds screenBounds = ownerNode.localToScreen(ownerNode.getBoundsInLocal());
 
-		Bounds screenBounds = ownerNode.localToScreen(ownerNode.getBoundsInLocal());
-		double startX = screenBounds.getMinX();
-		double startY = screenBounds.getMinY();
-		SizeBean dialogSize = SizeBean.of(getWidth(), getHeight());
-		SizeBean nodeSize = SizeBean.of(ownerNode.getWidth(), ownerNode.getHeight());
-		double x = startX + (nodeSize.getWidth() / 2 - dialogSize.getWidth() / 2);
-		double y = startY + (nodeSize.getHeight() / 2 - dialogSize.getHeight() / 2);
-		setX(x);
-		setY(y);
-	}
+           double startX = screenBounds.getMinX();
+           double nodeWidth = ownerNode.getWidth();
+           double x = startX + (nodeWidth / 2 - dialogWidth / 2);
+
+           setX(x);
+       }
+
+       protected void centerYInOwner(double dialogHeight) {
+           Bounds screenBounds = ownerNode.localToScreen(ownerNode.getBoundsInLocal());
+
+           double startY = screenBounds.getMinY();
+           double nodeHeight = ownerNode.getHeight();
+           double y = startY + (nodeHeight / 2 - dialogHeight / 2);
+           setY(y);
+       }
 
 	/**
 	 * Disposes the dialog, making it not reusable anymore!
