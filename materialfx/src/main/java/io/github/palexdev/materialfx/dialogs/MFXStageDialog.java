@@ -18,7 +18,6 @@
 
 package io.github.palexdev.materialfx.dialogs;
 
-import io.github.palexdev.materialfx.beans.SizeBean;
 import io.github.palexdev.materialfx.effects.MFXScrimEffect;
 import io.github.palexdev.materialfx.enums.ScrimPriority;
 import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
@@ -34,9 +33,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
 
 import java.io.IOException;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.stage.WindowEvent;
 
 /**
  * Dialog implementation that simply extends {@link Stage}.
@@ -93,6 +94,46 @@ public class MFXStageDialog extends Stage {
 	private MFXScrimEffect scrimEffect = new MFXScrimEffect();
 	private ScrimPriority scrimPriority = ScrimPriority.NODE;
 
+        // =====================================================================
+
+        //
+        // NOTE ON CENTERING THE DIALOG WITHIN THE OWNER
+        //
+        // When centerInownerNode is true, we want to show the dialog
+        // centered in the owner. However JavaFX calculates the actual
+        // width and height of the dialog only when it has to be shown,
+        // therefore there is no way to calculate its position relative
+        // to the owner in advance.
+        //
+        // The workaround is to detect when the dialog with and height
+        // change, so that as soon as there is a value the position of
+        // the dialog can be calculated and the dialog moved. This is
+        // done withe the two listener below, which are set in buildScene()
+        //
+        // Finally, we need anyway to center the dialog any time it is
+        // shown even if the dialog height and with have not changed.
+        // This is done during initialization adding a listener for
+        // WindowEvent.WINDOW_SHOWING
+        //
+
+        private final ChangeListener<Number> widthChangelistener = new ChangeListener<>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                        if (centerInOwnerNode.getValue()) {
+                            centerXInOwner(newValue.doubleValue());
+                        }
+                }
+        };
+
+        private final ChangeListener<Number> heightChangelistener = new ChangeListener<>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                        if (centerInOwnerNode.getValue()) {
+                            centerYInOwner(newValue.doubleValue());
+                        }
+                }
+        };
+
 	//================================================================================
 	// Constructors
 	//================================================================================
@@ -125,27 +166,15 @@ public class MFXStageDialog extends Stage {
 			if (oldValue != null) {
 				oldValue.removeEventHandler(MouseEvent.MOUSE_PRESSED, mousePressed);
 				oldValue.removeEventHandler(MouseEvent.MOUSE_DRAGGED, mouseDragged);
+                                oldValue.widthProperty().removeListener(widthChangelistener);
+                                oldValue.widthProperty().removeListener(heightChangelistener);
 			}
 
 			setScene(buildScene(getContent()));
 			initDraggable();
 		});
 
-                //
-                // When centerInownerNode is true, we want to show the dialog
-                // centered in the owner. However JavaFX calculates the actual
-                // width and height of the dialog only when it has to be shown,
-                // therefore there is no way to calculate its position relative
-                // to the owner in advance.
-                //
-                // The workaround is to detect when the dialog with and height
-                // change, so that as soon as there is a value the position of
-                // the dialog can be calculated and the dialog moved.
-                //
-                // Finally, we need anyway to center the dialog any time it is
-                // shown even if the dialog height and with have not changed.
-                //
-                onShowingProperty().set((t) -> {
+                addEventHandler(WindowEvent.WINDOW_SHOWING, event -> {
                     if (getWidth() == 0)  {
                         return;
                     }
@@ -154,19 +183,6 @@ public class MFXStageDialog extends Stage {
                         centerYInOwner(getHeight());
                     }
                 });
-
-		getContent().widthProperty().addListener((o, ov, nv) -> {
-                    if (centerInOwnerNode.getValue()) {
-                        centerXInOwner(nv.doubleValue());
-                    }
-                });
-
-                getContent().heightProperty().addListener((o, ov, nv) -> {
-                    if (centerInOwnerNode.getValue()) {
-                        centerYInOwner(nv.doubleValue());
-                    }
-                });
-
 	}
 
 	/**
@@ -174,6 +190,9 @@ public class MFXStageDialog extends Stage {
 	 * for the given content.
 	 */
 	protected Scene buildScene(AbstractMFXDialog content) {
+                widthProperty().addListener(widthChangelistener);
+                heightProperty().addListener(heightChangelistener);
+
 		Scene scene = new Scene(content);
 		scene.setFill(Color.TRANSPARENT);
 		return scene;
@@ -214,7 +233,6 @@ public class MFXStageDialog extends Stage {
 	public void showDialog() {
 		scrimOwner();
 		super.show();
-
 	}
 
 	/**
@@ -271,11 +289,11 @@ public class MFXStageDialog extends Stage {
 				.play();
 	}
 
-	/**
-        * This is responsible for centering the dialog on the
-        * {@link #getOwnerNode()} (if enabled).
-        */
-       protected void centerXInOwner(double dialogWidth) {
+        /**
+         * This is responsible for centering the dialog on the X axis in the
+         * {@link #getOwnerNode()} (if enabled).
+         */
+        protected void centerXInOwner(double dialogWidth) {
            Bounds screenBounds = ownerNode.localToScreen(ownerNode.getBoundsInLocal());
 
            double startX = screenBounds.getMinX();
@@ -283,16 +301,20 @@ public class MFXStageDialog extends Stage {
            double x = startX + (nodeWidth / 2 - dialogWidth / 2);
 
            setX(x);
-       }
+        }
 
-       protected void centerYInOwner(double dialogHeight) {
+        /**
+         * This is responsible for centering the dialog on the Y axis in the
+         * {@link #getOwnerNode()} (if enabled).
+         */
+        protected void centerYInOwner(double dialogHeight) {
            Bounds screenBounds = ownerNode.localToScreen(ownerNode.getBoundsInLocal());
 
            double startY = screenBounds.getMinY();
            double nodeHeight = ownerNode.getHeight();
            double y = startY + (nodeHeight / 2 - dialogHeight / 2);
            setY(y);
-       }
+        }
 
 	/**
 	 * Disposes the dialog, making it not reusable anymore!
