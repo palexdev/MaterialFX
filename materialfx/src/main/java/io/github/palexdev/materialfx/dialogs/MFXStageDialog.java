@@ -116,7 +116,7 @@ public class MFXStageDialog extends Stage {
         // WindowEvent.WINDOW_SHOWING
         //
 
-        private final ChangeListener<Number> widthChangelistener = new ChangeListener<>() {
+        private final ChangeListener<Number> widthChangeListener = new ChangeListener<>() {
                 @Override
                 public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                         if (centerInOwnerNode.getValue()) {
@@ -125,7 +125,7 @@ public class MFXStageDialog extends Stage {
                 }
         };
 
-        private final ChangeListener<Number> heightChangelistener = new ChangeListener<>() {
+        private final ChangeListener<Number> heightChangeListener = new ChangeListener<>() {
                 @Override
                 public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                         if (centerInOwnerNode.getValue()) {
@@ -166,8 +166,8 @@ public class MFXStageDialog extends Stage {
 			if (oldValue != null) {
 				oldValue.removeEventHandler(MouseEvent.MOUSE_PRESSED, mousePressed);
 				oldValue.removeEventHandler(MouseEvent.MOUSE_DRAGGED, mouseDragged);
-                                oldValue.widthProperty().removeListener(widthChangelistener);
-                                oldValue.widthProperty().removeListener(heightChangelistener);
+                                oldValue.widthProperty().removeListener(widthChangeListener);
+                                oldValue.heightProperty().removeListener(heightChangeListener);
 			}
 
 			setScene(buildScene(getContent()));
@@ -190,8 +190,8 @@ public class MFXStageDialog extends Stage {
 	 * for the given content.
 	 */
 	protected Scene buildScene(AbstractMFXDialog content) {
-                widthProperty().addListener(widthChangelistener);
-                heightProperty().addListener(heightChangelistener);
+                widthProperty().addListener(widthChangeListener);
+                heightProperty().addListener(heightChangeListener);
 
 		Scene scene = new Scene(content);
 		scene.setFill(Color.TRANSPARENT);
