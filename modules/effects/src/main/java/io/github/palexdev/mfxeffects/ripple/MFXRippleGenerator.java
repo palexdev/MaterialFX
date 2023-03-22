@@ -30,6 +30,8 @@ import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.ParallelTransition;
 import javafx.animation.Timeline;
+import javafx.beans.InvalidationListener;
+import javafx.beans.WeakInvalidationListener;
 import javafx.css.*;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
@@ -44,6 +46,7 @@ import javafx.scene.shape.Shape;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -98,8 +101,9 @@ public class MFXRippleGenerator extends Region implements RippleGenerator {
 	private Supplier<? extends Ripple<?>> rippleSupplier;
 	private Function<MouseEvent, Position> positionFunction;
 
-	private final EventHandler<MouseEvent> handler;
 	private Node cachedClip;
+	private final EventHandler<MouseEvent> handler;
+	private final InvalidationListener clipUpdater;
 
 	//================================================================================
 	// Constructors
@@ -107,6 +111,8 @@ public class MFXRippleGenerator extends Region implements RippleGenerator {
 	public MFXRippleGenerator(Region region) {
 		this.region = region;
 		handler = this::generate;
+		clipUpdater = new WeakInvalidationListener(i -> Optional.ofNullable(cachedClip)
+				.ifPresent(n -> n.resizeRelocate(0, 0, region.getWidth(), region.getHeight())));
 		initialize();
 	}
 
@@ -118,6 +124,7 @@ public class MFXRippleGenerator extends Region implements RippleGenerator {
 		setClipSupplier(defaultClipSupplier());
 		setPositionFunction(defaultPositionFunction());
 		setRippleSupplier(defaultRippleSupplier());
+		region.layoutBoundsProperty().addListener(clipUpdater);
 	}
 
 	/**
@@ -253,9 +260,9 @@ public class MFXRippleGenerator extends Region implements RippleGenerator {
 			if (cachedClip != null) return cachedClip;
 			CornerRadii radius = StyleUtils.parseCornerRadius(region);
 			Region clip = new Region();
-			clip.resizeRelocate(0, 0, region.getWidth(), region.getHeight());
-			StyleUtils.setBackground(clip, Color.WHITE, radius);
 			cachedClip = clip;
+			StyleUtils.setBackground(clip, Color.WHITE, radius);
+			clipUpdater.invalidated(null);
 			return clip;
 		}
 		return getClipSupplier().get();

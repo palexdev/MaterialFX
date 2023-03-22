@@ -32,6 +32,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Improved efficiency of MFXRippleGenerators when disabled through the visible property. This was needed especially
   because in CSS you cannot set the disable state but only the visibility
 - Moved Curve to new base package
+- MFXRippleGenerator: make sure the cached clip is updated when the region's layout bounds change
 
 ## Removed
 
