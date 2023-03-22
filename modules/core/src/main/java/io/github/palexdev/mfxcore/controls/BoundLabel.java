@@ -127,7 +127,13 @@ public class BoundLabel extends Label {
 			@Override
 			protected void updateChildren() {
 				super.updateChildren();
-				if (textNode == null && getChildren().size() > 1) setTextNode(getChildren().get(1));
+				if (textNode != null) return;
+
+				if (getChildren().size() == 1 && getGraphic() == null) {
+					setTextNode(getChildren().get(0));
+				} else if (getChildren().size() > 1) {
+					setTextNode(getChildren().get(1));
+				}
 			}
 		};
 	}

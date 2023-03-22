@@ -219,6 +219,7 @@ public class OnChanged<T> extends When<T> {
 			observableValue.removeListener(listener);
 			listener = null;
 			whens.remove(observableValue);
+			observableValue = null;
 		}
 	}
 }

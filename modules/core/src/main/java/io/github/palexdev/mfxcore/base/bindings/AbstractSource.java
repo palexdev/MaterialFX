@@ -19,13 +19,14 @@
 package io.github.palexdev.mfxcore.base.bindings;
 
 import io.github.palexdev.mfxcore.base.bindings.base.ISource;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
 /**
  * Base class for all types of {@code Sources}, implements {@link ISource}.
  * <p></p>
- * This class allows to have common properties in one place (such as the source's observable and the target), but also
- * implements common methods and defines methods that need to be used only internally.
+ * This class allows to have common properties in one place (such as the source's observable, the target, and listeners),
+ * but also implements common methods and defines methods that need to be used only internally.
  *
  * @param <S> the type of the source's observable
  * @param <T> the type of the target's observable
@@ -36,6 +37,9 @@ public abstract class AbstractSource<S, T> implements ISource<S, T> {
 	//================================================================================
 	protected ObservableValue<? extends S> observable;
 	protected Target<T> target;
+
+	protected ChangeListener<? super S> obvListener;
+	protected ChangeListener<? super T> tgtListener;
 
 	//================================================================================
 	// Constructors

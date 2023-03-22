@@ -40,16 +40,22 @@ import java.util.function.Supplier;
  * This construct also allows to define one-shot listeners, meaning that the
  * above phrase changes like this: "When condition changes, then do this, then dispose(remove listener)"
  * <p></p>
- * <b>Note:</b>Once the construct is not needed anymore it's highly recommended to dispose it
+ * <b>Note 1: </b>Once the construct is not needed anymore it's highly recommended to dispose it
  * using {@link #disposeFor(ObservableValue)} to avoid memory leaks.
  * When constructs and ObservableValues are stored in a {@link WeakHashMap} for this purpose.
+ * <p></p>
+ * <b>Note 2: </b> Every {@link ObservableValue} can have at max one When construct listening to it, attempts at
+ * registering more than one will result with an exception thrown by {@link #register()}.
+ * <p>
+ * One can also build a construct using {@link #forceListen()}, this will lead to the disposal of the previously built
+ * construct (if any was built).
  */
 public abstract class When<T> {
 	//================================================================================
 	// Properties
 	//================================================================================
 	protected static final WeakHashMap<ObservableValue<?>, WeakReference<When<?>>> whens = new WeakHashMap<>();
-	protected final ObservableValue<T> observableValue;
+	protected ObservableValue<T> observableValue;
 	protected boolean oneShot = false;
 
 	protected final Set<Observable> invalidatingObservables;
@@ -68,11 +74,27 @@ public abstract class When<T> {
 	//================================================================================
 	// Abstract Methods
 	//================================================================================
+
+	/**
+	 * Implementations of this should provide the logic that adds the listener on the given {@link ObservableValue},
+	 * as well as handling cases such {@link #oneShot()} and {@link #invalidating(Observable)} as well as making sure that
+	 * the construct is registered at the end, {@link #register()}.
+	 */
 	public abstract When<T> listen();
 
 	//================================================================================
 	// Methods
 	//================================================================================
+
+	/**
+	 * Forces the creation/activation of this {@code When} construct by first checking if there's already one for the
+	 * current {@link ObservableValue} by disposing it first and then calling {@link #listen()}.
+	 */
+	public When<T> forceListen() {
+		if (whens.containsKey(observableValue))
+			disposeFor(observableValue);
+		return listen();
+	}
 
 	/**
 	 * This is responsible for registering the {@code When} construct in a map that
@@ -156,6 +178,17 @@ public abstract class When<T> {
 	 */
 	public void requestDisposal() {
 		disposeFor(observableValue);
+	}
+
+	/**
+	 * @return whether this construct has been disposed before. By default, checks if the given {@link ObservableValue}
+	 * is null, there are no invalidating sources and the invalidation listener is null. A construct is considered to be
+	 * properly disposed only when all these conditions are verified
+	 */
+	public boolean isDisposed() {
+		return observableValue == null &&
+				invalidatingObservables.isEmpty() &&
+				invalidationListener == null;
 	}
 
 	//================================================================================

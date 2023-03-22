@@ -20,7 +20,6 @@ package io.github.palexdev.mfxcore.base.bindings;
 
 import io.github.palexdev.mfxcore.base.bindings.base.Updater;
 import io.github.palexdev.mfxcore.enums.BindingType;
-import io.github.palexdev.mfxcore.observables.When;
 import javafx.beans.value.ObservableValue;
 
 /**
@@ -110,47 +109,47 @@ public class Source<S> extends AbstractSource<S, S> {
 	/**
 	 * {@inheritDoc}
 	 * <p>
-	 * For unidirectional bindings. The listener to this source's observable is added by using
-	 * {@link When#onChanged(ObservableValue)} and is responsible for triggering {@link #updateTarget(Object, Object)}.
+	 * For unidirectional bindings. The listener added to this source's observable is responsible for
+	 * triggering {@link #updateTarget(Object, Object)}.
 	 */
 	@Override
 	protected void listen() {
-		When.onChanged(observable)
-				.then(this::updateTarget)
-				.listen();
+		if (obvListener == null) obvListener = (ov, o, n) -> updateTarget(o, n);
+		observable.addListener(obvListener);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * <p>
 	 * For bidirectional bindings. The source's target is set to the given one.
-	 * Then {@link #listen()} is called. Then a listener to the given target is added by using
-	 * {@link When#onChanged(ObservableValue)} and is responsible for triggering {@link #updateSource(Object, Object)}.
+	 * Then {@link #listen()} is called. Then a listener to the given target is added and is responsible for
+	 * triggering {@link #updateSource(Object, Object)}.
 	 */
 	@Override
 	protected void listen(Target<S> target) {
 		listen();
 
 		this.target = target;
-		When.onChanged(target.getObservable())
-				.then(this::updateSource)
-				.listen();
+		if (tgtListener == null) tgtListener = (ov, o, n) -> updateSource(o, n);
+		target.getObservable().addListener(tgtListener);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * <p>
-	 * Uses {@link When#disposeFor(ObservableValue)} to remove the listeners added to this source's observable
-	 * and the target's observable. Then sets all its properties to null.
+	 * Removes the listeners added to this source's observable and the target's observable (if not null).
+	 * Then sets all its properties and listeners to null.
 	 */
 	@Override
 	public void dispose() {
-		When.disposeFor(observable);
-		if (target != null) When.disposeFor(target.getObservable());
+		observable.removeListener(obvListener);
+		if (target != null && tgtListener != null) target.getObservable().removeListener(tgtListener);
 		observable = null;
 		target = null;
 		targetUpdater = null;
 		sourceUpdater = null;
+		obvListener = null;
+		tgtListener = null;
 	}
 
 	//================================================================================

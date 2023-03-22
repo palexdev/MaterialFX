@@ -19,7 +19,6 @@
 package io.github.palexdev.mfxcore.base.bindings;
 
 import io.github.palexdev.mfxcore.base.bindings.base.Updater;
-import io.github.palexdev.mfxcore.observables.When;
 import javafx.beans.value.ObservableValue;
 
 import java.util.Objects;
@@ -75,9 +74,8 @@ public class ExternalSource<S> extends AbstractSource<S, S> {
 	 */
 	@Override
 	protected void listen() {
-		When.onChanged(observable)
-				.then(action::update)
-				.listen();
+		if (obvListener == null) obvListener = (ov, o, n) -> action.update(o, n);
+		observable.addListener(obvListener);
 	}
 
 	/**
@@ -113,13 +111,14 @@ public class ExternalSource<S> extends AbstractSource<S, S> {
 	}
 
 	/**
-	 * Disposes the source by using {@link When#disposeFor(ObservableValue)},
-	 * then sets the observable to null.
+	 * Disposes the source by removing the listener, then sets both the observable
+	 * and listener to null.
 	 */
 	@Override
 	public void dispose() {
-		When.disposeFor(observable);
+		observable.removeListener(obvListener);
 		observable = null;
+		obvListener = null;
 	}
 
 	/**

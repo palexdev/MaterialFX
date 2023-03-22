@@ -41,7 +41,7 @@ public class LayoutUtils {
 	                                       double areaBaselineOffset, Insets margin, HPos hAlignment, VPos vAlignment, boolean snapToPixel, boolean computeSizes) {
 
 		Insets snappedMargin = margin == null ? Insets.EMPTY : margin;
-		if (snapToPixel) {
+		if (snapToPixel && snappedMargin != Insets.EMPTY) {
 			snappedMargin = InsetsBuilder.of(
 					parent.snapSpaceY(snappedMargin.getTop()),
 					parent.snapSpaceX(snappedMargin.getRight()),
@@ -57,7 +57,7 @@ public class LayoutUtils {
 
 	public static double computeXPosition(Region parent, Node child, double areaX, double areaWidth, Insets margin, boolean snapMargin, HPos hAlignment, boolean snapToPixel, boolean computeSizes) {
 		Insets snappedMargin = margin == null ? Insets.EMPTY : margin;
-		if (snapMargin) {
+		if (snapMargin && snappedMargin != Insets.EMPTY) {
 			snappedMargin = InsetsBuilder.of(
 					parent.snapSpaceY(snappedMargin.getTop()),
 					parent.snapSpaceX(snappedMargin.getRight()),
@@ -68,7 +68,7 @@ public class LayoutUtils {
 
 		final double leftMargin = snappedMargin.getLeft();
 		final double rightMargin = snappedMargin.getRight();
-		final double xOffset = leftMargin + computeXOffset(areaWidth - leftMargin - rightMargin, computeSizes ? boundWidth(child) : child.getLayoutBounds().getWidth(), hAlignment);
+		final double xOffset = leftMargin + computeXOffset(areaWidth - leftMargin - rightMargin, computeSizes ? parent.snapSizeX(boundWidth(child)) : child.getLayoutBounds().getWidth(), hAlignment);
 		final double xPosition = areaX + xOffset;
 		return snapToPixel ? parent.snapPositionX(xPosition) : xPosition;
 	}
@@ -90,12 +90,12 @@ public class LayoutUtils {
 		if (vAlignment == VPos.BASELINE) {
 			double bo = child.getBaselineOffset();
 			if (bo == Node.BASELINE_OFFSET_SAME_AS_HEIGHT) {
-				yOffset = areaBaselineOffset - (computeSizes ? boundHeight(child) : child.getLayoutBounds().getHeight());
+				yOffset = areaBaselineOffset - (computeSizes ? parent.snapSizeY(boundHeight(child)) : child.getLayoutBounds().getHeight());
 			} else {
 				yOffset = areaBaselineOffset - bo;
 			}
 		} else {
-			yOffset = topMargin + computeYOffset(areaHeight - topMargin - bottomMargin, computeSizes ? boundHeight(child) : child.getLayoutBounds().getHeight(), vAlignment);
+			yOffset = topMargin + computeYOffset(areaHeight - topMargin - bottomMargin, computeSizes ? parent.snapSizeY(boundHeight(child)) : child.getLayoutBounds().getHeight(), vAlignment);
 		}
 		final double yPosition = areaY + yOffset;
 		return snapToPixel ? parent.snapPositionY(yPosition) : yPosition;

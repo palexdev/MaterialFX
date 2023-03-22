@@ -26,6 +26,11 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   overhead
 - Added a new method responsible for registering the When construct. This is responsible for avoiding duplicates in the
   map (subsequent put) that would probably lead to a memory leak and unexpected behavior
+- When: mention in documentation that only a When construct per Observable can be active at anytime
+- When: Added method to force the activation/listening by disposing any other When on the given Observable (if one
+  exists already)
+- When: added method to check if a construct has been disposed before
+- Added some tests for When constructs
 
 ## Changed
 
@@ -33,10 +38,17 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   and the Behavior
 - Moved executeNow(...) methods to the base class for a better fluent API
 - When: added non-static method for disposal
+- Tests on Bindings where failing due to recent changes on When constructs. Since a Bindings may need to add/register a
+  listener more than once on a same observable avoid using When constructs
+- OnChanged, OnInvalidated: also set the Observable to null on disposal
+- LayoutUtils: optimize some of the algorithms by not computing the snapped margins if they are EMPTY
+- LayoutUtils: snap the computed sizes by default before any other calculation as this could lead to wrong pixel
+  positions
 
 ## Fixed
 
 - When: Implemented fix from #212
+- BoundLabel: fixed text node detection algorithm
 
 ## [11.2.4] - 09-02-2023
 
