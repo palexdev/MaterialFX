@@ -27,6 +27,7 @@ import io.github.palexdev.mfxcomponents.theming.enums.MFXThemeManager;
 import io.github.palexdev.mfxcore.base.properties.NodeProperty;
 import io.github.palexdev.mfxcore.behavior.BehaviorBase;
 import io.github.palexdev.mfxcore.observables.When;
+import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
 import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -174,8 +175,8 @@ public class TestLayoutStrategies {
 		});
 
 		// Default strategy, same as JavaFX
-		// Do not count insets for the sanity of the below 'comparison'
-		assertEquals(fab.getIcon().getLayoutBounds().getWidth(), fab.getWidth() - getLRInsets(fab));
+		// Do not count insets and GTG for the sanity of the below 'comparison'
+		assertEquals(fab.getIcon().getLayoutBounds().getWidth(), fab.getWidth() - getLRInsets(fab) - fab.getGraphicTextGap());
 		assertEquals(fab.getIcon().getLayoutBounds().getHeight(), fab.getHeight() - getTBInsets(fab));
 
 		// Double check with a similar container setup...
@@ -195,12 +196,16 @@ public class TestLayoutStrategies {
 
 		// Define a strategy with minimum sizes
 		LayoutStrategy strategy = LayoutStrategy.defaultStrategy()
-				.setMinWidthFunction(Defaults.DEF_MIN_WIDTH_FUNCTION.andThen(r -> Math.max(r, 64.0)))
-				.setMinHeightFunction(Defaults.DEF_MIN_HEIGHT_FUNCTION.andThen(r -> Math.max(r, 64.0)));
-		robot.interact(() -> fab.setLayoutStrategy(strategy));
+				.setMinWidthFunction(Defaults.DEF_MIN_WIDTH_FUNCTION.andThen(r -> Math.max(r, 72.0)))
+				.setMinHeightFunction(Defaults.DEF_MIN_HEIGHT_FUNCTION.andThen(r -> Math.max(r, 72.0)));
+		robot.interact(() -> {
+			fab.setLayoutStrategy(strategy);
+			//fab.requestLayout();
+		});
 
-		assertEquals(64.0, fab.getWidth());
-		assertEquals(64.0, fab.getHeight());
+		LayoutUtils.boundWidth(fab);
+		assertEquals(72.0, fab.getWidth());
+		assertEquals(72.0, fab.getHeight());
 
 		// What happens if I set the pref?
 		robot.interact(() -> fab.setPrefSize(100, 100));
@@ -209,9 +214,9 @@ public class TestLayoutStrategies {
 
 		// What happens if I also set the max?
 		robot.interact(() -> fab.setMaxSize(40, 40));
-		assertEquals(64.0, fab.getWidth());
-		assertEquals(64.0, fab.getHeight());
-		// Still 64, does this happen with JavaFX nodes too?
+		assertEquals(72.0, fab.getWidth());
+		assertEquals(72.0, fab.getHeight());
+		// Still 72.0, does this happen with JavaFX nodes too?
 
 		StackPane sp = new StackPane() {
 			@Override
@@ -267,21 +272,21 @@ public class TestLayoutStrategies {
 
 		// Define a strategy with pref sizes
 		LayoutStrategy strategy = LayoutStrategy.defaultStrategy()
-				.setPrefWidthFunction(Defaults.DEF_PREF_WIDTH_FUNCTION.andThen(r -> Math.max(r, 64.0)))
-				.setPrefHeightFunction(Defaults.DEF_PREF_HEIGHT_FUNCTION.andThen(r -> Math.max(r, 64.0)));
+				.setPrefWidthFunction(Defaults.DEF_PREF_WIDTH_FUNCTION.andThen(r -> Math.max(r, 72.0)))
+				.setPrefHeightFunction(Defaults.DEF_PREF_HEIGHT_FUNCTION.andThen(r -> Math.max(r, 72.0)));
 		robot.interact(() -> fab.setLayoutStrategy(strategy));
 
 		/*
 		 * This is different from using setPrefSize(...)!
 		 * And different from setting a minimum size strategy, so...
 		 */
-		assertEquals(64.0, fab.getWidth());
-		assertEquals(64.0, fab.getHeight());
+		assertEquals(72.0, fab.getWidth());
+		assertEquals(72.0, fab.getHeight());
 
 		// What happens if I set a max?
 		robot.interact(() -> fab.setMaxSize(30, 30));
 		assertEquals(30.0, fab.getWidth());
-		assertEquals(30.0, fab.getHeight());
+		assertEquals(56.0, fab.getHeight()); // Icon is 24, total padding is 32, sum is 56, for the aforementioned formula 56 wins
 
 		// What happens if I set a min?
 		robot.interact(() -> fab.setMinSize(45, 45));
@@ -298,21 +303,21 @@ public class TestLayoutStrategies {
 
 		// Define a strategy with max sizes
 		LayoutStrategy strategy = LayoutStrategy.defaultStrategy()
-				.setMaxWidthFunction(Defaults.DEF_MAX_WIDTH_FUNCTION.andThen(r -> Math.max(r, 64.0)))
-				.setMaxHeightFunction(Defaults.DEF_MAX_HEIGHT_FUNCTION.andThen(r -> Math.max(r, 64.0)));
+				.setMaxWidthFunction(Defaults.DEF_MAX_WIDTH_FUNCTION.andThen(r -> Math.max(r, 72.0)))
+				.setMaxHeightFunction(Defaults.DEF_MAX_HEIGHT_FUNCTION.andThen(r -> Math.max(r, 72.0)));
 		robot.interact(() -> fab.setLayoutStrategy(strategy));
 
 		/*
-		 * Here we have a special case. We set a strategy that constraints the node to be at max 64px
-		 * But remember that the node is inside a StackPane so it will occupy all the space possible within its constraints
-		 * So we have to checks to do: 1) the pref size 2) the actual size
+		 * Here we have a special case. We set a strategy that constraints the node to be at max 72px
+		 * But remember that the node is inside a StackPane, so it will occupy all the space possible within its constraints
+		 * So we have to check: 1) the pref size 2) the actual size
 		 *
 		 * We don't check for the prefHeight because only the pref width is overridden by the
 		 * extend() method in the FAB behavior
 		 */
-		assertEquals(60.0, fab.getPrefWidth());
-		assertEquals(64.0, fab.getWidth());
-		assertEquals(64.0, fab.getHeight());
+		assertEquals(64.0, fab.getPrefWidth());
+		assertEquals(72.0, fab.getWidth());
+		assertEquals(72.0, fab.getHeight());
 
 		// What happens if I set pref?
 		robot.interact(() -> fab.setPrefSize(100, 100));

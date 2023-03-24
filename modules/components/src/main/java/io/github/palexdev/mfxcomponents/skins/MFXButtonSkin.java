@@ -115,7 +115,7 @@ public class MFXButtonSkin extends MFXSkinBase<MFXButton, MFXButtonBehavior> {
 	public double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
 		MFXButton button = getSkinnable();
 		double insets = leftInset + rightInset;
-		double tW = TextUtils.computeTextWidth(label.getFont(), label.getText());
+		double tW = snapSizeX(TextUtils.computeTextWidth(label.getFont(), label.getText()));
 		if (button.getContentDisplay() == ContentDisplay.GRAPHIC_ONLY) tW = 0;
 		double gW = (button.getGraphic() != null) ? LayoutUtils.boundWidth(button.getGraphic()) + button.getGraphicTextGap() : 0.0;
 		return insets + tW + gW;
@@ -125,7 +125,7 @@ public class MFXButtonSkin extends MFXSkinBase<MFXButton, MFXButtonBehavior> {
 	public double computePrefHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
 		MFXButton button = getSkinnable();
 		double insets = topInset + bottomInset;
-		double tH = TextUtils.computeTextHeight(label.getFont(), label.getText());
+		double tH = snapSizeY(TextUtils.computeTextHeight(label.getFont(), label.getText()));
 		double gH = button.getGraphic() != null ? LayoutUtils.boundHeight(button.getGraphic()) : 0.0;
 		return insets + Math.max(tH, gH);
 	}

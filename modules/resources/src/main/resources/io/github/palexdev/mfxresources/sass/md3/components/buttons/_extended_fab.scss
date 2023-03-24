@@ -7,11 +7,12 @@
 @mixin fab_base($surface, $surfaceTint, $text, $elevation) {
   @include label_large();
   -fx-text-fill: get_scheme_color($text);
+  -fx-graphic-text-gap: 8px;
   -fx-background-color: get_scheme_color($surface);
   -fx-background-radius: 16px;
   -mfx-init-height: 56px;
   -mfx-init-width: 80px;
-  -fx-graphic-text-gap: 8px;
+  -fx-padding: 16px;
   -mfx-elevation: unquote("LEVEL" + $elevation);
 }
 
@@ -52,14 +53,6 @@
 }
 
 @mixin fab_icon($color) {
-  &:with-icon-left {
-    -fx-padding: 0px 20px 0px 16px;
-  }
-
-  &:with-icon-right {
-    -fx-padding: 0px 16px 0px 20px;
-  }
-
   .mfx-font-icon {
     -mfx-color: get_scheme_color($color);
     -mfx-size: 24px;

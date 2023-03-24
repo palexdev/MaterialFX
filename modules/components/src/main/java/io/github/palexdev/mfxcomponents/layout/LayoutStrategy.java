@@ -46,6 +46,13 @@ import java.util.function.Function;
  * <p></p>
  * When creating a new {@code LayoutStrategy} object through no-arg constructor or {@link #defaultStrategy()}, the six
  * functions are set to the one in {@link Defaults} (JavaFX algorithm).
+ * <p></p>
+ * <p></p>
+ * In general the JavaFX's layout algorithm works like this:
+ * <p> - Given the min, pref and max widths/heights for a Node
+ * <p> 1) Extracts the maximum between pref and min
+ * <p> 2) Extracts the maximum between min and max
+ * <p> 3) Returns the minimum between the two computed values
  */
 public class LayoutStrategy {
 	//================================================================================

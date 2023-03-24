@@ -241,9 +241,8 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
 		MFXButton btn3 = generator.apply("Focused", randomIcon(FONTAWESOME_SOLID));
 		MFXButton btn4 = generator.apply("Pressed", randomIcon(FONTAWESOME_SOLID));
 		MFXFab btn5 = generator.apply("Text Only", randomIcon(FONTAWESOME_SOLID));
-		MFXFab btn6 = generator.apply("Icon to Right", randomIcon(FONTAWESOME_SOLID));
+		MFXFab btn6 = generator.apply("Expandable", randomIcon(FONTAWESOME_SOLID));
 		MFXFab btn7 = generator.apply("Lowered Text Only", randomIcon(FONTAWESOME_SOLID));
-		MFXFab btn8 = generator.apply("Lowered Icon to Right", randomIcon(FONTAWESOME_SOLID));
 
 		btn1.setDisable(true);
 		btn2.setMouseTransparent(true);
@@ -254,16 +253,15 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
 		btn4.pseudoClassStateChanged(PseudoClass.getPseudoClass("pressed"), true);
 
 		btn5.setContentDisplay(ContentDisplay.TEXT_ONLY);
-		btn6.setContentDisplay(ContentDisplay.RIGHT);
+		btn5.setAlignment(Pos.CENTER);
 		btn7.addVariants(FABVariants.LOWERED);
 		btn7.setContentDisplay(ContentDisplay.TEXT_ONLY);
-		btn8.addVariants(FABVariants.LOWERED);
-		btn8.setContentDisplay(ContentDisplay.RIGHT);
+		btn7.setAlignment(Pos.CENTER);
 
 		btn6.setExtended(false);
 		btn6.setOnAction(e -> btn6.setExtended(!btn6.isExtended()));
 
-		defTfp.add(btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8);
+		defTfp.add(btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7);
 		return defTfp;
 	}
 }

@@ -31,7 +31,6 @@ import javafx.animation.Interpolator;
 import javafx.animation.ParallelTransition;
 import javafx.animation.Timeline;
 import javafx.beans.InvalidationListener;
-import javafx.beans.WeakInvalidationListener;
 import javafx.css.*;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
@@ -111,8 +110,8 @@ public class MFXRippleGenerator extends Region implements RippleGenerator {
 	public MFXRippleGenerator(Region region) {
 		this.region = region;
 		handler = this::generate;
-		clipUpdater = new WeakInvalidationListener(i -> Optional.ofNullable(cachedClip)
-				.ifPresent(n -> n.resizeRelocate(0, 0, region.getWidth(), region.getHeight())));
+		clipUpdater = i -> Optional.ofNullable(cachedClip)
+				.ifPresent(n -> n.resizeRelocate(0, 0, region.getWidth(), region.getHeight()));
 		initialize();
 	}
 

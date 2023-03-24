@@ -18,8 +18,9 @@
 
 package io.github.palexdev.mfxcomponents.behaviors;
 
-import io.github.palexdev.mfxcomponents.controls.base.MFXLabeled;
 import io.github.palexdev.mfxcomponents.controls.fab.MFXFabBase;
+import io.github.palexdev.mfxcomponents.skins.MFXFabSkin;
+import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
 import io.github.palexdev.mfxeffects.animations.Animations.KeyFrames;
 import io.github.palexdev.mfxeffects.animations.Animations.SequentialBuilder;
 import io.github.palexdev.mfxeffects.animations.Animations.TimelineBuilder;
@@ -29,7 +30,11 @@ import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.Timeline;
 import javafx.geometry.Bounds;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.scene.transform.Scale;
 import javafx.util.Duration;
@@ -52,6 +57,8 @@ public class MFXFabBehavior extends MFXButtonBehavior {
 
 	private Animation extendAnimation;
 	private boolean inhibitAnimations = false;
+
+	private Label labelNode;
 
 	//================================================================================
 	// Constructors
@@ -77,9 +84,13 @@ public class MFXFabBehavior extends MFXButtonBehavior {
 		double targetSize = computeWidth();
 		double targetTextOpacity = extended ? 1.0 : 0.0;
 
+		Label labelNode = getLabelNode();
+		double labelDisplacement = computeLabelDisplacement(targetSize);
+
 		if (!animate) {
 			fab.setPrefWidth(targetSize);
 			fab.setTextOpacity(targetTextOpacity);
+			labelNode.setTranslateX(labelDisplacement);
 			return;
 		}
 
@@ -91,6 +102,7 @@ public class MFXFabBehavior extends MFXButtonBehavior {
 		if (extendAnimation != null) extendAnimation.stop();
 		extendAnimation = TimelineBuilder.build()
 				.add(KeyFrames.of(resizeDuration, fab.prefWidthProperty(), targetSize, curve))
+				.add(KeyFrames.of(resizeDuration, labelNode.translateXProperty(), labelDisplacement, curve))
 				.add(KeyFrames.of(opacityDuration, fab.textOpacityProperty(), targetTextOpacity, curve))
 				.getAnimation();
 		extendAnimation.play();
@@ -173,6 +185,68 @@ public class MFXFabBehavior extends MFXButtonBehavior {
 	}
 
 	/**
+	 * By default, the text node is placed at {@link Pos#CENTER_LEFT} by {@link MFXFabSkin}.
+	 * This method serves two purposes:
+	 * <p> 1) Supporting {@link HPos#CENTER} and {@link HPos#RIGHT} other than just {@link HPos#LEFT}
+	 * <p> 2) Making sure that the label is always well positioned when expanding/collapsing the FAB. By always positioning
+	 * it at {@link Pos#CENTER_LEFT} we make sure that it's {@code layoutX} doesn't change, and we can animate the
+	 * {@link Node#translateXProperty()} to make the transition look smooth.
+	 */
+	protected double computeLabelDisplacement(double targetW) {
+		MFXFabBase fab = getFab();
+		HPos hpos = fab.getAlignment().getHpos();
+		if (fab.getSkin() == null) return 0.0;
+		Label labelNode = getLabelNode();
+
+		boolean extended = fab.isExtended();
+		double x = fab.snappedLeftInset();
+		double right = fab.snappedRightInset();
+		double w = extended ? fab.getWidth() : targetW;
+		MFXFontIcon icon = fab.getIcon();
+
+		double leftX = labelNode.getLayoutX();
+		if (!extended) {
+			if (icon == null) return 0.0;
+			double centerX = LayoutUtils.computeXPosition(
+					fab, icon,
+					x, w, Insets.EMPTY, true, HPos.CENTER,
+					true, true
+			);
+			return centerX - leftX - x;
+		}
+
+		double targetX = LayoutUtils.computeXPosition(
+				fab, labelNode,
+				x, targetW, Insets.EMPTY, true, hpos,
+				true, true
+		);
+		switch (hpos) {
+			case RIGHT:
+				x += right;
+				break;
+			case LEFT:
+				x = 0;
+				break;
+			case CENTER:
+				x += Math.abs(x - right) / 2;
+				break;
+		}
+		return targetX - leftX - x;
+	}
+
+	/**
+	 * Retrieves the text node from the FAB' skin. Must be overridden if changing the skin/layout since this
+	 * uses {@code fab.getChildrenUnmodifiable().get(1)}.
+	 */
+	protected Label getLabelNode() {
+		MFXFabBase fab = getFab();
+		if (labelNode == null) {
+			labelNode = (Label) fab.getChildrenUnmodifiable().get(1);
+		}
+		return labelNode;
+	}
+
+	/**
 	 * This is responsible for setting the {@link Scale}'s pivotX and pivotY for animating the
 	 * FAB when changing icon through {@link #changeIcon(MFXFontIcon)}.
 	 * <p></p>
@@ -219,6 +293,7 @@ public class MFXFabBehavior extends MFXButtonBehavior {
 	//================================================================================
 	@Override
 	public void dispose() {
+		labelNode = null;
 		getNode().getTransforms().remove(scale);
 		super.dispose();
 	}

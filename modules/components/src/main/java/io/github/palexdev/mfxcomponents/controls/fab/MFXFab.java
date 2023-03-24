@@ -18,6 +18,8 @@
 
 package io.github.palexdev.mfxcomponents.controls.fab;
 
+import io.github.palexdev.mfxcomponents.behaviors.MFXFabBehavior;
+import io.github.palexdev.mfxcomponents.skins.MFXFabSkin;
 import io.github.palexdev.mfxcomponents.theming.base.WithVariants;
 import io.github.palexdev.mfxcomponents.theming.enums.FABVariants;
 import io.github.palexdev.mfxcomponents.theming.enums.MFXThemeManager;
@@ -33,6 +35,12 @@ import java.util.List;
  * <p></p>
  * Implements the {@link WithVariants} API, since these type of FABs have slightly different versions, the
  * variants are described by {@link FABVariants}.
+ * <p></p>
+ * <b>Important note:</b> users should not use {@link #addVariants(FABVariants...)} or {@link #setVariants(FABVariants...)}
+ * to make the FAB extended ({@link FABVariants#EXTENDED}) because this could lead to invisible text. Use {@link #setExtended(boolean)} instead.
+ *
+ * @see MFXFabSkin
+ * @see MFXFabBehavior
  */
 public class MFXFab extends MFXFabBase implements WithVariants<MFXFab, FABVariants> {
 
@@ -111,7 +119,9 @@ public class MFXFab extends MFXFabBase implements WithVariants<MFXFab, FABVarian
 	//================================================================================
 	@Override
 	public List<String> defaultStyleClasses() {
-		return List.of("mfx-button", "fab-base", "fab");
+		return (extendedProperty() == null || !isExtended()) ?
+				List.of("mfx-button", "fab-base", "fab") :
+				List.of("mfx-button", "fab-base", "fab-extended");
 	}
 
 	@Override

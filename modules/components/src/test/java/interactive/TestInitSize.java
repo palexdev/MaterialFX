@@ -23,6 +23,7 @@ import io.github.palexdev.mfxcomponents.controls.buttons.MFXFilledButton;
 import io.github.palexdev.mfxcomponents.controls.fab.MFXFab;
 import io.github.palexdev.mfxcomponents.theming.enums.FABVariants;
 import io.github.palexdev.mfxcomponents.theming.enums.MFXThemeManager;
+import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -36,7 +37,6 @@ import org.testfx.framework.junit5.Start;
 
 import java.util.concurrent.TimeoutException;
 
-import static io.github.palexdev.mfxresources.fonts.IconsProviders.FONTAWESOME_SOLID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(ApplicationExtension.class)
@@ -52,7 +52,7 @@ public class TestInitSize {
 	@Test
 	void testStandardFab(FxRobot robot) {
 		StackPane root = setupStage();
-		MFXFab fab = new MFXFab(FONTAWESOME_SOLID.randomIcon());
+		MFXFab fab = new MFXFab(new MFXFontIcon("fas-circle", 24));
 		robot.interact(() -> root.getChildren().setAll(fab));
 		assertEquals(56, fab.getLayoutBounds().getWidth());
 		assertEquals(56, fab.getLayoutBounds().getHeight());
@@ -65,7 +65,7 @@ public class TestInitSize {
 	@Test
 	void testSmallFab(FxRobot robot) {
 		StackPane root = setupStage();
-		MFXFab fab = new MFXFab(FONTAWESOME_SOLID.randomIcon());
+		MFXFab fab = new MFXFab(new MFXFontIcon("fas-circle", 24));
 		robot.interact(() -> root.getChildren().setAll(fab));
 		assertEquals(56, fab.getLayoutBounds().getWidth());
 		assertEquals(56, fab.getLayoutBounds().getHeight());
@@ -82,7 +82,7 @@ public class TestInitSize {
 	@Test
 	void testLargeFab(FxRobot robot) {
 		StackPane root = setupStage();
-		MFXFab fab = new MFXFab(FONTAWESOME_SOLID.randomIcon());
+		MFXFab fab = new MFXFab(new MFXFontIcon("fas-circle", 24.0));
 		robot.interact(() -> root.getChildren().setAll(fab));
 		assertEquals(56, fab.getLayoutBounds().getWidth());
 		assertEquals(56, fab.getLayoutBounds().getHeight());

@@ -237,7 +237,7 @@
   -fx-text-fill: #1D192B;
   -fx-background-color: #e8def8;
   -fx-background-radius: 20px;
-  -fx-padding: 0px 12px 0px 12px;
+  -fx-padding: 0px 24px 0px 24px;
   -fx-graphic-text-gap: 8px;
   -mfx-init-height: 40px;
   -mfx-elevation: LEVEL0;
@@ -270,11 +270,11 @@
 }
 
 .mfx-button.tonal-filled:with-icon-left {
-  -fx-padding: 0px 16px 0px 12px;
+  -fx-padding: 0px 24px 0px 26px;
 }
 
 .mfx-button.tonal-filled:with-icon-right {
-  -fx-padding: 0px 12px 0px 16px;
+  -fx-padding: 0px 16px 0px 24px;
 }
 
 .mfx-button.tonal-filled .mfx-ripple-generator {
@@ -285,10 +285,17 @@
  * FAB Primary
  ****************************************************************************************************/
 .mfx-button.fab {
+  -fx-font-family: "Roboto Medium";
+  -fx-font-weight: 500;
+  -fx-font-size: 14px;
+  -fx-line-spacing: 20px;
+  -fx-text-fill: #21005D;
+  -fx-graphic-text-gap: 8px;
   -fx-background-color: #EADDFF;
   -fx-background-radius: 16px;
   -mfx-init-height: 56px;
   -mfx-init-width: 56px;
+  -fx-padding: 16px;
   -mfx-elevation: LEVEL3;
 }
 
@@ -296,6 +303,7 @@
   -fx-background-radius: 12px;
   -mfx-init-height: 40px;
   -mfx-init-width: 40px;
+  -fx-padding: 0px;
 }
 
 .mfx-button.fab.large {
@@ -353,10 +361,17 @@
  * FAB Surface
  ****************************************************************************************************/
 .mfx-button.fab.surface {
+  -fx-font-family: "Roboto Medium";
+  -fx-font-weight: 500;
+  -fx-font-size: 14px;
+  -fx-line-spacing: 20px;
+  -fx-text-fill: #6750A4;
+  -fx-graphic-text-gap: 8px;
   -fx-background-color: #FFFBFE;
   -fx-background-radius: 16px;
   -mfx-init-height: 56px;
   -mfx-init-width: 56px;
+  -fx-padding: 16px;
   -mfx-elevation: LEVEL3;
 }
 
@@ -364,6 +379,7 @@
   -fx-background-radius: 12px;
   -mfx-init-height: 40px;
   -mfx-init-width: 40px;
+  -fx-padding: 0px;
 }
 
 .mfx-button.fab.surface.large {
@@ -421,10 +437,17 @@
  * FAB Secondary
  ****************************************************************************************************/
 .mfx-button.fab.secondary {
+  -fx-font-family: "Roboto Medium";
+  -fx-font-weight: 500;
+  -fx-font-size: 14px;
+  -fx-line-spacing: 20px;
+  -fx-text-fill: #1D192B;
+  -fx-graphic-text-gap: 8px;
   -fx-background-color: #E8DEF8;
   -fx-background-radius: 16px;
   -mfx-init-height: 56px;
   -mfx-init-width: 56px;
+  -fx-padding: 16px;
   -mfx-elevation: LEVEL3;
 }
 
@@ -432,6 +455,7 @@
   -fx-background-radius: 12px;
   -mfx-init-height: 40px;
   -mfx-init-width: 40px;
+  -fx-padding: 0px;
 }
 
 .mfx-button.fab.secondary.large {
@@ -489,10 +513,17 @@
  * FAB Tertiary
  ****************************************************************************************************/
 .mfx-button.fab.tertiary {
+  -fx-font-family: "Roboto Medium";
+  -fx-font-weight: 500;
+  -fx-font-size: 14px;
+  -fx-line-spacing: 20px;
+  -fx-text-fill: #31111D;
+  -fx-graphic-text-gap: 8px;
   -fx-background-color: #FFD8E4;
   -fx-background-radius: 16px;
   -mfx-init-height: 56px;
   -mfx-init-width: 56px;
+  -fx-padding: 16px;
   -mfx-elevation: LEVEL3;
 }
 
@@ -500,6 +531,7 @@
   -fx-background-radius: 12px;
   -mfx-init-height: 40px;
   -mfx-init-width: 40px;
+  -fx-padding: 0px;
 }
 
 .mfx-button.fab.tertiary.large {
@@ -562,11 +594,12 @@
   -fx-font-size: 14px;
   -fx-line-spacing: 20px;
   -fx-text-fill: #21005D;
+  -fx-graphic-text-gap: 8px;
   -fx-background-color: #EADDFF;
   -fx-background-radius: 16px;
   -mfx-init-height: 56px;
   -mfx-init-width: 80px;
-  -fx-graphic-text-gap: 8px;
+  -fx-padding: 16px;
   -mfx-elevation: LEVEL3;
 }
 
@@ -583,14 +616,6 @@
 .mfx-button.fab-extended:pressed {
   -fx-background-color: #EADDFF, rgba(33, 0, 93, 0.12);
   -mfx-elevation: LEVEL3;
-}
-
-.mfx-button.fab-extended:with-icon-left {
-  -fx-padding: 0px 20px 0px 16px;
-}
-
-.mfx-button.fab-extended:with-icon-right {
-  -fx-padding: 0px 16px 0px 20px;
 }
 
 .mfx-button.fab-extended .mfx-font-icon {
@@ -624,11 +649,12 @@
   -fx-font-size: 14px;
   -fx-line-spacing: 20px;
   -fx-text-fill: #6750A4;
+  -fx-graphic-text-gap: 8px;
   -fx-background-color: #FFFBFE;
   -fx-background-radius: 16px;
   -mfx-init-height: 56px;
   -mfx-init-width: 80px;
-  -fx-graphic-text-gap: 8px;
+  -fx-padding: 16px;
   -mfx-elevation: LEVEL3;
 }
 
@@ -645,14 +671,6 @@
 .mfx-button.fab-extended.surface:pressed {
   -fx-background-color: #FFFBFE, rgba(103, 80, 164, 0.12);
   -mfx-elevation: LEVEL3;
-}
-
-.mfx-button.fab-extended.surface:with-icon-left {
-  -fx-padding: 0px 20px 0px 16px;
-}
-
-.mfx-button.fab-extended.surface:with-icon-right {
-  -fx-padding: 0px 16px 0px 20px;
 }
 
 .mfx-button.fab-extended.surface .mfx-font-icon {
@@ -686,11 +704,12 @@
   -fx-font-size: 14px;
   -fx-line-spacing: 20px;
   -fx-text-fill: #1D192B;
+  -fx-graphic-text-gap: 8px;
   -fx-background-color: #E8DEF8;
   -fx-background-radius: 16px;
   -mfx-init-height: 56px;
   -mfx-init-width: 80px;
-  -fx-graphic-text-gap: 8px;
+  -fx-padding: 16px;
   -mfx-elevation: LEVEL3;
 }
 
@@ -707,14 +726,6 @@
 .mfx-button.fab-extended.secondary:pressed {
   -fx-background-color: #E8DEF8, rgba(29, 25, 43, 0.12);
   -mfx-elevation: LEVEL3;
-}
-
-.mfx-button.fab-extended.secondary:with-icon-left {
-  -fx-padding: 0px 20px 0px 16px;
-}
-
-.mfx-button.fab-extended.secondary:with-icon-right {
-  -fx-padding: 0px 16px 0px 20px;
 }
 
 .mfx-button.fab-extended.secondary .mfx-font-icon {
@@ -748,11 +759,12 @@
   -fx-font-size: 14px;
   -fx-line-spacing: 20px;
   -fx-text-fill: #31111D;
+  -fx-graphic-text-gap: 8px;
   -fx-background-color: #FFD8E4;
   -fx-background-radius: 16px;
   -mfx-init-height: 56px;
   -mfx-init-width: 80px;
-  -fx-graphic-text-gap: 8px;
+  -fx-padding: 16px;
   -mfx-elevation: LEVEL3;
 }
 
@@ -769,14 +781,6 @@
 .mfx-button.fab-extended.tertiary:pressed {
   -fx-background-color: #FFD8E4, rgba(49, 17, 29, 0.12);
   -mfx-elevation: LEVEL3;
-}
-
-.mfx-button.fab-extended.tertiary:with-icon-left {
-  -fx-padding: 0px 20px 0px 16px;
-}
-
-.mfx-button.fab-extended.tertiary:with-icon-right {
-  -fx-padding: 0px 16px 0px 20px;
 }
 
 .mfx-button.fab-extended.tertiary .mfx-font-icon {

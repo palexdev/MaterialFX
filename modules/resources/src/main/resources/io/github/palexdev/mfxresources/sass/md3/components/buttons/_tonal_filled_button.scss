@@ -10,6 +10,17 @@ $icon: 'on-secondary-container';
 $ripple: 'on-secondary-container';
 
 .mfx-button.tonal-filled {
+  buttons_base.$padding:
+
+  0px 24px 0px 24px;
+
+  buttons_base.$padding-i-left:
+
+  0px 24px 0px 26px;
+
+  buttons_base.$padding-i-right:
+
+  0px 16px 0px 24px;
   @include buttons_base.base($surface, $surfaceTint, $text, 0);
   @include buttons_base.disabled();
   @include buttons_base.hover($surface, $surfaceTint, 1);

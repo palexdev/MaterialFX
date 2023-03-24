@@ -130,7 +130,6 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 	 * if it takes into account those init sizes, the component will resize accordingly.
 	 */
 	protected void onInitSizesChanged() {
-		requestLayout();
 	}
 
 	/**
@@ -209,8 +208,13 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 			USE_COMPUTED_SIZE
 	) {
 		@Override
-		public void invalidated() {
-			onInitSizesChanged();
+		public void set(double newValue) {
+			if (newValue == -1) return;
+			double oldValue = get();
+			if (newValue != oldValue) {
+				onInitSizesChanged();
+				super.set(newValue);
+			}
 		}
 	};
 
@@ -221,8 +225,13 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 			USE_COMPUTED_SIZE
 	) {
 		@Override
-		public void invalidated() {
-			onInitSizesChanged();
+		public void set(double newValue) {
+			if (newValue == -1) return;
+			double oldValue = get();
+			if (newValue != oldValue) {
+				onInitSizesChanged();
+				super.set(newValue);
+			}
 		}
 	};
 

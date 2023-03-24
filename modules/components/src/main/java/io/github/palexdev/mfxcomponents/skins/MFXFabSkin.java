@@ -20,14 +20,12 @@ package io.github.palexdev.mfxcomponents.skins;
 
 import io.github.palexdev.mfxcomponents.behaviors.MFXFabBehavior;
 import io.github.palexdev.mfxcomponents.controls.fab.MFXFabBase;
-import io.github.palexdev.mfxcomponents.theming.enums.PseudoClasses;
 import io.github.palexdev.mfxcore.base.beans.Position;
 import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
 import io.github.palexdev.mfxcore.utils.fx.TextUtils;
 import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.VPos;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.layout.Region;
 
@@ -61,21 +59,16 @@ public class MFXFabSkin extends MFXButtonSkin {
 	@Override
 	protected void addListeners() {
 		MFXFabBase fab = getFab();
+
+		// Extended FABs can only have trailing icons
+		label.contentDisplayProperty().unbind();
+		label.setContentDisplay(ContentDisplay.LEFT);
 		onChanged(fab.contentDisplayProperty())
 				.then((o, n) -> {
-					if (!fab.isExtended()) {
-						PseudoClasses.WITH_ICON_LEFT.setOn(fab, false);
-						PseudoClasses.WITH_ICON_RIGHT.setOn(fab, false);
-						return;
-					}
-					MFXFontIcon icon = fab.getIcon();
-					boolean wil = (icon != null) && (n == ContentDisplay.LEFT);
-					boolean wir = (icon != null) && (n == ContentDisplay.RIGHT);
-					PseudoClasses.WITH_ICON_LEFT.setOn(fab, wil);
-					PseudoClasses.WITH_ICON_RIGHT.setOn(fab, wir);
+					ContentDisplay cd = (n == ContentDisplay.TEXT_ONLY) ? ContentDisplay.TEXT_ONLY : ContentDisplay.LEFT;
+					label.setContentDisplay(cd);
 				})
 				.executeNow()
-				.invalidating(fab.iconProperty())
 				.listen();
 	}
 
@@ -89,24 +82,26 @@ public class MFXFabSkin extends MFXButtonSkin {
 		MFXFabBase fab = getFab();
 		MFXFontIcon icon = fab.getIcon();
 		double iW = (icon != null) ? icon.getLayoutBounds().getWidth() : 0.0;
+		double gap = (icon != null) ? fab.getGraphicTextGap() : 0.0;
 		return fab.isExtended() ?
-				leftInset + iW + TextUtils.computeTextWidth(fab.getFont(), fab.getText()) + rightInset :
+				leftInset + iW + gap + snapSizeX(TextUtils.computeTextWidth(fab.getFont(), fab.getText())) + rightInset :
 				leftInset + iW + rightInset;
 	}
 
 	@Override
 	protected void layoutChildren(double x, double y, double w, double h) {
 		MFXFabBase fab = getFab();
-		double lW = Math.max(LayoutUtils.boundWidth(label), w);
-		double lH = LayoutUtils.boundHeight(label);
-		HPos hPos = fab.isExtended() ? fab.getAlignment().getHpos() : HPos.CENTER;
-		VPos vPos = fab.getAlignment().getVpos();
-		Position lPos = LayoutUtils.computePosition(
+		double lW = snapSizeX(LayoutUtils.boundWidth(label));
+		double lH = snapSizeY(LayoutUtils.boundHeight(label));
+
+		Position labelPos = LayoutUtils.computePosition(
 				fab, label,
 				x, y, w, h, 0, Insets.EMPTY,
-				hPos, vPos
+				HPos.LEFT, fab.getAlignment().getVpos(),
+				true, true
 		);
-		label.resizeRelocate(lPos.getX(), lPos.getY(), lW, lH);
+
+		label.resizeRelocate(labelPos.getX(), labelPos.getY(), lW, lH);
 		rg.resizeRelocate(0, 0, fab.getWidth(), fab.getHeight());
 	}
 

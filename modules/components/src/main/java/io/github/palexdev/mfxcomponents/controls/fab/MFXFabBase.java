@@ -61,6 +61,9 @@ import java.util.function.Supplier;
  * <p></p>
  * Since FABs are meant to be used with icons, these enforce the usage of {@link MFXFontIcon}s
  * rather than generic nodes.
+ *
+ * @see MFXFabSkin
+ * @see MFXFabBehavior
  */
 public class MFXFabBase extends MFXElevatedButton {
 	//================================================================================
@@ -119,6 +122,9 @@ public class MFXFabBase extends MFXElevatedButton {
 			WithVariants.removeVariants(this, FABVariants.EXTENDED);
 		}
 
+		// This is necessary, otherwise padding and other properties may still result outdated!
+		applyCss();
+
 		Skin<?> skin = getSkin();
 		if (skin == null) {
 			// Let's ensure that no other listeners have been added before...
@@ -152,17 +158,15 @@ public class MFXFabBase extends MFXElevatedButton {
 
 	@Override
 	public void onLayoutStrategyChanged() {
+		super.onLayoutStrategyChanged();
 		if (getSkin() == null) return;
 		getFabBehavior().ifPresent(b -> b.extend(false));
 	}
 
 	@Override
 	protected void onInitSizesChanged() {
-		super.onInitSizesChanged();
-
-		// This usually happens when the FAB changes between standard and extended
-		// In such cases it's important to ensure minimum sizes are correct
-		getFabBehavior().ifPresent(b -> b.extend(false));
+		// Reset the prefWidth if not extended and init sizes changed
+		if (!isExtended()) setPrefWidth(USE_COMPUTED_SIZE);
 	}
 
 	@Override
