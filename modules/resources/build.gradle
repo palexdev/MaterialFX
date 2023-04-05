@@ -22,6 +22,10 @@ java {
     tasks.withType(Jar).each { it.archiveBaseName.set("mfxresources") }
 }
 
+sourcesJar {
+    mustRunAfter processResources
+}
+
 sass {
     // dart-sass version to use:
     version = "$sass"
