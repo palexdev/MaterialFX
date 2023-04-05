@@ -37,7 +37,7 @@ sass {
 }
 
 compileSass {
-    String baseDir = "io/github/palexdev/mfxresources/sass"
+    String baseDir = "io/github/palexdev/mfxresources/themes"
     sourceDir = project.file("src/main/resources/" + baseDir)
     outputDir = project.file("src/main/resources/" + baseDir)
     sourceMap = none
@@ -45,7 +45,7 @@ compileSass {
 
 tasks.register('postProcessCss') {
     doLast {
-        String baseDir = "io/github/palexdev/mfxresources/sass"
+        String baseDir = "io/github/palexdev/mfxresources/themes"
         File outputDir = project.file("src/main/resources/" + baseDir)
         outputDir.eachFileRecurse(groovy.io.FileType.FILES) {
             if (it.name.endsWith('.css')) {
