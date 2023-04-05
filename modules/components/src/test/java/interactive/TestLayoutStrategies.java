@@ -47,7 +47,9 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
 import java.util.concurrent.TimeoutException;
+import java.util.function.Supplier;
 
+import static io.github.palexdev.mfxcomponents.theming.enums.FABVariants.*;
 import static io.github.palexdev.mfxresources.fonts.IconsProviders.FONTAWESOME_SOLID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -340,6 +342,28 @@ public class TestLayoutStrategies {
 		// Exactly as expected...
 	}
 
+	@Test
+	void testSmallFabs(FxRobot robot) {
+		StackPane root = setupStage();
+		MFXFab fab = MFXFab.surface().addVariants(LOWERED, SMALL);
+		fab.setIcon(new MFXFontIcon("fas-circle"));
+		robot.interact(() -> root.getChildren().add(fab));
+
+		assertEquals(40, fab.getWidth());
+		assertEquals(40, fab.getHeight());
+	}
+
+	@Test
+	void testLargeFabs(FxRobot robot) {
+		StackPane root = setupStage();
+		MFXFab fab = MFXFab.tertiary().addVariants(LOWERED, LARGE);
+		fab.setIcon(new MFXFontIcon("fas-circle"));
+		robot.interact(() -> root.getChildren().add(fab));
+
+		assertEquals(96, fab.getWidth());
+		assertEquals(96, fab.getHeight());
+	}
+
 	private double getLRInsets(Region region) {
 		return region.snappedLeftInset() + region.snappedRightInset();
 	}
@@ -349,14 +373,19 @@ public class TestLayoutStrategies {
 	}
 
 	private StackPane setupStage() {
+		return setupStage(StackPane::new);
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T extends Pane> T setupStage(Supplier<T> paneFactory) {
 		try {
-			Scene scene = new Scene(new StackPane(), 200, 200);
-			MFXThemeManager.LIGHT.addOn(scene);
+			Scene scene = new Scene(paneFactory.get(), 200, 200);
+			MFXThemeManager.PURPLE_LIGHT.addOn(scene);
 			FxToolkit.setupStage(s -> s.setScene(scene));
 		} catch (TimeoutException e) {
 			throw new RuntimeException(e);
 		}
-		return (StackPane) stage.getScene().getRoot();
+		return (T) stage.getScene().getRoot();
 	}
 
 	private static class ResControl extends Control implements MFXResizable {

@@ -18,25 +18,28 @@
 
 package app.buttons;
 
-import app.others.ui.MultipleViewApp;
-import app.others.ui.TitledFlowPane;
-import app.others.ui.ViewSwitcher;
+import app.others.ui.*;
 import io.github.palexdev.mfxcomponents.controls.buttons.*;
 import io.github.palexdev.mfxcomponents.controls.fab.MFXFab;
+import io.github.palexdev.mfxcomponents.theming.CSSFragment;
 import io.github.palexdev.mfxcomponents.theming.enums.FABVariants;
+import io.github.palexdev.mfxcomponents.theming.enums.MFXThemeManager;
+import io.github.palexdev.mfxcore.base.beans.Size;
 import io.github.palexdev.mfxcore.builders.InsetsBuilder;
-import io.github.palexdev.mfxresources.MFXResources;
 import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.css.PseudoClass;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -53,6 +56,7 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
 	// Properties
 	//================================================================================
 	private final ViewSwitcher<String> switcher = new ViewSwitcher<>();
+	private final StringProperty themeVariant = new SimpleStringProperty("light");
 
 	//================================================================================
 	// Overridden Methods
@@ -60,6 +64,11 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
 	@Override
 	public void start(Stage stage) {
 		registerViews();
+
+		MFXFab themeSwitcher = MFXFab.lowered();
+		MFXFontIcon icon = new MFXFontIcon();
+		icon.descriptionProperty().bind(themeVariant.map(s -> s.equals("light") ? "fas-sun" : "fas-moon"));
+		themeSwitcher.setIcon(icon);
 
 		BorderPane root = new BorderPane();
 		ComboBox<String> header = new ComboBox<>(FXCollections.observableArrayList(switcher.views().keySet()));
@@ -71,15 +80,39 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
 
 		header.getSelectionModel().selectFirst();
 
-		ScrollPane sp = new ScrollPane(root);
+		ScrollPane sp = new ScrollPane(root) {
+			@Override
+			protected void layoutChildren() {
+				super.layoutChildren();
+				layoutInArea(themeSwitcher,
+						getLayoutX(), getLayoutY(),
+						getWidth(), getHeight(), 0,
+						InsetsBuilder.of(0, 24, 16, 0), HPos.RIGHT, VPos.BOTTOM
+				);
+			}
+		};
 		sp.setFitToWidth(true);
 		sp.setFitToHeight(true);
+		CSSFragment.Builder.build()
+				.addSelector(".scroll-pane, .scroll-pane .viewport")
+				.addStyle("-fx-background-color: transparent")
+				.closeSelector()
+				.applyOn(sp);
 
-		Scene scene = new Scene(sp, 800, 800);
+		Size ws = UIUtils.getWindowSize();
+		Scene scene = new Scene(sp, ws.getWidth(), ws.getHeight());
 		loadStyleSheet(scene);
 		stage.setScene(scene);
 		stage.setTitle("Buttons Playground");
 		stage.show();
+
+		themeSwitcher.setOnAction(e -> {
+			String newVariant = themeVariant.get().equals("light") ? "dark" : "light";
+			themeVariant.set(newVariant);
+			loadStyleSheet(scene);
+			themeSwitcher.getFabBehavior().ifPresent(b -> b.extend(true));
+		});
+		sp.getChildren().add(themeSwitcher);
 
 		ScenicView.show(scene);
 	}
@@ -102,7 +135,9 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
 
 	@Override
 	public String getStylesheet() {
-		return MFXResources.load("sass/md3/mfx-light.css");
+		return themeVariant.get().equals("light") ?
+				MFXThemeManager.PURPLE_LIGHT.load() :
+				MFXThemeManager.PURPLE_DARK.load();
 	}
 
 	//================================================================================
@@ -228,7 +263,7 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
 	}
 
 	private Node createExtendedFabView(String title, BiFunction<String, MFXFontIcon, MFXFab> generator) {
-		return createExtendedFabView(title, 700, generator);
+		return createExtendedFabView(title, 900, generator);
 	}
 
 	private Node createExtendedFabView(String title, double length, BiFunction<String, MFXFontIcon, MFXFab> generator) {
@@ -242,7 +277,8 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
 		MFXButton btn4 = generator.apply("Pressed", randomIcon(FONTAWESOME_SOLID));
 		MFXFab btn5 = generator.apply("Text Only", randomIcon(FONTAWESOME_SOLID));
 		MFXFab btn6 = generator.apply("Expandable", randomIcon(FONTAWESOME_SOLID));
-		MFXFab btn7 = generator.apply("Lowered Text Only", randomIcon(FONTAWESOME_SOLID));
+		MFXFab btn7 = generator.apply("Change Icon", randomIcon(FONTAWESOME_SOLID));
+		MFXFab btn8 = generator.apply("Lowered Text Only", randomIcon(FONTAWESOME_SOLID));
 
 		btn1.setDisable(true);
 		btn2.setMouseTransparent(true);
@@ -254,14 +290,15 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
 
 		btn5.setContentDisplay(ContentDisplay.TEXT_ONLY);
 		btn5.setAlignment(Pos.CENTER);
-		btn7.addVariants(FABVariants.LOWERED);
-		btn7.setContentDisplay(ContentDisplay.TEXT_ONLY);
-		btn7.setAlignment(Pos.CENTER);
+		btn8.addVariants(FABVariants.LOWERED);
+		btn8.setContentDisplay(ContentDisplay.TEXT_ONLY);
+		btn8.setAlignment(Pos.CENTER);
 
 		btn6.setExtended(false);
 		btn6.setOnAction(e -> btn6.setExtended(!btn6.isExtended()));
+		btn7.setOnAction(e -> btn7.getFabBehavior().ifPresent(b -> b.changeIcon(randomIcon(FONTAWESOME_SOLID))));
 
-		defTfp.add(btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7);
+		defTfp.add(btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8);
 		return defTfp;
 	}
 }

@@ -1,19 +1,19 @@
 // DISPLAY
-@mixin display_large() {
+@mixin DisplayLarge() {
   -fx-font-family: "Roboto Regular";
   -fx-font-weight: 400;
   -fx-font-size: 57px;
   -fx-line-spacing: 64px;
 }
 
-@mixin display_medium() {
+@mixin DisplayMedium() {
   -fx-font-family: "Roboto Regular";
   -fx-font-weight: 400;
   -fx-font-size: 45px;
   -fx-line-spacing: 52px;
 }
 
-@mixin display_small() {
+@mixin DisplaySmall() {
   -fx-font-family: "Roboto Regular";
   -fx-font-weight: 400;
   -fx-font-size: 36px;
@@ -21,21 +21,21 @@
 }
 
 // HEADLINE
-@mixin headline_large() {
+@mixin HeadlineLarge() {
   -fx-font-family: "Roboto Regular";
   -fx-font-weight: 400;
   -fx-font-size: 32px;
   -fx-line-spacing: 40px;
 }
 
-@mixin headline_medium() {
+@mixin HeadlineMedium() {
   -fx-font-family: "Roboto Regular";
   -fx-font-weight: 400;
   -fx-font-size: 28px;
   -fx-line-spacing: 36px;
 }
 
-@mixin headline_small() {
+@mixin HeadlineSmall() {
   -fx-font-family: "Roboto Regular";
   -fx-font-weight: 400;
   -fx-font-size: 24px;
@@ -43,21 +43,21 @@
 }
 
 // BODY
-@mixin body_large() {
+@mixin BodyLarge() {
   -fx-font-family: "Roboto Regular";
   -fx-font-weight: 400;
   -fx-font-size: 16px;
   -fx-line-spacing: 24px;
 }
 
-@mixin body_medium() {
+@mixin BodyMedium() {
   -fx-font-family: "Roboto Regular";
   -fx-font-weight: 400;
   -fx-font-size: 14px;
   -fx-line-spacing: 20px;
 }
 
-@mixin body_small() {
+@mixin BodySmall() {
   -fx-font-family: "Roboto Regular";
   -fx-font-weight: 400;
   -fx-font-size: 12px;
@@ -65,21 +65,21 @@
 }
 
 // LABEL
-@mixin label_large() {
+@mixin LabelLarge() {
   -fx-font-family: "Roboto Medium";
   -fx-font-weight: 500;
   -fx-font-size: 14px;
   -fx-line-spacing: 20px;
 }
 
-@mixin label_medium() {
+@mixin LabelMedium() {
   -fx-font-family: "Roboto Medium";
   -fx-font-weight: 500;
   -fx-font-size: 12px;
   -fx-line-spacing: 16px;
 }
 
-@mixin label_small() {
+@mixin LabelSmall() {
   -fx-font-family: "Roboto Medium";
   -fx-font-weight: 500;
   -fx-font-size: 11px;
@@ -87,21 +87,21 @@
 }
 
 // TITLE
-@mixin title_large() {
+@mixin TitleLarge() {
   -fx-font-family: "Roboto Regular";
   -fx-font-weight: 500;
   -fx-font-size: 22px;
   -fx-line-spacing: 28px;
 }
 
-@mixin title_medium() {
+@mixin TitleMedium() {
   -fx-font-family: "Roboto Medium";
   -fx-font-weight: 500;
   -fx-font-size: 16px;
   -fx-line-spacing: 24px;
 }
 
-@mixin title_small() {
+@mixin TitleSmall() {
   -fx-font-family: "Roboto Medium";
   -fx-font-weight: 500;
   -fx-font-size: 14px;

@@ -1,0 +1,48 @@
+@use 'sass:color';
+@use '../../abstracts/ripple' as Ripple;
+@use '../../tokens/theme' as Theme;
+@use '../../abstracts/theme_utils' as ThemeUtils;
+
+// Tokens
+$surface-tint: Theme.GetSchemeColor('primary') !default;
+$elevation: 0 !default;
+$elevation-hover: 1 !default;
+
+$bg-color: transparent !default;
+$bg-color-hover: rgba($surface-tint, Theme.GetStateLayer('hover')) !default;
+$bg-color-focused: rgba($surface-tint, Theme.GetStateLayer('focused')) !default;
+$bg-color-pressed: $bg-color-focused !default;
+
+$text-color: Theme.GetSchemeColor('primary') !default;
+
+$icon-color: Theme.GetSchemeColor('primary') !default;
+
+$ripple-color: Ripple.Ripple('primary') !default;
+
+/****************************************************************************************************
+ * Text Buttons
+ ****************************************************************************************************/
+.mfx-button.text {
+  -fx-text-fill: $text-color;
+  -fx-background-color: $bg-color;
+  -mfx-elevation: ThemeUtils.ElevationLevel($elevation);
+}
+
+.mfx-button.text:hover {
+  -fx-background-color: $bg-color-hover;
+  -mfx-elevation: ThemeUtils.ElevationLevel($elevation-hover);
+}
+
+.mfx-button.text:focused,
+.mfx-button.text:pressed {
+  -fx-background-color: $bg-color-focused;
+  -mfx-elevation: ThemeUtils.ElevationLevel($elevation);
+}
+
+.mfx-button.text .mfx-font-icon {
+  -mfx-color: $icon-color;
+}
+
+.mfx-button.text .mfx-ripple-generator {
+  -mfx-ripple-color: $ripple-color;
+}

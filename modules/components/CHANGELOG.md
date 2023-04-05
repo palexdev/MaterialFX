@@ -16,6 +16,33 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.16.1] - 05-04-2023
+
+## Added
+
+- Added purple dark theme variant to MFXThemeManager (experimental, theme needs adjustments in MFXResources, M3
+  guidelines changed recently)
+- Added tests to check that FABs' label is always positioned correctly even when changing text or icon
+- Added tests to check that init sizes are correctly applied to small and large FABs, honestly the tests pass, but there
+  may still be issues (dunno why though, my guess is that it depends on the container)
+
+## Changed
+
+- MFXFabBehavior: make getLabelNode() return an Optional and adapt code accordingly
+- MFXFabBehavior: improve the label displacement computation, the targetWidth is only useful for the animation. To
+  compute the displacement we actually want the bound size of the FAB
+- MFXTonalFilledButton: change style class to "filled-tonal"
+- MFXFab, MFXFabBase: turns out that managinfg the "extended" state is much easier with a PseudoClass rather than
+  changing the style classes (edge cases may happen, better not handle the mess and just adding a PseudoClass)
+- Create a base skin for all MFXLabeled controls, make MFXButtonSkin extend it, and adapt MFXFabSkin accordingly
+- ButtonsPlayground: implement theme switching (preliminary)
+- ButtonsPlayground: add extended FAB to test icon change animation
+
+## Fixed
+
+- MFXFabSkin: fixed misplacement of the label when its width changed (text or icon changes), in such case the
+  displacement must be re-computed
+
 ## [Unreleased] - 14-03-2023
 
 ## Added

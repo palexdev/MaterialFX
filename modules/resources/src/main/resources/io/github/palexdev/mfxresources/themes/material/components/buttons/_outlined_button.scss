@@ -1,0 +1,63 @@
+@use 'sass:color';
+@use '../../tokens/theme' as Theme;
+@use '../../abstracts/ripple' as Ripple;
+@use '../../abstracts/theme_utils' as ThemeUtils;
+
+// Tokens
+$surface-tint: Theme.GetSchemeColor('primary') !default;
+$elevation: 0 !default;
+$elevation-hover: 0 !default;
+
+$bg-color: transparent !default;
+$bg-color-hover: color.mix(
+    $surface-tint,
+    $bg-color,
+    Theme.GetStateLayer('hover')
+) !default;
+$bg-color-focused: color.mix(
+    $surface-tint,
+    $bg-color,
+    Theme.GetStateLayer('focused')
+) !default;
+$bg-color-pressed: $bg-color-focused !default;
+
+$bd-color: Theme.GetSchemeColor('outline') !default;
+$bd-radius: 20px !default;
+$bd-width: 1px;
+
+$text-color: Theme.GetSchemeColor('primary') !default;
+
+$icon-color: Theme.GetSchemeColor('primary') !default;
+
+$ripple-color: Ripple.Ripple('primary') !default;
+
+/****************************************************************************************************
+ * Outlined Buttons
+ ****************************************************************************************************/
+.mfx-button.outlined {
+  -fx-text-fill: $text-color;
+  -fx-background-color: $bg-color;
+  -fx-border-color: $bd-color;
+  -fx-border-radius: $bd-radius;
+  -fx-border-width: $bd-width;
+  -mfx-elevation: ThemeUtils.ElevationLevel($elevation);
+}
+
+.mfx-button.outlined:hover {
+  -fx-background-color: $bg-color-hover;
+  -mfx-elevation: ThemeUtils.ElevationLevel($elevation-hover);
+}
+
+.mfx-button.outlined:focused,
+.mfx-button.outlined:pressed {
+  -fx-background-color: $bg-color-focused;
+  -mfx-elevation: ThemeUtils.ElevationLevel($elevation);
+}
+
+.mfx-button.outlined .mfx-font-icon {
+  -mfx-color: $icon-color;
+}
+
+.mfx-button.outlined .mfx-ripple-generator {
+  -mfx-ripple-color: $ripple-color;
+}

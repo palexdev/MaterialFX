@@ -51,6 +51,7 @@ import java.util.function.Function;
  * {@link #sizeProperty()} or you could let this figure it out automatically at layout time. In the latter case, the
  * size is computed as the maximum between the icon's width and height.
  */
+// TODO add icon switch with animation
 public class MFXIconWrapper extends StackPane {
 	//================================================================================
 	// Properties

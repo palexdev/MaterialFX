@@ -16,6 +16,20 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.3.0] - 05-04-2023
+
+## Added
+
+- Added dark variant of purple theme (note how easy it is to derive from the light theme lol). This is experimental
+  though!
+
+## Changed
+
+- Completely re-arranged the SASS structure, as well as code style (PascalCase from C#, why?...I felt like it, it's very
+  clean actually for this purpose). The biggest pro of this change is that now generated themes are about halt the
+  size (in line of codes) than before, which of course means faster parsing for the JavaFX CSS system, and also less
+  repetition
+
 ## [11.2.0] - 09-02-2023
 
 ## Added

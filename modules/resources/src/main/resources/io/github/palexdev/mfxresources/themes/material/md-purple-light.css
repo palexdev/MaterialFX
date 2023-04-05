@@ -1,0 +1,527 @@
+.root {
+  /* Palette */
+  -md-source: #6750A4;
+  -md-ref-palette-primary0: #000000;
+  -md-ref-palette-primary10: #21005D;
+  -md-ref-palette-primary20: #381E72;
+  -md-ref-palette-primary30: #4F378B;
+  -md-ref-palette-primary40: #6750A4;
+  -md-ref-palette-primary50: #7F67BE;
+  -md-ref-palette-primary60: #9A82DB;
+  -md-ref-palette-primary70: #B69DF8;
+  -md-ref-palette-primary80: #D0BCFF;
+  -md-ref-palette-primary90: #EADDFF;
+  -md-ref-palette-primary95: #F6EDFF;
+  -md-ref-palette-primary99: #FFFBFE;
+  -md-ref-palette-primary100: #FFFFFF;
+  -md-ref-palette-secondary0: #000000;
+  -md-ref-palette-secondary10: #1D192B;
+  -md-ref-palette-secondary20: #332D41;
+  -md-ref-palette-secondary30: #4A4458;
+  -md-ref-palette-secondary40: #625B71;
+  -md-ref-palette-secondary50: #7A7289;
+  -md-ref-palette-secondary60: #958DA5;
+  -md-ref-palette-secondary70: #B0A7C0;
+  -md-ref-palette-secondary80: #CCC2DC;
+  -md-ref-palette-secondary90: #E8DEF8;
+  -md-ref-palette-secondary95: #F6EDFF;
+  -md-ref-palette-secondary99: #FFFBFE;
+  -md-ref-palette-secondary100: #FFFFFF;
+  -md-ref-palette-tertiary0: #000000;
+  -md-ref-palette-tertiary10: #31111D;
+  -md-ref-palette-tertiary20: #492532;
+  -md-ref-palette-tertiary30: #633B48;
+  -md-ref-palette-tertiary40: #7D5260;
+  -md-ref-palette-tertiary50: #986977;
+  -md-ref-palette-tertiary60: #B58392;
+  -md-ref-palette-tertiary70: #D29DAC;
+  -md-ref-palette-tertiary80: #EFB8C8;
+  -md-ref-palette-tertiary90: #FFD8E4;
+  -md-ref-palette-tertiary95: #FFECF1;
+  -md-ref-palette-tertiary99: #FFFBFA;
+  -md-ref-palette-tertiary100: #FFFFFF;
+  -md-ref-palette-error0: #000000;
+  -md-ref-palette-error10: #410E0B;
+  -md-ref-palette-error20: #601410;
+  -md-ref-palette-error30: #8C1D18;
+  -md-ref-palette-error40: #B3261E;
+  -md-ref-palette-error50: #DC362E;
+  -md-ref-palette-error60: #E46962;
+  -md-ref-palette-error70: #EC928E;
+  -md-ref-palette-error80: #F2B8B5;
+  -md-ref-palette-error90: #F9DEDC;
+  -md-ref-palette-error95: #FCEEEE;
+  -md-ref-palette-error99: #FFFBF9;
+  -md-ref-palette-error100: #FFFFFF;
+  -md-ref-palette-neutral0: #000000;
+  -md-ref-palette-neutral10: #1C1B1F;
+  -md-ref-palette-neutral20: #313033;
+  -md-ref-palette-neutral30: #484649;
+  -md-ref-palette-neutral40: #605D62;
+  -md-ref-palette-neutral50: #787579;
+  -md-ref-palette-neutral60: #939094;
+  -md-ref-palette-neutral70: #AEAAAE;
+  -md-ref-palette-neutral80: #C9C5CA;
+  -md-ref-palette-neutral90: #E6E1E5;
+  -md-ref-palette-neutral95: #F4EFF4;
+  -md-ref-palette-neutral99: #FFFBFE;
+  -md-ref-palette-neutral100: #FFFFFF;
+  -md-ref-palette-neutral-variant0: #000000;
+  -md-ref-palette-neutral-variant10: #1D1A22;
+  -md-ref-palette-neutral-variant20: #322F37;
+  -md-ref-palette-neutral-variant30: #49454F;
+  -md-ref-palette-neutral-variant40: #605D66;
+  -md-ref-palette-neutral-variant50: #79747E;
+  -md-ref-palette-neutral-variant60: #938F99;
+  -md-ref-palette-neutral-variant70: #AEA9B4;
+  -md-ref-palette-neutral-variant80: #CAC4D0;
+  -md-ref-palette-neutral-variant90: #E7E0EC;
+  -md-ref-palette-neutral-variant95: #F5EEFA;
+  -md-ref-palette-neutral-variant99: #FFFBFE;
+  -md-ref-palette-neutral-variant100: #FFFFFF;
+  /* Scheme */
+  -md-sys-color-primary: #6750A4;
+  -md-sys-color-primary-container: #EADDFF;
+  -md-sys-color-on-primary: #FFFFFF;
+  -md-sys-color-on-primary-container: #21005D;
+  -md-sys-color-inverse-primary: #D0BCFF;
+  -md-sys-color-secondary: #625B71;
+  -md-sys-color-secondary-container: #E8DEF8;
+  -md-sys-color-on-secondary: #FFFFFF;
+  -md-sys-color-on-secondary-container: #1D192B;
+  -md-sys-color-tertiary: #7D5260;
+  -md-sys-color-tertiary-container: #FFD8E4;
+  -md-sys-color-on-tertiay: #FFFFFF;
+  -md-sys-color-on-tertiary-container: #31111D;
+  -md-sys-color-error: #F9DEDC;
+  -md-sys-color-error-container: #FFFFFF;
+  -md-sys-color-on-error: #FFFFFF;
+  -md-sys-color-on-error-container: #410E0B;
+  -md-sys-color-surface: #FFFBFE;
+  -md-sys-color-surface-variant: #E7E0EC;
+  -md-sys-color-on-surface: #1C1B1F;
+  -md-sys-color-on-surface-variant: #49454F;
+  -md-sys-color-inverse-surface: #313033;
+  -md-sys-color-inverse-on-surface: #F4EFF4;
+  -md-sys-color-surface-tint: #6750A4;
+  -md-sys-color-background: #FFFBFE;
+  -md-sys-color-on-background: #1C1B1F;
+  -md-sys-color-outline: #79747E;
+  -md-sys-color-outline-variant: #CAC4D0;
+  -md-sys-color-shadow: #000000;
+  -md-sys-color-scrim: #000000;
+}
+
+/****************************************************************************************************
+ * Buttons shared properties
+ ****************************************************************************************************/
+.mfx-button.elevated,
+.mfx-button.filled,
+.mfx-button.filled-tonal,
+.mfx-button.text,
+.mfx-button.outlined {
+  -fx-font-family: "Roboto Medium";
+  -fx-font-weight: 500;
+  -fx-font-size: 14px;
+  -fx-line-spacing: 20px;
+  -fx-graphic-text-gap: 8px;
+  -fx-background-radius: 20px;
+  -fx-alignment: CENTER;
+  -fx-padding: 0px 24px 0px 24px;
+  -mfx-init-width: -1px;
+  -mfx-init-height: 40px;
+}
+
+.mfx-button.elevated:disabled,
+.mfx-button.filled:disabled,
+.mfx-button.filled-tonal:disabled,
+.mfx-button.text:disabled,
+.mfx-button.outlined:disabled {
+  -fx-text-fill: rgba(28, 27, 31, 0.38);
+  -fx-background-color: rgba(28, 27, 31, 0.12);
+  -mfx-elevation: LEVEL0;
+}
+
+.mfx-button.outlined:disabled,
+.mfx-button.text:disabled {
+  -fx-background-color: transparent;
+}
+
+.mfx-button.elevated .mfx-font-icon,
+.mfx-button.filled .mfx-font-icon,
+.mfx-button.filled-tonal .mfx-font-icon,
+.mfx-button.text .mfx-font-icon,
+.mfx-button.outlined .mfx-font-icon {
+  -mfx-size: 18px;
+}
+
+.mfx-button.elevated:disabled .mfx-font-icon,
+.mfx-button.filled:disabled .mfx-font-icon,
+.mfx-button.filled-tonal:disabled .mfx-font-icon,
+.mfx-button.text:disabled .mfx-font-icon,
+.mfx-button.outlined:disabled .mfx-font-icon {
+  -mfx-color: rgba(28, 27, 31, 0.38);
+}
+
+/* Label nodes inside buttons should not change in opacity when disabled */
+.mfx-button:disabled .label {
+  -fx-opacity: 1;
+}
+
+.mfx-button.elevated:with-icon-left,
+.mfx-button.filled:with-icon-left,
+.mfx-button.filled-tonal:with-icon-left,
+.mfx-button.text:with-icon-left,
+.mfx-button.outlined:with-icon-left {
+  -fx-padding: 0px 24px 0px 16px;
+}
+
+.mfx-button.elevated:with-icon-right,
+.mfx-button.filled:with-icon-right,
+.mfx-button.filled-tonal:with-icon-right,
+.mfx-button.text:with-icon-right,
+.mfx-button.outlined:with-icon-right {
+  -fx-padding: 0px 16px 0px 24px;
+}
+
+/****************************************************************************************************
+ * Elevated Buttons
+ ****************************************************************************************************/
+.mfx-button.elevated {
+  -fx-text-fill: #6750A4;
+  -fx-background-color: #f7f2fa;
+  -mfx-elevation: LEVEL1;
+}
+
+.mfx-button.elevated:hover {
+  -fx-background-color: #e8e0f0;
+  -mfx-elevation: LEVEL2;
+}
+
+.mfx-button.elevated:focused,
+.mfx-button.elevated:pressed {
+  -fx-background-color: #e6dff0;
+  -mfx-elevation: LEVEL1;
+}
+
+.mfx-button.elevated .mfx-font-icon {
+  -mfx-color: #6750A4;
+}
+
+.mfx-button.elevated .mfx-ripple-generator {
+  -mfx-ripple-color: rgba(103, 80, 164, 0.12);
+}
+
+/****************************************************************************************************
+ * Filled Buttons
+ ****************************************************************************************************/
+.mfx-button.filled {
+  -fx-text-fill: #FFFFFF;
+  -fx-background-color: #6750A4;
+  -mfx-elevation: LEVEL0;
+}
+
+.mfx-button.filled:hover {
+  -fx-background-color: #7b66b0;
+  -mfx-elevation: LEVEL1;
+}
+
+.mfx-button.filled:focused,
+.mfx-button.filled:pressed {
+  -fx-background-color: #7965af;
+  -mfx-elevation: LEVEL0;
+}
+
+.mfx-button.filled .mfx-font-icon {
+  -mfx-color: #FFFFFF;
+}
+
+.mfx-button.filled .mfx-ripple-generator {
+  -mfx-ripple-color: rgba(255, 255, 255, 0.12);
+}
+
+/****************************************************************************************************
+ * Filled Tonal Buttons
+ ****************************************************************************************************/
+.mfx-button.filled-tonal {
+  -fx-text-fill: #1D192B;
+  -fx-background-color: #E8DEF8;
+  -mfx-elevation: LEVEL0;
+}
+
+.mfx-button.filled-tonal:hover {
+  -fx-background-color: #cfc5de;
+  -mfx-elevation: LEVEL1;
+}
+
+.mfx-button.filled-tonal:focused,
+.mfx-button.filled-tonal:pressed {
+  -fx-background-color: #d0c6df;
+  -mfx-elevation: LEVEL0;
+}
+
+.mfx-button.filled-tonal .mfx-font-icon {
+  -mfx-color: #1D192B;
+}
+
+.mfx-button.filled-tonal .mfx-ripple-generator {
+  -mfx-ripple-color: rgba(29, 25, 43, 0.12);
+}
+
+/****************************************************************************************************
+ * Text Buttons
+ ****************************************************************************************************/
+.mfx-button.text {
+  -fx-text-fill: #6750A4;
+  -fx-background-color: transparent;
+  -mfx-elevation: LEVEL0;
+}
+
+.mfx-button.text:hover {
+  -fx-background-color: rgba(103, 80, 164, 0.08);
+  -mfx-elevation: LEVEL1;
+}
+
+.mfx-button.text:focused,
+.mfx-button.text:pressed {
+  -fx-background-color: rgba(103, 80, 164, 0.12);
+  -mfx-elevation: LEVEL0;
+}
+
+.mfx-button.text .mfx-font-icon {
+  -mfx-color: #6750A4;
+}
+
+.mfx-button.text .mfx-ripple-generator {
+  -mfx-ripple-color: rgba(103, 80, 164, 0.12);
+}
+
+/****************************************************************************************************
+ * Outlined Buttons
+ ****************************************************************************************************/
+.mfx-button.outlined {
+  -fx-text-fill: #6750A4;
+  -fx-background-color: transparent;
+  -fx-border-color: #79747E;
+  -fx-border-radius: 20px;
+  -fx-border-width: 1px;
+  -mfx-elevation: LEVEL0;
+}
+
+.mfx-button.outlined:hover {
+  -fx-background-color: rgba(103, 80, 164, 0.08);
+  -mfx-elevation: LEVEL0;
+}
+
+.mfx-button.outlined:focused,
+.mfx-button.outlined:pressed {
+  -fx-background-color: rgba(103, 80, 164, 0.12);
+  -mfx-elevation: LEVEL0;
+}
+
+.mfx-button.outlined .mfx-font-icon {
+  -mfx-color: #6750A4;
+}
+
+.mfx-button.outlined .mfx-ripple-generator {
+  -mfx-ripple-color: rgba(103, 80, 164, 0.12);
+}
+
+/****************************************************************************************************
+ * FABs shared properties
+ ****************************************************************************************************/
+.mfx-button.fab,
+.mfx-button.fab:extended {
+  -fx-font-family: "Roboto Medium";
+  -fx-font-weight: 500;
+  -fx-font-size: 14px;
+  -fx-line-spacing: 20px;
+  -fx-graphic-text-gap: 8px;
+  -fx-background-radius: 16px;
+  -fx-padding: 16px;
+  -mfx-init-width: 56px;
+  -mfx-init-height: 56px;
+  -mfx-elevation: LEVEL3;
+}
+
+.mfx-button.fab:extended {
+  -mfx-init-width: 80px;
+}
+
+.mfx-button.fab:hover,
+.mfx-button.fab:extended:hover {
+  -mfx-elevation: LEVEL4;
+}
+
+.mfx-button.fab:focused,
+.mfx-button.fab:extended:focused,
+.mfx-button.fab:pressed,
+.mfx-button.fab:extended:focused {
+  -mfx-elevation: LEVEL3;
+}
+
+.mfx-button.fab .mfx-font-icon,
+.mfx-button.fab:extended .mfx-font-icon {
+  -mfx-size: 24px;
+}
+
+.mfx-button.fab.small {
+  -fx-background-radius: 12px;
+  -fx-padding: 0px;
+  -mfx-init-width: 40px;
+  -mfx-init-height: 40px;
+}
+
+.mfx-button.fab.large {
+  -fx-background-radius: 28px;
+  -mfx-init-width: 96px;
+  -mfx-init-height: 96px;
+}
+
+.mfx-button.fab.large .mfx-font-icon {
+  -mfx-size: 36px;
+}
+
+/****************************************************************************************************
+ * Lowered FABs
+ ****************************************************************************************************/
+.mfx-button.fab.lowered,
+.mfx-button.fab:extended.lowered {
+  -mfx-elevation: LEVEL1;
+}
+
+.mfx-button.fab.lowered:hover,
+.mfx-button.fab:extended.lowered:hover {
+  -mfx-elevation: LEVEL2;
+}
+
+.mfx-button.fab.lowered:focused,
+.mfx-button.fab:extended.lowered:focused,
+.mfx-button.fab.lowered:pressed,
+.mfx-button.fab:extended.lowered:focused {
+  -mfx-elevation: LEVEL1;
+}
+
+/****************************************************************************************************
+ * Primary FABs
+ ****************************************************************************************************/
+.mfx-button.fab,
+.mfx-button.fab-extended {
+  -fx-text-fill: #21005D;
+  -fx-background-color: #EADDFF;
+}
+
+.mfx-button.fab:hover,
+.mfx-button.fab-extended:hover {
+  -fx-background-color: #dacbf2;
+}
+
+.mfx-button.fab:focused,
+.mfx-button.fab-extended:focused,
+.mfx-button.fab:pressed,
+.mfx-button.fab-extended:focused {
+  -fx-background-color: #d2c2ec;
+}
+
+.mfx-button.fab .mfx-font-icon,
+.mfx-button.fab-extended .mfx-font-icon {
+  -mfx-color: #21005D;
+}
+
+.mfx-button.fab .mfx-ripple-generator,
+.mfx-button.fab-extended .mfx-ripple-generator {
+  -mfx-ripple-color: rgba(33, 0, 93, 0.12);
+}
+
+/****************************************************************************************************
+ * Secondary FABs
+ ****************************************************************************************************/
+.mfx-button.fab.secondary,
+.mfx-button.fab-extended.secondary {
+  -fx-text-fill: #1D192B;
+  -fx-background-color: #E8DEF8;
+}
+
+.mfx-button.fab.secondary:hover,
+.mfx-button.fab-extended.secondary:hover {
+  -fx-background-color: #d8cee8;
+}
+
+.mfx-button.fab.secondary:focused,
+.mfx-button.fab-extended.secondary:focused,
+.mfx-button.fab.secondary:pressed,
+.mfx-button.fab-extended.secondary:focused {
+  -fx-background-color: #d0c6df;
+}
+
+.mfx-button.fab.secondary .mfx-font-icon,
+.mfx-button.fab-extended.secondary .mfx-font-icon {
+  -mfx-color: #1D192B;
+}
+
+.mfx-button.fab.secondary .mfx-ripple-generator,
+.mfx-button.fab-extended.secondary .mfx-ripple-generator {
+  -mfx-ripple-color: rgba(29, 25, 43, 0.12);
+}
+
+/****************************************************************************************************
+ * Secondary FABs
+ ****************************************************************************************************/
+.mfx-button.fab.tertiary,
+.mfx-button.fab-extended.tertiary {
+  -fx-text-fill: #31111D;
+  -fx-background-color: #FFD8E4;
+}
+
+.mfx-button.fab.tertiary:hover,
+.mfx-button.fab-extended.tertiary:hover {
+  -fx-background-color: #efc8d4;
+}
+
+.mfx-button.fab.tertiary:focused,
+.mfx-button.fab-extended.tertiary:focused,
+.mfx-button.fab.tertiary:pressed,
+.mfx-button.fab-extended.tertiary:focused {
+  -fx-background-color: #e6c0cc;
+}
+
+.mfx-button.fab.tertiary .mfx-font-icon,
+.mfx-button.fab-extended.tertiary .mfx-font-icon {
+  -mfx-color: #31111D;
+}
+
+.mfx-button.fab.tertiary .mfx-ripple-generator,
+.mfx-button.fab-extended.tertiary .mfx-ripple-generator {
+  -mfx-ripple-color: rgba(49, 17, 29, 0.12);
+}
+
+/****************************************************************************************************
+ * Secondary FABs
+ ****************************************************************************************************/
+.mfx-button.fab.surface,
+.mfx-button.fab-extended.surface {
+  -fx-text-fill: #6750A4;
+  -fx-background-color: #FFFBFE;
+}
+
+.mfx-button.fab.surface:hover,
+.mfx-button.fab-extended.surface:hover {
+  -fx-background-color: #f3edf7;
+}
+
+.mfx-button.fab.surface:focused,
+.mfx-button.fab-extended.surface:focused,
+.mfx-button.fab.surface:pressed,
+.mfx-button.fab-extended.surface:focused {
+  -fx-background-color: #ede6f3;
+}
+
+.mfx-button.fab.surface .mfx-font-icon,
+.mfx-button.fab-extended.surface .mfx-font-icon {
+  -mfx-color: #6750A4;
+}
+
+.mfx-button.fab.surface .mfx-ripple-generator,
+.mfx-button.fab-extended.surface .mfx-ripple-generator {
+  -mfx-ripple-color: rgba(103, 80, 164, 0.12);
+}

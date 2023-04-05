@@ -29,6 +29,6 @@ public interface MultipleViewApp<T> {
 	String getStylesheet();
 
 	default void loadStyleSheet(Scene scene) {
-		scene.getStylesheets().add(getStylesheet());
+		scene.getStylesheets().setAll(getStylesheet());
 	}
 }

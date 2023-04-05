@@ -1,0 +1,56 @@
+@use 'sass:color';
+@use '../../tokens/theme' as Theme;
+@use '../../abstracts/ripple' as Ripple;
+@use '../../abstracts/theme_utils' as ThemeUtils;
+
+// Tokens
+$surface-tint: Theme.GetSchemeColor('on-secondary-container') !default;
+$elevation: 0 !default;
+$elevation-hover: 1 !default;
+
+$bg-color: Theme.GetSchemeColor('secondary-container') !default;
+$bg-color-hover: color.mix(
+    $surface-tint,
+    ThemeUtils.ElevationLayer($surface-tint, $elevation-hover, 'secondary-container'),
+    Theme.GetStateLayer('hover')
+) !default;
+$bg-color-focused: color.mix(
+    $surface-tint,
+    $bg-color,
+    Theme.GetStateLayer('focused')
+) !default;
+$bg-color-pressed: $bg-color-focused !default;
+
+$text-color: Theme.GetSchemeColor('on-secondary-container') !default;
+
+$icon-color: Theme.GetSchemeColor('on-secondary-container') !default;
+
+$ripple-color: Ripple.Ripple('on-secondary-container') !default;
+
+/****************************************************************************************************
+ * Filled Tonal Buttons
+ ****************************************************************************************************/
+.mfx-button.filled-tonal {
+  -fx-text-fill: $text-color;
+  -fx-background-color: $bg-color;
+  -mfx-elevation: ThemeUtils.ElevationLevel($elevation);
+}
+
+.mfx-button.filled-tonal:hover {
+  -fx-background-color: $bg-color-hover;
+  -mfx-elevation: ThemeUtils.ElevationLevel($elevation-hover);
+}
+
+.mfx-button.filled-tonal:focused,
+.mfx-button.filled-tonal:pressed {
+  -fx-background-color: $bg-color-focused;
+  -mfx-elevation: ThemeUtils.ElevationLevel($elevation);
+}
+
+.mfx-button.filled-tonal .mfx-font-icon {
+  -mfx-color: $icon-color;
+}
+
+.mfx-button.filled-tonal .mfx-ripple-generator {
+  -mfx-ripple-color: $ripple-color;
+}

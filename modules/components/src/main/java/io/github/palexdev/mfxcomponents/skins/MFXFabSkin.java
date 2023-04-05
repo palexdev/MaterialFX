@@ -19,8 +19,10 @@
 package io.github.palexdev.mfxcomponents.skins;
 
 import io.github.palexdev.mfxcomponents.behaviors.MFXFabBehavior;
+import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
 import io.github.palexdev.mfxcomponents.controls.fab.MFXFabBase;
 import io.github.palexdev.mfxcore.base.beans.Position;
+import io.github.palexdev.mfxcore.controls.BoundLabel;
 import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
 import io.github.palexdev.mfxcore.utils.fx.TextUtils;
 import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
@@ -32,11 +34,11 @@ import javafx.scene.layout.Region;
 import static io.github.palexdev.mfxcore.observables.When.onChanged;
 
 /**
- * Default skin implementation for {@link MFXFabBase} components.
+ * Default skin implementation for {@link MFXFabBase} components, extends {@link MFXButtonSkin} since the
+ * layout and functionalities are the same.
  * <p>
- * Extends {@link MFXButtonSkin}.
- * <p></p>
- * This is needed for the animations defined in {@link MFXFabBehavior} to work properly.
+ * However keep in mind that this skin is meant to be used with behaviors of type {@link MFXFabBehavior}, not only for
+ * animations but also for layout purposes. (TODO can this be improved)
  * <p>
  * The min width computation is overridden to return {@link Region#USE_COMPUTED_SIZE}, while the
  * pref width property is overridden to adapt to the {@link MFXFabBase#extendedProperty()}.
@@ -56,13 +58,26 @@ public class MFXFabSkin extends MFXButtonSkin {
 	//================================================================================
 	// Overridden Methods
 	//================================================================================
+
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Overridden to unbind the content display property, FABs only support
+	 * two states: text only, icon and text.
+	 */
+	@Override
+	protected BoundLabel createLabel(MFXButton labeled) {
+		BoundLabel bl = super.createLabel(labeled);
+		bl.contentDisplayProperty().unbind();
+		bl.setContentDisplay(ContentDisplay.LEFT);
+		return bl;
+	}
+
 	@Override
 	protected void addListeners() {
 		MFXFabBase fab = getFab();
 
-		// Extended FABs can only have trailing icons
-		label.contentDisplayProperty().unbind();
-		label.setContentDisplay(ContentDisplay.LEFT);
+		// Extended FABs can only have leading icons
 		onChanged(fab.contentDisplayProperty())
 				.then((o, n) -> {
 					ContentDisplay cd = (n == ContentDisplay.TEXT_ONLY) ? ContentDisplay.TEXT_ONLY : ContentDisplay.LEFT;
@@ -70,6 +85,11 @@ public class MFXFabSkin extends MFXButtonSkin {
 				})
 				.executeNow()
 				.listen();
+
+		// Text changes or icon changes need the label to be placed correctly
+		label.widthProperty().addListener(i -> fab.getFabBehavior()
+				.ifPresent(b -> label.setTranslateX(b.computeLabelDisplacement()))
+		);
 	}
 
 	@Override

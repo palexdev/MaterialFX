@@ -24,8 +24,7 @@ import io.github.palexdev.mfxcomponents.controls.base.MFXSkinBase;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXElevatedButton;
 import io.github.palexdev.mfxcomponents.skins.MFXFabSkin;
-import io.github.palexdev.mfxcomponents.theming.base.WithVariants;
-import io.github.palexdev.mfxcomponents.theming.enums.FABVariants;
+import io.github.palexdev.mfxcomponents.theming.enums.PseudoClasses;
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableBooleanProperty;
 import io.github.palexdev.mfxcore.observables.When;
 import io.github.palexdev.mfxcore.utils.fx.StyleUtils;
@@ -116,11 +115,7 @@ public class MFXFabBase extends MFXElevatedButton {
 	 */
 	protected void extend() {
 		boolean extended = isExtended();
-		if (extended) {
-			WithVariants.addVariants(this, FABVariants.EXTENDED);
-		} else {
-			WithVariants.removeVariants(this, FABVariants.EXTENDED);
-		}
+		PseudoClasses.EXTENDED.setOn(this, extended);
 
 		// This is necessary, otherwise padding and other properties may still result outdated!
 		applyCss();

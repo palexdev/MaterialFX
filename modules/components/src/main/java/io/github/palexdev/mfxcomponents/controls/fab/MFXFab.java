@@ -119,9 +119,7 @@ public class MFXFab extends MFXFabBase implements WithVariants<MFXFab, FABVarian
 	//================================================================================
 	@Override
 	public List<String> defaultStyleClasses() {
-		return (extendedProperty() == null || !isExtended()) ?
-				List.of("mfx-button", "fab-base", "fab") :
-				List.of("mfx-button", "fab-base", "fab-extended");
+		return List.of("mfx-button", "fab-base", "fab");
 	}
 
 	@Override
@@ -148,7 +146,7 @@ public class MFXFab extends MFXFabBase implements WithVariants<MFXFab, FABVarian
 	@Override
 	protected void sceneBuilderIntegration() {
 		SceneBuilderIntegration.ifInSceneBuilder(() -> {
-			String theme = MFXThemeManager.LIGHT.load();
+			String theme = MFXThemeManager.PURPLE_LIGHT.load();
 			When.onChanged(sceneProperty())
 					.condition((o, n) -> n != null && !n.getStylesheets().contains(theme))
 					.then((o, n) -> n.getStylesheets().add(theme))

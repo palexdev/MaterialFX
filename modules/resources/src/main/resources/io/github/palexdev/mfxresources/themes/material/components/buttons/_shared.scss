@@ -1,0 +1,91 @@
+@use '../../tokens/theme' as Theme;
+@use '../../tokens/typography' as Typography;
+@use '../../abstracts/theme_utils' as ThemeUtils;
+
+// Shared component-level tokens
+$bg-color-disabled: rgba(Theme.GetSchemeColor('on-surface'), Theme.GetStateLayer('disabled')) !default;
+$bg-radius: 20px !default;
+
+$text-color-disabled: rgba(Theme.GetSchemeColor('on-surface'), Theme.GetStateLayer('disabled-text')) !default;
+
+$icon-size: 18px !default;
+$icon-color-disabled: rgba(Theme.GetSchemeColor('on-surface'), Theme.GetStateLayer('disabled-text')) !default;
+
+$min-width: -1px !default;
+$min-height: 40px !default;
+$padding: 0px 24px 0px 24px !default;
+$padding-icon-left: 0px 24px 0px 16px !default;
+$padding-icon-right: 0px 16px 0px 24px !default;
+$elements-gap: 8px !default;
+$alignment: CENTER !default;
+
+$elevation-disabled: 0 !default;
+
+/****************************************************************************************************
+ * Buttons shared properties
+ ****************************************************************************************************/
+.mfx-button.elevated,
+.mfx-button.filled,
+.mfx-button.filled-tonal,
+.mfx-button.text,
+.mfx-button.outlined {
+  @include Typography.LabelLarge();
+  -fx-graphic-text-gap: $elements-gap;
+  -fx-background-radius: $bg-radius;
+  -fx-alignment: $alignment;
+  -fx-padding: $padding;
+  -mfx-init-width: $min-width;
+  -mfx-init-height: $min-height;
+}
+
+.mfx-button.elevated:disabled,
+.mfx-button.filled:disabled,
+.mfx-button.filled-tonal:disabled,
+.mfx-button.text:disabled,
+.mfx-button.outlined:disabled {
+  -fx-text-fill: $text-color-disabled;
+  -fx-background-color: rgba(28, 27, 31, 0.12);
+  -mfx-elevation: ThemeUtils.ElevationLevel($elevation-disabled);
+}
+
+.mfx-button.outlined:disabled,
+.mfx-button.text:disabled {
+  -fx-background-color: transparent;
+}
+
+.mfx-button.elevated .mfx-font-icon,
+.mfx-button.filled .mfx-font-icon,
+.mfx-button.filled-tonal .mfx-font-icon,
+.mfx-button.text .mfx-font-icon,
+.mfx-button.outlined .mfx-font-icon {
+  -mfx-size: $icon-size;
+}
+
+.mfx-button.elevated:disabled .mfx-font-icon,
+.mfx-button.filled:disabled .mfx-font-icon,
+.mfx-button.filled-tonal:disabled .mfx-font-icon,
+.mfx-button.text:disabled .mfx-font-icon,
+.mfx-button.outlined:disabled .mfx-font-icon {
+  -mfx-color: $icon-color-disabled;
+}
+
+/* Label nodes inside buttons should not change in opacity when disabled */
+.mfx-button:disabled .label {
+  -fx-opacity: 1.0;
+}
+
+.mfx-button.elevated:with-icon-left,
+.mfx-button.filled:with-icon-left,
+.mfx-button.filled-tonal:with-icon-left,
+.mfx-button.text:with-icon-left,
+.mfx-button.outlined:with-icon-left {
+  -fx-padding: $padding-icon-left;
+}
+
+.mfx-button.elevated:with-icon-right,
+.mfx-button.filled:with-icon-right,
+.mfx-button.filled-tonal:with-icon-right,
+.mfx-button.text:with-icon-right,
+.mfx-button.outlined:with-icon-right {
+  -fx-padding: $padding-icon-right;
+}

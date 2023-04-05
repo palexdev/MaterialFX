@@ -27,6 +27,7 @@ import javafx.scene.Node;
 public enum PseudoClasses {
 	WITH_ICON_LEFT(PseudoClass.getPseudoClass("with-icon-left")),
 	WITH_ICON_RIGHT(PseudoClass.getPseudoClass("with-icon-right")),
+	EXTENDED(PseudoClass.getPseudoClass("extended")),
 	;
 
 	private final PseudoClass pseudoClass;

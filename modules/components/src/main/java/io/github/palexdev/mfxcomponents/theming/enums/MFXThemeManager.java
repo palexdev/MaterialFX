@@ -24,7 +24,8 @@ import javafx.scene.Scene;
 import java.net.URL;
 
 public enum MFXThemeManager {
-	LIGHT("sass/md3/mfx-light.css"),
+	PURPLE_LIGHT("themes/material/md-purple-light.css"),
+	PURPLE_DARK("themes/material/md-purple-dark.css"),
 	;
 
 	private final String path;

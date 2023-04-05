@@ -1,15 +1,14 @@
-@use "theme_utils" as *;
-@use '../tokens/tokens' as *;
+@use "../tokens/theme" as Theme;
 
 /// Computes the color of the ripple layer given the base color and the interaction/layer state
-@function ripple_layer($color, $layer_state) {
-  @return rgba(get_scheme_color($color), get_percent_state_layer($layer_state));
+@function RippleLayer($color, $layer_state) {
+  @return rgba(Theme.GetSchemeColor($color), Theme.GetStateLayer($layer_state));
 }
 
 /// Shortcut for the ripple_layer function with 'pressed' as the interaction state.
 /// On the web, the ripple layer is an actual container that changes its color based on the user interaction with the
 /// component. Here on the desktop the ripple is not a layer but just an effect, because of this, the ripple color
 /// will always refer to the 'pressed' state.
-@function ripple($color) {
-  @return ripple_layer($color, 'pressed');
+@function Ripple($color) {
+  @return RippleLayer($color, 'pressed');
 }

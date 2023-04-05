@@ -22,6 +22,7 @@ import io.github.palexdev.mfxcomponents.controls.fab.MFXFab;
 import io.github.palexdev.mfxcomponents.theming.enums.MFXThemeManager;
 import io.github.palexdev.mfxcore.builders.InsetsBuilder;
 import io.github.palexdev.mfxcore.utils.fx.ColorUtils;
+import io.github.palexdev.mfxcore.utils.fx.TextUtils;
 import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -188,12 +189,53 @@ public class TestAlignment {
 		assertEquals(icon.getBoundsInParent().getMinX(), label.getBoundsInParent().getMinX());
 	}
 
+	@Test
+	void testTextChange(FxRobot robot) {
+		VBox root = setupStage();
+		MFXFab fab = MFXFab.extended();
+		fab.setText("Initial");
+		fab.setIcon(new MFXFontIcon("fas-circle"));
+		fab.setMinWidth(300);
+		fab.setAlignment(Pos.CENTER);
+		robot.interact(() -> root.getChildren().setAll(fab));
+
+		// Compute expected position after change
+		double wText = TextUtils.computeTextWidth(fab.getFont(), "Text has changed");
+		double wLabel = fab.snapSizeX(fab.getIcon().getLayoutBounds().getWidth() + fab.getGraphicTextGap() + wText);
+		double pos = fab.snapPositionX((300 - wLabel) / 2);
+
+		// Make change, retrieve label, check position
+		robot.interact(() -> fab.setText("Text has changed"));
+		Node label = fab.getChildrenUnmodifiable().get(1);
+		assertEquals(pos, label.getBoundsInParent().getMinX());
+	}
+
+	@Test
+	void testIconChange(FxRobot robot) {
+		VBox root = setupStage();
+		MFXFab fab = MFXFab.large();
+		fab.setText("Initial");
+		fab.setIcon(new MFXFontIcon("fas-circle"));
+		fab.setMinWidth(300);
+		fab.setAlignment(Pos.CENTER);
+		robot.interact(() -> root.getChildren().setAll(fab));
+
+		// Compute expected position after change
+		double wIcon = fab.snapSizeX(fab.getIcon().getLayoutBounds().getWidth());
+		double pos = fab.snapPositionX((300 - wIcon) / 2);
+
+		// Make change, retrieve label, check position
+		robot.interact(() -> fab.setText("Text has changed"));
+		Node label = fab.getChildrenUnmodifiable().get(1);
+		assertEquals(pos, label.getBoundsInParent().getMinX());
+	}
+
 	private VBox setupStage() {
 		VBox box = new VBox(10);
 		box.setAlignment(Pos.CENTER);
 		try {
 			Scene scene = new Scene(box, 400, 400);
-			MFXThemeManager.LIGHT.addOn(scene);
+			MFXThemeManager.PURPLE_LIGHT.addOn(scene);
 			FxToolkit.setupStage(s -> s.setScene(scene));
 		} catch (TimeoutException e) {
 			throw new RuntimeException(e);

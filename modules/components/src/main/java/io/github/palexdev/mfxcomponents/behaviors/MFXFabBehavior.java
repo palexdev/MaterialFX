@@ -39,6 +39,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 
+import java.util.Optional;
+
 /**
  * This is the default behavior used by all {@link MFXFabBase} components.
  * <p>
@@ -84,13 +86,13 @@ public class MFXFabBehavior extends MFXButtonBehavior {
 		double targetSize = computeWidth();
 		double targetTextOpacity = extended ? 1.0 : 0.0;
 
-		Label labelNode = getLabelNode();
-		double labelDisplacement = computeLabelDisplacement(targetSize);
+		Optional<Label> labelNode = getLabelNode();
+		double labelDisplacement = computeLabelDisplacement();
 
 		if (!animate) {
 			fab.setPrefWidth(targetSize);
 			fab.setTextOpacity(targetTextOpacity);
-			labelNode.setTranslateX(labelDisplacement);
+			labelNode.ifPresent(n -> n.setTranslateX(labelDisplacement));
 			return;
 		}
 
@@ -102,11 +104,10 @@ public class MFXFabBehavior extends MFXButtonBehavior {
 		if (extendAnimation != null) extendAnimation.stop();
 		extendAnimation = TimelineBuilder.build()
 				.add(KeyFrames.of(resizeDuration, fab.prefWidthProperty(), targetSize, curve))
-				.add(KeyFrames.of(resizeDuration, labelNode.translateXProperty(), labelDisplacement, curve))
+				.addConditional(labelNode::isPresent, KeyFrames.of(resizeDuration, labelNode.get().translateXProperty(), labelDisplacement, curve))
 				.add(KeyFrames.of(opacityDuration, fab.textOpacityProperty(), targetTextOpacity, curve))
 				.getAnimation();
 		extendAnimation.play();
-
 	}
 
 	/**
@@ -192,16 +193,17 @@ public class MFXFabBehavior extends MFXButtonBehavior {
 	 * it at {@link Pos#CENTER_LEFT} we make sure that it's {@code layoutX} doesn't change, and we can animate the
 	 * {@link Node#translateXProperty()} to make the transition look smooth.
 	 */
-	protected double computeLabelDisplacement(double targetW) {
+	public double computeLabelDisplacement() {
 		MFXFabBase fab = getFab();
 		HPos hpos = fab.getAlignment().getHpos();
-		if (fab.getSkin() == null) return 0.0;
-		Label labelNode = getLabelNode();
+		Optional<Label> labelNodeOpt = getLabelNode();
+		if (fab.getSkin() == null || labelNodeOpt.isEmpty()) return 0.0;
 
 		boolean extended = fab.isExtended();
 		double x = fab.snappedLeftInset();
 		double right = fab.snappedRightInset();
-		double w = extended ? fab.getWidth() : targetW;
+		double w = LayoutUtils.boundWidth(fab);
+		Label labelNode = labelNodeOpt.get();
 		MFXFontIcon icon = fab.getIcon();
 
 		double leftX = labelNode.getLayoutX();
@@ -217,7 +219,7 @@ public class MFXFabBehavior extends MFXButtonBehavior {
 
 		double targetX = LayoutUtils.computeXPosition(
 				fab, labelNode,
-				x, targetW, Insets.EMPTY, true, hpos,
+				x, w, Insets.EMPTY, true, hpos,
 				true, true
 		);
 		switch (hpos) {
@@ -237,13 +239,16 @@ public class MFXFabBehavior extends MFXButtonBehavior {
 	/**
 	 * Retrieves the text node from the FAB' skin. Must be overridden if changing the skin/layout since this
 	 * uses {@code fab.getChildrenUnmodifiable().get(1)}.
+	 * <p>
+	 * Returns an {@link Optional} for null-safety.
 	 */
-	protected Label getLabelNode() {
+	protected Optional<Label> getLabelNode() {
 		MFXFabBase fab = getFab();
+		if (fab.getSkin() == null) return Optional.empty();
 		if (labelNode == null) {
 			labelNode = (Label) fab.getChildrenUnmodifiable().get(1);
 		}
-		return labelNode;
+		return Optional.of(labelNode);
 	}
 
 	/**

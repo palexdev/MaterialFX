@@ -1,0 +1,41 @@
+@use 'sass:color';
+@use '../../tokens/theme' as Theme;
+@use '../../abstracts/ripple' as Ripple;
+
+// Tokens
+$surface-tint: Theme.GetSchemeColor('primary') !default;
+$bg-color: Theme.GetSchemeColor('surface') !default;
+$text-color: Theme.GetSchemeColor('primary') !default;
+$icon-color: Theme.GetSchemeColor('primary') !default;
+$ripple-color: Ripple.Ripple('primary');
+
+/****************************************************************************************************
+ * Secondary FABs
+ ****************************************************************************************************/
+.mfx-button.fab.surface,
+.mfx-button.fab-extended.surface {
+  -fx-text-fill: $text-color;
+  -fx-background-color: $bg-color;
+}
+
+.mfx-button.fab.surface:hover,
+.mfx-button.fab-extended.surface:hover {
+  -fx-background-color: color.mix($surface-tint, $bg-color, Theme.GetStateLayer('hover'));
+}
+
+.mfx-button.fab.surface:focused,
+.mfx-button.fab-extended.surface:focused,
+.mfx-button.fab.surface:pressed,
+.mfx-button.fab-extended.surface:focused {
+  -fx-background-color: color.mix($surface-tint, $bg-color, Theme.GetStateLayer('focused'));
+}
+
+.mfx-button.fab.surface .mfx-font-icon,
+.mfx-button.fab-extended.surface .mfx-font-icon {
+  -mfx-color: $icon-color;
+}
+
+.mfx-button.fab.surface .mfx-ripple-generator,
+.mfx-button.fab-extended.surface .mfx-ripple-generator {
+  -mfx-ripple-color: $ripple-color;
+}

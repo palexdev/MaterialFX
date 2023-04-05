@@ -19,10 +19,9 @@
 package io.github.palexdev.mfxcomponents.skins;
 
 import io.github.palexdev.mfxcomponents.behaviors.MFXButtonBehavior;
-import io.github.palexdev.mfxcomponents.controls.base.MFXSkinBase;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
+import io.github.palexdev.mfxcomponents.skins.base.MFXLabeledSkin;
 import io.github.palexdev.mfxcomponents.theming.enums.PseudoClasses;
-import io.github.palexdev.mfxcore.controls.BoundLabel;
 import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
 import io.github.palexdev.mfxcore.utils.fx.TextUtils;
 import io.github.palexdev.mfxeffects.ripple.MFXRippleGenerator;
@@ -37,16 +36,14 @@ import static io.github.palexdev.mfxcore.observables.When.onChanged;
 /**
  * Default skin implementation for {@link MFXButton}s.
  * <p>
- * Extends {@link MFXSkinBase} allowing seamless integration with the new Behavior API. This
- * skin uses behaviors of type {@link MFXButtonBehavior}.
+ * This skin uses behaviors of type {@link MFXButtonBehavior}.
  * <p></p>
  * The layout is simple, there are just the label to show the text and the {@link MFXRippleGenerator} to generate ripples.
  */
-public class MFXButtonSkin extends MFXSkinBase<MFXButton, MFXButtonBehavior> {
+public class MFXButtonSkin extends MFXLabeledSkin<MFXButton, MFXButtonBehavior> {
 	//================================================================================
 	// Properties
 	//================================================================================
-	protected final BoundLabel label;
 	protected final MFXRippleGenerator rg;
 
 	//================================================================================
@@ -55,10 +52,7 @@ public class MFXButtonSkin extends MFXSkinBase<MFXButton, MFXButtonBehavior> {
 	public MFXButtonSkin(MFXButton button) {
 		super(button);
 
-		// Init nodes
-		label = new BoundLabel(button);
-		label.onSetTextNode(n -> n.opacityProperty().bind(button.textOpacityProperty()));
-
+		// Init ripple generator
 		rg = new MFXRippleGenerator(button);
 		rg.setManaged(false);
 		rg.setAnimateBackground(false);

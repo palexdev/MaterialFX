@@ -50,6 +50,6 @@ public class MFXTonalFilledButton extends MFXButton {
 	//================================================================================
 	@Override
 	public List<String> defaultStyleClasses() {
-		return List.of("mfx-button", "tonal-filled");
+		return List.of("mfx-button", "filled-tonal");
 	}
 }

@@ -114,7 +114,7 @@ public class TestInitSize {
 	private StackPane setupStage() {
 		try {
 			Scene scene = new Scene(new StackPane(), 200, 200);
-			MFXThemeManager.LIGHT.addOn(scene);
+			MFXThemeManager.PURPLE_LIGHT.addOn(scene);
 			FxToolkit.setupStage(s -> s.setScene(scene));
 		} catch (TimeoutException e) {
 			throw new RuntimeException(e);
