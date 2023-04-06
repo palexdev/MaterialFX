@@ -23,6 +23,7 @@ import io.github.palexdev.mfxeffects.animations.Animations.KeyFrames;
 import io.github.palexdev.mfxeffects.animations.Animations.ParallelBuilder;
 import io.github.palexdev.mfxeffects.animations.Animations.TimelineBuilder;
 import io.github.palexdev.mfxeffects.beans.Position;
+import io.github.palexdev.mfxeffects.enums.MouseTransparentMode;
 import io.github.palexdev.mfxeffects.ripple.base.Ripple;
 import io.github.palexdev.mfxeffects.ripple.base.RippleGenerator;
 import io.github.palexdev.mfxeffects.utils.StyleUtils;
@@ -124,6 +125,7 @@ public class MFXRippleGenerator extends Region implements RippleGenerator {
 		setPositionFunction(defaultPositionFunction());
 		setRippleSupplier(defaultRippleSupplier());
 		region.layoutBoundsProperty().addListener(clipUpdater);
+		updateMouseMode();
 	}
 
 	/**
@@ -267,6 +269,30 @@ public class MFXRippleGenerator extends Region implements RippleGenerator {
 		return getClipSupplier().get();
 	}
 
+	/**
+	 * Automatically called when {@link #mouseTransparentModeProperty()} changes to update the way Mouse events are
+	 * managed.
+	 */
+	protected void updateMouseMode() {
+		MouseTransparentMode mode = getMouseTransparentMode();
+		switch (mode) {
+			case OFF: {
+				setPickOnBounds(true);
+				setMouseTransparent(false);
+				break;
+			}
+			case DONT_PICK_ON_BOUNDS: {
+				setPickOnBounds(false);
+				setMouseTransparent(false);
+				break;
+			}
+			case MOUSE_TRANSPARENT:
+				setPickOnBounds(true);
+				setMouseTransparent(true);
+				break;
+		}
+	}
+
 	//================================================================================
 	// Overridden Methods
 	//================================================================================
@@ -350,6 +376,23 @@ public class MFXRippleGenerator extends Region implements RippleGenerator {
 			"checkBounds",
 			true
 	) {
+		@Override
+		public StyleOrigin getStyleOrigin() {
+			return StyleOrigin.USER_AGENT;
+		}
+	};
+
+	private final StyleableObjectProperty<MouseTransparentMode> mouseTransparentMode = new SimpleStyleableObjectProperty<>(
+			StyleableProperties.MOUSE_TRANSPARENT_MODE,
+			this,
+			"mouseTransparentMode",
+			MouseTransparentMode.MOUSE_TRANSPARENT
+	) {
+		@Override
+		protected void invalidated() {
+			updateMouseMode();
+		}
+
 		@Override
 		public StyleOrigin getStyleOrigin() {
 			return StyleOrigin.USER_AGENT;
@@ -506,6 +549,29 @@ public class MFXRippleGenerator extends Region implements RippleGenerator {
 		this.checkBounds.set(checkBounds);
 	}
 
+	public MouseTransparentMode getMouseTransparentMode() {
+		return mouseTransparentMode.get();
+	}
+
+	/**
+	 * Allows to specify the behavior of the generator regarding Mouse events. It may happen (for rounded components in particular)
+	 * that Mouse events are intercepted outside the node and thus triggering pseudo states when it's not intended.
+	 * <p></p>
+	 * By default, it's set to {@link MouseTransparentMode#MOUSE_TRANSPARENT} so that the generator ignores any Mouse event,
+	 * in the vast majority of cases, other nodes are responsible for intercepting the event that will generate the ripple
+	 * anyway, so I don't see why the generator should intercept the events. However, I still wanted to keep this configurable
+	 * for any exception.
+	 * <p>
+	 * Can be set in CSS via the property: '-mfx-mouse-transparent-mode'.
+	 */
+	public StyleableObjectProperty<MouseTransparentMode> mouseTransparentModeProperty() {
+		return mouseTransparentMode;
+	}
+
+	public void setMouseTransparentMode(MouseTransparentMode mouseTransparentMode) {
+		this.mouseTransparentMode.set(mouseTransparentMode);
+	}
+
 	@Override
 	public Paint getRippleColor() {
 		return rippleColor.get();
@@ -635,6 +701,14 @@ public class MFXRippleGenerator extends Region implements RippleGenerator {
 						true
 				);
 
+		private static final CssMetaData<MFXRippleGenerator, MouseTransparentMode> MOUSE_TRANSPARENT_MODE =
+				FACTORY.createEnumCssMetaData(
+						MouseTransparentMode.class,
+						"-mfx-mouse-transparent-mode",
+						MFXRippleGenerator::mouseTransparentModeProperty,
+						MouseTransparentMode.MOUSE_TRANSPARENT
+				);
+
 		private static final CssMetaData<MFXRippleGenerator, Paint> RIPPLE_COLOR =
 				FACTORY.createPaintCssMetaData(
 						"-mfx-ripple-color",
@@ -668,7 +742,7 @@ public class MFXRippleGenerator extends Region implements RippleGenerator {
 			Collections.addAll(
 					data,
 					ANIMATE_BACKGROUND, ANIMATION_SPEED, AUTO_CLIP,
-					BACKGROUND_COLOR, BACKGROUND_OPACITY, CHECK_BOUNDS,
+					BACKGROUND_COLOR, BACKGROUND_OPACITY, CHECK_BOUNDS, MOUSE_TRANSPARENT_MODE,
 					RIPPLE_COLOR, RIPPLE_OPACITY, RIPPLE_PREF_SIZE, RIPPLE_SIZE_MULTIPLIER
 			);
 			cssMetaDataList = List.copyOf(data);

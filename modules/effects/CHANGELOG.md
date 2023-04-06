@@ -16,7 +16,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
-## [Unreleased] - 08-03-2023
+## [11.0.5] - 06-04-2023
 
 ## Added
 
@@ -33,6 +33,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   because in CSS you cannot set the disable state but only the visibility
 - Moved Curve to new base package
 - MFXRippleGenerator: make sure the cached clip is updated when the region's layout bounds change
+- MFXRippleGenerator: added mechanism to define how mouse events are managed, this is a way to fix components that
+  were triggering pseudo states even when the mouse was outside it
 
 ## Removed
 
