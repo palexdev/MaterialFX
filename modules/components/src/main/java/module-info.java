@@ -1,26 +1,28 @@
 module mfx.components {
-	requires transitive javafx.controls;
+    requires transitive javafx.controls;
 
-	requires transitive mfx.core;
-	requires transitive mfx.effects;
-	requires transitive mfx.localization;
-	requires transitive mfx.resources;
+    requires transitive mfx.core;
+    requires transitive mfx.effects;
+    requires transitive mfx.localization;
+    requires transitive mfx.resources;
 
-	// Behaviors
-	exports io.github.palexdev.mfxcomponents.behaviors;
+    // Behaviors
+    exports io.github.palexdev.mfxcomponents.behaviors;
 
-	// Controls
-	exports io.github.palexdev.mfxcomponents.controls.base;
-	exports io.github.palexdev.mfxcomponents.controls.buttons;
-	exports io.github.palexdev.mfxcomponents.controls.fab;
+    // Controls
+    exports io.github.palexdev.mfxcomponents.controls.base;
+    exports io.github.palexdev.mfxcomponents.controls.buttons;
+    exports io.github.palexdev.mfxcomponents.controls.fab;
 
-	// Layout
-	exports io.github.palexdev.mfxcomponents.layout;
+    // Layout
+    exports io.github.palexdev.mfxcomponents.layout;
 
-	// Skins
-	exports io.github.palexdev.mfxcomponents.skins;
+    // Skins
+    exports io.github.palexdev.mfxcomponents.skins;
+    exports io.github.palexdev.mfxcomponents.skins.base;
 
-	// Theming
-	exports io.github.palexdev.mfxcomponents.theming.base;
-	exports io.github.palexdev.mfxcomponents.theming.enums;
+    // Theming
+    exports io.github.palexdev.mfxcomponents.theming;
+    exports io.github.palexdev.mfxcomponents.theming.base;
+    exports io.github.palexdev.mfxcomponents.theming.enums;
 }

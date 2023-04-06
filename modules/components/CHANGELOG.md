@@ -16,6 +16,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.16.2] - 06-04-2023
+
+## Fixed
+
+- Added missing exports
+
 ## [11.16.1] - 05-04-2023
 
 ## Added

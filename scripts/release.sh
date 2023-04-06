@@ -7,7 +7,7 @@ function printHelp() {
   echo 'Shell Script utility to publish the modules of this project to Maven using the Gradle Wrapper'
   echo 'You can decide what to publish with the following arguments:'
   echo '  1) all : tells the script to publish all the modules'
-  echo '  2) A list of modules (ex. components, core,...)'
+  echo '  2) A list of modules (e.g: components core ...)'
   echo ''
   echo 'Options:'
   echo '-r to also automatically release the artifacts once they are published'
