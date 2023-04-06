@@ -16,7 +16,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
-## [Unreleased] - 14-03-2023
+## [11.3.0] - 06-04-2023
 
 ## Added
 
@@ -30,6 +30,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - When: Added method to force the activation/listening by disposing any other When on the given Observable (if one
   exists already)
 - When: added method to check if a construct has been disposed before
+- When: added non-static method for disposal
 - Added some tests for When constructs
 
 ## Changed
@@ -37,18 +38,21 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added method to retrieve the component's behavior object, thus creating a bridge between the Control the View(skin)
   and the Behavior
 - Moved executeNow(...) methods to the base class for a better fluent API
-- When: added non-static method for disposal
-- Tests on Bindings where failing due to recent changes on When constructs. Since a Bindings may need to add/register a
-  listener more than once on a same observable avoid using When constructs
 - OnChanged, OnInvalidated: also set the Observable to null on disposal
 - LayoutUtils: optimize some of the algorithms by not computing the snapped margins if they are EMPTY
 - LayoutUtils: snap the computed sizes by default before any other calculation as this could lead to wrong pixel
   positions
 
+## Removed
+
+- Removed SkinBase, moved to components as MFXSkinBase
+
 ## Fixed
 
 - When: Implemented fix from #212
 - BoundLabel: fixed text node detection algorithm
+- Tests on Bindings where failing due to recent changes on When constructs. Since a Bindings may need to add/register a
+  listener more than once on a same observable avoid using When constructs
 
 ## [11.2.4] - 09-02-2023
 
