@@ -4,9 +4,9 @@ module MaterialFX {
 	requires transitive javafx.graphics;
 	requires transitive java.desktop;
 
-	requires mfx.core;
-	requires mfx.resources;
-	requires VirtualizedFX;
+	requires transitive mfx.core;
+	requires transitive mfx.resources;
+	requires transitive VirtualizedFX;
 
 	// Root
 	exports io.github.palexdev.materialfx;
