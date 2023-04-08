@@ -16,6 +16,22 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+# [11.16.0] - 08-04-2023
+
+## Changed
+
+- Migrate to the newest version of VirtualizedFX that also brings the latest versions
+  of MFXCore and MFXResources. This fixes issues at compile time caused by the MFXCore being renamed
+  in the module-info to "mfx.core" and at runtime caused by conflicts between the old resources
+  and the new ones. Note though that even if VirtualizedFX has been updated it still uses the
+  old VirtualFlow implementation, switching to the new would be way too much work, and
+  it would not be worth it, better wait for the rewrite to be over
+
+## Fixed
+
+- Fixed in owner centering for stage dialogs, fixes kindly provided by
+  Stefano Fornari (Thanks!)
+
 ## [11.15.0] - 17-03-2023
 
 ## Changed
