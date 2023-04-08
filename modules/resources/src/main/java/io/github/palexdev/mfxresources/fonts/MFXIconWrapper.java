@@ -261,7 +261,8 @@ public class MFXIconWrapper extends StackPane {
 		@Override
 		protected void invalidated() {
 			boolean state = get();
-			enableRippleGenerator(state);
+			if (!state && rg != null) enableRippleGenerator(false);
+			if (state && rg == null) enableRippleGenerator(true);
 		}
 
 		@Override
@@ -408,8 +409,9 @@ public class MFXIconWrapper extends StackPane {
 		return icon;
 	}
 
-	public void setIcon(MFXFontIcon icon) {
+	public MFXIconWrapper setIcon(MFXFontIcon icon) {
 		this.icon.set(icon);
+		return this;
 	}
 
 	/**
@@ -418,16 +420,18 @@ public class MFXIconWrapper extends StackPane {
 	 * <p>
 	 * Keep in mind that the default icons provider for new {@link MFXFontIcon} is {@link IconsProviders#defaultProvider()}
 	 */
-	public void setIcon(String desc) {
+	public MFXIconWrapper setIcon(String desc) {
 		setIcon(new MFXFontIcon(desc));
+		return this;
 	}
 
 	/**
 	 * Convenience method to set the {@link #iconProperty()} to a new {@link MFXFontIcon} instance given an {@link IconProvider} and
 	 * an icon description/name.
 	 */
-	public void setIcon(IconProvider provider, String desc) {
+	public MFXIconWrapper setIcon(IconProvider provider, String desc) {
 		setIcon(new MFXFontIcon().setIconsProvider(provider).setDescription(desc));
+		return this;
 	}
 
 	/**
@@ -436,7 +440,8 @@ public class MFXIconWrapper extends StackPane {
 	 *
 	 * @see MFXFontIcon#setIconsProvider(Font, Function)
 	 */
-	public void setIcon(Font font, Function<String, Character> converter, String desc) {
+	public MFXIconWrapper setIcon(Font font, Function<String, Character> converter, String desc) {
 		setIcon(new MFXFontIcon().setIconsProvider(font, converter).setDescription(desc));
+		return this;
 	}
 }

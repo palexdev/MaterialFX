@@ -18,6 +18,8 @@
 
 package interactive;
 
+import io.github.palexdev.mfxeffects.ripple.MFXRippleGenerator;
+import io.github.palexdev.mfxresources.builders.IconWrapperBuilder;
 import io.github.palexdev.mfxresources.fonts.IconsProviders;
 import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import io.github.palexdev.mfxresources.fonts.MFXIconWrapper;
@@ -227,6 +229,31 @@ public class IconsTests {
 		new MFXIconWrapper();
 		new MFXIconWrapper(null);
 		new MFXIconWrapper(null, 32.0);
+	}
+
+	@Test
+	void testWrapperEnableRipple(FxRobot robot) {
+		StackPane root = setupStage();
+		MFXIconWrapper icon = IconWrapperBuilder.build()
+				.setIcon("fas-circle")
+				.enableRippleGenerator(true)
+				.get();
+		robot.interact(() -> root.getChildren().setAll(icon));
+		assertTrue(icon.getChildren().get(0) instanceof MFXRippleGenerator);
+	}
+
+	@Test
+	void testWrapperEnableDisableRipple(FxRobot robot) {
+		StackPane root = setupStage();
+		MFXIconWrapper icon = IconWrapperBuilder.build()
+				.setIcon("fas-circle")
+				.enableRippleGenerator(true)
+				.get();
+		robot.interact(() -> root.getChildren().setAll(icon));
+		assertTrue(icon.getChildren().get(0) instanceof MFXRippleGenerator);
+
+		robot.interact(() -> icon.enableRippleGenerator(false));
+		assertTrue(icon.getChildren().size() == 1 && !(icon.getChildren().get(0) instanceof MFXRippleGenerator));
 	}
 
 	private StackPane setupStage() {

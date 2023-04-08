@@ -59,7 +59,11 @@ public class MFXFontIcon extends Text {
 	// Constructors
 	//================================================================================
 	public MFXFontIcon() {
-		this(null);
+		this((String) null);
+	}
+
+	public MFXFontIcon(IconDescriptor icon) {
+		this(icon.getDescription());
 	}
 
 	public MFXFontIcon(String description) {

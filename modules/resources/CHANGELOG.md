@@ -16,7 +16,19 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
-## [11.13.1] - 06-04-2023
+## [11.3.2 and release] - 08-04-2023
+
+## Changed
+
+- MFXFontIcon: added new constructor
+- MFXIconWrapper: make some methods return the wrapper itself for fluent programming
+
+## Fixed
+
+- MFXIconWrapper: fixed exception occurring when using enableRippleGenerator(...) methods as they caused the property to
+  trigger and call theme again
+
+## [11.3.1] - 06-04-2023
 
 ## Fixed
 
