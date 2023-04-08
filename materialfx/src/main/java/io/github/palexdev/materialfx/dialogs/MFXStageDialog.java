@@ -24,6 +24,7 @@ import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
 import io.github.palexdev.materialfx.utils.AnimationUtils.TimelineBuilder;
 import javafx.animation.Interpolator;
 import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
@@ -33,11 +34,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.stage.WindowEvent;
 
 /**
  * Dialog implementation that simply extends {@link Stage}.
@@ -66,425 +65,429 @@ import javafx.stage.WindowEvent;
  * so that you can use them whenever you need and just change  their content if needed,
  */
 public class MFXStageDialog extends Stage {
-	//================================================================================
-	// Properties
-	//================================================================================
-	private final ObjectProperty<AbstractMFXDialog> content = new SimpleObjectProperty<>();
+    //================================================================================
+    // Properties
+    //================================================================================
+    private final ObjectProperty<AbstractMFXDialog> content = new SimpleObjectProperty<>();
 
-	private boolean draggable = false;
+    private boolean draggable = false;
+    private double xPos;
+    private double yPos;
+    private EventHandler<MouseEvent> mousePressed = event -> {
+        xPos = getX() - event.getScreenX();
+        yPos = getY() - event.getScreenY();
+    };
+    private EventHandler<MouseEvent> mouseDragged = event -> {
+        setX(event.getScreenX() + xPos);
+        setY(event.getScreenY() + yPos);
+    };
 
-	private double xPos;
-	private double yPos;
-	private EventHandler<MouseEvent> mousePressed = event -> {
-		xPos = getX() - event.getScreenX();
-		yPos = getY() - event.getScreenY();
-	};
-	private EventHandler<MouseEvent> mouseDragged = event -> {
-		setX(event.getScreenX() + xPos);
-		setY(event.getScreenY() + yPos);
-	};
+    private boolean overlayClose = false;
+    private EventHandler<MouseEvent> overlayCloseHandler = event -> close();
 
-	private boolean overlayClose = false;
-	private EventHandler<MouseEvent> overlayCloseHandler = event -> close();
-
-	private Pane ownerNode;
-	private final BooleanProperty centerInOwnerNode = new SimpleBooleanProperty(true);
-	private final BooleanProperty scrimOwner = new SimpleBooleanProperty(false);
-	private final DoubleProperty scrimStrength = new SimpleDoubleProperty(0.5);
-	private MFXScrimEffect scrimEffect = new MFXScrimEffect();
-	private ScrimPriority scrimPriority = ScrimPriority.NODE;
-
-        // =====================================================================
-
-        //
-        // NOTE ON CENTERING THE DIALOG WITHIN THE OWNER
-        //
-        // When centerInownerNode is true, we want to show the dialog
-        // centered in the owner. However JavaFX calculates the actual
-        // width and height of the dialog only when it has to be shown,
-        // therefore there is no way to calculate its position relative
-        // to the owner in advance.
-        //
-        // The workaround is to detect when the dialog with and height
-        // change, so that as soon as there is a value the position of
-        // the dialog can be calculated and the dialog moved. This is
-        // done withe the two listener below, which are set in buildScene()
-        //
-        // Finally, we need anyway to center the dialog any time it is
-        // shown even if the dialog height and with have not changed.
-        // This is done during initialization adding a listener for
-        // WindowEvent.WINDOW_SHOWING
-        //
-
-        private final ChangeListener<Number> widthChangeListener = new ChangeListener<>() {
-                @Override
-                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                        if (centerInOwnerNode.getValue()) {
-                            centerXInOwner(newValue.doubleValue());
-                        }
-                }
-        };
-
-        private final ChangeListener<Number> heightChangeListener = new ChangeListener<>() {
-                @Override
-                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                        if (centerInOwnerNode.getValue()) {
-                            centerYInOwner(newValue.doubleValue());
-                        }
-                }
-        };
-
-	//================================================================================
-	// Constructors
-	//================================================================================
-	public MFXStageDialog() {
-		this(null);
-	}
-
-	public MFXStageDialog(AbstractMFXDialog content) {
-		setContent(content);
-		initialize();
-	}
-
-	//================================================================================
-	// Methods
-	//================================================================================
-	private void initialize() {
-		initStyle(StageStyle.TRANSPARENT);
-		scrimEffect.getScrimNode().setOpacity(0.0);
-
-		if (getContent() != null) {
-			setScene(buildScene(getContent()));
-			initDraggable();
-		}
-
-		if (getOwnerNode() != null) {
-			initOverlayClose();
-		}
-
-		contentProperty().addListener((observable, oldValue, newValue) -> {
-			if (oldValue != null) {
-				oldValue.removeEventHandler(MouseEvent.MOUSE_PRESSED, mousePressed);
-				oldValue.removeEventHandler(MouseEvent.MOUSE_DRAGGED, mouseDragged);
-                                oldValue.widthProperty().removeListener(widthChangeListener);
-                                oldValue.heightProperty().removeListener(heightChangeListener);
-			}
-
-			setScene(buildScene(getContent()));
-			initDraggable();
-		});
-
-                addEventHandler(WindowEvent.WINDOW_SHOWING, event -> {
-                    if (getWidth() == 0)  {
-                        return;
-                    }
-                    if (centerInOwnerNode.getValue()) {
-                        centerXInOwner(getWidth());
-                        centerYInOwner(getHeight());
-                    }
-                });
-	}
-
-	/**
-	 * Builds the dialog's scene
-	 * for the given content.
-	 */
-	protected Scene buildScene(AbstractMFXDialog content) {
+    private Pane ownerNode;
+    private final BooleanProperty centerInOwnerNode = new SimpleBooleanProperty() {
+        @Override
+        protected void invalidated() {
+            boolean state = get();
+            if (state) {
                 widthProperty().addListener(widthChangeListener);
                 heightProperty().addListener(heightChangeListener);
+            } else {
+                widthProperty().removeListener(widthChangeListener);
+                heightProperty().removeListener(heightChangeListener);
+            }
+        }
+    };
+    private final BooleanProperty scrimOwner = new SimpleBooleanProperty(false);
+    private final DoubleProperty scrimStrength = new SimpleDoubleProperty(0.5);
+    private MFXScrimEffect scrimEffect = new MFXScrimEffect();
+    private ScrimPriority scrimPriority = ScrimPriority.NODE;
 
-		Scene scene = new Scene(content);
-		scene.setFill(Color.TRANSPARENT);
-		return scene;
-	}
+    // =====================================================================
 
-	/**
-	 * Enables/Disabled the draggable feature.
-	 */
-	protected void initDraggable() {
-		if (getContent() == null) return;
+    //
+    // NOTE ON CENTERING THE DIALOG WITHIN THE OWNER
+    //
+    // When centerInOwnerNode is true, we want to show the dialog
+    // centered in the owner. However, JavaFX calculates the actual
+    // width and height of the dialog only when it has to be shown,
+    // therefore there is no way to calculate its position relative
+    // to the owner in advance.
+    //
+    // The workaround is to detect when the dialog with and height
+    // change, so that as soon as there is a value the position of
+    // the dialog can be calculated and the dialog moved.
+    // This is done by adding two listeners directly to the Window' size properties,
+    // changes in content will not affect the two listeners that will continue working as intended.
+    //
+    // Finally, we need anyway to center the dialog any time it is
+    // shown even if the dialog height and with have not changed.
+    // This is done during initialization adding a listener for
+    // WindowEvent.WINDOW_SHOWING
+    //
 
-		AbstractMFXDialog content = getContent();
-		if (isDraggable()) {
-			content.addEventHandler(MouseEvent.MOUSE_PRESSED, mousePressed);
-			content.addEventHandler(MouseEvent.MOUSE_DRAGGED, mouseDragged);
-		} else {
-			content.removeEventHandler(MouseEvent.MOUSE_PRESSED, mousePressed);
-			content.removeEventHandler(MouseEvent.MOUSE_DRAGGED, mouseDragged);
-		}
-	}
+    private final ChangeListener<Number> widthChangeListener = (o, ov, nv) -> {
+        if (centerInOwnerNode.getValue()) {
+            centerXInOwner(nv.doubleValue());
+        }
+    };
 
-	/**
-	 * Enables/Disables the overlay close feature.
-	 */
-	protected void initOverlayClose() {
-		if (getOwnerNode() == null) return;
+    private final ChangeListener<Number> heightChangeListener = (o, ov, nv) -> {
+        if (centerInOwnerNode.getValue()) {
+            centerYInOwner(nv.doubleValue());
+        }
+    };
 
-		if (isOverlayClose()) {
-			ownerNode.addEventFilter(MouseEvent.MOUSE_PRESSED, overlayCloseHandler);
-		} else {
-			ownerNode.removeEventFilter(MouseEvent.MOUSE_PRESSED, overlayCloseHandler);
-		}
-	}
+    //================================================================================
+    // Constructors
+    //================================================================================
+    public MFXStageDialog() {
+        this(null);
+    }
 
-	/**
-	 * Calls {@link #scrimOwner()} than shows the dialog.
-	 */
-	public void showDialog() {
-		scrimOwner();
-		super.show();
-	}
+    public MFXStageDialog(AbstractMFXDialog content) {
+        setContent(content);
+        initialize();
+    }
 
-	/**
-	 * Calls {@link #scrimOwner()} then shows the dialog and waits.
-	 */
-	@Override
-	public void showAndWait() {
-		scrimOwner();
-		super.showAndWait();
-	}
+    //================================================================================
+    // Methods
+    //================================================================================
+    private void initialize() {
+        initStyle(StageStyle.TRANSPARENT);
+        scrimEffect.getScrimNode().setOpacity(0.0);
 
-	/**
-	 * Calls {@link #unScrimOwner()} then closes the dialog.
-	 */
-	@Override
-	public void hide() {
-		unScrimOwner();
-		super.hide();
-	}
-
-	/**
-	 * This is responsible for applying the scrim effect (if enabled) according to
-	 * the {@link #getScrimPriority()}.
-	 */
-	protected void scrimOwner() {
-		if (!isScrimOwner()) return;
-
-		switch (scrimPriority) {
-			case NODE: {
-				if (ownerNode != null) scrimEffect.modalScrim(ownerNode, getScrimStrength());
-				break;
-			}
-			case WINDOW: {
-				if (getOwner() != null) scrimEffect.scrimWindow(getOwner(), getScrimStrength());
-				break;
-			}
-		}
-
-		TimelineBuilder.build()
-				.add(KeyFrames.of(200, scrimEffect.getScrimNode().opacityProperty(), getScrimStrength(), Interpolator.EASE_BOTH))
-				.getAnimation()
-				.play();
-	}
-
-	/**
-	 * If {@link #getOwnerNode()} is not null removes the scrim effect from it.
-	 */
-	protected void unScrimOwner() {
-		if (ownerNode != null) scrimEffect.removeEffect(ownerNode);
-		if (getOwner() != null) scrimEffect.removeEffect(getOwner());
-		TimelineBuilder.build()
-				.add(KeyFrames.of(200, scrimEffect.getScrimNode().opacityProperty(), 0, Interpolator.EASE_BOTH))
-				.getAnimation()
-				.play();
-	}
-
-        /**
-         * This is responsible for centering the dialog on the X axis in the
-         * {@link #getOwnerNode()} (if enabled).
-         */
-        protected void centerXInOwner(double dialogWidth) {
-           Bounds screenBounds = ownerNode.localToScreen(ownerNode.getBoundsInLocal());
-
-           double startX = screenBounds.getMinX();
-           double nodeWidth = ownerNode.getWidth();
-           double x = startX + (nodeWidth / 2 - dialogWidth / 2);
-
-           setX(x);
+        if (getContent() != null) {
+            setScene(buildScene(getContent()));
+            initDraggable();
         }
 
-        /**
-         * This is responsible for centering the dialog on the Y axis in the
-         * {@link #getOwnerNode()} (if enabled).
-         */
-        protected void centerYInOwner(double dialogHeight) {
-           Bounds screenBounds = ownerNode.localToScreen(ownerNode.getBoundsInLocal());
-
-           double startY = screenBounds.getMinY();
-           double nodeHeight = ownerNode.getHeight();
-           double y = startY + (nodeHeight / 2 - dialogHeight / 2);
-           setY(y);
+        if (getOwnerNode() != null) {
+            initOverlayClose();
         }
 
-	/**
-	 * Disposes the dialog, making it not reusable anymore!
-	 */
-	public void dispose() {
-		AbstractMFXDialog content = getContent();
-		if (content != null) {
-			content.removeEventHandler(MouseEvent.MOUSE_PRESSED, mousePressed);
-			content.removeEventHandler(MouseEvent.MOUSE_DRAGGED, mouseDragged);
-		}
-		if (ownerNode != null) {
-			ownerNode.removeEventFilter(MouseEvent.MOUSE_PRESSED, overlayCloseHandler);
-		}
-		mousePressed = null;
-		mouseDragged = null;
-		overlayCloseHandler = null;
-		ownerNode = null;
-		scrimEffect = null;
-	}
+        contentProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue != null) {
+                oldValue.removeEventHandler(MouseEvent.MOUSE_PRESSED, mousePressed);
+                oldValue.removeEventHandler(MouseEvent.MOUSE_DRAGGED, mouseDragged);
+                oldValue.widthProperty().removeListener(widthChangeListener);
+                oldValue.heightProperty().removeListener(heightChangeListener);
+            }
 
-	//================================================================================
-	// Static Methods
-	//================================================================================
+            setScene(buildScene(getContent()));
+            initDraggable();
+        });
 
-	/**
-	 * Convenience method to create a {@link MFXStageDialog} from an FXML file.
-	 * <p>
-	 * Two notes:
-	 * <p> - the file is loaded using the given class, so make sure the FXML file
-	 * is in the right directory
-	 * <p> - the method expects to load a {@link AbstractMFXDialog} as root
-	 */
-	public static MFXStageDialog load(Class<?> clazz, String fxmlPath) throws IOException {
-		AbstractMFXDialog root = FXMLLoader.load(clazz.getResource(fxmlPath));
-		return new MFXStageDialog(root);
-	}
+        addEventHandler(WindowEvent.WINDOW_SHOWING, event -> {
+            if (getWidth() == 0) {
+                return;
+            }
+            if (centerInOwnerNode.getValue()) {
+                centerXInOwner(getWidth());
+                centerYInOwner(getHeight());
+            }
+        });
+        setCenterInOwnerNode(true);
+    }
 
-	/**
-	 * Same as {@link #load(Class, String)}, but in case of fail it will return null.
-	 */
-	public static MFXStageDialog loadOrNull(Class<?> clazz, String fxmlPath) {
-		try {
-			return load(clazz, fxmlPath);
-		} catch (IOException ex) {
-			return null;
-		}
-	}
+    /**
+     * Builds the dialog's scene
+     * for the given content.
+     */
+    protected Scene buildScene(AbstractMFXDialog content) {
+        Scene scene = new Scene(content);
+        scene.setFill(Color.TRANSPARENT);
+        return scene;
+    }
 
-	//================================================================================
-	// Getters/Setters
-	//================================================================================
-	public AbstractMFXDialog getContent() {
-		return content.get();
-	}
+    /**
+     * Enables/Disabled the draggable feature.
+     */
+    protected void initDraggable() {
+        if (getContent() == null) return;
 
-	/**
-	 * Specifies the dialog' scene root node.
-	 */
-	public ObjectProperty<AbstractMFXDialog> contentProperty() {
-		return content;
-	}
+        AbstractMFXDialog content = getContent();
+        if (isDraggable()) {
+            content.addEventHandler(MouseEvent.MOUSE_PRESSED, mousePressed);
+            content.addEventHandler(MouseEvent.MOUSE_DRAGGED, mouseDragged);
+        } else {
+            content.removeEventHandler(MouseEvent.MOUSE_PRESSED, mousePressed);
+            content.removeEventHandler(MouseEvent.MOUSE_DRAGGED, mouseDragged);
+        }
+    }
 
-	public void setContent(AbstractMFXDialog content) {
-		this.content.set(content);
-	}
+    /**
+     * Enables/Disables the overlay close feature.
+     */
+    protected void initOverlayClose() {
+        if (getOwnerNode() == null) return;
 
-	/**
-	 * @return whether the dialog is draggable
-	 */
-	public boolean isDraggable() {
-		return draggable;
-	}
+        if (isOverlayClose()) {
+            ownerNode.addEventFilter(MouseEvent.MOUSE_PRESSED, overlayCloseHandler);
+        } else {
+            ownerNode.removeEventFilter(MouseEvent.MOUSE_PRESSED, overlayCloseHandler);
+        }
+    }
 
-	public void setDraggable(boolean draggable) {
-		this.draggable = draggable;
-		initDraggable();
-	}
+    /**
+     * Calls {@link #scrimOwner()} than shows the dialog.
+     */
+    public void showDialog() {
+        scrimOwner();
+        super.show();
+    }
 
-	/**
-	 * @return whether the dialog will be closed when pressing on the specified
-	 * {@link #getOwnerNode()}
-	 */
-	public boolean isOverlayClose() {
-		return overlayClose;
-	}
+    /**
+     * Calls {@link #scrimOwner()} then shows the dialog and waits.
+     */
+    @Override
+    public void showAndWait() {
+        scrimOwner();
+        super.showAndWait();
+    }
 
-	public void setOverlayClose(boolean overlayClose) {
-		this.overlayClose = overlayClose;
-		initOverlayClose();
-	}
+    /**
+     * Calls {@link #unScrimOwner()} then closes the dialog.
+     */
+    @Override
+    public void hide() {
+        unScrimOwner();
+        super.hide();
+    }
 
-	/**
-	 * @return the node which "owns" the dialog
-	 */
-	public Pane getOwnerNode() {
-		return ownerNode;
-	}
+    /**
+     * This is responsible for applying the scrim effect (if enabled) according to
+     * the {@link #getScrimPriority()}.
+     */
+    protected void scrimOwner() {
+        if (!isScrimOwner()) return;
 
-	public void setOwnerNode(Pane ownerNode) {
-		if (this.ownerNode != null) {
-			this.ownerNode.removeEventFilter(MouseEvent.MOUSE_PRESSED, overlayCloseHandler);
-		}
-		this.ownerNode = ownerNode;
-		initOverlayClose();
-	}
+        switch (scrimPriority) {
+            case NODE: {
+                if (ownerNode != null) scrimEffect.modalScrim(ownerNode, getScrimStrength());
+                break;
+            }
+            case WINDOW: {
+                if (getOwner() != null) scrimEffect.scrimWindow(getOwner(), getScrimStrength());
+                break;
+            }
+        }
 
-	public boolean isCenterInOwnerNode() {
-		return centerInOwnerNode.get();
-	}
+        TimelineBuilder.build()
+                .add(KeyFrames.of(200, scrimEffect.getScrimNode().opacityProperty(), getScrimStrength(), Interpolator.EASE_BOTH))
+                .getAnimation()
+                .play();
+    }
 
-	/**
-	 * Specifies whether the dialog should be centered on the {@link #getOwnerNode()}
-	 * when shown.
-	 */
-	public BooleanProperty centerInOwnerNodeProperty() {
-		return centerInOwnerNode;
-	}
+    /**
+     * If {@link #getOwnerNode()} is not null removes the scrim effect from it.
+     */
+    protected void unScrimOwner() {
+        if (ownerNode != null) scrimEffect.removeEffect(ownerNode);
+        if (getOwner() != null) scrimEffect.removeEffect(getOwner());
+        TimelineBuilder.build()
+                .add(KeyFrames.of(200, scrimEffect.getScrimNode().opacityProperty(), 0, Interpolator.EASE_BOTH))
+                .getAnimation()
+                .play();
+    }
 
-	public void setCenterInOwnerNode(boolean centerInOwnerNode) {
-		this.centerInOwnerNode.set(centerInOwnerNode);
-	}
+    /**
+     * This is responsible for centering the dialog on the X axis in the
+     * {@link #getOwnerNode()} (if enabled).
+     */
+    protected void centerXInOwner(double dialogWidth) {
+        Bounds screenBounds = ownerNode.localToScreen(ownerNode.getBoundsInLocal());
 
-	public boolean isScrimOwner() {
-		return scrimOwner.get();
-	}
+        double startX = screenBounds.getMinX();
+        double nodeWidth = ownerNode.getWidth();
+        double x = startX + (nodeWidth / 2 - dialogWidth / 2);
 
-	/**
-	 * Specifies whether to scrim the {@link #getOwnerNode()} when showing the dialog.
-	 */
-	public BooleanProperty scrimOwnerProperty() {
-		return scrimOwner;
-	}
+        setX(x);
+    }
 
-	public void setScrimOwner(boolean scrimOwner) {
-		this.scrimOwner.set(scrimOwner);
-	}
+    /**
+     * This is responsible for centering the dialog on the Y axis in the
+     * {@link #getOwnerNode()} (if enabled).
+     */
+    protected void centerYInOwner(double dialogHeight) {
+        Bounds screenBounds = ownerNode.localToScreen(ownerNode.getBoundsInLocal());
 
-	public double getScrimStrength() {
-		return scrimStrength.get();
-	}
+        double startY = screenBounds.getMinY();
+        double nodeHeight = ownerNode.getHeight();
+        double y = startY + (nodeHeight / 2 - dialogHeight / 2);
+        setY(y);
+    }
 
-	/**
-	 * Specifies the strength(opacity, so values from 0.0 to 1.0) of the scrim effect, by default it is 0.5
-	 */
-	public DoubleProperty scrimStrengthProperty() {
-		return scrimStrength;
-	}
+    /**
+     * Disposes the dialog, making it not reusable anymore!
+     */
+    public void dispose() {
+        AbstractMFXDialog content = getContent();
+        if (content != null) {
+            content.removeEventHandler(MouseEvent.MOUSE_PRESSED, mousePressed);
+            content.removeEventHandler(MouseEvent.MOUSE_DRAGGED, mouseDragged);
+        }
+        if (ownerNode != null) {
+            ownerNode.removeEventFilter(MouseEvent.MOUSE_PRESSED, overlayCloseHandler);
+        }
+        mousePressed = null;
+        mouseDragged = null;
+        overlayCloseHandler = null;
+        ownerNode = null;
+        scrimEffect = null;
+    }
 
-	public void setScrimStrength(double scrimStrength) {
-		this.scrimStrength.set(scrimStrength);
-	}
+    //================================================================================
+    // Static Methods
+    //================================================================================
 
-	/**
-	 * @return the enum constant used to specify how to apply the scrim effect.
-	 * You can have two owners, one is the stage owner(Window) and the other is the dialog owner(Pane).
-	 * Sometimes it's better to apply the scrim to the window (for example the owner node would not allow to apply the
-	 * scrim effect, for example AnchorPanes, VBoxes, HBoxes...), but you still want to center the dialog in the owner node.
-	 * Setting this to {@link ScrimPriority#WINDOW} will tell the dialog to apply the effect to {@link #getOwner()},
-	 * setting this to {@link ScrimPriority#NODE} will tell the dialog to apply the effect to {@link #getOwnerNode()}.
-	 */
-	public ScrimPriority getScrimPriority() {
-		return scrimPriority;
-	}
+    /**
+     * Convenience method to create a {@link MFXStageDialog} from an FXML file.
+     * <p>
+     * Two notes:
+     * <p> - the file is loaded using the given class, so make sure the FXML file
+     * is in the right directory
+     * <p> - the method expects to load a {@link AbstractMFXDialog} as root
+     */
+    public static MFXStageDialog load(Class<?> clazz, String fxmlPath) throws IOException {
+        AbstractMFXDialog root = FXMLLoader.load(clazz.getResource(fxmlPath));
+        return new MFXStageDialog(root);
+    }
 
-	/**
-	 * Sets the enum constant used to specify how to apply the scrim effect.
-	 *
-	 * @see #getScrimPriority()
-	 */
-	public void setScrimPriority(ScrimPriority scrimPriority) {
-		this.scrimPriority = scrimPriority;
-	}
+    /**
+     * Same as {@link #load(Class, String)}, but in case of fail it will return null.
+     */
+    public static MFXStageDialog loadOrNull(Class<?> clazz, String fxmlPath) {
+        try {
+            return load(clazz, fxmlPath);
+        } catch (IOException ex) {
+            return null;
+        }
+    }
+
+    //================================================================================
+    // Getters/Setters
+    //================================================================================
+    public AbstractMFXDialog getContent() {
+        return content.get();
+    }
+
+    /**
+     * Specifies the dialog' scene root node.
+     */
+    public ObjectProperty<AbstractMFXDialog> contentProperty() {
+        return content;
+    }
+
+    public void setContent(AbstractMFXDialog content) {
+        this.content.set(content);
+    }
+
+    /**
+     * @return whether the dialog is draggable
+     */
+    public boolean isDraggable() {
+        return draggable;
+    }
+
+    public void setDraggable(boolean draggable) {
+        this.draggable = draggable;
+        initDraggable();
+    }
+
+    /**
+     * @return whether the dialog will be closed when pressing on the specified
+     * {@link #getOwnerNode()}
+     */
+    public boolean isOverlayClose() {
+        return overlayClose;
+    }
+
+    public void setOverlayClose(boolean overlayClose) {
+        this.overlayClose = overlayClose;
+        initOverlayClose();
+    }
+
+    /**
+     * @return the node which "owns" the dialog
+     */
+    public Pane getOwnerNode() {
+        return ownerNode;
+    }
+
+    public void setOwnerNode(Pane ownerNode) {
+        if (this.ownerNode != null) {
+            this.ownerNode.removeEventFilter(MouseEvent.MOUSE_PRESSED, overlayCloseHandler);
+        }
+        this.ownerNode = ownerNode;
+        initOverlayClose();
+    }
+
+    public boolean isCenterInOwnerNode() {
+        return centerInOwnerNode.get();
+    }
+
+    /**
+     * Specifies whether the dialog should be centered on the {@link #getOwnerNode()}
+     * when shown.
+     */
+    public BooleanProperty centerInOwnerNodeProperty() {
+        return centerInOwnerNode;
+    }
+
+    public void setCenterInOwnerNode(boolean centerInOwnerNode) {
+        this.centerInOwnerNode.set(centerInOwnerNode);
+    }
+
+    public boolean isScrimOwner() {
+        return scrimOwner.get();
+    }
+
+    /**
+     * Specifies whether to scrim the {@link #getOwnerNode()} when showing the dialog.
+     */
+    public BooleanProperty scrimOwnerProperty() {
+        return scrimOwner;
+    }
+
+    public void setScrimOwner(boolean scrimOwner) {
+        this.scrimOwner.set(scrimOwner);
+    }
+
+    public double getScrimStrength() {
+        return scrimStrength.get();
+    }
+
+    /**
+     * Specifies the strength(opacity, so values from 0.0 to 1.0) of the scrim effect, by default it is 0.5
+     */
+    public DoubleProperty scrimStrengthProperty() {
+        return scrimStrength;
+    }
+
+    public void setScrimStrength(double scrimStrength) {
+        this.scrimStrength.set(scrimStrength);
+    }
+
+    /**
+     * @return the enum constant used to specify how to apply the scrim effect.
+     * You can have two owners, one is the stage owner(Window) and the other is the dialog owner(Pane).
+     * Sometimes it's better to apply the scrim to the window (for example the owner node would not allow to apply the
+     * scrim effect, for example AnchorPanes, VBoxes, HBoxes...), but you still want to center the dialog in the owner node.
+     * Setting this to {@link ScrimPriority#WINDOW} will tell the dialog to apply the effect to {@link #getOwner()},
+     * setting this to {@link ScrimPriority#NODE} will tell the dialog to apply the effect to {@link #getOwnerNode()}.
+     */
+    public ScrimPriority getScrimPriority() {
+        return scrimPriority;
+    }
+
+    /**
+     * Sets the enum constant used to specify how to apply the scrim effect.
+     *
+     * @see #getScrimPriority()
+     */
+    public void setScrimPriority(ScrimPriority scrimPriority) {
+        this.scrimPriority = scrimPriority;
+    }
 }
