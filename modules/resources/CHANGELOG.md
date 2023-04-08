@@ -16,6 +16,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.3.3] - 08-04-2023
+
+## Fixed
+
+- Themes were working partially as I forgot to import the fonts
+
 ## [11.3.2 and release] - 08-04-2023
 
 ## Changed

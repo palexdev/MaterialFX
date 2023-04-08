@@ -92,5 +92,6 @@
 @use 'tokens/theme' as Theme;
 
 @include Theme.ExposeTokens();
+@import '../../fonts/Fonts.css';
 @import 'components/components';
 
