@@ -47,122 +47,122 @@ import java.util.Comparator;
  * Simply an HBox with a label, an icon for sorting. It also has support for resizing the column on drag.
  */
 public class MFXTableColumnSkin<T> extends SkinBase<MFXTableColumn<T>> {
-	//================================================================================
-	// Properties
-	//================================================================================
-	private final HBox container;
-	private final BoundLabel label;
-	private final MFXIconWrapper sortIcon;
-	private final DragResizer dragResizer;
+    //================================================================================
+    // Properties
+    //================================================================================
+    private final HBox container;
+    private final BoundLabel label;
+    private final MFXIconWrapper sortIcon;
+    private final DragResizer dragResizer;
 
-	//================================================================================
-	// Constructors
-	//================================================================================
-	public MFXTableColumnSkin(MFXTableColumn<T> column) {
-		super(column);
+    //================================================================================
+    // Constructors
+    //================================================================================
+    public MFXTableColumnSkin(MFXTableColumn<T> column) {
+        super(column);
 
-		label = new BoundLabel(column);
-		label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		HBox.setHgrow(label, Priority.ALWAYS);
+        label = new BoundLabel(column);
+        label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        HBox.setHgrow(label, Priority.ALWAYS);
 
-		sortIcon = new MFXIconWrapper("mfx-caret-up", 14, 18).defaultRippleGeneratorBehavior();
-		NodeUtils.makeRegionCircular(sortIcon);
+        sortIcon = new MFXIconWrapper("fas-caret-up", 14, 18).defaultRippleGeneratorBehavior();
+        NodeUtils.makeRegionCircular(sortIcon);
 
-		container = new HBox(label);
-		container.setMinWidth(Region.USE_PREF_SIZE);
-		positionIcon(column.getAlignment());
+        container = new HBox(label);
+        container.setMinWidth(Region.USE_PREF_SIZE);
+        positionIcon(column.getAlignment());
 
-		dragResizer = new DragResizer(column, Direction.RIGHT)
-				.setWidthConstraintFunction(region ->
-						region.snappedLeftInset() +
-								region.prefWidth(-1) +
-								region.snappedRightInset()
-				);
-		if (column.isColumnResizable()) dragResizer.makeResizable();
+        dragResizer = new DragResizer(column, Direction.RIGHT)
+                .setWidthConstraintFunction(region ->
+                        region.snappedLeftInset() +
+                                region.prefWidth(-1) +
+                                region.snappedRightInset()
+                );
+        if (column.isColumnResizable()) dragResizer.makeResizable();
 
-		getChildren().setAll(container);
-		addListeners();
-	}
+        getChildren().setAll(container);
+        addListeners();
+    }
 
-	//================================================================================
-	// Methods
-	//================================================================================
+    //================================================================================
+    // Methods
+    //================================================================================
 
-	/**
-	 * Specifies the behavior for the following changes/events:
-	 * <p> - the column's alignment, to position the icon, {@link #positionIcon(Pos)}
-	 * <p> - the column's sort state, to animate the icon, {@link #animateIcon(SortState)}
-	 * <p> - the column's resizable property, {@link MFXTableColumn#columnResizableProperty()}, to
-	 * install/uninstall the {@link DragResizer}
-	 * <p>
-	 * It's also responsible for initializing the column if the initial sort state is not {@link SortState#UNSORTED},
-	 * done by using a one-shot(no scope :D) listener {@link NodeUtils#waitForSkin(Control, Runnable, boolean, boolean)}.
-	 */
-	private void addListeners() {
-		MFXTableColumn<T> column = getSkinnable();
+    /**
+     * Specifies the behavior for the following changes/events:
+     * <p> - the column's alignment, to position the icon, {@link #positionIcon(Pos)}
+     * <p> - the column's sort state, to animate the icon, {@link #animateIcon(SortState)}
+     * <p> - the column's resizable property, {@link MFXTableColumn#columnResizableProperty()}, to
+     * install/uninstall the {@link DragResizer}
+     * <p>
+     * It's also responsible for initializing the column if the initial sort state is not {@link SortState#UNSORTED},
+     * done by using a one-shot(no scope :D) listener {@link NodeUtils#waitForSkin(Control, Runnable, boolean, boolean)}.
+     */
+    private void addListeners() {
+        MFXTableColumn<T> column = getSkinnable();
 
-		column.alignmentProperty().addListener((observable, oldValue, newValue) -> positionIcon(newValue));
-		column.sortStateProperty().addListener((observable, oldValue, newValue) -> animateIcon(newValue));
-		column.columnResizableProperty().addListener((observable, oldValue, newValue) -> {
-			if (!newValue) {
-				dragResizer.uninstall();
-			} else {
-				dragResizer.makeResizable();
-			}
-		});
+        column.alignmentProperty().addListener((observable, oldValue, newValue) -> positionIcon(newValue));
+        column.sortStateProperty().addListener((observable, oldValue, newValue) -> animateIcon(newValue));
+        column.columnResizableProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                dragResizer.uninstall();
+            } else {
+                dragResizer.makeResizable();
+            }
+        });
 
-		NodeUtils.waitForSkin(column, () -> {
-			SortState sortState = column.getSortState();
-			animateIcon(sortState);
-			if (sortState == SortState.UNSORTED) return;
+        NodeUtils.waitForSkin(column, () -> {
+            SortState sortState = column.getSortState();
+            animateIcon(sortState);
+            if (sortState == SortState.UNSORTED) return;
 
-			Comparator<T> comparator = (sortState == SortState.DESCENDING) ? column.getComparator().reversed() : column.getComparator();
-			column.fireEvent(new MFXTableColumnEvent<>(MFXTableColumnEvent.SORTING_EVENT, column, comparator, sortState));
-		}, false, true);
-	}
+            Comparator<T> comparator = (sortState == SortState.DESCENDING) ? column.getComparator().reversed() : column.getComparator();
+            column.fireEvent(new MFXTableColumnEvent<>(MFXTableColumnEvent.SORTING_EVENT, column, comparator, sortState));
+        }, false, true);
+    }
 
-	/**
-	 * Responsible for animating the icon according to the given sort state.
-	 */
-	private void animateIcon(SortState sortState) {
-		Timeline animation = new Timeline();
-		switch (sortState) {
-			case ASCENDING: {
-				sortIcon.setVisible(true);
-				animation = MFXAnimationFactory.FADE_IN.build(sortIcon, 250);
-				break;
-			}
-			case DESCENDING: {
-				sortIcon.setVisible(true);
-				KeyFrame kf = new KeyFrame(Duration.millis(150),
-						new KeyValue(sortIcon.rotateProperty(), 180)
-				);
-				animation = new Timeline(kf);
-				break;
-			}
-			case UNSORTED: {
-				animation = MFXAnimationFactory.FADE_OUT.build(sortIcon, 250);
-				animation.setOnFinished(event -> {
-					sortIcon.setVisible(false);
-					sortIcon.setRotate(0.0);
-				});
-				break;
-			}
-		}
-		animation.play();
-	}
+    /**
+     * Responsible for animating the icon according to the given sort state.
+     */
+    private void animateIcon(SortState sortState) {
+        Timeline animation = new Timeline();
+        switch (sortState) {
+            case ASCENDING: {
+                sortIcon.setVisible(true);
+                animation = MFXAnimationFactory.FADE_IN.build(sortIcon, 250);
+                break;
+            }
+            case DESCENDING: {
+                sortIcon.setVisible(true);
+                KeyFrame kf = new KeyFrame(Duration.millis(150),
+                        new KeyValue(sortIcon.rotateProperty(), 180)
+                );
+                animation = new Timeline(kf);
+                break;
+            }
+            case UNSORTED: {
+                animation = MFXAnimationFactory.FADE_OUT.build(sortIcon, 250);
+                animation.setOnFinished(event -> {
+                    sortIcon.setVisible(false);
+                    sortIcon.setRotate(0.0);
+                });
+                break;
+            }
+        }
+        animation.play();
+    }
 
-	/**
-	 * Responsible for positioning the icon according to the column's alignment.
-	 * <p>
-	 * Left if the column is right-aligned. Right if the column is left-aligned.
-	 */
-	private void positionIcon(Pos alignment) {
-		container.getChildren().remove(sortIcon);
-		if (PositionUtils.isRight(alignment)) {
-			container.getChildren().add(0, sortIcon);
-			return;
-		}
-		container.getChildren().add(sortIcon);
-	}
+    /**
+     * Responsible for positioning the icon according to the column's alignment.
+     * <p>
+     * Left if the column is right-aligned. Right if the column is left-aligned.
+     */
+    private void positionIcon(Pos alignment) {
+        container.getChildren().remove(sortIcon);
+        if (PositionUtils.isRight(alignment)) {
+            container.getChildren().add(0, sortIcon);
+            return;
+        }
+        container.getChildren().add(sortIcon);
+    }
 }

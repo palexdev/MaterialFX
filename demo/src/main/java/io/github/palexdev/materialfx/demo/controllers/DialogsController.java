@@ -24,7 +24,7 @@ import io.github.palexdev.materialfx.dialogs.MFXGenericDialog;
 import io.github.palexdev.materialfx.dialogs.MFXGenericDialogBuilder;
 import io.github.palexdev.materialfx.dialogs.MFXStageDialog;
 import io.github.palexdev.materialfx.enums.ScrimPriority;
-import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -71,7 +71,7 @@ public class DialogsController {
 
 	@FXML
 	private void openInfo(ActionEvent event) {
-		MFXFontIcon infoIcon = new MFXFontIcon("mfx-info-circle", 18);
+		MFXFontIcon infoIcon = new MFXFontIcon("fas-circle-info", 18);
 		dialogContent.setHeaderIcon(infoIcon);
 		dialogContent.setHeaderText("This is a generic info dialog");
 		convertDialogTo("mfx-info-dialog");
@@ -80,7 +80,7 @@ public class DialogsController {
 
 	@FXML
 	private void openWarning(ActionEvent event) {
-		MFXFontIcon warnIcon = new MFXFontIcon("mfx-do-not-enter-circle", 18);
+		MFXFontIcon warnIcon = new MFXFontIcon("fas-circle-exclamation", 18);
 		dialogContent.setHeaderIcon(warnIcon);
 		dialogContent.setHeaderText("This is a warning info dialog");
 		convertDialogTo("mfx-warn-dialog");
@@ -89,7 +89,7 @@ public class DialogsController {
 
 	@FXML
 	private void openError(ActionEvent event) {
-		MFXFontIcon errorIcon = new MFXFontIcon("mfx-exclamation-circle-filled", 18);
+		MFXFontIcon errorIcon = new MFXFontIcon("fas-circle-xmark", 18);
 		dialogContent.setHeaderIcon(errorIcon);
 		dialogContent.setHeaderText("This is a error info dialog");
 		convertDialogTo("mfx-error-dialog");

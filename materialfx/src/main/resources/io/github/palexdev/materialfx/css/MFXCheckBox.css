@@ -39,10 +39,10 @@
 }
 
 .mfx-checkbox .box .mark {
-	visibility: hidden;
-	-mfx-color: white;
-	-mfx-description: "mfx-variant7-mark";
-	-mfx-size: 12;
+    visibility: hidden;
+    -mfx-color: white;
+    -mfx-description: "fas-check";
+    -mfx-size: 12;
 }
 
 .mfx-checkbox .ripple-container {
@@ -72,7 +72,7 @@
 }
 
 .mfx-checkbox:indeterminate .box .mark {
-	visibility: visible;
-	-mfx-description: "mfx-minus";
+    visibility: visible;
+    -mfx-description: "fas-minus";
 }
 

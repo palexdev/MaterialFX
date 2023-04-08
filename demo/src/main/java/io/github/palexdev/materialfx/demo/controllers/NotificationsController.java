@@ -28,11 +28,15 @@ import io.github.palexdev.materialfx.demo.model.Model;
 import io.github.palexdev.materialfx.enums.NotificationPos;
 import io.github.palexdev.materialfx.enums.NotificationState;
 import io.github.palexdev.materialfx.factories.InsetsFactory;
-import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.notifications.MFXNotificationCenterSystem;
 import io.github.palexdev.materialfx.notifications.MFXNotificationSystem;
 import io.github.palexdev.materialfx.notifications.base.INotification;
 import io.github.palexdev.materialfx.utils.RandomUtils;
+import io.github.palexdev.mfxresources.fonts.IconDescriptor;
+import io.github.palexdev.mfxresources.fonts.IconsProviders;
+import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
+import io.github.palexdev.mfxresources.fonts.fontawesome.FontAwesomeBrands;
+import io.github.palexdev.mfxresources.fonts.fontawesome.FontAwesomeRegular;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
@@ -159,12 +163,21 @@ public class NotificationsController {
 
 		public ExampleNotification() {
 
-			MFXIconWrapper icon = new MFXIconWrapper(RandomUtils.randFromArray(Model.notificationsIcons).getDescription(), 16, 32);
+			MFXFontIcon fi = new MFXFontIcon();
+			IconDescriptor desc = RandomUtils.randFromArray(Model.notificationsIcons);
+			if (desc instanceof FontAwesomeRegular) {
+				fi.setIconsProvider(IconsProviders.FONTAWESOME_REGULAR);
+			} else if (desc instanceof FontAwesomeBrands) {
+				fi.setIconsProvider(IconsProviders.FONTAWESOME_BRANDS);
+			}
+			fi.setDescription(desc.getDescription());
+			fi.setSize(16);
+			MFXIconWrapper icon = new MFXIconWrapper(fi, 32);
 			Label headerLabel = new Label();
 			headerLabel.textProperty().bind(headerText);
-			MFXIconWrapper readIcon = new MFXIconWrapper("mfx-eye", 16, 32);
+			MFXIconWrapper readIcon = new MFXIconWrapper("fas-eye", 16, 32);
 			((MFXFontIcon) readIcon.getIcon()).descriptionProperty().bind(Bindings.createStringBinding(
-					() -> (getState() == NotificationState.READ) ? "mfx-eye" : "mfx-eye-slash",
+					() -> (getState() == NotificationState.READ) ? "fas-eye" : "fas-eye-slash",
 					notificationStateProperty()
 			));
 			StackPane.setAlignment(readIcon, Pos.CENTER_RIGHT);

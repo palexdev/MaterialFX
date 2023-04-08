@@ -22,7 +22,7 @@ import io.github.palexdev.materialfx.beans.properties.styleable.StyleableBoolean
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableStringProperty;
 import io.github.palexdev.materialfx.css.themes.Stylesheets;
 import io.github.palexdev.materialfx.css.themes.Theme;
-import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
@@ -54,403 +54,403 @@ import java.util.List;
  * <p> - Introduces a new PseudoClass, ":masked" that activates when the text is masked
  */
 public class MFXPasswordField extends MFXTextField {
-	//================================================================================
-	// Properties
-	//================================================================================
-	private final String STYLE_CLASS = "mfx-password-field";
+    //================================================================================
+    // Properties
+    //================================================================================
+    private final String STYLE_CLASS = "mfx-password-field";
 
-	public static final String BULLET = "\u25cf";
-	protected static final PseudoClass MASKED_PSEUDO_CLASS = PseudoClass.getPseudoClass("masked");
+    public static final String BULLET = "\u25cf";
+    protected static final PseudoClass MASKED_PSEUDO_CLASS = PseudoClass.getPseudoClass("masked");
 
-	//================================================================================
-	// Constructors
-	//================================================================================
-	public MFXPasswordField() {
-		this("");
-	}
+    //================================================================================
+    // Constructors
+    //================================================================================
+    public MFXPasswordField() {
+        this("");
+    }
 
-	public MFXPasswordField(String text) {
-		this(text, "");
-	}
+    public MFXPasswordField(String text) {
+        this(text, "");
+    }
 
-	public MFXPasswordField(String text, String promptText) {
-		this(text, promptText, "");
-	}
+    public MFXPasswordField(String text, String promptText) {
+        this(text, promptText, "");
+    }
 
-	public MFXPasswordField(String text, String promptText, String floatingText) {
-		super(text, promptText, floatingText);
-		initialize();
-	}
+    public MFXPasswordField(String text, String promptText, String floatingText) {
+        super(text, promptText, floatingText);
+        initialize();
+    }
 
-	//================================================================================
-	// Methods
-	//================================================================================
-	private void initialize() {
-		getStyleClass().add(STYLE_CLASS);
-		setBehavior();
-		defaultTrailingIcon();
-		defaultContextMenu();
-	}
+    //================================================================================
+    // Methods
+    //================================================================================
+    private void initialize() {
+        getStyleClass().add(STYLE_CLASS);
+        setBehavior();
+        defaultTrailingIcon();
+        defaultContextMenu();
+    }
 
-	/**
-	 * Sets the default behavior for the password field such:
-	 * <p> - Avoid worlds selection and only allowing selectAll()
-	 * <p> - Managing the ":masked" PseudoClass
-	 */
-	protected void setBehavior() {
-		addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-			if (event.getClickCount() >= 2 && event.getClickCount() % 2 == 0) {
-				selectAll();
-				event.consume();
-			}
-		});
-		addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-			switch (event.getCode()) {
-				case LEFT:
-				case RIGHT:
-					if (event.isControlDown() && event.isShiftDown()) {
-						boundField.selectAll();
-						event.consume();
-					}
-					break;
-			}
-		});
+    /**
+     * Sets the default behavior for the password field such:
+     * <p> - Avoid worlds selection and only allowing selectAll()
+     * <p> - Managing the ":masked" PseudoClass
+     */
+    protected void setBehavior() {
+        addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+            if (event.getClickCount() >= 2 && event.getClickCount() % 2 == 0) {
+                selectAll();
+                event.consume();
+            }
+        });
+        addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            switch (event.getCode()) {
+                case LEFT:
+                case RIGHT:
+                    if (event.isControlDown() && event.isShiftDown()) {
+                        boundField.selectAll();
+                        event.consume();
+                    }
+                    break;
+            }
+        });
 
-		if (!isShowPassword()) pseudoClassStateChanged(MASKED_PSEUDO_CLASS, true);
-		showPassword.addListener((observable, oldValue, newValue) -> pseudoClassStateChanged(MASKED_PSEUDO_CLASS, !newValue));
-	}
+        if (!isShowPassword()) pseudoClassStateChanged(MASKED_PSEUDO_CLASS, true);
+        showPassword.addListener((observable, oldValue, newValue) -> pseudoClassStateChanged(MASKED_PSEUDO_CLASS, !newValue));
+    }
 
-	/**
-	 * Sets the default trailing icon for the password field.
-	 * <p>
-	 * An eye to show/hide the password.
-	 */
-	protected void defaultTrailingIcon() {
-		MFXFontIcon icon = new MFXFontIcon("mfx-eye", 16, Color.web("#4D4D4D"));
-		icon.getStyleClass().add("eye-icon");
-		icon.descriptionProperty().bind(Bindings.createStringBinding(
-				() -> isShowPassword() ? "mfx-eye-slash" : "mfx-eye",
-				showPasswordProperty()
-		));
-		MFXIconWrapper showPasswordIcon = new MFXIconWrapper(icon, 24).defaultRippleGeneratorBehavior();
-		NodeUtils.makeRegionCircular(showPasswordIcon);
-		showPasswordIcon.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-			setShowPassword(!isShowPassword());
+    /**
+     * Sets the default trailing icon for the password field.
+     * <p>
+     * An eye to show/hide the password.
+     */
+    protected void defaultTrailingIcon() {
+        MFXFontIcon icon = new MFXFontIcon("fas-eye", 16, Color.web("#4D4D4D"));
+        icon.getStyleClass().add("eye-icon");
+        icon.descriptionProperty().bind(Bindings.createStringBinding(
+                () -> isShowPassword() ? "fas-eye-slash" : "fas-eye",
+                showPasswordProperty()
+        ));
+        MFXIconWrapper showPasswordIcon = new MFXIconWrapper(icon, 24).defaultRippleGeneratorBehavior();
+        NodeUtils.makeRegionCircular(showPasswordIcon);
+        showPasswordIcon.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            setShowPassword(!isShowPassword());
 
-			// Workaround for caret being positioned (only visually) wrongly
-			int currPos = delegateGetCaretPosition();
-			positionCaret(0);
-			positionCaret(currPos);
+            // Workaround for caret being positioned (only visually) wrongly
+            int currPos = delegateGetCaretPosition();
+            positionCaret(0);
+            positionCaret(currPos);
 
-			event.consume();
-		});
+            event.consume();
+        });
 
-		setTrailingIcon(showPasswordIcon);
-	}
+        setTrailingIcon(showPasswordIcon);
+    }
 
-	//================================================================================
-	// Overridden Methods
-	//================================================================================
-	@Override
-	public void defaultContextMenu() {
-		if (allowCopy == null ||
-				allowCut == null ||
-				allowPaste == null)
-			return;
+    //================================================================================
+    // Overridden Methods
+    //================================================================================
+    @Override
+    public void defaultContextMenu() {
+        if (allowCopy == null ||
+                allowCut == null ||
+                allowPaste == null)
+            return;
 
-		MFXContextMenuItem copyItem = MFXContextMenuItem.Builder.build()
-				.setIcon(new MFXFontIcon("mfx-content-copy", 14))
-				.setText(I18N.getOrDefault("textField.contextMenu.copy"))
-				.setAccelerator("Ctrl + C")
-				.setOnAction(event -> copy())
-				.get();
-		copyItem.disableProperty().bind(allowCopyProperty().not());
+        MFXContextMenuItem copyItem = MFXContextMenuItem.Builder.build()
+                .setIcon(new MFXFontIcon("fas-copy", 14))
+                .setText(I18N.getOrDefault("textField.contextMenu.copy"))
+                .setAccelerator("Ctrl + C")
+                .setOnAction(event -> copy())
+                .get();
+        copyItem.disableProperty().bind(allowCopyProperty().not());
 
-		MFXContextMenuItem cutItem = MFXContextMenuItem.Builder.build()
-				.setIcon(new MFXFontIcon("mfx-content-cut", 14))
-				.setText(I18N.getOrDefault("textField.contextMenu.cut"))
-				.setAccelerator("Ctrl + X")
-				.setOnAction(event -> cut())
-				.get();
-		cutItem.disableProperty().bind(allowCutProperty().not());
+        MFXContextMenuItem cutItem = MFXContextMenuItem.Builder.build()
+                .setIcon(new MFXFontIcon("fas-scissors", 14))
+                .setText(I18N.getOrDefault("textField.contextMenu.cut"))
+                .setAccelerator("Ctrl + X")
+                .setOnAction(event -> cut())
+                .get();
+        cutItem.disableProperty().bind(allowCutProperty().not());
 
-		MFXContextMenuItem pasteItem = MFXContextMenuItem.Builder.build()
-				.setIcon(new MFXFontIcon("mfx-content-paste", 14))
-				.setText(I18N.getOrDefault("textField.contextMenu.paste"))
-				.setAccelerator("Ctrl + V")
-				.setOnAction(event -> paste())
-				.get();
-		pasteItem.disableProperty().bind(allowPasteProperty().not());
+        MFXContextMenuItem pasteItem = MFXContextMenuItem.Builder.build()
+                .setIcon(new MFXFontIcon("fas-paste", 14))
+                .setText(I18N.getOrDefault("textField.contextMenu.paste"))
+                .setAccelerator("Ctrl + V")
+                .setOnAction(event -> paste())
+                .get();
+        pasteItem.disableProperty().bind(allowPasteProperty().not());
 
-		MFXContextMenuItem deleteItem = MFXContextMenuItem.Builder.build()
-				.setIcon(new MFXFontIcon("mfx-delete-alt", 16))
-				.setText(I18N.getOrDefault("textField.contextMenu.delete"))
-				.setAccelerator("Ctrl + D")
-				.setOnAction(event -> boundField.deleteText(delegateGetSelection()))
-				.get();
+        MFXContextMenuItem deleteItem = MFXContextMenuItem.Builder.build()
+                .setIcon(new MFXFontIcon("fas-delete-left", 16))
+                .setText(I18N.getOrDefault("textField.contextMenu.delete"))
+                .setAccelerator("Ctrl + D")
+                .setOnAction(event -> boundField.deleteText(delegateGetSelection()))
+                .get();
 
-		MFXContextMenuItem selectAllItem = MFXContextMenuItem.Builder.build()
-				.setIcon(new MFXFontIcon("mfx-select-all", 16))
-				.setText(I18N.getOrDefault("textField.contextMenu.selectAll"))
-				.setAccelerator("Ctrl + A")
-				.setOnAction(event -> selectAll())
-				.get();
+        MFXContextMenuItem selectAllItem = MFXContextMenuItem.Builder.build()
+                .setIcon(new MFXFontIcon("fas-check-double", 16))
+                .setText(I18N.getOrDefault("textField.contextMenu.selectAll"))
+                .setAccelerator("Ctrl + A")
+                .setOnAction(event -> selectAll())
+                .get();
 
-		MFXContextMenuItem redoItem = MFXContextMenuItem.Builder.build()
-				.setIcon(new MFXFontIcon("mfx-redo", 12))
-				.setText(I18N.getOrDefault("textField.contextMenu.redo"))
-				.setAccelerator("Ctrl + Y")
-				.setOnAction(event -> boundField.redo())
-				.get();
-		redoItem.disableProperty().bind(delegateRedoableProperty().not());
+        MFXContextMenuItem redoItem = MFXContextMenuItem.Builder.build()
+                .setIcon(new MFXFontIcon("fas-arrow-rotate-right", 12))
+                .setText(I18N.getOrDefault("textField.contextMenu.redo"))
+                .setAccelerator("Ctrl + Y")
+                .setOnAction(event -> boundField.redo())
+                .get();
+        redoItem.disableProperty().bind(delegateRedoableProperty().not());
 
-		MFXContextMenuItem undoItem = MFXContextMenuItem.Builder.build()
-				.setIcon(new MFXFontIcon("mfx-undo", 12))
-				.setText(I18N.getOrDefault("textField.contextMenu.undo"))
-				.setAccelerator("Ctrl + Z")
-				.setOnAction(event -> boundField.undo())
-				.get();
-		undoItem.disableProperty().bind(delegateUndoableProperty().not());
+        MFXContextMenuItem undoItem = MFXContextMenuItem.Builder.build()
+                .setIcon(new MFXFontIcon("fas-arrow-rotate-left", 12))
+                .setText(I18N.getOrDefault("textField.contextMenu.undo"))
+                .setAccelerator("Ctrl + Z")
+                .setOnAction(event -> boundField.undo())
+                .get();
+        undoItem.disableProperty().bind(delegateUndoableProperty().not());
 
-		contextMenu = MFXContextMenu.Builder.build(this)
-				.addItems(copyItem, cutItem, pasteItem, deleteItem, selectAllItem)
-				.addLineSeparator()
-				.addItems(redoItem, undoItem)
-				.setPopupStyleableParent(this)
-				.installAndGet();
-	}
+        contextMenu = MFXContextMenu.Builder.build(this)
+                .addItems(copyItem, cutItem, pasteItem, deleteItem, selectAllItem)
+                .addLineSeparator()
+                .addItems(redoItem, undoItem)
+                .setPopupStyleableParent(this)
+                .installAndGet();
+    }
 
-	@Override
-	public void copy() {
-		if (!isAllowCopy()) return;
-		super.copy();
-	}
+    @Override
+    public void copy() {
+        if (!isAllowCopy()) return;
+        super.copy();
+    }
 
-	@Override
-	public void cut() {
-		if (!isAllowCut()) return;
-		super.cut();
-	}
+    @Override
+    public void cut() {
+        if (!isAllowCut()) return;
+        super.cut();
+    }
 
-	@Override
-	public void paste() {
-		if (!isAllowPaste()) return;
-		super.paste();
-	}
+    @Override
+    public void paste() {
+        if (!isAllowPaste()) return;
+        super.paste();
+    }
 
-	@Override
-	public void previousWord() {
-		boundField.selectAll();
-	}
+    @Override
+    public void previousWord() {
+        boundField.selectAll();
+    }
 
-	@Override
-	public void nextWord() {
-		boundField.selectAll();
-	}
+    @Override
+    public void nextWord() {
+        boundField.selectAll();
+    }
 
-	@Override
-	public void endOfNextWord() {
-		boundField.selectAll();
-	}
+    @Override
+    public void endOfNextWord() {
+        boundField.selectAll();
+    }
 
-	@Override
-	public void selectPreviousWord() {
-		boundField.selectAll();
-	}
+    @Override
+    public void selectPreviousWord() {
+        boundField.selectAll();
+    }
 
-	@Override
-	public void selectNextWord() {
-		boundField.selectAll();
-	}
+    @Override
+    public void selectNextWord() {
+        boundField.selectAll();
+    }
 
-	@Override
-	public void selectEndOfNextWord() {
-		boundField.selectAll();
-	}
+    @Override
+    public void selectEndOfNextWord() {
+        boundField.selectAll();
+    }
 
-	@Override
-	public Theme getTheme() {
-		return Stylesheets.PASSWORD_FIELD;
-	}
+    @Override
+    public Theme getTheme() {
+        return Stylesheets.PASSWORD_FIELD;
+    }
 
-	//================================================================================
-	// Styleable Properties
-	//================================================================================
-	private final StyleableBooleanProperty allowCopy = new StyleableBooleanProperty(
-			StyleableProperties.ALLOW_COPY,
-			this,
-			"allowCopy",
-			false
-	);
+    //================================================================================
+    // Styleable Properties
+    //================================================================================
+    private final StyleableBooleanProperty allowCopy = new StyleableBooleanProperty(
+            StyleableProperties.ALLOW_COPY,
+            this,
+            "allowCopy",
+            false
+    );
 
-	private final StyleableBooleanProperty allowCut = new StyleableBooleanProperty(
-			StyleableProperties.ALLOW_CUT,
-			this,
-			"allowCut",
-			false
-	);
+    private final StyleableBooleanProperty allowCut = new StyleableBooleanProperty(
+            StyleableProperties.ALLOW_CUT,
+            this,
+            "allowCut",
+            false
+    );
 
-	private final StyleableBooleanProperty allowPaste = new StyleableBooleanProperty(
-			StyleableProperties.ALLOW_PASTE,
-			this,
-			"allowPaste",
-			false
-	);
+    private final StyleableBooleanProperty allowPaste = new StyleableBooleanProperty(
+            StyleableProperties.ALLOW_PASTE,
+            this,
+            "allowPaste",
+            false
+    );
 
-	private final StyleableBooleanProperty showPassword = new StyleableBooleanProperty(
-			StyleableProperties.SHOW_PASSWORD,
-			this,
-			"showPassword",
-			false
-	);
+    private final StyleableBooleanProperty showPassword = new StyleableBooleanProperty(
+            StyleableProperties.SHOW_PASSWORD,
+            this,
+            "showPassword",
+            false
+    );
 
-	private final StyleableStringProperty hideCharacter = new StyleableStringProperty(
-			StyleableProperties.HIDE_CHARACTER,
-			this,
-			"hideCharacter",
-			BULLET
-	) {
-		@Override
-		public void set(String newValue) {
-			if (newValue.trim().isEmpty()) {
-				return;
-			}
-			super.set(newValue.length() > 1 ? newValue.substring(0, 1) : newValue);
-		}
-	};
+    private final StyleableStringProperty hideCharacter = new StyleableStringProperty(
+            StyleableProperties.HIDE_CHARACTER,
+            this,
+            "hideCharacter",
+            BULLET
+    ) {
+        @Override
+        public void set(String newValue) {
+            if (newValue.trim().isEmpty()) {
+                return;
+            }
+            super.set(newValue.length() > 1 ? newValue.substring(0, 1) : newValue);
+        }
+    };
 
-	public boolean isAllowCopy() {
-		return allowCopy.get();
-	}
+    public boolean isAllowCopy() {
+        return allowCopy.get();
+    }
 
-	/**
-	 * Specifies if copying the password field text is allowed.
-	 */
-	public StyleableBooleanProperty allowCopyProperty() {
-		return allowCopy;
-	}
+    /**
+     * Specifies if copying the password field text is allowed.
+     */
+    public StyleableBooleanProperty allowCopyProperty() {
+        return allowCopy;
+    }
 
-	public void setAllowCopy(boolean allowCopy) {
-		this.allowCopy.set(allowCopy);
-	}
+    public void setAllowCopy(boolean allowCopy) {
+        this.allowCopy.set(allowCopy);
+    }
 
-	public boolean isAllowCut() {
-		return allowCut.get();
-	}
+    public boolean isAllowCut() {
+        return allowCut.get();
+    }
 
-	/**
-	 * Specifies if it's allowed to cut text from the password field.
-	 */
-	public StyleableBooleanProperty allowCutProperty() {
-		return allowCut;
-	}
+    /**
+     * Specifies if it's allowed to cut text from the password field.
+     */
+    public StyleableBooleanProperty allowCutProperty() {
+        return allowCut;
+    }
 
-	public void setAllowCut(boolean allowCut) {
-		this.allowCut.set(allowCut);
-	}
+    public void setAllowCut(boolean allowCut) {
+        this.allowCut.set(allowCut);
+    }
 
-	public boolean isAllowPaste() {
-		return allowPaste.get();
-	}
+    public boolean isAllowPaste() {
+        return allowPaste.get();
+    }
 
-	/**
-	 * Specifies if it's allowed to paste text from the clipboard to the field.
-	 */
-	public StyleableBooleanProperty allowPasteProperty() {
-		return allowPaste;
-	}
+    /**
+     * Specifies if it's allowed to paste text from the clipboard to the field.
+     */
+    public StyleableBooleanProperty allowPasteProperty() {
+        return allowPaste;
+    }
 
-	public void setAllowPaste(boolean allowPaste) {
-		this.allowPaste.set(allowPaste);
-	}
+    public void setAllowPaste(boolean allowPaste) {
+        this.allowPaste.set(allowPaste);
+    }
 
-	public boolean isShowPassword() {
-		return showPassword.get();
-	}
+    public boolean isShowPassword() {
+        return showPassword.get();
+    }
 
-	/**
-	 * Specifies if the text should be un-masked to show the password.
-	 */
-	public StyleableBooleanProperty showPasswordProperty() {
-		return showPassword;
-	}
+    /**
+     * Specifies if the text should be un-masked to show the password.
+     */
+    public StyleableBooleanProperty showPasswordProperty() {
+        return showPassword;
+    }
 
-	public void setShowPassword(boolean showPassword) {
-		this.showPassword.set(showPassword);
-	}
+    public void setShowPassword(boolean showPassword) {
+        this.showPassword.set(showPassword);
+    }
 
-	public String getHideCharacter() {
-		return hideCharacter.get();
-	}
+    public String getHideCharacter() {
+        return hideCharacter.get();
+    }
 
-	/**
-	 * Specifies the character used to mask the text.
-	 */
-	public StyleableStringProperty hideCharacterProperty() {
-		return hideCharacter;
-	}
+    /**
+     * Specifies the character used to mask the text.
+     */
+    public StyleableStringProperty hideCharacterProperty() {
+        return hideCharacter;
+    }
 
-	public void setHideCharacter(String hideCharacter) {
-		this.hideCharacter.set(hideCharacter);
-	}
+    public void setHideCharacter(String hideCharacter) {
+        this.hideCharacter.set(hideCharacter);
+    }
 
-	//================================================================================
-	// CSSMetaData
-	//================================================================================
-	private static class StyleableProperties {
-		private static final StyleablePropertyFactory<MFXPasswordField> FACTORY = new StyleablePropertyFactory<>(MFXTextField.getClassCssMetaData());
-		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+    //================================================================================
+    // CSSMetaData
+    //================================================================================
+    private static class StyleableProperties {
+        private static final StyleablePropertyFactory<MFXPasswordField> FACTORY = new StyleablePropertyFactory<>(MFXTextField.getClassCssMetaData());
+        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
-		private static final CssMetaData<MFXPasswordField, Boolean> ALLOW_COPY =
-				FACTORY.createBooleanCssMetaData(
-						"-mfx-allow-copy",
-						MFXPasswordField::allowCopyProperty,
-						false
-				);
+        private static final CssMetaData<MFXPasswordField, Boolean> ALLOW_COPY =
+                FACTORY.createBooleanCssMetaData(
+                        "-mfx-allow-copy",
+                        MFXPasswordField::allowCopyProperty,
+                        false
+                );
 
-		private static final CssMetaData<MFXPasswordField, Boolean> ALLOW_CUT =
-				FACTORY.createBooleanCssMetaData(
-						"-mfx-allow-cut",
-						MFXPasswordField::allowCutProperty,
-						false
-				);
+        private static final CssMetaData<MFXPasswordField, Boolean> ALLOW_CUT =
+                FACTORY.createBooleanCssMetaData(
+                        "-mfx-allow-cut",
+                        MFXPasswordField::allowCutProperty,
+                        false
+                );
 
-		private static final CssMetaData<MFXPasswordField, Boolean> ALLOW_PASTE =
-				FACTORY.createBooleanCssMetaData(
-						"-mfx-allow-paste",
-						MFXPasswordField::allowPasteProperty,
-						false
-				);
+        private static final CssMetaData<MFXPasswordField, Boolean> ALLOW_PASTE =
+                FACTORY.createBooleanCssMetaData(
+                        "-mfx-allow-paste",
+                        MFXPasswordField::allowPasteProperty,
+                        false
+                );
 
-		private static final CssMetaData<MFXPasswordField, Boolean> SHOW_PASSWORD =
-				FACTORY.createBooleanCssMetaData(
-						"-mfx-show-password",
-						MFXPasswordField::showPasswordProperty,
-						false
-				);
+        private static final CssMetaData<MFXPasswordField, Boolean> SHOW_PASSWORD =
+                FACTORY.createBooleanCssMetaData(
+                        "-mfx-show-password",
+                        MFXPasswordField::showPasswordProperty,
+                        false
+                );
 
-		private static final CssMetaData<MFXPasswordField, String> HIDE_CHARACTER =
-				FACTORY.createStringCssMetaData(
-						"-mfx-hide-character",
-						MFXPasswordField::hideCharacterProperty,
-						BULLET
-				);
+        private static final CssMetaData<MFXPasswordField, String> HIDE_CHARACTER =
+                FACTORY.createStringCssMetaData(
+                        "-mfx-hide-character",
+                        MFXPasswordField::hideCharacterProperty,
+                        BULLET
+                );
 
-		static {
-			cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
-					MFXTextField.getClassCssMetaData(),
-					ALLOW_COPY, ALLOW_CUT, ALLOW_PASTE,
-					SHOW_PASSWORD, HIDE_CHARACTER
-			);
-		}
-	}
+        static {
+            cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
+                    MFXTextField.getClassCssMetaData(),
+                    ALLOW_COPY, ALLOW_CUT, ALLOW_PASTE,
+                    SHOW_PASSWORD, HIDE_CHARACTER
+            );
+        }
+    }
 
-	public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
-		return StyleableProperties.cssMetaDataList;
-	}
+    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
+        return StyleableProperties.cssMetaDataList;
+    }
 
-	@Override
-	public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-		return MFXPasswordField.getClassCssMetaData();
-	}
+    @Override
+    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+        return MFXPasswordField.getClassCssMetaData();
+    }
 }

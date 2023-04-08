@@ -109,9 +109,9 @@
 }
 
 #customFilter .caret .mfx-font-icon {
-	-mfx-color: #FF794B;
-	-mfx-description: "mfx-angle-down";
-	-mfx-size: 16;
+    -mfx-color: #FF794B;
+    -mfx-description: "fas-angle-down";
+    -mfx-size: 16;
 }
 
 #customFilter .caret .mfx-ripple-generator {

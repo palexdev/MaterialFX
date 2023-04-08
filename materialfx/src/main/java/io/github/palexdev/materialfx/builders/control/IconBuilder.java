@@ -20,79 +20,80 @@ package io.github.palexdev.materialfx.builders.control;
 
 import io.github.palexdev.materialfx.builders.base.INodeBuilder;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
-import io.github.palexdev.materialfx.font.FontResources;
-import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.NodeUtils;
+import io.github.palexdev.mfxresources.fonts.IconDescriptor;
+import io.github.palexdev.mfxresources.fonts.IconsProviders;
+import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import javafx.scene.paint.Color;
 
 public class IconBuilder implements INodeBuilder<MFXFontIcon> {
-	//================================================================================
-	// Properties
-	//================================================================================
-	private final MFXFontIcon icon;
+    //================================================================================
+    // Properties
+    //================================================================================
+    private final MFXFontIcon icon;
 
-	//================================================================================
-	// Constructors
-	//================================================================================
-	public IconBuilder() {
-		icon = new MFXFontIcon();
-	}
+    //================================================================================
+    // Constructors
+    //================================================================================
+    public IconBuilder() {
+        icon = new MFXFontIcon();
+    }
 
-	public IconBuilder(MFXFontIcon icon) {
-		this.icon = icon;
-	}
+    public IconBuilder(MFXFontIcon icon) {
+        this.icon = icon;
+    }
 
-	public static IconBuilder icon() {
-		return new IconBuilder();
-	}
+    public static IconBuilder icon() {
+        return new IconBuilder();
+    }
 
-	public static IconBuilder icon(MFXFontIcon icon) {
-		return new IconBuilder(icon);
-	}
+    public static IconBuilder icon(MFXFontIcon icon) {
+        return new IconBuilder(icon);
+    }
 
-	//================================================================================
-	// Delegate Methods
-	//================================================================================
+    //================================================================================
+    // Delegate Methods
+    //================================================================================
 
-	public static MFXFontIcon getRandomIcon(double size, Color color) {
-		return MFXFontIcon.getRandomIcon(size, color);
-	}
+    public static MFXFontIcon getRandomIcon(IconsProviders provider, double size, Color color) {
+        return provider.randomIcon(size, color);
+    }
 
-	public IconBuilder setColor(Color color) {
-		icon.setColor(color);
-		return this;
-	}
+    public IconBuilder setColor(Color color) {
+        icon.setColor(color);
+        return this;
+    }
 
-	public IconBuilder setDescription(String code) {
-		icon.setDescription(code);
-		return this;
-	}
+    public IconBuilder setDescription(String code) {
+        icon.setDescription(code);
+        return this;
+    }
 
-	public IconBuilder setDescription(FontResources resource) {
-		icon.setDescription(resource.getDescription());
-		return this;
-	}
+    public IconBuilder setDescription(IconDescriptor descriptor) {
+        icon.setDescription(descriptor.getDescription());
+        return this;
+    }
 
-	public IconBuilder setSize(double size) {
-		icon.setSize(size);
-		return this;
-	}
+    public IconBuilder setSize(double size) {
+        icon.setSize(size);
+        return this;
+    }
 
-	//================================================================================
-	// Methods
-	//================================================================================
-	public MFXIconWrapper wrapIcon(double size, boolean addRippleGenerator, boolean makeCircular) {
-		MFXIconWrapper wrapped = new MFXIconWrapper(icon, size);
-		if (addRippleGenerator) wrapped.defaultRippleGeneratorBehavior();
-		if (makeCircular) NodeUtils.makeRegionCircular(wrapped);
-		return wrapped;
-	}
+    //================================================================================
+    // Methods
+    //================================================================================
+    public MFXIconWrapper wrapIcon(double size, boolean addRippleGenerator, boolean makeCircular) {
+        MFXIconWrapper wrapped = new MFXIconWrapper(icon, size);
+        if (addRippleGenerator) wrapped.defaultRippleGeneratorBehavior();
+        if (makeCircular) NodeUtils.makeRegionCircular(wrapped);
+        return wrapped;
+    }
 
-	//================================================================================
-	// Overridden Methods
-	//================================================================================
-	@Override
-	public MFXFontIcon getNode() {
-		return null;
-	}
+    //================================================================================
+    // Overridden Methods
+    //================================================================================
+    @Override
+    public MFXFontIcon getNode() {
+        return null;
+    }
 }

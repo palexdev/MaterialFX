@@ -24,7 +24,7 @@ import io.github.palexdev.materialfx.controls.cell.MFXListCell;
 import io.github.palexdev.materialfx.demo.model.Model;
 import io.github.palexdev.materialfx.demo.model.Person;
 import io.github.palexdev.materialfx.effects.DepthLevel;
-import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
 import javafx.collections.ObservableList;
@@ -38,64 +38,64 @@ import java.util.ResourceBundle;
 
 public class ListViewsController implements Initializable {
 
-	@FXML
-	private MFXListView<String> list;
+    @FXML
+    private MFXListView<String> list;
 
-	@FXML
-	private MFXListView<Person> custList;
+    @FXML
+    private MFXListView<Person> custList;
 
-	@FXML
-	private MFXCheckListView<String> checkList;
+    @FXML
+    private MFXCheckListView<String> checkList;
 
-	@FXML
-	private MFXListView<Person> legacyList;
+    @FXML
+    private MFXListView<Person> legacyList;
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		ObservableList<String> strings = Model.strings;
-		ObservableList<Person> people = Model.people;
-		StringConverter<Person> converter = FunctionalStringConverter.to(person -> (person == null) ? "" : person.getName() + " " + person.getSurname());
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        ObservableList<String> strings = Model.strings;
+        ObservableList<Person> people = Model.people;
+        StringConverter<Person> converter = FunctionalStringConverter.to(person -> (person == null) ? "" : person.getName() + " " + person.getSurname());
 
-		list.setItems(strings);
-		custList.setItems(people);
-		checkList.setItems(strings);
-		custList.setConverter(converter);
-		custList.setCellFactory(person -> new PersonCellFactory(custList, person));
-		custList.features().enableBounceEffect();
-		custList.features().enableSmoothScrolling(0.5);
+        list.setItems(strings);
+        custList.setItems(people);
+        checkList.setItems(strings);
+        custList.setConverter(converter);
+        custList.setCellFactory(person -> new PersonCellFactory(custList, person));
+        custList.features().enableBounceEffect();
+        custList.features().enableSmoothScrolling(0.5);
 
-		legacyList.setItems(people);
-		legacyList.setConverter(converter);
-	}
+        legacyList.setItems(people);
+        legacyList.setConverter(converter);
+    }
 
-	@FXML
-	void changeColors(ActionEvent event) {
-		custList.setTrackColor(ColorUtils.getRandomColor());
-		custList.setThumbColor(ColorUtils.getRandomColor());
-		custList.setThumbHoverColor(ColorUtils.getRandomColor());
-	}
+    @FXML
+    void changeColors(ActionEvent event) {
+        custList.setTrackColor(ColorUtils.getRandomColor());
+        custList.setThumbColor(ColorUtils.getRandomColor());
+        custList.setThumbHoverColor(ColorUtils.getRandomColor());
+    }
 
-	@FXML
-	void changeDepth(ActionEvent event) {
-		DepthLevel newLevel = (custList.getDepthLevel() == DepthLevel.LEVEL0) ? DepthLevel.LEVEL2 : DepthLevel.LEVEL0;
-		custList.setDepthLevel(newLevel);
-	}
+    @FXML
+    void changeDepth(ActionEvent event) {
+        DepthLevel newLevel = (custList.getDepthLevel() == DepthLevel.LEVEL0) ? DepthLevel.LEVEL2 : DepthLevel.LEVEL0;
+        custList.setDepthLevel(newLevel);
+    }
 
-	private static class PersonCellFactory extends MFXListCell<Person> {
-		private final MFXFontIcon userIcon;
+    private static class PersonCellFactory extends MFXListCell<Person> {
+        private final MFXFontIcon userIcon;
 
-		public PersonCellFactory(MFXListView<Person> listView, Person data) {
-			super(listView, data);
+        public PersonCellFactory(MFXListView<Person> listView, Person data) {
+            super(listView, data);
 
-			userIcon = new MFXFontIcon("mfx-user", 18);
-			userIcon.getStyleClass().add("user-icon");
-			render(data);
-		}
+            userIcon = new MFXFontIcon("fas-user", 18);
+            userIcon.getStyleClass().add("user-icon");
+            render(data);
+        }
 
-		@Override
-		protected void render(Person data) {
-			super.render(data);
-			if (userIcon != null) getChildren().add(0, userIcon);
-		}
-	}
+        @Override
+        protected void render(Person data) {
+            super.render(data);
+            if (userIcon != null) getChildren().add(0, userIcon);
+        }
+    }
 }

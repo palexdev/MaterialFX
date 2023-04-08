@@ -19,7 +19,7 @@
   -->
 
 <?import io.github.palexdev.materialfx.controls.*?>
-<?import io.github.palexdev.materialfx.font.MFXFontIcon?>
+<?import io.github.palexdev.mfxresources.fonts.MFXFontIcon?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
@@ -109,18 +109,18 @@
     <Label styleClass="header-label" text="Toggle Nodes" GridPane.columnIndex="5" GridPane.rowIndex="4"/>
     <MFXCircleToggleNode text="Circle Toggle" GridPane.columnIndex="4" GridPane.rowIndex="5">
         <graphic>
-            <MFXFontIcon description="mfx-bell" size="32.0"/>
+            <MFXFontIcon description="fas-bell" size="32.0"/>
         </graphic>
     </MFXCircleToggleNode>
     <MFXCircleToggleNode id="customCircle" text="Custom" textPosition="TOP" GridPane.columnIndex="5"
                          GridPane.rowIndex="5">
         <graphic>
-            <MFXFontIcon description="mfx-gear" size="32.0"/>
+            <MFXFontIcon description="fas-gear" size="32.0"/>
         </graphic>
     </MFXCircleToggleNode>
     <MFXCircleToggleNode disable="true" selected="true" text="Disabled" GridPane.columnIndex="6" GridPane.rowIndex="5">
         <graphic>
-            <MFXFontIcon description="mfx-eye" size="32.0"/>
+            <MFXFontIcon description="fas-eye" size="32.0"/>
         </graphic>
     </MFXCircleToggleNode>
     <MFXRectangleToggleNode fx:id="r1" text="Rectangle Toggle" GridPane.columnIndex="4" GridPane.rowIndex="6"/>

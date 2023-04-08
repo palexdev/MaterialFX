@@ -4,8 +4,11 @@ module MaterialFX {
 	requires transitive javafx.graphics;
 	requires transitive java.desktop;
 
+	requires mfx.core;
+	requires mfx.resources;
 	requires VirtualizedFX;
 
+	// Root
 	exports io.github.palexdev.materialfx;
 
 	// Beans Package
@@ -56,9 +59,6 @@ module MaterialFX {
 	// Filter Package
 	exports io.github.palexdev.materialfx.filter;
 	exports io.github.palexdev.materialfx.filter.base;
-
-	// Font Package
-	exports io.github.palexdev.materialfx.font;
 
 	// I18N Package
 	exports io.github.palexdev.materialfx.i18n;

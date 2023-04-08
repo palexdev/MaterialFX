@@ -63,7 +63,7 @@ public class MFXNotificationCenterSkin extends SkinBase<MFXNotificationCenter> {
     public MFXNotificationCenterSkin(MFXNotificationCenter notificationCenter, SimpleVirtualFlow<INotification, MFXNotificationCell> virtualFlow) {
         super(notificationCenter);
 
-        bellWrapped = new MFXIconWrapper("mfx-bell-alt", 36, 56);
+        bellWrapped = new MFXIconWrapper("fas-bell", 36, 56);
         bellWrapped.getIcon().setMouseTransparent(true);
         bellWrapped.getStyleClass().add("notifications-icon");
 
@@ -85,11 +85,11 @@ public class MFXNotificationCenterSkin extends SkinBase<MFXNotificationCenter> {
         header.getStyleClass().add("header");
         header.setAlignment(Pos.CENTER_LEFT);
 
-        MFXIconWrapper select = new MFXIconWrapper("mfx-variant13-mark", 24, 36).defaultRippleGeneratorBehavior();
-        MFXIconWrapper markAsRead = new MFXIconWrapper("mfx-eye", 20, 36).defaultRippleGeneratorBehavior();
-        MFXIconWrapper markAsUnread = new MFXIconWrapper("mfx-eye-slash", 20, 36).defaultRippleGeneratorBehavior();
-        MFXIconWrapper dismiss = new MFXIconWrapper("mfx-delete", 20, 36).defaultRippleGeneratorBehavior();
-        MFXIconWrapper options = new MFXIconWrapper("mfx-bars", 18, 36).defaultRippleGeneratorBehavior();
+        MFXIconWrapper select = new MFXIconWrapper("fas-check", 24, 36).defaultRippleGeneratorBehavior();
+        MFXIconWrapper markAsRead = new MFXIconWrapper("fas-eye", 20, 36).defaultRippleGeneratorBehavior();
+        MFXIconWrapper markAsUnread = new MFXIconWrapper("fas-eye-slash", 20, 36).defaultRippleGeneratorBehavior();
+        MFXIconWrapper dismiss = new MFXIconWrapper("fas-trash", 20, 36).defaultRippleGeneratorBehavior();
+        MFXIconWrapper options = new MFXIconWrapper("fas-ellipsis", 18, 36).defaultRippleGeneratorBehavior();
 
         select.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> notificationCenter.setSelectionMode(!notificationCenter.isSelectionMode()));
         markAsRead.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> notificationCenter.markSelectedNotificationsAs(NotificationState.READ));

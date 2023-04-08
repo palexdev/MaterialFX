@@ -163,9 +163,9 @@ public class MFXGenericDialog extends AbstractMFXDialog {
         headerLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         HBox.setHgrow(headerLabel, Priority.ALWAYS);
 
-        alwaysOnTopIcon = new MFXIconWrapper("mfx-caret-up", 12, 24);
-        minimizeIcon = new MFXIconWrapper("mfx-minus", 12, 24);
-        closeIcon = new MFXIconWrapper("mfx-x-alt", 12, 24);
+        alwaysOnTopIcon = new MFXIconWrapper("fas-caret-up", 12, 24);
+        minimizeIcon = new MFXIconWrapper("fas-minus", 12, 24);
+        closeIcon = new MFXIconWrapper("fas-xmark", 12, 24);
 
         alwaysOnTopIcon.setId("alwaysOnTop");
         minimizeIcon.setId("minimize");

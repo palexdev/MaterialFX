@@ -35,7 +35,7 @@ import io.github.palexdev.materialfx.filter.BooleanFilter;
 import io.github.palexdev.materialfx.filter.EnumFilter;
 import io.github.palexdev.materialfx.filter.base.AbstractFilter;
 import io.github.palexdev.materialfx.filter.base.NumberFilter;
-import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.beans.InvalidationListener;
@@ -164,7 +164,7 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
 		Label functionLabel = new Label(filter.getPredicateName());
 		Label queryLabel = new Label(filter.getQuery());
 		functionLabel.getStyleClass().add("function-text");
-		MFXFontIcon remove = new MFXFontIcon("mfx-x-alt", 12);
+		MFXFontIcon remove = new MFXFontIcon("fas-xmark", 12);
 		remove.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> getSkinnable().getActiveFilters().remove(filter));
 		HBox.setMargin(remove, InsetsFactory.top(2));
 
@@ -205,8 +205,8 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
 		headerLabel.setMaxWidth(Double.MAX_VALUE);
 		HBox.setHgrow(headerLabel, Priority.ALWAYS);
 
-		MFXIconWrapper filter = new MFXIconWrapper("mfx-variant7-mark", 16, 28).defaultRippleGeneratorBehavior();
-		MFXIconWrapper reset = new MFXIconWrapper("mfx-undo", 16, 28).defaultRippleGeneratorBehavior();
+		MFXIconWrapper filter = new MFXIconWrapper("fas-check", 16, 28).defaultRippleGeneratorBehavior();
+		MFXIconWrapper reset = new MFXIconWrapper("fas-arrow-rotate-left", 16, 28).defaultRippleGeneratorBehavior();
 
 		filter.setId("filterIcon");
 		reset.setId("resetIcon");

@@ -164,8 +164,8 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
 	protected StackPane buildFooter() {
 		MFXTableView<T> tableView = getSkinnable();
 
-		MFXIconWrapper filterIcon = new MFXIconWrapper("mfx-filter-alt", 16, 32).defaultRippleGeneratorBehavior();
-		MFXIconWrapper clearFilterIcon = new MFXIconWrapper("mfx-filter-alt-clear", 16, 32).defaultRippleGeneratorBehavior();
+		MFXIconWrapper filterIcon = new MFXIconWrapper("fas-filter", 16, 32).defaultRippleGeneratorBehavior();
+		MFXIconWrapper clearFilterIcon = new MFXIconWrapper("fas-filter-circle-xmark", 15, 32).defaultRippleGeneratorBehavior();
 
 		NodeUtils.makeRegionCircular(filterIcon);
 		NodeUtils.makeRegionCircular(clearFilterIcon);

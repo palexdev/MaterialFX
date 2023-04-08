@@ -18,8 +18,11 @@
 
 package io.github.palexdev.materialfx.demo.model;
 
-import io.github.palexdev.materialfx.font.FontResources;
 import io.github.palexdev.materialfx.utils.FXCollectors;
+import io.github.palexdev.mfxresources.fonts.IconDescriptor;
+import io.github.palexdev.mfxresources.fonts.fontawesome.FontAwesomeBrands;
+import io.github.palexdev.mfxresources.fonts.fontawesome.FontAwesomeRegular;
+import io.github.palexdev.mfxresources.fonts.fontawesome.FontAwesomeSolid;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -37,22 +40,22 @@ public class Model {
 					It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
 					It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
 					""";
-	public static final FontResources[] notificationsIcons;
+	public static final IconDescriptor[] notificationsIcons;
 	public static final String[] randomText;
 	public static final ObservableList<String> strings;
 	public static final ObservableList<Person> people;
 	public static final ObservableList<Device> devices;
 
 	static {
-		notificationsIcons = new FontResources[]{
-				FontResources.BELL, FontResources.BELL_ALT,
-				FontResources.CALENDAR_ALT_DARK, FontResources.CALENDAR_ALT_SEMI_DARK,
-				FontResources.CHART_PIE, FontResources.CIRCLE, FontResources.CIRCLE_EMPTY,
-				FontResources.EXCLAMATION_CIRCLE, FontResources.EXCLAMATION_TRIANGLE,
-				FontResources.GEAR, FontResources.GOOGLE_DRIVE, FontResources.HOME,
-				FontResources.INFO_CIRCLE, FontResources.MUSIC,
-				FontResources.USER, FontResources.USERS, FontResources.VIDEO,
-				FontResources.X_CIRCLE
+		notificationsIcons = new IconDescriptor[]{
+				FontAwesomeSolid.BELL, FontAwesomeRegular.BELL,
+				FontAwesomeSolid.CALENDAR, FontAwesomeSolid.CALENDAR_DAYS,
+				FontAwesomeSolid.CHART_PIE, FontAwesomeSolid.CIRCLE, FontAwesomeRegular.CIRCLE,
+				FontAwesomeSolid.CIRCLE_EXCLAMATION, FontAwesomeSolid.TRIANGLE_EXCLAMATION,
+				FontAwesomeSolid.GEAR, FontAwesomeBrands.GOOGLE_DRIVE, FontAwesomeSolid.HOUSE,
+				FontAwesomeSolid.CIRCLE_INFO, FontAwesomeSolid.MUSIC,
+				FontAwesomeSolid.USER, FontAwesomeSolid.USERS, FontAwesomeSolid.VIDEO,
+				FontAwesomeSolid.CIRCLE_XMARK
 		};
 
 		randomText = new String[]{

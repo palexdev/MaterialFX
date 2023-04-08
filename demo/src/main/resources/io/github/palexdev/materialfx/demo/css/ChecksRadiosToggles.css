@@ -40,11 +40,11 @@
 }
 
 #customCheck .box .mark {
-	-mfx-description: "mfx-x-alt";
+	-mfx-description: "fas-check";
 }
 
 #customCheck:indeterminate .box .mark {
-	-mfx-description: "mfx-hyphen";
+	-mfx-description: "fas-minus";
 }
 
 #customCheck .mfx-ripple-generator {

@@ -22,7 +22,7 @@ import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableDoubleProperty;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.effects.ripple.base.IRippleGenerator;
-import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;

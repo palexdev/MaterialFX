@@ -27,7 +27,7 @@ import io.github.palexdev.materialfx.controls.base.Themable;
 import io.github.palexdev.materialfx.css.themes.Stylesheets;
 import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.enums.FloatMode;
-import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.skins.MFXTextFieldSkin;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
@@ -122,878 +122,878 @@ import java.util.List;
  * be activated every time the inner TextField is focused and deactivated when it loses focus
  */
 public class MFXTextField extends TextField implements Validated, MFXMenuControl, Themable {
-	//================================================================================
-	// Properties
-	//================================================================================
-	private final String STYLE_CLASS = "mfx-text-field";
-	protected final BoundTextField boundField;
-
-	public static final Color DEFAULT_TEXT_COLOR = Color.rgb(0, 0, 0, 0.87);
-
-	private final BooleanProperty selectable = new SimpleBooleanProperty(true);
-	private final ObjectProperty<Node> leadingIcon = new SimpleObjectProperty<>();
-	private final ObjectProperty<Node> trailingIcon = new SimpleObjectProperty<>();
-
-	private final StringProperty floatingText = new SimpleStringProperty();
-	protected final BooleanProperty floating = new SimpleBooleanProperty() {
-		@Override
-		public void unbind() {
-		}
-	};
-	private static final PseudoClass FLOATING_PSEUDO_CLASS = PseudoClass.getPseudoClass("floating");
-
-	private final StringProperty measureUnit = new SimpleStringProperty("");
-
-	protected final MFXValidator validator = new MFXValidator();
-	protected MFXContextMenu contextMenu;
-
-	//================================================================================
-	// Constructors
-	//================================================================================
-	public MFXTextField() {
-		this("");
-	}
-
-	public MFXTextField(String text) {
-		this(text, "");
-	}
-
-	public MFXTextField(String text, String promptText) {
-		this(text, promptText, "");
-	}
-
-	public MFXTextField(String text, String promptText, String floatingText) {
-		super(text);
-		boundField = new BoundTextField(this);
-		setPromptText(promptText);
-		setFloatingText(floatingText);
-		initialize();
-	}
-
-	//================================================================================
-	// Static Methods
-	//================================================================================
-
-	/**
-	 * Calls {@link #asLabel(String)} with empty text.
-	 */
-	public static MFXTextField asLabel() {
-		return asLabel("");
-	}
-
-	/**
-	 * Calls {@link #asLabel(String, String)} with empty promptText.
-	 */
-	public static MFXTextField asLabel(String text) {
-		return asLabel(text, "");
-	}
-
-	/**
-	 * Calls {@link #asLabel(String, String, String)} with empty floatingText.
-	 */
-	public static MFXTextField asLabel(String text, String promptText) {
-		return asLabel(text, promptText, "");
-	}
-
-	/**
-	 * Creates a text field that is not editable nor selectable to act just like a label.
-	 */
-	public static MFXTextField asLabel(String text, String promptText, String floatingText) {
-		MFXTextField textField = new MFXTextField(text, promptText, floatingText);
-		textField.setEditable(false);
-		textField.setSelectable(false);
-		return textField;
-	}
-
-	//================================================================================
-	// Methods
-	//================================================================================
-	private void initialize() {
-		getStyleClass().setAll(STYLE_CLASS);
-		setPrefColumnCount(6);
-		setFocusTraversable(false);
-		floating.addListener(invalidated -> pseudoClassStateChanged(FLOATING_PSEUDO_CLASS, floating.get()));
-		allowEditProperty().bindBidirectional(editableProperty());
-
-		addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
-		addEventHandler(KeyEvent.KEY_PRESSED, event -> {
-			if (event.getCode() == KeyCode.D && event.isControlDown())
-				boundField.deleteText(delegateGetSelection());
-		});
-		defaultContextMenu();
-		sceneBuilderIntegration();
-	}
-
-	public void defaultContextMenu() {
-		MFXContextMenuItem copyItem = MFXContextMenuItem.Builder.build()
-				.setIcon(new MFXFontIcon("mfx-content-copy", 14))
-				.setText(I18N.getOrDefault("textField.contextMenu.copy"))
-				.setAccelerator("Ctrl + C")
-				.setOnAction(event -> copy())
-				.get();
-
-		MFXContextMenuItem cutItem = MFXContextMenuItem.Builder.build()
-				.setIcon(new MFXFontIcon("mfx-content-cut", 14))
-				.setText(I18N.getOrDefault("textField.contextMenu.cut"))
-				.setAccelerator("Ctrl + X")
-				.setOnAction(event -> cut())
-				.get();
-
-		MFXContextMenuItem pasteItem = MFXContextMenuItem.Builder.build()
-				.setIcon(new MFXFontIcon("mfx-content-paste", 14))
-				.setText(I18N.getOrDefault("textField.contextMenu.paste"))
-				.setAccelerator("Ctrl + V")
-				.setOnAction(event -> paste())
-				.get();
-
-		MFXContextMenuItem deleteItem = MFXContextMenuItem.Builder.build()
-				.setIcon(new MFXFontIcon("mfx-delete-alt", 16))
-				.setText(I18N.getOrDefault("textField.contextMenu.delete"))
-				.setAccelerator("Ctrl + D")
-				.setOnAction(event -> boundField.deleteText(delegateGetSelection()))
-				.get();
-
-		MFXContextMenuItem selectAllItem = MFXContextMenuItem.Builder.build()
-				.setIcon(new MFXFontIcon("mfx-select-all", 16))
-				.setText(I18N.getOrDefault("textField.contextMenu.selectAll"))
-				.setAccelerator("Ctrl + A")
-				.setOnAction(event -> selectAll())
-				.get();
-
-		MFXContextMenuItem redoItem = MFXContextMenuItem.Builder.build()
-				.setIcon(new MFXFontIcon("mfx-redo", 12))
-				.setText(I18N.getOrDefault("textField.contextMenu.redo"))
-				.setAccelerator("Ctrl + Y")
-				.setOnAction(event -> boundField.redo())
-				.get();
-		redoItem.disableProperty().bind(delegateRedoableProperty().not());
-
-		MFXContextMenuItem undoItem = MFXContextMenuItem.Builder.build()
-				.setIcon(new MFXFontIcon("mfx-undo", 12))
-				.setText(I18N.getOrDefault("textField.contextMenu.undo"))
-				.setAccelerator("Ctrl + Z")
-				.setOnAction(event -> boundField.undo())
-				.get();
-		undoItem.disableProperty().bind(delegateUndoableProperty().not());
-
-		contextMenu = MFXContextMenu.Builder.build(this)
-				.addItems(copyItem, cutItem, pasteItem, deleteItem, selectAllItem)
-				.addLineSeparator()
-				.addItems(redoItem, undoItem)
-				.setPopupStyleableParent(this)
-				.installAndGet();
-	}
-
-	//================================================================================
-	// Overridden Methods
-	//================================================================================
-	@Override
-	public Parent toParent() {
-		return this;
-	}
-
-	@Override
-	public Theme getTheme() {
-		return Stylesheets.TEXT_FIELD;
-	}
-
-	@Override
-	public MFXContextMenu getMFXContextMenu() {
-		return contextMenu;
-	}
-
-	@Override
-	protected Skin<?> createDefaultSkin() {
-		return new MFXTextFieldSkin(this, boundField);
-	}
-
-	@Override
-	public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-		return MFXTextField.getClassCssMetaData();
-	}
-
-	//================================================================================
-	// Workaround Methods
-	//================================================================================
-	@Override
-	public void cut() {
-		boundField.cut();
-	}
-
-	@Override
-	public void copy() {
-		boundField.copy();
-	}
-
-	@Override
-	public void paste() {
-		boundField.paste();
-	}
-
-	@Override
-	public void selectBackward() {
-		boundField.selectBackward();
-	}
-
-	@Override
-	public void selectForward() {
-		boundField.selectForward();
-	}
-
-	@Override
-	public void previousWord() {
-		boundField.previousWord();
-	}
-
-	@Override
-	public void nextWord() {
-		boundField.nextWord();
-	}
-
-	@Override
-	public void endOfNextWord() {
-		boundField.endOfNextWord();
-	}
-
-	@Override
-	public void selectPreviousWord() {
-		boundField.selectPreviousWord();
-	}
-
-	@Override
-	public void selectNextWord() {
-		boundField.selectNextWord();
-	}
-
-	@Override
-	public void selectEndOfNextWord() {
-		boundField.selectEndOfNextWord();
-	}
-
-	@Override
-	public void selectAll() {
-		boundField.selectAll();
-	}
-
-	@Override
-	public void home() {
-		boundField.home();
-	}
-
-	@Override
-	public void end() {
-		boundField.end();
-	}
-
-	@Override
-	public void selectHome() {
-		boundField.selectHome();
-	}
-
-	@Override
-	public void selectEnd() {
-		boundField.selectEnd();
-	}
-
-	@Override
-	public void forward() {
-		boundField.forward();
-	}
-
-	@Override
-	public void backward() {
-		boundField.backward();
-	}
-
-	@Override
-	public void positionCaret(int pos) {
-		boundField.positionCaret(pos);
-	}
-
-	@Override
-	public void selectPositionCaret(int pos) {
-		boundField.selectPositionCaret(pos);
-	}
-
-	@Override
-	public void selectRange(int anchor, int caretPosition) {
-		boundField.selectRange(anchor, caretPosition);
-	}
-
-	@Override
-	public void extendSelection(int pos) {
-		boundField.extendSelection(pos);
-	}
-
-	@Override
-	public void clear() {
-		boundField.clear();
-	}
-
-	@Override
-	public void deselect() {
-		boundField.deselect();
-	}
-
-	@Override
-	public void replaceSelection(String replacement) {
-		boundField.replaceSelection(replacement);
-	}
-
-	public TextFormatter<?> delegateGetTextFormatter() {
-		return boundField.getTextFormatter();
-	}
-
-	/**
-	 * Specifies the {@link BoundTextField} text formatter.
-	 */
-	public ObjectProperty<TextFormatter<?>> delegateTextFormatterProperty() {
-		return boundField.textFormatterProperty();
-	}
-
-	public void delegateSetTextFormatter(TextFormatter<?> textFormatter) {
-		boundField.setTextFormatter(textFormatter);
-	}
-
-	public int delegateGetAnchor() {
-		return boundField.getAnchor();
-	}
-
-	/**
-	 * Specifies the {@link BoundTextField} anchor position.
-	 */
-	public ReadOnlyIntegerProperty delegateAnchorProperty() {
-		return boundField.anchorProperty();
-	}
-
-	public int delegateGetCaretPosition() {
-		return boundField.getCaretPosition();
-	}
-
-	/**
-	 * Specifies the {@link BoundTextField} caret position.
-	 */
-	public ReadOnlyIntegerProperty delegateCaretPositionProperty() {
-		return boundField.caretPositionProperty();
-	}
-
-	public String delegateGetSelectedText() {
-		return boundField.getSelectedText();
-	}
-
-	/**
-	 * Specifies the {@link BoundTextField} selected text.
-	 */
-	public ReadOnlyStringProperty delegateSelectedTextProperty() {
-		return boundField.selectedTextProperty();
-	}
-
-	public IndexRange delegateGetSelection() {
-		return boundField.getSelection();
-	}
-
-	/**
-	 * Specifies the {@link BoundTextField} selection.
-	 */
-	public ReadOnlyObjectProperty<IndexRange> delegateSelectionProperty() {
-		return boundField.selectionProperty();
-	}
-
-	public boolean delegateIsRedoable() {
-		return boundField.isRedoable();
-	}
-
-	/**
-	 * Delegates to {@link BoundTextField}, see {@link BoundTextField#redoableProperty()}.
-	 */
-	public ReadOnlyBooleanProperty delegateRedoableProperty() {
-		return boundField.redoableProperty();
-	}
-
-	public boolean delegateIsUndoable() {
-		return boundField.isUndoable();
-	}
-
-	/**
-	 * Delegates to {@link BoundTextField}, see {@link BoundTextField#undoableProperty()}.
-	 */
-	public ReadOnlyBooleanProperty delegateUndoableProperty() {
-		return boundField.undoableProperty();
-	}
-
-	public boolean delegateIsFocused() {
-		return boundField.isFocused();
-	}
-
-	/**
-	 * Specifies whether the {@link BoundTextField} is focused.
-	 */
-	public ReadOnlyBooleanProperty delegateFocusedProperty() {
-		return boundField.focusedProperty();
-	}
-
-	public void delegateSetFocusTraversable(boolean value) {
-		boundField.setFocusTraversable(value);
-	}
-
-	/**
-	 * Specifies whether the {@link BoundTextField} it focus traversable.
-	 */
-	public BooleanProperty delegateFocusTraversableProperty() {
-		return boundField.focusTraversableProperty();
-	}
-
-	public boolean delegateIsFocusTraversable() {
-		return boundField.isFocusTraversable();
-	}
-
-	//================================================================================
-	// Validation
-	//================================================================================
-	@Override
-	public MFXValidator getValidator() {
-		return validator;
-	}
-
-	//================================================================================
-	// Getters/Setters
-	//================================================================================
-	public boolean isSelectable() {
-		return selectable.get();
-	}
-
-	/**
-	 * Specifies whether selection is allowed.
-	 */
-	public BooleanProperty selectableProperty() {
-		return selectable;
-	}
-
-	public void setSelectable(boolean selectable) {
-		this.selectable.set(selectable);
-	}
-
-	public Node getLeadingIcon() {
-		return leadingIcon.get();
-	}
-
-	/**
-	 * Specifies the icon placed before the input field.
-	 */
-	public ObjectProperty<Node> leadingIconProperty() {
-		return leadingIcon;
-	}
-
-	public void setLeadingIcon(Node leadingIcon) {
-		this.leadingIcon.set(leadingIcon);
-	}
-
-	public Node getTrailingIcon() {
-		return trailingIcon.get();
-	}
-
-	/**
-	 * Specifies the icon placed after the input field.
-	 */
-	public ObjectProperty<Node> trailingIconProperty() {
-		return trailingIcon;
-	}
-
-	public void setTrailingIcon(Node trailingIcon) {
-		this.trailingIcon.set(trailingIcon);
-	}
-
-	public String getFloatingText() {
-		return floatingText.get();
-	}
-
-	/**
-	 * Specifies the text of the floating text node.
-	 */
-	public StringProperty floatingTextProperty() {
-		return floatingText;
-	}
-
-	public void setFloatingText(String floatingText) {
-		this.floatingText.set(floatingText);
-	}
-
-	public boolean isFloating() {
-		return floating.get();
-	}
-
-	/**
-	 * Specifies if the floating text node is currently floating or not.
-	 */
-	public BooleanProperty floatingProperty() {
-		return floating;
-	}
-
-	public String getMeasureUnit() {
-		return measureUnit.get();
-	}
-
-	/**
-	 * Specifies the unit of measure of the field.
-	 * <p></p>
-	 * This is useful of course when dealing with numeric fields that represent for example:
-	 * weight, volume, length and so on...
-	 */
-	public StringProperty measureUnitProperty() {
-		return measureUnit;
-	}
-
-	public void setMeasureUnit(String measureUnit) {
-		this.measureUnit.set(measureUnit);
-	}
-
-	//================================================================================
-	// Styleable Properties
-	//================================================================================
-	private final StyleableBooleanProperty allowEdit = new StyleableBooleanProperty(
-			StyleableProperties.EDITABLE,
-			this,
-			"allowEdit",
-			true
-	);
-
-	private final StyleableBooleanProperty animated = new StyleableBooleanProperty(
-			StyleableProperties.ANIMATED,
-			this,
-			"animated",
-			true
-	);
-
-	private final StyleableDoubleProperty borderGap = new StyleableDoubleProperty(
-			StyleableProperties.BORDER_GAP,
-			this,
-			"borderGap",
-			10.0
-	);
-
-	private final StyleableBooleanProperty caretVisible = new StyleableBooleanProperty(
-			StyleableProperties.CARET_VISIBLE,
-			this,
-			"caretAnimated",
-			true
-	);
-
-	private final StyleableObjectProperty<FloatMode> floatMode = new StyleableObjectProperty<>(
-			StyleableProperties.FLOAT_MODE,
-			this,
-			"floatMode",
-			FloatMode.INLINE
-	);
-
-	private final StyleableDoubleProperty floatingTextGap = new StyleableDoubleProperty(
-			StyleableProperties.FLOATING_TEXT_GAP,
-			this,
-			"gap",
-			5.0
-	);
-
-	private final StyleableDoubleProperty graphicTextGap = new StyleableDoubleProperty(
-			StyleableProperties.GRAPHIC_TEXT_GAP,
-			this,
-			"graphicTextGap",
-			10.0
-	);
-
-	private final StyleableDoubleProperty measureUnitGap = new StyleableDoubleProperty(
-			StyleableProperties.MEASURE_UNIT_GAP,
-			this,
-			"measureUnitGap",
-			5.0
-	);
-
-	private final StyleableBooleanProperty scaleOnAbove = new StyleableBooleanProperty(
-			StyleableProperties.SCALE_ON_ABOVE,
-			this,
-			"scaleOnAbove",
-			false
-	);
-
-	private final StyleableObjectProperty<Color> textFill = new StyleableObjectProperty<>(
-			StyleableProperties.TEXT_FILL,
-			this,
-			"textFill",
-			DEFAULT_TEXT_COLOR
-	);
-
-	private final StyleableIntegerProperty textLimit = new StyleableIntegerProperty(
-			StyleableProperties.TEXT_LIMIT,
-			this,
-			"textLimit",
-			-1
-	);
-
-	public boolean isAllowEdit() {
-		return allowEdit.get();
-	}
-
-	/**
-	 * Specifies whether the field is editable.
-	 * <p>
-	 * This property is bound bidirectionally to {@link TextField#editableProperty()},
-	 * it's here just to be set via CSS.
-	 */
-	public StyleableBooleanProperty allowEditProperty() {
-		return allowEdit;
-	}
-
-	public void setAllowEdit(boolean allowEdit) {
-		this.allowEdit.set(allowEdit);
-	}
-
-	public boolean isAnimated() {
-		return animated.get();
-	}
-
-	/**
-	 * Specifies whether the floating text positioning is animated.
-	 */
-	public StyleableBooleanProperty animatedProperty() {
-		return animated;
-	}
-
-	public void setAnimated(boolean animated) {
-		this.animated.set(animated);
-	}
-
-	public double getBorderGap() {
-		return borderGap.get();
-	}
-
-	/**
-	 * For {@link FloatMode#BORDER} and {@link FloatMode#ABOVE} modes, this specifies the distance from
-	 * the control's x origin (padding not included).
-	 */
-	public StyleableDoubleProperty borderGapProperty() {
-		return borderGap;
-	}
-
-	public void setBorderGap(double borderGap) {
-		this.borderGap.set(borderGap);
-	}
-
-	public boolean getCaretVisible() {
-		return caretVisible.get();
-	}
-
-	/**
-	 * Specifies whether the caret should be visible.
-	 */
-	public StyleableBooleanProperty caretVisibleProperty() {
-		return caretVisible;
-	}
-
-	public void setCaretVisible(boolean caretVisible) {
-		this.caretVisible.set(caretVisible);
-	}
-
-	public FloatMode getFloatMode() {
-		return floatMode.get();
-	}
-
-	/**
-	 * Specifies how the floating text is positioned when floating.
-	 */
-	public StyleableObjectProperty<FloatMode> floatModeProperty() {
-		return floatMode;
-	}
-
-	public void setFloatMode(FloatMode floatMode) {
-		this.floatMode.set(floatMode);
-	}
-
-	public double getFloatingTextGap() {
-		return floatingTextGap.get();
-	}
-
-	/**
-	 * For {@link FloatMode#INLINE} mode, this specifies the gap between
-	 * the floating text node and the input field node.
-	 */
-	public StyleableDoubleProperty floatingTextGapProperty() {
-		return floatingTextGap;
-	}
-
-	public void setFloatingTextGap(double floatingTextGap) {
-		this.floatingTextGap.set(floatingTextGap);
-	}
-
-	public double getGraphicTextGap() {
-		return graphicTextGap.get();
-	}
-
-	/**
-	 * Specifies the gap between the input field and the icons.
-	 */
-	public StyleableDoubleProperty graphicTextGapProperty() {
-		return graphicTextGap;
-	}
-
-	public void setGraphicTextGap(double graphicTextGap) {
-		this.graphicTextGap.set(graphicTextGap);
-	}
-
-	public boolean scaleOnAbove() {
-		return scaleOnAbove.get();
-	}
-
-	/**
-	 * Specifies whether the floating text node should be scaled or not when
-	 * the float mode is set to {@link FloatMode#ABOVE}.
-	 */
-	public StyleableBooleanProperty scaleOnAboveProperty() {
-		return scaleOnAbove;
-	}
-
-	public void setScaleOnAbove(boolean scaleOnAbove) {
-		this.scaleOnAbove.set(scaleOnAbove);
-	}
-
-	public double getMeasureUnitGap() {
-		return measureUnitGap.get();
-	}
-
-	/**
-	 * Specifies the gap between the field and the measure unit label.
-	 */
-	public StyleableDoubleProperty measureUnitGapProperty() {
-		return measureUnitGap;
-	}
-
-	public void setMeasureUnitGap(double measureUnitGap) {
-		this.measureUnitGap.set(measureUnitGap);
-	}
-
-	public Color getTextFill() {
-		return textFill.get();
-	}
-
-	/**
-	 * Specifies the text color.
-	 */
-	public StyleableObjectProperty<Color> textFillProperty() {
-		return textFill;
-	}
-
-	public void setTextFill(Color textFill) {
-		this.textFill.set(textFill);
-	}
-
-	public int getTextLimit() {
-		return textLimit.get();
-	}
-
-	/**
-	 * Specifies the maximum number of characters the field's text can have.
-	 */
-	public StyleableIntegerProperty textLimitProperty() {
-		return textLimit;
-	}
-
-	public void setTextLimit(int textLimit) {
-		this.textLimit.set(textLimit);
-	}
-
-	//================================================================================
-	// CSSMetaData
-	//================================================================================
-	private static class StyleableProperties {
-		private static final StyleablePropertyFactory<MFXTextField> FACTORY = new StyleablePropertyFactory<>(TextField.getClassCssMetaData());
-		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
-
-		private static final CssMetaData<MFXTextField, Boolean> ANIMATED =
-				FACTORY.createBooleanCssMetaData(
-						"-mfx-animated",
-						MFXTextField::animatedProperty,
-						true
-				);
-
-		private static final CssMetaData<MFXTextField, Number> BORDER_GAP =
-				FACTORY.createSizeCssMetaData(
-						"-mfx-border-gap",
-						MFXTextField::borderGapProperty,
-						10.0
-				);
-
-		private static final CssMetaData<MFXTextField, Boolean> CARET_VISIBLE =
-				FACTORY.createBooleanCssMetaData(
-						"-mfx-caret-visible",
-						MFXTextField::caretVisibleProperty,
-						true
-				);
-
-		private static final CssMetaData<MFXTextField, Boolean> EDITABLE =
-				FACTORY.createBooleanCssMetaData(
-						"-mfx-editable",
-						MFXTextField::allowEditProperty,
-						true
-				);
-
-		private static final CssMetaData<MFXTextField, FloatMode> FLOAT_MODE =
-				FACTORY.createEnumCssMetaData(
-						FloatMode.class,
-						"-mfx-float-mode",
-						MFXTextField::floatModeProperty,
-						FloatMode.INLINE
-				);
-
-		private static final CssMetaData<MFXTextField, Number> FLOATING_TEXT_GAP =
-				FACTORY.createSizeCssMetaData(
-						"-mfx-gap",
-						MFXTextField::floatingTextGapProperty,
-						5.0
-				);
-
-		private static final CssMetaData<MFXTextField, Number> GRAPHIC_TEXT_GAP =
-				FACTORY.createSizeCssMetaData(
-						"-fx-graphic-text-gap",
-						MFXTextField::graphicTextGapProperty,
-						10.0
-				);
-
-		private static final CssMetaData<MFXTextField, Number> MEASURE_UNIT_GAP =
-				FACTORY.createSizeCssMetaData(
-						"-mfx-measure-unit-gap",
-						MFXTextField::measureUnitGapProperty,
-						5.0
-				);
-
-		private static final CssMetaData<MFXTextField, Boolean> SCALE_ON_ABOVE =
-				FACTORY.createBooleanCssMetaData(
-						"-mfx-scale-on-above",
-						MFXTextField::scaleOnAboveProperty,
-						false
-				);
-
-		private static final CssMetaData<MFXTextField, Color> TEXT_FILL =
-				FACTORY.createColorCssMetaData(
-						"-fx-text-fill",
-						MFXTextField::textFillProperty,
-						DEFAULT_TEXT_COLOR
-				);
-
-		private static final CssMetaData<MFXTextField, Number> TEXT_LIMIT =
-				FACTORY.createSizeCssMetaData(
-						"-mfx-text-limit",
-						MFXTextField::textLimitProperty,
-						-1
-				);
-
-		static {
-			cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
-					TextField.getClassCssMetaData(),
-					ANIMATED, CARET_VISIBLE, BORDER_GAP,
-					EDITABLE, FLOAT_MODE, FLOATING_TEXT_GAP, GRAPHIC_TEXT_GAP, MEASURE_UNIT_GAP,
-					SCALE_ON_ABOVE, TEXT_FILL, TEXT_LIMIT
-			);
-		}
-	}
-
-	public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
-		return StyleableProperties.cssMetaDataList;
-	}
+    //================================================================================
+    // Properties
+    //================================================================================
+    private final String STYLE_CLASS = "mfx-text-field";
+    protected final BoundTextField boundField;
+
+    public static final Color DEFAULT_TEXT_COLOR = Color.rgb(0, 0, 0, 0.87);
+
+    private final BooleanProperty selectable = new SimpleBooleanProperty(true);
+    private final ObjectProperty<Node> leadingIcon = new SimpleObjectProperty<>();
+    private final ObjectProperty<Node> trailingIcon = new SimpleObjectProperty<>();
+
+    private final StringProperty floatingText = new SimpleStringProperty();
+    protected final BooleanProperty floating = new SimpleBooleanProperty() {
+        @Override
+        public void unbind() {
+        }
+    };
+    private static final PseudoClass FLOATING_PSEUDO_CLASS = PseudoClass.getPseudoClass("floating");
+
+    private final StringProperty measureUnit = new SimpleStringProperty("");
+
+    protected final MFXValidator validator = new MFXValidator();
+    protected MFXContextMenu contextMenu;
+
+    //================================================================================
+    // Constructors
+    //================================================================================
+    public MFXTextField() {
+        this("");
+    }
+
+    public MFXTextField(String text) {
+        this(text, "");
+    }
+
+    public MFXTextField(String text, String promptText) {
+        this(text, promptText, "");
+    }
+
+    public MFXTextField(String text, String promptText, String floatingText) {
+        super(text);
+        boundField = new BoundTextField(this);
+        setPromptText(promptText);
+        setFloatingText(floatingText);
+        initialize();
+    }
+
+    //================================================================================
+    // Static Methods
+    //================================================================================
+
+    /**
+     * Calls {@link #asLabel(String)} with empty text.
+     */
+    public static MFXTextField asLabel() {
+        return asLabel("");
+    }
+
+    /**
+     * Calls {@link #asLabel(String, String)} with empty promptText.
+     */
+    public static MFXTextField asLabel(String text) {
+        return asLabel(text, "");
+    }
+
+    /**
+     * Calls {@link #asLabel(String, String, String)} with empty floatingText.
+     */
+    public static MFXTextField asLabel(String text, String promptText) {
+        return asLabel(text, promptText, "");
+    }
+
+    /**
+     * Creates a text field that is not editable nor selectable to act just like a label.
+     */
+    public static MFXTextField asLabel(String text, String promptText, String floatingText) {
+        MFXTextField textField = new MFXTextField(text, promptText, floatingText);
+        textField.setEditable(false);
+        textField.setSelectable(false);
+        return textField;
+    }
+
+    //================================================================================
+    // Methods
+    //================================================================================
+    private void initialize() {
+        getStyleClass().setAll(STYLE_CLASS);
+        setPrefColumnCount(6);
+        setFocusTraversable(false);
+        floating.addListener(invalidated -> pseudoClassStateChanged(FLOATING_PSEUDO_CLASS, floating.get()));
+        allowEditProperty().bindBidirectional(editableProperty());
+
+        addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
+        addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.D && event.isControlDown())
+                boundField.deleteText(delegateGetSelection());
+        });
+        defaultContextMenu();
+        sceneBuilderIntegration();
+    }
+
+    public void defaultContextMenu() {
+        MFXContextMenuItem copyItem = MFXContextMenuItem.Builder.build()
+                .setIcon(new MFXFontIcon("fas-copy", 14))
+                .setText(I18N.getOrDefault("textField.contextMenu.copy"))
+                .setAccelerator("Ctrl + C")
+                .setOnAction(event -> copy())
+                .get();
+
+        MFXContextMenuItem cutItem = MFXContextMenuItem.Builder.build()
+                .setIcon(new MFXFontIcon("fas-scissors", 14))
+                .setText(I18N.getOrDefault("textField.contextMenu.cut"))
+                .setAccelerator("Ctrl + X")
+                .setOnAction(event -> cut())
+                .get();
+
+        MFXContextMenuItem pasteItem = MFXContextMenuItem.Builder.build()
+                .setIcon(new MFXFontIcon("fas-paste", 14))
+                .setText(I18N.getOrDefault("textField.contextMenu.paste"))
+                .setAccelerator("Ctrl + V")
+                .setOnAction(event -> paste())
+                .get();
+
+        MFXContextMenuItem deleteItem = MFXContextMenuItem.Builder.build()
+                .setIcon(new MFXFontIcon("fas-delete-left", 16))
+                .setText(I18N.getOrDefault("textField.contextMenu.delete"))
+                .setAccelerator("Ctrl + D")
+                .setOnAction(event -> boundField.deleteText(delegateGetSelection()))
+                .get();
+
+        MFXContextMenuItem selectAllItem = MFXContextMenuItem.Builder.build()
+                .setIcon(new MFXFontIcon("fas-check-double", 16))
+                .setText(I18N.getOrDefault("textField.contextMenu.selectAll"))
+                .setAccelerator("Ctrl + A")
+                .setOnAction(event -> selectAll())
+                .get();
+
+        MFXContextMenuItem redoItem = MFXContextMenuItem.Builder.build()
+                .setIcon(new MFXFontIcon("fas-arrow-rotate-right", 12))
+                .setText(I18N.getOrDefault("textField.contextMenu.redo"))
+                .setAccelerator("Ctrl + Y")
+                .setOnAction(event -> boundField.redo())
+                .get();
+        redoItem.disableProperty().bind(delegateRedoableProperty().not());
+
+        MFXContextMenuItem undoItem = MFXContextMenuItem.Builder.build()
+                .setIcon(new MFXFontIcon("fas-arrow-rotate-left", 12))
+                .setText(I18N.getOrDefault("textField.contextMenu.undo"))
+                .setAccelerator("Ctrl + Z")
+                .setOnAction(event -> boundField.undo())
+                .get();
+        undoItem.disableProperty().bind(delegateUndoableProperty().not());
+
+        contextMenu = MFXContextMenu.Builder.build(this)
+                .addItems(copyItem, cutItem, pasteItem, deleteItem, selectAllItem)
+                .addLineSeparator()
+                .addItems(redoItem, undoItem)
+                .setPopupStyleableParent(this)
+                .installAndGet();
+    }
+
+    //================================================================================
+    // Overridden Methods
+    //================================================================================
+    @Override
+    public Parent toParent() {
+        return this;
+    }
+
+    @Override
+    public Theme getTheme() {
+        return Stylesheets.TEXT_FIELD;
+    }
+
+    @Override
+    public MFXContextMenu getMFXContextMenu() {
+        return contextMenu;
+    }
+
+    @Override
+    protected Skin<?> createDefaultSkin() {
+        return new MFXTextFieldSkin(this, boundField);
+    }
+
+    @Override
+    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+        return MFXTextField.getClassCssMetaData();
+    }
+
+    //================================================================================
+    // Workaround Methods
+    //================================================================================
+    @Override
+    public void cut() {
+        boundField.cut();
+    }
+
+    @Override
+    public void copy() {
+        boundField.copy();
+    }
+
+    @Override
+    public void paste() {
+        boundField.paste();
+    }
+
+    @Override
+    public void selectBackward() {
+        boundField.selectBackward();
+    }
+
+    @Override
+    public void selectForward() {
+        boundField.selectForward();
+    }
+
+    @Override
+    public void previousWord() {
+        boundField.previousWord();
+    }
+
+    @Override
+    public void nextWord() {
+        boundField.nextWord();
+    }
+
+    @Override
+    public void endOfNextWord() {
+        boundField.endOfNextWord();
+    }
+
+    @Override
+    public void selectPreviousWord() {
+        boundField.selectPreviousWord();
+    }
+
+    @Override
+    public void selectNextWord() {
+        boundField.selectNextWord();
+    }
+
+    @Override
+    public void selectEndOfNextWord() {
+        boundField.selectEndOfNextWord();
+    }
+
+    @Override
+    public void selectAll() {
+        boundField.selectAll();
+    }
+
+    @Override
+    public void home() {
+        boundField.home();
+    }
+
+    @Override
+    public void end() {
+        boundField.end();
+    }
+
+    @Override
+    public void selectHome() {
+        boundField.selectHome();
+    }
+
+    @Override
+    public void selectEnd() {
+        boundField.selectEnd();
+    }
+
+    @Override
+    public void forward() {
+        boundField.forward();
+    }
+
+    @Override
+    public void backward() {
+        boundField.backward();
+    }
+
+    @Override
+    public void positionCaret(int pos) {
+        boundField.positionCaret(pos);
+    }
+
+    @Override
+    public void selectPositionCaret(int pos) {
+        boundField.selectPositionCaret(pos);
+    }
+
+    @Override
+    public void selectRange(int anchor, int caretPosition) {
+        boundField.selectRange(anchor, caretPosition);
+    }
+
+    @Override
+    public void extendSelection(int pos) {
+        boundField.extendSelection(pos);
+    }
+
+    @Override
+    public void clear() {
+        boundField.clear();
+    }
+
+    @Override
+    public void deselect() {
+        boundField.deselect();
+    }
+
+    @Override
+    public void replaceSelection(String replacement) {
+        boundField.replaceSelection(replacement);
+    }
+
+    public TextFormatter<?> delegateGetTextFormatter() {
+        return boundField.getTextFormatter();
+    }
+
+    /**
+     * Specifies the {@link BoundTextField} text formatter.
+     */
+    public ObjectProperty<TextFormatter<?>> delegateTextFormatterProperty() {
+        return boundField.textFormatterProperty();
+    }
+
+    public void delegateSetTextFormatter(TextFormatter<?> textFormatter) {
+        boundField.setTextFormatter(textFormatter);
+    }
+
+    public int delegateGetAnchor() {
+        return boundField.getAnchor();
+    }
+
+    /**
+     * Specifies the {@link BoundTextField} anchor position.
+     */
+    public ReadOnlyIntegerProperty delegateAnchorProperty() {
+        return boundField.anchorProperty();
+    }
+
+    public int delegateGetCaretPosition() {
+        return boundField.getCaretPosition();
+    }
+
+    /**
+     * Specifies the {@link BoundTextField} caret position.
+     */
+    public ReadOnlyIntegerProperty delegateCaretPositionProperty() {
+        return boundField.caretPositionProperty();
+    }
+
+    public String delegateGetSelectedText() {
+        return boundField.getSelectedText();
+    }
+
+    /**
+     * Specifies the {@link BoundTextField} selected text.
+     */
+    public ReadOnlyStringProperty delegateSelectedTextProperty() {
+        return boundField.selectedTextProperty();
+    }
+
+    public IndexRange delegateGetSelection() {
+        return boundField.getSelection();
+    }
+
+    /**
+     * Specifies the {@link BoundTextField} selection.
+     */
+    public ReadOnlyObjectProperty<IndexRange> delegateSelectionProperty() {
+        return boundField.selectionProperty();
+    }
+
+    public boolean delegateIsRedoable() {
+        return boundField.isRedoable();
+    }
+
+    /**
+     * Delegates to {@link BoundTextField}, see {@link BoundTextField#redoableProperty()}.
+     */
+    public ReadOnlyBooleanProperty delegateRedoableProperty() {
+        return boundField.redoableProperty();
+    }
+
+    public boolean delegateIsUndoable() {
+        return boundField.isUndoable();
+    }
+
+    /**
+     * Delegates to {@link BoundTextField}, see {@link BoundTextField#undoableProperty()}.
+     */
+    public ReadOnlyBooleanProperty delegateUndoableProperty() {
+        return boundField.undoableProperty();
+    }
+
+    public boolean delegateIsFocused() {
+        return boundField.isFocused();
+    }
+
+    /**
+     * Specifies whether the {@link BoundTextField} is focused.
+     */
+    public ReadOnlyBooleanProperty delegateFocusedProperty() {
+        return boundField.focusedProperty();
+    }
+
+    public void delegateSetFocusTraversable(boolean value) {
+        boundField.setFocusTraversable(value);
+    }
+
+    /**
+     * Specifies whether the {@link BoundTextField} it focus traversable.
+     */
+    public BooleanProperty delegateFocusTraversableProperty() {
+        return boundField.focusTraversableProperty();
+    }
+
+    public boolean delegateIsFocusTraversable() {
+        return boundField.isFocusTraversable();
+    }
+
+    //================================================================================
+    // Validation
+    //================================================================================
+    @Override
+    public MFXValidator getValidator() {
+        return validator;
+    }
+
+    //================================================================================
+    // Getters/Setters
+    //================================================================================
+    public boolean isSelectable() {
+        return selectable.get();
+    }
+
+    /**
+     * Specifies whether selection is allowed.
+     */
+    public BooleanProperty selectableProperty() {
+        return selectable;
+    }
+
+    public void setSelectable(boolean selectable) {
+        this.selectable.set(selectable);
+    }
+
+    public Node getLeadingIcon() {
+        return leadingIcon.get();
+    }
+
+    /**
+     * Specifies the icon placed before the input field.
+     */
+    public ObjectProperty<Node> leadingIconProperty() {
+        return leadingIcon;
+    }
+
+    public void setLeadingIcon(Node leadingIcon) {
+        this.leadingIcon.set(leadingIcon);
+    }
+
+    public Node getTrailingIcon() {
+        return trailingIcon.get();
+    }
+
+    /**
+     * Specifies the icon placed after the input field.
+     */
+    public ObjectProperty<Node> trailingIconProperty() {
+        return trailingIcon;
+    }
+
+    public void setTrailingIcon(Node trailingIcon) {
+        this.trailingIcon.set(trailingIcon);
+    }
+
+    public String getFloatingText() {
+        return floatingText.get();
+    }
+
+    /**
+     * Specifies the text of the floating text node.
+     */
+    public StringProperty floatingTextProperty() {
+        return floatingText;
+    }
+
+    public void setFloatingText(String floatingText) {
+        this.floatingText.set(floatingText);
+    }
+
+    public boolean isFloating() {
+        return floating.get();
+    }
+
+    /**
+     * Specifies if the floating text node is currently floating or not.
+     */
+    public BooleanProperty floatingProperty() {
+        return floating;
+    }
+
+    public String getMeasureUnit() {
+        return measureUnit.get();
+    }
+
+    /**
+     * Specifies the unit of measure of the field.
+     * <p></p>
+     * This is useful of course when dealing with numeric fields that represent for example:
+     * weight, volume, length and so on...
+     */
+    public StringProperty measureUnitProperty() {
+        return measureUnit;
+    }
+
+    public void setMeasureUnit(String measureUnit) {
+        this.measureUnit.set(measureUnit);
+    }
+
+    //================================================================================
+    // Styleable Properties
+    //================================================================================
+    private final StyleableBooleanProperty allowEdit = new StyleableBooleanProperty(
+            StyleableProperties.EDITABLE,
+            this,
+            "allowEdit",
+            true
+    );
+
+    private final StyleableBooleanProperty animated = new StyleableBooleanProperty(
+            StyleableProperties.ANIMATED,
+            this,
+            "animated",
+            true
+    );
+
+    private final StyleableDoubleProperty borderGap = new StyleableDoubleProperty(
+            StyleableProperties.BORDER_GAP,
+            this,
+            "borderGap",
+            10.0
+    );
+
+    private final StyleableBooleanProperty caretVisible = new StyleableBooleanProperty(
+            StyleableProperties.CARET_VISIBLE,
+            this,
+            "caretAnimated",
+            true
+    );
+
+    private final StyleableObjectProperty<FloatMode> floatMode = new StyleableObjectProperty<>(
+            StyleableProperties.FLOAT_MODE,
+            this,
+            "floatMode",
+            FloatMode.INLINE
+    );
+
+    private final StyleableDoubleProperty floatingTextGap = new StyleableDoubleProperty(
+            StyleableProperties.FLOATING_TEXT_GAP,
+            this,
+            "gap",
+            5.0
+    );
+
+    private final StyleableDoubleProperty graphicTextGap = new StyleableDoubleProperty(
+            StyleableProperties.GRAPHIC_TEXT_GAP,
+            this,
+            "graphicTextGap",
+            10.0
+    );
+
+    private final StyleableDoubleProperty measureUnitGap = new StyleableDoubleProperty(
+            StyleableProperties.MEASURE_UNIT_GAP,
+            this,
+            "measureUnitGap",
+            5.0
+    );
+
+    private final StyleableBooleanProperty scaleOnAbove = new StyleableBooleanProperty(
+            StyleableProperties.SCALE_ON_ABOVE,
+            this,
+            "scaleOnAbove",
+            false
+    );
+
+    private final StyleableObjectProperty<Color> textFill = new StyleableObjectProperty<>(
+            StyleableProperties.TEXT_FILL,
+            this,
+            "textFill",
+            DEFAULT_TEXT_COLOR
+    );
+
+    private final StyleableIntegerProperty textLimit = new StyleableIntegerProperty(
+            StyleableProperties.TEXT_LIMIT,
+            this,
+            "textLimit",
+            -1
+    );
+
+    public boolean isAllowEdit() {
+        return allowEdit.get();
+    }
+
+    /**
+     * Specifies whether the field is editable.
+     * <p>
+     * This property is bound bidirectionally to {@link TextField#editableProperty()},
+     * it's here just to be set via CSS.
+     */
+    public StyleableBooleanProperty allowEditProperty() {
+        return allowEdit;
+    }
+
+    public void setAllowEdit(boolean allowEdit) {
+        this.allowEdit.set(allowEdit);
+    }
+
+    public boolean isAnimated() {
+        return animated.get();
+    }
+
+    /**
+     * Specifies whether the floating text positioning is animated.
+     */
+    public StyleableBooleanProperty animatedProperty() {
+        return animated;
+    }
+
+    public void setAnimated(boolean animated) {
+        this.animated.set(animated);
+    }
+
+    public double getBorderGap() {
+        return borderGap.get();
+    }
+
+    /**
+     * For {@link FloatMode#BORDER} and {@link FloatMode#ABOVE} modes, this specifies the distance from
+     * the control's x origin (padding not included).
+     */
+    public StyleableDoubleProperty borderGapProperty() {
+        return borderGap;
+    }
+
+    public void setBorderGap(double borderGap) {
+        this.borderGap.set(borderGap);
+    }
+
+    public boolean getCaretVisible() {
+        return caretVisible.get();
+    }
+
+    /**
+     * Specifies whether the caret should be visible.
+     */
+    public StyleableBooleanProperty caretVisibleProperty() {
+        return caretVisible;
+    }
+
+    public void setCaretVisible(boolean caretVisible) {
+        this.caretVisible.set(caretVisible);
+    }
+
+    public FloatMode getFloatMode() {
+        return floatMode.get();
+    }
+
+    /**
+     * Specifies how the floating text is positioned when floating.
+     */
+    public StyleableObjectProperty<FloatMode> floatModeProperty() {
+        return floatMode;
+    }
+
+    public void setFloatMode(FloatMode floatMode) {
+        this.floatMode.set(floatMode);
+    }
+
+    public double getFloatingTextGap() {
+        return floatingTextGap.get();
+    }
+
+    /**
+     * For {@link FloatMode#INLINE} mode, this specifies the gap between
+     * the floating text node and the input field node.
+     */
+    public StyleableDoubleProperty floatingTextGapProperty() {
+        return floatingTextGap;
+    }
+
+    public void setFloatingTextGap(double floatingTextGap) {
+        this.floatingTextGap.set(floatingTextGap);
+    }
+
+    public double getGraphicTextGap() {
+        return graphicTextGap.get();
+    }
+
+    /**
+     * Specifies the gap between the input field and the icons.
+     */
+    public StyleableDoubleProperty graphicTextGapProperty() {
+        return graphicTextGap;
+    }
+
+    public void setGraphicTextGap(double graphicTextGap) {
+        this.graphicTextGap.set(graphicTextGap);
+    }
+
+    public boolean scaleOnAbove() {
+        return scaleOnAbove.get();
+    }
+
+    /**
+     * Specifies whether the floating text node should be scaled or not when
+     * the float mode is set to {@link FloatMode#ABOVE}.
+     */
+    public StyleableBooleanProperty scaleOnAboveProperty() {
+        return scaleOnAbove;
+    }
+
+    public void setScaleOnAbove(boolean scaleOnAbove) {
+        this.scaleOnAbove.set(scaleOnAbove);
+    }
+
+    public double getMeasureUnitGap() {
+        return measureUnitGap.get();
+    }
+
+    /**
+     * Specifies the gap between the field and the measure unit label.
+     */
+    public StyleableDoubleProperty measureUnitGapProperty() {
+        return measureUnitGap;
+    }
+
+    public void setMeasureUnitGap(double measureUnitGap) {
+        this.measureUnitGap.set(measureUnitGap);
+    }
+
+    public Color getTextFill() {
+        return textFill.get();
+    }
+
+    /**
+     * Specifies the text color.
+     */
+    public StyleableObjectProperty<Color> textFillProperty() {
+        return textFill;
+    }
+
+    public void setTextFill(Color textFill) {
+        this.textFill.set(textFill);
+    }
+
+    public int getTextLimit() {
+        return textLimit.get();
+    }
+
+    /**
+     * Specifies the maximum number of characters the field's text can have.
+     */
+    public StyleableIntegerProperty textLimitProperty() {
+        return textLimit;
+    }
+
+    public void setTextLimit(int textLimit) {
+        this.textLimit.set(textLimit);
+    }
+
+    //================================================================================
+    // CSSMetaData
+    //================================================================================
+    private static class StyleableProperties {
+        private static final StyleablePropertyFactory<MFXTextField> FACTORY = new StyleablePropertyFactory<>(TextField.getClassCssMetaData());
+        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+
+        private static final CssMetaData<MFXTextField, Boolean> ANIMATED =
+                FACTORY.createBooleanCssMetaData(
+                        "-mfx-animated",
+                        MFXTextField::animatedProperty,
+                        true
+                );
+
+        private static final CssMetaData<MFXTextField, Number> BORDER_GAP =
+                FACTORY.createSizeCssMetaData(
+                        "-mfx-border-gap",
+                        MFXTextField::borderGapProperty,
+                        10.0
+                );
+
+        private static final CssMetaData<MFXTextField, Boolean> CARET_VISIBLE =
+                FACTORY.createBooleanCssMetaData(
+                        "-mfx-caret-visible",
+                        MFXTextField::caretVisibleProperty,
+                        true
+                );
+
+        private static final CssMetaData<MFXTextField, Boolean> EDITABLE =
+                FACTORY.createBooleanCssMetaData(
+                        "-mfx-editable",
+                        MFXTextField::allowEditProperty,
+                        true
+                );
+
+        private static final CssMetaData<MFXTextField, FloatMode> FLOAT_MODE =
+                FACTORY.createEnumCssMetaData(
+                        FloatMode.class,
+                        "-mfx-float-mode",
+                        MFXTextField::floatModeProperty,
+                        FloatMode.INLINE
+                );
+
+        private static final CssMetaData<MFXTextField, Number> FLOATING_TEXT_GAP =
+                FACTORY.createSizeCssMetaData(
+                        "-mfx-gap",
+                        MFXTextField::floatingTextGapProperty,
+                        5.0
+                );
+
+        private static final CssMetaData<MFXTextField, Number> GRAPHIC_TEXT_GAP =
+                FACTORY.createSizeCssMetaData(
+                        "-fx-graphic-text-gap",
+                        MFXTextField::graphicTextGapProperty,
+                        10.0
+                );
+
+        private static final CssMetaData<MFXTextField, Number> MEASURE_UNIT_GAP =
+                FACTORY.createSizeCssMetaData(
+                        "-mfx-measure-unit-gap",
+                        MFXTextField::measureUnitGapProperty,
+                        5.0
+                );
+
+        private static final CssMetaData<MFXTextField, Boolean> SCALE_ON_ABOVE =
+                FACTORY.createBooleanCssMetaData(
+                        "-mfx-scale-on-above",
+                        MFXTextField::scaleOnAboveProperty,
+                        false
+                );
+
+        private static final CssMetaData<MFXTextField, Color> TEXT_FILL =
+                FACTORY.createColorCssMetaData(
+                        "-fx-text-fill",
+                        MFXTextField::textFillProperty,
+                        DEFAULT_TEXT_COLOR
+                );
+
+        private static final CssMetaData<MFXTextField, Number> TEXT_LIMIT =
+                FACTORY.createSizeCssMetaData(
+                        "-mfx-text-limit",
+                        MFXTextField::textLimitProperty,
+                        -1
+                );
+
+        static {
+            cssMetaDataList = StyleablePropertiesUtils.cssMetaDataList(
+                    TextField.getClassCssMetaData(),
+                    ANIMATED, CARET_VISIBLE, BORDER_GAP,
+                    EDITABLE, FLOAT_MODE, FLOATING_TEXT_GAP, GRAPHIC_TEXT_GAP, MEASURE_UNIT_GAP,
+                    SCALE_ON_ABOVE, TEXT_FILL, TEXT_LIMIT
+            );
+        }
+    }
+
+    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
+        return StyleableProperties.cssMetaDataList;
+    }
 }
