@@ -29,11 +29,11 @@ import io.github.palexdev.materialfx.filter.base.AbstractFilter;
 import io.github.palexdev.materialfx.selection.MultipleSelectionModel;
 import io.github.palexdev.materialfx.selection.base.IMultipleSelectionModel;
 import io.github.palexdev.materialfx.skins.MFXTableViewSkin;
+import io.github.palexdev.materialfx.utils.ListChangeHelper;
 import io.github.palexdev.materialfx.utils.ListChangeProcessor;
 import io.github.palexdev.materialfx.utils.others.observables.When;
-import io.github.palexdev.virtualizedfx.beans.NumberRange;
-import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
-import io.github.palexdev.virtualizedfx.utils.ListChangeHelper;
+import io.github.palexdev.mfxcore.base.beans.range.IntegerRange;
+import io.github.palexdev.virtualizedfx.unused.simple.SimpleVirtualFlow;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -133,7 +133,7 @@ public class MFXTableView<T> extends Control implements Themable {
 			return;
 		}
 
-		ListChangeHelper.Change c = ListChangeHelper.processChange(change, NumberRange.of(0, Integer.MAX_VALUE));
+		ListChangeHelper.Change c = ListChangeHelper.processChange(change, IntegerRange.of(0, Integer.MAX_VALUE));
 		ListChangeProcessor updater = new ListChangeProcessor(new HashSet<>(selectionModel.getSelection().keySet()));
 		c.processReplacement((changed, removed) -> selectionModel.replaceSelection(changed.toArray(Integer[]::new)));
 		c.processAddition((from, to, added) -> {

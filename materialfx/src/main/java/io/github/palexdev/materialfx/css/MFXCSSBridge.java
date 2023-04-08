@@ -34,68 +34,69 @@ import javafx.scene.Parent;
  * it's really useful, so... we'll see in future if needed.
  */
 public class MFXCSSBridge {
-	//================================================================================
-	// Properties
-	//================================================================================
-	private Parent parent;
-	private final ObservableList<String> stylesheets = FXCollections.observableArrayList();
-	private final InvalidationListener stylesheetsChanged = invalidated -> initializeStylesheets();
+    //================================================================================
+    // Properties
+    //================================================================================
+    private Parent parent;
+    private final ObservableList<String> stylesheets = FXCollections.observableArrayList();
+    private final InvalidationListener stylesheetsChanged = invalidated -> initializeStylesheets();
 
-	//================================================================================
-	// Constructors
-	//================================================================================
-	public MFXCSSBridge(Parent parent) {
-		this.parent = parent;
-		initializeStylesheets();
-		addListeners();
-	}
+    //================================================================================
+    // Constructors
+    //================================================================================
+    public MFXCSSBridge(Parent parent) {
+        this.parent = parent;
+        initializeStylesheets();
+        addListeners();
+    }
 
-	//================================================================================
-	// Methods
-	//================================================================================
+    //================================================================================
+    // Methods
+    //================================================================================
 
-	/**
-	 * Called by the constructor the first time.
-	 * <p>
-	 * Responsible for parsing and building the stylesheets list.
-	 */
-	public void initializeStylesheets() {
-		stylesheets.clear();
-		if (parent == null) return;
+    /**
+     * Called by the constructor the first time.
+     * <p>
+     * Responsible for parsing and building the stylesheets list.
+     */
+    public void initializeStylesheets() {
+        stylesheets.clear();
+        if (parent == null) return;
 
-		stylesheets.addAll(parent.getStylesheets());
-	}
+        stylesheets.addAll(parent.getStylesheets());
+    }
 
-	/**
-	 * Adds the listener responsible for updating the stylesheets list
-	 * to the parent's stylesheets observable list.
-	 */
-	public void addListeners() {
-		if (parent == null) return;
-		parent.getStylesheets().addListener(stylesheetsChanged);
-	}
+    /**
+     * Adds the listener responsible for updating the stylesheets list
+     * to the parent's stylesheets observable list.
+     */
+    // TODO this should also be called when the parent changes!
+    public void addListeners() {
+        if (parent == null) return;
+        parent.getStylesheets().addListener(stylesheetsChanged);
+    }
 
-	/**
-	 * Disposes the MFXCSSBridge by removing the stylesheetsChanged listener.
-	 */
-	public void dispose() {
-		if (parent != null) {
-			parent.getStylesheets().removeListener(stylesheetsChanged);
-		}
-	}
+    /**
+     * Disposes the MFXCSSBridge by removing the stylesheetsChanged listener.
+     */
+    public void dispose() {
+        if (parent != null) {
+            parent.getStylesheets().removeListener(stylesheetsChanged);
+        }
+    }
 
-	public Parent getParent() {
-		return parent;
-	}
+    public Parent getParent() {
+        return parent;
+    }
 
-	public void setParent(Parent parent) {
-		this.parent = parent;
-	}
+    public void setParent(Parent parent) {
+        this.parent = parent;
+    }
 
-	/**
-	 * @return the parsed stylesheets list
-	 */
-	public ObservableList<String> getStylesheets() {
-		return stylesheets;
-	}
+    /**
+     * @return the parsed stylesheets list
+     */
+    public ObservableList<String> getStylesheets() {
+        return stylesheets;
+    }
 }

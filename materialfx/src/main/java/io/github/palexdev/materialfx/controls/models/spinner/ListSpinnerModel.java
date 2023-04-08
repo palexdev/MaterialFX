@@ -18,10 +18,10 @@
 
 package io.github.palexdev.materialfx.controls.models.spinner;
 
+import io.github.palexdev.materialfx.utils.ListChangeHelper;
 import io.github.palexdev.materialfx.utils.ListChangeProcessor;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
-import io.github.palexdev.virtualizedfx.beans.NumberRange;
-import io.github.palexdev.virtualizedfx.utils.ListChangeHelper;
+import io.github.palexdev.mfxcore.base.beans.range.IntegerRange;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -101,7 +101,7 @@ public class ListSpinnerModel<T> extends AbstractSpinnerModel<T> {
 			return;
 		}
 
-		ListChangeHelper.Change c = ListChangeHelper.processChange(change, NumberRange.of(0, Integer.MAX_VALUE));
+		ListChangeHelper.Change c = ListChangeHelper.processChange(change, IntegerRange.of(0, Integer.MAX_VALUE));
 		ListChangeProcessor updater = new ListChangeProcessor(Set.of(currentIndex));
 		c.processReplacement((replaced, removed) -> {
 			T value = items.get(currentIndex);

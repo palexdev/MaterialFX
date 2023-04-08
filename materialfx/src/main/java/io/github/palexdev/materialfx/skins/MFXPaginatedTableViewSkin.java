@@ -22,7 +22,7 @@ import io.github.palexdev.materialfx.controls.MFXPaginatedTableView;
 import io.github.palexdev.materialfx.controls.MFXPagination;
 import io.github.palexdev.materialfx.controls.MFXTableRow;
 import io.github.palexdev.materialfx.utils.AnimationUtils.PauseBuilder;
-import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
+import io.github.palexdev.virtualizedfx.unused.simple.SimpleVirtualFlow;
 import javafx.animation.PauseTransition;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
@@ -44,73 +44,73 @@ import javafx.scene.layout.StackPane;
  * is thrown.
  */
 public class MFXPaginatedTableViewSkin<T> extends MFXTableViewSkin<T> {
-	//================================================================================
-	// Properties
-	//================================================================================
-	private final MFXPagination pagination;
-	private boolean init = false;
+    //================================================================================
+    // Properties
+    //================================================================================
+    private final MFXPagination pagination;
+    private boolean init = false;
 
-	//================================================================================
-	// Constructors
-	//================================================================================
-	public MFXPaginatedTableViewSkin(MFXPaginatedTableView<T> tableView, SimpleVirtualFlow<T, MFXTableRow<T>> rowsFlow) {
-		super(tableView, rowsFlow);
+    //================================================================================
+    // Constructors
+    //================================================================================
+    public MFXPaginatedTableViewSkin(MFXPaginatedTableView<T> tableView, SimpleVirtualFlow<T, MFXTableRow<T>> rowsFlow) {
+        super(tableView, rowsFlow);
 
-		rowsFlow.setMinHeight(Region.USE_PREF_SIZE);
-		rowsFlow.setMaxHeight(Region.USE_PREF_SIZE);
+        rowsFlow.setMinHeight(Region.USE_PREF_SIZE);
+        rowsFlow.setMaxHeight(Region.USE_PREF_SIZE);
 
-		pagination = new MFXPagination();
-		pagination.pagesToShowProperty().bind(tableView.pagesToShowProperty());
-		pagination.maxPageProperty().bind(tableView.maxPageProperty());
-		pagination.setCurrentPage(tableView.getCurrentPage());
-		tableView.currentPageProperty().bindBidirectional(pagination.currentPageProperty());
+        pagination = new MFXPagination();
+        pagination.pagesToShowProperty().bind(tableView.pagesToShowProperty());
+        pagination.maxPageProperty().bind(tableView.maxPageProperty());
+        pagination.setCurrentPage(tableView.getCurrentPage());
+        tableView.currentPageProperty().bindBidirectional(pagination.currentPageProperty());
 
-		container.getChildren().remove(footer);
-		container.getChildren().add(buildFooter());
+        container.getChildren().remove(footer);
+        container.getChildren().add(buildFooter());
 
-		addListeners();
-	}
+        addListeners();
+    }
 
-	//================================================================================
-	// Methods
-	//================================================================================
-	private void addListeners() {
-		MFXPaginatedTableView<T> tableView = (MFXPaginatedTableView<T>) getSkinnable();
-		tableView.virtualFlowInitializedProperty().addListener((observable, oldValue, newValue) -> {
-			if (!init && newValue) {
-				rowsFlow.prefHeightProperty().bind(Bindings.createDoubleBinding(
-						() -> tableView.getRowsPerPage() * rowsFlow.getCellHeight(),
-						tableView.rowsPerPageProperty()
-				));
+    //================================================================================
+    // Methods
+    //================================================================================
+    private void addListeners() {
+        MFXPaginatedTableView<T> tableView = (MFXPaginatedTableView<T>) getSkinnable();
+        tableView.virtualFlowInitializedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!init && newValue) {
+                rowsFlow.prefHeightProperty().bind(Bindings.createDoubleBinding(
+                        () -> tableView.getRowsPerPage() * rowsFlow.getCellHeight(),
+                        tableView.rowsPerPageProperty()
+                ));
 
-				int current = tableView.getCurrentPage();
-				if (current != 1) {
-					PauseBuilder.build()
-							.setDuration(20)
-							.setOnFinished(event -> tableView.goToPage(current))
-							.getAnimation().play();
-				}
+                int current = tableView.getCurrentPage();
+                if (current != 1) {
+                    PauseBuilder.build()
+                            .setDuration(20)
+                            .setOnFinished(event -> tableView.goToPage(current))
+                            .getAnimation().play();
+                }
 
-				init = true;
-			}
-		});
-	}
+                init = true;
+            }
+        });
+    }
 
-	//================================================================================
-	// Overridden Methods
-	//================================================================================
-	@Override
-	protected StackPane buildFooter() {
-		StackPane footer = super.buildFooter();
-		if (pagination == null) return footer;
-		footer.getChildren().add(pagination);
-		StackPane.setAlignment(pagination, Pos.CENTER);
-		return footer;
-	}
+    //================================================================================
+    // Overridden Methods
+    //================================================================================
+    @Override
+    protected StackPane buildFooter() {
+        StackPane footer = super.buildFooter();
+        if (pagination == null) return footer;
+        footer.getChildren().add(pagination);
+        StackPane.setAlignment(pagination, Pos.CENTER);
+        return footer;
+    }
 
-	@Override
-	protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-		double footerWidth = leftInset + footer.prefWidth(-1) + pagination.prefWidth(-1) * 2 + 10 + rightInset;
-		return Math.max(footerWidth, super.computeMinWidth(height, topInset, rightInset, bottomInset, leftInset));
-	}
+    @Override
+    protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+        double footerWidth = leftInset + footer.prefWidth(-1) + pagination.prefWidth(-1) * 2 + 10 + rightInset;
+        return Math.max(footerWidth, super.computeMinWidth(height, topInset, rightInset, bottomInset, leftInset));
+    }
 }

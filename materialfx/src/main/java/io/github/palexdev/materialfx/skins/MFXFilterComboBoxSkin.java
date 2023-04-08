@@ -23,7 +23,7 @@ import io.github.palexdev.materialfx.controls.BoundTextField;
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.i18n.I18N;
-import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
+import io.github.palexdev.virtualizedfx.unused.simple.SimpleVirtualFlow;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -44,107 +44,107 @@ import java.util.function.Predicate;
  */
 public class MFXFilterComboBoxSkin<T> extends MFXComboBoxSkin<T> {
 
-	//================================================================================
-	// Constructors
-	//================================================================================
-	public MFXFilterComboBoxSkin(MFXFilterComboBox<T> comboBox, BoundTextField boundField) {
-		super(comboBox, boundField);
-		addListeners();
-	}
+    //================================================================================
+    // Constructors
+    //================================================================================
+    public MFXFilterComboBoxSkin(MFXFilterComboBox<T> comboBox, BoundTextField boundField) {
+        super(comboBox, boundField);
+        addListeners();
+    }
 
-	//================================================================================
-	// Methods
-	//================================================================================
-	private void addListeners() {
-		MFXFilterComboBox<T> comboBox = getComboBox();
+    //================================================================================
+    // Methods
+    //================================================================================
+    private void addListeners() {
+        MFXFilterComboBox<T> comboBox = getComboBox();
 
-		comboBox.searchTextProperty().addListener((observable, oldValue, newValue) -> filter(newValue));
-		popup.showingProperty().addListener((observable, oldValue, newValue) -> {
-			if (!newValue && comboBox.isResetOnPopupHidden()) comboBox.setSearchText("");
-		});
-	}
+        comboBox.searchTextProperty().addListener((observable, oldValue, newValue) -> filter(newValue));
+        popup.showingProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue && comboBox.isResetOnPopupHidden()) comboBox.setSearchText("");
+        });
+    }
 
-	/**
-	 * Responsible for filtering the popup's listview.
-	 * <p></p>
-	 * What it really does is to use the {@link MFXFilterComboBox#filterFunctionProperty()}
-	 * to produce a {@link Predicate}, which is then set on the {@link MFXFilterComboBox#getFilterList()}.
-	 * <p></p>
-	 * This means that since it is not bound you can even set your own predicate on that list,
-	 * but everytime the text is changed in the search field it will be replaced.
-	 */
-	protected void filter(String text) {
-		MFXFilterComboBox<T> comboBox = getComboBox();
-		Function<String, Predicate<T>> filterFunction = comboBox.getFilterFunction();
-		if (filterFunction == null) return;
+    /**
+     * Responsible for filtering the popup's listview.
+     * <p></p>
+     * What it really does is to use the {@link MFXFilterComboBox#filterFunctionProperty()}
+     * to produce a {@link Predicate}, which is then set on the {@link MFXFilterComboBox#getFilterList()}.
+     * <p></p>
+     * This means that since it is not bound you can even set your own predicate on that list,
+     * but everytime the text is changed in the search field it will be replaced.
+     */
+    protected void filter(String text) {
+        MFXFilterComboBox<T> comboBox = getComboBox();
+        Function<String, Predicate<T>> filterFunction = comboBox.getFilterFunction();
+        if (filterFunction == null) return;
 
-		Predicate<T> filter = filterFunction.apply(text);
-		comboBox.getFilterList().setPredicate(filter);
-	}
+        Predicate<T> filter = filterFunction.apply(text);
+        comboBox.getFilterList().setPredicate(filter);
+    }
 
-	//================================================================================
-	// Overridden Methods
-	//================================================================================
+    //================================================================================
+    // Overridden Methods
+    //================================================================================
 
-	/**
-	 * {@inheritDoc}
-	 * <p></p>
-	 * The content is slightly different from the {@link MFXComboBoxSkin} one.
-	 * <p>
-	 * In the previous combo box skin, a text field was positioned on top of the combo's field
-	 * to input the search text.
-	 * <p>
-	 * This time I decided to do it another way. The popup contains both the search field
-	 * and the listview, contained in a VBox, this way the control is easier to maintain,
-	 * and also more appealing.
-	 */
-	@Override
-	protected Node createPopupContent() {
-		MFXFilterComboBox<T> comboBox = getComboBox();
-		TransformableList<T> filterList = comboBox.getFilterList();
+    /**
+     * {@inheritDoc}
+     * <p></p>
+     * The content is slightly different from the {@link MFXComboBoxSkin} one.
+     * <p>
+     * In the previous combo box skin, a text field was positioned on top of the combo's field
+     * to input the search text.
+     * <p>
+     * This time I decided to do it another way. The popup contains both the search field
+     * and the listview, contained in a VBox, this way the control is easier to maintain,
+     * and also more appealing.
+     */
+    @Override
+    protected Node createPopupContent() {
+        MFXFilterComboBox<T> comboBox = getComboBox();
+        TransformableList<T> filterList = comboBox.getFilterList();
 
-		MFXTextField searchField = new MFXTextField("", I18N.getOrDefault("filterCombo.search"));
-		searchField.getStyleClass().add("search-field");
-		searchField.textProperty().bindBidirectional(comboBox.searchTextProperty());
-		searchField.setMaxWidth(Double.MAX_VALUE);
+        MFXTextField searchField = new MFXTextField("", I18N.getOrDefault("filterCombo.search"));
+        searchField.getStyleClass().add("search-field");
+        searchField.textProperty().bindBidirectional(comboBox.searchTextProperty());
+        searchField.setMaxWidth(Double.MAX_VALUE);
 
-		virtualFlow = new SimpleVirtualFlow<>(
-				filterList,
-				comboBox.getCellFactory(),
-				Orientation.VERTICAL
-		);
-		virtualFlow.cellFactoryProperty().bind(comboBox.cellFactoryProperty());
-		virtualFlow.prefWidthProperty().bind(comboBox.widthProperty());
-		virtualFlow.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-			if (popup.isShowing()) {
-				popup.hide();
-			}
-		});
+        virtualFlow = new SimpleVirtualFlow<>(
+                filterList,
+                comboBox.getCellFactory(),
+                Orientation.VERTICAL
+        );
+        virtualFlow.cellFactoryProperty().bind(comboBox.cellFactoryProperty());
+        virtualFlow.prefWidthProperty().bind(comboBox.widthProperty());
+        virtualFlow.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            if (popup.isShowing()) {
+                popup.hide();
+            }
+        });
 
-		Runnable createBinding = () ->
-				virtualFlow.minHeightProperty().bind(Bindings.createDoubleBinding(
-						() -> Math.min(comboBox.getRowsCount(), comboBox.getItems().size()) * virtualFlow.getCellHeight(),
-						comboBox.rowsCountProperty(), comboBox.getItems(), virtualFlow.cellFactoryProperty(), vfInitialized
-				));
-		virtualFlow.itemsProperty().addListener((observable, oldValue, newValue) -> {
-			if (newValue != null) createBinding.run();
-		});
-		createBinding.run();
+        Runnable createBinding = () ->
+                virtualFlow.minHeightProperty().bind(Bindings.createDoubleBinding(
+                        () -> Math.min(comboBox.getRowsCount(), comboBox.getItems().size()) * virtualFlow.getCellHeight(),
+                        comboBox.rowsCountProperty(), comboBox.getItems(), virtualFlow.cellFactoryProperty(), vfInitialized
+                ));
+        virtualFlow.itemsProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) createBinding.run();
+        });
+        createBinding.run();
 
-		VBox container = new VBox(10, searchField, virtualFlow);
-		container.getStyleClass().add("search-container");
-		container.setAlignment(Pos.TOP_CENTER);
-		return container;
-	}
+        VBox container = new VBox(10, searchField, virtualFlow);
+        container.getStyleClass().add("search-container");
+        container.setAlignment(Pos.TOP_CENTER);
+        return container;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 * <p></p>
-	 * Overridden to cast to {@code MFXFilterComboBox}.
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public MFXFilterComboBox<T> getComboBox() {
-		return (MFXFilterComboBox<T>) getSkinnable();
-	}
+    /**
+     * {@inheritDoc}
+     * <p></p>
+     * Overridden to cast to {@code MFXFilterComboBox}.
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public MFXFilterComboBox<T> getComboBox() {
+        return (MFXFilterComboBox<T>) getSkinnable();
+    }
 }

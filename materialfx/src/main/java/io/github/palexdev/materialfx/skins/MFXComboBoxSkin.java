@@ -22,7 +22,7 @@ import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.selection.ComboBoxSelectionModel;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
 import io.github.palexdev.virtualizedfx.cell.Cell;
-import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
+import io.github.palexdev.virtualizedfx.unused.simple.SimpleVirtualFlow;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;

@@ -34,15 +34,11 @@ import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.selection.ComboBoxSelectionModel;
 import io.github.palexdev.materialfx.skins.MFXComboBoxSkin;
-import io.github.palexdev.materialfx.utils.ListChangeProcessor;
-import io.github.palexdev.materialfx.utils.NodeUtils;
-import io.github.palexdev.materialfx.utils.NumberUtils;
-import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
+import io.github.palexdev.materialfx.utils.*;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
 import io.github.palexdev.materialfx.validation.MFXValidator;
-import io.github.palexdev.virtualizedfx.beans.NumberRange;
+import io.github.palexdev.mfxcore.base.beans.range.IntegerRange;
 import io.github.palexdev.virtualizedfx.cell.Cell;
-import io.github.palexdev.virtualizedfx.utils.ListChangeHelper;
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
@@ -255,7 +251,7 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 			return;
 		}
 
-		ListChangeHelper.Change c = ListChangeHelper.processChange(change, NumberRange.of(0, Integer.MAX_VALUE));
+		ListChangeHelper.Change c = ListChangeHelper.processChange(change, IntegerRange.of(0, Integer.MAX_VALUE));
 		Set<Integer> indexes = new HashSet<>();
 		indexes.add(getSelectedIndex());
 		ListChangeProcessor updater = new ListChangeProcessor(indexes);

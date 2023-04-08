@@ -30,12 +30,12 @@ import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.notifications.base.INotification;
 import io.github.palexdev.materialfx.selection.MultipleSelectionModel;
 import io.github.palexdev.materialfx.skins.MFXNotificationCenterSkin;
+import io.github.palexdev.materialfx.utils.ListChangeHelper;
+import io.github.palexdev.materialfx.utils.ListChangeHelper.Change;
 import io.github.palexdev.materialfx.utils.ListChangeProcessor;
 import io.github.palexdev.materialfx.utils.others.ReusableScheduledExecutor;
-import io.github.palexdev.virtualizedfx.beans.NumberRange;
-import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
-import io.github.palexdev.virtualizedfx.utils.ListChangeHelper;
-import io.github.palexdev.virtualizedfx.utils.ListChangeHelper.Change;
+import io.github.palexdev.mfxcore.base.beans.range.IntegerRange;
+import io.github.palexdev.virtualizedfx.unused.simple.SimpleVirtualFlow;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.LongBinding;
 import javafx.beans.property.*;
@@ -174,7 +174,7 @@ public class MFXNotificationCenter extends Control implements MFXMenuControl, Th
 				if (change.getList().isEmpty()) {
 					selectionModel.clearSelection();
 				} else {
-					Change c = ListChangeHelper.processChange(change, NumberRange.of(0, Integer.MAX_VALUE));
+					Change c = ListChangeHelper.processChange(change, IntegerRange.of(0, Integer.MAX_VALUE));
 					ListChangeProcessor updater = new ListChangeProcessor(selectionModel.getSelection().keySet());
 					c.processReplacement((changed, removed) -> selectionModel.replaceSelection(changed.toArray(new Integer[0])));
 					c.processAddition((from, to, added) -> {
@@ -215,8 +215,8 @@ public class MFXNotificationCenter extends Control implements MFXMenuControl, Th
 				.setOnAction(event -> {
 					if (notifications.isEmpty()) return;
 					setSelectionMode(true);
-					NumberRange<Integer> indexes = NumberRange.of(0, notifications.size() - 1);
-					selectionModel.replaceSelection(NumberRange.expandRange(indexes).toArray(Integer[]::new));
+					IntegerRange indexes = IntegerRange.of(0, notifications.size() - 1);
+					selectionModel.replaceSelection(IntegerRange.expandRange(indexes).toArray(Integer[]::new));
 				}).get();
 
 		MFXContextMenuItem selectRead = MFXContextMenuItem.Builder.build()

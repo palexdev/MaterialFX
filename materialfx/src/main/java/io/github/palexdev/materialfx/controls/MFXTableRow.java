@@ -22,7 +22,7 @@ import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.virtualizedfx.cell.Cell;
-import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
+import io.github.palexdev.virtualizedfx.unused.simple.SimpleVirtualFlow;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;

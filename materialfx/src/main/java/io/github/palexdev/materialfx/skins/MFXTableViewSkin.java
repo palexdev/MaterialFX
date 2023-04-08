@@ -26,7 +26,7 @@ import io.github.palexdev.materialfx.dialogs.MFXDialogs;
 import io.github.palexdev.materialfx.dialogs.MFXStageDialog;
 import io.github.palexdev.materialfx.enums.SortState;
 import io.github.palexdev.materialfx.utils.NodeUtils;
-import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
+import io.github.palexdev.virtualizedfx.unused.simple.SimpleVirtualFlow;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
@@ -36,7 +36,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 
 /**
  * This is the implementation of the {@code Skin} associated with every {@link MFXTableView}.
@@ -97,7 +96,7 @@ public class MFXTableViewSkin<T> extends SkinBase<MFXTableView<T>> {
 				.setOwnerNode(container)
 				.setCenterInOwnerNode(true)
 				.initOwner(tableView.getScene().getWindow())
-				.initModality(Modality.APPLICATION_MODAL)
+				//.initModality(Modality.APPLICATION_MODAL)
 				.get();
 		filterDialog.setOnShown(event -> filterDialog.toFront());
 

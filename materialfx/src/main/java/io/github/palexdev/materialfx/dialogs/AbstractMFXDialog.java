@@ -18,45 +18,52 @@
 
 package io.github.palexdev.materialfx.dialogs;
 
+import io.github.palexdev.materialfx.controls.base.Themable;
 import io.github.palexdev.materialfx.css.themes.MFXThemeManager;
 import io.github.palexdev.materialfx.css.themes.Themes;
+import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
 
 /**
  * Base class every {@code MFXDialog} should extend.
  */
-public abstract class AbstractMFXDialog extends BorderPane {
-	//================================================================================
-	// Properties
-	//================================================================================
-	private final String STYLE_CLASS = "mfx-dialog";
+public abstract class AbstractMFXDialog extends BorderPane implements Themable {
+    //================================================================================
+    // Properties
+    //================================================================================
+    private final String STYLE_CLASS = "mfx-dialog";
 
-	//================================================================================
-	// Constructors
-	//================================================================================
-	public AbstractMFXDialog() {
-		initialize();
-	}
+    //================================================================================
+    // Constructors
+    //================================================================================
+    public AbstractMFXDialog() {
+        initialize();
+    }
 
-	//================================================================================
-	// Methods
-	//================================================================================
-	private void initialize() {
-		getStyleClass().add(STYLE_CLASS);
-		MFXThemeManager.addOn(this, Themes.DEFAULT, Themes.LEGACY);
-		setMinSize(400, 200);
-	}
+    //================================================================================
+    // Methods
+    //================================================================================
+    private void initialize() {
+        getStyleClass().add(STYLE_CLASS);
+        MFXThemeManager.addOn(this, Themes.DEFAULT, Themes.LEGACY);
+        setMinSize(400, 200);
+    }
 
-	//================================================================================
-	// Overridden Methods
-	//================================================================================
-	@Override
-	protected double computeMaxWidth(double height) {
-		return computePrefWidth(height);
-	}
+    //================================================================================
+    // Overridden Methods
+    //================================================================================
+    @Override
+    public Parent toParent() {
+        return this;
+    }
 
-	@Override
-	protected double computeMaxHeight(double width) {
-		return computePrefHeight(width);
-	}
+    @Override
+    protected double computeMaxWidth(double height) {
+        return computePrefWidth(height);
+    }
+
+    @Override
+    protected double computeMaxHeight(double width) {
+        return computePrefHeight(width);
+    }
 }

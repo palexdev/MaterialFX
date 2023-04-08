@@ -23,10 +23,10 @@ import io.github.palexdev.materialfx.controls.cell.MFXListCell;
 import io.github.palexdev.materialfx.css.themes.Stylesheets;
 import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.skins.MFXListViewSkin;
+import io.github.palexdev.materialfx.utils.ListChangeHelper;
 import io.github.palexdev.materialfx.utils.ListChangeProcessor;
-import io.github.palexdev.virtualizedfx.beans.NumberRange;
-import io.github.palexdev.virtualizedfx.flow.simple.SimpleVirtualFlow;
-import io.github.palexdev.virtualizedfx.utils.ListChangeHelper;
+import io.github.palexdev.mfxcore.base.beans.range.IntegerRange;
+import io.github.palexdev.virtualizedfx.unused.simple.SimpleVirtualFlow;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -111,7 +111,7 @@ public class MFXListView<T> extends AbstractMFXListView<T, MFXListCell<T>> {
 			return;
 		}
 
-		ListChangeHelper.Change c = ListChangeHelper.processChange(change, NumberRange.of(0, Integer.MAX_VALUE));
+		ListChangeHelper.Change c = ListChangeHelper.processChange(change, IntegerRange.of(0, Integer.MAX_VALUE));
 		ListChangeProcessor updater = new ListChangeProcessor(new HashSet<>(getSelectionModel().getSelection().keySet()));
 		c.processReplacement((changed, removed) -> getSelectionModel().replaceSelection(changed.toArray(new Integer[0])));
 		c.processAddition((from, to, added) -> {
