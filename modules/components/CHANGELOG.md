@@ -16,6 +16,17 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.16.3] - 11-04-2023
+
+## Changed
+
+- Adapt to new When API from MFXCore
+
+## Fixed
+
+- Fixed a bug that lead to the behavior not being initialized in specific occasions, also added unit test
+- Fixed label positioning for buttons
+
 ## [11.16.2] - 06-04-2023
 
 ## Fixed
