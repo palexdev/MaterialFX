@@ -16,6 +16,19 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.3.1] - 11-04-2023
+
+## Added
+
+- Added new collection, WeakHashSet
+
+## Changed
+
+- When API v2! Now allowing again multiple Whens on the same ObservableValue
+- Synchronized properties: avoid using When for the waiting property for two reasons: 1) it can't be disposed easily 2)
+  overriding the set method of the property avoids the need of listeners, improving memory usage and performance
+- Validation: adapt to new When API
+
 ## [11.3.0] - 06-04-2023
 
 ## Added
