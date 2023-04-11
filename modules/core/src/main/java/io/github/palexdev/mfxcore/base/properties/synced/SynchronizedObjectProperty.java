@@ -37,44 +37,29 @@ public class SynchronizedObjectProperty<T> extends ReadOnlyObjectWrapper<T> impl
 	//================================================================================
 	// Properties
 	//================================================================================
-	private final ReadOnlyBooleanWrapper waiting = new ReadOnlyBooleanWrapper();
+	private final ReadOnlyBooleanWrapper waiting = new ReadOnlyBooleanWrapper() {
+		@Override
+		public void set(boolean newValue) {
+			super.set(newValue);
+			if (!newValue) SynchronizedObjectProperty.this.fireValueChangedEvent();
+		}
+	};
 
 	//================================================================================
 	// Constructors
 	//================================================================================
-	public SynchronizedObjectProperty() {
-		initialize();
-	}
+	public SynchronizedObjectProperty() {}
 
 	public SynchronizedObjectProperty(T initialValue) {
 		super(initialValue);
-		initialize();
 	}
 
 	public SynchronizedObjectProperty(Object bean, String name) {
 		super(bean, name);
-		initialize();
 	}
 
 	public SynchronizedObjectProperty(Object bean, String name, T initialValue) {
 		super(bean, name, initialValue);
-		initialize();
-	}
-
-	//================================================================================
-	// Methods
-	//================================================================================
-
-	/**
-	 * Adds a listener to the property by calling {@link When#onChanged(ObservableValue)}
-	 * to call {@link #fireValueChangedEvent()} when the property is awakened, {@link #awake()}.
-	 */
-	private void initialize() {
-		When.onChanged(waiting)
-				.then((oldValue, newValue) -> {
-					if (!newValue) fireValueChangedEvent();
-				})
-				.listen();
 	}
 
 	//================================================================================
@@ -90,9 +75,9 @@ public class SynchronizedObjectProperty<T> extends ReadOnlyObjectWrapper<T> impl
 
 		waiting.set(true);
 		When.onChanged(observable)
-				.then((oldValue, newValue) -> awake())
-				.oneShot()
-				.listen();
+			.then((oldValue, newValue) -> awake())
+			.oneShot()
+			.listen();
 		set(value);
 	}
 
@@ -176,7 +161,7 @@ public class SynchronizedObjectProperty<T> extends ReadOnlyObjectWrapper<T> impl
 
 		if (isBound()) unbind();
 		MFXBindings.instance().bindBidirectional(this).addSource(
-				new Source<>(other).implicit(this, other)).get();
+			new Source<>(other).implicit(this, other)).get();
 	}
 
 	/**

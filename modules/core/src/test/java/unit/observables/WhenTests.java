@@ -18,47 +18,101 @@
 
 package unit.observables;
 
-import io.github.palexdev.mfxcore.observables.OnInvalidated;
 import io.github.palexdev.mfxcore.observables.When;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import org.junit.jupiter.api.Test;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WhenTests {
 
-	@Test
-	void testMultipleFail() {
-		IntegerProperty ip = new SimpleIntegerProperty();
+    @Test
+    void testMultiple() {
+        IntegerProperty prop = new SimpleIntegerProperty();
+        AtomicInteger cnt = new AtomicInteger();
 
-		When.onInvalidated(ip)
-				.then(System.out::println)
-				.listen();
+        When<Number> oc = When.onChanged(prop)
+            .then((o, n) -> cnt.incrementAndGet())
+            .listen();
 
-		assertThrows(
-				IllegalArgumentException.class,
-				() -> When.onInvalidated(ip)
-						.then(n -> System.out.println("This should not happen"))
-						.listen()
-		);
-	}
+        prop.set(1);
+        assertEquals(1, cnt.get());
 
-	@Test
-	void testMultipleForce() {
-		IntegerProperty ip = new SimpleIntegerProperty();
+        When<Number> oi = When.onInvalidated(prop)
+            .then(v -> cnt.incrementAndGet())
+            .listen();
 
-		OnInvalidated<Number> first = When.onInvalidated(ip)
-				.then(System.out::println)
-				.listen();
+        prop.set(3);
+        assertEquals(3, cnt.get());
 
-		assertDoesNotThrow(
-				() -> {
-					When.onInvalidated(ip)
-							.then(n -> System.out.println("This should not happen"))
-							.forceListen();
-				}
-		);
-		assertTrue(first.isDisposed());
-	}
+        assertEquals(2, When.totalSize());
+        When.dispose(oc, oi);
+        assertEquals(0, When.totalSize());
+    }
+
+    @Test
+    void testOneShot1() {
+        IntegerProperty prop = new SimpleIntegerProperty();
+        AtomicBoolean changed = new AtomicBoolean(false);
+
+        When.onInvalidated(prop)
+            .then(v -> changed.set(true))
+            .oneShot(true)
+            .executeNow()
+            .listen();
+
+        assertTrue(changed.get());
+        assertEquals(0, When.totalSize());
+    }
+
+    @Test
+    void testOneShot2() {
+        IntegerProperty prop = new SimpleIntegerProperty(-1);
+        AtomicBoolean changed = new AtomicBoolean(false);
+
+        When.onInvalidated(prop)
+            .then(v -> changed.set(true))
+            .oneShot(true)
+            .executeNow(() -> prop.get() != -1)
+            .listen();
+
+        assertFalse(changed.get());
+        assertEquals(1, When.totalSize());
+
+        prop.set(0);
+        assertTrue(changed.get());
+        assertEquals(0, When.totalSize());
+    }
+
+    @Test
+    void testOneShot3() {
+        IntegerProperty prop = new SimpleIntegerProperty(-1);
+        StringProperty sProp = new SimpleStringProperty("");
+        AtomicBoolean changed = new AtomicBoolean(false);
+
+        When.onInvalidated(prop)
+            .condition(v -> v.intValue() != -1)
+            .then(v -> changed.set(true))
+            .oneShot(true)
+            .executeNow(() -> prop.get() != -1)
+            .invalidating(sProp)
+            .listen();
+
+        assertFalse(changed.get());
+        assertEquals(1, When.totalSize());
+
+        sProp.set("Don't change yet!");
+        assertFalse(changed.get());
+        assertEquals(1, When.totalSize());
+
+        prop.set(0);
+        assertTrue(changed.get());
+        assertEquals(0, When.totalSize());
+    }
 }

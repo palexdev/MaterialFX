@@ -22,15 +22,16 @@ import io.github.palexdev.mfxcomponents.behaviors.MFXButtonBehavior;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
 import io.github.palexdev.mfxcomponents.skins.base.MFXLabeledSkin;
 import io.github.palexdev.mfxcomponents.theming.enums.PseudoClasses;
+import io.github.palexdev.mfxcore.observables.When;
 import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
 import io.github.palexdev.mfxcore.utils.fx.TextUtils;
 import io.github.palexdev.mfxeffects.ripple.MFXRippleGenerator;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
-import static io.github.palexdev.mfxcore.observables.When.disposeFor;
 import static io.github.palexdev.mfxcore.observables.When.onChanged;
 
 /**
@@ -41,112 +42,113 @@ import static io.github.palexdev.mfxcore.observables.When.onChanged;
  * The layout is simple, there are just the label to show the text and the {@link MFXRippleGenerator} to generate ripples.
  */
 public class MFXButtonSkin extends MFXLabeledSkin<MFXButton, MFXButtonBehavior> {
-	//================================================================================
-	// Properties
-	//================================================================================
-	protected final MFXRippleGenerator rg;
+    //================================================================================
+    // Properties
+    //================================================================================
+    protected final MFXRippleGenerator rg;
+    protected When<ContentDisplay> cdWhen;
 
-	//================================================================================
-	// Constructors
-	//================================================================================
-	public MFXButtonSkin(MFXButton button) {
-		super(button);
+    //================================================================================
+    // Constructors
+    //================================================================================
+    public MFXButtonSkin(MFXButton button) {
+        super(button);
 
-		// Init ripple generator
-		rg = new MFXRippleGenerator(button);
-		rg.setManaged(false);
-		rg.setAnimateBackground(false);
-		rg.setAutoClip(true);
-		rg.setRipplePrefSize(50);
-		rg.setRippleColor(Color.web("d7d1e7"));
+        // Init ripple generator
+        rg = new MFXRippleGenerator(button);
+        rg.setManaged(false);
+        rg.setAnimateBackground(false);
+        rg.setAutoClip(true);
+        rg.setRipplePrefSize(50);
+        rg.setRippleColor(Color.web("d7d1e7"));
 
-		// Finalize init
-		getChildren().addAll(rg, label);
-		addListeners();
-	}
+        // Finalize init
+        getChildren().addAll(rg, label);
+        addListeners();
+    }
 
-	//================================================================================
-	// Methods
-	//================================================================================
+    //================================================================================
+    // Methods
+    //================================================================================
 
-	/**
-	 * Adds the following listeners:
-	 * <p> - A listener on the {@link MFXButton#contentDisplayProperty()} to activate/disable the pseudo classes
-	 * {@link PseudoClasses#WITH_ICON_LEFT} and {@link PseudoClasses#WITH_ICON_RIGHT} accordingly
-	 */
-	protected void addListeners() {
-		MFXButton button = getSkinnable();
-		onChanged(button.contentDisplayProperty())
-				.then((o, n) -> {
-					Node graphic = button.getGraphic();
-					boolean wil = (graphic != null) && (n == ContentDisplay.LEFT);
-					boolean wir = (graphic != null) && (n == ContentDisplay.RIGHT);
-					PseudoClasses.WITH_ICON_LEFT.setOn(button, wil);
-					PseudoClasses.WITH_ICON_RIGHT.setOn(button, wir);
-				})
-				.executeNow()
-				.invalidating(button.graphicProperty())
-				.listen();
-	}
+    /**
+     * Adds the following listeners:
+     * <p> - A listener on the {@link MFXButton#contentDisplayProperty()} to activate/disable the pseudo classes
+     * {@link PseudoClasses#WITH_ICON_LEFT} and {@link PseudoClasses#WITH_ICON_RIGHT} accordingly
+     */
+    protected void addListeners() {
+        MFXButton button = getSkinnable();
+        cdWhen = onChanged(button.contentDisplayProperty())
+            .then((o, n) -> {
+                Node graphic = button.getGraphic();
+                boolean wil = (graphic != null) && (n == ContentDisplay.LEFT);
+                boolean wir = (graphic != null) && (n == ContentDisplay.RIGHT);
+                PseudoClasses.WITH_ICON_LEFT.setOn(button, wil);
+                PseudoClasses.WITH_ICON_RIGHT.setOn(button, wir);
+            })
+            .executeNow()
+            .invalidating(button.graphicProperty())
+            .listen();
+    }
 
-	//================================================================================
-	// Overridden Methods
-	//================================================================================
+    //================================================================================
+    // Overridden Methods
+    //================================================================================
 
-	/**
-	 * Initializes the given {@link MFXButtonBehavior} to handle events such as: {@link MouseEvent#MOUSE_PRESSED},
-	 * {@link MouseEvent#MOUSE_CLICKED}.
-	 */
-	@Override
-	protected void initBehavior(MFXButtonBehavior behavior) {
-		MFXButton button = getSkinnable();
-		handle(button, MouseEvent.MOUSE_PRESSED, e -> behavior.generateRipple(rg, e));
-		handle(button, MouseEvent.MOUSE_PRESSED, behavior::mousePressed);
-		handle(button, MouseEvent.MOUSE_CLICKED, behavior::mouseClicked);
-	}
+    /**
+     * Initializes the given {@link MFXButtonBehavior} to handle events such as: {@link MouseEvent#MOUSE_PRESSED},
+     * {@link MouseEvent#MOUSE_CLICKED}.
+     */
+    @Override
+    protected void initBehavior(MFXButtonBehavior behavior) {
+        MFXButton button = getSkinnable();
+        handle(button, MouseEvent.MOUSE_PRESSED, e -> behavior.generateRipple(rg, e));
+        handle(button, MouseEvent.MOUSE_PRESSED, behavior::mousePressed);
+        handle(button, MouseEvent.MOUSE_CLICKED, behavior::mouseClicked);
+    }
 
-	@Override
-	public double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-		MFXButton button = getSkinnable();
-		double insets = leftInset + rightInset;
-		double tW = snapSizeX(TextUtils.computeTextWidth(label.getFont(), label.getText()));
-		if (button.getContentDisplay() == ContentDisplay.GRAPHIC_ONLY) tW = 0;
-		double gW = (button.getGraphic() != null) ? LayoutUtils.boundWidth(button.getGraphic()) + button.getGraphicTextGap() : 0.0;
-		return insets + tW + gW;
-	}
+    @Override
+    public double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+        MFXButton button = getSkinnable();
+        double insets = leftInset + rightInset;
+        double tW = snapSizeX(TextUtils.computeTextWidth(label.getFont(), label.getText()));
+        if (button.getContentDisplay() == ContentDisplay.GRAPHIC_ONLY) tW = 0;
+        double gW = (button.getGraphic() != null) ? LayoutUtils.boundWidth(button.getGraphic()) + button.getGraphicTextGap() : 0.0;
+        return insets + tW + gW;
+    }
 
-	@Override
-	public double computePrefHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-		MFXButton button = getSkinnable();
-		double insets = topInset + bottomInset;
-		double tH = snapSizeY(TextUtils.computeTextHeight(label.getFont(), label.getText()));
-		double gH = button.getGraphic() != null ? LayoutUtils.boundHeight(button.getGraphic()) : 0.0;
-		return insets + Math.max(tH, gH);
-	}
+    @Override
+    public double computePrefHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+        MFXButton button = getSkinnable();
+        double insets = topInset + bottomInset;
+        double tH = snapSizeY(TextUtils.computeTextHeight(label.getFont(), label.getText()));
+        double gH = button.getGraphic() != null ? LayoutUtils.boundHeight(button.getGraphic()) : 0.0;
+        return insets + Math.max(tH, gH);
+    }
 
-	@Override
-	public double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-		return getSkinnable().prefWidth(height);
-	}
+    @Override
+    public double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return getSkinnable().prefWidth(height);
+    }
 
-	@Override
-	public double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-		return getSkinnable().prefHeight(width);
-	}
+    @Override
+    public double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return getSkinnable().prefHeight(width);
+    }
 
-	@Override
-	protected void layoutChildren(double x, double y, double w, double h) {
-		super.layoutChildren(x, y, w, h);
+    @Override
+    protected void layoutChildren(double x, double y, double w, double h) {
+        MFXButton button = getSkinnable();
+        Pos pos = button.getAlignment();
+        layoutInArea(label, x, y, w, h, 0, pos.getHpos(), pos.getVpos());
+        rg.resizeRelocate(0, 0, button.getWidth(), button.getHeight());
+    }
 
-		MFXButton button = getSkinnable();
-		rg.resizeRelocate(0, 0, button.getWidth(), button.getHeight());
-	}
-
-	@Override
-	public void dispose() {
-		MFXButton button = getSkinnable();
-		label.getTextNode().ifPresent(n -> n.opacityProperty().unbind());
-		disposeFor(button.contentDisplayProperty());
-		super.dispose();
-	}
+    @Override
+    public void dispose() {
+        label.getTextNode().ifPresent(n -> n.opacityProperty().unbind());
+        cdWhen.dispose();
+        cdWhen = null;
+        super.dispose();
+    }
 }

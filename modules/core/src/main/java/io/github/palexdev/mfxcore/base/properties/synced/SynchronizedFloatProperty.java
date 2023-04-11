@@ -32,181 +32,166 @@ import javafx.beans.value.ObservableValue;
  * Implementation of {@link SynchronizedProperty} for float values.
  */
 public class SynchronizedFloatProperty extends ReadOnlyFloatWrapper implements SynchronizedProperty<Number> {
-	//================================================================================
-	// Properties
-	//================================================================================
-	private final ReadOnlyBooleanWrapper waiting = new ReadOnlyBooleanWrapper();
+    //================================================================================
+    // Properties
+    //================================================================================
+    private final ReadOnlyBooleanWrapper waiting = new ReadOnlyBooleanWrapper() {
+        @Override
+        public void set(boolean newValue) {
+            super.set(newValue);
+            if (!newValue) SynchronizedFloatProperty.this.fireValueChangedEvent();
+        }
+    };
 
-	//================================================================================
-	// Constructors
-	//================================================================================
-	public SynchronizedFloatProperty() {
-		initialize();
-	}
+    //================================================================================
+    // Constructors
+    //================================================================================
+    public SynchronizedFloatProperty() {}
 
-	public SynchronizedFloatProperty(float initialValue) {
-		super(initialValue);
-		initialize();
-	}
+    public SynchronizedFloatProperty(float initialValue) {
+        super(initialValue);
+    }
 
-	public SynchronizedFloatProperty(Object bean, String name) {
-		super(bean, name);
-		initialize();
-	}
+    public SynchronizedFloatProperty(Object bean, String name) {
+        super(bean, name);
+    }
 
-	public SynchronizedFloatProperty(Object bean, String name, float initialValue) {
-		super(bean, name, initialValue);
-		initialize();
-	}
+    public SynchronizedFloatProperty(Object bean, String name, float initialValue) {
+        super(bean, name, initialValue);
+    }
 
-	//================================================================================
-	// Methods
-	//================================================================================
+    //================================================================================
+    // Implemented/Overridden Methods
+    //================================================================================
 
-	/**
-	 * Adds a listener to the property by calling {@link When#onChanged(ObservableValue)}
-	 * to call {@link #fireValueChangedEvent()} when the property is awakened, {@link #awake()}.
-	 */
-	private void initialize() {
-		When.onChanged(waiting)
-				.then((oldValue, newValue) -> {
-					if (!newValue) fireValueChangedEvent();
-				})
-				.listen();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setAndWait(Number value, ObservableValue<?> observable) {
+        if (!Helper.check(this, value, observable)) return;
 
-	//================================================================================
-	// Implemented/Overridden Methods
-	//================================================================================
+        waiting.set(true);
+        When.onChanged(observable)
+            .then((oldValue, newValue) -> awake())
+            .oneShot()
+            .listen();
+        set(value.floatValue());
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setAndWait(Number value, ObservableValue<?> observable) {
-		if (!Helper.check(this, value, observable)) return;
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isWaiting() {
+        return waiting.get();
+    }
 
-		waiting.set(true);
-		When.onChanged(observable)
-				.then((oldValue, newValue) -> awake())
-				.oneShot()
-				.listen();
-		set(value.floatValue());
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ReadOnlyBooleanProperty waiting() {
+        return waiting.getReadOnlyProperty();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean isWaiting() {
-		return waiting.get();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void awake() {
+        waiting.set(false);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ReadOnlyBooleanProperty waiting() {
-		return waiting.getReadOnlyProperty();
-	}
+    /**
+     * {@inheritDoc}
+     * <p></p>
+     * Overridden to not fire a change event if {@link #waiting()} is true.
+     */
+    @Override
+    protected void fireValueChangedEvent() {
+        if (isWaiting()) return;
+        super.fireValueChangedEvent();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void awake() {
-		waiting.set(false);
-	}
+    //================================================================================
+    // Binding
+    //================================================================================
 
-	/**
-	 * {@inheritDoc}
-	 * <p></p>
-	 * Overridden to not fire a change event if {@link #waiting()} is true.
-	 */
-	@Override
-	protected void fireValueChangedEvent() {
-		if (isWaiting()) return;
-		super.fireValueChangedEvent();
-	}
+    /**
+     * Creates a unidirectional bindings with the given observable.
+     * <p>
+     * The binding is created using the new {@link MFXBindings} mechanism.
+     * <p></p>
+     * If the property is already bound it is automatically unbound before bindings to the new observable.
+     *
+     * @throws IllegalArgumentException if the given observable is the property itself
+     * @see MFXBindings
+     */
+    @Override
+    public void bind(ObservableValue<? extends Number> source) {
+        if (this == source) {
+            throw new IllegalArgumentException("Cannot bind to itself!");
+        }
 
-	//================================================================================
-	// Binding
-	//================================================================================
+        if (isBound()) unbind();
+        MFXBindings.instance().bind(this).source(source).get();
+    }
 
-	/**
-	 * Creates a unidirectional bindings with the given observable.
-	 * <p>
-	 * The binding is created using the new {@link MFXBindings} mechanism.
-	 * <p></p>
-	 * If the property is already bound it is automatically unbound before bindings to the new observable.
-	 *
-	 * @throws IllegalArgumentException if the given observable is the property itself
-	 * @see MFXBindings
-	 */
-	@Override
-	public void bind(ObservableValue<? extends Number> source) {
-		if (this == source) {
-			throw new IllegalArgumentException("Cannot bind to itself!");
-		}
+    /**
+     * Creates a bidirectional bindings between this property and the given property.
+     * <p>
+     * The binding is created using the new {@link MFXBindings} mechanism.
+     * <p></p>
+     * If the property is already bound unidirectionally it is automatically unbound.
+     * <p>
+     * If the property is already bound bidirectionally it won't be automatically unbound, just like JavaFX,
+     * this way you can have multiple bidirectional bindings
+     *
+     * @throws IllegalArgumentException if the given observable is the property itself
+     * @see MFXBindings
+     */
+    @Override
+    public void bindBidirectional(Property<Number> other) {
+        if (this == other) {
+            throw new IllegalArgumentException("Cannot bind to itself!");
+        }
 
-		if (isBound()) unbind();
-		MFXBindings.instance().bind(this).source(source).get();
-	}
+        if (isBound()) unbind();
+        MFXBindings.instance().bindBidirectional(this)
+            .addSource(new Source<>(other).implicit(this, other)).get();
+    }
 
-	/**
-	 * Creates a bidirectional bindings between this property and the given property.
-	 * <p>
-	 * The binding is created using the new {@link MFXBindings} mechanism.
-	 * <p></p>
-	 * If the property is already bound unidirectionally it is automatically unbound.
-	 * <p>
-	 * If the property is already bound bidirectionally it won't be automatically unbound, just like JavaFX,
-	 * this way you can have multiple bidirectional bindings
-	 *
-	 * @throws IllegalArgumentException if the given observable is the property itself
-	 * @see MFXBindings
-	 */
-	@Override
-	public void bindBidirectional(Property<Number> other) {
-		if (this == other) {
-			throw new IllegalArgumentException("Cannot bind to itself!");
-		}
+    /**
+     * Overridden to call {@link MFXBindings#unbind(ObservableValue)}.
+     */
+    @Override
+    public void unbind() {
+        MFXBindings.instance().unbind(this);
+    }
 
-		if (isBound()) unbind();
-		MFXBindings.instance().bindBidirectional(this)
-				.addSource(new Source<>(other).implicit(this, other)).get();
-	}
+    /**
+     * Overridden to call {@link MFXBindings#unbindBidirectional(ObservableValue, ObservableValue)}.
+     */
+    @Override
+    public void unbindBidirectional(Property<Number> other) {
+        MFXBindings.instance().unbindBidirectional(this, other);
+    }
 
-	/**
-	 * Overridden to call {@link MFXBindings#unbind(ObservableValue)}.
-	 */
-	@Override
-	public void unbind() {
-		MFXBindings.instance().unbind(this);
-	}
+    /**
+     * Delegate method for {@link MFXBindings#disposeBidirectional(ObservableValue)}.
+     */
+    public void clearBidirectional() {
+        MFXBindings.instance().disposeBidirectional(this);
+    }
 
-	/**
-	 * Overridden to call {@link MFXBindings#unbindBidirectional(ObservableValue, ObservableValue)}.
-	 */
-	@Override
-	public void unbindBidirectional(Property<Number> other) {
-		MFXBindings.instance().unbindBidirectional(this, other);
-	}
-
-	/**
-	 * Delegate method for {@link MFXBindings#disposeBidirectional(ObservableValue)}.
-	 */
-	public void clearBidirectional() {
-		MFXBindings.instance().disposeBidirectional(this);
-	}
-
-	/**
-	 * Overridden to check the {@link MFXBindings#isBound(ObservableValue)} and {@link MFXBindings#isIgnoreBinding(ObservableValue)}.
-	 *
-	 * @return true only if `MFXBindings.isBound()` is true and `isIgnoreBound()` is false
-	 */
-	@Override
-	public boolean isBound() {
-		return MFXBindings.instance().isBound(this) && !MFXBindings.instance().isIgnoreBinding(this);
-	}
+    /**
+     * Overridden to check the {@link MFXBindings#isBound(ObservableValue)} and {@link MFXBindings#isIgnoreBinding(ObservableValue)}.
+     *
+     * @return true only if `MFXBindings.isBound()` is true and `isIgnoreBound()` is false
+     */
+    @Override
+    public boolean isBound() {
+        return MFXBindings.instance().isBound(this) && !MFXBindings.instance().isIgnoreBinding(this);
+    }
 }

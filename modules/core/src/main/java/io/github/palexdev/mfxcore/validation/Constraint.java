@@ -19,6 +19,7 @@
 package io.github.palexdev.mfxcore.validation;
 
 import io.github.palexdev.mfxcore.enums.ChainMode;
+import io.github.palexdev.mfxcore.observables.When;
 import javafx.beans.binding.BooleanExpression;
 
 /**
@@ -33,7 +34,7 @@ import javafx.beans.binding.BooleanExpression;
  * <p></p>
  * To build a constraint you can use the offered static methods, the {@link Builder}, or the parameterized constructors.
  */
-class Constraint {
+public class Constraint {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -41,6 +42,8 @@ class Constraint {
 	private String message;
 	private BooleanExpression condition;
 	private ChainMode chainMode = ChainMode.AND;
+
+	protected When<Boolean> when;
 
 	//================================================================================
 	// Constructors
@@ -80,6 +83,21 @@ class Constraint {
 	 */
 	public static Constraint of(Severity severity, String message, BooleanExpression condition) {
 		return new Constraint(severity, message, condition);
+	}
+
+	//================================================================================
+	// Methods
+	//================================================================================
+
+	/**
+	 * Used by {@link MFXValidator} when the constraint in being removed from it.
+	 * <p>
+	 * Upon its creation a listener is added to update the validator with the {@link When}
+	 * construct. Since we need the instance to properly dispose it afterward, we store the reference here,
+	 * the disposal can then be easily automatically handled by {@link MFXValidator#removeConstraint(Constraint)}.
+	 */
+	protected void dispose() {
+		if (when != null) when.dispose();
 	}
 
 	//================================================================================

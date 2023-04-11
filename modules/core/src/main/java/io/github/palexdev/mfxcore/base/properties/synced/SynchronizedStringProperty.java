@@ -35,44 +35,29 @@ public class SynchronizedStringProperty extends ReadOnlyStringWrapper implements
 	//================================================================================
 	// Properties
 	//================================================================================
-	private final ReadOnlyBooleanWrapper waiting = new ReadOnlyBooleanWrapper();
+	private final ReadOnlyBooleanWrapper waiting = new ReadOnlyBooleanWrapper() {
+		@Override
+		public void set(boolean newValue) {
+			super.set(newValue);
+			if (!newValue) SynchronizedStringProperty.this.fireValueChangedEvent();
+		}
+	};
 
 	//================================================================================
 	// Constructors
 	//================================================================================
-	public SynchronizedStringProperty() {
-		initialize();
-	}
+	public SynchronizedStringProperty() {}
 
 	public SynchronizedStringProperty(String initialValue) {
 		super(initialValue);
-		initialize();
 	}
 
 	public SynchronizedStringProperty(Object bean, String name) {
 		super(bean, name);
-		initialize();
 	}
 
 	public SynchronizedStringProperty(Object bean, String name, String initialValue) {
 		super(bean, name, initialValue);
-		initialize();
-	}
-
-	//================================================================================
-	// Methods
-	//================================================================================
-
-	/**
-	 * Adds a listener to the property by calling {@link When#onChanged(ObservableValue)}
-	 * to call {@link #fireValueChangedEvent()} when the property is awakened, {@link #awake()}.
-	 */
-	private void initialize() {
-		When.onChanged(waiting)
-				.then((oldValue, newValue) -> {
-					if (!newValue) fireValueChangedEvent();
-				})
-				.listen();
 	}
 
 	//================================================================================
@@ -88,9 +73,9 @@ public class SynchronizedStringProperty extends ReadOnlyStringWrapper implements
 
 		waiting.set(true);
 		When.onChanged(observable)
-				.then((oldValue, newValue) -> awake())
-				.oneShot()
-				.listen();
+			.then((oldValue, newValue) -> awake())
+			.oneShot()
+			.listen();
 		set(value);
 	}
 
@@ -174,7 +159,7 @@ public class SynchronizedStringProperty extends ReadOnlyStringWrapper implements
 
 		if (isBound()) unbind();
 		MFXBindings.instance().bindBidirectional(this)
-				.addSource(new Source<>(other).implicit(this, other)).get();
+			.addSource(new Source<>(other).implicit(this, other)).get();
 	}
 
 	/**

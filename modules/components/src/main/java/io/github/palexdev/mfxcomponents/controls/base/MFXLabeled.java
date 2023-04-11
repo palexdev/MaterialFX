@@ -26,6 +26,7 @@ import io.github.palexdev.mfxcore.base.properties.functional.SupplierProperty;
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableDoubleProperty;
 import io.github.palexdev.mfxcore.behavior.BehaviorBase;
 import io.github.palexdev.mfxcore.behavior.WithBehavior;
+import io.github.palexdev.mfxcore.observables.When;
 import io.github.palexdev.mfxcore.utils.fx.StyleUtils;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -84,7 +85,12 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 			}
 			behavior = get().get();
 			MFXSkinBase skin = ((MFXSkinBase) getSkin());
-			if (skin != null && behavior != null) skin.initBehavior(behavior);
+			When.onInvalidated(skinProperty())
+				.condition(s -> s != null && behavior != null)
+				.then(s -> ((MFXSkinBase) s).initBehavior(behavior))
+				.oneShot(true)
+				.executeNow(() -> skin != null && behavior != null)
+				.listen();
 		}
 	};
 
@@ -150,8 +156,8 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 	@Override
 	public LayoutStrategy defaultLayoutStrategy() {
 		return LayoutStrategy.defaultStrategy()
-				.setPrefWidthFunction(Defaults.DEF_PREF_WIDTH_FUNCTION.andThen(r -> Math.max(r, getInitWidth())))
-				.setPrefHeightFunction(Defaults.DEF_PREF_HEIGHT_FUNCTION.andThen(r -> Math.max(r, getInitHeight())));
+			.setPrefWidthFunction(Defaults.DEF_PREF_WIDTH_FUNCTION.andThen(r -> Math.max(r, getInitWidth())))
+			.setPrefHeightFunction(Defaults.DEF_PREF_HEIGHT_FUNCTION.andThen(r -> Math.max(r, getInitHeight())));
 	}
 
 	@Override
@@ -202,10 +208,10 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 	// Styleable Properties
 	//================================================================================
 	private final StyleableDoubleProperty initHeight = new StyleableDoubleProperty(
-			StyleableProperties.INIT_HEIGHT,
-			this,
-			"initHeight",
-			USE_COMPUTED_SIZE
+		StyleableProperties.INIT_HEIGHT,
+		this,
+		"initHeight",
+		USE_COMPUTED_SIZE
 	) {
 		@Override
 		public void set(double newValue) {
@@ -219,10 +225,10 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 	};
 
 	private final StyleableDoubleProperty initWidth = new StyleableDoubleProperty(
-			StyleableProperties.INIT_WIDTH,
-			this,
-			"initWidth",
-			USE_COMPUTED_SIZE
+		StyleableProperties.INIT_WIDTH,
+		this,
+		"initWidth",
+		USE_COMPUTED_SIZE
 	) {
 		@Override
 		public void set(double newValue) {
@@ -236,10 +242,10 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 	};
 
 	private final StyleableDoubleProperty textOpacity = new StyleableDoubleProperty(
-			StyleableProperties.TEXT_OPACITY,
-			this,
-			"textOpacity",
-			1.0
+		StyleableProperties.TEXT_OPACITY,
+		this,
+		"textOpacity",
+		1.0
 	);
 
 	public final double getInitHeight() {
@@ -320,30 +326,30 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
 		protected static final CssMetaData<MFXLabeled<?>, Number> INIT_HEIGHT =
-				FACTORY.createSizeCssMetaData(
-						"-mfx-init-height",
-						MFXLabeled::initHeightProperty,
-						USE_COMPUTED_SIZE
-				);
+			FACTORY.createSizeCssMetaData(
+				"-mfx-init-height",
+				MFXLabeled::initHeightProperty,
+				USE_COMPUTED_SIZE
+			);
 
 		private static final CssMetaData<MFXLabeled<?>, Number> INIT_WIDTH =
-				FACTORY.createSizeCssMetaData(
-						"-mfx-init-width",
-						MFXLabeled::initWidthProperty,
-						USE_COMPUTED_SIZE
-				);
+			FACTORY.createSizeCssMetaData(
+				"-mfx-init-width",
+				MFXLabeled::initWidthProperty,
+				USE_COMPUTED_SIZE
+			);
 
 		private static final CssMetaData<MFXLabeled<?>, Number> TEXT_OPACITY =
-				FACTORY.createSizeCssMetaData(
-						"-mfx-text-opacity",
-						MFXLabeled::textOpacityProperty,
-						1.0
-				);
+			FACTORY.createSizeCssMetaData(
+				"-mfx-text-opacity",
+				MFXLabeled::textOpacityProperty,
+				1.0
+			);
 
 		static {
 			cssMetaDataList = StyleUtils.cssMetaDataList(
-					Labeled.getClassCssMetaData(),
-					INIT_HEIGHT, INIT_WIDTH, TEXT_OPACITY
+				Labeled.getClassCssMetaData(),
+				INIT_HEIGHT, INIT_WIDTH, TEXT_OPACITY
 			);
 		}
 	}

@@ -96,8 +96,8 @@ public class TestLayoutStrategies {
 
 		// Finally, let's test the strategy
 		LayoutStrategy strategy = LayoutStrategy.defaultStrategy()
-				.setMinWidthFunction(Defaults.DEF_MIN_WIDTH_FUNCTION.andThen(r -> Math.max(r, 48)))
-				.setMinHeightFunction(Defaults.DEF_MIN_HEIGHT_FUNCTION.andThen(r -> Math.max(r, 48)));
+			.setMinWidthFunction(Defaults.DEF_MIN_WIDTH_FUNCTION.andThen(r -> Math.max(r, 48)))
+			.setMinHeightFunction(Defaults.DEF_MIN_HEIGHT_FUNCTION.andThen(r -> Math.max(r, 48)));
 		robot.interact(() -> {
 			rc.setLayoutStrategy(strategy);
 			rc.requestLayout();
@@ -118,8 +118,8 @@ public class TestLayoutStrategies {
 		assertEquals(24.0, rc.getHeight());
 
 		LayoutStrategy strategy = LayoutStrategy.defaultStrategy()
-				.setPrefWidthFunction(Defaults.DEF_PREF_WIDTH_FUNCTION.andThen(r -> Math.max(r, 64.0)))
-				.setPrefHeightFunction(Defaults.DEF_PREF_HEIGHT_FUNCTION.andThen(r -> Math.max(r, 64.0)));
+			.setPrefWidthFunction(Defaults.DEF_PREF_WIDTH_FUNCTION.andThen(r -> Math.max(r, 64.0)))
+			.setPrefHeightFunction(Defaults.DEF_PREF_HEIGHT_FUNCTION.andThen(r -> Math.max(r, 64.0)));
 		robot.interact(() -> {
 			rc.setLayoutStrategy(strategy);
 			rc.requestLayout();
@@ -145,8 +145,8 @@ public class TestLayoutStrategies {
 		robot.interact(() -> root.getChildren().setAll(rc));
 
 		LayoutStrategy strategy = LayoutStrategy.defaultStrategy()
-				.setMaxWidthFunction(Defaults.DEF_MAX_WIDTH_FUNCTION.andThen(r -> Math.min(r, 50.0)))
-				.setMaxHeightFunction(Defaults.DEF_MAX_HEIGHT_FUNCTION.andThen(r -> Math.min(r, 50.0)));
+			.setMaxWidthFunction(Defaults.DEF_MAX_WIDTH_FUNCTION.andThen(r -> Math.min(r, 50.0)))
+			.setMaxHeightFunction(Defaults.DEF_MAX_HEIGHT_FUNCTION.andThen(r -> Math.min(r, 50.0)));
 		robot.interact(() -> {
 			rc.setLayoutStrategy(strategy);
 			rc.requestLayout();
@@ -198,8 +198,8 @@ public class TestLayoutStrategies {
 
 		// Define a strategy with minimum sizes
 		LayoutStrategy strategy = LayoutStrategy.defaultStrategy()
-				.setMinWidthFunction(Defaults.DEF_MIN_WIDTH_FUNCTION.andThen(r -> Math.max(r, 72.0)))
-				.setMinHeightFunction(Defaults.DEF_MIN_HEIGHT_FUNCTION.andThen(r -> Math.max(r, 72.0)));
+			.setMinWidthFunction(Defaults.DEF_MIN_WIDTH_FUNCTION.andThen(r -> Math.max(r, 72.0)))
+			.setMinHeightFunction(Defaults.DEF_MIN_HEIGHT_FUNCTION.andThen(r -> Math.max(r, 72.0)));
 		robot.interact(() -> {
 			fab.setLayoutStrategy(strategy);
 			//fab.requestLayout();
@@ -274,8 +274,8 @@ public class TestLayoutStrategies {
 
 		// Define a strategy with pref sizes
 		LayoutStrategy strategy = LayoutStrategy.defaultStrategy()
-				.setPrefWidthFunction(Defaults.DEF_PREF_WIDTH_FUNCTION.andThen(r -> Math.max(r, 72.0)))
-				.setPrefHeightFunction(Defaults.DEF_PREF_HEIGHT_FUNCTION.andThen(r -> Math.max(r, 72.0)));
+			.setPrefWidthFunction(Defaults.DEF_PREF_WIDTH_FUNCTION.andThen(r -> Math.max(r, 72.0)))
+			.setPrefHeightFunction(Defaults.DEF_PREF_HEIGHT_FUNCTION.andThen(r -> Math.max(r, 72.0)));
 		robot.interact(() -> fab.setLayoutStrategy(strategy));
 
 		/*
@@ -305,8 +305,8 @@ public class TestLayoutStrategies {
 
 		// Define a strategy with max sizes
 		LayoutStrategy strategy = LayoutStrategy.defaultStrategy()
-				.setMaxWidthFunction(Defaults.DEF_MAX_WIDTH_FUNCTION.andThen(r -> Math.max(r, 72.0)))
-				.setMaxHeightFunction(Defaults.DEF_MAX_HEIGHT_FUNCTION.andThen(r -> Math.max(r, 72.0)));
+			.setMaxWidthFunction(Defaults.DEF_MAX_WIDTH_FUNCTION.andThen(r -> Math.max(r, 72.0)))
+			.setMaxHeightFunction(Defaults.DEF_MAX_HEIGHT_FUNCTION.andThen(r -> Math.max(r, 72.0)));
 		robot.interact(() -> fab.setLayoutStrategy(strategy));
 
 		/*
@@ -334,8 +334,8 @@ public class TestLayoutStrategies {
 		 */
 
 		LayoutStrategy newStrategy = LayoutStrategy.defaultStrategy()
-				.setMaxWidthFunction(r -> 64.0)
-				.setMaxHeightFunction(r -> 64.0);
+			.setMaxWidthFunction(r -> 64.0)
+			.setMaxHeightFunction(r -> 64.0);
 		robot.interact(() -> fab.setLayoutStrategy(newStrategy));
 		assertEquals(64.0, fab.getWidth());
 		assertEquals(64.0, fab.getHeight());
@@ -458,24 +458,25 @@ public class TestLayoutStrategies {
 				}
 
 				final Pane pane = new Pane();
+				final When<Node> cdWhen;
 
 				{
-					When.onChanged(contentProperty())
-							.then((o, n) -> {
-								if (n == null) {
-									pane.getChildren().clear();
-									return;
-								}
-								pane.getChildren().setAll(n);
-							})
-							.executeNow()
-							.listen();
+					cdWhen = When.onChanged(contentProperty())
+						.then((o, n) -> {
+							if (n == null) {
+								pane.getChildren().clear();
+								return;
+							}
+							pane.getChildren().setAll(n);
+						})
+						.executeNow()
+						.listen();
 					getChildren().add(pane);
 				}
 
 				@Override
 				public void dispose() {
-					When.disposeFor(contentProperty());
+					cdWhen.dispose();
 					super.dispose();
 				}
 			};

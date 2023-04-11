@@ -35,44 +35,29 @@ public class SynchronizedLongProperty extends ReadOnlyLongWrapper implements Syn
 	//================================================================================
 	// Properties
 	//================================================================================
-	private final ReadOnlyBooleanWrapper waiting = new ReadOnlyBooleanWrapper();
+	private final ReadOnlyBooleanWrapper waiting = new ReadOnlyBooleanWrapper() {
+		@Override
+		public void set(boolean newValue) {
+			super.set(newValue);
+			if (!newValue) SynchronizedLongProperty.this.fireValueChangedEvent();
+		}
+	};
 
 	//================================================================================
 	// Constructors
 	//================================================================================
-	public SynchronizedLongProperty() {
-		initialize();
-	}
+	public SynchronizedLongProperty() {}
 
 	public SynchronizedLongProperty(long initialValue) {
 		super(initialValue);
-		initialize();
 	}
 
 	public SynchronizedLongProperty(Object bean, String name) {
 		super(bean, name);
-		initialize();
 	}
 
 	public SynchronizedLongProperty(Object bean, String name, long initialValue) {
 		super(bean, name, initialValue);
-		initialize();
-	}
-
-	//================================================================================
-	// Methods
-	//================================================================================
-
-	/**
-	 * Adds a listener to the property by calling {@link When#onChanged(ObservableValue)}
-	 * to call {@link #fireValueChangedEvent()} when the property is awakened, {@link #awake()}.
-	 */
-	private void initialize() {
-		When.onChanged(waiting)
-				.then((oldValue, newValue) -> {
-					if (!newValue) fireValueChangedEvent();
-				})
-				.listen();
 	}
 
 	//================================================================================
@@ -88,9 +73,9 @@ public class SynchronizedLongProperty extends ReadOnlyLongWrapper implements Syn
 
 		waiting.set(true);
 		When.onChanged(observable)
-				.then((oldValue, newValue) -> awake())
-				.oneShot()
-				.listen();
+			.then((oldValue, newValue) -> awake())
+			.oneShot()
+			.listen();
 		set(value.longValue());
 	}
 
@@ -173,7 +158,7 @@ public class SynchronizedLongProperty extends ReadOnlyLongWrapper implements Syn
 
 		if (isBound()) unbind();
 		MFXBindings.instance().bindBidirectional(this).addSource(
-				new Source<>(other).implicit(this, other)).get();
+			new Source<>(other).implicit(this, other)).get();
 	}
 
 	/**

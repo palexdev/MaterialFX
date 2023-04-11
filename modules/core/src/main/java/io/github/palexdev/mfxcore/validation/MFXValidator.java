@@ -24,7 +24,6 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.binding.BooleanExpression;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -59,6 +58,8 @@ public class MFXValidator {
 	private boolean sortBySeverity = true;
 	private boolean failFast = false;
 
+	protected When<Boolean> when;
+
 	//================================================================================
 	// Constructors
 	//================================================================================
@@ -81,7 +82,7 @@ public class MFXValidator {
 	 * The listener is build using the new {@link When} construct.
 	 */
 	public MFXValidator constraint(Constraint constraint) {
-		When.onInvalidated(constraint.getCondition()).then(value -> update()).listen();
+		constraint.when = When.onInvalidated(constraint.getCondition()).then(value -> update()).listen();
 		constraints.add(constraint);
 		return this;
 	}
@@ -103,13 +104,11 @@ public class MFXValidator {
 	/**
 	 * Removes the given {@link Constraint} from the validator.
 	 * <p>
-	 * Also invokes {@link When#disposeFor(ObservableValue)} on the
-	 * constraint's condition (see {@link #constraint(Constraint)} and {@link When}).
+	 * Also invokes {@link Constraint#dispose()} to properly dispose the listener added by
+	 * {@link #constraint(Constraint)}.
 	 */
 	public MFXValidator removeConstraint(Constraint constraint) {
-		if (constraints.remove(constraint)) {
-			When.disposeFor(constraint.getCondition());
-		}
+		if (constraints.remove(constraint)) constraint.dispose();
 		return this;
 	}
 
@@ -121,7 +120,7 @@ public class MFXValidator {
 	 * the {@link #validProperty()}
 	 */
 	public MFXValidator dependsOn(MFXValidator validator) {
-		When.onInvalidated(validator.validProperty()).then(value -> update()).listen();
+		validator.when = When.onInvalidated(validator.validProperty()).then(value -> update()).listen();
 		dependencies.add(validator);
 		return this;
 	}
@@ -129,13 +128,11 @@ public class MFXValidator {
 	/**
 	 * Removes the given validator dependency from this validator.
 	 * <p>
-	 * Also calls {@link When#disposeFor(ObservableValue)} on the dependency's
-	 * valid property (see {@link #dependsOn(MFXValidator)} and {@link When}).
+	 * Also calls {@link MFXValidator#dispose()} on the dependency to properly
+	 * dispose the listener added by {@link #dependsOn(MFXValidator)}.
 	 */
 	public MFXValidator removeDependency(MFXValidator validator) {
-		if (dependencies.remove(validator)) {
-			When.disposeFor(validator.validProperty());
-		}
+		if (dependencies.remove(validator)) validator.dispose();
 		return this;
 	}
 
@@ -215,6 +212,17 @@ public class MFXValidator {
 		if (onUpdated != null) {
 			onUpdated.accept(isValid(), validate());
 		}
+	}
+
+	/**
+	 * Used when another validator is being removed from the dependencies.
+	 * <p>
+	 * When a dependency is added, a listener is added to update the main validator with the {@link When}
+	 * construct. Since we need the instance to properly dispose it afterward, we store the reference here,
+	 * the disposal can then be easily automatically handled by {@link MFXValidator#removeDependency(MFXValidator)}.
+	 */
+	protected void dispose() {
+		if (when != null) when.dispose();
 	}
 
 	//================================================================================

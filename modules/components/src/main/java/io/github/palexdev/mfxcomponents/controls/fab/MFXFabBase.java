@@ -122,9 +122,6 @@ public class MFXFabBase extends MFXElevatedButton {
 
 		Skin<?> skin = getSkin();
 		if (skin == null) {
-			// Let's ensure that no other listeners have been added before...
-			When.disposeFor(skinProperty());
-
 			// This is needed because if this property is set before the Skin has been
 			// created it's not possible for the control to correctly compute its
 			// expanded/collapsed size. So, first of all we must wait until the Skin is created,

@@ -35,44 +35,29 @@ public class SynchronizedIntegerProperty extends ReadOnlyIntegerWrapper implemen
 	//================================================================================
 	// Properties
 	//================================================================================
-	private final ReadOnlyBooleanWrapper waiting = new ReadOnlyBooleanWrapper();
+	private final ReadOnlyBooleanWrapper waiting = new ReadOnlyBooleanWrapper() {
+		@Override
+		public void set(boolean newValue) {
+			super.set(newValue);
+			if (!newValue) SynchronizedIntegerProperty.this.fireValueChangedEvent();
+		}
+	};
 
 	//================================================================================
 	// Constructors
 	//================================================================================
-	public SynchronizedIntegerProperty() {
-		initialize();
-	}
+	public SynchronizedIntegerProperty() {}
 
 	public SynchronizedIntegerProperty(int initialValue) {
 		super(initialValue);
-		initialize();
 	}
 
 	public SynchronizedIntegerProperty(Object bean, String name) {
 		super(bean, name);
-		initialize();
 	}
 
 	public SynchronizedIntegerProperty(Object bean, String name, int initialValue) {
 		super(bean, name, initialValue);
-		initialize();
-	}
-
-	//================================================================================
-	// Methods
-	//================================================================================
-
-	/**
-	 * Adds a listener to the property by calling {@link When#onChanged(ObservableValue)}
-	 * to call {@link #fireValueChangedEvent()} when the property is awakened, {@link #awake()}.
-	 */
-	private void initialize() {
-		When.onChanged(waiting)
-				.then((oldValue, newValue) -> {
-					if (!newValue) fireValueChangedEvent();
-				})
-				.listen();
 	}
 
 	//================================================================================
@@ -88,9 +73,9 @@ public class SynchronizedIntegerProperty extends ReadOnlyIntegerWrapper implemen
 
 		waiting.set(true);
 		When.onChanged(observable)
-				.then((oldValue, newValue) -> awake())
-				.oneShot()
-				.listen();
+			.then((oldValue, newValue) -> awake())
+			.oneShot()
+			.listen();
 		set(value.intValue());
 	}
 
@@ -174,7 +159,7 @@ public class SynchronizedIntegerProperty extends ReadOnlyIntegerWrapper implemen
 
 		if (isBound()) unbind();
 		MFXBindings.instance().bindBidirectional(this)
-				.addSource(new Source<>(other).implicit(this, other)).get();
+			.addSource(new Source<>(other).implicit(this, other)).get();
 	}
 
 	/**
