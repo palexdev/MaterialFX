@@ -16,6 +16,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.16.4] - 12-04-2023
+
+## Fixed
+
+- Emergency fix for components, the behavior was initialized twice
+
 ## [11.16.3] - 11-04-2023
 
 ## Changed

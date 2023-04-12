@@ -36,6 +36,7 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 import static io.github.palexdev.mfxcore.utils.fx.LayoutUtils.snappedBoundHeight;
@@ -50,17 +51,14 @@ public class TestButton {
     @Start
     private void start(Stage stage) {
         TestButton.stage = stage;
-        //stage.show();
+        stage.show();
     }
 
     @Test
     void testSizes(FxRobot robot) {
         StackPane root = setupStage();
         MFXButton button = new MFXButton("MFXButton");
-        robot.interact(() -> {
-            stage.show();
-            root.getChildren().setAll(button);
-        });
+        robot.interact(() -> root.getChildren().setAll(button));
 
         // Test Pref
         robot.interact(() -> button.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE));
@@ -89,11 +87,25 @@ public class TestButton {
             }
         };
         filled.setText("Init Button");
-        filled.setSkin(new InitSkin(filled));
+        filled.changeSkin(new InitSkin(filled));
         robot.interact(() -> root.getChildren().setAll(filled));
 
         InitBehavior b = (InitBehavior) filled.getBehavior();
         assertTrue(b.isInit);
+    }
+
+    @Test
+    void testOnAction(FxRobot robot) {
+        StackPane root = setupStage();
+        AtomicInteger cnt = new AtomicInteger(0);
+        MFXButton button = new MFXFilledButton("Text");
+        button.setOnAction(e -> cnt.incrementAndGet());
+        robot.interact(() -> root.getChildren().add(button));
+
+        robot.clickOn(button);
+        assertEquals(1, cnt.get());
+        robot.clickOn(button);
+        assertEquals(2, cnt.get());
     }
 
     private StackPane setupStage() {

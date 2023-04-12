@@ -26,7 +26,6 @@ import io.github.palexdev.mfxcore.base.properties.functional.SupplierProperty;
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableDoubleProperty;
 import io.github.palexdev.mfxcore.behavior.BehaviorBase;
 import io.github.palexdev.mfxcore.behavior.WithBehavior;
-import io.github.palexdev.mfxcore.observables.When;
 import io.github.palexdev.mfxcore.utils.fx.StyleUtils;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -35,6 +34,7 @@ import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
 import javafx.scene.Node;
 import javafx.scene.control.Labeled;
+import javafx.scene.control.Skin;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -66,6 +66,17 @@ import java.util.function.Supplier;
  * <p>
  * Since this always implements {@link MFXResizable}, it redefines the JavaFX's layout strategy by extending it to take
  * into account the aforementioned sizes.
+ * <p></p>
+ * <b>Important Note: </b><p>
+ * To avoid adding listeners that would harm the performance, and since the {@link #setSkin(Skin)} method cannot be overridden,
+ * the correct way to change the skin of any component is to use {@link #changeSkin(MFXSkinBase)}. It will ensure the
+ * initialization of the behavior and overall the correct state of the component.
+ * <p>
+ * As a consequence components inheriting from this (almost if not all MFX components) do not support the "-fx-skin" CSS
+ * property, you'll have to do it in code.
+ * <p>
+ * Unfortunately, I cannot prevent users from still using the aforementioned method, but I can guarantee you using that
+ * will cause issues and undesired behaviors. You have been warned.
  *
  * @param <B> the behavior type used by the control
  * @see MFXSkinBase
@@ -84,13 +95,8 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 				behavior.dispose();
 			}
 			behavior = get().get();
-			MFXSkinBase skin = ((MFXSkinBase) getSkin());
-			When.onInvalidated(skinProperty())
-				.condition(s -> s != null && behavior != null)
-				.then(s -> ((MFXSkinBase) s).initBehavior(behavior))
-				.oneShot(true)
-				.executeNow(() -> skin != null && behavior != null)
-				.listen();
+			MFXSkinBase skin = (MFXSkinBase) getSkin();
+			if (skin != null && behavior != null) skin.initBehavior(behavior);
 		}
 	};
 
@@ -127,6 +133,22 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 	//================================================================================
 	// Methods
 	//================================================================================
+
+	/**
+	 * Since this is deeply integrated with the new behavior API, and since the {@link #setSkin(Skin)} method cannot
+	 * be overridden, and finally to avoid adding listeners, this is the method to use when you want to change the skin.
+	 * <p></p>
+	 * Unfortunately, I cannot prevent users from still using the aforementioned method, but I can guarantee you using that
+	 * will cause issues and undesired behaviors. You have been warned.
+	 */
+	public void changeSkin(MFXSkinBase<?, ?> skin) {
+		if (skin == null)
+			throw new IllegalArgumentException("The new skin cannot be null!");
+		if (behavior != null) behavior.dispose();
+		behavior = getBehaviorProvider().get();
+		((MFXSkinBase) skin).initBehavior(behavior);
+		setSkin(skin);
+	}
 
 	/**
 	 * This is automatically invoked when either {@link #initHeightProperty()} or {@link #initWidthProperty()} change.
