@@ -91,7 +91,7 @@ public class MFXIconWrapper extends StackPane {
 			super.getChildren().remove(oldValue);
 			manageChildren();
 		});
-		size.addListener((observable, oldValue, newValue) -> setPrefSize(newValue.doubleValue(), oldValue.doubleValue()));
+		size.addListener((observable, oldValue, newValue) -> setPrefSize(newValue.doubleValue(), newValue.doubleValue()));
 		rHandler = e -> {
 			if (e.getButton() == MouseButton.PRIMARY)
 				rg.generate(e);
@@ -230,8 +230,8 @@ public class MFXIconWrapper extends StackPane {
 			double iW = icon.prefWidth(-1);
 			double iH = icon.prefHeight(-1);
 			double size = Math.max(
-					snappedLeftInset() + iW + snappedRightInset(),
-					snappedTopInset() + iH + snappedBottomInset()
+				snappedLeftInset() + iW + snappedRightInset(),
+				snappedTopInset() + iH + snappedBottomInset()
 			);
 			setSize(size);
 		}
@@ -241,10 +241,10 @@ public class MFXIconWrapper extends StackPane {
 	// Styleable Properties
 	//================================================================================
 	private final StyleableDoubleProperty size = new SimpleStyleableDoubleProperty(
-			StyleableProperties.SIZE,
-			this,
-			"size",
-			-1.0
+		StyleableProperties.SIZE,
+		this,
+		"size",
+		-1.0
 	) {
 		@Override
 		public StyleOrigin getStyleOrigin() {
@@ -253,10 +253,10 @@ public class MFXIconWrapper extends StackPane {
 	};
 
 	private final StyleableBooleanProperty enableRipple = new SimpleStyleableBooleanProperty(
-			StyleableProperties.ENABLE_RIPPLE,
-			this,
-			"enableRipple",
-			false
+		StyleableProperties.ENABLE_RIPPLE,
+		this,
+		"enableRipple",
+		false
 	) {
 		@Override
 		protected void invalidated() {
@@ -272,10 +272,10 @@ public class MFXIconWrapper extends StackPane {
 	};
 
 	private final StyleableBooleanProperty round = new SimpleStyleableBooleanProperty(
-			StyleableProperties.ROUND,
-			this,
-			"round",
-			false
+		StyleableProperties.ROUND,
+		this,
+		"round",
+		false
 	) {
 		@Override
 		protected void invalidated() {
@@ -302,8 +302,9 @@ public class MFXIconWrapper extends StackPane {
 		return size;
 	}
 
-	public void setSize(double size) {
+	public MFXIconWrapper setSize(double size) {
 		this.size.set(size);
+		return this;
 	}
 
 	public boolean isEnableRipple() {
@@ -320,8 +321,9 @@ public class MFXIconWrapper extends StackPane {
 		return enableRipple;
 	}
 
-	public void setEnableRipple(boolean enableRipple) {
+	public MFXIconWrapper setEnableRipple(boolean enableRipple) {
 		this.enableRipple.set(enableRipple);
+		return this;
 	}
 
 	public boolean isRound() {
@@ -338,8 +340,9 @@ public class MFXIconWrapper extends StackPane {
 		return round;
 	}
 
-	public void setRound(boolean round) {
+	public MFXIconWrapper setRound(boolean round) {
 		this.round.set(round);
+		return this;
 	}
 
 	//================================================================================
@@ -350,25 +353,25 @@ public class MFXIconWrapper extends StackPane {
 		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
 		private static final CssMetaData<MFXIconWrapper, Number> SIZE =
-				FACTORY.createSizeCssMetaData(
-						"-mfx-size",
-						MFXIconWrapper::sizeProperty,
-						-1.0
-				);
+			FACTORY.createSizeCssMetaData(
+				"-mfx-size",
+				MFXIconWrapper::sizeProperty,
+				-1.0
+			);
 
 		private static final CssMetaData<MFXIconWrapper, Boolean> ENABLE_RIPPLE =
-				FACTORY.createBooleanCssMetaData(
-						"-mfx-enable-ripple",
-						MFXIconWrapper::enableRippleProperty,
-						false
-				);
+			FACTORY.createBooleanCssMetaData(
+				"-mfx-enable-ripple",
+				MFXIconWrapper::enableRippleProperty,
+				false
+			);
 
 		private static final CssMetaData<MFXIconWrapper, Boolean> ROUND =
-				FACTORY.createBooleanCssMetaData(
-						"-mfx-round",
-						MFXIconWrapper::roundProperty,
-						false
-				);
+			FACTORY.createBooleanCssMetaData(
+				"-mfx-round",
+				MFXIconWrapper::roundProperty,
+				false
+			);
 
 		static {
 			List<CssMetaData<? extends Styleable, ?>> data = new ArrayList<>(StackPane.getClassCssMetaData());

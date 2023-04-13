@@ -16,6 +16,16 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.3.4] - 13-04-2023
+
+## Changed
+
+- MFXIconWrapper: turn some other methods to fluent API
+
+## Fixed
+
+- MFXIconWrapper: wrong value used in size listener
+
 ## [11.3.3] - 08-04-2023
 
 ## Fixed

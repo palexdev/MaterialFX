@@ -108,18 +108,18 @@ public class IconsTests {
 		StackPane root = setupStage();
 		final AtomicReference<MFXFontIcon> icon = new AtomicReference<>();
 		icon.set(new MFXFontIcon()
-				.setIconsProvider(IconsProviders.FONTAWESOME_BRANDS)
-				.setDescription("fab-google")
-				.setSize(64.0));
+			.setIconsProvider(IconsProviders.FONTAWESOME_BRANDS)
+			.setDescription("fab-google")
+			.setSize(64.0));
 		robot.interact(() -> root.getChildren().setAll(icon.get()));
 		assertEquals(64.0, icon.get().getFont().getSize());
 		assertEquals(64.0, icon.get().getSize());
 		Thread.sleep(sleep);
 
 		icon.set(new MFXFontIcon()
-				.setIconsProvider(IconsProviders.FONTAWESOME_REGULAR)
-				.setDescription("far-compass")
-				.setSize(64.0));
+			.setIconsProvider(IconsProviders.FONTAWESOME_REGULAR)
+			.setDescription("far-compass")
+			.setSize(64.0));
 		robot.interact(() -> root.getChildren().setAll(icon.get()));
 		assertEquals(64.0, icon.get().getFont().getSize());
 		assertEquals(64.0, icon.get().getSize());
@@ -129,16 +129,16 @@ public class IconsTests {
 		icon.set(new MFXFontIcon("fas-circle", 64.0) {
 			{
 				textProperty().bind(Bindings.createStringBinding(
-						() -> {
-							try {
-								String desc = getDescription();
-								return (desc != null && !desc.isBlank()) ? descToCode(desc) : "";
-							} catch (Exception ex) {
-								exRef.set(ex);
-								ex.printStackTrace();
-								return "";
-							}
-						}, descriptionProperty(), fontProperty()
+					() -> {
+						try {
+							String desc = getDescription();
+							return (desc != null && !desc.isBlank()) ? descToCode(desc) : "";
+						} catch (Exception ex) {
+							exRef.set(ex);
+							ex.printStackTrace();
+							return "";
+						}
+					}, descriptionProperty(), fontProperty()
 				));
 			}
 		});
@@ -159,9 +159,9 @@ public class IconsTests {
 		robot.interact(() -> root.getChildren().setAll(icon.get()));
 
 		icon.get().setIconsProvider(
-				Font.loadFont(new Win10IkonHandler().getFontResourceAsStream(), 64.0),
-				s -> Optional.ofNullable(Win10.findByDescription(s)).map(w -> (char) w.getCode())
-						.orElse('\0')
+			Font.loadFont(new Win10IkonHandler().getFontResourceAsStream(), 64.0),
+			s -> Optional.ofNullable(Win10.findByDescription(s)).map(w -> (char) w.getCode())
+				.orElse('\0')
 		);
 		icon.get().setDescription(EnumUtils.randomEnum(Win10.class).getDescription());
 		assertEquals(64.0, icon.get().getFont().getSize());
@@ -170,9 +170,9 @@ public class IconsTests {
 		Thread.sleep(sleep);
 
 		icon.get().setIconsProvider(
-				Font.loadFont(new FluentUiRegularALIkonHandler().getFontResourceAsStream(), 64.0),
-				s -> Optional.ofNullable(FluentUiRegularAL.findByDescription(s)).map(f -> (char) f.getCode())
-						.orElse('\0')
+			Font.loadFont(new FluentUiRegularALIkonHandler().getFontResourceAsStream(), 64.0),
+			s -> Optional.ofNullable(FluentUiRegularAL.findByDescription(s)).map(f -> (char) f.getCode())
+				.orElse('\0')
 		);
 		icon.get().setDescription(EnumUtils.randomEnum(FluentUiRegularAL.class).getDescription());
 		assertEquals(64.0, icon.get().getFont().getSize());
@@ -198,16 +198,16 @@ public class IconsTests {
 		Thread.sleep(sleep);
 
 		wrapper.getIcon()
-				.setIconsProvider(IconsProviders.FONTAWESOME_BRANDS)
-				.setDescription(EnumUtils.randomEnum(FontAwesomeBrands.class).getDescription());
+			.setIconsProvider(IconsProviders.FONTAWESOME_BRANDS)
+			.setDescription(EnumUtils.randomEnum(FontAwesomeBrands.class).getDescription());
 		Thread.sleep(sleep);
 
 		robot.interact(() -> wrapper.setIcon(
-				IconsProviders.randomIcon(
-						IconsProviders.FONTAWESOME_REGULAR,
-						64.0,
-						Color.web("#454545")
-				)
+			IconsProviders.randomIcon(
+				IconsProviders.FONTAWESOME_REGULAR,
+				64.0,
+				Color.web("#454545")
+			)
 		));
 		Thread.sleep(sleep);
 
@@ -235,9 +235,9 @@ public class IconsTests {
 	void testWrapperEnableRipple(FxRobot robot) {
 		StackPane root = setupStage();
 		MFXIconWrapper icon = IconWrapperBuilder.build()
-				.setIcon("fas-circle")
-				.enableRippleGenerator(true)
-				.get();
+			.setIcon("fas-circle")
+			.enableRippleGenerator(true)
+			.get();
 		robot.interact(() -> root.getChildren().setAll(icon));
 		assertTrue(icon.getChildren().get(0) instanceof MFXRippleGenerator);
 	}
@@ -246,14 +246,27 @@ public class IconsTests {
 	void testWrapperEnableDisableRipple(FxRobot robot) {
 		StackPane root = setupStage();
 		MFXIconWrapper icon = IconWrapperBuilder.build()
-				.setIcon("fas-circle")
-				.enableRippleGenerator(true)
-				.get();
+			.setIcon("fas-circle")
+			.enableRippleGenerator(true)
+			.get();
 		robot.interact(() -> root.getChildren().setAll(icon));
 		assertTrue(icon.getChildren().get(0) instanceof MFXRippleGenerator);
 
 		robot.interact(() -> icon.enableRippleGenerator(false));
 		assertTrue(icon.getChildren().size() == 1 && !(icon.getChildren().get(0) instanceof MFXRippleGenerator));
+	}
+
+	@Test
+	void testSizes(FxRobot robot) {
+		StackPane root = setupStage();
+		MFXIconWrapper icon = new MFXIconWrapper()
+			.setIcon("fas-circle")
+			.makeRound(true)
+			.setSize(32);
+		robot.interact(() -> root.getChildren().setAll(icon));
+
+		assertEquals(32.0, icon.getWidth());
+		assertEquals(32.0, icon.getHeight());
 	}
 
 	private StackPane setupStage() {
