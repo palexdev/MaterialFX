@@ -8,6 +8,8 @@ dependencies {
     api(project(":localization"))
     api(project(":resources"))
     api "io.github.palexdev:virtualizedfx:$vfx"
+
+    testImplementation "fr.brouillard.oss:cssfx:$cssfx"
 }
 
 java {
