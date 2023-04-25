@@ -1,6 +1,7 @@
 @use 'sass:color';
 @use '../../tokens/theme' as Theme;
 @use '../../abstracts/ripple' as Ripple;
+@use '../../abstracts/theme_utils' as ThemeUtils;
 
 // Tokens
 $surface-tint: Theme.GetSchemeColor('on-primary-container') !default;
@@ -12,30 +13,24 @@ $ripple-color: Ripple.Ripple('on-primary-container');
 /****************************************************************************************************
  * Primary FABs
  ****************************************************************************************************/
-.mfx-button.fab,
-.mfx-button.fab-extended {
+.mfx-button.fab {
   -fx-text-fill: $text-color;
   -fx-background-color: $bg-color;
 }
 
-.mfx-button.fab:hover,
-.mfx-button.fab-extended:hover {
-  -fx-background-color: color.mix($surface-tint, $bg-color, Theme.GetStateLayer('hover'));
+.mfx-button.fab:hover {
+  -fx-background-color: ThemeUtils.StateLayer($surface-tint, $bg-color, 'hover');
 }
 
 .mfx-button.fab:focused,
-.mfx-button.fab-extended:focused,
-.mfx-button.fab:pressed,
-.mfx-button.fab-extended:focused {
-  -fx-background-color: color.mix($surface-tint, $bg-color, Theme.GetStateLayer('focused'));
+.mfx-button.fab:pressed {
+  -fx-background-color: ThemeUtils.StateLayer($surface-tint, $bg-color, 'focus');
 }
 
-.mfx-button.fab .mfx-font-icon,
-.mfx-button.fab-extended .mfx-font-icon {
+.mfx-button.fab .mfx-font-icon {
   -mfx-color: $icon-color;
 }
 
-.mfx-button.fab .mfx-ripple-generator,
-.mfx-button.fab-extended .mfx-ripple-generator {
+.mfx-button.fab .mfx-ripple-generator {
   -mfx-ripple-color: $ripple-color;
 }

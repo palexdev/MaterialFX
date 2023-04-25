@@ -6,10 +6,10 @@
 $bg-color-disabled: rgba(Theme.GetSchemeColor('on-surface'), Theme.GetStateLayer('disabled')) !default;
 $bg-radius: 20px !default;
 
-$text-color-disabled: rgba(Theme.GetSchemeColor('on-surface'), Theme.GetStateLayer('disabled-text')) !default;
+$text-color-disabled: Theme.GetSchemeColor('on-surface') !default;
 
 $icon-size: 18px !default;
-$icon-color-disabled: rgba(Theme.GetSchemeColor('on-surface'), Theme.GetStateLayer('disabled-text')) !default;
+$icon-color-disabled: $text-color-disabled !default;
 
 $min-width: -1px !default;
 $min-height: 40px !default;
@@ -44,7 +44,7 @@ $elevation-disabled: 0 !default;
 .mfx-button.text:disabled,
 .mfx-button.outlined:disabled {
   -fx-text-fill: $text-color-disabled;
-  -fx-background-color: rgba(28, 27, 31, 0.12);
+  -fx-background-color: $bg-color-disabled;
   -mfx-elevation: ThemeUtils.ElevationLevel($elevation-disabled);
 }
 
@@ -69,9 +69,9 @@ $elevation-disabled: 0 !default;
   -mfx-color: $icon-color-disabled;
 }
 
-/* Label nodes inside buttons should not change in opacity when disabled */
+/* Label text is solid, label node is opaque, this is the correct way to get the right disabled color */
 .mfx-button:disabled .label {
-  -fx-opacity: 1.0;
+  -fx-opacity: Theme.GetStateLayer('disabled-text');
 }
 
 .mfx-button.elevated:with-icon-left,

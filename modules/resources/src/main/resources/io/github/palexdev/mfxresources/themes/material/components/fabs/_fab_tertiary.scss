@@ -1,6 +1,7 @@
 @use 'sass:color';
 @use '../../tokens/theme' as Theme;
 @use '../../abstracts/ripple' as Ripple;
+@use '../../abstracts/theme_utils' as ThemeUtils;
 
 // Tokens
 $surface-tint: Theme.GetSchemeColor('on-tertiary-container') !default;
@@ -10,32 +11,26 @@ $icon-color: Theme.GetSchemeColor('on-tertiary-container') !default;
 $ripple-color: Ripple.Ripple('on-tertiary-container');
 
 /****************************************************************************************************
- * Secondary FABs
+ * Tertiary FABs
  ****************************************************************************************************/
-.mfx-button.fab.tertiary,
-.mfx-button.fab-extended.tertiary {
+.mfx-button.fab.tertiary {
   -fx-text-fill: $text-color;
   -fx-background-color: $bg-color;
 }
 
-.mfx-button.fab.tertiary:hover,
-.mfx-button.fab-extended.tertiary:hover {
-  -fx-background-color: color.mix($surface-tint, $bg-color, Theme.GetStateLayer('hover'));
+.mfx-button.fab.tertiary:hover {
+  -fx-background-color: ThemeUtils.StateLayer($surface-tint, $bg-color, 'hover');
 }
 
 .mfx-button.fab.tertiary:focused,
-.mfx-button.fab-extended.tertiary:focused,
-.mfx-button.fab.tertiary:pressed,
-.mfx-button.fab-extended.tertiary:focused {
-  -fx-background-color: color.mix($surface-tint, $bg-color, Theme.GetStateLayer('focused'));
+.mfx-button.fab.tertiary:pressed {
+  -fx-background-color: ThemeUtils.StateLayer($surface-tint, $bg-color, 'focus');
 }
 
-.mfx-button.fab.tertiary .mfx-font-icon,
-.mfx-button.fab-extended.tertiary .mfx-font-icon {
+.mfx-button.fab.tertiary .mfx-font-icon {
   -mfx-color: $icon-color;
 }
 
-.mfx-button.fab.tertiary .mfx-ripple-generator,
-.mfx-button.fab-extended.tertiary .mfx-ripple-generator {
+.mfx-button.fab.tertiary .mfx-ripple-generator {
   -mfx-ripple-color: $ripple-color;
 }

@@ -8,17 +8,9 @@ $surface-tint: Theme.GetSchemeColor('primary') !default;
 $elevation: 1 !default;
 $elevation-hover: 2 !default;
 
-$bg-color: ThemeUtils.ElevationLayer($surface-tint, $elevation, 'surface') !default;
-$bg-color-hover: color.mix(
-    $surface-tint,
-    ThemeUtils.ElevationLayer($surface-tint, $elevation-hover, 'surface'),
-    Theme.GetStateLayer('hover')
-) !default;
-$bg-color-focused: color.mix(
-    $surface-tint,
-    $bg-color,
-    Theme.GetStateLayer('focused')
-) !default;
+$bg-color: Theme.GetSchemeColor('surface-container-low') !default;
+$bg-color-hover: ThemeUtils.StateLayer($surface-tint, $bg-color, 'hover') !default;
+$bg-color-focused: ThemeUtils.StateLayer($surface-tint, $bg-color, 'focus') !default;
 $bg-color-pressed: $bg-color-focused !default;
 
 $text-color: Theme.GetSchemeColor('primary') !default;

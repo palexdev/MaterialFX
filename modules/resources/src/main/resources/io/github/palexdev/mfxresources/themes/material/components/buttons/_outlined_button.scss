@@ -9,19 +9,13 @@ $elevation: 0 !default;
 $elevation-hover: 0 !default;
 
 $bg-color: transparent !default;
-$bg-color-hover: color.mix(
-    $surface-tint,
-    $bg-color,
-    Theme.GetStateLayer('hover')
-) !default;
-$bg-color-focused: color.mix(
-    $surface-tint,
-    $bg-color,
-    Theme.GetStateLayer('focused')
-) !default;
+$bg-color-hover: ThemeUtils.StateLayer($surface-tint, $bg-color, 'hover') !default;
+$bg-color-focused: ThemeUtils.StateLayer($surface-tint, $bg-color, 'focus') !default;
 $bg-color-pressed: $bg-color-focused !default;
 
 $bd-color: Theme.GetSchemeColor('outline') !default;
+$bd-color-disabled: rgba($bd-color, Theme.GetStateLayer('disabled-text')) !default; // Should be 'disabled' but it's too transparent
+$bd-color-focused: Theme.GetSchemeColor('primary');
 $bd-radius: 20px !default;
 $bd-width: 1px;
 
@@ -43,6 +37,10 @@ $ripple-color: Ripple.Ripple('primary') !default;
   -mfx-elevation: ThemeUtils.ElevationLevel($elevation);
 }
 
+.mfx-button.outlined:disabled {
+  -fx-border-color: $bd-color-disabled;
+}
+
 .mfx-button.outlined:hover {
   -fx-background-color: $bg-color-hover;
   -mfx-elevation: ThemeUtils.ElevationLevel($elevation-hover);
@@ -52,6 +50,10 @@ $ripple-color: Ripple.Ripple('primary') !default;
 .mfx-button.outlined:pressed {
   -fx-background-color: $bg-color-focused;
   -mfx-elevation: ThemeUtils.ElevationLevel($elevation);
+}
+
+.mfx-button.outlined:focused {
+  -fx-border-color: $bd-color-focused;
 }
 
 .mfx-button.outlined .mfx-font-icon {

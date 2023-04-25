@@ -55,17 +55,28 @@
   -md-ref-palette-error99: #FFFBF9;
   -md-ref-palette-error100: #FFFFFF;
   -md-ref-palette-neutral0: #000000;
-  -md-ref-palette-neutral10: #1C1B1F;
-  -md-ref-palette-neutral20: #313033;
-  -md-ref-palette-neutral30: #484649;
-  -md-ref-palette-neutral40: #605D62;
-  -md-ref-palette-neutral50: #787579;
-  -md-ref-palette-neutral60: #939094;
-  -md-ref-palette-neutral70: #AEAAAE;
-  -md-ref-palette-neutral80: #C9C5CA;
-  -md-ref-palette-neutral90: #E6E1E5;
-  -md-ref-palette-neutral95: #F4EFF4;
-  -md-ref-palette-neutral99: #FFFBFE;
+  -md-ref-palette-neutral4: #0F0D13;
+  -md-ref-palette-neutral6: #141218;
+  -md-ref-palette-neutral10: #1D1B20;
+  -md-ref-palette-neutral12: #211F26;
+  -md-ref-palette-neutral17: #2B2930;
+  -md-ref-palette-neutral20: #322F35;
+  -md-ref-palette-neutral22: #36343B;
+  -md-ref-palette-neutral24: #3B383E;
+  -md-ref-palette-neutral30: #48464C;
+  -md-ref-palette-neutral40: #605D64;
+  -md-ref-palette-neutral50: #79767D;
+  -md-ref-palette-neutral60: #938F96;
+  -md-ref-palette-neutral70: #AEA9B1;
+  -md-ref-palette-neutral80: #CAC5CD;
+  -md-ref-palette-neutral87: #DED8E1;
+  -md-ref-palette-neutral90: #E6E0E9;
+  -md-ref-palette-neutral92: #ECE6F0;
+  -md-ref-palette-neutral94: #F3EDF7;
+  -md-ref-palette-neutral95: #F5EFF7;
+  -md-ref-palette-neutral96: #F7F2FA;
+  -md-ref-palette-neutral98: #FEF7FF;
+  -md-ref-palette-neutral99: #FFFBFF;
   -md-ref-palette-neutral100: #FFFFFF;
   -md-ref-palette-neutral-variant0: #000000;
   -md-ref-palette-neutral-variant10: #1D1A22;
@@ -98,15 +109,22 @@
   -md-sys-color-error-container: #FFFFFF;
   -md-sys-color-on-error: #FFFFFF;
   -md-sys-color-on-error-container: #410E0B;
-  -md-sys-color-surface: #FFFBFE;
+  -md-sys-color-surface: #FEF7FF;
+  -md-sys-color-surface-dim: #DED8E1;
+  -md-sys-color-surface-bright: #FEF7FF;
+  -md-sys-color-surface-container-lowest: #FFFFFF;
+  -md-sys-color-surface-container-low: #F7F2FA;
+  -md-sys-color-surface-container: #F3EDF7;
+  -md-sys-color-surface-container-high: #ECE6F0;
+  -md-sys-color-surface-container-highest: #E6E0E9;
   -md-sys-color-surface-variant: #E7E0EC;
-  -md-sys-color-on-surface: #1C1B1F;
+  -md-sys-color-on-surface: #1D1B20;
   -md-sys-color-on-surface-variant: #49454F;
-  -md-sys-color-inverse-surface: #313033;
-  -md-sys-color-inverse-on-surface: #F4EFF4;
+  -md-sys-color-inverse-surface: #322F35;
+  -md-sys-color-inverse-on-surface: #F5EFF7;
   -md-sys-color-surface-tint: #6750A4;
-  -md-sys-color-background: #FFFBFE;
-  -md-sys-color-on-background: #1C1B1F;
+  -md-sys-color-background: #FEF7FF;
+  -md-sys-color-on-background: #1D1B20;
   -md-sys-color-outline: #79747E;
   -md-sys-color-outline-variant: #CAC4D0;
   -md-sys-color-shadow: #000000;
@@ -124,7 +142,6 @@
   -fx-font-family: "Roboto Medium";
   -fx-font-weight: 500;
   -fx-font-size: 14px;
-  -fx-line-spacing: 20px;
   -fx-graphic-text-gap: 8px;
   -fx-background-radius: 20px;
   -fx-alignment: CENTER;
@@ -138,8 +155,8 @@
 .mfx-button.filled-tonal:disabled,
 .mfx-button.text:disabled,
 .mfx-button.outlined:disabled {
-  -fx-text-fill: rgba(28, 27, 31, 0.38);
-  -fx-background-color: rgba(28, 27, 31, 0.12);
+  -fx-text-fill: #1D1B20;
+  -fx-background-color: rgba(29, 27, 32, 0.12);
   -mfx-elevation: LEVEL0;
 }
 
@@ -161,12 +178,12 @@
 .mfx-button.filled-tonal:disabled .mfx-font-icon,
 .mfx-button.text:disabled .mfx-font-icon,
 .mfx-button.outlined:disabled .mfx-font-icon {
-  -mfx-color: rgba(28, 27, 31, 0.38);
+  -mfx-color: #1D1B20;
 }
 
-/* Label nodes inside buttons should not change in opacity when disabled */
+/* Label text is solid, label node is opaque, this is the correct way to get the right disabled color */
 .mfx-button:disabled .label {
-  -fx-opacity: 1;
+  -fx-opacity: 38%;
 }
 
 .mfx-button.elevated:with-icon-left,
@@ -190,12 +207,12 @@
  ****************************************************************************************************/
 .mfx-button.elevated {
   -fx-text-fill: #6750A4;
-  -fx-background-color: #f7f2fa;
+  -fx-background-color: #F7F2FA;
   -mfx-elevation: LEVEL1;
 }
 
 .mfx-button.elevated:hover {
-  -fx-background-color: #e8e0f0;
+  -fx-background-color: #ebe5f3;
   -mfx-elevation: LEVEL2;
 }
 
@@ -223,7 +240,7 @@
 }
 
 .mfx-button.filled:hover {
-  -fx-background-color: #7b66b0;
+  -fx-background-color: #735eab;
   -mfx-elevation: LEVEL1;
 }
 
@@ -251,7 +268,7 @@
 }
 
 .mfx-button.filled-tonal:hover {
-  -fx-background-color: #cfc5de;
+  -fx-background-color: #d8cee8;
   -mfx-elevation: LEVEL1;
 }
 
@@ -309,6 +326,10 @@
   -mfx-elevation: LEVEL0;
 }
 
+.mfx-button.outlined:disabled {
+  -fx-border-color: rgba(121, 116, 126, 0.38);
+}
+
 .mfx-button.outlined:hover {
   -fx-background-color: rgba(103, 80, 164, 0.08);
   -mfx-elevation: LEVEL0;
@@ -318,6 +339,10 @@
 .mfx-button.outlined:pressed {
   -fx-background-color: rgba(103, 80, 164, 0.12);
   -mfx-elevation: LEVEL0;
+}
+
+.mfx-button.outlined:focused {
+  -fx-border-color: #6750A4;
 }
 
 .mfx-button.outlined .mfx-font-icon {
@@ -336,7 +361,6 @@
   -fx-font-family: "Roboto Medium";
   -fx-font-weight: 500;
   -fx-font-size: 14px;
-  -fx-line-spacing: 20px;
   -fx-graphic-text-gap: 8px;
   -fx-background-radius: 16px;
   -fx-padding: 16px;
@@ -383,6 +407,11 @@
   -mfx-size: 36px;
 }
 
+/* FABs don't have the disabled state */
+.mfx-button.fab:disabled .label {
+  -fx-opacity: 1;
+}
+
 /****************************************************************************************************
  * Lowered FABs
  ****************************************************************************************************/
@@ -406,123 +435,116 @@
 /****************************************************************************************************
  * Primary FABs
  ****************************************************************************************************/
-.mfx-button.fab,
-.mfx-button.fab-extended {
+.mfx-button.fab {
   -fx-text-fill: #21005D;
   -fx-background-color: #EADDFF;
 }
 
-.mfx-button.fab:hover,
-.mfx-button.fab-extended:hover {
+.mfx-button.fab:hover {
   -fx-background-color: #dacbf2;
 }
 
 .mfx-button.fab:focused,
-.mfx-button.fab-extended:focused,
-.mfx-button.fab:pressed,
-.mfx-button.fab-extended:focused {
+.mfx-button.fab:pressed {
   -fx-background-color: #d2c2ec;
 }
 
-.mfx-button.fab .mfx-font-icon,
-.mfx-button.fab-extended .mfx-font-icon {
+.mfx-button.fab .mfx-font-icon {
   -mfx-color: #21005D;
 }
 
-.mfx-button.fab .mfx-ripple-generator,
-.mfx-button.fab-extended .mfx-ripple-generator {
+.mfx-button.fab .mfx-ripple-generator {
   -mfx-ripple-color: rgba(33, 0, 93, 0.12);
 }
 
 /****************************************************************************************************
  * Secondary FABs
  ****************************************************************************************************/
-.mfx-button.fab.secondary,
-.mfx-button.fab-extended.secondary {
+.mfx-button.fab.secondary {
   -fx-text-fill: #1D192B;
   -fx-background-color: #E8DEF8;
 }
 
-.mfx-button.fab.secondary:hover,
-.mfx-button.fab-extended.secondary:hover {
+.mfx-button.fab.secondary:hover {
   -fx-background-color: #d8cee8;
 }
 
 .mfx-button.fab.secondary:focused,
-.mfx-button.fab-extended.secondary:focused,
-.mfx-button.fab.secondary:pressed,
-.mfx-button.fab-extended.secondary:focused {
+.mfx-button.fab.secondary:pressed {
   -fx-background-color: #d0c6df;
 }
 
-.mfx-button.fab.secondary .mfx-font-icon,
-.mfx-button.fab-extended.secondary .mfx-font-icon {
+.mfx-button.fab.secondary .mfx-font-icon {
   -mfx-color: #1D192B;
 }
 
-.mfx-button.fab.secondary .mfx-ripple-generator,
-.mfx-button.fab-extended.secondary .mfx-ripple-generator {
+.mfx-button.fab.secondary .mfx-ripple-generator {
   -mfx-ripple-color: rgba(29, 25, 43, 0.12);
 }
 
 /****************************************************************************************************
- * Secondary FABs
+ * Tertiary FABs
  ****************************************************************************************************/
-.mfx-button.fab.tertiary,
-.mfx-button.fab-extended.tertiary {
+.mfx-button.fab.tertiary {
   -fx-text-fill: #31111D;
   -fx-background-color: #FFD8E4;
 }
 
-.mfx-button.fab.tertiary:hover,
-.mfx-button.fab-extended.tertiary:hover {
+.mfx-button.fab.tertiary:hover {
   -fx-background-color: #efc8d4;
 }
 
 .mfx-button.fab.tertiary:focused,
-.mfx-button.fab-extended.tertiary:focused,
-.mfx-button.fab.tertiary:pressed,
-.mfx-button.fab-extended.tertiary:focused {
+.mfx-button.fab.tertiary:pressed {
   -fx-background-color: #e6c0cc;
 }
 
-.mfx-button.fab.tertiary .mfx-font-icon,
-.mfx-button.fab-extended.tertiary .mfx-font-icon {
+.mfx-button.fab.tertiary .mfx-font-icon {
   -mfx-color: #31111D;
 }
 
-.mfx-button.fab.tertiary .mfx-ripple-generator,
-.mfx-button.fab-extended.tertiary .mfx-ripple-generator {
+.mfx-button.fab.tertiary .mfx-ripple-generator {
   -mfx-ripple-color: rgba(49, 17, 29, 0.12);
 }
 
 /****************************************************************************************************
- * Secondary FABs
+ * Surface FABs
  ****************************************************************************************************/
-.mfx-button.fab.surface,
-.mfx-button.fab-extended.surface {
+.mfx-button.fab.surface {
   -fx-text-fill: #6750A4;
-  -fx-background-color: #FFFBFE;
+  -fx-background-color: #ECE6F0;
 }
 
-.mfx-button.fab.surface:hover,
-.mfx-button.fab-extended.surface:hover {
-  -fx-background-color: #f3edf7;
+.mfx-button.fab.surface:hover {
+  -fx-background-color: #e1daea;
 }
 
 .mfx-button.fab.surface:focused,
-.mfx-button.fab-extended.surface:focused,
-.mfx-button.fab.surface:pressed,
-.mfx-button.fab-extended.surface:focused {
-  -fx-background-color: #ede6f3;
+.mfx-button.fab.surface:pressed {
+  -fx-background-color: #dcd4e7;
 }
 
-.mfx-button.fab.surface .mfx-font-icon,
-.mfx-button.fab-extended.surface .mfx-font-icon {
+.mfx-button.fab.surface .mfx-font-icon {
   -mfx-color: #6750A4;
 }
 
-.mfx-button.fab.surface .mfx-ripple-generator,
-.mfx-button.fab-extended.surface .mfx-ripple-generator {
+.mfx-button.fab.surface .mfx-ripple-generator {
   -mfx-ripple-color: rgba(103, 80, 164, 0.12);
+}
+
+/****************************************************************************************************
+ * Lowered Surface FABs
+ ****************************************************************************************************/
+.mfx-button.fab.surface.lowered {
+  -fx-text-fill: #6750A4;
+  -fx-background-color: #F7F2FA;
+}
+
+.mfx-button.fab.surface.lowered:hover {
+  -fx-background-color: #ebe5f3;
+}
+
+.mfx-button.fab.surface.lowered:focused,
+.mfx-button.fab.surface.lowered:pressed {
+  -fx-background-color: #e6dff0;
 }

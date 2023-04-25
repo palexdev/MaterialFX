@@ -30,3 +30,10 @@
   $clamped_elevation: math.clamp(0, $elevation, 5);
   @return mix($tint, Theme.GetSchemeColor($bg-color), Theme.GetElevationPercentage($clamped_elevation));
 }
+
+@function StateLayer($tint, $bg, $state) {
+  $cTint: if(type_of($tint) == string, Theme.GetSchemeColor($tint), $tint);
+  $cBg: if(type_of($bg) == string, Theme.GetSchemeColor($bg), $bg);
+  $ratio: Theme.GetStateLayer($state);
+  @return mix($cTint, $cBg, $ratio);
+}

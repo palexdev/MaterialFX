@@ -81,6 +81,11 @@ $elevation-hover-lowered: 2 !default;
   -mfx-size: $icon-size-large;
 }
 
+/* FABs don't have the disabled state */
+.mfx-button.fab:disabled .label {
+  -fx-opacity: 1.0
+}
+
 /****************************************************************************************************
  * Lowered FABs
  ****************************************************************************************************/

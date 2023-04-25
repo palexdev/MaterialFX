@@ -1,41 +1,54 @@
 @use 'sass:color';
 @use '../../tokens/theme' as Theme;
 @use '../../abstracts/ripple' as Ripple;
+@use "../../abstracts/theme_utils" as ThemeUtils;
 
 // Tokens
 $surface-tint: Theme.GetSchemeColor('primary') !default;
-$bg-color: Theme.GetSchemeColor('surface') !default;
+$bg-color: Theme.GetSchemeColor('surface-container-high') !default;
+$bg-color-lowered: Theme.GetSchemeColor('surface-container-low') !default;
 $text-color: Theme.GetSchemeColor('primary') !default;
 $icon-color: Theme.GetSchemeColor('primary') !default;
 $ripple-color: Ripple.Ripple('primary');
 
 /****************************************************************************************************
- * Secondary FABs
+ * Surface FABs
  ****************************************************************************************************/
-.mfx-button.fab.surface,
-.mfx-button.fab-extended.surface {
+.mfx-button.fab.surface {
   -fx-text-fill: $text-color;
   -fx-background-color: $bg-color;
 }
 
-.mfx-button.fab.surface:hover,
-.mfx-button.fab-extended.surface:hover {
-  -fx-background-color: color.mix($surface-tint, $bg-color, Theme.GetStateLayer('hover'));
+.mfx-button.fab.surface:hover {
+  -fx-background-color: ThemeUtils.StateLayer($surface-tint, $bg-color, 'hover');
 }
 
 .mfx-button.fab.surface:focused,
-.mfx-button.fab-extended.surface:focused,
-.mfx-button.fab.surface:pressed,
-.mfx-button.fab-extended.surface:focused {
-  -fx-background-color: color.mix($surface-tint, $bg-color, Theme.GetStateLayer('focused'));
+.mfx-button.fab.surface:pressed {
+  -fx-background-color: ThemeUtils.StateLayer($surface-tint, $bg-color, 'focus');
 }
 
-.mfx-button.fab.surface .mfx-font-icon,
-.mfx-button.fab-extended.surface .mfx-font-icon {
+.mfx-button.fab.surface .mfx-font-icon {
   -mfx-color: $icon-color;
 }
 
-.mfx-button.fab.surface .mfx-ripple-generator,
-.mfx-button.fab-extended.surface .mfx-ripple-generator {
+.mfx-button.fab.surface .mfx-ripple-generator {
   -mfx-ripple-color: $ripple-color;
+}
+
+/****************************************************************************************************
+ * Lowered Surface FABs
+ ****************************************************************************************************/
+.mfx-button.fab.surface.lowered {
+  -fx-text-fill: $text-color;
+  -fx-background-color: $bg-color-lowered;
+}
+
+.mfx-button.fab.surface.lowered:hover {
+  -fx-background-color: ThemeUtils.StateLayer($surface-tint, $bg-color-lowered, 'hover');
+}
+
+.mfx-button.fab.surface.lowered:focused,
+.mfx-button.fab.surface.lowered:pressed {
+  -fx-background-color: ThemeUtils.StateLayer($surface-tint, $bg-color-lowered, 'focus');
 }
