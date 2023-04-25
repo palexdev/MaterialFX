@@ -16,6 +16,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [Unreleased]
+
+## Changed
+
+- Minor refactor and improvements to the ButtonsPlayground demo
+
 ## [11.16.4] - 12-04-2023
 
 ## Fixed

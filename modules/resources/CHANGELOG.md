@@ -16,6 +16,25 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## Unreleased
+
+## Changed
+
+- Updates material palette due to recent changes in the specs, there are now more tokens to express the different
+  elevations of surfaces
+- Buttons shared: for better color fidelity the text and icon colors are both opaque, but the label is made
+  transparent (FABs have been excluded from this change)
+- Elevated buttons: updated style
+- Outlined buttons: updated style
+- FABs: there's no need to specify the style for extended state since it was changes from style class to pseudo class
+- Surface FABs: updated style
+
+## Fixed
+
+- Buttons: all buttons' color has been corrected. The elevation controls only the shadow not the background. The
+  button's color on a specific state (hover, press,...) is given by the mix of the "resting" color and the surface
+  tint (there's now also a new utility just for that)
+
 ## [11.3.4] - 13-04-2023
 
 ## Changed
