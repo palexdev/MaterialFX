@@ -1,0 +1,21 @@
+.container {
+    -fx-background-color: -md-sys-color-surface;
+}
+
+.titled-flow-pane {
+    -fx-spacing: 36px;
+}
+
+.title {
+    -fx-font-family: "Roboto Regular";
+    -fx-font-weight: 400;
+    -fx-font-size: 22px;
+    -fx-text-fill: -md-sys-color-on-surface;
+    -fx-background-color: -md-sys-color-surface-container-high;
+    -fx-background-radius: 20px;
+    -fx-padding: 6px 18px 6px 18px;
+}
+
+.titled-flow-pane .mfx-button.filled:disabled {
+    -fx-text-fill: #1D1B20;
+}

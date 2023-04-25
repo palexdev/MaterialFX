@@ -49,6 +49,9 @@ public class TitledFlowPane extends VBox {
 		pane.setVgap(30);
 		pane.setHgap(30);
 
+		label.getStyleClass().add("title");
+		getStyleClass().add(STYLE_CLASS);
+
 		super.getChildren().addAll(label, pane);
 		setAlignment(Pos.TOP_CENTER);
 		setSpacing(30);

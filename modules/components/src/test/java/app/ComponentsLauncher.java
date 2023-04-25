@@ -34,4 +34,8 @@ public class ComponentsLauncher {
 		//System.setProperty("javafx.animation.fullspeed", "true");
 		Application.launch(ButtonsPlayground.class, args);
 	}
+
+	public static String load(String name) {
+		return ComponentsLauncher.class.getResource(name).toExternalForm();
+	}
 }

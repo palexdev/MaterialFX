@@ -18,7 +18,9 @@
 
 package app.buttons;
 
+import app.ComponentsLauncher;
 import app.others.ui.*;
+import fr.brouillard.oss.cssfx.CSSFX;
 import io.github.palexdev.mfxcomponents.controls.buttons.*;
 import io.github.palexdev.mfxcomponents.controls.fab.MFXFab;
 import io.github.palexdev.mfxcomponents.theming.CSSFragment;
@@ -46,6 +48,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.scenicview.ScenicView;
 
+import java.util.List;
 import java.util.function.BiFunction;
 
 import static io.github.palexdev.mfxresources.fonts.IconsProviders.FONTAWESOME_SOLID;
@@ -63,11 +66,13 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
 	//================================================================================
 	@Override
 	public void start(Stage stage) {
+		CSSFX.start();
 		registerViews();
 
 		MFXFab themeSwitcher = MFXFab.lowered();
-		MFXFontIcon icon = new MFXFontIcon();
-		icon.descriptionProperty().bind(themeVariant.map(s -> s.equals("light") ? "fas-sun" : "fas-moon"));
+		MFXFontIcon icon = new MFXFontIcon("fas-moon");
+		themeSwitcher.setExtended(true);
+		themeSwitcher.textProperty().bind(themeVariant.map(s -> s.equals("light") ? "Dark" : "Light"));
 		themeSwitcher.setIcon(icon);
 
 		BorderPane root = new BorderPane();
@@ -76,7 +81,7 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
 		root.setTop(header);
 		BorderPane.setAlignment(header, Pos.CENTER);
 		BorderPane.setMargin(header, new Insets(30, 0, 60, 0));
-		root.setStyle("-fx-background-color: -md-sys-color-background");
+		root.getStyleClass().add("container");
 
 		header.getSelectionModel().selectFirst();
 
@@ -85,19 +90,19 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
 			protected void layoutChildren() {
 				super.layoutChildren();
 				layoutInArea(themeSwitcher,
-						getLayoutX(), getLayoutY(),
-						getWidth(), getHeight(), 0,
-						InsetsBuilder.of(0, 24, 16, 0), HPos.RIGHT, VPos.BOTTOM
+					getLayoutX(), getLayoutY(),
+					getWidth(), getHeight(), 0,
+					InsetsBuilder.of(0, 24, 16, 0), HPos.RIGHT, VPos.BOTTOM
 				);
 			}
 		};
 		sp.setFitToWidth(true);
 		sp.setFitToHeight(true);
 		CSSFragment.Builder.build()
-				.addSelector(".scroll-pane, .scroll-pane .viewport")
-				.addStyle("-fx-background-color: transparent")
-				.closeSelector()
-				.applyOn(sp);
+			.addSelector(".scroll-pane, .scroll-pane .viewport")
+			.addStyle("-fx-background-color: transparent")
+			.closeSelector()
+			.applyOn(sp);
 
 		Size ws = UIUtils.getWindowSize();
 		Scene scene = new Scene(sp, ws.getWidth(), ws.getHeight());
@@ -108,9 +113,10 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
 
 		themeSwitcher.setOnAction(e -> {
 			String newVariant = themeVariant.get().equals("light") ? "dark" : "light";
+			String iconDesc = themeVariant.get().equals("light") ? "fas-sun" : "fas-moon";
 			themeVariant.set(newVariant);
 			loadStyleSheet(scene);
-			themeSwitcher.getFabBehavior().ifPresent(b -> b.extend(true));
+			themeSwitcher.getFabBehavior().ifPresent(b -> b.changeIcon(new MFXFontIcon(iconDesc)));
 		});
 		sp.getChildren().add(themeSwitcher);
 
@@ -134,10 +140,12 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
 	}
 
 	@Override
-	public String getStylesheet() {
-		return themeVariant.get().equals("light") ?
-				MFXThemeManager.PURPLE_LIGHT.load() :
-				MFXThemeManager.PURPLE_DARK.load();
+	public List<String> getStylesheet() {
+		String base = ComponentsLauncher.load("AppBase.css");
+		String theme = themeVariant.get().equals("light") ?
+			MFXThemeManager.PURPLE_LIGHT.load() :
+			MFXThemeManager.PURPLE_DARK.load();
+		return List.of(base, theme);
 	}
 
 	//================================================================================

@@ -20,13 +20,15 @@ package app.others.ui;
 
 import javafx.scene.Scene;
 
+import java.util.List;
+
 public interface MultipleViewApp<T> {
 
 	void registerViews();
 
 	T defaultView();
 
-	String getStylesheet();
+	List<String> getStylesheet();
 
 	default void loadStyleSheet(Scene scene) {
 		scene.getStylesheets().setAll(getStylesheet());
