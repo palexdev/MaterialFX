@@ -16,7 +16,7 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package interactive;
+package app;
 
 import javafx.application.Application;
 

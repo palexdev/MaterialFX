@@ -16,7 +16,7 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.mfxcomponents.theming;
+package io.github.palexdev.mfxcore.utils.fx;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
