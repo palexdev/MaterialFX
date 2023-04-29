@@ -46,6 +46,9 @@ module mfx.core {
 	// Observables
 	exports io.github.palexdev.mfxcore.observables;
 
+	// Selection
+	exports io.github.palexdev.mfxcore.selection;
+
 	// Utils
 	exports io.github.palexdev.mfxcore.utils;
 	exports io.github.palexdev.mfxcore.utils.converters;

@@ -40,14 +40,14 @@ public interface WithBehavior<B extends BehaviorBase<? extends Node>> {
 	 */
 	Supplier<B> defaultBehaviorProvider();
 
-	void setBehaviorProvider(Supplier<B> factory);
+	Supplier<B> getBehaviorProvider();
 
 	/**
 	 * Specifies the {@link Supplier} used to produce a behavior object for the component.
 	 */
 	SupplierProperty<B> behaviorProviderProperty();
 
-	Supplier<B> getBehaviorProvider();
+	void setBehaviorProvider(Supplier<B> factory);
 
 	/**
 	 * Restores the components behavior to the default one using {@link #defaultBehaviorProvider()}

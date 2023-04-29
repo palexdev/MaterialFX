@@ -16,6 +16,14 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## Unreleased
+
+## Added
+
+- Introducing the Selection API that will be used by components such as check boxes, radio buttons, switches and such.
+  However, the API has been developed to be as general purpose as possible, meaning that it can be used with anything
+  implementing the needed interface
+
 ## [11.3.1] - 11-04-2023
 
 ## Added
