@@ -16,6 +16,10 @@ dependencies {
 }
 
 java {
+    // These will be empty but Sonatype needs them for some reason, don't know if they can be disabled, don't care
+    // Maven publish is a fucking garbage mess
+    withSourcesJar()
+    withJavadocJar()
     tasks.withType(Jar).each { it.archiveBaseName.set("materialfx-all") }
 }
 
@@ -28,6 +32,7 @@ shadowJar {
         include(project(':localization'))
         include(project(':resources'))
     }
+    archiveClassifier = null
 }
 
 mavenPublishing {
@@ -35,7 +40,15 @@ mavenPublishing {
     signAllPublications()
 }
 
-jar {
-    enabled = false
-    dependsOn(shadowJar { archiveClassifier = null })
+configurations {
+    Task shadowJarTask = project.tasks.findByName('shadowJar')
+    [apiElements, runtimeElements].each {
+        if (shadowJarTask) {
+            it.outgoing.artifacts.removeIf {
+                it.buildDependencies.getDependencies(null)
+                        .contains(project.tasks.named('jar', Jar).get())
+            }
+            it.outgoing.artifact(shadowJarTask)
+        }
+    }
 }
