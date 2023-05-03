@@ -541,12 +541,12 @@
 }
 
 .mfx-button.fab.surface.lowered:hover {
-    -fx-background-color: #2b2832;
+  -fx-background-color: #2b2832;
 }
 
 .mfx-button.fab.surface.lowered:focused,
 .mfx-button.fab.surface.lowered:pressed {
-    -fx-background-color: #322e3b;
+  -fx-background-color: #322e3b;
 }
 
 /****************************************************************************************************
@@ -556,86 +556,86 @@
 .mfx-icon-button.filled,
 .mfx-icon-button.filled-tonal,
 .mfx-icon-button.outlined {
-    -fx-background-radius: 100%;
-    -fx-padding: 4px;
-    -mfx-size: 40px;
+  -fx-background-radius: 100%;
+  -fx-padding: 4px;
+  -mfx-size: 40px;
 }
 
 .mfx-icon-button:disabled,
 .mfx-icon-button.filled:disabled,
 .mfx-icon-button.filled-tonal:disabled,
 .mfx-icon-button.outlined:disabled {
-    -fx-background-color: rgba(230, 224, 233, 0.12);
+  -fx-background-color: rgba(230, 224, 233, 0.12);
 }
 
 .mfx-icon-button .mfx-font-icon,
 .mfx-icon-button.filled .mfx-font-icon,
 .mfx-icon-button.filled-tonal .mfx-font-icon,
 .mfx-icon-button.outlined .mfx-font-icon {
-    -mfx-size: 24px;
+  -mfx-size: 24px;
 }
 
 .mfx-icon-button:disabled .mfx-font-icon,
 .mfx-icon-button.filled:disabled .mfx-font-icon,
 .mfx-icon-button.filled-tonal:disabled .mfx-font-icon,
 .mfx-icon-button.outlined:disabled .mfx-font-icon {
-    -fx-opacity: 38%;
-    -mfx-color: #E6E0E9;
+  -fx-opacity: 38%;
+  -mfx-color: #E6E0E9;
 }
 
 /****************************************************************************************************
  * Standard IconButtons
  ****************************************************************************************************/
 .mfx-icon-button {
-    -fx-background-color: transparent;
+  -fx-background-color: transparent;
 }
 
 .mfx-icon-button:disabled {
-    -fx-background-color: transparent;
+  -fx-background-color: transparent;
 }
 
 .mfx-icon-button:hover {
-    -fx-background-color: rgba(202, 196, 208, 0.08);
+  -fx-background-color: rgba(202, 196, 208, 0.08);
 }
 
 .mfx-icon-button:focused {
-    -fx-background-color: rgba(202, 196, 208, 0.12);
+  -fx-background-color: rgba(202, 196, 208, 0.12);
 }
 
 .mfx-icon-button:pressed {
-    -fx-background-color: rgba(202, 196, 208, 0.12);
+  -fx-background-color: rgba(202, 196, 208, 0.12);
 }
 
 .mfx-icon-button .mfx-font-icon {
-    -mfx-color: #CAC4D0;
+  -mfx-color: #CAC4D0;
 }
 
 .mfx-icon-button .mfx-ripple-generator {
-    -mfx-ripple-color: rgba(202, 196, 208, 0.12);
+  -mfx-ripple-color: rgba(202, 196, 208, 0.12);
 }
 
 .mfx-icon-button:selectable:selected {
-    -fx-background-color: transparent;
+  -fx-background-color: transparent;
 }
 
 .mfx-icon-button:selectable:selected:hover {
-    -fx-background-color: rgba(208, 188, 255, 0.08);
+  -fx-background-color: rgba(208, 188, 255, 0.08);
 }
 
 .mfx-icon-button:selectable:selected:focused {
-    -fx-background-color: rgba(208, 188, 255, 0.12);
+  -fx-background-color: rgba(208, 188, 255, 0.12);
 }
 
 .mfx-icon-button:selectable:selected:pressed {
-    -fx-background-color: rgba(208, 188, 255, 0.12);
+  -fx-background-color: rgba(208, 188, 255, 0.12);
 }
 
 .mfx-icon-button:selectable:selected .mfx-font-icon {
-    -mfx-color: #D0BCFF;
+  -mfx-color: #D0BCFF;
 }
 
 .mfx-icon-button:selectable:disabled .mfx-font-icon {
-    -mfx-color: #E6E0E9;
+  -mfx-color: #E6E0E9;
 }
 
 /****************************************************************************************************
@@ -643,51 +643,51 @@
  ****************************************************************************************************/
 .mfx-icon-button.filled,
 .mfx-icon-button.filled:selectable:selected {
-    -fx-background-color: #D0BCFF;
+  -fx-background-color: #D0BCFF;
 }
 
 .mfx-icon-button.filled:hover,
 .mfx-icon-button.filled:selectable:selected:hover {
-    -fx-background-color: #c4aff4;
+  -fx-background-color: #c4aff4;
 }
 
 .mfx-icon-button.filled:focused,
 .mfx-icon-button.filled:selectable:selected:focused {
-    -fx-background-color: #bea9ee;
+  -fx-background-color: #bea9ee;
 }
 
 .mfx-icon-button.filled:pressed,
 .mfx-icon-button.filled:selectable:selected:pressed {
-    -fx-background-color: #bea9ee;
+  -fx-background-color: #bea9ee;
 }
 
 .mfx-icon-button.filled .mfx-font-icon,
 .mfx-icon-button.filled:selectable:selected .mfx-font-icon {
-    -mfx-color: #381E72;
+  -mfx-color: #381E72;
 }
 
 .mfx-icon-button.filled .mfx-ripple-generator {
-    visibility: hidden;
+  visibility: hidden;
 }
 
 .mfx-icon-button.filled:selectable {
-    -fx-background-color: #36343B;
+  -fx-background-color: #36343B;
 }
 
 .mfx-icon-button.filled:hover:selectable {
-    -fx-background-color: #423f4b;
+  -fx-background-color: #423f4b;
 }
 
 .mfx-icon-button.filled:focused:selectable {
-    -fx-background-color: #484453;
+  -fx-background-color: #484453;
 }
 
 .mfx-icon-button.filled:pressed:selectable {
-    -fx-background-color: #484453;
+  -fx-background-color: #484453;
 }
 
 .mfx-icon-button.filled:selectable .mfx-font-icon {
-    -mfx-color: #D0BCFF;
+  -mfx-color: #D0BCFF;
 }
 
 /****************************************************************************************************
@@ -695,99 +695,99 @@
  ****************************************************************************************************/
 .mfx-icon-button.filled-tonal,
 .mfx-icon-button.filled-tonal:selectable:selected {
-    -fx-background-color: #4A4458;
+  -fx-background-color: #4A4458;
 }
 
 .mfx-icon-button.filled-tonal:hover,
 .mfx-icon-button.filled-tonal:selectable:selected:hover {
-    -fx-background-color: #575065;
+  -fx-background-color: #575065;
 }
 
 .mfx-icon-button.filled-tonal:focused,
 .mfx-icon-button.filled-tonal:selectable:selected:focused {
-    -fx-background-color: #5d566b;
+  -fx-background-color: #5d566b;
 }
 
 .mfx-icon-button.filled-tonal:pressed,
 .mfx-icon-button.filled-tonal:selectable:selected:pressed {
-    -fx-background-color: #5d566b;
+  -fx-background-color: #5d566b;
 }
 
 .mfx-icon-button.filled-tonal .mfx-font-icon,
 .mfx-icon-button.filled-tonal:selectable:selected .mfx-font-icon {
-    -mfx-color: #E8DEF8;
+  -mfx-color: #E8DEF8;
 }
 
 .mfx-icon-button.filled-tonal .mfx-ripple-generator {
-    -mfx-ripple-color: rgba(202, 196, 208, 0.12);
+  -mfx-ripple-color: rgba(202, 196, 208, 0.12);
 }
 
 .mfx-icon-button.filled-tonal:selectable {
-    -fx-background-color: #36343B;
+  -fx-background-color: #36343B;
 }
 
 .mfx-icon-button.filled-tonal:hover:selectable {
-    -fx-background-color: #424047;
+  -fx-background-color: #424047;
 }
 
 .mfx-icon-button.filled-tonal:focused:selectable {
-    -fx-background-color: #48454d;
+  -fx-background-color: #48454d;
 }
 
 .mfx-icon-button.filled-tonal:pressed:selectable {
-    -fx-background-color: #48454d;
+  -fx-background-color: #48454d;
 }
 
 .mfx-icon-button.filled-tonal:selectable .mfx-font-icon {
-    -mfx-color: #CAC4D0;
+  -mfx-color: #CAC4D0;
 }
 
 /****************************************************************************************************
  * Outlined IconButtons
  ****************************************************************************************************/
 .mfx-icon-button.outlined {
-    -fx-background-color: transparent;
-    -fx-border-color: #938F99;
-    -fx-border-radius: 100%;
+  -fx-background-color: transparent;
+  -fx-border-color: #938F99;
+  -fx-border-radius: 100%;
 }
 
 .mfx-icon-button.outlined:hover {
-    -fx-background-color: rgba(202, 196, 208, 0.08);
+  -fx-background-color: rgba(202, 196, 208, 0.08);
 }
 
 .mfx-icon-button.outlined:focused {
-    -fx-background-color: rgba(202, 196, 208, 0.12);
+  -fx-background-color: rgba(202, 196, 208, 0.12);
 }
 
 .mfx-icon-button.outlined:pressed {
-    -fx-background-color: rgba(202, 196, 208, 0.12);
+  -fx-background-color: rgba(202, 196, 208, 0.12);
 }
 
 .mfx-icon-button.outlined .mfx-font-icon {
-    -mfx-color: #CAC4D0;
+  -mfx-color: #CAC4D0;
 }
 
 .mfx-icon-button.outlined .mfx-ripple-generator {
-    -mfx-ripple-color: rgba(202, 196, 208, 0.12);
+  -mfx-ripple-color: rgba(202, 196, 208, 0.12);
 }
 
 .mfx-icon-button.outlined:selectable:selected {
-    -fx-background-color: #E6E0E9;
-    -fx-border-color: transparent;
+  -fx-background-color: #E6E0E9;
+  -fx-border-color: transparent;
 }
 
 .mfx-icon-button.outlined:selectable:selected:hover {
-    -fx-background-color: #d8d2db;
+  -fx-background-color: #d8d2db;
 }
 
 .mfx-icon-button.outlined:selectable:selected:focused {
-    -fx-background-color: #d0cbd3;
+  -fx-background-color: #d0cbd3;
 }
 
 .mfx-icon-button.outlined:selectable:selected:pressed {
-    -fx-background-color: #d0cbd3;
+  -fx-background-color: #d0cbd3;
 }
 
 .mfx-icon-button.outlined:selectable:selected .mfx-font-icon {
-    -mfx-color: #322F35;
+  -mfx-color: #322F35;
 }
