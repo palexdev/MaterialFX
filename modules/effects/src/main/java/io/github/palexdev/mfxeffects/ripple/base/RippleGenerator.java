@@ -25,12 +25,10 @@ import io.github.palexdev.mfxeffects.ripple.CircleRipple;
 import javafx.animation.Animation;
 import javafx.css.StyleableDoubleProperty;
 import javafx.css.StyleableObjectProperty;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -60,7 +58,14 @@ public interface RippleGenerator {
 	/**
 	 * This is the core method responsible for generating ripple effects.
 	 */
-	void generate(MouseEvent me);
+	void generate(Position pos);
+
+	/**
+	 * Shortcut for {@code generate(Position.of(x, y))}.
+	 */
+	default void generate(double x, double y) {
+		generate(Position.of(x, y));
+	}
 
 	/**
 	 * By default, returns null.
@@ -73,6 +78,13 @@ public interface RippleGenerator {
 	 */
 	default Animation backgroundAnimation() {
 		return null;
+	}
+
+	/**
+	 * Implementation can specify the actions needed for the generator's disposal.
+	 * By default, does nothing.
+	 */
+	default void dispose() {
 	}
 
 	/**
@@ -101,18 +113,6 @@ public interface RippleGenerator {
 	 * Sets the {@link Supplier} used by the generator to create ripples.
 	 */
 	void setRippleSupplier(Supplier<? extends Ripple<?>> rippleSupplier);
-
-	/**
-	 * @return the {@link Function} used by the generator to convert a {@link MouseEvent} to a {@link Position}
-	 * bean, which will be used as the coordinates at which create the ripple
-	 */
-	Function<MouseEvent, Position> getPositionFunction();
-
-	/**
-	 * Sets the {@link Function} used by the generator to convert a {@link MouseEvent} to a {@link Position}
-	 * bean, which will be used as the coordinates at which create the ripple
-	 */
-	void setPositionFunction(Function<MouseEvent, Position> positionFunction);
 
 	Paint getRippleColor();
 
@@ -163,14 +163,5 @@ public interface RippleGenerator {
 	 */
 	default Supplier<Shape> defaultClipSupplier() {
 		return () -> new RippleClipTypeBuilder(RippleClipType.RECTANGLE).build(getRegion());
-	}
-
-	/**
-	 * @return a default {@link Function} for the conversion of {@link MouseEvent}s to positions
-	 * at which ripples are places. This default function uses {@link MouseEvent#getX()} and {@link MouseEvent#getY()}.
-	 * @see #setPositionFunction(Function)
-	 */
-	default Function<MouseEvent, Position> defaultPositionFunction() {
-		return e -> Position.of(e.getX(), e.getY());
 	}
 }

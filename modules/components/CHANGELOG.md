@@ -18,9 +18,25 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## Added
+
+- Implemented IconButtons
+- Implemented base classes for the new Selection API from core module. To be used with components such as checks,
+  radios, switches,...
+- MFXButtonBehavior: added key events handling. By default now, by pressing ENTER if the button is focused, the behavior
+  will trigger the ripple generation at the center of the button, as well as firing an ActionEvent just like for mouse
+  clicks
+- MFXFabBase: added delegate methods for the icon property
+- Added PseudoClasses for selection
+- Added theme files for the new IconButtons
+
 ## Changed
 
 - Minor refactor and improvements to the ButtonsPlayground demo
+- MFXButtonBehavior: change ripple generation method to not take the generator as a parameter. Rather, try to get the
+  generator instance from the button' skin and then cache it
+- MFXFabBehavior: Improved change icon animation for extended FABs
+- MFXButtonSkin and MFXFabSkin: adapt to behavior changes mentioned above
 
 ## [11.16.4] - 12-04-2023
 

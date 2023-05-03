@@ -20,15 +20,15 @@ $scheme: () !default;
       $scheme: (
         // Primary Dark
         '--md-sys-color-primary': GetPaletteColor('primary', 80),
-        '--md-sys-color-primary-container': GetPaletteColor('primary', 30),
-        '--md-sys-color-on-primary': GetPaletteColor('primary', 20),
-        '--md-sys-color-on-primary-container': GetPaletteColor('primary', 90),
-        '--md-sys-color-inverse-primary': GetPaletteColor('primary', 40),
+              '--md-sys-color-primary-container': GetPaletteColor('primary', 30),
+              '--md-sys-color-on-primary': GetPaletteColor('primary', 20),
+              '--md-sys-color-on-primary-container': GetPaletteColor('primary', 90),
+              '--md-sys-color-inverse-primary': GetPaletteColor('primary', 40),
         // Secondary Dark
-        '--md-sys-color-secondary': GetPaletteColor('secondary', 80),
-        '--md-sys-color-secondary-container': GetPaletteColor('secondary', 30),
-        '--md-sys-color-on-secondary': GetPaletteColor('secondary', 20),
-        '--md-sys-color-on-secondary-container': GetPaletteColor('secondary', 90),
+              '--md-sys-color-secondary': GetPaletteColor('secondary', 80),
+              '--md-sys-color-secondary-container': GetPaletteColor('secondary', 30),
+              '--md-sys-color-on-secondary': GetPaletteColor('secondary', 20),
+              '--md-sys-color-on-secondary-container': GetPaletteColor('secondary', 90),
         // Tertiary Dark
               '--md-sys-color-tertiary': GetPaletteColor('tertiary', 80),
               '--md-sys-color-tertiary-container': GetPaletteColor('tertiary', 30),
@@ -66,15 +66,15 @@ $scheme: () !default;
       $scheme: (
         // Primary Light
         '--md-sys-color-primary': GetPaletteColor('primary', 40),
-        '--md-sys-color-primary-container': GetPaletteColor('primary', 90),
-        '--md-sys-color-on-primary': GetPaletteColor('primary', 100),
-        '--md-sys-color-on-primary-container': GetPaletteColor('primary', 10),
-        '--md-sys-color-inverse-primary': GetPaletteColor('primary', 80),
+              '--md-sys-color-primary-container': GetPaletteColor('primary', 90),
+              '--md-sys-color-on-primary': GetPaletteColor('primary', 100),
+              '--md-sys-color-on-primary-container': GetPaletteColor('primary', 10),
+              '--md-sys-color-inverse-primary': GetPaletteColor('primary', 80),
         // Secondary Light
-        '--md-sys-color-secondary': GetPaletteColor('secondary', 40),
-        '--md-sys-color-secondary-container': GetPaletteColor('secondary', 90),
-        '--md-sys-color-on-secondary': GetPaletteColor('secondary', 100),
-        '--md-sys-color-on-secondary-container': GetPaletteColor('secondary', 10),
+              '--md-sys-color-secondary': GetPaletteColor('secondary', 40),
+              '--md-sys-color-secondary-container': GetPaletteColor('secondary', 90),
+              '--md-sys-color-on-secondary': GetPaletteColor('secondary', 100),
+              '--md-sys-color-on-secondary-container': GetPaletteColor('secondary', 10),
         // Tertiary Light
               '--md-sys-color-tertiary': GetPaletteColor('tertiary', 40),
               '--md-sys-color-tertiary-container': GetPaletteColor('tertiary', 90),
@@ -119,7 +119,11 @@ $scheme: () !default;
   $key: '--md-sys-color-' + $color;
   $scheme: GetColorScheme();
   $val: map.get($scheme, $key);
-  @return if($val not null, $val, lightgray);
+  @if not $val {
+    @warn "Invalid token #{$key}";
+    @return lightgray;
+  }
+  @return $val;
 }
 
 /// Given a color name (so a string) and the color's luminance (number) extracts the corresponding MD3 color from the palette.
@@ -128,7 +132,11 @@ $scheme: () !default;
   $clamped_luminance: math.clamp(0, $luminance, 100);
   $key: '--md-ref-palette-' + $color + $clamped_luminance;
   $val: map.get($palette, $key);
-  @return if($val not null, $val, lightgray);
+  @if not $val {
+    @warn "Invalid token #{$key}";
+    @return lightgray;
+  }
+  @return $val;
 }
 
 /// Returns the opacity percentage given an elevation level (between 0 and 5).
@@ -149,15 +157,19 @@ $scheme: () !default;
 /// These values are defined by M3 guidelines.
 @function GetStateLayer($state) {
   $val: map.get((
-    'hover': 8%,
-    'focus': 12%,
-    'focused': 12%,
-    'pressed': 12%,
-    'dragged': 16%,
-    'disabled': 12%,
-    'disabled-text': 38%,
+          'hover': 8%,
+          'focus': 12%,
+          'focused': 12%,
+          'pressed': 12%,
+          'dragged': 16%,
+          'disabled': 12%,
+          'disabled-text': 38%,
   ), $state);
-  @return if($val not null, $val, 0%);
+  @if not $val {
+    @warn "Invalid state layer #{$state}";
+    @return 0%;
+  }
+  @return $val;
 }
 
 /// Returns pixel values given the desired shape.
@@ -166,17 +178,21 @@ $scheme: () !default;
   $val: map.get((
     'none': '0px',
     'extra-small': '4px',
-    'extra-small-top': '4px 4px 0px 0px',
-    'small': '8px',
-    'medium': '12px',
-    'large': '16px',
-    'large-end': '0px 16px 16px 0px',
-    'large-top': '16px 16px 0px 0px',
-    'extra-large': '28px',
-    'extra-large-top': '28px 28px 0px 0px',
-    'full': '100%',
+          'extra-small-top': '4px 4px 0px 0px',
+          'small': '8px',
+          'medium': '12px',
+          'large': '16px',
+          'large-end': '0px 16px 16px 0px',
+          'large-top': '16px 16px 0px 0px',
+          'extra-large': '28px',
+          'extra-large-top': '28px 28px 0px 0px',
+          'full': '100%',
   ), $shape);
-  @return if($val not null, $val, '0px');
+  @if not $val {
+    @warn "Invalid shape #{$shape}";
+    @return 0px;
+  }
+  @return $val;
 }
 
 /// This is responsible for exposing both the palette and scheme colors in a way that is compatible with JavaFX.

@@ -8,6 +8,7 @@ module mfx.components {
 
     // Behaviors
     exports io.github.palexdev.mfxcomponents.behaviors;
+    exports io.github.palexdev.mfxcomponents.behaviors.base;
 
     // Controls
     exports io.github.palexdev.mfxcomponents.controls.base;
@@ -22,7 +23,6 @@ module mfx.components {
     exports io.github.palexdev.mfxcomponents.skins.base;
 
     // Theming
-    exports io.github.palexdev.mfxcomponents.theming;
     exports io.github.palexdev.mfxcomponents.theming.base;
     exports io.github.palexdev.mfxcomponents.theming.enums;
 }

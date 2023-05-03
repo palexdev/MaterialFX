@@ -1,0 +1,77 @@
+@use '../../tokens/theme' as Theme;
+@use '../../abstracts/ripple' as Ripple;
+@use '../../abstracts/theme_utils' as ThemeUtils;
+
+// Tokens
+$surface-tint-default: Theme.GetSchemeColor('inverse-on-surface') !default;
+$surface-tint-unselected: Theme.GetSchemeColor('on-surface-variant') !default;
+
+$bg-default: Theme.GetSchemeColor('inverse-surface') !default;
+$bg-default-hover: ThemeUtils.StateLayer($surface-tint-default, $bg-default, 'hover') !default;
+$bg-default-focused: ThemeUtils.StateLayer($surface-tint-default, $bg-default, 'focus') !default;
+$bg-default-pressed: $bg-default-focused !default;
+
+$bg-unselected: transparent !default;
+$bg-unselected-hover: ThemeUtils.StateLayer($surface-tint-unselected, $bg-unselected, 'hover') !default;
+$bg-unselected-focused: ThemeUtils.StateLayer($surface-tint-unselected, $bg-unselected, 'focus') !default;
+$bg-unselected-pressed: $bg-unselected-focused !default;
+
+$bd-color-default: transparent !default;
+$bd-color-unselected: Theme.GetSchemeColor('outline') !default;
+$bd-radius: 100%;
+
+$icon-default: Theme.GetSchemeColor('inverse-on-surface') !default;
+$icon-unselected: Theme.GetSchemeColor('on-surface-variant') !default;
+
+$ripple-default: Ripple.Ripple('on-surface-variant') !default;
+
+/****************************************************************************************************
+ * Outlined IconButtons
+ ****************************************************************************************************/
+.mfx-icon-button.outlined {
+  -fx-background-color: $bg-unselected;
+  -fx-border-color: $bd-color-unselected;
+  -fx-border-radius: $bd-radius;
+}
+
+.mfx-icon-button.outlined:hover {
+  -fx-background-color: $bg-unselected-hover;
+}
+
+.mfx-icon-button.outlined:focused {
+  -fx-background-color: $bg-unselected-focused;
+}
+
+.mfx-icon-button.outlined:pressed {
+  -fx-background-color: $bg-unselected-pressed;
+}
+
+.mfx-icon-button.outlined .mfx-font-icon {
+  -mfx-color: $icon-unselected;
+}
+
+.mfx-icon-button.outlined .mfx-ripple-generator {
+  -mfx-ripple-color: $ripple-default;
+}
+
+// Toggle Variant
+.mfx-icon-button.outlined:selectable:selected {
+  -fx-background-color: $bg-default;
+  -fx-border-color: $bd-color-default;
+}
+
+.mfx-icon-button.outlined:selectable:selected:hover {
+  -fx-background-color: $bg-default-hover;
+}
+
+.mfx-icon-button.outlined:selectable:selected:focused {
+  -fx-background-color: $bg-default-focused;
+}
+
+.mfx-icon-button.outlined:selectable:selected:pressed {
+  -fx-background-color: $bg-default-pressed;
+}
+
+.mfx-icon-button.outlined:selectable:selected .mfx-font-icon {
+  -mfx-color: $icon-default;
+}

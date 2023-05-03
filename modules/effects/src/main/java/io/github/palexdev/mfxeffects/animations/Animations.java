@@ -134,6 +134,7 @@ public class Animations {
 	 * @return true if the given animation status is RUNNING, otherwise false
 	 */
 	public static boolean isPlaying(Animation animation) {
+		if (animation == null) return false;
 		return animation.getStatus() == Animation.Status.RUNNING;
 	}
 
@@ -141,10 +142,12 @@ public class Animations {
 	 * @return true if the given animation status is PAUSED, otherwise false
 	 */
 	public static boolean isPaused(Animation animation) {
+		if (animation == null) return false;
 		return animation.getStatus() == Animation.Status.PAUSED;
 	}
 
 	public static boolean isStopped(Animation animation) {
+		if (animation == null) return false;
 		return animation.getStatus() == Animation.Status.STOPPED;
 	}
 

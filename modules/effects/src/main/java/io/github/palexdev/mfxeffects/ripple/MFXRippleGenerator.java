@@ -102,15 +102,14 @@ public class MFXRippleGenerator extends Region implements RippleGenerator {
 	private Function<MouseEvent, Position> positionFunction;
 
 	private Node cachedClip;
-	private final EventHandler<MouseEvent> handler;
-	private final InvalidationListener clipUpdater;
+	private EventHandler<MouseEvent> handler;
+	private InvalidationListener clipUpdater;
 
 	//================================================================================
 	// Constructors
 	//================================================================================
 	public MFXRippleGenerator(Region region) {
 		this.region = region;
-		handler = this::generate;
 		clipUpdater = i -> Optional.ofNullable(cachedClip)
 				.ifPresent(n -> n.resizeRelocate(0, 0, region.getWidth(), region.getHeight()));
 		initialize();
@@ -136,6 +135,7 @@ public class MFXRippleGenerator extends Region implements RippleGenerator {
 	 */
 	@Override
 	public void enable() {
+		if (handler == null) handler = this::generate;
 		region.addEventHandler(MouseEvent.MOUSE_PRESSED, handler);
 	}
 
@@ -146,15 +146,35 @@ public class MFXRippleGenerator extends Region implements RippleGenerator {
 	 */
 	@Override
 	public void disable() {
-		region.removeEventHandler(MouseEvent.MOUSE_PRESSED, handler);
+		if (handler != null) {
+			region.removeEventHandler(MouseEvent.MOUSE_PRESSED, handler);
+			handler = null;
+		}
+	}
+
+	/**
+	 * The effect is generated only if these two conditions are met first:
+	 * <p>
+	 * If the generator has been disabled, {@link #disableProperty()}, or it's not visible,
+	 * either by setting {@link #visibleProperty()} to false or by setting the {@link #opacityProperty()} to 0,
+	 * exits immediately.
+	 * <p></p>
+	 * If all checks pass uses the current {@link #getPositionFunction()} to generate a {@link Position} that is then
+	 * fed to {@link #generate(Position)}.
+	 */
+	public void generate(MouseEvent me) {
+		if (isDisabled() || !isVisible() || getRippleOpacity() <= 0) return;
+		Position pos = getPositionFunction().apply(me);
+		generate(pos);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * <p></p>
 	 * The effect is generated only if these two conditions are met first:
-	 * <p> 1) The generator has not been disabled, {@link #disableProperty()}
-	 * <p> 2) The bounds check is enabled and {@link #isWithinBounds(MouseEvent)} returns true
+	 * <p> 1) The generator has not been disabled, {@link #disableProperty()}, or it's not visible,
+	 * either by setting {@link #visibleProperty()} to false or by setting the {@link #opacityProperty()} to 0
+	 * <p> 2) The bounds check is enabled and {@link #isWithinBounds(Position)} returns true
 	 * <p></p>
 	 * The first operation is to set the clip for the generator, so that ripples do not overflow.
 	 * <p>
@@ -178,13 +198,11 @@ public class MFXRippleGenerator extends Region implements RippleGenerator {
 	 * It's also important to tell the root animation to remove the ripple shape from the generator once the transition
 	 * has ended.
 	 */
-	@Override
-	public void generate(MouseEvent me) {
+	public void generate(Position pos) {
 		if (isDisabled() || !isVisible() || getRippleOpacity() <= 0) return;
-		if (isCheckBounds() && !isWithinBounds(me)) return;
+		if (isCheckBounds() && !isWithinBounds(pos)) return;
 		if (getClip() != null) setClip(null);
 		setClip(buildClip());
-		Position pos = getPositionFunction().apply(me);
 
 		Ripple<?> ripple = getRippleSupplier().get();
 		Shape rNode = ripple.getNode();
@@ -239,13 +257,22 @@ public class MFXRippleGenerator extends Region implements RippleGenerator {
 				.getAnimation();
 	}
 
+	@Override
+	public void dispose() {
+		disable();
+		if (clipUpdater != null) {
+			region.layoutBoundsProperty().removeListener(clipUpdater);
+			clipUpdater = null;
+		}
+	}
+
 	/**
-	 * Checks if the given {@link MouseEvent} is within the bounds of the target region,
+	 * Checks if the given {@link Position} is within the bounds of the target region,
 	 * uses {@link javafx.geometry.Bounds#contains(Bounds)} on the region's layout bounds.
 	 */
-	protected boolean isWithinBounds(MouseEvent event) {
-		if (event == null) return true;
-		return region.getLayoutBounds().contains(event.getX(), event.getY());
+	protected boolean isWithinBounds(Position pos) {
+		if (pos == null) return true;
+		return region.getLayoutBounds().contains(pos.getX(), pos.getY());
 	}
 
 	/**
@@ -537,9 +564,11 @@ public class MFXRippleGenerator extends Region implements RippleGenerator {
 	}
 
 	/**
-	 * Specifies whether the bounds check is enabled before the ripple generation, see {@link #isWithinBounds(MouseEvent)}.
+	 * Specifies whether the bounds check is enabled before the ripple generation.
 	 * <p>
 	 * Can be set in CSS via the property: '-mfx-check-bounds'.
+	 *
+	 * @see #isWithinBounds(Position)
 	 */
 	public StyleableBooleanProperty checkBoundsProperty() {
 		return checkBounds;
@@ -650,6 +679,15 @@ public class MFXRippleGenerator extends Region implements RippleGenerator {
 	@Override
 	public void setRippleSizeMultiplier(double rippleSizeMultiplier) {
 		this.rippleSizeMultiplier.set(rippleSizeMultiplier);
+	}
+
+	/**
+	 * @return a default {@link Function} for the conversion of {@link MouseEvent}s to positions
+	 * at which ripples are places. This default function uses {@link MouseEvent#getX()} and {@link MouseEvent#getY()}.
+	 * @see #setPositionFunction(Function)
+	 */
+	public Function<MouseEvent, Position> defaultPositionFunction() {
+		return e -> Position.of(e.getX(), e.getY());
 	}
 
 	//================================================================================
@@ -782,12 +820,18 @@ public class MFXRippleGenerator extends Region implements RippleGenerator {
 		this.rippleSupplier = rippleSupplier;
 	}
 
-	@Override
+	/**
+	 * @return the {@link Function} used by the generator to convert a {@link MouseEvent} to a {@link Position}
+	 * bean, which will be used as the coordinates at which create the ripple
+	 */
 	public Function<MouseEvent, Position> getPositionFunction() {
 		return positionFunction;
 	}
 
-	@Override
+	/**
+	 * Sets the {@link Function} used by the generator to convert a {@link MouseEvent} to a {@link Position}
+	 * bean, which will be used as the coordinates at which create the ripple
+	 */
 	public void setPositionFunction(Function<MouseEvent, Position> positionFunction) {
 		this.positionFunction = positionFunction;
 	}

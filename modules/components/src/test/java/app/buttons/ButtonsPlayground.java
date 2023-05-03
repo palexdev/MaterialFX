@@ -23,11 +23,12 @@ import app.others.ui.*;
 import fr.brouillard.oss.cssfx.CSSFX;
 import io.github.palexdev.mfxcomponents.controls.buttons.*;
 import io.github.palexdev.mfxcomponents.controls.fab.MFXFab;
-import io.github.palexdev.mfxcomponents.theming.CSSFragment;
 import io.github.palexdev.mfxcomponents.theming.enums.FABVariants;
+import io.github.palexdev.mfxcomponents.theming.enums.IconButtonVariants;
 import io.github.palexdev.mfxcomponents.theming.enums.MFXThemeManager;
 import io.github.palexdev.mfxcore.base.beans.Size;
 import io.github.palexdev.mfxcore.builders.InsetsBuilder;
+import io.github.palexdev.mfxcore.utils.fx.CSSFragment;
 import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
@@ -55,258 +56,328 @@ import static io.github.palexdev.mfxresources.fonts.IconsProviders.FONTAWESOME_S
 import static io.github.palexdev.mfxresources.fonts.IconsProviders.randomIcon;
 
 public class ButtonsPlayground extends Application implements MultipleViewApp<String> {
-	//================================================================================
-	// Properties
-	//================================================================================
-	private final ViewSwitcher<String> switcher = new ViewSwitcher<>();
-	private final StringProperty themeVariant = new SimpleStringProperty("light");
+    //================================================================================
+    // Properties
+    //================================================================================
+    private final ViewSwitcher<String> switcher = new ViewSwitcher<>();
+    private final StringProperty themeVariant = new SimpleStringProperty("light");
 
-	//================================================================================
-	// Overridden Methods
-	//================================================================================
-	@Override
-	public void start(Stage stage) {
-		CSSFX.start();
-		registerViews();
+    //================================================================================
+    // Overridden Methods
+    //================================================================================
+    @Override
+    public void start(Stage stage) {
+        CSSFX.start();
+        registerViews();
 
-		MFXFab themeSwitcher = MFXFab.lowered();
-		MFXFontIcon icon = new MFXFontIcon("fas-moon");
-		themeSwitcher.setExtended(true);
-		themeSwitcher.textProperty().bind(themeVariant.map(s -> s.equals("light") ? "Dark" : "Light"));
-		themeSwitcher.setIcon(icon);
+        MFXFab themeSwitcher = MFXFab.lowered();
+        MFXFontIcon icon = new MFXFontIcon("fas-moon");
+        themeSwitcher.setExtended(true);
+        themeSwitcher.textProperty().bind(themeVariant.map(s -> s.equals("light") ? "Dark" : "Light"));
+        themeSwitcher.setIcon(icon);
 
-		BorderPane root = new BorderPane();
-		ComboBox<String> header = new ComboBox<>(FXCollections.observableArrayList(switcher.views().keySet()));
-		header.valueProperty().addListener((observable, oldValue, newValue) -> root.setCenter(switcher.load(newValue)));
-		root.setTop(header);
-		BorderPane.setAlignment(header, Pos.CENTER);
-		BorderPane.setMargin(header, new Insets(30, 0, 60, 0));
-		root.getStyleClass().add("container");
+        BorderPane root = new BorderPane();
+        ComboBox<String> header = new ComboBox<>(FXCollections.observableArrayList(switcher.views().keySet()));
+        header.valueProperty().addListener((observable, oldValue, newValue) -> root.setCenter(switcher.load(newValue)));
+        root.setTop(header);
+        BorderPane.setAlignment(header, Pos.CENTER);
+        BorderPane.setMargin(header, new Insets(30, 0, 60, 0));
+        root.getStyleClass().add("container");
 
-		header.getSelectionModel().selectFirst();
+        header.getSelectionModel().selectFirst();
 
-		ScrollPane sp = new ScrollPane(root) {
-			@Override
-			protected void layoutChildren() {
-				super.layoutChildren();
-				layoutInArea(themeSwitcher,
-					getLayoutX(), getLayoutY(),
-					getWidth(), getHeight(), 0,
-					InsetsBuilder.of(0, 24, 16, 0), HPos.RIGHT, VPos.BOTTOM
-				);
-			}
-		};
-		sp.setFitToWidth(true);
-		sp.setFitToHeight(true);
-		CSSFragment.Builder.build()
-			.addSelector(".scroll-pane, .scroll-pane .viewport")
-			.addStyle("-fx-background-color: transparent")
-			.closeSelector()
-			.applyOn(sp);
+        ScrollPane sp = new ScrollPane(root) {
+            @Override
+            protected void layoutChildren() {
+                super.layoutChildren();
+                layoutInArea(themeSwitcher,
+                        getLayoutX(), getLayoutY(),
+                        getWidth(), getHeight(), 0,
+                        InsetsBuilder.of(0, 24, 16, 0), HPos.RIGHT, VPos.BOTTOM
+                );
+            }
+        };
+        sp.setFitToWidth(true);
+        sp.setFitToHeight(true);
+        CSSFragment.Builder.build()
+                .addSelector(".scroll-pane, .scroll-pane .viewport")
+                .addStyle("-fx-background-color: transparent")
+                .closeSelector()
+                .applyOn(sp);
 
-		Size ws = UIUtils.getWindowSize();
-		Scene scene = new Scene(sp, ws.getWidth(), ws.getHeight());
-		loadStyleSheet(scene);
-		stage.setScene(scene);
-		stage.setTitle("Buttons Playground");
-		stage.show();
+        Size ws = UIUtils.getWindowSize();
+        Scene scene = new Scene(sp, ws.getWidth(), ws.getHeight());
+        loadStyleSheet(scene);
+        stage.setScene(scene);
+        stage.setTitle("Buttons Playground");
+        stage.show();
 
-		themeSwitcher.setOnAction(e -> {
-			String newVariant = themeVariant.get().equals("light") ? "dark" : "light";
-			String iconDesc = themeVariant.get().equals("light") ? "fas-sun" : "fas-moon";
-			themeVariant.set(newVariant);
-			loadStyleSheet(scene);
-			themeSwitcher.getFabBehavior().ifPresent(b -> b.changeIcon(new MFXFontIcon(iconDesc)));
-		});
-		sp.getChildren().add(themeSwitcher);
+        themeSwitcher.setOnAction(e -> {
+            String newVariant = themeVariant.get().equals("light") ? "dark" : "light";
+            String iconDesc = themeVariant.get().equals("light") ? "fas-sun" : "fas-moon";
+            themeVariant.set(newVariant);
+            loadStyleSheet(scene);
+            themeSwitcher.getFabBehavior().ifPresent(b -> b.changeIcon(new MFXFontIcon(iconDesc)));
+        });
+        sp.getChildren().add(themeSwitcher);
 
-		ScenicView.show(scene);
-	}
+        ScenicView.show(scene);
+    }
 
-	@Override
-	public void registerViews() {
-		switcher.register(defaultView(), s -> ebView());
-		switcher.register("filled-buttons", s -> fbView());
-		switcher.register("tonal-filled-buttons", s -> tfbView());
-		switcher.register("outlined-buttons", s -> obView());
-		switcher.register("text-buttons", s -> tbView());
-		switcher.register("fabs", s -> fabView());
-		switcher.register("extended-fabs", s -> extendedFabView());
-	}
+    @Override
+    public void registerViews() {
+        switcher.register(defaultView(), s -> ebView());
+        switcher.register("filled-buttons", s -> fbView());
+        switcher.register("tonal-filled-buttons", s -> tfbView());
+        switcher.register("outlined-buttons", s -> obView());
+        switcher.register("text-buttons", s -> tbView());
+        switcher.register("fabs", s -> fabView());
+        switcher.register("extended-fabs", s -> extendedFabView());
+        switcher.register("icon-buttons", s -> iconButtonsView());
+    }
 
-	@Override
-	public String defaultView() {
-		return "elevated-buttons";
-	}
+    @Override
+    public String defaultView() {
+        return "elevated-buttons";
+    }
 
-	@Override
-	public List<String> getStylesheet() {
-		String base = ComponentsLauncher.load("AppBase.css");
-		String theme = themeVariant.get().equals("light") ?
-			MFXThemeManager.PURPLE_LIGHT.load() :
-			MFXThemeManager.PURPLE_DARK.load();
-		return List.of(base, theme);
-	}
+    @Override
+    public List<String> getStylesheet() {
+        String base = ComponentsLauncher.load("AppBase.css");
+        String theme = themeVariant.get().equals("light") ?
+                MFXThemeManager.PURPLE_LIGHT.load() :
+                MFXThemeManager.PURPLE_DARK.load();
+        return List.of(base, theme);
+    }
 
-	//================================================================================
-	// Methods
-	//================================================================================
+    //================================================================================
+    // Methods
+    //================================================================================
 
-	private Node ebView() {
-		return createButtonsView("Elevated Buttons", MFXElevatedButton::new);
-	}
+    private Node ebView() {
+        return createButtonsView("Elevated Buttons", MFXElevatedButton::new);
+    }
 
-	private Node fbView() {
-		return createButtonsView("Filled Buttons", MFXFilledButton::new);
-	}
+    private Node fbView() {
+        return createButtonsView("Filled Buttons", MFXFilledButton::new);
+    }
 
-	private Node tfbView() {
-		return createButtonsView("Tonal Filled Buttons", MFXTonalFilledButton::new);
-	}
+    private Node tfbView() {
+        return createButtonsView("Tonal Filled Buttons", MFXTonalFilledButton::new);
+    }
 
-	private Node obView() {
-		return createButtonsView("Outlined Buttons", MFXOutlinedButton::new);
-	}
+    private Node obView() {
+        return createButtonsView("Outlined Buttons", MFXOutlinedButton::new);
+    }
 
-	private Node tbView() {
-		return createButtonsView("Text Buttons", 600, MFXTextButton::new);
-	}
+    private Node tbView() {
+        return createButtonsView("Text Buttons", 600, MFXTextButton::new);
+    }
 
-	private Node fabView() {
-		VBox box = new VBox(50);
-		box.setAlignment(Pos.TOP_CENTER);
-		box.setPadding(InsetsBuilder.all(10));
-		Node def = createFabsView("Floating Action Buttons", (s, i) -> new MFXFab(i));
-		Node surf = createFabsView("Floating Action Buttons (Surface)", (s, i) -> new MFXFab(i).setVariants(FABVariants.SURFACE));
-		Node sdy = createFabsView("Floating Action Buttons (Secondary)", (s, i) -> new MFXFab(i).setVariants(FABVariants.SECONDARY));
-		Node tty = createFabsView("Floating Action Buttons (Tertiary)", (s, i) -> new MFXFab(i).setVariants(FABVariants.TERTIARY));
-		box.getChildren().addAll(def, surf, sdy, tty);
-		return box;
-	}
+    private Node fabView() {
+        VBox box = new VBox(50);
+        box.setAlignment(Pos.TOP_CENTER);
+        box.setPadding(InsetsBuilder.all(10));
+        Node def = createFabsView("Floating Action Buttons", (s, i) -> new MFXFab(i));
+        Node surf = createFabsView("Floating Action Buttons (Surface)", (s, i) -> new MFXFab(i).setVariants(FABVariants.SURFACE));
+        Node sdy = createFabsView("Floating Action Buttons (Secondary)", (s, i) -> new MFXFab(i).setVariants(FABVariants.SECONDARY));
+        Node tty = createFabsView("Floating Action Buttons (Tertiary)", (s, i) -> new MFXFab(i).setVariants(FABVariants.TERTIARY));
+        box.getChildren().addAll(def, surf, sdy, tty);
+        return box;
+    }
 
-	private Node extendedFabView() {
-		BiFunction<String, MFXFontIcon, MFXFab> generator = (s, i) -> {
-			MFXFab fab = MFXFab.extended();
-			fab.setText(s);
-			fab.setIcon(i);
-			return fab;
-		};
-		VBox box = new VBox(50);
-		box.setAlignment(Pos.TOP_CENTER);
-		box.setPadding(InsetsBuilder.all(10));
-		Node def = createExtendedFabView("Extended FABs", generator);
-		Node surf = createExtendedFabView("Extended FABs (Surface)", generator.andThen(f -> f.setVariants(FABVariants.SURFACE)));
-		Node sdy = createExtendedFabView("Extended FABs (Secondary)", generator.andThen(f -> f.setVariants(FABVariants.SECONDARY)));
-		Node tty = createExtendedFabView("Extended FABs (Tertiary)", generator.andThen(f -> f.setVariants(FABVariants.TERTIARY)));
-		box.getChildren().addAll(def, surf, sdy, tty);
-		return box;
-	}
+    private Node extendedFabView() {
+        BiFunction<String, MFXFontIcon, MFXFab> generator = (s, i) -> {
+            MFXFab fab = MFXFab.extended();
+            fab.setText(s);
+            fab.setIcon(i);
+            return fab;
+        };
+        VBox box = new VBox(50);
+        box.setAlignment(Pos.TOP_CENTER);
+        box.setPadding(InsetsBuilder.all(10));
+        Node def = createExtendedFabView("Extended FABs", generator);
+        Node surf = createExtendedFabView("Extended FABs (Surface)", generator.andThen(f -> f.setVariants(FABVariants.SURFACE)));
+        Node sdy = createExtendedFabView("Extended FABs (Secondary)", generator.andThen(f -> f.setVariants(FABVariants.SECONDARY)));
+        Node tty = createExtendedFabView("Extended FABs (Tertiary)", generator.andThen(f -> f.setVariants(FABVariants.TERTIARY)));
+        box.getChildren().addAll(def, surf, sdy, tty);
+        return box;
+    }
 
-	private Node createButtonsView(String title, BiFunction<String, Node, MFXButton> generator) {
-		return createButtonsView(title, 700, generator);
-	}
+    private Node iconButtonsView() {
+        BiFunction<Boolean, MFXFontIcon, MFXIconButton> generator = (s, i) -> {
+            MFXIconButton btn = new MFXIconButton(i);
+            btn.setSelectable(s);
+            return btn;
+        };
 
-	private Node createButtonsView(String title, double length, BiFunction<String, Node, MFXButton> generator) {
-		TitledFlowPane tfp = new TitledFlowPane(title);
-		tfp.setMaxWidth(length);
+        VBox box = new VBox(50);
+        box.setAlignment(Pos.TOP_CENTER);
+        box.setPadding(InsetsBuilder.all(10));
+        Node standard = createIconButtonsView("Standard IconButtons", generator);
+        Node filled = createIconButtonsView("Filled IconButtons", generator.andThen(b -> b.addVariants(IconButtonVariants.FILLED)));
+        Node filledTonal = createIconButtonsView("Filled Tonal IconButtons", generator.andThen(b -> b.addVariants(IconButtonVariants.FILLED_TONAL)));
+        Node outlined = createIconButtonsView("Outlined IconButtons", generator.andThen(b -> b.addVariants(IconButtonVariants.OUTLINED)));
+        box.getChildren().addAll(standard, filled, filledTonal, outlined);
+        return box;
+    }
 
-		MFXButton btn0 = generator.apply("Enabled", null);
-		MFXButton btn1 = generator.apply("Disabled", null);
-		MFXButton btn2 = generator.apply("Hovered", null);
-		MFXButton btn3 = generator.apply("Focused", null);
-		MFXButton btn4 = generator.apply("Pressed", null);
-		MFXButton btn5 = generator.apply("Icon Left", randomIcon(FONTAWESOME_SOLID));
-		MFXButton btn6 = generator.apply("Icon Right", randomIcon(FONTAWESOME_SOLID));
-		btn6.setContentDisplay(ContentDisplay.RIGHT);
+    // Creators
+    private Node createButtonsView(String title, BiFunction<String, Node, MFXButton> generator) {
+        return createButtonsView(title, 700, generator);
+    }
 
-		btn1.setDisable(true);
-		btn2.setMouseTransparent(true);
-		btn2.pseudoClassStateChanged(PseudoClass.getPseudoClass("hover"), true);
-		btn3.setMouseTransparent(true);
-		btn3.pseudoClassStateChanged(PseudoClass.getPseudoClass("focused"), true);
-		btn4.setMouseTransparent(true);
-		btn4.pseudoClassStateChanged(PseudoClass.getPseudoClass("pressed"), true);
+    private Node createButtonsView(String title, double length, BiFunction<String, Node, MFXButton> generator) {
+        TitledFlowPane tfp = new TitledFlowPane(title);
+        tfp.setMaxWidth(length);
 
-		tfp.add(btn0, btn1, btn2, btn3, btn4, btn5, btn6);
-		return tfp;
-	}
+        MFXButton btn0 = generator.apply("Enabled", null);
+        MFXButton btn1 = generator.apply("Disabled", null);
+        MFXButton btn2 = generator.apply("Hovered", null);
+        MFXButton btn3 = generator.apply("Focused", null);
+        MFXButton btn4 = generator.apply("Pressed", null);
+        MFXButton btn5 = generator.apply("Icon Left", randomIcon(FONTAWESOME_SOLID));
+        MFXButton btn6 = generator.apply("Icon Right", randomIcon(FONTAWESOME_SOLID));
+        btn6.setContentDisplay(ContentDisplay.RIGHT);
 
-	private Node createFabsView(String title, BiFunction<String, MFXFontIcon, MFXFab> generator) {
-		return createFabsView(title, 700, generator);
-	}
+        btn1.setDisable(true);
+        btn2.setMouseTransparent(true);
+        btn2.pseudoClassStateChanged(PseudoClass.getPseudoClass("hover"), true);
+        btn3.setMouseTransparent(true);
+        btn3.pseudoClassStateChanged(PseudoClass.getPseudoClass("focused"), true);
+        btn4.setMouseTransparent(true);
+        btn4.pseudoClassStateChanged(PseudoClass.getPseudoClass("pressed"), true);
 
-	private Node createFabsView(String title, double length, BiFunction<String, MFXFontIcon, MFXFab> generator) {
-		TitledFlowPane defTfp = new TitledFlowPane(title);
-		defTfp.setMaxWidth(length);
+        tfp.add(btn0, btn1, btn2, btn3, btn4, btn5, btn6);
+        return tfp;
+    }
 
-		MFXButton btn0 = generator.apply("Enabled", randomIcon(FONTAWESOME_SOLID));
-		MFXButton btn1 = generator.apply("Disabled", randomIcon(FONTAWESOME_SOLID));
-		MFXButton btn2 = generator.apply("Hovered", randomIcon(FONTAWESOME_SOLID));
-		MFXButton btn3 = generator.apply("Focused", randomIcon(FONTAWESOME_SOLID));
-		MFXButton btn4 = generator.apply("Pressed", randomIcon(FONTAWESOME_SOLID));
-		MFXFab btn5 = generator.apply("Small", randomIcon(FONTAWESOME_SOLID));
-		MFXFab btn6 = generator.apply("Large", randomIcon(FONTAWESOME_SOLID));
-		MFXFab btn7 = generator.apply("Large Lowered", randomIcon(FONTAWESOME_SOLID));
-		MFXFab btn8 = generator.apply("Lowered Large", randomIcon(FONTAWESOME_SOLID));
+    private Node createFabsView(String title, BiFunction<String, MFXFontIcon, MFXFab> generator) {
+        return createFabsView(title, 700, generator);
+    }
 
-		btn1.setDisable(true);
-		btn2.setMouseTransparent(true);
-		btn2.pseudoClassStateChanged(PseudoClass.getPseudoClass("hover"), true);
-		btn3.setMouseTransparent(true);
-		btn3.pseudoClassStateChanged(PseudoClass.getPseudoClass("focused"), true);
-		btn4.setMouseTransparent(true);
-		btn4.pseudoClassStateChanged(PseudoClass.getPseudoClass("pressed"), true);
-		btn5.addVariants(FABVariants.SMALL);
-		btn6.addVariants(FABVariants.LARGE);
-		btn7.addVariants(FABVariants.LARGE, FABVariants.LOWERED);
-		btn8.addVariants(FABVariants.LOWERED, FABVariants.LARGE);
+    private Node createFabsView(String title, double length, BiFunction<String, MFXFontIcon, MFXFab> generator) {
+        TitledFlowPane defTfp = new TitledFlowPane(title);
+        defTfp.setMaxWidth(length);
 
-		btn8.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
-			btn8.getFabBehavior().ifPresent(b -> b.changeIcon(randomIcon(FONTAWESOME_SOLID)));
-			e.consume();
-		});
+        MFXButton btn0 = generator.apply("Enabled", randomIcon(FONTAWESOME_SOLID));
+        MFXButton btn1 = generator.apply("Disabled", randomIcon(FONTAWESOME_SOLID));
+        MFXButton btn2 = generator.apply("Hovered", randomIcon(FONTAWESOME_SOLID));
+        MFXButton btn3 = generator.apply("Focused", randomIcon(FONTAWESOME_SOLID));
+        MFXButton btn4 = generator.apply("Pressed", randomIcon(FONTAWESOME_SOLID));
+        MFXFab btn5 = generator.apply("Small", randomIcon(FONTAWESOME_SOLID));
+        MFXFab btn6 = generator.apply("Large", randomIcon(FONTAWESOME_SOLID));
+        MFXFab btn7 = generator.apply("Large Lowered", randomIcon(FONTAWESOME_SOLID));
+        MFXFab btn8 = generator.apply("Lowered Large", randomIcon(FONTAWESOME_SOLID));
 
-		defTfp.add(btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8);
-		return defTfp;
-	}
+        btn1.setDisable(true);
+        btn2.setMouseTransparent(true);
+        btn2.pseudoClassStateChanged(PseudoClass.getPseudoClass("hover"), true);
+        btn3.setMouseTransparent(true);
+        btn3.pseudoClassStateChanged(PseudoClass.getPseudoClass("focused"), true);
+        btn4.setMouseTransparent(true);
+        btn4.pseudoClassStateChanged(PseudoClass.getPseudoClass("pressed"), true);
+        btn5.addVariants(FABVariants.SMALL);
+        btn6.addVariants(FABVariants.LARGE);
+        btn7.addVariants(FABVariants.LARGE, FABVariants.LOWERED);
+        btn8.addVariants(FABVariants.LOWERED, FABVariants.LARGE);
 
-	private Node createExtendedFabView(String title, BiFunction<String, MFXFontIcon, MFXFab> generator) {
-		return createExtendedFabView(title, 900, generator);
-	}
+        btn8.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
+            btn8.getFabBehavior().ifPresent(b -> b.changeIcon(randomIcon(FONTAWESOME_SOLID)));
+            e.consume();
+        });
 
-	private Node createExtendedFabView(String title, double length, BiFunction<String, MFXFontIcon, MFXFab> generator) {
-		TitledFlowPane defTfp = new TitledFlowPane(title);
-		defTfp.setMaxWidth(length);
+        defTfp.add(btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8);
+        return defTfp;
+    }
 
-		MFXButton btn0 = generator.apply("Enabled", randomIcon(FONTAWESOME_SOLID));
-		MFXButton btn1 = generator.apply("Disabled", randomIcon(FONTAWESOME_SOLID));
-		MFXButton btn2 = generator.apply("Hovered", randomIcon(FONTAWESOME_SOLID));
-		MFXButton btn3 = generator.apply("Focused", randomIcon(FONTAWESOME_SOLID));
-		MFXButton btn4 = generator.apply("Pressed", randomIcon(FONTAWESOME_SOLID));
-		MFXFab btn5 = generator.apply("Text Only", randomIcon(FONTAWESOME_SOLID));
-		MFXFab btn6 = generator.apply("Expandable", randomIcon(FONTAWESOME_SOLID));
-		MFXFab btn7 = generator.apply("Change Icon", randomIcon(FONTAWESOME_SOLID));
-		MFXFab btn8 = generator.apply("Lowered Text Only", randomIcon(FONTAWESOME_SOLID));
+    private Node createExtendedFabView(String title, BiFunction<String, MFXFontIcon, MFXFab> generator) {
+        return createExtendedFabView(title, 900, generator);
+    }
 
-		btn1.setDisable(true);
-		btn2.setMouseTransparent(true);
-		btn2.pseudoClassStateChanged(PseudoClass.getPseudoClass("hover"), true);
-		btn3.setMouseTransparent(true);
-		btn3.pseudoClassStateChanged(PseudoClass.getPseudoClass("focused"), true);
-		btn4.setMouseTransparent(true);
-		btn4.pseudoClassStateChanged(PseudoClass.getPseudoClass("pressed"), true);
+    private Node createExtendedFabView(String title, double length, BiFunction<String, MFXFontIcon, MFXFab> generator) {
+        TitledFlowPane defTfp = new TitledFlowPane(title);
+        defTfp.setMaxWidth(length);
 
-		btn5.setContentDisplay(ContentDisplay.TEXT_ONLY);
-		btn5.setAlignment(Pos.CENTER);
-		btn8.addVariants(FABVariants.LOWERED);
-		btn8.setContentDisplay(ContentDisplay.TEXT_ONLY);
-		btn8.setAlignment(Pos.CENTER);
+        MFXButton btn0 = generator.apply("Enabled", randomIcon(FONTAWESOME_SOLID));
+        MFXButton btn1 = generator.apply("Disabled", randomIcon(FONTAWESOME_SOLID));
+        MFXButton btn2 = generator.apply("Hovered", randomIcon(FONTAWESOME_SOLID));
+        MFXButton btn3 = generator.apply("Focused", randomIcon(FONTAWESOME_SOLID));
+        MFXButton btn4 = generator.apply("Pressed", randomIcon(FONTAWESOME_SOLID));
+        MFXFab btn5 = generator.apply("Text Only", randomIcon(FONTAWESOME_SOLID));
+        MFXFab btn6 = generator.apply("Expandable", randomIcon(FONTAWESOME_SOLID));
+        MFXFab btn7 = generator.apply("Change Icon", randomIcon(FONTAWESOME_SOLID));
+        MFXFab btn8 = generator.apply("Lowered Text Only", randomIcon(FONTAWESOME_SOLID));
 
-		btn6.setExtended(false);
-		btn6.setOnAction(e -> btn6.setExtended(!btn6.isExtended()));
-		btn7.setOnAction(e -> btn7.getFabBehavior().ifPresent(b -> b.changeIcon(randomIcon(FONTAWESOME_SOLID))));
+        btn1.setDisable(true);
+        btn2.setMouseTransparent(true);
+        btn2.pseudoClassStateChanged(PseudoClass.getPseudoClass("hover"), true);
+        btn3.setMouseTransparent(true);
+        btn3.pseudoClassStateChanged(PseudoClass.getPseudoClass("focused"), true);
+        btn4.setMouseTransparent(true);
+        btn4.pseudoClassStateChanged(PseudoClass.getPseudoClass("pressed"), true);
 
-		defTfp.add(btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8);
-		return defTfp;
-	}
+        btn5.setContentDisplay(ContentDisplay.TEXT_ONLY);
+        btn5.setAlignment(Pos.CENTER);
+        btn8.addVariants(FABVariants.LOWERED);
+        btn8.setContentDisplay(ContentDisplay.TEXT_ONLY);
+        btn8.setAlignment(Pos.CENTER);
+
+        btn6.setExtended(false);
+        btn6.setOnAction(e -> btn6.setExtended(!btn6.isExtended()));
+        btn7.setOnAction(e -> btn7.getFabBehavior().ifPresent(b -> b.changeIcon(randomIcon(FONTAWESOME_SOLID))));
+
+        defTfp.add(btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8);
+        return defTfp;
+    }
+
+    private Node createIconButtonsView(String title, BiFunction<Boolean, MFXFontIcon, MFXIconButton> generator) {
+        return createIconButtonsView(title, 400, generator);
+    }
+
+    private Node createIconButtonsView(String title, double length, BiFunction<Boolean, MFXFontIcon, MFXIconButton> generator) {
+        TitledFlowPane defTfp = new TitledFlowPane(title);
+        defTfp.setMaxWidth(length);
+
+        // As toggles
+        MFXIconButton btn0 = generator.apply(false, randomIcon(FONTAWESOME_SOLID));
+        MFXIconButton btn1 = generator.apply(false, randomIcon(FONTAWESOME_SOLID));
+        MFXIconButton btn2 = generator.apply(false, randomIcon(FONTAWESOME_SOLID));
+        MFXIconButton btn3 = generator.apply(false, randomIcon(FONTAWESOME_SOLID));
+        MFXIconButton btn4 = generator.apply(false, randomIcon(FONTAWESOME_SOLID));
+        btn1.setMouseTransparent(true);
+        btn1.pseudoClassStateChanged(PseudoClass.getPseudoClass("hover"), true);
+        btn2.setMouseTransparent(true);
+        btn2.pseudoClassStateChanged(PseudoClass.getPseudoClass("focused"), true);
+        btn3.setMouseTransparent(true);
+        btn3.pseudoClassStateChanged(PseudoClass.getPseudoClass("pressed"), true);
+        btn4.setDisable(true);
+
+        // Standard
+        MFXIconButton btn5 = generator.apply(true, randomIcon(FONTAWESOME_SOLID));
+        MFXIconButton btn6 = generator.apply(true, randomIcon(FONTAWESOME_SOLID));
+        MFXIconButton btn7 = generator.apply(true, randomIcon(FONTAWESOME_SOLID));
+        MFXIconButton btn8 = generator.apply(true, randomIcon(FONTAWESOME_SOLID));
+        MFXIconButton btn9 = generator.apply(true, randomIcon(FONTAWESOME_SOLID));
+        btn6.setMouseTransparent(true);
+        btn6.pseudoClassStateChanged(PseudoClass.getPseudoClass("hover"), true);
+        btn7.setMouseTransparent(true);
+        btn7.pseudoClassStateChanged(PseudoClass.getPseudoClass("focused"), true);
+        btn8.setMouseTransparent(true);
+        btn8.pseudoClassStateChanged(PseudoClass.getPseudoClass("pressed"), true);
+        btn9.setDisable(true);
+        btn5.setOnAction(e -> System.out.println("Fire!: " + btn5.isSelected()));
+
+        if (btn5.getStyleClass().contains(IconButtonVariants.OUTLINED.variantStyleClass()) ||
+                btn5.getStyleClass().size() == 1) {
+            btn5.setSelected(true);
+            btn6.setSelected(true);
+            btn7.setSelected(true);
+            btn8.setSelected(true);
+            btn9.setSelected(true);
+        }
+
+        defTfp.add(btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9);
+        return defTfp;
+    }
 }

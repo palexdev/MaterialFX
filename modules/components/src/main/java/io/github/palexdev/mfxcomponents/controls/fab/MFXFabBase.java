@@ -29,14 +29,17 @@ import io.github.palexdev.mfxcore.base.properties.styleable.StyleableBooleanProp
 import io.github.palexdev.mfxcore.observables.When;
 import io.github.palexdev.mfxcore.utils.fx.StyleUtils;
 import io.github.palexdev.mfxresources.base.properties.IconProperty;
+import io.github.palexdev.mfxresources.fonts.IconProvider;
 import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
 import javafx.scene.control.Skin;
+import javafx.scene.text.Font;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -278,5 +281,37 @@ public class MFXFabBase extends MFXElevatedButton {
 
 	public void setIcon(MFXFontIcon icon) {
 		iconProperty().set(icon);
+	}
+
+	/**
+	 * Delegate of {@link IconProperty#setDescription(String)}.
+	 */
+	public IconProperty setIconDescription(String description) {
+		return icon.setDescription(description);
+	}
+
+	/**
+	 * Delegate of {@link IconProperty#setProvider(IconProvider)}.
+	 *
+	 * @see MFXFontIcon#setIconsProvider(IconProvider)
+	 */
+	public IconProperty setIconProvider(IconProvider provider) {
+		return icon.setProvider(provider);
+	}
+
+	/**
+	 * Delegate of {@link IconProperty#setProvider(Font, Function)}.
+	 *
+	 * @see MFXFontIcon#setIconsProvider(Font, Function)
+	 */
+	public IconProperty setIconProvider(Font font, Function<String, Character> converter) {
+		return icon.setProvider(font, converter);
+	}
+
+	/**
+	 * Delegate of {@link IconProperty#setProvider(IconProvider, String)}.
+	 */
+	public IconProperty setIconProvider(IconProvider provider, String description) {
+		return icon.setProvider(provider, description);
 	}
 }

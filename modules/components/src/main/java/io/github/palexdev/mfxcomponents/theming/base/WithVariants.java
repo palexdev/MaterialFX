@@ -71,10 +71,19 @@ import java.util.Set;
  */
 public interface WithVariants<N extends Node, V extends Variant> {
 
+	/**
+	 * Adds the given variants to the component.
+	 */
 	N addVariants(V... variants);
 
+	/**
+	 * Clears the component's variants then adds all the provided ones.
+	 */
 	N setVariants(V... variants);
 
+	/**
+	 * Removes all the given variants from the component.
+	 */
 	N removeVariants(V... variants);
 
 	/**

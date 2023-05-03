@@ -16,6 +16,23 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [Unreleased]
+
+## Changed
+
+- Animations: methods to check for an Animation state should take into account null values
+- Slightly reviewed the Ripple API
+- RippleGenerator interface: any generator should operate on a generic Position. For this reason, 'generate(MouseEvent)'
+  has been moved to concrete implementations that can generate effects from MouseEvents. They should also offer a
+  disposal method in case it is needed
+- MFXRippleGenerator: for the above changes, make 'isWithinBounds(...)' work on generic positions rather than mouse
+  events
+
+## Fixed
+
+- MFXRippleGenerator: fixed a series of potential memory leaks. Don't build the mouse event handler until one requests
+  it, and make sure to dispose both the handler and the bound listener when requested
+
 ## [11.0.5] - 06-04-2023
 
 ## Added

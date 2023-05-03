@@ -1,0 +1,76 @@
+@use '../../tokens/theme' as Theme;
+@use '../../abstracts/ripple' as Ripple;
+@use '../../abstracts/theme_utils' as ThemeUtils;
+
+// Tokens
+$surface-tint: Theme.GetSchemeColor('on-primary') !default;
+$surface-tint-toggle: Theme.GetSchemeColor('primary') !default;
+
+$bg-default: Theme.GetSchemeColor('primary') !default;
+$bg-default-hover: ThemeUtils.StateLayer($surface-tint, $bg-default, 'hover') !default;
+$bg-default-focused: ThemeUtils.StateLayer($surface-tint, $bg-default, 'focus') !default;
+$bg-default-pressed: $bg-default-focused !default;
+
+$bg-unselected: Theme.GetSchemeColor('surface-container-highest') !default;
+$bg-unselected-hover: ThemeUtils.StateLayer($surface-tint-toggle, $bg-unselected, 'hover') !default;
+$bg-unselected-focused: ThemeUtils.StateLayer($surface-tint-toggle, $bg-unselected, 'focus') !default;
+$bg-unselected-pressed: $bg-unselected-focused !default;
+
+$icon-default: Theme.GetSchemeColor('on-primary') !default;
+$icon-unselected: Theme.GetSchemeColor('primary') !default;
+$icon-selected: Theme.GetSchemeColor('on-primary') !default;
+
+$ripple-default: Ripple.Ripple('on-primary') !default;
+
+/****************************************************************************************************
+ * Filled IconButtons
+ ****************************************************************************************************/
+.mfx-icon-button.filled,
+.mfx-icon-button.filled:selectable:selected {
+  -fx-background-color: $bg-default;
+}
+
+.mfx-icon-button.filled:hover,
+.mfx-icon-button.filled:selectable:selected:hover, {
+  -fx-background-color: $bg-default-hover;
+}
+
+.mfx-icon-button.filled:focused,
+.mfx-icon-button.filled:selectable:selected:focused {
+  -fx-background-color: $bg-default-focused;
+}
+
+.mfx-icon-button.filled:pressed,
+.mfx-icon-button.filled:selectable:selected:pressed {
+  -fx-background-color: $bg-default-pressed;
+}
+
+.mfx-icon-button.filled .mfx-font-icon,
+.mfx-icon-button.filled:selectable:selected .mfx-font-icon {
+  -mfx-color: $icon-default;
+}
+
+.mfx-icon-button.filled .mfx-ripple-generator {
+  visibility: hidden;
+}
+
+// Toggle Variant
+.mfx-icon-button.filled:selectable {
+  -fx-background-color: $bg-unselected;
+}
+
+.mfx-icon-button.filled:hover:selectable {
+  -fx-background-color: $bg-unselected-hover;
+}
+
+.mfx-icon-button.filled:focused:selectable {
+  -fx-background-color: $bg-unselected-focused;
+}
+
+.mfx-icon-button.filled:pressed:selectable {
+  -fx-background-color: $bg-unselected-pressed;
+}
+
+.mfx-icon-button.filled:selectable .mfx-font-icon {
+  -mfx-color: $icon-unselected;
+}

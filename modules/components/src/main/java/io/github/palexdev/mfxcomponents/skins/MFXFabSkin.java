@@ -90,6 +90,7 @@ public class MFXFabSkin extends MFXButtonSkin {
             .listen();
 
         // Text changes or icon changes need the label to be placed correctly
+        //noinspection OptionalGetWithoutIsPresent
         lwWhen = onInvalidated(label.widthProperty())
             .condition(v -> fab.getFabBehavior().isPresent())
             .then(v -> label.setTranslateX(fab.getFabBehavior().get().computeLabelDisplacement()))
@@ -108,9 +109,9 @@ public class MFXFabSkin extends MFXButtonSkin {
         MFXFontIcon icon = fab.getIcon();
         double iW = (icon != null) ? icon.getLayoutBounds().getWidth() : 0.0;
         double gap = (icon != null) ? fab.getGraphicTextGap() : 0.0;
-        return fab.isExtended() ?
-            leftInset + iW + gap + snapSizeX(TextUtils.computeTextWidth(fab.getFont(), fab.getText())) + rightInset :
-            leftInset + iW + rightInset;
+        return fab.isExtended() && !fab.getFabBehavior().map(MFXFabBehavior::isChangingIcon).orElse(false) ?
+                leftInset + iW + gap + snapSizeX(TextUtils.computeTextWidth(fab.getFont(), fab.getText())) + rightInset :
+                leftInset + iW + rightInset;
     }
 
     @Override

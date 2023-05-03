@@ -21,6 +21,7 @@ package io.github.palexdev.mfxcomponents.behaviors;
 import io.github.palexdev.mfxcomponents.controls.fab.MFXFabBase;
 import io.github.palexdev.mfxcomponents.skins.MFXFabSkin;
 import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
+import io.github.palexdev.mfxeffects.animations.Animations;
 import io.github.palexdev.mfxeffects.animations.Animations.KeyFrames;
 import io.github.palexdev.mfxeffects.animations.Animations.SequentialBuilder;
 import io.github.palexdev.mfxeffects.animations.Animations.TimelineBuilder;
@@ -58,7 +59,8 @@ public class MFXFabBehavior extends MFXButtonBehavior {
 	private final Scale scale = new Scale(1, 1);
 
 	private Animation extendAnimation;
-	private boolean inhibitAnimations = false;
+	private Animation changeIconAnimation;
+	private boolean changingIcon = false;
 
 	private Label labelNode;
 
@@ -80,6 +82,7 @@ public class MFXFabBehavior extends MFXButtonBehavior {
 	 * <p></p>
 	 * This is automatically called by the {@link MFXFabBase#extendedProperty()} when it changes.
 	 */
+	@SuppressWarnings("OptionalGetWithoutIsPresent")
 	public void extend(boolean animate) {
 		MFXFabBase fab = getFab();
 		boolean extended = fab.isExtended();
@@ -96,8 +99,8 @@ public class MFXFabBehavior extends MFXButtonBehavior {
 			return;
 		}
 
-		double resizeDuration = inhibitAnimations ? 1 : M3Motion.LONG2.toMillis();
-		double opacityDuration = inhibitAnimations ? 1 : (extended ? M3Motion.LONG4 : M3Motion.SHORT4).toMillis();
+		double resizeDuration = M3Motion.LONG2.toMillis();
+		double opacityDuration = (extended ? M3Motion.LONG4 : M3Motion.SHORT4).toMillis();
 		Interpolator curve = M3Motion.EMPHASIZED;
 
 		if (!extended && fab.getPrefWidth() == Region.USE_COMPUTED_SIZE) fab.setPrefWidth(fab.getWidth());
@@ -128,30 +131,48 @@ public class MFXFabBehavior extends MFXButtonBehavior {
 	 * The 'pivot' argument is used to set the {@link Scale}'s pivotX and pivotY, the code is factored out in the
 	 * {@link #setScalePivot(Pos)} method.
 	 */
+	@SuppressWarnings({"ConstantValue", "OptionalGetWithoutIsPresent"})
 	public void changeIcon(MFXFontIcon newIcon, Pos pivot) {
 		MFXFabBase fab = getFab();
 		MFXFontIcon currentIcon = fab.getIcon();
+		if (Animations.isPlaying(changeIconAnimation)) {
+			changeIconAnimation.stop();
+		}
 
-		Duration outMillis = M3Motion.LONG4;
+		Interpolator curve = M3Motion.EMPHASIZED;
 		if (fab.isExtended()) {
-			newIcon.setOpacity(0.0);
-			fab.setIcon(newIcon);
-			TimelineBuilder.build()
+			Duration inMillis = M3Motion.SHORT2;
+			Duration outMillis = M3Motion.LONG4;
+			Duration oOutMills = M3Motion.MEDIUM1;
+			Interpolator oCurve = M3Motion.EMPHASIZED_ACCELERATE;
+			Optional<Label> label = getLabelNode();
+
+			Animation closeAnimation = TimelineBuilder.build()
+					.add(KeyFrames.of(0, e -> changingIcon = true))
+					.addConditional(() -> currentIcon != null, KeyFrames.of(inMillis, currentIcon.opacityProperty(), 0.0, curve))
+					.addConditional(label::isPresent, KeyFrames.of(inMillis, label.get().opacityProperty(), 0.0, curve))
+					.add(KeyFrames.of(inMillis, fab.prefWidthProperty(), 0.0, curve))
+					.setOnFinished(e -> fab.setIcon(newIcon))
+					.getAnimation();
+			Animation openAnimation = TimelineBuilder.build()
 					.add(KeyFrames.of(0, e -> {
-						inhibitAnimations = true;
-						fab.setExtended(false);
+						newIcon.setOpacity(0.0);
+						changingIcon = false;
 					}))
-					.add(KeyFrames.of(M3Motion.SHORT2, e -> {
-						inhibitAnimations = false;
-						fab.setExtended(true);
-					}))
-					.add(KeyFrames.of(outMillis, newIcon.opacityProperty(), 1.0, M3Motion.EMPHASIZED))
-					.getAnimation()
-					.play();
+					.addConditional(() -> newIcon != null, KeyFrames.of(oOutMills, newIcon.opacityProperty(), 1.0, oCurve))
+					.addConditional(label::isPresent, KeyFrames.of(oOutMills, label.get().opacityProperty(), 1.0, oCurve))
+					.addConditional(label::isPresent, KeyFrames.of(outMillis, label.get().translateXProperty(), computeLabelDisplacement(), curve))
+					.add(KeyFrames.of(outMillis, fab.prefWidthProperty(), computeWidth(), curve))
+					.getAnimation();
+			changeIconAnimation = SequentialBuilder.build()
+					.add(closeAnimation)
+					.add(openAnimation)
+					.getAnimation();
 		} else {
 			setScalePivot(pivot);
 
 			Duration inMillis = M3Motion.SHORT4;
+			Duration outMillis = M3Motion.LONG4;
 			Interpolator inCurve = M3Motion.EMPHASIZED_ACCELERATE;
 			Interpolator outCurve = M3Motion.EMPHASIZED_DECELERATE;
 
@@ -167,12 +188,12 @@ public class MFXFabBehavior extends MFXButtonBehavior {
 					.add(KeyFrames.of(outMillis, scale.yProperty(), 1.0, outCurve))
 					.addConditional(() -> newIcon != null, KeyFrames.of(outMillis, newIcon.opacityProperty(), 1.0, outCurve))
 					.getAnimation();
-			SequentialBuilder.build()
+			changeIconAnimation = SequentialBuilder.build()
 					.add(scaleDown)
 					.add(scaleUp)
-					.getAnimation()
-					.play();
+					.getAnimation();
 		}
+		changeIconAnimation.play();
 	}
 
 	/**
@@ -298,6 +319,8 @@ public class MFXFabBehavior extends MFXButtonBehavior {
 	//================================================================================
 	@Override
 	public void dispose() {
+		extendAnimation = null;
+		changeIconAnimation = null;
 		labelNode = null;
 		getNode().getTransforms().remove(scale);
 		super.dispose();
@@ -312,5 +335,15 @@ public class MFXFabBehavior extends MFXButtonBehavior {
 	 */
 	public MFXFabBase getFab() {
 		return (MFXFabBase) getNode();
+	}
+
+	/**
+	 * Indicated whether the extended FAB is changing its icon through {@link #changeIcon(MFXFontIcon)}.
+	 * <p></p>
+	 * This is used by {@link MFXFabSkin} to allow the FAB's width to be set to 0.0 initially and then to
+	 * correctly compute the new width when expanding again.
+	 */
+	public boolean isChangingIcon() {
+		return changingIcon;
 	}
 }

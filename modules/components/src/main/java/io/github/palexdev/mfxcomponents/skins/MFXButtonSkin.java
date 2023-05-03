@@ -29,6 +29,7 @@ import io.github.palexdev.mfxeffects.ripple.MFXRippleGenerator;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
@@ -97,14 +98,15 @@ public class MFXButtonSkin extends MFXLabeledSkin<MFXButton, MFXButtonBehavior> 
 
     /**
      * Initializes the given {@link MFXButtonBehavior} to handle events such as: {@link MouseEvent#MOUSE_PRESSED},
-     * {@link MouseEvent#MOUSE_CLICKED}.
+     * {@link MouseEvent#MOUSE_CLICKED}, {@link KeyEvent#KEY_PRESSED}.
      */
     @Override
     protected void initBehavior(MFXButtonBehavior behavior) {
         MFXButton button = getSkinnable();
-        handle(button, MouseEvent.MOUSE_PRESSED, e -> behavior.generateRipple(rg, e));
+        handle(button, MouseEvent.MOUSE_PRESSED, behavior::generateRipple);
         handle(button, MouseEvent.MOUSE_PRESSED, behavior::mousePressed);
         handle(button, MouseEvent.MOUSE_CLICKED, behavior::mouseClicked);
+        handle(button, KeyEvent.KEY_PRESSED, behavior::keyPressed);
     }
 
     @Override
@@ -146,6 +148,7 @@ public class MFXButtonSkin extends MFXLabeledSkin<MFXButton, MFXButtonBehavior> 
 
     @Override
     public void dispose() {
+        rg.dispose();
         label.getTextNode().ifPresent(n -> n.opacityProperty().unbind());
         cdWhen.dispose();
         cdWhen = null;

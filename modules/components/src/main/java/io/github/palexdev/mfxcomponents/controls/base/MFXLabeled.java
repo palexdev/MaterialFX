@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 /**
- * Base class for MaterialFX controls that are text based. The idea is to have a separate hierarchy of components from the JavaFX one,
+ * Base class for MaterialFX components that are text based. The idea is to have a separate hierarchy of components from the JavaFX one,
  * that perfectly integrates with the new Behavior, Skin and Theming APIs.
  * <p>
  * Extends {@link Labeled} and implements {@link WithBehavior}, {@link MFXStyleable} and {@link MFXResizable}.
@@ -78,7 +78,7 @@ import java.util.function.Supplier;
  * Unfortunately, I cannot prevent users from still using the aforementioned method, but I can guarantee you using that
  * will cause issues and undesired behaviors. You have been warned.
  *
- * @param <B> the behavior type used by the control
+ * @param <B> the behavior type used by the component
  * @see MFXSkinBase
  * @see MFXResizable
  */

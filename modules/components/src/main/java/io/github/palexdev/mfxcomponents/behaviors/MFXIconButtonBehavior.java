@@ -1,46 +1,24 @@
-/*
- * Copyright (C) 2022 Parisi Alessandro - alessandro.parisi406@gmail.com
- * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
- *
- * MaterialFX is free software: you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation; either version 3 of the License,
- * or (at your option) any later version.
- *
- * MaterialFX is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.palexdev.mfxcomponents.behaviors;
 
-import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
-import io.github.palexdev.mfxcore.behavior.BehaviorBase;
+import io.github.palexdev.mfxcomponents.behaviors.base.MFXSelectableBehavior;
+import io.github.palexdev.mfxcomponents.controls.buttons.MFXIconButton;
 import io.github.palexdev.mfxeffects.ripple.MFXRippleGenerator;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Skin;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- * This is the default behavior used by all {@link MFXButton}s.
+ * This is the default behavior used by all {@link MFXIconButton} components.
  * <p>
- * Defines the actions to:
- * <p> - generate ripples
- * <p> - handle mouse press
- * <p> - handle mouse click
- * <p> - handle key press
+ * Although it doesn't extend directly {@link MFXButtonBehavior}, this can be considered an extension of it
+ * since it offers the same methods but also the necessary capabilities to handle selection, inherited from {@link MFXSelectableBehavior}.
  */
-public class MFXButtonBehavior extends BehaviorBase<MFXButton> {
+public class MFXIconButtonBehavior extends MFXSelectableBehavior<MFXIconButton> {
     //================================================================================
     // Properties
     //================================================================================
@@ -49,8 +27,8 @@ public class MFXButtonBehavior extends BehaviorBase<MFXButton> {
     //================================================================================
     // Constructors
     //================================================================================
-    public MFXButtonBehavior(MFXButton node) {
-        super(node);
+    public MFXIconButtonBehavior(MFXIconButton selectable) {
+        super(selectable);
     }
 
     //================================================================================
@@ -62,7 +40,6 @@ public class MFXButtonBehavior extends BehaviorBase<MFXButton> {
      * {@link MouseEvent}.
      */
     public void generateRipple(MouseEvent me) {
-        if (me.getButton() != MouseButton.PRIMARY) return;
         getRippleGenerator().ifPresent(rg -> rg.generate(me));
     }
 
@@ -74,25 +51,27 @@ public class MFXButtonBehavior extends BehaviorBase<MFXButton> {
     }
 
     /**
-     * Calls {@link MFXButton#fire()} on mouse clicked.
+     * Delegates to {@link #handleSelection(MouseEvent)} but also checks if the icon button is in selection mode,
+     * {@link MFXIconButton#selectableProperty()}. If it's not, exits.
      */
     public void mouseClicked(MouseEvent me) {
-        if (me.getButton() != MouseButton.PRIMARY) return;
-        getNode().fire();
+        MFXIconButton btn = getNode();
+        if (!btn.isSelectable()) return;
+        handleSelection(me);
     }
 
     /**
      * Handles {@link KeyEvent}s.
      * <p></p>
      * By default, if the pressed key is {@link KeyCode#ENTER}, first triggers the generation of a ripple effect at the
-     * center of the button, then triggers {@link MFXButton#fire()}.
+     * center of the button, then delegates to {@link #handleSelection(KeyEvent)} for the selection handling.
      */
     public void keyPressed(KeyEvent ke) {
-        MFXButton node = getNode();
+        MFXIconButton node = getNode();
         if (ke.getCode() == KeyCode.ENTER) {
             Bounds b = node.getLayoutBounds();
             getRippleGenerator().ifPresent(rg -> rg.generate(b.getCenterX(), b.getCenterY()));
-            node.fire();
+            handleSelection(ke);
         }
     }
 
@@ -104,7 +83,7 @@ public class MFXButtonBehavior extends BehaviorBase<MFXButton> {
      */
     public Optional<MFXRippleGenerator> getRippleGenerator() {
         if (rg == null) {
-            MFXButton btn = getNode();
+            MFXIconButton btn = getNode();
             Skin<?> skin = btn.getSkin();
             if (skin == null) return Optional.empty();
             Optional<MFXRippleGenerator> opt = btn.getChildrenUnmodifiable().stream()

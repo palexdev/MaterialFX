@@ -22,6 +22,7 @@ import com.sun.javafx.tk.Toolkit;
 import io.github.palexdev.mfxcomponents.behaviors.MFXButtonBehavior;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXFilledButton;
+import io.github.palexdev.mfxcomponents.controls.buttons.MFXIconButton;
 import io.github.palexdev.mfxcomponents.skins.MFXButtonSkin;
 import io.github.palexdev.mfxcomponents.theming.enums.MFXThemeManager;
 import javafx.scene.Scene;
@@ -75,6 +76,17 @@ public class TestButton {
         });
         assertEquals(200.0, button.getWidth());
         assertEquals(200.0, button.getHeight());
+    }
+
+    @Test
+    void testIconButtonSize(FxRobot robot) {
+        StackPane root = setupStage();
+        MFXIconButton btn = new MFXIconButton();
+        btn.iconProperty().setDescription("fas-gear");
+        robot.interact(() -> root.getChildren().setAll(btn));
+
+        assertEquals(48.0, btn.getWidth());
+        assertEquals(48.0, btn.getHeight());
     }
 
     @Test

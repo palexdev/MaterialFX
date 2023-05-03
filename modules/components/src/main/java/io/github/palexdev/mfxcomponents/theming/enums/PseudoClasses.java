@@ -25,16 +25,18 @@ import javafx.scene.Node;
  * This enumerator keeps references to custom {@link PseudoClass}es needed by MaterialFX components.
  */
 public enum PseudoClasses {
-	WITH_ICON_LEFT(PseudoClass.getPseudoClass("with-icon-left")),
-	WITH_ICON_RIGHT(PseudoClass.getPseudoClass("with-icon-right")),
-	EXTENDED(PseudoClass.getPseudoClass("extended")),
-	;
+    EXTENDED(PseudoClass.getPseudoClass("extended")),
+    SELECTABLE(PseudoClass.getPseudoClass("selectable")),
+    SELECTED(PseudoClass.getPseudoClass("selected")),
+    WITH_ICON_LEFT(PseudoClass.getPseudoClass("with-icon-left")),
+    WITH_ICON_RIGHT(PseudoClass.getPseudoClass("with-icon-right")),
+    ;
 
-	private final PseudoClass pseudoClass;
+    private final PseudoClass pseudoClass;
 
-	PseudoClasses(PseudoClass pseudoClass) {
-		this.pseudoClass = pseudoClass;
-	}
+    PseudoClasses(PseudoClass pseudoClass) {
+        this.pseudoClass = pseudoClass;
+    }
 
 	public void setOn(Node node, boolean state) {
 		node.pseudoClassStateChanged(pseudoClass, state);

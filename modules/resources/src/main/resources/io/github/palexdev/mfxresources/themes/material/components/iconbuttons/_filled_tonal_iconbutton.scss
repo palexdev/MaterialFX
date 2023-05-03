@@ -1,0 +1,76 @@
+@use '../../tokens/theme' as Theme;
+@use '../../abstracts/ripple' as Ripple;
+@use '../../abstracts/theme_utils' as ThemeUtils;
+
+// Tokens
+$surface-tint: Theme.GetSchemeColor('on-secondary-container') !default;
+$surface-tint-toggle: Theme.GetSchemeColor('on-surface-variant') !default;
+
+$bg-default: Theme.GetSchemeColor('secondary-container') !default;
+$bg-default-hover: ThemeUtils.StateLayer($surface-tint, $bg-default, 'hover') !default;
+$bg-default-focused: ThemeUtils.StateLayer($surface-tint, $bg-default, 'focus') !default;
+$bg-default-pressed: $bg-default-focused !default;
+
+$bg-unselected: Theme.GetSchemeColor('surface-container-highest') !default;
+$bg-unselected-hover: ThemeUtils.StateLayer($surface-tint-toggle, $bg-unselected, 'hover') !default;
+$bg-unselected-focused: ThemeUtils.StateLayer($surface-tint-toggle, $bg-unselected, 'focus') !default;
+$bg-unselected-pressed: $bg-unselected-focused !default;
+
+$icon-default: Theme.GetSchemeColor('on-secondary-container') !default;
+$icon-unselected: Theme.GetSchemeColor('on-surface-variant') !default;
+$icon-selected: Theme.GetSchemeColor('on-secondary-container') !default;
+
+$ripple-default: Ripple.Ripple('on-surface-variant') !default;
+
+/****************************************************************************************************
+ * Filled Tonal IconButtons
+ ****************************************************************************************************/
+.mfx-icon-button.filled-tonal,
+.mfx-icon-button.filled-tonal:selectable:selected {
+  -fx-background-color: $bg-default;
+}
+
+.mfx-icon-button.filled-tonal:hover,
+.mfx-icon-button.filled-tonal:selectable:selected:hover, {
+  -fx-background-color: $bg-default-hover;
+}
+
+.mfx-icon-button.filled-tonal:focused,
+.mfx-icon-button.filled-tonal:selectable:selected:focused {
+  -fx-background-color: $bg-default-focused;
+}
+
+.mfx-icon-button.filled-tonal:pressed,
+.mfx-icon-button.filled-tonal:selectable:selected:pressed {
+  -fx-background-color: $bg-default-pressed;
+}
+
+.mfx-icon-button.filled-tonal .mfx-font-icon,
+.mfx-icon-button.filled-tonal:selectable:selected .mfx-font-icon {
+  -mfx-color: $icon-default;
+}
+
+.mfx-icon-button.filled-tonal .mfx-ripple-generator {
+  -mfx-ripple-color: $ripple-default;
+}
+
+// Toggle Variant
+.mfx-icon-button.filled-tonal:selectable {
+  -fx-background-color: $bg-unselected;
+}
+
+.mfx-icon-button.filled-tonal:hover:selectable {
+  -fx-background-color: $bg-unselected-hover;
+}
+
+.mfx-icon-button.filled-tonal:focused:selectable {
+  -fx-background-color: $bg-unselected-focused;
+}
+
+.mfx-icon-button.filled-tonal:pressed:selectable {
+  -fx-background-color: $bg-unselected-pressed;
+}
+
+.mfx-icon-button.filled-tonal:selectable .mfx-font-icon {
+  -mfx-color: $icon-unselected;
+}

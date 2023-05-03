@@ -16,7 +16,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
-## Unreleased
+## [Unreleased]
 
 ## Changed
 
@@ -28,6 +28,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Outlined buttons: updated style
 - FABs: there's no need to specify the style for extended state since it was changes from style class to pseudo class
 - Surface FABs: updated style
+- Don't just return generic values for invalid tokens, rather, raise a warning first so that a dev or a user knows at
+  compile time
 
 ## Fixed
 

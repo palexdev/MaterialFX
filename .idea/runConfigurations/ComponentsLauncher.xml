@@ -1,7 +1,8 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="ComponentsLauncher" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="app.ComponentsLauncher" />
-    <module name="MaterialFX.modules.MaterialFX.components.test" />
+    <module name="MaterialFX.components.test" />
+    <option name="VM_PARAMETERS" value="-Dglass.disableGrab=true;" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="app.*" />

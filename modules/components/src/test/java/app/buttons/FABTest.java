@@ -21,11 +21,11 @@ package app.buttons;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
 import io.github.palexdev.mfxcomponents.controls.fab.MFXFab;
 import io.github.palexdev.mfxcomponents.controls.fab.MFXFabBase;
-import io.github.palexdev.mfxcomponents.theming.CSSFragment;
 import io.github.palexdev.mfxcomponents.theming.enums.FABVariants;
 import io.github.palexdev.mfxcore.base.TriConsumer;
 import io.github.palexdev.mfxcore.builders.InsetsBuilder;
 import io.github.palexdev.mfxcore.observables.When;
+import io.github.palexdev.mfxcore.utils.fx.CSSFragment;
 import io.github.palexdev.mfxeffects.animations.Animations.KeyFrames;
 import io.github.palexdev.mfxeffects.animations.Animations.TimelineBuilder;
 import io.github.palexdev.mfxresources.MFXResources;
@@ -53,17 +53,17 @@ import java.util.function.Supplier;
 
 import static io.github.palexdev.mfxcomponents.theming.enums.FABVariants.*;
 
-public class ResTest extends Application {
-	public static String variant = "light";
+public class FABTest extends Application {
+    public static String variant = "light";
 
-	private static final PseudoClass DISABLE = PseudoClass.getPseudoClass("disabled");
-	private static final PseudoClass HOVER = PseudoClass.getPseudoClass("hover");
-	private static final PseudoClass FOCUS = PseudoClass.getPseudoClass("focused");
-	private static final PseudoClass PRESS = PseudoClass.getPseudoClass("pressed");
+    private static final PseudoClass DISABLE = PseudoClass.getPseudoClass("disabled");
+    private static final PseudoClass HOVER = PseudoClass.getPseudoClass("hover");
+    private static final PseudoClass FOCUS = PseudoClass.getPseudoClass("focused");
+    private static final PseudoClass PRESS = PseudoClass.getPseudoClass("pressed");
 
-	@Override
-	public void start(Stage primaryStage) {
-		VBox pane = new VBox(50);
+    @Override
+    public void start(Stage primaryStage) {
+        VBox pane = new VBox(50);
 		pane.setAlignment(Pos.CENTER);
 		pane.setStyle("-fx-background-color: #FFFBFE");
 
