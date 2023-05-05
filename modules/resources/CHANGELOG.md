@@ -18,7 +18,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [11.4.0] - 03-05-2023
 
-## Changed
+### Changed
 
 - Updates material palette due to recent changes in the specs, there are now more tokens to express the different
   elevations of surfaces
@@ -31,7 +31,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Don't just return generic values for invalid tokens, rather, raise a warning first so that a dev or a user knows at
   compile time
 
-## Fixed
+### Fixed
 
 - Buttons: all buttons' color has been corrected. The elevation controls only the shadow not the background. The
   button's color on a specific state (hover, press,...) is given by the mix of the "resting" color and the surface
@@ -39,46 +39,46 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [11.3.4] - 13-04-2023
 
-## Changed
+### Changed
 
 - MFXIconWrapper: turn some other methods to fluent API
 
-## Fixed
+### Fixed
 
 - MFXIconWrapper: wrong value used in size listener
 
 ## [11.3.3] - 08-04-2023
 
-## Fixed
+### Fixed
 
 - Themes were working partially as I forgot to import the fonts
 
 ## [11.3.2 and release] - 08-04-2023
 
-## Changed
+### Changed
 
 - MFXFontIcon: added new constructor
 - MFXIconWrapper: make some methods return the wrapper itself for fluent programming
 
-## Fixed
+### Fixed
 
 - MFXIconWrapper: fixed exception occurring when using enableRippleGenerator(...) methods as they caused the property to
   trigger and call theme again
 
 ## [11.3.1] - 06-04-2023
 
-## Fixed
+### Fixed
 
 - Added missing exports
 
 ## [11.3.0] - 05-04-2023
 
-## Added
+### Added
 
 - Added dark variant of purple theme (note how easy it is to derive from the light theme lol). This is experimental
   though!
 
-## Changed
+### Changed
 
 - Completely re-arranged the SASS structure, as well as code style (PascalCase from C#, why?...I felt like it, it's very
   clean actually for this purpose). The biggest pro of this change is that now generated themes are about halt the
@@ -87,32 +87,32 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [11.2.0] - 09-02-2023
 
-## Added
+### Added
 
 - Added two new properties for MFXFontIcons and MFXIconWrappers
 - IconsProviders: added a new no-arg method to create a random MFXFontIcon
 - Added stylesheets for FABs
 
-## Changed
+### Changed
 
 - Buttons: use the new init sizes properties instead of the JavaFX's ones (pref).
 - Buttons: remove the onSurface parameter as it was unused
 
 ## [11.1.2] - 07-02-2023
 
-## Changed
+### Changed
 
 - Fix wrongly formatted stylesheet
 
 ## [11.1.1] - 02-02-2023
 
-## Added
+### Added
 
 - Added styles for all the button variants
 - Expose all the tokens in the generated CSS theme, so that user can easily extend a theme and have the palette and
   color scheme as look-ups
 
-## Changed
+### Changed
 
 - MFXFontIcon: use old properties name in CSS
 - MFXIconWrapper: use the new ripple generator
@@ -121,12 +121,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [11.1.0] - 26-01-2023
 
-## Added
+### Added
 
 - Define public API to define icon packs and icon descriptors
 - Preliminary implementation of the new theme used for MaterialFX components, Material Design 3
 
-## Changed
+### Changed
 
 - Drop MFXResources icon pack in favor of FontAwesome 6 variants
 - Improved MFXFontIcon

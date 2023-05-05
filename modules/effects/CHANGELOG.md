@@ -18,13 +18,13 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-## Changed
+### Changed
 
 - Import changes to beans from MFXCore
 
 ## [11.1.0] - 03-05-2023
 
-## Changed
+### Changed
 
 - Animations: methods to check for an Animation state should take into account null values
 - Slightly reviewed the Ripple API
@@ -34,14 +34,14 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - MFXRippleGenerator: for the above changes, make 'isWithinBounds(...)' work on generic positions rather than mouse
   events
 
-## Fixed
+### Fixed
 
 - MFXRippleGenerator: fixed a series of potential memory leaks. Don't build the mouse event handler until one requests
   it, and make sure to dispose both the handler and the bound listener when requested
 
 ## [11.0.5] - 06-04-2023
 
-## Added
+### Added
 
 - Ported many of the Curves/Interpolators used by the Flutter framework for animations to JavaFX
 - Animations: Added new method to TimelineBuilder
@@ -49,7 +49,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Introduce new container capable of replicating the Container Transform animations as shown by Material 3 guidelines
 - Imported and allow export of some beans and utilities from MFXCore
 
-## Changed
+### Changed
 
 - AnimationFactory: allow to build animations with a specific Interpolator or a default one
 - Improved efficiency of MFXRippleGenerators when disabled through the visible property. This was needed especially
@@ -59,26 +59,26 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - MFXRippleGenerator: added mechanism to define how mouse events are managed, this is a way to fix components that
   were triggering pseudo states even when the mouse was outside it
 
-## Removed
+### Removed
 
 - Removed BezierEasing implementation class in favor of the implementation offered by Flutter, Cubic.java, which is much
   simpler and more performant
 
 ## [11.0.4] - 09-02-2023
 
-## Changed
+### Changed
 
 - ElevationLevel: hopefully for the last time, improve the shadows transition animation
 
 ## [11.0.3] - 02-02-2023
 
-## Changed
+### Changed
 
 - Slight change to shadow transitions
 
 ## [11.0.2] - 31-01-2023
 
-## Changed
+### Changed
 
 - Small refactors due to Animations API being moved from core module
 - Adapted shadows to Material Design 3
@@ -86,7 +86,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [11.0.1] - 26-01-2023
 
-## Added
+### Added
 
 - APIs extracted from core module, this way you can use the provided effects in any project without necessarily needing
   the core or components modules

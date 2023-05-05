@@ -16,9 +16,15 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [Unreleased]
+
+### Added
+
+- [WIP] Implementing Popups and Tooltips
+
 ## [11.7.0] - 03-05-2023
 
-## Added
+### Added
 
 - Implemented IconButtons
 - Implemented base classes for the new Selection API from core module. To be used with components such as checks,
@@ -30,7 +36,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added PseudoClasses for selection
 - Added theme files for the new IconButtons
 
-## Changed
+### Changed
 
 - Minor refactor and improvements to the ButtonsPlayground demo
 - MFXButtonBehavior: change ripple generation method to not take the generator as a parameter. Rather, try to get the
@@ -40,30 +46,30 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [11.16.4] - 12-04-2023
 
-## Fixed
+### Fixed
 
 - Emergency fix for components, the behavior was initialized twice
 
 ## [11.16.3] - 11-04-2023
 
-## Changed
+### Changed
 
 - Adapt to new When API from MFXCore
 
-## Fixed
+### Fixed
 
 - Fixed a bug that lead to the behavior not being initialized in specific occasions, also added unit test
 - Fixed label positioning for buttons
 
 ## [11.16.2] - 06-04-2023
 
-## Fixed
+### Fixed
 
 - Added missing exports
 
 ## [11.16.1] - 05-04-2023
 
-## Added
+### Added
 
 - Added purple dark theme variant to MFXThemeManager (experimental, theme needs adjustments in MFXResources, M3
   guidelines changed recently)
@@ -71,7 +77,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added tests to check that init sizes are correctly applied to small and large FABs, honestly the tests pass, but there
   may still be issues (dunno why though, my guess is that it depends on the container)
 
-## Changed
+### Changed
 
 - MFXFabBehavior: make getLabelNode() return an Optional and adapt code accordingly
 - MFXFabBehavior: improve the label displacement computation, the targetWidth is only useful for the animation. To
@@ -83,14 +89,14 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - ButtonsPlayground: implement theme switching (preliminary)
 - ButtonsPlayground: add extended FAB to test icon change animation
 
-## Fixed
+### Fixed
 
 - MFXFabSkin: fixed misplacement of the label when its width changed (text or icon changes), in such case the
   displacement must be re-computed
 
 ## [Unreleased] - 14-03-2023
 
-## Added
+### Added
 
 - Added specific behavior for FABs as shown by the M3 guidelines
 - MFXLabeled: added property that allows to control the text opacity (see recent changes to BoundLabel in core module)
@@ -103,7 +109,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   instead of creating custom skins, custom components or overriding methods inline
 - Added tests for the new LayoutStrategy and MFXResizable APIs
 
-## Changed
+### Changed
 
 - MFXButtonBehavior: fire an action only on PRIMARY mouse clicks by default
 - Moved SkinBase from core module and renamed it to MFXSkinBase
@@ -128,11 +134,11 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   state
 - WithVariants: added method to remove variants from a component
 
-## Removed
+### Removed
 
 - MFXExtendedFab has been removed to avoid code duplication
 
-## Fixed
+### Fixed
 
 - Fixed critical bug related to the initWidth and initHeight new styleable properties. For some reason they were causing
   the CSS to be reapplied continuously, causing memory leaks and a huge performance hit over time. Override
@@ -140,7 +146,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [11.16.0] - 09-02-2023
 
-## Added
+### Added
 
 - Introduced two new styleable properties to both MFXControl and MFXLabeled, to allow specifying the initial sizes of a
   component without relying on JavaFX's CSS properties since once they are set, they cannot be overwritten (bug or not
@@ -150,37 +156,37 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Introduced FABs and Extended FABs
 - Added two new theming APIs to define components' variants
 
-## Changed
+### Changed
 
 - MFXButtonSkin: listener on the graphic property is not needed, let the BoundLabel handle it
 - MFXButtonSkin: do not apply the listener on the content display property if the button is of type MFXFab
 
-## Fixed
+### Fixed
 
 - MFXElevatedButton: fixed NullPointerException caused by the elevation property as in some occasions both the oldValue
   and newValue can be null
 
 ## [11.15.2] - 07-02-2023
 
-## Changed
+### Changed
 
 - Rename materialfx package to mfxcomponents, for consistency with other modules
 - Make buttons use the new SceneBuilder integration API mentioned above
 
 ## [11.15.1] - 02-02-2023
 
-## Added
+### Added
 
 - Implemented all variants of MFXButton
 
-## Changed
+### Changed
 
 - Implemented MFXButtonBehavior
 - MFXButtonSkin: add ripple effect, adapt to changes made in SkinBase
 
 ## [11.15.0] - 26-01-2023
 
-## Added
+### Added
 
 - Preliminary implementation of components hierarchy, the idea is to build the components from scratch making them
   extend either MFXControl or MFXLabeled

@@ -18,36 +18,36 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-## Added
+### Added
 
 - Add to both Position and Size beans, methods that return empty or invalid states
 - Implement StyleableProperty for Position beans, works the same as StyleableSizeProperty
 - Added convenience method to LayoutUtils to quickly create an empty Bounds object
 
-## Changed
+### Changed
 
 - Make CSSFragment smarted and add support for multiple selector
 
 ## [11.4.0] - 03-05-2023
 
-## Added
+### Added
 
 - Introducing the Selection API that will be used by components such as check boxes, radio buttons, switches and such.
   However, the API has been developed to be as general purpose as possible, meaning that it can be used with anything
   implementing the needed interface
 - Added tests for the new Selection API
 
-## Changed
+### Changed
 
 - Moved CSSFragment from components
 
 ## [11.3.1] - 11-04-2023
 
-## Added
+### Added
 
 - Added new collection, WeakHashSet
 
-## Changed
+### Changed
 
 - When API v2! Now allowing again multiple Whens on the same ObservableValue
 - Synchronized properties: avoid using When for the waiting property for two reasons: 1) it can't be disposed easily 2)
@@ -56,7 +56,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [11.3.0] - 06-04-2023
 
-## Added
+### Added
 
 - BoundLabel: Added a mechanism to detect and retrieve the node responsible for displaying the label's text. This way
   custom controls that rely on this can have full control on the actual text node rather than the label as a whole. This
@@ -71,7 +71,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - When: added non-static method for disposal
 - Added some tests for When constructs
 
-## Changed
+### Changed
 
 - Added method to retrieve the component's behavior object, thus creating a bridge between the Control the View(skin)
   and the Behavior
@@ -81,11 +81,11 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - LayoutUtils: snap the computed sizes by default before any other calculation as this could lead to wrong pixel
   positions
 
-## Removed
+### Removed
 
 - Removed SkinBase, moved to components as MFXSkinBase
 
-## Fixed
+### Fixed
 
 - When: Implemented fix from #212
 - BoundLabel: fixed text node detection algorithm
@@ -94,32 +94,32 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [11.2.4] - 09-02-2023
 
-## Added
+### Added
 
 - SceneBuilderIntegration: added new method for debugging while in SceneBuilder
 
 ## [11.2.3] - 07-02-2023
 
-## Added
+### Added
 
 - Introduce convenience API for components developers that want to easily integrate with SceneBuilder
 
 ## [11.2.2] - 02-02-2023
 
-## Changed
+### Changed
 
 - Added/Updated documentation where needed
 
 ## [11.2.1] - 31-01-2023
 
-## Changed
+### Changed
 
 - Moved animations API to effects module
 - SkinBase: pass the behavior object to initialize as argument to initBehavior()
 
 ## [11.2.0] - 26-01-2023
 
-## Added
+### Added
 
 - Added object property to contain Node instances
 - Preliminary implementation of the new Behavior API, this may remain the same as I'm pretty satisfied with it
@@ -128,7 +128,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added new utilities to LayoutUtils
 - Added missing utility to TextUtils
 
-## Changed
+### Changed
 
 - Moved BoundLabel to core module
 - TextUtils: do not take graphic text gap into consideration if the graphic is null when computing a Label's width
