@@ -2,25 +2,26 @@
 
 ### Components (from material-web)
 
-- [ ] Button
+- [x] Button
 - [ ] Checkbox
 - [ ] Field
 - [ ] Radio button
 - [ ] Switch
 - [ ] Text field
-- [ ] FAB
-- [ ] Icon Button
+- [x] FAB
+- [x] Icon Button
 - [ ] Chips
 - [ ] Dialog
 - [ ] Divider
-- [ ] Elevation
+- [x] Elevation
 - [ ] Focus Ring
-- [ ] Icon
+- [x] Icon
 - [ ] List
 - [ ] Menu
+- [x] Popups/Tooltips
 - [ ] Progress indicator (circular)
 - [ ] Progress indicator (linear)
-- [ ] Ripple
+- [x] Ripple
 - [ ] Select
 - [ ] Slider
 - [ ] Tabs
@@ -28,7 +29,7 @@
 ### Module: MaterialFX
 
 - [ ] Behavior API
-- [ ] Buttons
+- [x] Buttons
 - [ ] Checkboxes
 - [ ] Radio Buttons
 - [ ] Toggles
@@ -46,6 +47,7 @@
 
 #### Roadmap
 
+- [ ] Time to make a Demo app (ASAP)
 - [ ] Theme API and Dark theme
 - [ ] ColorPicker
 - [ ] TextArea

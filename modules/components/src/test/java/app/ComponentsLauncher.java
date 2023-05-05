@@ -18,7 +18,7 @@
 
 package app;
 
-import app.buttons.ButtonsPlayground;
+import app.popups.PopupTest;
 import javafx.application.Application;
 
 public class ComponentsLauncher {
@@ -32,7 +32,8 @@ public class ComponentsLauncher {
 		//System.setProperty("prism.forceGPU","true");
 		//System.setProperty("prism.verbose", "true");
 		//System.setProperty("javafx.animation.fullspeed", "true");
-		Application.launch(ButtonsPlayground.class, args);
+		System.setProperty("glass.disableGrab", "true");
+		Application.launch(PopupTest.class, args);
 	}
 
 	public static String load(String name) {

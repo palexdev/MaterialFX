@@ -25,4 +25,7 @@ module mfx.components {
     // Theming
     exports io.github.palexdev.mfxcomponents.theming.base;
     exports io.github.palexdev.mfxcomponents.theming.enums;
+
+    // Window
+    exports io.github.palexdev.mfxcomponents.window.popups;
 }
