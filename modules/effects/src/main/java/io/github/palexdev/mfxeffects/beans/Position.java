@@ -53,6 +53,13 @@ public class Position {
 		return new Position(x, y);
 	}
 
+	/**
+	 * @return a new {@code Position} object with both x and y set to 0
+	 */
+	public static Position origin() {
+		return of(0, 0);
+	}
+
 	//================================================================================
 	// Overridden Methods
 	//================================================================================

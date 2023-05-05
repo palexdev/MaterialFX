@@ -164,6 +164,8 @@ public class CSSFragment {
 	 */
 	public static class Builder {
 		private final StringBuilder sb = new StringBuilder();
+		private boolean isSelectorOpen = false;
+		private boolean isBracketOpen = false;
 
 		public static Builder build() {
 			return new Builder();
@@ -176,7 +178,9 @@ public class CSSFragment {
 		 * Once you finish the styling block for this element you must call {@link #closeSelector()}
 		 */
 		public Builder addSelector(String selector) {
-			sb.append(selector).append("{\n");
+			if (isSelectorOpen) sb.append(",\n");
+			isSelectorOpen = true;
+			sb.append(selector.trim());
 			return this;
 		}
 
@@ -184,7 +188,12 @@ public class CSSFragment {
 		 * Must always be called after {@link #addSelector(String)} to close the styling block for an element.
 		 */
 		public Builder closeSelector() {
-			sb.append("}\n\n");
+			if (!isBracketOpen) {
+				sb.append(" {");
+			}
+			sb.append("\n}\n\n");
+			isSelectorOpen = false;
+			isBracketOpen = false;
 			return this;
 		}
 
@@ -193,8 +202,21 @@ public class CSSFragment {
 		 * It's not needed to add the ending ';\n' as it is automatically added.
 		 */
 		public Builder addStyle(String style) {
-			sb.append(style).append(";\n");
+			if (!isSelectorOpen) throw new IllegalStateException("No selector was opened!");
+			if (!isBracketOpen) {
+				sb.append(" {");
+				isBracketOpen = true;
+			}
+			sb.append("\n  ").append(style).append(";");
 			return this;
+		}
+
+		/**
+		 * Overridden to return the built CSS string.
+		 */
+		@Override
+		public String toString() {
+			return sb.toString().trim();
 		}
 
 		/**
@@ -202,7 +224,8 @@ public class CSSFragment {
 		 */
 		public CSSFragment toCSS() {
 			if (sb.length() == 0) throw new IllegalStateException("No styles set");
-			return new CSSFragment(sb.toString());
+			if (isSelectorOpen) throw new IllegalStateException("Selector was not closed!");
+			return new CSSFragment(sb.toString().trim());
 		}
 
 		/**

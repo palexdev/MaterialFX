@@ -80,7 +80,7 @@ public class TransitionPane extends StackPane {
 			cachedOpenSize = null;
 		}
 	};
-	private final ObjectProperty<Supplier<Position>> targetOffset = new SimpleObjectProperty<>(() -> Position.of(0, 0));
+	private final ObjectProperty<Supplier<Position>> targetOffset = new SimpleObjectProperty<>(Position::origin);
 	private Size cachedClosedSize;
 	private Size cachedOpenSize;
 
@@ -110,10 +110,10 @@ public class TransitionPane extends StackPane {
 		pseudoClassStateChanged(CLOSED_PSEUDO_CLASS, true);
 		setTargetSize(() -> {
 			Node node = getOpenNode();
-			if (node == null) return Size.of(-1, -1);
+			if (node == null) return Size.invalid();
 			return Size.of(
-					LayoutUtils.boundWidth(node),
-					LayoutUtils.boundHeight(node)
+				LayoutUtils.boundWidth(node),
+				LayoutUtils.boundHeight(node)
 			);
 		});
 
@@ -125,7 +125,7 @@ public class TransitionPane extends StackPane {
 		if (isOpen()) return;
 		Node openNode = getOpenNode();
 		Size size = getOpenSize();
-		if (openNode == null || Size.of(-1, -1).equals(size)) return;
+		if (openNode == null || Size.invalid().equals(size)) return;
 
 		setOpen(true);
 		if (cachedOpenAnimation == null)
@@ -153,21 +153,21 @@ public class TransitionPane extends StackPane {
 	}
 
 	public Size getOpenSize() {
-		if (cachedOpenSize == null || Size.of(-1, -1).equals(cachedOpenSize)) {
+		if (cachedOpenSize == null || Size.invalid().equals(cachedOpenSize)) {
 			cachedOpenSize = getTargetSize().get();
 		}
 		return cachedOpenSize;
 	}
 
 	public Size getClosedSize() {
-		if (cachedClosedSize == null || Size.of(-1, -1).equals(cachedClosedSize)) {
+		if (cachedClosedSize == null || Size.invalid().equals(cachedClosedSize)) {
 			Node closedNode = getClosedNode();
 			cachedClosedSize = (closedNode != null) ?
-					Size.of(
-							LayoutUtils.boundWidth(closedNode),
-							LayoutUtils.boundHeight(closedNode)
-					) :
-					Size.of(-1, -1);
+				Size.of(
+					LayoutUtils.boundWidth(closedNode),
+					LayoutUtils.boundHeight(closedNode)
+				) :
+				Size.invalid();
 		}
 		return cachedClosedSize;
 	}

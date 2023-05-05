@@ -16,6 +16,18 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [Unreleased]
+
+## Added
+
+- Add to both Position and Size beans, methods that return empty or invalid states
+- Implement StyleableProperty for Position beans, works the same as StyleableSizeProperty
+- Added convenience method to LayoutUtils to quickly create an empty Bounds object
+
+## Changed
+
+- Make CSSFragment smarted and add support for multiple selector
+
 ## [11.4.0] - 03-05-2023
 
 ## Added

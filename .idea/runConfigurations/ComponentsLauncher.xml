@@ -1,5 +1,10 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="ComponentsLauncher" type="Application" factoryName="Application" nameIsGenerated="true">
+    <envs>
+      <env name="__GLX_VENDOR_LIBRARY_NAME" value="nvidia" />
+      <env name="__NV_PRIME_RENDER_OFFLOAD" value="1" />
+      <env name="DRI_PRIME" value="1" />
+    </envs>
     <option name="MAIN_CLASS_NAME" value="app.ComponentsLauncher" />
     <module name="MaterialFX.components.test" />
     <option name="VM_PARAMETERS" value="-Dglass.disableGrab=true;" />

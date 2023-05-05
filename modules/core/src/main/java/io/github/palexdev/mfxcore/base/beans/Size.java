@@ -49,6 +49,20 @@ public class Size {
 		return new Size(width, height);
 	}
 
+	/**
+	 * @return a new {@code Size} object with both width and height set to 0
+	 */
+	public static Size empty() {
+		return of(0, 0);
+	}
+
+	/**
+	 * @return a new {@code Size} object with both width and height set to -1
+	 */
+	public static Size invalid() {
+		return of(-1, -1);
+	}
+
 	//================================================================================
 	// Overridden Methods
 	//================================================================================

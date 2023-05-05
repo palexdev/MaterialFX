@@ -16,6 +16,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [Unreleased]
+
+## Changed
+
+- Import changes to beans from MFXCore
+
 ## [11.1.0] - 03-05-2023
 
 ## Changed

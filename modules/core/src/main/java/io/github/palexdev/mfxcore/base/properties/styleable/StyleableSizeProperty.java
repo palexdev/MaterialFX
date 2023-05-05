@@ -23,12 +23,17 @@ import javafx.css.*;
 import javafx.scene.text.Font;
 
 import java.util.Arrays;
+import java.util.function.Function;
 
 /**
  * Convenience {@link StyleableObjectProperty} for {@link Size}, settable via CSS thanks to
  * {@link SizeConverter}.
  */
 public class StyleableSizeProperty extends StyleableObjectProperty<Size> {
+
+	//================================================================================
+	// Constructors
+	//================================================================================
 	public StyleableSizeProperty(CssMetaData<? extends Styleable, Size> cssMetaData) {
 		super(cssMetaData);
 	}
@@ -45,6 +50,9 @@ public class StyleableSizeProperty extends StyleableObjectProperty<Size> {
 		super(cssMetaData, bean, name, initialValue);
 	}
 
+	//================================================================================
+	// Methods
+	//================================================================================
 	public void setSize(double width, double height) {
 		set(Size.of(width, height));
 	}
@@ -53,6 +61,22 @@ public class StyleableSizeProperty extends StyleableObjectProperty<Size> {
 	public void applyStyle(StyleOrigin origin, Size v) {
 		if (v == null) return;
 		super.applyStyle(origin, v);
+	}
+
+	public static <S extends Styleable> CssMetaData<S, Size> metaDataFor(
+		String propId, Function<S, StyleableSizeProperty> property, Size initialValue
+	) {
+		return new CssMetaData<>(propId, SizeConverter.getInstance(), initialValue) {
+			@Override
+			public boolean isSettable(S styleable) {
+				return !property.apply(styleable).isBound();
+			}
+
+			@Override
+			public StyleableProperty<Size> getStyleableProperty(S styleable) {
+				return property.apply(styleable);
+			}
+		};
 	}
 
 	//================================================================================
@@ -97,8 +121,8 @@ public class StyleableSizeProperty extends StyleableObjectProperty<Size> {
 		public Size convert(ParsedValue<String, Size> value, Font font) {
 			try {
 				double[] sizes = Arrays.stream(value.getValue().split(" "))
-						.mapToDouble(Double::parseDouble)
-						.toArray();
+					.mapToDouble(Double::parseDouble)
+					.toArray();
 				return Size.of(sizes[0], sizes[1]);
 			} catch (Exception ex) {
 				System.out.println(ex.getMessage());

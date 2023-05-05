@@ -20,9 +20,7 @@ package io.github.palexdev.mfxcore.utils.fx;
 
 import io.github.palexdev.mfxcore.base.beans.Position;
 import io.github.palexdev.mfxcore.builders.InsetsBuilder;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.geometry.VPos;
+import javafx.geometry.*;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.Region;
@@ -33,20 +31,20 @@ public class LayoutUtils {
 	}
 
 	public static Position computePosition(Region parent, Node child, double areaX, double areaY, double areaWidth, double areaHeight,
-	                                       double areaBaselineOffset, Insets margin, HPos hAlignment, VPos vAlignment) {
+										   double areaBaselineOffset, Insets margin, HPos hAlignment, VPos vAlignment) {
 		return computePosition(parent, child, areaX, areaY, areaWidth, areaHeight, areaBaselineOffset, margin, hAlignment, vAlignment, true, true);
 	}
 
 	public static Position computePosition(Region parent, Node child, double areaX, double areaY, double areaWidth, double areaHeight,
-	                                       double areaBaselineOffset, Insets margin, HPos hAlignment, VPos vAlignment, boolean snapToPixel, boolean computeSizes) {
+										   double areaBaselineOffset, Insets margin, HPos hAlignment, VPos vAlignment, boolean snapToPixel, boolean computeSizes) {
 
 		Insets snappedMargin = margin == null ? Insets.EMPTY : margin;
 		if (snapToPixel && snappedMargin != Insets.EMPTY) {
 			snappedMargin = InsetsBuilder.of(
-					parent.snapSpaceY(snappedMargin.getTop()),
-					parent.snapSpaceX(snappedMargin.getRight()),
-					parent.snapSpaceY(snappedMargin.getBottom()),
-					parent.snapSpaceX(snappedMargin.getLeft())
+				parent.snapSpaceY(snappedMargin.getTop()),
+				parent.snapSpaceX(snappedMargin.getRight()),
+				parent.snapSpaceY(snappedMargin.getBottom()),
+				parent.snapSpaceX(snappedMargin.getLeft())
 			);
 		}
 
@@ -59,10 +57,10 @@ public class LayoutUtils {
 		Insets snappedMargin = margin == null ? Insets.EMPTY : margin;
 		if (snapMargin && snappedMargin != Insets.EMPTY) {
 			snappedMargin = InsetsBuilder.of(
-					parent.snapSpaceY(snappedMargin.getTop()),
-					parent.snapSpaceX(snappedMargin.getRight()),
-					parent.snapSpaceY(snappedMargin.getBottom()),
-					parent.snapSpaceX(snappedMargin.getLeft())
+				parent.snapSpaceY(snappedMargin.getTop()),
+				parent.snapSpaceX(snappedMargin.getRight()),
+				parent.snapSpaceY(snappedMargin.getBottom()),
+				parent.snapSpaceX(snappedMargin.getLeft())
 			);
 		}
 
@@ -77,10 +75,10 @@ public class LayoutUtils {
 		Insets snappedMargin = margin == null ? Insets.EMPTY : margin;
 		if (snapMargin) {
 			snappedMargin = InsetsBuilder.of(
-					parent.snapSpaceY(snappedMargin.getTop()),
-					parent.snapSpaceX(snappedMargin.getRight()),
-					parent.snapSpaceY(snappedMargin.getBottom()),
-					parent.snapSpaceX(snappedMargin.getLeft())
+				parent.snapSpaceY(snappedMargin.getTop()),
+				parent.snapSpaceX(snappedMargin.getRight()),
+				parent.snapSpaceY(snappedMargin.getBottom()),
+				parent.snapSpaceX(snappedMargin.getLeft())
 			);
 		}
 
@@ -168,5 +166,13 @@ public class LayoutUtils {
 			return ((Region) p).snapSizeY(boundHeight(node));
 		}
 		return boundHeight(node);
+	}
+
+	/**
+	 * @return a new {@link BoundingBox} object with 0 as all
+	 * parameters (x, y, width and height).
+	 */
+	public static Bounds emptyBounds() {
+		return new BoundingBox(0, 0, 0, 0);
 	}
 }
