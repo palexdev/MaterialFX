@@ -3,6 +3,7 @@ package app.popups;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
 import io.github.palexdev.mfxcomponents.theming.enums.MFXThemeManager;
 import io.github.palexdev.mfxcomponents.window.popups.MFXPopup;
+import io.github.palexdev.mfxcomponents.window.popups.MFXTooltip;
 import io.github.palexdev.mfxcore.base.beans.Position;
 import io.github.palexdev.mfxcore.base.beans.Size;
 import io.github.palexdev.mfxcore.builders.InsetsBuilder;
@@ -32,7 +33,7 @@ public class PopupTest extends Application {
 
         ComboBox<Pos> positions = new ComboBox<>(FXCollections.observableArrayList(Pos.values()));
         positions.getItems().removeAll(Pos.BASELINE_CENTER, Pos.BASELINE_LEFT, Pos.BASELINE_RIGHT);
-        positions.getSelectionModel().selectFirst();
+        positions.getSelectionModel().select(Pos.BOTTOM_CENTER);
         positions.setEditable(false);
         StackPane.setAlignment(positions, Pos.TOP_CENTER);
         StackPane.setMargin(positions, InsetsBuilder.top(80));
@@ -49,9 +50,19 @@ public class PopupTest extends Application {
         popup2.setContent(new SimpleContent("2nd Tooltip"));
         popup2.install();*/
 
+        MFXTooltip tooltip = new MFXTooltip(button);
+        tooltip.setContent(new SimpleContent());
+        button.setMFXTooltip(tooltip);
+
         MFXPopup popup = new MFXPopup();
         popup.setContent(new SimpleContent());
-        button.setOnAction(e -> popup.show(button, positions.getValue()));
+        button.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            if (e.getButton() == MouseButton.PRIMARY) {
+                popup.show(button, positions.getValue());
+            } else {
+                popup.show(primaryStage, positions.getValue());
+            }
+        });
 
         Runnable updateOffset = () -> {
             Pos pos = positions.getValue();

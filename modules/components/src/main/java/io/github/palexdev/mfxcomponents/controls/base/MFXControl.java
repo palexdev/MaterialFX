@@ -21,6 +21,7 @@ package io.github.palexdev.mfxcomponents.controls.base;
 import io.github.palexdev.mfxcomponents.behaviors.MFXFabBehavior;
 import io.github.palexdev.mfxcomponents.layout.LayoutStrategy;
 import io.github.palexdev.mfxcomponents.layout.MFXResizable;
+import io.github.palexdev.mfxcomponents.window.popups.MFXTooltip;
 import io.github.palexdev.mfxcore.base.properties.functional.SupplierProperty;
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableDoubleProperty;
 import io.github.palexdev.mfxcore.behavior.BehaviorBase;
@@ -105,6 +106,16 @@ public abstract class MFXControl<B extends BehaviorBase<? extends Node>> extends
 		@Override
 		protected void invalidated() {
 			onLayoutStrategyChanged();
+		}
+	};
+	private final ObjectProperty<MFXTooltip> mfxTooltip = new SimpleObjectProperty<>() {
+		@Override
+		public void set(MFXTooltip newValue) {
+			MFXTooltip oldValue = get();
+			if (oldValue != null) oldValue.dispose();
+			if (oldValue == newValue) return;
+			newValue.install((Node) MFXControl.this);
+			super.set(newValue);
 		}
 	};
 
@@ -349,5 +360,20 @@ public abstract class MFXControl<B extends BehaviorBase<? extends Node>> extends
 	@Override
 	public void setLayoutStrategy(LayoutStrategy layoutStrategy) {
 		this.layoutStrategy.set(layoutStrategy);
+	}
+
+	public MFXTooltip getMFXTooltip() {
+		return mfxTooltip.get();
+	}
+
+	/**
+	 * Specifies the {@link MFXTooltip} to use on this control.
+	 */
+	public ObjectProperty<MFXTooltip> mfxTooltipProperty() {
+		return mfxTooltip;
+	}
+
+	public void setMFXTooltip(MFXTooltip mfxTooltip) {
+		this.mfxTooltip.set(mfxTooltip);
 	}
 }
