@@ -1,0 +1,47 @@
+@use '../../tokens/theme' as Theme;
+@use '../../tokens/typography' as Typography;
+@use '../../abstracts/theme_utils' as ThemeUtils;
+
+// Component-level tokens
+$bg-color: Theme.GetSchemeColor('surface-container') !default;
+$bg-radius: Theme.GetShape('medium') !default;
+$elevation: 2 !default;
+
+$padding: 12px 16px 8px 16px !default;
+$vertical-spacing: 8px !default;
+$actions-spacing: 8px !default;
+$actions-padding: 8px 0px 0px 0px !default;
+
+$text-color: Theme.GetSchemeColor('on-surface-variant') !default;
+$wrapping-width: 300px !default;
+
+/****************************************************************************************************
+ * Rich Content
+ ****************************************************************************************************/
+.mfx-popup .content > .rich,
+.mfx-tooltip .content > .rich {
+  -fx-background-color: $bg-color;
+  -fx-background-radius: $bg-radius;
+  -fx-padding: $padding;
+  -fx-spacing: $vertical-spacing;
+  -mfx-elevation: ThemeUtils.ElevationLevel($elevation);
+}
+
+.mfx-popup .content > .rich > .actions,
+.mfx-tooltip .content > .rich > .actions {
+  -fx-spacing: $actions-spacing;
+  -fx-padding: $actions-padding;
+}
+
+.mfx-popup .content > .rich > .text,
+.mfx-tooltip .content > .rich > .text {
+  @include Typography.BodyMedium();
+  -fx-fill: $text-color;
+  -fx-wrapping-width: $wrapping-width;
+}
+
+.mfx-popup .content > .rich > .header,
+.mfx-tooltip .content > .rich > .header {
+  @include Typography.TitleSmall();
+  -fx-fill: $text-color;
+}

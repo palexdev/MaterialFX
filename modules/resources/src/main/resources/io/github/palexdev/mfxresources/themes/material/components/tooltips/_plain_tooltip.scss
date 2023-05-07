@@ -1,0 +1,30 @@
+@use '../../tokens/theme' as Theme;
+@use '../../tokens/typography' as Typography;
+
+// Component-level tokens
+$bg-color: Theme.GetSchemeColor('inverse-surface') !default;
+$bg-radius: Theme.GetShape('extra-small') !default;
+
+$padding: 8px !default;
+$min-height: 24px !default;
+
+$text-color: Theme.GetSchemeColor('inverse-on-surface') !default;
+$wrapping-width: 200px !default;
+
+/****************************************************************************************************
+ * Plain Content
+ ****************************************************************************************************/
+.mfx-popup .content > .plain,
+.mfx-tooltip .content > .plain {
+  -fx-background-color: $bg-color;
+  -fx-background-radius: $bg-radius;
+  -fx-padding: $padding;
+  -fx-min-height: $min-height;
+}
+
+.mfx-popup .content > .plain > .text,
+.mfx-tooltip .content > .plain > .text {
+  @include Typography.BodySmall();
+  -fx-fill: $text-color;
+  -fx-wrapping-width: $wrapping-width;
+}

@@ -791,3 +791,66 @@
 .mfx-icon-button.outlined:selectable:selected .mfx-font-icon {
   -mfx-color: #322F35;
 }
+
+/****************************************************************************************************
+ * Popups and Tooltips shared properties
+ ****************************************************************************************************/
+.mfx-popup .content,
+.mfx-tooltip .content {
+  -mfx-offset: "8 8";
+}
+
+/****************************************************************************************************
+ * Plain Content
+ ****************************************************************************************************/
+.mfx-popup .content > .plain,
+.mfx-tooltip .content > .plain {
+  -fx-background-color: #E6E0E9;
+  -fx-background-radius: 4px;
+  -fx-padding: 8px;
+  -fx-min-height: 24px;
+}
+
+.mfx-popup .content > .plain > .text,
+.mfx-tooltip .content > .plain > .text {
+  -fx-font-family: "Roboto";
+  -fx-font-weight: 400;
+  -fx-font-size: 12px;
+  -fx-fill: #322F35;
+  -fx-wrapping-width: 200px;
+}
+
+/****************************************************************************************************
+ * Rich Content
+ ****************************************************************************************************/
+.mfx-popup .content > .rich,
+.mfx-tooltip .content > .rich {
+  -fx-background-color: #211F26;
+  -fx-background-radius: 12px;
+  -fx-padding: 12px 16px 8px 16px;
+  -fx-spacing: 8px;
+  -mfx-elevation: LEVEL2;
+}
+
+.mfx-popup .content > .rich > .actions,
+.mfx-tooltip .content > .rich > .actions {
+  -fx-spacing: 8px;
+  -fx-padding: 8px 0px 0px 0px;
+}
+
+.mfx-popup .content > .rich > .text,
+.mfx-tooltip .content > .rich > .text {
+  -fx-font-family: "Roboto";
+  -fx-font-weight: 400;
+  -fx-font-size: 14px;
+  -fx-fill: #CAC4D0;
+  -fx-wrapping-width: 300px;
+}
+
+.mfx-popup .content > .rich > .header,
+.mfx-tooltip .content > .rich > .header {
+  -fx-font-family: "Roboto Medium";
+  -fx-font-weight: 500;
+  -fx-font-size: 14px;
+  -fx-fill: #CAC4D0;
+}

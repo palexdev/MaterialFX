@@ -20,7 +20,20 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- [WIP] Implementing Popups and Tooltips
+- Implementing Popups and Tooltips
+- Add MFXTooltip support to both MFXControl and MFXLabeled
+- Define API for animated popups, IMFXPopupSkin
+- MFXPopup now supports the new anchor based show mechanism for Window owners too
+- Implemented the two types of popup contents shown by M3 guidelines
+
+### Changed
+
+- Moved MFXPopupSkin to Skins Package
+- MFXPopupBase: position computation methods have been slightly refactored to support the above case too
+- MFXPopupRoot: make sure the animated property is also being initialized on creation
+- MFXTooltip: allow changing owner
+- MFXPopupSkin: slightly improved open animation
+- MFXTooltip: use MOUSE_MOVED handler instead of MOUSE_ENTER for a more reliable interaction
 
 ## [11.7.0] - 03-05-2023
 

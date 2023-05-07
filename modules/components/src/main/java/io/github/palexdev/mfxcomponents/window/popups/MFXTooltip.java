@@ -3,8 +3,11 @@ package io.github.palexdev.mfxcomponents.window.popups;
 import io.github.palexdev.mfxcomponents.controls.base.MFXControl;
 import io.github.palexdev.mfxcomponents.controls.base.MFXLabeled;
 import io.github.palexdev.mfxcomponents.controls.base.MFXStyleable;
+import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
 import io.github.palexdev.mfxcomponents.skins.MFXPopupSkin;
 import io.github.palexdev.mfxcomponents.skins.base.IMFXPopupSkin;
+import io.github.palexdev.mfxcomponents.window.MFXPlainContent;
+import io.github.palexdev.mfxcomponents.window.MFXRichContent;
 import io.github.palexdev.mfxcore.base.beans.Position;
 import io.github.palexdev.mfxcore.base.beans.Size;
 import io.github.palexdev.mfxcore.base.properties.NodeProperty;
@@ -30,6 +33,7 @@ import javafx.util.Duration;
 import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * Specialized type of popup usually used to show short and concise hints on UI elements.
@@ -78,7 +82,7 @@ public class MFXTooltip extends PopupControl implements IMFXPopup {
     private PauseTransition countdown;
 
     private boolean installed = false;
-    private EventHandler<MouseEvent> mouseEnter;
+    private EventHandler<MouseEvent> mouseMove;
     private EventHandler<MouseEvent> mouseExit;
     private When<?> hoverWhen;
 
@@ -126,7 +130,7 @@ public class MFXTooltip extends PopupControl implements IMFXPopup {
             .getAnimation();
         countdown.durationProperty().bind(outDelayProperty());
 
-        mouseEnter = e -> {
+        mouseMove = e -> {
             countdown.stop();
             if (isShowing()) return;
             if (Animations.isPlaying(delayer)) return;
@@ -147,7 +151,7 @@ public class MFXTooltip extends PopupControl implements IMFXPopup {
             })
             .listen();
 
-        owner.addEventFilter(MouseEvent.MOUSE_ENTERED, mouseEnter);
+        owner.addEventFilter(MouseEvent.MOUSE_MOVED, mouseMove);
         owner.addEventFilter(MouseEvent.MOUSE_EXITED, mouseExit);
         installed = true;
         return this;
@@ -183,10 +187,10 @@ public class MFXTooltip extends PopupControl implements IMFXPopup {
         delayer = null;
         countdown = null;
         if (owner != null) {
-            owner.removeEventFilter(MouseEvent.MOUSE_ENTERED, mouseEnter);
+            owner.removeEventFilter(MouseEvent.MOUSE_MOVED, mouseMove);
             owner.removeEventFilter(MouseEvent.MOUSE_EXITED, mouseExit);
         }
-        mouseEnter = null;
+        mouseMove = null;
         mouseExit = null;
         if (hoverWhen != null) {
             hoverWhen.dispose();
@@ -611,5 +615,170 @@ public class MFXTooltip extends PopupControl implements IMFXPopup {
      */
     protected void setShowing(MFXTooltip showing) {
         MFXTooltip.showing.set(new WeakReference<>(showing));
+    }
+
+    //================================================================================
+    // Content Specific Methods
+    //================================================================================
+
+    /**
+     * Convenience method for contents of type {@link MFXPlainContent} or {@link MFXRichContent}.
+     * <p>
+     * Delegates to {@link MFXPlainContent#getText()} and {@link MFXRichContent#getText()} respectively.
+     * <p></p>
+     * Returns an empty string if the content is not of such types.
+     */
+    public String getText() {
+        Node content = getContent();
+        if (content instanceof MFXPlainContent) {
+            return ((MFXPlainContent) content).getText();
+        }
+        if (content instanceof MFXRichContent) {
+            return ((MFXRichContent) content).getText();
+        }
+        return "";
+    }
+
+    /**
+     * Convenience method for contents of type {@link MFXPlainContent} or {@link MFXRichContent}.
+     * <p>
+     * Delegates to {@link MFXPlainContent#textProperty()} and {@link MFXRichContent#textProperty()} respectively.
+     * <p></p>
+     * To avoid {@link NullPointerException}s if the content is not of such types, the result is wrapped in a {@link Optional}.
+     */
+    public Optional<StringProperty> textProperty() {
+        Node content = getContent();
+        if (content instanceof MFXPlainContent) {
+            return Optional.of(((MFXPlainContent) content).textProperty());
+        }
+        if (content instanceof MFXRichContent) {
+            return Optional.of(((MFXRichContent) content).textProperty());
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Convenience method for contents of type {@link MFXPlainContent} or {@link MFXRichContent}.
+     * <p>
+     * Delegates to {@link MFXPlainContent#setText(String)}and {@link MFXRichContent#setText(String)} respectively.
+     */
+    public void setText(String text) {
+        Node content = getContent();
+        if (content instanceof MFXPlainContent) {
+            ((MFXPlainContent) content).setText(text);
+        }
+        if (content instanceof MFXRichContent) {
+            ((MFXRichContent) content).setText(text);
+        }
+    }
+
+    /**
+     * Convenience method for contents of type {@link MFXRichContent}.
+     * <p>
+     * Delegates to {@link MFXRichContent#getHeader()}.
+     * <p></p>
+     * Returns an empty string if the content is not of such type.
+     */
+    public String getHeader() {
+        Node content = getContent();
+        if (content instanceof MFXRichContent) {
+            return ((MFXRichContent) content).getHeader();
+        }
+        return "";
+    }
+
+    /**
+     * Convenience method for contents of type {@link MFXRichContent}.
+     * <p>
+     * Delegates to {@link MFXRichContent#headerProperty()}.
+     * <p></p>
+     * To avoid {@link NullPointerException}s if the content is not of such type, the result is wrapped in a {@link Optional}.
+     */
+    public Optional<StringProperty> headerProperty() {
+        Node content = getContent();
+        if (content instanceof MFXRichContent) {
+            return Optional.of(((MFXRichContent) content).headerProperty());
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Convenience method for contents of type {@link MFXRichContent}.
+     * <p>
+     * Delegates to {@link MFXRichContent#setHeader(String)}.
+     */
+    public void setHeader(String header) {
+        Node content = getContent();
+        if (content instanceof MFXRichContent) {
+            ((MFXRichContent) content).setHeader(header);
+        }
+    }
+
+    /**
+     * Convenience method for contents of type {@link MFXRichContent}.
+     * <p>
+     * Delegates to {@link MFXRichContent#getPrimaryAction()}.
+     * <p></p>
+     * To avoid {@link NullPointerException}s if the content is not of such type, the result is wrapped in a {@link Optional}.
+     */
+    public Optional<MFXButton> getPrimaryAction() {
+        Node content = getContent();
+        if (content instanceof MFXRichContent) {
+            return Optional.ofNullable(((MFXRichContent) content).getPrimaryAction());
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Convenience method for contents of type {@link MFXRichContent}.
+     * <p>
+     * Delegates to {@link MFXRichContent#setPrimaryAction(MFXButton)}.
+     */
+    public void setPrimaryAction(MFXButton btn) {
+        Node content = getContent();
+        if (content instanceof MFXRichContent) {
+            ((MFXRichContent) content).setPrimaryAction(btn);
+        }
+    }
+
+    /**
+     * Delegates to {@link #setPrimaryAction(MFXButton)} but with the convenience of accepting a {@link Supplier}.
+     */
+    public void setPrimaryAction(Supplier<MFXButton> supplier) {
+        setPrimaryAction(supplier.get());
+    }
+
+    /**
+     * Convenience method for contents of type {@link MFXRichContent}.
+     * <p>
+     * Delegates to {@link MFXRichContent#getSecondaryAction()}.
+     * <p></p>
+     * To avoid {@link NullPointerException}s if the content is not of such type, the result is wrapped in a {@link Optional}.
+     */
+    public Optional<MFXButton> getSecondaryAction() {
+        Node content = getContent();
+        if (content instanceof MFXRichContent) {
+            return Optional.ofNullable(((MFXRichContent) content).getSecondaryAction());
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Convenience method for contents of type {@link MFXRichContent}.
+     * <p>
+     * Delegates to {@link MFXRichContent#setSecondaryAction(MFXButton)}.
+     */
+    public void setSecondaryAction(MFXButton btn) {
+        Node content = getContent();
+        if (content instanceof MFXRichContent) {
+            ((MFXRichContent) content).setSecondaryAction(btn);
+        }
+    }
+
+    /**
+     * Delegates to {@link #setSecondaryAction(MFXButton)} but with the convenience of accepting a {@link Supplier}.
+     */
+    public void setSecondaryAction(Supplier<MFXButton> supplier) {
+        setSecondaryAction(supplier.get());
     }
 }

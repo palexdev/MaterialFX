@@ -70,8 +70,8 @@ public class Motion {
 	public static final Curve SLOW_MIDDLE = new Cubic(0.15, 0.85, 0.85, 0.15);
 	public static final Curve BOUNCE_IN = new BounceInCurve();
 	public static final Curve BOUNCE_OUT = new BounceOutCurve();
-	public static final Curve BOUND_IN_OUT = new BounceInOutCurve();
-	public static final Curve ELASTIC_IN = new ElasticInCurve();
+    public static final Curve BOUNCE_IN_OUT = new BounceInOutCurve();
+    public static final Curve ELASTIC_IN = new ElasticInCurve();
 	public static final Curve ELASTIC_OUT = new ElasticOutCurve();
 	public static final Curve ELASTIC_IN_OUT = new ElasticInOutCurve();
 

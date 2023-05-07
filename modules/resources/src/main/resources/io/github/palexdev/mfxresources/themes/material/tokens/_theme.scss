@@ -1,5 +1,5 @@
 @use 'sass:map';
-@use "sass:math";
+@use 'sass:math';
 @use '../abstracts/utils' as Utils;
 
 $variant: 'light' !default;
@@ -19,7 +19,7 @@ $scheme: () !default;
     @if ($variant == 'dark') {
       $scheme: (
         // Primary Dark
-        '--md-sys-color-primary': GetPaletteColor('primary', 80),
+              '--md-sys-color-primary': GetPaletteColor('primary', 80),
               '--md-sys-color-primary-container': GetPaletteColor('primary', 30),
               '--md-sys-color-on-primary': GetPaletteColor('primary', 20),
               '--md-sys-color-on-primary-container': GetPaletteColor('primary', 90),
@@ -65,7 +65,7 @@ $scheme: () !default;
     } @else {
       $scheme: (
         // Primary Light
-        '--md-sys-color-primary': GetPaletteColor('primary', 40),
+              '--md-sys-color-primary': GetPaletteColor('primary', 40),
               '--md-sys-color-primary-container': GetPaletteColor('primary', 90),
               '--md-sys-color-on-primary': GetPaletteColor('primary', 100),
               '--md-sys-color-on-primary-container': GetPaletteColor('primary', 10),
@@ -176,8 +176,8 @@ $scheme: () !default;
 /// These values are defined by M3 guidelines.
 @function GetShape($shape) {
   $val: map.get((
-    'none': '0px',
-    'extra-small': '4px',
+          'none': '0px',
+          'extra-small': '4px',
           'extra-small-top': '4px 4px 0px 0px',
           'small': '8px',
           'medium': '12px',
@@ -192,7 +192,7 @@ $scheme: () !default;
     @warn "Invalid shape #{$shape}";
     @return 0px;
   }
-  @return $val;
+  @return unquote($val);
 }
 
 /// This is responsible for exposing both the palette and scheme colors in a way that is compatible with JavaFX.

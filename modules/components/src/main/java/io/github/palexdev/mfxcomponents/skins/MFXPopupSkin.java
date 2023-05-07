@@ -38,14 +38,14 @@ public class MFXPopupSkin<P extends IMFXPopup & Skinnable> implements Skin<P>, I
     protected MFXPopupRoot root;
 
     private Scale scale;
-    protected double inScaleX = 0.7;
+    protected double inScaleX = 0.5;
     protected double outScaleX = 1.0;
     protected double inScaleY = 1.0;
     protected double outScaleY = 1.0;
 
     private Animation inAnimation;
     private Animation outAnimation;
-    protected Duration inDuration = M3Motion.LONG2;
+    protected Duration inDuration = M3Motion.MEDIUM2;
     protected Duration outDuration = M3Motion.LONG2;
     protected Interpolator curve = M3Motion.EMPHASIZED;
 
@@ -57,7 +57,7 @@ public class MFXPopupSkin<P extends IMFXPopup & Skinnable> implements Skin<P>, I
 
         // Init animations parameters
         if (popup instanceof MFXPopup) {
-            inScaleY = 0.7;
+            inScaleY = 0.5;
         }
 
         // Init root

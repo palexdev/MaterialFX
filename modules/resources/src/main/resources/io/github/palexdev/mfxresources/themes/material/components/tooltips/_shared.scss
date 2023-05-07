@@ -1,0 +1,10 @@
+// Shared component-level tokens
+$offset: '8 8' !default;
+
+/****************************************************************************************************
+ * Popups and Tooltips shared properties
+ ****************************************************************************************************/
+.mfx-popup .content,
+.mfx-tooltip .content {
+  -mfx-offset: $offset;
+}

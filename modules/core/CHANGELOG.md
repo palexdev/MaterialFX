@@ -23,6 +23,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Add to both Position and Size beans, methods that return empty or invalid states
 - Implement StyleableProperty for Position beans, works the same as StyleableSizeProperty
 - Added convenience method to LayoutUtils to quickly create an empty Bounds object
+- Added extension of Text to set the wrapping width in CSS
 
 ### Changed
 

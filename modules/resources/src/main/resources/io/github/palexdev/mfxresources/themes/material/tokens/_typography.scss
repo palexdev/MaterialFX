@@ -1,56 +1,56 @@
 // DISPLAY
 @mixin DisplayLarge() {
-  -fx-font-family: "Roboto Regular";
+  -fx-font-family: "Roboto";
   -fx-font-weight: 400;
   -fx-font-size: 57px;
 }
 
 @mixin DisplayMedium() {
-  -fx-font-family: "Roboto Regular";
+  -fx-font-family: "Roboto";
   -fx-font-weight: 400;
   -fx-font-size: 45px;
 }
 
 @mixin DisplaySmall() {
-  -fx-font-family: "Roboto Regular";
+  -fx-font-family: "Roboto";
   -fx-font-weight: 400;
   -fx-font-size: 36px;
 }
 
 // HEADLINE
 @mixin HeadlineLarge() {
-  -fx-font-family: "Roboto Regular";
+  -fx-font-family: "Roboto";
   -fx-font-weight: 400;
   -fx-font-size: 32px;
 }
 
 @mixin HeadlineMedium() {
-  -fx-font-family: "Roboto Regular";
+  -fx-font-family: "Roboto";
   -fx-font-weight: 400;
   -fx-font-size: 28px;
 }
 
 @mixin HeadlineSmall() {
-  -fx-font-family: "Roboto Regular";
+  -fx-font-family: "Roboto";
   -fx-font-weight: 400;
   -fx-font-size: 24px;
 }
 
 // BODY
 @mixin BodyLarge() {
-  -fx-font-family: "Roboto Regular";
+  -fx-font-family: "Roboto";
   -fx-font-weight: 400;
   -fx-font-size: 16px;
 }
 
 @mixin BodyMedium() {
-  -fx-font-family: "Roboto Regular";
+  -fx-font-family: "Roboto";
   -fx-font-weight: 400;
   -fx-font-size: 14px;
 }
 
 @mixin BodySmall() {
-  -fx-font-family: "Roboto Regular";
+  -fx-font-family: "Roboto";
   -fx-font-weight: 400;
   -fx-font-size: 12px;
 }
@@ -76,7 +76,7 @@
 
 // TITLE
 @mixin TitleLarge() {
-  -fx-font-family: "Roboto Regular";
+  -fx-font-family: "Roboto";
   -fx-font-weight: 400;
   -fx-font-size: 22px;
 }

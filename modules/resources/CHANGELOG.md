@@ -16,6 +16,21 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [Unreleased]
+
+### Added
+
+- Added styles for popups and tooltips
+
+### Changed
+
+- Update Roboto font ttf
+- GetShape function should return unquote values
+
+### Fixed
+
+- Apparently, it's not needed to specify 'Regular' for Roboto, doing so leads to the incorrect font being applied
+
 ## [11.4.0] - 03-05-2023
 
 ### Changed
