@@ -12,6 +12,8 @@ module mfx.effects {
 	// Beans
 	exports io.github.palexdev.mfxeffects.beans;
 	exports io.github.palexdev.mfxeffects.beans.base;
+	exports io.github.palexdev.mfxeffects.beans.properties;
+	exports io.github.palexdev.mfxeffects.beans.properties.styleable;
 
 	// Builders
 	exports io.github.palexdev.mfxeffects.builders;

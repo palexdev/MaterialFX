@@ -43,6 +43,12 @@ public class Interval extends Curve {
 		this.curve = Motion.LINEAR;
 	}
 
+	public Interval(double begin, double end, Curve curve) {
+		this.begin = begin;
+		this.end = end;
+		this.curve = curve;
+	}
+
 	@Override
 	public double curve(double t) {
 		assert (begin >= 0.0);

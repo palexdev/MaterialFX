@@ -5,7 +5,7 @@ import javafx.scene.Node;
 /**
  * Enumeration for ripple generators to allow users to specify the behavior for mouse events.
  */
-public enum MouseTransparentMode {
+public enum MouseMode {
 
 	/**
 	 * The generator will detect all mouse events.

@@ -16,6 +16,19 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [Unreleased]
+
+### Added
+
+- Import some properties from MFXCore
+- Import ColorUtils from MFXCore
+
+### Changed
+
+- Completely remade the ripple generator, it's now vastly more efficient and more close to the original Material Design
+  ripple effect
+- Renamed MouseTransparentMode to MouseMode
+
 ## [11.1.1] - 07-05-2023
 
 ### Changed

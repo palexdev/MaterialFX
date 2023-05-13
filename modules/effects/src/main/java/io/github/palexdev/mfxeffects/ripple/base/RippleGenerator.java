@@ -1,167 +1,136 @@
-/*
- * Copyright (C) 2023 Parisi Alessandro - alessandro.parisi406@gmail.com
- * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
- *
- * MaterialFX is free software: you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation; either version 3 of the License,
- * or (at your option) any later version.
- *
- * MaterialFX is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.palexdev.mfxeffects.ripple.base;
 
 import io.github.palexdev.mfxeffects.beans.Position;
-import io.github.palexdev.mfxeffects.builders.RippleClipTypeBuilder;
-import io.github.palexdev.mfxeffects.enums.RippleClipType;
-import io.github.palexdev.mfxeffects.ripple.CircleRipple;
-import javafx.animation.Animation;
-import javafx.css.StyleableDoubleProperty;
+import io.github.palexdev.mfxeffects.beans.Size;
+import io.github.palexdev.mfxeffects.beans.properties.styleable.StyleableSizeProperty;
+import javafx.css.StyleableBooleanProperty;
 import javafx.css.StyleableObjectProperty;
 import javafx.scene.layout.Region;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Shape;
+import javafx.scene.paint.Color;
 
 import java.util.function.Supplier;
 
 /**
- * Public API that all ripple generators should expose, this is also a connector between the
- * generator and {@link Ripple}.
+ * Public API that all ripple generators should expose.
  */
 public interface RippleGenerator {
 
-	/**
-	 * By default, does nothing.
-	 * <p>
-	 * Optionally generators can implement this convenience method to enable the generation of effects
-	 * on the target region.
-	 */
-	default void enable() {
-	}
+    /**
+     * By default, does nothing.
+     * <p>
+     * Optionally generators can implement this convenience method to enable the generation of effects
+     * on the target region.
+     */
+    default void enable() {
+    }
 
-	/**
-	 * By default, does nothing.
-	 * <p>
-	 * Optionally generators can implement this convenience method to disable the generation of effects
-	 * on the target region.
-	 */
-	default void disable() {
-	}
+    /**
+     * By default, does nothing.
+     * <p>
+     * Optionally generators can implement this convenience method to disable the generation of effects
+     * on the target region.
+     */
+    default void disable() {
+    }
 
-	/**
-	 * This is the core method responsible for generating ripple effects.
-	 */
-	void generate(Position pos);
+    /**
+     * This is the core method responsible for generating ripple effects.
+     * <p>
+     * Should define the first phase of the effect, the generation.
+     *
+     * @see #release()
+     */
+    void generate(double x, double y);
 
-	/**
-	 * Shortcut for {@code generate(Position.of(x, y))}.
-	 */
-	default void generate(double x, double y) {
-		generate(Position.of(x, y));
-	}
+    /**
+     * Opposite of {@link #generate(double, double)}.
+     * <p>
+     * Should define the second phase of the effect, the fading out
+     * <p></p>
+     * This is optional, implementations can also rely on a single phase.
+     */
+    void release();
 
-	/**
-	 * By default, returns null.
-	 * <p>
-	 * Optionally generators can create a secondary animation for the background to 'accompany' the
-	 * main ripple effect.
-	 * <p></p>
-	 * As far as I know the original specs do not mention a secondary animation, and in fact it should not be needed,
-	 * the 'effect' can be replicated by using just the main one, check {@link CircleRipple#animation(RippleGenerator)}.
-	 */
-	default Animation backgroundAnimation() {
-		return null;
-	}
+    /**
+     * Shortcut for {@code generate(pos.getX(), pos.getY())}.
+     */
+    default void generate(Position pos) {
+        generate(pos.getX(), pos.getY());
+    }
 
-	/**
-	 * Implementation can specify the actions needed for the generator's disposal.
-	 * By default, does nothing.
-	 */
-	default void dispose() {
-	}
+    /**
+     * Implementation can specify the actions needed for the generator's disposal.
+     * By default, does nothing.
+     */
+    default void dispose() {
+    }
 
-	/**
-	 * @return the target region on which the ripple effect is applied
-	 */
-	Region getRegion();
+    /**
+     * @return the target region which defines some of the core generator's properties, like its geometry, and
+     * it's also needed to add the handlers on it
+     */
+    Region getOwner();
 
-	/**
-	 * @return the {@link Supplier} used by the generator to clip itself, thus avoiding ripples from
-	 * overflowing
-	 */
-	Supplier<Shape> getClipSupplier();
+    /**
+     * @return the {@link Supplier} used by the generator to clip itself, thus avoiding ripples from
+     * overflowing
+     */
+    Supplier<Region> getClipSupplier();
 
-	/**
-	 * Sets the {@link Supplier} used by the generator to clip itself, thus avoiding ripples from
-	 * overflowing.
-	 */
-	void setClipSupplier(Supplier<Shape> clipSupplier);
+    /**
+     * Sets the {@link Supplier} used by the generator to clip itself, thus avoiding ripples from
+     * overflowing.
+     */
+    void setClipSupplier(Supplier<Region> clipSupplier);
 
-	/**
-	 * @return the {@link Supplier} used by the generator to create ripples
-	 */
-	Supplier<? extends Ripple<?>> getRippleSupplier();
+    /**
+     * @return the {@link Supplier} used by the generator to create ripples
+     */
+    Supplier<Ripple<?>> getRippleSupplier();
 
-	/**
-	 * Sets the {@link Supplier} used by the generator to create ripples.
-	 */
-	void setRippleSupplier(Supplier<? extends Ripple<?>> rippleSupplier);
+    /**
+     * Sets the {@link Supplier} used by the generator to create ripples.
+     */
+    void setRippleSupplier(Supplier<Ripple<?>> rippleSupplier);
 
-	Paint getRippleColor();
+    /**
+     * @return the preferred, default type of ripple the generator uses
+     */
+    Supplier<Ripple<?>> defaultRippleSupplier();
 
-	/**
-	 * Specifies the color of the ripples.
-	 */
-	StyleableObjectProperty<Paint> rippleColorProperty();
+    boolean doAnimateBackground();
 
-	void setRippleColor(Paint rippleColor);
+    /**
+     * Specifies whether the generator should also animate its background color.
+     */
+    StyleableBooleanProperty animateBackgroundProperty();
 
-	double getRippleOpacity();
+    void setAnimateBackground(boolean animateBackground);
 
-	/**
-	 * Specifies the starting opacity of the ripples.
-	 */
-	StyleableDoubleProperty rippleOpacityProperty();
+    Color getBackgroundColor();
 
-	void setRippleOpacity(double rippleOpacity);
+    /**
+     * Specifies the background color to use when animating it, see {@link #animateBackgroundProperty()}.
+     */
+    StyleableObjectProperty<Color> backgroundColorProperty();
 
-	double getRipplePrefSize();
+    void setBackgroundColor(Color backgroundColor);
 
-	/**
-	 * Specifies the preferred size of the ripples.
-	 */
-	StyleableDoubleProperty ripplePrefSizeProperty();
+    Color getRippleColor();
 
-	void setRipplePrefSize(double ripplePrefSize);
+    /**
+     * Specifies ripple node color.
+     */
+    StyleableObjectProperty<Color> rippleColorProperty();
 
-	double getRippleSizeMultiplier();
+    void setRippleColor(Color rippleColor);
 
-	/**
-	 * Specifies by how much the ripples should be "enlarged" by the animation.
-	 */
-	StyleableDoubleProperty rippleSizeMultiplierProperty();
+    Size getRipplePrefSize();
 
-	void setRippleSizeMultiplier(double rippleSizeMultiplier);
+    /**
+     * Specifies the preferred size of the ripple node.
+     */
+    StyleableSizeProperty ripplePrefSizeProperty();
 
-	/**
-	 * @return a default {@link Supplier} for the ripples shape
-	 */
-	default Supplier<? extends Ripple<?>> defaultRippleSupplier() {
-		return CircleRipple::new;
-	}
-
-	/**
-	 * @return a default {@link Supplier} for the generator's clip shape
-	 * @see #setClipSupplier(Supplier)
-	 */
-	default Supplier<Shape> defaultClipSupplier() {
-		return () -> new RippleClipTypeBuilder(RippleClipType.RECTANGLE).build(getRegion());
-	}
+    void setRipplePrefSize(Size ripplePrefSize);
 }
