@@ -42,7 +42,7 @@ public class ObservableStack<E> extends SimpleListProperty<E> {
 	//================================================================================
 	public ObservableStack() {
 		this.stack = new LinkedList<>();
-		this.set(FXCollections.observableList(this.stack));
+		super.set(FXCollections.observableList(stack));
 	}
 
 	//================================================================================
@@ -194,6 +194,11 @@ public class ObservableStack<E> extends SimpleListProperty<E> {
 
 	@Override
 	public boolean removeAll(Collection<?> objects) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void set(ObservableList<E> newValue) {
 		throw new UnsupportedOperationException();
 	}
 

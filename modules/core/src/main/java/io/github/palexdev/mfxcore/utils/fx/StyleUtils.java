@@ -111,7 +111,7 @@ public class StyleUtils {
 	}
 
 	/**
-	 * Tries to parse tje given Region's corner radius.
+	 * Tries to parse the given Region's corner radius.
 	 * <p>
 	 * To be more precise it tries to parse both the background and the
 	 * border radius. The background radius is prioritized over the border one

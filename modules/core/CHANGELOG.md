@@ -16,6 +16,22 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [Unreleased]
+
+### Added
+
+- Added init method to BehaviorBase
+- Added observable implementation of the CircularQueue
+- Added method to ColorUtils that returns a Color with the desired opacity
+- Added many convenient methods to CSSFragment, now you don't necessarily have to type the whole JavaFX property but
+  just the value
+- Added tests for the ObservableCircularQueue
+
+### Changed
+
+- CircularQueue: renamed size to capacity, moved setter and added getter
+- ObservableStack: do not allow changing the backing data structure
+
 ## [11.5.0] - 07-05-2023
 
 ### Added

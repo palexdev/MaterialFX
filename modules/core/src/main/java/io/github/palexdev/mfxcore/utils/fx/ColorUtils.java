@@ -18,6 +18,7 @@
 
 package io.github.palexdev.mfxcore.utils.fx;
 
+import io.github.palexdev.mfxcore.utils.NumberUtils;
 import io.github.palexdev.mfxcore.utils.RandomUtils;
 import javafx.scene.paint.*;
 
@@ -77,6 +78,20 @@ public class ColorUtils {
 				(int) (255 * color.getGreen()),
 				(int) (255 * color.getBlue()),
 				color.getOpacity());
+	}
+
+	/**
+	 * @return a new {@link Color} which has the same RGB components of the given one but the opacity
+	 * is set to the desired value (clamped between 0.0 and 1.0)
+	 */
+	public static Color atAlpha(Color color, double alpha) {
+		double cAlpha = NumberUtils.clamp(alpha, 0.0, 1.0);
+		return Color.color(
+				color.getRed(),
+				color.getGreen(),
+				color.getBlue(),
+				cAlpha
+		);
 	}
 
 	/**

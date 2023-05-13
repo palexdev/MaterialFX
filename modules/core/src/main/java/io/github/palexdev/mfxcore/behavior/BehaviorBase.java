@@ -63,6 +63,12 @@ public abstract class BehaviorBase<N extends Node> {
 	//================================================================================
 
 	/**
+	 * Behaviors can specify a set of actions to initialize themselves if needed.
+	 */
+	public void init() {
+	}
+
+	/**
 	 * Creates a new {@link EventAction} using {@link EventAction#handler(Node, EventType, EventHandler)}
 	 * and adds it to the actions list.
 	 *
