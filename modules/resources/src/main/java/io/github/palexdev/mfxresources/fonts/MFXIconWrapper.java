@@ -60,7 +60,9 @@ public class MFXIconWrapper extends StackPane {
 
 	private final IconProperty icon = new IconProperty();
 	private MFXRippleGenerator rg;
-	private EventHandler<MouseEvent> rHandler;
+	private EventHandler<MouseEvent> pressHandler;
+	private EventHandler<MouseEvent> releaseHandler;
+	private EventHandler<MouseEvent> exitHandler;
 
 	//================================================================================
 	// Constructors
@@ -92,10 +94,6 @@ public class MFXIconWrapper extends StackPane {
 			manageChildren();
 		});
 		size.addListener((observable, oldValue, newValue) -> setPrefSize(newValue.doubleValue(), newValue.doubleValue()));
-		rHandler = e -> {
-			if (e.getButton() == MouseButton.PRIMARY)
-				rg.generate(e);
-		};
 	}
 
 	/**
@@ -119,8 +117,10 @@ public class MFXIconWrapper extends StackPane {
 	 */
 	public MFXIconWrapper enableRippleGenerator(boolean enable, Function<MouseEvent, Position> positionFunction) {
 		if (!enable) {
-			if (rg != null) {
-				removeEventHandler(MouseEvent.MOUSE_PRESSED, rHandler);
+			if (rg != null && pressHandler != null) {
+				removeEventHandler(MouseEvent.MOUSE_PRESSED, pressHandler);
+				removeEventHandler(MouseEvent.MOUSE_RELEASED, releaseHandler);
+				removeEventHandler(MouseEvent.MOUSE_EXITED, exitHandler);
 				super.getChildren().remove(rg);
 				rg = null;
 			}
@@ -130,9 +130,20 @@ public class MFXIconWrapper extends StackPane {
 		if (rg != null)
 			throw new IllegalStateException("Ripple generator has already been enabled for this icon!");
 
+		if (pressHandler == null) {
+			pressHandler = e -> {
+				if (e.getButton() == MouseButton.PRIMARY)
+					rg.generate(e);
+			};
+			releaseHandler = e -> rg.release();
+			exitHandler = e -> rg.release();
+		}
+
 		rg = new MFXRippleGenerator(this);
-		rg.setPositionFunction(positionFunction);
-		addEventHandler(MouseEvent.MOUSE_PRESSED, rHandler);
+		rg.setMeToPosConverter(positionFunction);
+		addEventHandler(MouseEvent.MOUSE_PRESSED, pressHandler);
+		addEventHandler(MouseEvent.MOUSE_RELEASED, releaseHandler);
+		addEventHandler(MouseEvent.MOUSE_EXITED, exitHandler);
 		manageChildren();
 		setEnableRipple(true);
 		return this;

@@ -18,6 +18,7 @@
 
 package interactive;
 
+import io.github.palexdev.mfxeffects.enums.RippleState;
 import io.github.palexdev.mfxeffects.ripple.MFXRippleGenerator;
 import io.github.palexdev.mfxresources.builders.IconWrapperBuilder;
 import io.github.palexdev.mfxresources.fonts.IconsProviders;
@@ -213,14 +214,14 @@ public class IconsTests {
 
 		robot.interact(() -> {
 			wrapper.getIcon().setDescription(FontAwesomeRegular.SQUARE.getDescription());
-			wrapper.setStyle("-mfx-enable-ripple: true;\n-mfx-round: true;\n");
+			wrapper.setStyle("-mfx-enable-ripple: true;\n-mfx-round: true;\n-mfx-ripple-pref-size: \"128.0 128.0\"");
 		});
-		wrapper.getRippleGenerator().setRipplePrefSize(128.0);
 		assertNotNull(wrapper.getClip());
 		assertEquals(2, wrapper.getChildren().size());
 		robot.clickOn(wrapper);
 		Thread.sleep(1000);
-		assertEquals(0, wrapper.getRippleGenerator().getChildrenUnmodifiable().size());
+		assertEquals(RippleState.INACTIVE, wrapper.getRippleGenerator().getRippleState());
+		assertTrue(wrapper.getRippleGenerator().getChildrenUnmodifiable().get(0).getOpacity() < 1.0);
 
 		robot.interact(() -> wrapper.setStyle(null));
 		assertNull(wrapper.getClip());
