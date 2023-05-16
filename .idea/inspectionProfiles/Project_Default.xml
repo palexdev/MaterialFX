@@ -1714,7 +1714,9 @@
     <inspection_tool class="JavadocDeclaration" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="JavadocHtmlLint" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="JavadocLinkAsPlainText" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="JavadocReference" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="JavadocReference" enabled="true" level="ERROR" enabled_by_default="true">
+      <option name="REPORT_INACCESSIBLE" value="false" />
+    </inspection_tool>
     <inspection_tool class="JavaeeApplicationDomInspection" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="JdkProxiedBeanTypeInspection" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="JmhInspections" enabled="true" level="ERROR" enabled_by_default="true" />
