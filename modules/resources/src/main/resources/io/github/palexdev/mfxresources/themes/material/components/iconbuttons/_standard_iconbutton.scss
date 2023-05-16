@@ -3,24 +3,17 @@
 @use '../../abstracts/theme_utils' as ThemeUtils;
 
 // Tokens
+$bg-default: transparent !default;
 $surface-tint-default: Theme.GetSchemeColor('primary') !default;
-$surface-tint-unselected: Theme.GetSchemeColor('on-surface-variant') !default;
 
 $bg-unselected: transparent !default;
-$bg-unselected-hover: ThemeUtils.StateLayer($surface-tint-unselected, $bg-unselected, 'hover') !default;
-$bg-unselected-focused: ThemeUtils.StateLayer($surface-tint-unselected, $bg-unselected, 'focus') !default;
-$bg-unselected-pressed: $bg-unselected-focused !default;
+$surface-tint-unselected: Theme.GetSchemeColor('on-surface-variant') !default;
 
-$bg-default: transparent !default;
 $bg-default-disabled: transparent !default;
-$bg-default-hover: ThemeUtils.StateLayer($surface-tint-default, $bg-default, 'hover') !default;
-$bg-default-focused: ThemeUtils.StateLayer($surface-tint-default, $bg-default, 'focus') !default;
-$bg-default-pressed: $bg-default-focused !default;
 
 $icon-default: Theme.GetSchemeColor('primary') !default;
 $icon-unselected: Theme.GetSchemeColor('on-surface-variant') !default;
 $icon-disabled: Theme.GetSchemeColor('on-surface');
-
 $ripple-default: Ripple.Ripple('on-surface-variant') !default;
 
 /****************************************************************************************************
@@ -34,16 +27,8 @@ $ripple-default: Ripple.Ripple('on-surface-variant') !default;
   -fx-background-color: $bg-default-disabled;
 }
 
-.mfx-icon-button:hover {
-  -fx-background-color: $bg-unselected-hover;
-}
-
-.mfx-icon-button:focused {
-  -fx-background-color: $bg-unselected-focused;
-}
-
-.mfx-icon-button:pressed {
-  -fx-background-color: $bg-unselected-pressed;
+.mfx-icon-button > .surface > .bg {
+  -fx-background-color: $surface-tint-unselected;
 }
 
 .mfx-icon-button .mfx-font-icon {
@@ -59,16 +44,8 @@ $ripple-default: Ripple.Ripple('on-surface-variant') !default;
   -fx-background-color: $bg-default;
 }
 
-.mfx-icon-button:selectable:selected:hover {
-  -fx-background-color: $bg-default-hover;
-}
-
-.mfx-icon-button:selectable:selected:focused {
-  -fx-background-color: $bg-default-focused;
-}
-
-.mfx-icon-button:selectable:selected:pressed {
-  -fx-background-color: $bg-default-pressed;
+.mfx-icon-button:selectable:selected > .surface > .bg {
+  -fx-background-color: $surface-tint-default;
 }
 
 .mfx-icon-button:selectable:selected .mfx-font-icon {

@@ -4,20 +4,15 @@
 @use '../../abstracts/theme_utils' as ThemeUtils;
 
 // Tokens
-$surface-tint: Theme.GetSchemeColor('on-primary') !default;
-$elevation: 0 !default;
-$elevation-hover: 1 !default;
-
 $bg-color: Theme.GetSchemeColor('primary') !default;
-$bg-color-hover: ThemeUtils.StateLayer($surface-tint, $bg-color, 'hover') !default;
-$bg-color-focused: ThemeUtils.StateLayer($surface-tint, $bg-color, 'focus') !default;
-$bg-color-pressed: $bg-color-focused !default;
+$surface-tint: Theme.GetSchemeColor('on-primary') !default;
 
 $text-color: Theme.GetSchemeColor('on-primary') !default;
-
 $icon-color: Theme.GetSchemeColor('on-primary') !default;
-
 $ripple-color: Ripple.Ripple('on-primary') !default;
+
+$elevation: 0 !default;
+$elevation-hover: 1 !default;
 
 /****************************************************************************************************
  * Filled Buttons
@@ -25,24 +20,24 @@ $ripple-color: Ripple.Ripple('on-primary') !default;
 .mfx-button.filled {
   -fx-text-fill: $text-color;
   -fx-background-color: $bg-color;
+}
+
+.mfx-button.filled > .surface {
   -mfx-elevation: ThemeUtils.ElevationLevel($elevation);
 }
 
-.mfx-button.filled:hover {
-  -fx-background-color: $bg-color-hover;
+.mfx-button.filled > .surface > .bg {
+  -fx-background-color: $surface-tint;
+}
+
+.mfx-button.filled:hover > .surface {
   -mfx-elevation: ThemeUtils.ElevationLevel($elevation-hover);
-}
-
-.mfx-button.filled:focused,
-.mfx-button.filled:pressed {
-  -fx-background-color: $bg-color-focused;
-  -mfx-elevation: ThemeUtils.ElevationLevel($elevation);
 }
 
 .mfx-button.filled .mfx-font-icon {
   -mfx-color: $icon-color;
 }
 
-.mfx-button.filled .mfx-ripple-generator {
+.mfx-button.filled > .surface > .mfx-ripple-generator {
   -mfx-ripple-color: $ripple-color;
 }

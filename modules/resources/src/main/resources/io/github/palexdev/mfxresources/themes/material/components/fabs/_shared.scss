@@ -37,26 +37,26 @@ $elevation-hover-lowered: 2 !default;
   @include Typography.LabelLarge();
   -fx-graphic-text-gap: $elements-gap;
   -fx-background-radius: $bg-radius;
-  -fx-padding: 16px;
+  -fx-padding: $padding;
   -mfx-init-width: $min-width-standard;
   -mfx-init-height: $min-height;
-  -mfx-elevation: ThemeUtils.ElevationLevel($elevation);
+
+  > .surface {
+    -mfx-elevation: ThemeUtils.ElevationLevel($elevation);
+  }
+
+  > .surface > .bg {
+    -fx-background-radius: $bg-radius;
+  }
 }
 
 .mfx-button.fab:extended {
   -mfx-init-width: $min-width-extended;
 }
 
-.mfx-button.fab:hover,
-.mfx-button.fab:extended:hover {
+.mfx-button.fab:hover > .surface,
+.mfx-button.fab:extended:hover > .surface {
   -mfx-elevation: ThemeUtils.ElevationLevel($elevation-hover);
-}
-
-.mfx-button.fab:focused,
-.mfx-button.fab:extended:focused,
-.mfx-button.fab:pressed,
-.mfx-button.fab:extended:focused {
-  -mfx-elevation: ThemeUtils.ElevationLevel($elevation);
 }
 
 .mfx-button.fab .mfx-font-icon,
@@ -71,10 +71,18 @@ $elevation-hover-lowered: 2 !default;
   -mfx-init-height: $min-height-small;
 }
 
+.mfx-button.fab.small > .surface > .bg {
+  -fx-background-radius: $bg-radius-small;
+}
+
 .mfx-button.fab.large {
   -fx-background-radius: $bg-radius-large;
   -mfx-init-width: $min-width-large;
   -mfx-init-height: $min-height-large;
+}
+
+.mfx-button.fab.large > .surface > .bg {
+  -fx-background-radius: $bg-radius-large;
 }
 
 .mfx-button.fab.large .mfx-font-icon {
@@ -89,19 +97,12 @@ $elevation-hover-lowered: 2 !default;
 /****************************************************************************************************
  * Lowered FABs
  ****************************************************************************************************/
-.mfx-button.fab.lowered,
-.mfx-button.fab:extended.lowered {
+.mfx-button.fab.lowered > .surface,
+.mfx-button.fab:extended.lowered > .surface {
   -mfx-elevation: ThemeUtils.ElevationLevel($elevation-lowered);
 }
 
-.mfx-button.fab.lowered:hover,
-.mfx-button.fab:extended.lowered:hover {
+.mfx-button.fab.lowered:hover > .surface,
+.mfx-button.fab:extended.lowered:hover > .surface {
   -mfx-elevation: ThemeUtils.ElevationLevel($elevation-hover-lowered);
-}
-
-.mfx-button.fab.lowered:focused,
-.mfx-button.fab:extended.lowered:focused,
-.mfx-button.fab.lowered:pressed,
-.mfx-button.fab:extended.lowered:focused {
-  -mfx-elevation: ThemeUtils.ElevationLevel($elevation-lowered);
 }

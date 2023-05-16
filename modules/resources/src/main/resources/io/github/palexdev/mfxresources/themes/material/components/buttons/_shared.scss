@@ -36,6 +36,10 @@ $elevation-disabled: 0 !default;
   -fx-padding: $padding;
   -mfx-init-width: $min-width;
   -mfx-init-height: $min-height;
+
+  > .surface > .bg {
+    -fx-background-radius: $bg-radius;
+  }
 }
 
 .mfx-button.elevated:disabled,
@@ -45,6 +49,13 @@ $elevation-disabled: 0 !default;
 .mfx-button.outlined:disabled {
   -fx-text-fill: $text-color-disabled;
   -fx-background-color: $bg-color-disabled;
+}
+
+.mfx-button.elevated:disabled > .surface,
+.mfx-button.filled:disabled > .surface,
+.mfx-button.filled-tonal:disabled > .surface,
+.mfx-button.text:disabled > .surface,
+.mfx-button.outlined:disabled > .surface {
   -mfx-elevation: ThemeUtils.ElevationLevel($elevation-disabled);
 }
 

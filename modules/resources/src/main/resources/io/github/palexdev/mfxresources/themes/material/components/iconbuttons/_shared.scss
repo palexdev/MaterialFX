@@ -3,7 +3,7 @@
 
 // Shared component-level tokens
 $bg-color-disabled: rgba(Theme.GetSchemeColor('on-surface'), Theme.GetStateLayer('disabled')) !default;
-$bg-radius: 100%;
+$bg-radius: 100px;
 
 $icon-size: 24px;
 $icon-color-disabled: Theme.GetSchemeColor('on-surface') !default;
@@ -20,7 +20,11 @@ $padding: 4px;
 .mfx-icon-button.outlined {
   -fx-background-radius: $bg-radius;
   -fx-padding: $padding;
-  -mfx-size: $size
+  -mfx-size: $size;
+
+  > .surface > .bg {
+    -fx-background-radius: $bg-radius;
+  }
 }
 
 .mfx-icon-button:disabled,

@@ -132,6 +132,15 @@
 }
 
 /****************************************************************************************************
+ * Common to all components with a MaterialSurface
+ ****************************************************************************************************/
+.surface {
+  -mfx-hover-opacity: 8%;
+  -mfx-focus-opacity: 12%;
+  -mfx-press-opacity: 12%;
+}
+
+/****************************************************************************************************
  * Buttons shared properties
  ****************************************************************************************************/
 .mfx-button.elevated,
@@ -150,6 +159,14 @@
   -mfx-init-height: 40px;
 }
 
+.mfx-button.elevated > .surface > .bg,
+.mfx-button.filled > .surface > .bg,
+.mfx-button.filled-tonal > .surface > .bg,
+.mfx-button.text > .surface > .bg,
+.mfx-button.outlined > .surface > .bg {
+  -fx-background-radius: 20px;
+}
+
 .mfx-button.elevated:disabled,
 .mfx-button.filled:disabled,
 .mfx-button.filled-tonal:disabled,
@@ -157,6 +174,13 @@
 .mfx-button.outlined:disabled {
   -fx-text-fill: #1D1B20;
   -fx-background-color: rgba(29, 27, 32, 0.12);
+}
+
+.mfx-button.elevated:disabled > .surface,
+.mfx-button.filled:disabled > .surface,
+.mfx-button.filled-tonal:disabled > .surface,
+.mfx-button.text:disabled > .surface,
+.mfx-button.outlined:disabled > .surface {
   -mfx-elevation: LEVEL0;
 }
 
@@ -208,25 +232,25 @@
 .mfx-button.elevated {
   -fx-text-fill: #6750A4;
   -fx-background-color: #F7F2FA;
+}
+
+.mfx-button.elevated > .surface {
   -mfx-elevation: LEVEL1;
 }
 
-.mfx-button.elevated:hover {
-  -fx-background-color: #ebe5f3;
+.mfx-button.elevated > .surface > .bg {
+  -fx-background-color: #6750A4;
+}
+
+.mfx-button.elevated:hover > .surface {
   -mfx-elevation: LEVEL2;
-}
-
-.mfx-button.elevated:focused,
-.mfx-button.elevated:pressed {
-  -fx-background-color: #e6dff0;
-  -mfx-elevation: LEVEL1;
 }
 
 .mfx-button.elevated .mfx-font-icon {
   -mfx-color: #6750A4;
 }
 
-.mfx-button.elevated .mfx-ripple-generator {
+.mfx-button.elevated > .surface > .mfx-ripple-generator {
   -mfx-ripple-color: rgba(103, 80, 164, 0.12);
 }
 
@@ -236,25 +260,25 @@
 .mfx-button.filled {
   -fx-text-fill: #FFFFFF;
   -fx-background-color: #6750A4;
+}
+
+.mfx-button.filled > .surface {
   -mfx-elevation: LEVEL0;
 }
 
-.mfx-button.filled:hover {
-  -fx-background-color: #735eab;
+.mfx-button.filled > .surface > .bg {
+  -fx-background-color: #FFFFFF;
+}
+
+.mfx-button.filled:hover > .surface {
   -mfx-elevation: LEVEL1;
-}
-
-.mfx-button.filled:focused,
-.mfx-button.filled:pressed {
-  -fx-background-color: #7965af;
-  -mfx-elevation: LEVEL0;
 }
 
 .mfx-button.filled .mfx-font-icon {
   -mfx-color: #FFFFFF;
 }
 
-.mfx-button.filled .mfx-ripple-generator {
+.mfx-button.filled > .surface > .mfx-ripple-generator {
   -mfx-ripple-color: rgba(255, 255, 255, 0.12);
 }
 
@@ -264,18 +288,18 @@
 .mfx-button.filled-tonal {
   -fx-text-fill: #1D192B;
   -fx-background-color: #E8DEF8;
+}
+
+.mfx-button.filled-tonal > .surface {
   -mfx-elevation: LEVEL0;
 }
 
-.mfx-button.filled-tonal:hover {
-  -fx-background-color: #d8cee8;
+.mfx-button.filled-tonal > .surface > .bg {
+  -fx-background-color: #1D192B;
+}
+
+.mfx-button.filled-tonal:hover > .surface {
   -mfx-elevation: LEVEL1;
-}
-
-.mfx-button.filled-tonal:focused,
-.mfx-button.filled-tonal:pressed {
-  -fx-background-color: #d0c6df;
-  -mfx-elevation: LEVEL0;
 }
 
 .mfx-button.filled-tonal .mfx-font-icon {
@@ -292,18 +316,10 @@
 .mfx-button.text {
   -fx-text-fill: #6750A4;
   -fx-background-color: transparent;
-  -mfx-elevation: LEVEL0;
 }
 
-.mfx-button.text:hover {
-  -fx-background-color: rgba(103, 80, 164, 0.08);
-  -mfx-elevation: LEVEL1;
-}
-
-.mfx-button.text:focused,
-.mfx-button.text:pressed {
-  -fx-background-color: rgba(103, 80, 164, 0.12);
-  -mfx-elevation: LEVEL0;
+.mfx-button.text > .surface > .bg {
+  -fx-background-color: #6750A4;
 }
 
 .mfx-button.text .mfx-font-icon {
@@ -323,22 +339,14 @@
   -fx-border-color: #79747E;
   -fx-border-radius: 20px;
   -fx-border-width: 1px;
-  -mfx-elevation: LEVEL0;
+}
+
+.mfx-button.outlined > .surface > .bg {
+  -fx-background-color: #6750A4;
 }
 
 .mfx-button.outlined:disabled {
   -fx-border-color: rgba(121, 116, 126, 0.38);
-}
-
-.mfx-button.outlined:hover {
-  -fx-background-color: rgba(103, 80, 164, 0.08);
-  -mfx-elevation: LEVEL0;
-}
-
-.mfx-button.outlined:focused,
-.mfx-button.outlined:pressed {
-  -fx-background-color: rgba(103, 80, 164, 0.12);
-  -mfx-elevation: LEVEL0;
 }
 
 .mfx-button.outlined:focused {
@@ -366,23 +374,25 @@
   -fx-padding: 16px;
   -mfx-init-width: 56px;
   -mfx-init-height: 56px;
+}
+
+.mfx-button.fab > .surface,
+.mfx-button.fab:extended > .surface {
   -mfx-elevation: LEVEL3;
+}
+
+.mfx-button.fab > .surface > .bg,
+.mfx-button.fab:extended > .surface > .bg {
+  -fx-background-radius: 16px;
 }
 
 .mfx-button.fab:extended {
   -mfx-init-width: 80px;
 }
 
-.mfx-button.fab:hover,
-.mfx-button.fab:extended:hover {
+.mfx-button.fab:hover > .surface,
+.mfx-button.fab:extended:hover > .surface {
   -mfx-elevation: LEVEL4;
-}
-
-.mfx-button.fab:focused,
-.mfx-button.fab:extended:focused,
-.mfx-button.fab:pressed,
-.mfx-button.fab:extended:focused {
-  -mfx-elevation: LEVEL3;
 }
 
 .mfx-button.fab .mfx-font-icon,
@@ -397,10 +407,18 @@
   -mfx-init-height: 40px;
 }
 
+.mfx-button.fab.small > .surface > .bg {
+  -fx-background-radius: 12px;
+}
+
 .mfx-button.fab.large {
   -fx-background-radius: 28px;
   -mfx-init-width: 96px;
   -mfx-init-height: 96px;
+}
+
+.mfx-button.fab.large > .surface > .bg {
+  -fx-background-radius: 28px;
 }
 
 .mfx-button.fab.large .mfx-font-icon {
@@ -415,21 +433,14 @@
 /****************************************************************************************************
  * Lowered FABs
  ****************************************************************************************************/
-.mfx-button.fab.lowered,
-.mfx-button.fab:extended.lowered {
+.mfx-button.fab.lowered > .surface,
+.mfx-button.fab:extended.lowered > .surface {
   -mfx-elevation: LEVEL1;
 }
 
-.mfx-button.fab.lowered:hover,
-.mfx-button.fab:extended.lowered:hover {
+.mfx-button.fab.lowered:hover > .surface,
+.mfx-button.fab:extended.lowered:hover > .surface {
   -mfx-elevation: LEVEL2;
-}
-
-.mfx-button.fab.lowered:focused,
-.mfx-button.fab:extended.lowered:focused,
-.mfx-button.fab.lowered:pressed,
-.mfx-button.fab:extended.lowered:focused {
-  -mfx-elevation: LEVEL1;
 }
 
 /****************************************************************************************************
@@ -440,13 +451,8 @@
   -fx-background-color: #EADDFF;
 }
 
-.mfx-button.fab:hover {
-  -fx-background-color: #dacbf2;
-}
-
-.mfx-button.fab:focused,
-.mfx-button.fab:pressed {
-  -fx-background-color: #d2c2ec;
+.mfx-button.fab > .surface > .bg {
+  -fx-background-color: #21005D;
 }
 
 .mfx-button.fab .mfx-font-icon {
@@ -465,13 +471,8 @@
   -fx-background-color: #E8DEF8;
 }
 
-.mfx-button.fab.secondary:hover {
-  -fx-background-color: #d8cee8;
-}
-
-.mfx-button.fab.secondary:focused,
-.mfx-button.fab.secondary:pressed {
-  -fx-background-color: #d0c6df;
+.mfx-button.fab.secondary > .surface > .bg {
+  -fx-background-color: #1D192B;
 }
 
 .mfx-button.fab.secondary .mfx-font-icon {
@@ -490,13 +491,8 @@
   -fx-background-color: #FFD8E4;
 }
 
-.mfx-button.fab.tertiary:hover {
-  -fx-background-color: #efc8d4;
-}
-
-.mfx-button.fab.tertiary:focused,
-.mfx-button.fab.tertiary:pressed {
-  -fx-background-color: #e6c0cc;
+.mfx-button.fab.tertiary > .surface > .bg {
+  -fx-background-color: #31111D;
 }
 
 .mfx-button.fab.tertiary .mfx-font-icon {
@@ -515,13 +511,8 @@
   -fx-background-color: #ECE6F0;
 }
 
-.mfx-button.fab.surface:hover {
-  -fx-background-color: #e1daea;
-}
-
-.mfx-button.fab.surface:focused,
-.mfx-button.fab.surface:pressed {
-  -fx-background-color: #dcd4e7;
+.mfx-button.fab.surface > .surface > .bg {
+  -fx-background-color: #6750A4;
 }
 
 .mfx-button.fab.surface .mfx-font-icon {
@@ -540,15 +531,6 @@
   -fx-background-color: #F7F2FA;
 }
 
-.mfx-button.fab.surface.lowered:hover {
-  -fx-background-color: #ebe5f3;
-}
-
-.mfx-button.fab.surface.lowered:focused,
-.mfx-button.fab.surface.lowered:pressed {
-  -fx-background-color: #e6dff0;
-}
-
 /****************************************************************************************************
  * IconButtons shared properties
  ****************************************************************************************************/
@@ -556,9 +538,16 @@
 .mfx-icon-button.filled,
 .mfx-icon-button.filled-tonal,
 .mfx-icon-button.outlined {
-  -fx-background-radius: 100%;
+  -fx-background-radius: 100px;
   -fx-padding: 4px;
   -mfx-size: 40px;
+}
+
+.mfx-icon-button > .surface > .bg,
+.mfx-icon-button.filled > .surface > .bg,
+.mfx-icon-button.filled-tonal > .surface > .bg,
+.mfx-icon-button.outlined > .surface > .bg {
+  -fx-background-radius: 100px;
 }
 
 .mfx-icon-button:disabled,
@@ -594,16 +583,8 @@
   -fx-background-color: transparent;
 }
 
-.mfx-icon-button:hover {
-  -fx-background-color: rgba(73, 69, 79, 0.08);
-}
-
-.mfx-icon-button:focused {
-  -fx-background-color: rgba(73, 69, 79, 0.12);
-}
-
-.mfx-icon-button:pressed {
-  -fx-background-color: rgba(73, 69, 79, 0.12);
+.mfx-icon-button > .surface > .bg {
+  -fx-background-color: #49454F;
 }
 
 .mfx-icon-button .mfx-font-icon {
@@ -618,16 +599,8 @@
   -fx-background-color: transparent;
 }
 
-.mfx-icon-button:selectable:selected:hover {
-  -fx-background-color: rgba(103, 80, 164, 0.08);
-}
-
-.mfx-icon-button:selectable:selected:focused {
-  -fx-background-color: rgba(103, 80, 164, 0.12);
-}
-
-.mfx-icon-button:selectable:selected:pressed {
-  -fx-background-color: rgba(103, 80, 164, 0.12);
+.mfx-icon-button:selectable:selected > .surface > .bg {
+  -fx-background-color: #6750A4;
 }
 
 .mfx-icon-button:selectable:selected .mfx-font-icon {
@@ -646,19 +619,9 @@
   -fx-background-color: #6750A4;
 }
 
-.mfx-icon-button.filled:hover,
-.mfx-icon-button.filled:selectable:selected:hover {
-  -fx-background-color: #735eab;
-}
-
-.mfx-icon-button.filled:focused,
-.mfx-icon-button.filled:selectable:selected:focused {
-  -fx-background-color: #7965af;
-}
-
-.mfx-icon-button.filled:pressed,
-.mfx-icon-button.filled:selectable:selected:pressed {
-  -fx-background-color: #7965af;
+.mfx-icon-button.filled > .surface > .bg,
+.mfx-icon-button.filled:selectable:selected > .surface > .bg {
+  -fx-background-color: #FFFFFF;
 }
 
 .mfx-icon-button.filled .mfx-font-icon,
@@ -666,24 +629,16 @@
   -mfx-color: #FFFFFF;
 }
 
-.mfx-icon-button.filled .mfx-ripple-generator {
-  visibility: hidden;
+.mfx-icon-button.filled > .surface > .mfx-ripple-generator {
+  -mfx-ripple-color: rgba(255, 255, 255, 0.12);
 }
 
 .mfx-icon-button.filled:selectable {
   -fx-background-color: #E6E0E9;
 }
 
-.mfx-icon-button.filled:hover:selectable {
-  -fx-background-color: #dcd4e3;
-}
-
-.mfx-icon-button.filled:focused:selectable {
-  -fx-background-color: #d7cfe1;
-}
-
-.mfx-icon-button.filled:pressed:selectable {
-  -fx-background-color: #d7cfe1;
+.mfx-icon-button.filled:selectable > .surface > .bg {
+  -fx-background-color: #6750A4;
 }
 
 .mfx-icon-button.filled:selectable .mfx-font-icon {
@@ -698,19 +653,9 @@
   -fx-background-color: #E8DEF8;
 }
 
-.mfx-icon-button.filled-tonal:hover,
-.mfx-icon-button.filled-tonal:selectable:selected:hover {
-  -fx-background-color: #d8cee8;
-}
-
-.mfx-icon-button.filled-tonal:focused,
-.mfx-icon-button.filled-tonal:selectable:selected:focused {
-  -fx-background-color: #d0c6df;
-}
-
-.mfx-icon-button.filled-tonal:pressed,
-.mfx-icon-button.filled-tonal:selectable:selected:pressed {
-  -fx-background-color: #d0c6df;
+.mfx-icon-button.filled-tonal > .surface > .bg,
+.mfx-icon-button.filled-tonal:selectable:selected > .surface > .bg {
+  -fx-background-color: #1D192B;
 }
 
 .mfx-icon-button.filled-tonal .mfx-font-icon,
@@ -718,7 +663,7 @@
   -mfx-color: #1D192B;
 }
 
-.mfx-icon-button.filled-tonal .mfx-ripple-generator {
+.mfx-icon-button.filled-tonal > .surface > .mfx-ripple-generator {
   -mfx-ripple-color: rgba(73, 69, 79, 0.12);
 }
 
@@ -726,16 +671,8 @@
   -fx-background-color: #E6E0E9;
 }
 
-.mfx-icon-button.filled-tonal:hover:selectable {
-  -fx-background-color: #d9d4dd;
-}
-
-.mfx-icon-button.filled-tonal:focused:selectable {
-  -fx-background-color: #d3cdd7;
-}
-
-.mfx-icon-button.filled-tonal:pressed:selectable {
-  -fx-background-color: #d3cdd7;
+.mfx-icon-button.filled-tonal:selectable > .surface > .bg {
+  -fx-background-color: #49454F;
 }
 
 .mfx-icon-button.filled-tonal:selectable .mfx-font-icon {
@@ -751,16 +688,8 @@
   -fx-border-radius: 100%;
 }
 
-.mfx-icon-button.outlined:hover {
-  -fx-background-color: rgba(73, 69, 79, 0.08);
-}
-
-.mfx-icon-button.outlined:focused {
-  -fx-background-color: rgba(73, 69, 79, 0.12);
-}
-
-.mfx-icon-button.outlined:pressed {
-  -fx-background-color: rgba(73, 69, 79, 0.12);
+.mfx-icon-button.outlined > .surface > .bg {
+  -fx-background-color: #49454F;
 }
 
 .mfx-icon-button.outlined .mfx-font-icon {
@@ -776,20 +705,97 @@
   -fx-border-color: transparent;
 }
 
-.mfx-icon-button.outlined:selectable:selected:hover {
-  -fx-background-color: #423e45;
-}
-
-.mfx-icon-button.outlined:selectable:selected:focused {
-  -fx-background-color: #49464c;
-}
-
-.mfx-icon-button.outlined:selectable:selected:pressed {
-  -fx-background-color: #49464c;
+.mfx-icon-button.outlined:selectable:selected > .surface > .bg {
+  -fx-background-color: #F5EFF7;
 }
 
 .mfx-icon-button.outlined:selectable:selected .mfx-font-icon {
   -mfx-color: #F5EFF7;
+}
+
+/****************************************************************************************************
+ * Segmented Buttons
+ ****************************************************************************************************/
+.mfx-segmented-button {
+  -mfx-init-height: 40px;
+}
+
+.mfx-segmented-button > .segment {
+  -fx-font-family: "Roboto Medium";
+  -fx-font-weight: 500;
+  -fx-font-size: 14px;
+  -fx-text-fill: #1D1B20;
+  -fx-graphic-text-gap: 8px;
+  -fx-background-color: transparent;
+  -fx-border-color: #79747E;
+  -fx-border-insets: -1px;
+  -fx-padding: 4px 12px 4px 12px;
+  -mfx-init-width: 48px;
+}
+
+.mfx-segmented-button > .segment > .surface > .bg {
+  -fx-background-color: #1D1B20;
+}
+
+.mfx-segmented-button > .segment .mfx-font-icon {
+  -mfx-color: #1D1B20;
+}
+
+.mfx-segmented-button > .segment > .mfx-ripple-generator {
+  -mfx-ripple-color: rgba(29, 27, 32, 0.12);
+}
+
+.mfx-segmented-button > .segment:first {
+  -fx-border-radius: 100px 0px 0px 100px;
+  -fx-background-radius: 100px 0px 0px 100px;
+}
+
+.mfx-segmented-button > .segment:first > .surface > .bg {
+  -fx-background-radius: 100px 0px 0px 100px;
+}
+
+.mfx-segmented-button > .segment:last {
+  -fx-border-radius: 0px 100px 100px 0px;
+  -fx-background-radius: 0px 100px 100px 0px;
+}
+
+.mfx-segmented-button > .segment:last > .surface > .bg {
+  -fx-background-radius: 0px 100px 100px 0px;
+}
+
+.mfx-segmented-button > .segment:disabled > .label {
+  -fx-opacity: 1;
+}
+
+.mfx-segmented-button > .segment:disabled {
+  -fx-text-fill: rgba(29, 27, 32, 0.38);
+  -fx-border-color: rgba(121, 116, 126, 0.12);
+}
+
+.mfx-segmented-button > .segment:disabled .mfx-font-icon {
+  -mfx-color: rgba(29, 27, 32, 0.38);
+}
+
+.mfx-segmented-button > .segment:selected {
+  -fx-text-fill: #1D192B;
+  -fx-background-color: #E8DEF8;
+}
+
+.mfx-segmented-button > .segment:selected > .surface > .bg {
+  -fx-background-color: #1D192B;
+}
+
+.mfx-segmented-button > .segment:selected .mfx-font-icon {
+  -mfx-description: "fas-check";
+  -mfx-color: #1D192B;
+}
+
+.mfx-segmented-button > .segment:selected:disabled {
+  -fx-text-fill: rgba(29, 25, 43, 0.38);
+}
+
+.mfx-segmented-button > .segment:selected:disabled .mfx-font-icon {
+  -mfx-color: rgba(29, 25, 43, 0.38);
 }
 
 /****************************************************************************************************

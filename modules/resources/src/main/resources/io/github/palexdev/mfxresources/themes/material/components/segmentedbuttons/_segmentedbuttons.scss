@@ -1,0 +1,119 @@
+@use '../../tokens/theme' as Theme;
+@use '../../tokens/typography' as Typography;
+@use '../../abstracts/ripple' as Ripple;
+@use '../../abstracts/theme_utils' as ThemeUtils;
+
+// Component-level tokens (Unselected)
+$bg-color: transparent !default;
+$surface-tint: Theme.GetSchemeColor('on-surface') !default;
+
+$bd-color: Theme.GetSchemeColor('outline');
+$bd-color-disabled: rgba($bd-color, Theme.GetStateLayer('disabled')) !default;
+
+$icon-color: Theme.GetSchemeColor('on-surface') !default;
+$icon-color-disabled: rgba($icon-color, Theme.GetStateLayer('disabled-text')) !default;
+
+$text-color: Theme.GetSchemeColor('on-surface') !default;
+$text-color-disabled: rgba($text-color, Theme.GetStateLayer('disabled-text')) !default;
+
+$ripple: Ripple.Ripple('on-surface');
+
+$spacing: 8px !default;
+$radius: 100px !default;
+$insets: -1px !default;
+$padding: 4px 12px 4px 12px !default;
+$min-height: 40px !default;
+$min-width: 48px !default;
+
+/****************************************************************************************************
+ * Segmented Buttons
+ ****************************************************************************************************/
+.mfx-segmented-button {
+  -mfx-init-height: $min-height;
+}
+
+.mfx-segmented-button > .segment {
+  @include Typography.LabelLarge();
+  -fx-text-fill: $text-color;
+  -fx-graphic-text-gap: $spacing;
+  -fx-background-color: $bg-color;
+  -fx-border-color: $bd-color;
+  -fx-border-insets: $insets;
+  -fx-padding: $padding;
+  -mfx-init-width: $min-width;
+}
+
+.mfx-segmented-button > .segment > .surface > .bg {
+  -fx-background-color: $surface-tint;
+}
+
+.mfx-segmented-button > .segment .mfx-font-icon {
+  -mfx-color: $icon-color;
+}
+
+.mfx-segmented-button > .segment > .mfx-ripple-generator {
+  -mfx-ripple-color: $ripple;
+}
+
+.mfx-segmented-button > .segment:first {
+  -fx-border-radius: $radius 0px 0px $radius;
+  -fx-background-radius: $radius 0px 0px $radius;
+}
+
+.mfx-segmented-button > .segment:first > .surface > .bg {
+  -fx-background-radius: $radius 0px 0px $radius;
+}
+
+.mfx-segmented-button > .segment:last {
+  -fx-border-radius: 0px $radius $radius 0px;
+  -fx-background-radius: 0px $radius $radius 0px;
+}
+
+.mfx-segmented-button > .segment:last > .surface > .bg {
+  -fx-background-radius: 0px $radius $radius 0px;
+}
+
+.mfx-segmented-button > .segment:disabled > .label {
+  -fx-opacity: 1.0;
+}
+
+.mfx-segmented-button > .segment:disabled {
+  -fx-text-fill: $text-color-disabled;
+  -fx-border-color: $bd-color-disabled;
+}
+
+.mfx-segmented-button > .segment:disabled .mfx-font-icon {
+  -mfx-color: $icon-color-disabled;
+}
+
+// Component-level tokens (Selected)
+$bg-color-selected: Theme.GetSchemeColor('secondary-container') !default;
+$surface-tint-selected: Theme.GetSchemeColor('on-secondary-container') !default;
+
+$icon-color-selected: Theme.GetSchemeColor('on-secondary-container') !default;
+$icon-color-selected-disabled: rgba($icon-color-selected, Theme.GetStateLayer('disabled-text')) !default;
+
+$text-color-selected: Theme.GetSchemeColor('on-secondary-container') !default;
+$text-color-selected-disabled: rgba($text-color-selected, Theme.GetStateLayer('disabled-text')) !default;
+
+.mfx-segmented-button > .segment:selected {
+  -fx-text-fill: $text-color-selected;
+  -fx-background-color: $bg-color-selected;
+}
+
+.mfx-segmented-button > .segment:selected > .surface > .bg {
+  -fx-background-color: $surface-tint-selected;
+}
+
+.mfx-segmented-button > .segment:selected .mfx-font-icon {
+  -mfx-description: "fas-check";
+  -mfx-color: $icon-color-selected;
+}
+
+.mfx-segmented-button > .segment:selected:disabled {
+  -fx-text-fill: $text-color-selected-disabled;
+}
+
+.mfx-segmented-button > .segment:selected:disabled .mfx-font-icon {
+  -mfx-color: $icon-color-selected-disabled;
+}
