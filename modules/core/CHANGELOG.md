@@ -26,6 +26,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added many convenient methods to CSSFragment, now you don't necessarily have to type the whole JavaFX property but
   just the value
 - Added tests for the ObservableCircularQueue
+- Implemented cache util to measure the sizes of a text node only when needed. Can vastly improve the performance of
+  components relying on text sizes computation
+- TextUtils: added method to compute both the text width and height in one go
 
 ### Changed
 

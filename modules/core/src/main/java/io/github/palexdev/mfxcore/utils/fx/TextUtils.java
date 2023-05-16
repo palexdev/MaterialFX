@@ -31,144 +31,158 @@ import javafx.scene.text.Text;
  */
 public class TextUtils {
 
-	private TextUtils() {
-	}
+    private TextUtils() {
+    }
 
-	/**
-	 * Checks if the text of the specified {@code Label} is truncated.
-	 *
-	 * @param label The specified label
-	 */
-	public static boolean isLabelTruncated(Label label) {
-		String originalString = label.getText();
-		Text textNode = (Text) label.lookup(".text");
-		if (textNode != null) {
-			String actualString = textNode.getText();
-			return (!actualString.isEmpty() && !originalString.equals(actualString));
-		}
-		return false;
-	}
+    /**
+     * Checks if the text of the specified {@code Label} is truncated.
+     *
+     * @param label The specified label
+     */
+    public static boolean isLabelTruncated(Label label) {
+        String originalString = label.getText();
+        Text textNode = (Text) label.lookup(".text");
+        if (textNode != null) {
+            String actualString = textNode.getText();
+            return (!actualString.isEmpty() && !originalString.equals(actualString));
+        }
+        return false;
+    }
 
-	/**
-	 * Registers a listener to the specified {@code Label} which checks if the text
-	 * is truncated and updates the specified boolean property accordingly.
-	 *
-	 * @param isTruncated The boolean property to change
-	 * @param label       The specified label
-	 */
-	public static void registerTruncatedLabelListener(BooleanProperty isTruncated, Label label) {
-		label.needsLayoutProperty().addListener((observable, oldValue, newValue) -> {
-			String originalString = label.getText();
-			Text textNode = (Text) label.lookup(".text");
-			String actualString = textNode.getText();
+    /**
+     * Registers a listener to the specified {@code Label} which checks if the text
+     * is truncated and updates the specified boolean property accordingly.
+     *
+     * @param isTruncated The boolean property to change
+     * @param label       The specified label
+     */
+    public static void registerTruncatedLabelListener(BooleanProperty isTruncated, Label label) {
+        label.needsLayoutProperty().addListener((observable, oldValue, newValue) -> {
+            String originalString = label.getText();
+            Text textNode = (Text) label.lookup(".text");
+            String actualString = textNode.getText();
 
-			isTruncated.set(!actualString.isEmpty() && !originalString.equals(actualString));
-		});
-	}
+            isTruncated.set(!actualString.isEmpty() && !originalString.equals(actualString));
+        });
+    }
 
-	/**
-	 * Computes the min width of a text node so that all the text is visible. Uses {@link RegionUtils#getRegionWidth(Region)}.
-	 * <p>
-	 * Uses {@link Label} as helper.
-	 *
-	 * @param font the label font
-	 * @param text the label text
-	 */
-	public static double computeLabelWidth(Font font, String text) {
-		Label helper = new Label(text);
-		helper.setMaxWidth(Double.MAX_VALUE);
-		helper.setFont(font);
+    /**
+     * Computes the min width of a text node so that all the text is visible. Uses {@link RegionUtils#getRegionWidth(Region)}.
+     * <p>
+     * Uses {@link Label} as helper.
+     *
+     * @param font the label font
+     * @param text the label text
+     */
+    public static double computeLabelWidth(Font font, String text) {
+        Label helper = new Label(text);
+        helper.setMaxWidth(Double.MAX_VALUE);
+        helper.setFont(font);
 
-		return RegionUtils.getRegionWidth(helper);
-	}
+        return RegionUtils.getRegionWidth(helper);
+    }
 
-	/**
-	 * Computes the min height of a text node.
-	 * <p>
-	 * Uses {@link Label} as helper.
-	 *
-	 * @param font the node font
-	 * @param text the node text
-	 */
-	public static double computeLabelHeight(Font font, String text) {
-		Label helper = new Label(text);
-		helper.setMaxWidth(Double.MAX_VALUE);
-		helper.setFont(font);
-		return RegionUtils.getRegionHeight(helper);
-	}
+    /**
+     * Computes the min height of a text node.
+     * <p>
+     * Uses {@link Label} as helper.
+     *
+     * @param font the node font
+     * @param text the node text
+     */
+    public static double computeLabelHeight(Font font, String text) {
+        Label helper = new Label(text);
+        helper.setMaxWidth(Double.MAX_VALUE);
+        helper.setFont(font);
+        return RegionUtils.getRegionHeight(helper);
+    }
 
-	/**
-	 * Computes both the width and the height of a {@link Label}
-	 * for the given font and text.
-	 *
-	 * @return the bean containing the computed values
-	 */
-	public static Size computeLabelSizes(Font font, String text) {
-		Label helper = new Label(text);
-		helper.setMaxWidth(Double.MAX_VALUE);
-		helper.setFont(font);
-		return NodeUtils.getNodeSizes(helper);
-	}
+    /**
+     * Computes both the width and the height of a {@link Label}
+     * for the given font and text.
+     *
+     * @return the bean containing the computed values
+     */
+    public static Size computeLabelSizes(Font font, String text) {
+        Label helper = new Label(text);
+        helper.setMaxWidth(Double.MAX_VALUE);
+        helper.setFont(font);
+        return NodeUtils.getNodeSizes(helper);
+    }
 
-	/**
-	 * Computes the min width of a text node so that all the text is visible.
-	 * <p>
-	 * Uses {@link Text} as helper.
-	 *
-	 * @param font the node font
-	 * @param text the node text
-	 */
-	public static double computeTextWidth(Font font, String text) {
-		Text helper = new Text(text);
-		helper.setFont(font);
-		return NodeUtils.getNodeWidth(helper);
-	}
+    /**
+     * Computes the min width of a text node so that all the text is visible.
+     * <p>
+     * Uses {@link Text} as helper.
+     *
+     * @param font the node font
+     * @param text the node text
+     */
+    public static double computeTextWidth(Font font, String text) {
+        Text helper = new Text(text);
+        helper.setFont(font);
+        return NodeUtils.getNodeWidth(helper);
+    }
 
-	/**
-	 * Computes the min height of a text node.
-	 * <p>
-	 * Uses {@link Text} as helper.
-	 *
-	 * @param font the node font
-	 * @param text the node text
-	 */
-	public static double computeTextHeight(Font font, String text) {
-		Text helper = new Text(text);
-		helper.setFont(font);
-		return NodeUtils.getNodeHeight(helper);
-	}
+    /**
+     * Computes the min height of a text node.
+     * <p>
+     * Uses {@link Text} as helper.
+     *
+     * @param font the node font
+     * @param text the node text
+     */
+    public static double computeTextHeight(Font font, String text) {
+        Text helper = new Text(text);
+        helper.setFont(font);
+        return NodeUtils.getNodeHeight(helper);
+    }
 
-	/**
-	 * Computes the min width for the specified {@link Label} so that all the text is visible.
-	 * <p>
-	 * Uses {@link #computeTextWidth(Font, String)}, but also takes into account the label's
-	 * graphic bounds (if not null) and the {@link Label#graphicTextGapProperty()}.
-	 * <p></p>
-	 * Note: this works only after the label has been laid out.
-	 */
-	public static double computeLabelWidth(Label label) {
-		Node graphic = label.getGraphic();
-		double gap = (graphic != null) ? label.getGraphicTextGap() : 0.0;
-		return label.snappedLeftInset() +
-				(graphic != null ? graphic.getBoundsInParent().getWidth() : 0) +
-				TextUtils.computeTextWidth(label.getFont(), label.getText()) +
-				label.snappedRightInset() +
-				gap;
-	}
+    /**
+     * Computes both the min height and width of a text node.
+     * <p>
+     * Uses {@link Text} as helper.
+     *
+     * @param font the node font
+     * @param text the node text
+     */
+    public static Size computeTextSizes(Font font, String text) {
+        Text helper = new Text(text);
+        helper.setFont(font);
+        return NodeUtils.getNodeSizes(helper);
+    }
 
-	/**
-	 * Computes the min height for the specified {@link Label} so that all the text is visible.
-	 * <p>
-	 * Uses {@link #computeTextHeight(Font, String)}, but also takes into account the label's
-	 * graphic bounds (if not null).
-	 * <p></p>
-	 * Note: this works only after the label has been laid out.
-	 */
-	public static double computeLabelHeight(Label label) {
-		Node graphic = label.getGraphic();
-		return label.snappedTopInset() +
-				(graphic != null ? graphic.getBoundsInParent().getHeight() : 0) +
-				TextUtils.computeTextHeight(label.getFont(), label.getText()) +
-				label.snappedTopInset();
-	}
+    /**
+     * Computes the min width for the specified {@link Label} so that all the text is visible.
+     * <p>
+     * Uses {@link #computeTextWidth(Font, String)}, but also takes into account the label's
+     * graphic bounds (if not null) and the {@link Label#graphicTextGapProperty()}.
+     * <p></p>
+     * Note: this works only after the label has been laid out.
+     */
+    public static double computeLabelWidth(Label label) {
+        Node graphic = label.getGraphic();
+        double gap = (graphic != null) ? label.getGraphicTextGap() : 0.0;
+        return label.snappedLeftInset() +
+            (graphic != null ? graphic.getBoundsInParent().getWidth() : 0) +
+            TextUtils.computeTextWidth(label.getFont(), label.getText()) +
+            label.snappedRightInset() +
+            gap;
+    }
+
+    /**
+     * Computes the min height for the specified {@link Label} so that all the text is visible.
+     * <p>
+     * Uses {@link #computeTextHeight(Font, String)}, but also takes into account the label's
+     * graphic bounds (if not null).
+     * <p></p>
+     * Note: this works only after the label has been laid out.
+     */
+    public static double computeLabelHeight(Label label) {
+        Node graphic = label.getGraphic();
+        return label.snappedTopInset() +
+            (graphic != null ? graphic.getBoundsInParent().getHeight() : 0) +
+            TextUtils.computeTextHeight(label.getFont(), label.getText()) +
+            label.snappedTopInset();
+    }
 }
