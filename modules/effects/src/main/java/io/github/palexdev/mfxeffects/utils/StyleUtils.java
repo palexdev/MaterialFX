@@ -31,133 +31,133 @@ import java.util.List;
 
 public class StyleUtils {
 
-	private StyleUtils() {
-	}
+    private StyleUtils() {
+    }
 
-	/**
-	 * Changes the background color of a {@code Region} to the desired one.
-	 *
-	 * @param region The region to change the background color to
-	 * @param fill   The desired color
-	 */
-	public static void updateBackground(Region region, Paint fill) {
-		final Background background = region.getBackground();
-		if (background == null || background.getFills().isEmpty()) {
-			return;
-		}
+    /**
+     * Changes the background color of a {@code Region} to the desired one.
+     *
+     * @param region The region to change the background color to
+     * @param fill   The desired color
+     */
+    public static void updateBackground(Region region, Paint fill) {
+        final Background background = region.getBackground();
+        if (background == null || background.getFills().isEmpty()) {
+            return;
+        }
 
-		final List<BackgroundFill> fills = new ArrayList<>();
-		for (BackgroundFill bf : background.getFills()) {
-			fills.add(new BackgroundFill(fill, bf.getRadii(), bf.getInsets()));
-		}
+        final List<BackgroundFill> fills = new ArrayList<>();
+        for (BackgroundFill bf : background.getFills()) {
+            fills.add(new BackgroundFill(fill, bf.getRadii(), bf.getInsets()));
+        }
 
-		region.setBackground(new Background(fills.toArray(BackgroundFill[]::new)));
-	}
+        region.setBackground(new Background(fills.toArray(BackgroundFill[]::new)));
+    }
 
-	/**
-	 * Changes the background color of a {@code Region} to the desired one and lets specify the background insets.
-	 *
-	 * @param region           The region to change the background color to
-	 * @param fill             The desired color
-	 * @param backgroundInsets The background insets to use
-	 */
-	public static void updateBackground(Region region, Paint fill, Insets backgroundInsets) {
-		final Background background = region.getBackground();
-		if (background == null || background.getFills().isEmpty()) {
-			return;
-		}
+    /**
+     * Changes the background color of a {@code Region} to the desired one and lets specify the background insets.
+     *
+     * @param region           The region to change the background color to
+     * @param fill             The desired color
+     * @param backgroundInsets The background insets to use
+     */
+    public static void updateBackground(Region region, Paint fill, Insets backgroundInsets) {
+        final Background background = region.getBackground();
+        if (background == null || background.getFills().isEmpty()) {
+            return;
+        }
 
-		final List<BackgroundFill> fills = new ArrayList<>();
-		for (BackgroundFill bf : background.getFills()) {
-			fills.add(new BackgroundFill(fill, bf.getRadii(), backgroundInsets));
-		}
+        final List<BackgroundFill> fills = new ArrayList<>();
+        for (BackgroundFill bf : background.getFills()) {
+            fills.add(new BackgroundFill(fill, bf.getRadii(), backgroundInsets));
+        }
 
-		region.setBackground(new Background(fills.toArray(BackgroundFill[]::new)));
-	}
+        region.setBackground(new Background(fills.toArray(BackgroundFill[]::new)));
+    }
 
-	public static void updateBackground(Region region, Paint fill, CornerRadii cornerRadii, Insets backgroundInsets) {
-		final Background background = region.getBackground();
-		if (background == null || background.getFills().isEmpty()) {
-			return;
-		}
+    public static void updateBackground(Region region, Paint fill, CornerRadii cornerRadii, Insets backgroundInsets) {
+        final Background background = region.getBackground();
+        if (background == null || background.getFills().isEmpty()) {
+            return;
+        }
 
-		final List<BackgroundFill> fills = new ArrayList<>();
-		for (BackgroundFill bf : background.getFills()) {
-			fills.add(new BackgroundFill(fill, cornerRadii, backgroundInsets));
-		}
+        final List<BackgroundFill> fills = new ArrayList<>();
+        for (BackgroundFill bf : background.getFills()) {
+            fills.add(new BackgroundFill(fill, cornerRadii, backgroundInsets));
+        }
 
-		region.setBackground(new Background(fills.toArray(BackgroundFill[]::new)));
-	}
+        region.setBackground(new Background(fills.toArray(BackgroundFill[]::new)));
+    }
 
-	/**
-	 * Sets the background of the given region to the given color.
-	 */
-	public static void setBackground(Region region, Paint fill) {
-		setBackground(region, fill, CornerRadii.EMPTY, Insets.EMPTY);
-	}
+    /**
+     * Sets the background of the given region to the given color.
+     */
+    public static void setBackground(Region region, Paint fill) {
+        setBackground(region, fill, CornerRadii.EMPTY, Insets.EMPTY);
+    }
 
-	/**
-	 * Sets the background of the given region to the given color, with the given radius.
-	 */
-	public static void setBackground(Region region, Paint fill, CornerRadii radius) {
-		setBackground(region, fill, radius, Insets.EMPTY);
-	}
+    /**
+     * Sets the background of the given region to the given color, with the given radius.
+     */
+    public static void setBackground(Region region, Paint fill, CornerRadii radius) {
+        setBackground(region, fill, radius, Insets.EMPTY);
+    }
 
-	/**
-	 * Sets the background of the given region to the given color, with the given radius and insets.
-	 */
-	public static void setBackground(Region region, Paint fill, CornerRadii radius, Insets insets) {
-		region.setBackground(new Background(new BackgroundFill(fill, radius, insets)));
-	}
+    /**
+     * Sets the background of the given region to the given color, with the given radius and insets.
+     */
+    public static void setBackground(Region region, Paint fill, CornerRadii radius, Insets insets) {
+        region.setBackground(new Background(new BackgroundFill(fill, radius, insets)));
+    }
 
-	/**
-	 * Tries to parse tje given Region's corner radius.
-	 * <p>
-	 * To be more precise it tries to parse both the background and the
-	 * border radius. The background radius is prioritized over the border one
-	 * but in case the background is null or empty then the border one is used.
-	 * <p>
-	 * In case of both null or empty returns {@link  CornerRadii#EMPTY}.
-	 */
-	public static CornerRadii parseCornerRadius(Region region) {
-		CornerRadii backRadius = CornerRadii.EMPTY;
-		CornerRadii bordRadius = CornerRadii.EMPTY;
+    /**
+     * Tries to parse the given Region's corner radius.
+     * <p>
+     * To be more precise it tries to parse both the background and the
+     * border radius. The background radius is prioritized over the border one
+     * but in case the background is null or empty then the border one is used.
+     * <p>
+     * In case of both null or empty returns {@link  CornerRadii#EMPTY}.
+     */
+    public static CornerRadii parseCornerRadius(Region region) {
+        CornerRadii backRadius = CornerRadii.EMPTY;
+        CornerRadii bordRadius = CornerRadii.EMPTY;
 
-		Background background = region.getBackground();
-		if (background != null && !background.isEmpty()) {
-			backRadius = background.getFills().get(0).getRadii();
-		}
+        Background background = region.getBackground();
+        if (background != null && !background.isEmpty()) {
+            backRadius = background.getFills().get(0).getRadii();
+        }
 
-		Border border = region.getBorder();
-		if (border != null && !border.isEmpty()) {
-			bordRadius = border.getStrokes().get(0).getRadii();
-		}
+        Border border = region.getBorder();
+        if (border != null && !border.isEmpty()) {
+            bordRadius = border.getStrokes().get(0).getRadii();
+        }
 
-		return !backRadius.equals(CornerRadii.EMPTY) ? backRadius : bordRadius;
-	}
+        return !backRadius.equals(CornerRadii.EMPTY) ? backRadius : bordRadius;
+    }
 
-	@SafeVarargs
-	public static List<CssMetaData<? extends Styleable, ?>> cssMetaDataList(List<CssMetaData<? extends Styleable, ?>> styleable, CssMetaData<? extends Styleable, ?>... cssMetaData) {
-		CssMetaDataList styleableMetaData = new CssMetaDataList(styleable);
-		styleableMetaData.addAll(cssMetaData);
-		return styleableMetaData.toUnmodifiable();
-	}
+    @SafeVarargs
+    public static List<CssMetaData<? extends Styleable, ?>> cssMetaDataList(List<CssMetaData<? extends Styleable, ?>> styleable, CssMetaData<? extends Styleable, ?>... cssMetaData) {
+        CssMetaDataList styleableMetaData = new CssMetaDataList(styleable);
+        styleableMetaData.addAll(cssMetaData);
+        return styleableMetaData.toUnmodifiable();
+    }
 
-	public static class CssMetaDataList extends ArrayList<CssMetaData<? extends Styleable, ?>> {
-		public CssMetaDataList() {
-		}
+    public static class CssMetaDataList extends ArrayList<CssMetaData<? extends Styleable, ?>> {
+        public CssMetaDataList() {
+        }
 
-		public CssMetaDataList(Collection<? extends CssMetaData<? extends Styleable, ?>> c) {
-			super(c);
-		}
+        public CssMetaDataList(Collection<? extends CssMetaData<? extends Styleable, ?>> c) {
+            super(c);
+        }
 
-		@SafeVarargs
-		public final boolean addAll(CssMetaData<? extends Styleable, ?>... cssMetaData) {
-			return Collections.addAll(this, cssMetaData);
-		}
+        @SafeVarargs
+        public final boolean addAll(CssMetaData<? extends Styleable, ?>... cssMetaData) {
+            return Collections.addAll(this, cssMetaData);
+        }
 
-		public List<CssMetaData<? extends Styleable, ?>> toUnmodifiable() {
-			return Collections.unmodifiableList(this);
-		}
-	}
+        public List<CssMetaData<? extends Styleable, ?>> toUnmodifiable() {
+            return Collections.unmodifiableList(this);
+        }
+    }
 }

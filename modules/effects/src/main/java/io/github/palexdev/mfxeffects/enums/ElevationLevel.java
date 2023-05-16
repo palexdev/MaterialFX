@@ -55,7 +55,6 @@ public enum ElevationLevel {
 	private final double spread;
 	private final double offsetX;
 	private final double offsetY;
-	private static final ElevationLevel[] valuesArr = values();
 
 	ElevationLevel(double radius, double spread, double offsetX, double offsetY) {
 		this(Color.rgb(0, 0, 0, 0.20), radius, spread, offsetX, offsetY);
@@ -95,7 +94,7 @@ public enum ElevationLevel {
 	 * @return The next {@code DepthLevel}
 	 */
 	public ElevationLevel next() {
-		return valuesArr[(this.ordinal() + 1) % valuesArr.length];
+		return values()[(this.ordinal() + 1) % values().length];
 	}
 
 	public void animateTo(DropShadow current, ElevationLevel next) {
