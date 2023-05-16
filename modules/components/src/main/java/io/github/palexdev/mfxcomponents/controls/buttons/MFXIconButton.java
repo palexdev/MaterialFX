@@ -75,6 +75,24 @@ public class MFXIconButton extends MFXSelectable<MFXIconButtonBehavior> implemen
     }
 
     //================================================================================
+    // Variants
+    //================================================================================
+    public MFXIconButton filled() {
+        setVariants(IconButtonVariants.FILLED);
+        return this;
+    }
+
+    public MFXIconButton tonal() {
+        setVariants(IconButtonVariants.FILLED_TONAL);
+        return this;
+    }
+
+    public MFXIconButton outlined() {
+        setVariants(IconButtonVariants.OUTLINED);
+        return this;
+    }
+
+    //================================================================================
     // Methods
     //================================================================================
     private void initialize() {

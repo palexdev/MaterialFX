@@ -1,26 +1,21 @@
 package io.github.palexdev.mfxcomponents.controls.base;
 
-import io.github.palexdev.mfxcomponents.behaviors.base.MFXSelectableBehavior;
+import io.github.palexdev.mfxcomponents.behaviors.MFXSelectableBehaviorBase;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXIconButton;
 import io.github.palexdev.mfxcomponents.theming.enums.PseudoClasses;
-import io.github.palexdev.mfxcore.base.properties.EventHandlerProperty;
 import io.github.palexdev.mfxcore.selection.Selectable;
 import io.github.palexdev.mfxcore.selection.SelectionGroup;
 import io.github.palexdev.mfxcore.selection.SelectionGroupProperty;
 import io.github.palexdev.mfxcore.selection.SelectionProperty;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 
 /**
- * Base class for MaterialFX components that are selectables. Extends {@link MFXLabeled} since almost every kind of
- * 'selectable' (checks, radios, switches,...) are ofter accompanied by a label to show text
- * (An exception being {@link MFXIconButton}).
+ * Base class for MaterialFX components that are selectables and buttons. Extends {@link MFXButtonBase} since
+ * almost every kind of 'selectable' are buttons accompanied by text (checks, radios, switches,...).
+ * An exception being {@link MFXIconButton} that only shows an icon.
  * <p></p>
- * Implements the selection API/Behavior through the {@link Selectable} interface and the {@link MFXSelectableBehavior} class.
- * Also, following a little the JavaFX design, which treats 'selectables' as special buttons, it also has the property to
- * set an {@link EventHandler} for {@link ActionEvent}s (the usual {@code setOnAction(...)}), as well as the usual
- * {@link #fire()} method.
+ * Implements the selection API/Behavior through the {@link Selectable} interface.
+ * Expects behaviors of type {@link MFXSelectableBehaviorBase}.
  * <p></p>
  * Implementations of this may need to control the way selection works, for this reason there are two methods that are basically
  * hooks for pre/post selection change, see {@link #changeSelection(boolean)} and {@link #onSelectionChanged(boolean)}.
@@ -29,16 +24,10 @@ import javafx.scene.Node;
  * @see SelectionGroupProperty
  * @see SelectionGroup
  */
-public abstract class MFXSelectable<B extends MFXSelectableBehavior<? extends Node>> extends MFXLabeled<B> implements Selectable {
+public abstract class MFXSelectable<B extends MFXSelectableBehaviorBase<?>> extends MFXButtonBase<B> implements Selectable {
     //================================================================================
     // Properties
     //================================================================================
-    private final EventHandlerProperty<ActionEvent> onAction = new EventHandlerProperty<>() {
-        @Override
-        protected void invalidated() {
-            setEventHandler(ActionEvent.ACTION, get());
-        }
-    };
     private final SelectionGroupProperty selectionGroup = new SelectionGroupProperty(this);
     private final SelectionProperty selected = new SelectionProperty(this) {
         @Override
@@ -97,32 +86,9 @@ public abstract class MFXSelectable<B extends MFXSelectableBehavior<? extends No
         PseudoClasses.SELECTED.setOn(this, selected);
     }
 
-    /**
-     * If not disabled, fires a new {@link ActionEvent}, triggering the {@link EventHandler} specified
-     * by the {@link #onActionProperty()}.
-     */
-    public void fire() {
-        if (!isDisabled()) fireEvent(new ActionEvent());
-    }
-
     //================================================================================
     // Getters/Setters
     //================================================================================
-    public EventHandler<ActionEvent> getOnAction() {
-        return onAction.get();
-    }
-
-    /**
-     * Specifies the action to execute when an {@link ActionEvent} is fired on this button.
-     */
-    public EventHandlerProperty<ActionEvent> onActionProperty() {
-        return onAction;
-    }
-
-    public void setOnAction(EventHandler<ActionEvent> onAction) {
-        this.onAction.set(onAction);
-    }
-
     @Override
     public SelectionGroup getSelectionGroup() {
         return selectionGroup.get();

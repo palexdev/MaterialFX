@@ -64,155 +64,155 @@ public class FABTest extends Application {
     @Override
     public void start(Stage primaryStage) {
         VBox pane = new VBox(50);
-		pane.setAlignment(Pos.CENTER);
-		pane.setStyle("-fx-background-color: #FFFBFE");
+        pane.setAlignment(Pos.CENTER);
+        pane.setStyle("-fx-background-color: #FFFBFE");
 
-		pane.getChildren().addAll(
-				createFABTestView("Primary", MFXFab::new),
-				createFABTestView("Secondary", MFXFab::secondary),
-				createFABTestView("Tertiary", MFXFab::tertiary),
-				createFABTestView("Surface", MFXFab::surface),
+        pane.getChildren().addAll(
+            createFABTestView("Primary", MFXFab::new),
+            createFABTestView("Secondary", () -> new MFXFab().secondary()),
+            createFABTestView("Tertiary", () -> new MFXFab().tertiary()),
+            createFABTestView("Surface", () -> new MFXFab().surface()),
 
-				new Separator(Orientation.HORIZONTAL),
+            new Separator(Orientation.HORIZONTAL),
 
-				createFABTestView("Lowered Primary", MFXFab::lowered),
-				createFABTestView("Lowered Secondary", () -> MFXFab.secondary().addVariants(LOWERED)),
-				createFABTestView("Lowered Tertiary", () -> MFXFab.tertiary().addVariants(LOWERED)),
-				createFABTestView("Lowered Surface", () -> MFXFab.surface().addVariants(LOWERED)),
+            createFABTestView("Lowered Primary", () -> new MFXFab().lowered()),
+            createFABTestView("Lowered Secondary", () -> new MFXFab().secondary().addVariants(LOWERED)),
+            createFABTestView("Lowered Tertiary", () -> new MFXFab().tertiary().addVariants(LOWERED)),
+            createFABTestView("Lowered Surface", () -> new MFXFab().surface().addVariants(LOWERED)),
 
-				new Separator(Orientation.HORIZONTAL),
+            new Separator(Orientation.HORIZONTAL),
 
-				createFABTestView("Lowered Small Primary", () -> new MFXFab().addVariants(LOWERED, SMALL)),
-				createFABTestView("Lowered Small Secondary", () -> MFXFab.secondary().addVariants(LOWERED, SMALL)),
-				createFABTestView("Lowered Small Tertiary", () -> MFXFab.tertiary().addVariants(LOWERED, SMALL)),
-				createFABTestView("Lowered Small Surface", () -> MFXFab.surface().addVariants(LOWERED, SMALL)),
+            createFABTestView("Lowered Small Primary", () -> new MFXFab().addVariants(LOWERED, SMALL)),
+            createFABTestView("Lowered Small Secondary", () -> new MFXFab().secondary().addVariants(LOWERED, SMALL)),
+            createFABTestView("Lowered Small Tertiary", () -> new MFXFab().tertiary().addVariants(LOWERED, SMALL)),
+            createFABTestView("Lowered Small Surface", () -> new MFXFab().surface().addVariants(LOWERED, SMALL)),
 
-				new Separator(Orientation.HORIZONTAL),
+            new Separator(Orientation.HORIZONTAL),
 
-				createFABTestView("Lowered Large Primary", () -> new MFXFab().addVariants(LOWERED, LARGE)),
-				createFABTestView("Lowered Large Secondary", () -> MFXFab.secondary().addVariants(FABVariants.LOWERED, LARGE)),
-				createFABTestView("Lowered Large Tertiary", () -> MFXFab.tertiary().addVariants(FABVariants.LOWERED, LARGE)),
-				createFABTestView("Lowered Large Surface", () -> MFXFab.surface().addVariants(FABVariants.LOWERED, LARGE))
-		);
-		String theme = MFXResources.load("themes/material/md-purple-" + variant + ".css");
-		//String theme = MFXThemeManager.LIGHT.load();
-		pane.getStylesheets().add(theme);
-		pane.setPadding(InsetsBuilder.of(15, 5, 15, 5));
+            createFABTestView("Lowered Large Primary", () -> new MFXFab().addVariants(LOWERED, LARGE)),
+            createFABTestView("Lowered Large Secondary", () -> new MFXFab().secondary().addVariants(FABVariants.LOWERED, LARGE)),
+            createFABTestView("Lowered Large Tertiary", () -> new MFXFab().tertiary().addVariants(FABVariants.LOWERED, LARGE)),
+            createFABTestView("Lowered Large Surface", () -> new MFXFab().surface().addVariants(FABVariants.LOWERED, LARGE))
+        );
+        String theme = MFXResources.load("themes/material/md-purple-" + variant + ".css");
+        //String theme = MFXThemeManager.LIGHT.load();
+        pane.getStylesheets().add(theme);
+        pane.setPadding(InsetsBuilder.of(15, 5, 15, 5));
 
-		ScrollPane sp = new ScrollPane(pane);
-		sp.setFitToWidth(true);
-		sp.setFitToHeight(true);
-		sp.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        ScrollPane sp = new ScrollPane(pane);
+        sp.setFitToWidth(true);
+        sp.setFitToHeight(true);
+        sp.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
-		Scene scene = new Scene(sp, 1440, 900);
-		primaryStage.setScene(scene);
-		primaryStage.show();
+        Scene scene = new Scene(sp, 1440, 900);
+        primaryStage.setScene(scene);
+        primaryStage.show();
 
-		ScenicView.show(scene);
-	}
+        ScenicView.show(scene);
+    }
 
-	private Node createButtonTestView(Supplier<MFXButton> factory) {
-		TriConsumer<String, PseudoClass, MFXButton> cfg = (s, p, b) -> {
-			b.setText(s);
-			b.setGraphic(new MFXFontIcon("fas-circle"));
-			if (p != null) {
-				b.pseudoClassStateChanged(p, true);
-				b.setMouseTransparent(true);
-			}
-		};
+    private Node createButtonTestView(Supplier<MFXButton> factory) {
+        TriConsumer<String, PseudoClass, MFXButton> cfg = (s, p, b) -> {
+            b.setText(s);
+            b.setGraphic(new MFXFontIcon("fas-circle"));
+            if (p != null) {
+                b.pseudoClassStateChanged(p, true);
+                b.setMouseTransparent(true);
+            }
+        };
 
-		MFXButton enabled = factory.get();
-		cfg.accept("Enabled", null, enabled);
+        MFXButton enabled = factory.get();
+        cfg.accept("Enabled", null, enabled);
 
-		MFXButton disabled = factory.get();
-		cfg.accept("Disabled", DISABLE, disabled);
+        MFXButton disabled = factory.get();
+        cfg.accept("Disabled", DISABLE, disabled);
 
-		MFXButton hover = factory.get();
-		cfg.accept("Hover", HOVER, hover);
+        MFXButton hover = factory.get();
+        cfg.accept("Hover", HOVER, hover);
 
-		MFXButton focused = factory.get();
-		cfg.accept("Focused", FOCUS, focused);
+        MFXButton focused = factory.get();
+        cfg.accept("Focused", FOCUS, focused);
 
-		MFXButton pressed = factory.get();
-		cfg.accept("Pressed", PRESS, pressed);
+        MFXButton pressed = factory.get();
+        cfg.accept("Pressed", PRESS, pressed);
 
-		MFXButton ripple = factory.get();
-		cfg.accept("Ripple", null, ripple);
-		automaticRipple(ripple);
+        MFXButton ripple = factory.get();
+        cfg.accept("Ripple", null, ripple);
+        automaticRipple(ripple);
 
-		HBox box = new HBox(30, enabled, disabled, hover, focused, pressed, ripple);
-		box.setAlignment(Pos.CENTER);
-		return box;
-	}
+        HBox box = new HBox(30, enabled, disabled, hover, focused, pressed, ripple);
+        box.setAlignment(Pos.CENTER);
+        return box;
+    }
 
-	private Node createFABTestView(String variant, Supplier<MFXFabBase> factory) {
-		TriConsumer<String, PseudoClass, MFXFabBase> cfg = (s, p, b) -> {
-			b.setText(s);
-			b.setIcon(new MFXFontIcon("fas-circle"));
-			if (p != null) {
-				b.pseudoClassStateChanged(p, true);
-				b.setMouseTransparent(true);
-			}
-			boolean isStandard = b.getStyleClass().contains("small") || b.getStyleClass().contains("large");
-			b.setExtended(!isStandard);
-		};
+    private Node createFABTestView(String variant, Supplier<MFXFabBase> factory) {
+        TriConsumer<String, PseudoClass, MFXFabBase> cfg = (s, p, b) -> {
+            b.setText(s);
+            b.setIcon(new MFXFontIcon("fas-circle"));
+            if (p != null) {
+                b.pseudoClassStateChanged(p, true);
+                b.setMouseTransparent(true);
+            }
+            boolean isStandard = b.getStyleClass().contains("small") || b.getStyleClass().contains("large");
+            b.setExtended(!isStandard);
+        };
 
-		MFXFabBase enabled = factory.get();
-		cfg.accept("Enabled", null, enabled);
+        MFXFabBase enabled = factory.get();
+        cfg.accept("Enabled", null, enabled);
 
-		MFXFabBase disabled = factory.get();
-		cfg.accept("Disabled", DISABLE, disabled);
+        MFXFabBase disabled = factory.get();
+        cfg.accept("Disabled", DISABLE, disabled);
 
-		MFXFabBase hover = factory.get();
-		cfg.accept("Hover", HOVER, hover);
+        MFXFabBase hover = factory.get();
+        cfg.accept("Hover", HOVER, hover);
 
-		MFXFabBase focused = factory.get();
-		cfg.accept("Focused", FOCUS, focused);
+        MFXFabBase focused = factory.get();
+        cfg.accept("Focused", FOCUS, focused);
 
-		MFXFabBase pressed = factory.get();
-		cfg.accept("Pressed", PRESS, pressed);
+        MFXFabBase pressed = factory.get();
+        cfg.accept("Pressed", PRESS, pressed);
 
-		MFXFabBase ripple = factory.get();
-		cfg.accept("Ripple", null, ripple);
-		automaticRipple(ripple);
+        MFXFabBase ripple = factory.get();
+        cfg.accept("Ripple", null, ripple);
+        automaticRipple(ripple);
 
-		Label label = new Label(variant);
-		label.setMinWidth(200);
-		HBox box = new HBox(30, label, enabled, disabled, hover, focused, pressed, ripple);
-		box.setAlignment(Pos.CENTER);
-		return box;
-	}
+        Label label = new Label(variant);
+        label.setMinWidth(200);
+        HBox box = new HBox(30, label, enabled, disabled, hover, focused, pressed, ripple);
+        box.setAlignment(Pos.CENTER);
+        return box;
+    }
 
-	private void automaticRipple(Node node) {
-		TimelineBuilder.build()
-				.setCycleCount(Animation.INDEFINITE)
-				.add(KeyFrames.of(3000, e -> {
-					Bounds sceb = node.localToScene(node.getLayoutBounds());
-					Bounds scrb = node.localToScreen(node.getLayoutBounds());
-					MouseEvent me = new MouseEvent(
-							MouseEvent.MOUSE_PRESSED,
-							sceb.getCenterX(), sceb.getCenterY(),
-							scrb.getCenterX(), scrb.getCenterY(),
-							MouseButton.PRIMARY, 1,
-							false, false, false, false,
-							false, false, false,
-							false, false, false,
-							null
-					);
-					Event.fireEvent(node, me);
-				}))
-				.getAnimation()
-				.play();
+    private void automaticRipple(Node node) {
+        TimelineBuilder.build()
+            .setCycleCount(Animation.INDEFINITE)
+            .add(KeyFrames.of(3000, e -> {
+                Bounds sceb = node.localToScene(node.getLayoutBounds());
+                Bounds scrb = node.localToScreen(node.getLayoutBounds());
+                MouseEvent me = new MouseEvent(
+                    MouseEvent.MOUSE_PRESSED,
+                    sceb.getCenterX(), sceb.getCenterY(),
+                    scrb.getCenterX(), scrb.getCenterY(),
+                    MouseButton.PRIMARY, 1,
+                    false, false, false, false,
+                    false, false, false,
+                    false, false, false,
+                    null
+                );
+                Event.fireEvent(node, me);
+            }))
+            .getAnimation()
+            .play();
 
-		When.onChanged(node.parentProperty())
-				.condition((o, n) -> n != null)
-				.then((o, n) -> CSSFragment.Builder.build()
-						.addSelector(".mfx-ripple-generator")
-						.addStyle("-mfx-animation-speed: 0.4")
-						.closeSelector()
-						.applyOn(n)
-				)
-				.oneShot()
-				.listen();
-	}
+        When.onChanged(node.parentProperty())
+            .condition((o, n) -> n != null)
+            .then((o, n) -> CSSFragment.Builder.build()
+                .addSelector(".mfx-ripple-generator")
+                .addStyle("-mfx-animation-speed: 0.4")
+                .closeSelector()
+                .applyOn(n)
+            )
+            .oneShot()
+            .listen();
+    }
 }

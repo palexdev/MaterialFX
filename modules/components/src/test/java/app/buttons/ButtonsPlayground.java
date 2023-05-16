@@ -21,7 +21,9 @@ package app.buttons;
 import app.ComponentsLauncher;
 import app.others.ui.*;
 import fr.brouillard.oss.cssfx.CSSFX;
-import io.github.palexdev.mfxcomponents.controls.buttons.*;
+import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
+import io.github.palexdev.mfxcomponents.controls.buttons.MFXIconButton;
+import io.github.palexdev.mfxcomponents.controls.buttons.MFXSegmentedButton;
 import io.github.palexdev.mfxcomponents.controls.fab.MFXFab;
 import io.github.palexdev.mfxcomponents.theming.enums.FABVariants;
 import io.github.palexdev.mfxcomponents.theming.enums.IconButtonVariants;
@@ -70,7 +72,7 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
         CSSFX.start();
         registerViews();
 
-        MFXFab themeSwitcher = MFXFab.lowered();
+        MFXFab themeSwitcher = new MFXFab().lowered();
         MFXFontIcon icon = new MFXFontIcon("fas-moon");
         themeSwitcher.setExtended(true);
         themeSwitcher.textProperty().bind(themeVariant.map(s -> s.equals("light") ? "Dark" : "Light"));
@@ -91,19 +93,19 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
             protected void layoutChildren() {
                 super.layoutChildren();
                 layoutInArea(themeSwitcher,
-                        getLayoutX(), getLayoutY(),
-                        getWidth(), getHeight(), 0,
-                        InsetsBuilder.of(0, 24, 16, 0), HPos.RIGHT, VPos.BOTTOM
+                    getLayoutX(), getLayoutY(),
+                    getWidth(), getHeight(), 0,
+                    InsetsBuilder.of(0, 24, 16, 0), HPos.RIGHT, VPos.BOTTOM
                 );
             }
         };
         sp.setFitToWidth(true);
         sp.setFitToHeight(true);
         CSSFragment.Builder.build()
-                .addSelector(".scroll-pane, .scroll-pane .viewport")
-                .addStyle("-fx-background-color: transparent")
-                .closeSelector()
-                .applyOn(sp);
+            .addSelector(".scroll-pane, .scroll-pane .viewport")
+            .addStyle("-fx-background-color: transparent")
+            .closeSelector()
+            .applyOn(sp);
 
         Size ws = UIUtils.getWindowSize();
         Scene scene = new Scene(sp, ws.getWidth(), ws.getHeight());
@@ -117,7 +119,7 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
             String iconDesc = themeVariant.get().equals("light") ? "fas-sun" : "fas-moon";
             themeVariant.set(newVariant);
             loadStyleSheet(scene);
-            themeSwitcher.getFabBehavior().ifPresent(b -> b.changeIcon(new MFXFontIcon(iconDesc)));
+            themeSwitcher.getBehavior().changeIcon(new MFXFontIcon(iconDesc));
         });
         sp.getChildren().add(themeSwitcher);
 
@@ -134,6 +136,7 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
         switcher.register("fabs", s -> fabView());
         switcher.register("extended-fabs", s -> extendedFabView());
         switcher.register("icon-buttons", s -> iconButtonsView());
+        switcher.register("segmented-buttons", s -> segmentedButtonsView());
     }
 
     @Override
@@ -145,8 +148,8 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
     public List<String> getStylesheet() {
         String base = ComponentsLauncher.load("AppBase.css");
         String theme = themeVariant.get().equals("light") ?
-                MFXThemeManager.PURPLE_LIGHT.load() :
-                MFXThemeManager.PURPLE_DARK.load();
+            MFXThemeManager.PURPLE_LIGHT.load() :
+            MFXThemeManager.PURPLE_DARK.load();
         return List.of(base, theme);
     }
 
@@ -155,23 +158,23 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
     //================================================================================
 
     private Node ebView() {
-        return createButtonsView("Elevated Buttons", MFXElevatedButton::new);
+        return createButtonsView("Elevated Buttons", MFXButton::new);
     }
 
     private Node fbView() {
-        return createButtonsView("Filled Buttons", MFXFilledButton::new);
+        return createButtonsView("Filled Buttons", (s, node) -> new MFXButton(s, node).filled());
     }
 
     private Node tfbView() {
-        return createButtonsView("Tonal Filled Buttons", MFXTonalFilledButton::new);
+        return createButtonsView("Tonal Filled Buttons", (s, node) -> new MFXButton(s, node).tonal());
     }
 
     private Node obView() {
-        return createButtonsView("Outlined Buttons", MFXOutlinedButton::new);
+        return createButtonsView("Outlined Buttons", (s, node) -> new MFXButton(s, node).outlined());
     }
 
     private Node tbView() {
-        return createButtonsView("Text Buttons", 600, MFXTextButton::new);
+        return createButtonsView("Text Buttons", 600, (s, node) -> new MFXButton(s, node).text());
     }
 
     private Node fabView() {
@@ -222,6 +225,10 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
         return box;
     }
 
+    private Node segmentedButtonsView() {
+        return createSegmentedButtonsView("Segmented Buttons");
+    }
+
     // Creators
     private Node createButtonsView(String title, BiFunction<String, Node, MFXButton> generator) {
         return createButtonsView(title, 700, generator);
@@ -260,11 +267,11 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
         TitledFlowPane defTfp = new TitledFlowPane(title);
         defTfp.setMaxWidth(length);
 
-        MFXButton btn0 = generator.apply("Enabled", randomIcon(FONTAWESOME_SOLID));
-        MFXButton btn1 = generator.apply("Disabled", randomIcon(FONTAWESOME_SOLID));
-        MFXButton btn2 = generator.apply("Hovered", randomIcon(FONTAWESOME_SOLID));
-        MFXButton btn3 = generator.apply("Focused", randomIcon(FONTAWESOME_SOLID));
-        MFXButton btn4 = generator.apply("Pressed", randomIcon(FONTAWESOME_SOLID));
+        MFXFab btn0 = generator.apply("Enabled", randomIcon(FONTAWESOME_SOLID));
+        MFXFab btn1 = generator.apply("Disabled", randomIcon(FONTAWESOME_SOLID));
+        MFXFab btn2 = generator.apply("Hovered", randomIcon(FONTAWESOME_SOLID));
+        MFXFab btn3 = generator.apply("Focused", randomIcon(FONTAWESOME_SOLID));
+        MFXFab btn4 = generator.apply("Pressed", randomIcon(FONTAWESOME_SOLID));
         MFXFab btn5 = generator.apply("Small", randomIcon(FONTAWESOME_SOLID));
         MFXFab btn6 = generator.apply("Large", randomIcon(FONTAWESOME_SOLID));
         MFXFab btn7 = generator.apply("Large Lowered", randomIcon(FONTAWESOME_SOLID));
@@ -283,7 +290,7 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
         btn8.addVariants(FABVariants.LOWERED, FABVariants.LARGE);
 
         btn8.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
-            btn8.getFabBehavior().ifPresent(b -> b.changeIcon(randomIcon(FONTAWESOME_SOLID)));
+            btn8.getBehavior().changeIcon(randomIcon(FONTAWESOME_SOLID));
             e.consume();
         });
 
@@ -299,11 +306,11 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
         TitledFlowPane defTfp = new TitledFlowPane(title);
         defTfp.setMaxWidth(length);
 
-        MFXButton btn0 = generator.apply("Enabled", randomIcon(FONTAWESOME_SOLID));
-        MFXButton btn1 = generator.apply("Disabled", randomIcon(FONTAWESOME_SOLID));
-        MFXButton btn2 = generator.apply("Hovered", randomIcon(FONTAWESOME_SOLID));
-        MFXButton btn3 = generator.apply("Focused", randomIcon(FONTAWESOME_SOLID));
-        MFXButton btn4 = generator.apply("Pressed", randomIcon(FONTAWESOME_SOLID));
+        MFXFab btn0 = generator.apply("Enabled", randomIcon(FONTAWESOME_SOLID));
+        MFXFab btn1 = generator.apply("Disabled", randomIcon(FONTAWESOME_SOLID));
+        MFXFab btn2 = generator.apply("Hovered", randomIcon(FONTAWESOME_SOLID));
+        MFXFab btn3 = generator.apply("Focused", randomIcon(FONTAWESOME_SOLID));
+        MFXFab btn4 = generator.apply("Pressed", randomIcon(FONTAWESOME_SOLID));
         MFXFab btn5 = generator.apply("Text Only", randomIcon(FONTAWESOME_SOLID));
         MFXFab btn6 = generator.apply("Expandable", randomIcon(FONTAWESOME_SOLID));
         MFXFab btn7 = generator.apply("Change Icon", randomIcon(FONTAWESOME_SOLID));
@@ -318,14 +325,14 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
         btn4.pseudoClassStateChanged(PseudoClass.getPseudoClass("pressed"), true);
 
         btn5.setContentDisplay(ContentDisplay.TEXT_ONLY);
-        btn5.setAlignment(Pos.CENTER);
+        btn5.setAlignment(Pos.CENTER_RIGHT);
         btn8.addVariants(FABVariants.LOWERED);
         btn8.setContentDisplay(ContentDisplay.TEXT_ONLY);
         btn8.setAlignment(Pos.CENTER);
 
         btn6.setExtended(false);
         btn6.setOnAction(e -> btn6.setExtended(!btn6.isExtended()));
-        btn7.setOnAction(e -> btn7.getFabBehavior().ifPresent(b -> b.changeIcon(randomIcon(FONTAWESOME_SOLID))));
+        btn7.setOnAction(e -> btn7.getBehavior().changeIcon(randomIcon(FONTAWESOME_SOLID)));
 
         defTfp.add(btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8);
         return defTfp;
@@ -366,10 +373,9 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
         btn8.setMouseTransparent(true);
         btn8.pseudoClassStateChanged(PseudoClass.getPseudoClass("pressed"), true);
         btn9.setDisable(true);
-        btn5.setOnAction(e -> System.out.println("Fire!: " + btn5.isSelected()));
 
         if (btn5.getStyleClass().contains(IconButtonVariants.OUTLINED.variantStyleClass()) ||
-                btn5.getStyleClass().size() == 1) {
+            btn5.getStyleClass().size() == 1) {
             btn5.setSelected(true);
             btn6.setSelected(true);
             btn7.setSelected(true);
@@ -379,5 +385,29 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
 
         defTfp.add(btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9);
         return defTfp;
+    }
+
+    private Node createSegmentedButtonsView(String title) {
+        TitledFlowPane defTP = new TitledFlowPane(title);
+
+        MFXSegmentedButton woIcons = new MFXSegmentedButton();
+        for (int i = 0; i < 5; i++) {
+            woIcons.addSegment(null, "Segment " + i);
+        }
+
+        MFXSegmentedButton wIcons = new MFXSegmentedButton();
+        for (int i = 0; i < 5; i++) {
+            wIcons.addSegment(FONTAWESOME_SOLID.randomIcon(), "Segment " + i);
+        }
+
+        MFXSegmentedButton wDisabled = new MFXSegmentedButton();
+        for (int i = 0; i < 5; i++) {
+            wDisabled.addSegment(FONTAWESOME_SOLID.randomIcon(), "Segment " + i);
+        }
+        wDisabled.getSegments().get(1).setDisable(true);
+        wDisabled.getSegments().get(2).setDisable(true);
+
+        defTP.add(woIcons, wIcons, wDisabled);
+        return defTP;
     }
 }

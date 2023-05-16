@@ -19,9 +19,8 @@
 package interactive;
 
 import com.sun.javafx.tk.Toolkit;
-import io.github.palexdev.mfxcomponents.behaviors.MFXButtonBehavior;
+import io.github.palexdev.mfxcomponents.behaviors.MFXButtonBehaviorBase;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
-import io.github.palexdev.mfxcomponents.controls.buttons.MFXFilledButton;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXIconButton;
 import io.github.palexdev.mfxcomponents.skins.MFXButtonSkin;
 import io.github.palexdev.mfxcomponents.theming.enums.MFXThemeManager;
@@ -92,12 +91,12 @@ public class TestButton {
     @Test
     void testInitBehavior(FxRobot robot) {
         StackPane root = setupStage();
-        MFXButton filled = new MFXFilledButton() {
+        MFXButton filled = new MFXButton() {
             @Override
-            public Supplier<MFXButtonBehavior> defaultBehaviorProvider() {
+            public Supplier<MFXButtonBehaviorBase<MFXButton>> defaultBehaviorProvider() {
                 return () -> new InitBehavior(this);
             }
-        };
+        }.filled();
         filled.setText("Init Button");
         filled.changeSkin(new InitSkin(filled));
         robot.interact(() -> root.getChildren().setAll(filled));
@@ -110,7 +109,7 @@ public class TestButton {
     void testOnAction(FxRobot robot) {
         StackPane root = setupStage();
         AtomicInteger cnt = new AtomicInteger(0);
-        MFXButton button = new MFXFilledButton("Text");
+        MFXButton button = new MFXButton("Text").filled();
         button.setOnAction(e -> cnt.incrementAndGet());
         robot.interact(() -> root.getChildren().add(button));
 
@@ -135,7 +134,7 @@ public class TestButton {
     //================================================================================
     // Internal Classes
     //================================================================================
-    private static class InitBehavior extends MFXButtonBehavior {
+    private static class InitBehavior extends MFXButtonBehaviorBase<MFXButton> {
         private boolean isInit = false;
 
         public InitBehavior(MFXButton node) {
@@ -148,16 +147,9 @@ public class TestButton {
         }
     }
 
-    private static class InitSkin extends MFXButtonSkin {
-
+    private static class InitSkin extends MFXButtonSkin<MFXButton, MFXButtonBehaviorBase<MFXButton>> {
         public InitSkin(MFXButton button) {
             super(button);
-        }
-
-        @Override
-        protected void initBehavior(MFXButtonBehavior behavior) {
-            super.initBehavior(behavior);
-            ((InitBehavior) behavior).init();
         }
     }
 }

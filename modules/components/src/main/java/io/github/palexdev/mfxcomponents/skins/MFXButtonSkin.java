@@ -18,14 +18,14 @@
 
 package io.github.palexdev.mfxcomponents.skins;
 
-import io.github.palexdev.mfxcomponents.behaviors.MFXButtonBehavior;
+import io.github.palexdev.mfxcomponents.behaviors.MFXButtonBehaviorBase;
+import io.github.palexdev.mfxcomponents.controls.MaterialSurface;
+import io.github.palexdev.mfxcomponents.controls.base.MFXButtonBase;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
 import io.github.palexdev.mfxcomponents.skins.base.MFXLabeledSkin;
 import io.github.palexdev.mfxcomponents.theming.enums.PseudoClasses;
 import io.github.palexdev.mfxcore.observables.When;
 import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
-import io.github.palexdev.mfxcore.utils.fx.TextUtils;
-import io.github.palexdev.mfxeffects.ripple.MFXRippleGenerator;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.ContentDisplay;
@@ -36,35 +36,35 @@ import javafx.scene.paint.Color;
 import static io.github.palexdev.mfxcore.observables.When.onChanged;
 
 /**
- * Default skin implementation for {@link MFXButton}s.
+ * Base skin implementation for all components of type {@link MFXButtonBase}.
  * <p>
- * This skin uses behaviors of type {@link MFXButtonBehavior}.
+ * This skin uses behaviors of type {@link MFXButtonBehaviorBase}.
  * <p></p>
- * The layout is simple, there are just the label to show the text and the {@link MFXRippleGenerator} to generate ripples.
+ * The layout is simple, there are just the label to show the text and the {@link MaterialSurface} responsible for
+ * showing the various interaction states (applying an overlay background) and generating ripple effects.
+ * About ripple generation, see also {@link MFXButtonBehaviorBase#generateRipple(MouseEvent)} and
+ * {@link MFXButtonBehaviorBase#getRippleGenerator()}
  */
-public class MFXButtonSkin extends MFXLabeledSkin<MFXButton, MFXButtonBehavior> {
+public class MFXButtonSkin<T extends MFXButtonBase<B>, B extends MFXButtonBehaviorBase<T>> extends MFXLabeledSkin<T, B> {
     //================================================================================
     // Properties
     //================================================================================
-    protected final MFXRippleGenerator rg;
+    protected final MaterialSurface surface;
     protected When<ContentDisplay> cdWhen;
 
     //================================================================================
     // Constructors
     //================================================================================
-    public MFXButtonSkin(MFXButton button) {
+    public MFXButtonSkin(T button) {
         super(button);
+        initTextMeasurementCache();
 
-        // Init ripple generator
-        rg = new MFXRippleGenerator(button);
-        rg.setManaged(false);
-        rg.setAnimateBackground(false);
-        rg.setAutoClip(true);
-        rg.setRipplePrefSize(50);
-        rg.setRippleColor(Color.web("d7d1e7"));
+        // Init surface
+        surface = new MaterialSurface(button)
+            .initRipple(rg -> rg.setRippleColor(Color.web("#d7d1e7")));
 
         // Finalize init
-        getChildren().addAll(rg, label);
+        getChildren().addAll(surface, label);
         addListeners();
     }
 
@@ -78,7 +78,7 @@ public class MFXButtonSkin extends MFXLabeledSkin<MFXButton, MFXButtonBehavior> 
      * {@link PseudoClasses#WITH_ICON_LEFT} and {@link PseudoClasses#WITH_ICON_RIGHT} accordingly
      */
     protected void addListeners() {
-        MFXButton button = getSkinnable();
+        T button = getSkinnable();
         cdWhen = onChanged(button.contentDisplayProperty())
             .then((o, n) -> {
                 Node graphic = button.getGraphic();
@@ -97,23 +97,26 @@ public class MFXButtonSkin extends MFXLabeledSkin<MFXButton, MFXButtonBehavior> 
     //================================================================================
 
     /**
-     * Initializes the given {@link MFXButtonBehavior} to handle events such as: {@link MouseEvent#MOUSE_PRESSED},
-     * {@link MouseEvent#MOUSE_CLICKED}, {@link KeyEvent#KEY_PRESSED}.
+     * Initializes the given {@link MFXButtonBehaviorBase} to handle events such as: {@link MouseEvent#MOUSE_PRESSED},
+     * {@link MouseEvent#MOUSE_RELEASED}, {@link MouseEvent#MOUSE_CLICKED}, {@link MouseEvent#MOUSE_EXITED} and
+     * {@link KeyEvent#KEY_PRESSED}.
      */
     @Override
-    protected void initBehavior(MFXButtonBehavior behavior) {
-        MFXButton button = getSkinnable();
-        handle(button, MouseEvent.MOUSE_PRESSED, behavior::generateRipple);
+    protected void initBehavior(B behavior) {
+        T button = getSkinnable();
+        behavior.init();
         handle(button, MouseEvent.MOUSE_PRESSED, behavior::mousePressed);
+        handle(button, MouseEvent.MOUSE_RELEASED, behavior::mouseReleased);
         handle(button, MouseEvent.MOUSE_CLICKED, behavior::mouseClicked);
+        handle(button, MouseEvent.MOUSE_EXITED, behavior::mouseExited);
         handle(button, KeyEvent.KEY_PRESSED, behavior::keyPressed);
     }
 
     @Override
     public double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        MFXButton button = getSkinnable();
+        T button = getSkinnable();
         double insets = leftInset + rightInset;
-        double tW = snapSizeX(TextUtils.computeTextWidth(label.getFont(), label.getText()));
+        double tW = tmCache.getSnappedWidth();
         if (button.getContentDisplay() == ContentDisplay.GRAPHIC_ONLY) tW = 0;
         double gW = (button.getGraphic() != null) ? LayoutUtils.boundWidth(button.getGraphic()) + button.getGraphicTextGap() : 0.0;
         return insets + tW + gW;
@@ -121,9 +124,9 @@ public class MFXButtonSkin extends MFXLabeledSkin<MFXButton, MFXButtonBehavior> 
 
     @Override
     public double computePrefHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-        MFXButton button = getSkinnable();
+        T button = getSkinnable();
         double insets = topInset + bottomInset;
-        double tH = snapSizeY(TextUtils.computeTextHeight(label.getFont(), label.getText()));
+        double tH = tmCache.getSnappedHeight();
         double gH = button.getGraphic() != null ? LayoutUtils.boundHeight(button.getGraphic()) : 0.0;
         return insets + Math.max(tH, gH);
     }
@@ -140,15 +143,15 @@ public class MFXButtonSkin extends MFXLabeledSkin<MFXButton, MFXButtonBehavior> 
 
     @Override
     protected void layoutChildren(double x, double y, double w, double h) {
-        MFXButton button = getSkinnable();
+        T button = getSkinnable();
         Pos pos = button.getAlignment();
         layoutInArea(label, x, y, w, h, 0, pos.getHpos(), pos.getVpos());
-        rg.resizeRelocate(0, 0, button.getWidth(), button.getHeight());
+        surface.resizeRelocate(0, 0, button.getWidth(), button.getHeight());
     }
 
     @Override
     public void dispose() {
-        rg.dispose();
+        surface.dispose();
         label.getTextNode().ifPresent(n -> n.opacityProperty().unbind());
         cdWhen.dispose();
         cdWhen = null;

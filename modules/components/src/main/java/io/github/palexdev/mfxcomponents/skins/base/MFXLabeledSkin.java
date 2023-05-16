@@ -4,6 +4,7 @@ import io.github.palexdev.mfxcomponents.controls.base.MFXLabeled;
 import io.github.palexdev.mfxcomponents.controls.base.MFXSkinBase;
 import io.github.palexdev.mfxcore.behavior.BehaviorBase;
 import io.github.palexdev.mfxcore.controls.BoundLabel;
+import io.github.palexdev.mfxcore.utils.fx.TextMeasurementCache;
 
 import java.util.function.Consumer;
 
@@ -19,32 +20,60 @@ import java.util.function.Consumer;
  * @see BoundLabel
  */
 public abstract class MFXLabeledSkin<L extends MFXLabeled<B>, B extends BehaviorBase<L>> extends MFXSkinBase<L, B> {
-	//================================================================================
-	// Properties
-	//================================================================================
-	protected final BoundLabel label;
+    //================================================================================
+    // Properties
+    //================================================================================
+    protected final BoundLabel label;
+    protected TextMeasurementCache tmCache;
 
-	//================================================================================
-	// Constructors
-	//================================================================================
-	public MFXLabeledSkin(L labeled) {
-		super(labeled);
-		label = createLabel(labeled);
-	}
+    //================================================================================
+    // Constructors
+    //================================================================================
+    public MFXLabeledSkin(L labeled) {
+        super(labeled);
+        label = createLabel(labeled);
+    }
 
-	//================================================================================
-	// Methods
-	//================================================================================
+    //================================================================================
+    // Methods
+    //================================================================================
 
-	/**
-	 * Creates the {@link BoundLabel} which will display the component's text.
-	 * <p></p>
-	 * By default, also sets the {@link BoundLabel#onSetTextNode(Consumer)} action to bind the text node opacity property
-	 * to {@link MFXLabeled#textOpacityProperty()}.
-	 */
-	protected BoundLabel createLabel(L labeled) {
-		BoundLabel bl = new BoundLabel(labeled);
-		bl.onSetTextNode(n -> n.opacityProperty().bind(labeled.textOpacityProperty()));
-		return bl;
-	}
+    /**
+     * Initializes the {@link TextMeasurementCache} instance of this skin.
+     * Implementations that heavily rely on such computations should call this and use {@link #getCachedTextWidth()}
+     * and {@link #getCachedTextHeight()} to retrieve the text sizes when needed.
+     */
+    protected void initTextMeasurementCache() {
+        if (tmCache == null) tmCache = new TextMeasurementCache(getSkinnable());
+    }
+
+    /**
+     * Creates the {@link BoundLabel} which will display the component's text.
+     * <p></p>
+     * By default, also sets the {@link BoundLabel#onSetTextNode(Consumer)} action to bind the text node opacity property
+     * to {@link MFXLabeled#textOpacityProperty()}.
+     */
+    protected BoundLabel createLabel(L labeled) {
+        BoundLabel bl = new BoundLabel(labeled);
+        bl.onSetTextNode(n -> n.opacityProperty().bind(labeled.textOpacityProperty()));
+        return bl;
+    }
+
+    //================================================================================
+    // Getters
+    //================================================================================
+
+    /**
+     * Delegate for {@link TextMeasurementCache#getSnappedWidth()}. If the cache was not initialized before, returns -1.
+     */
+    public double getCachedTextWidth() {
+        return (tmCache != null) ? tmCache.getSnappedWidth() : -1.0;
+    }
+
+    /**
+     * Delegate for {@link TextMeasurementCache#getSnappedHeight()}. If the cache was not initialized before, returns -1.
+     */
+    public double getCachedTextHeight() {
+        return (tmCache != null) ? tmCache.getSnappedHeight() : -1.0;
+    }
 }

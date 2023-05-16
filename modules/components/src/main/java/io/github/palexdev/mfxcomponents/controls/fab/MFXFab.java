@@ -44,115 +44,106 @@ import java.util.List;
  */
 public class MFXFab extends MFXFabBase implements WithVariants<MFXFab, FABVariants> {
 
-	//================================================================================
-	// Constructors
-	//================================================================================
-	public MFXFab() {
-		this("");
-	}
+    //================================================================================
+    // Constructors
+    //================================================================================
+    public MFXFab() {
+        this("");
+    }
 
-	public MFXFab(String text) {
-		this(text, null);
-	}
+    public MFXFab(String text) {
+        this(text, null);
+    }
 
-	public MFXFab(MFXFontIcon icon) {
-		this("", icon);
-	}
+    public MFXFab(MFXFontIcon icon) {
+        this("", icon);
+    }
 
-	public MFXFab(String text, MFXFontIcon icon) {
-		super(text, icon);
-	}
+    public MFXFab(String text, MFXFontIcon icon) {
+        super(text, icon);
+    }
 
-	/**
-	 * Creates a new {@code MFXFab}, small variant.
-	 */
-	public static MFXFab small() {
-		return new MFXFab().setVariants(FABVariants.SMALL);
-	}
+    /**
+     * Creates a new {@link MFXFab} which is extended (shows text).
+     */
+    public static MFXFab extended() {
+        MFXFab fab = new MFXFab();
+        fab.setExtended(true);
+        return fab;
+    }
 
-	/**
-	 * Creates a new {@code MFXFab}, large variant.
-	 */
-	public static MFXFab large() {
-		return new MFXFab().setVariants(FABVariants.LARGE);
-	}
+    //================================================================================
+    // Variants
+    //================================================================================
+    public MFXFab small() {
+        setVariants(FABVariants.SMALL);
+        return this;
+    }
 
-	/**
-	 * Creates a new {@code MFXFab}, surface color scheme variant.
-	 */
-	public static MFXFab surface() {
-		return new MFXFab().setVariants(FABVariants.SURFACE);
-	}
+    public MFXFab large() {
+        setVariants(FABVariants.LARGE);
+        return this;
+    }
 
-	/**
-	 * Creates a new {@code MFXFab}, secondary color scheme variant.
-	 */
-	public static MFXFab secondary() {
-		return new MFXFab().setVariants(FABVariants.SECONDARY);
-	}
+    public MFXFab surface() {
+        setVariants(FABVariants.SURFACE);
+        return this;
+    }
 
-	/**
-	 * Creates a new {@code MFXFab}, tertiary color scheme variant.
-	 */
-	public static MFXFab tertiary() {
-		return new MFXFab().setVariants(FABVariants.TERTIARY);
-	}
+    public MFXFab secondary() {
+        setVariants(FABVariants.SECONDARY);
+        return this;
+    }
 
-	/**
-	 * Creates a new {@code MFXFab} with less shadow emphasis.
-	 */
-	public static MFXFab lowered() {
-		return new MFXFab().setVariants(FABVariants.LOWERED);
-	}
+    public MFXFab tertiary() {
+        setVariants(FABVariants.TERTIARY);
+        return this;
+    }
 
-	/**
-	 * Creates a new {@link MFXFab} which is extended (shows text).
-	 */
-	public static MFXFab extended() {
-		MFXFab fab = new MFXFab();
-		fab.setExtended(true);
-		return fab;
-	}
+    public MFXFab lowered() {
+        setVariants(FABVariants.LOWERED);
+        return this;
+    }
 
-	//================================================================================
-	// Overridden Methods
-	//================================================================================
-	@Override
-	public List<String> defaultStyleClasses() {
-		return List.of("mfx-button", "fab-base", "fab");
-	}
+    //================================================================================
+    // Overridden Methods
+    //================================================================================
+    @Override
+    public List<String> defaultStyleClasses() {
+        return List.of("mfx-button", "fab-base", "fab");
+    }
 
-	@Override
-	public MFXFab addVariants(FABVariants... variants) {
-		WithVariants.addVariants(this, variants);
-		onInitSizesChanged();
-		return this;
-	}
+    @Override
+    public MFXFab addVariants(FABVariants... variants) {
+        WithVariants.addVariants(this, variants);
+        onInitSizesChanged();
+        return this;
+    }
 
-	@Override
-	public MFXFab setVariants(FABVariants... variants) {
-		WithVariants.setVariants(this, variants);
-		onInitSizesChanged();
-		return this;
-	}
+    @Override
+    public MFXFab setVariants(FABVariants... variants) {
+        WithVariants.setVariants(this, variants);
+        onInitSizesChanged();
+        return this;
+    }
 
-	@Override
-	public MFXFab removeVariants(FABVariants... variants) {
-		WithVariants.removeVariants(this, variants);
-		onInitSizesChanged();
-		return this;
-	}
+    @Override
+    public MFXFab removeVariants(FABVariants... variants) {
+        WithVariants.removeVariants(this, variants);
+        onInitSizesChanged();
+        return this;
+    }
 
-	@Override
-	protected void sceneBuilderIntegration() {
-		SceneBuilderIntegration.ifInSceneBuilder(() -> {
-			String theme = MFXThemeManager.PURPLE_LIGHT.load();
-			When.onChanged(sceneProperty())
-					.condition((o, n) -> n != null && !n.getStylesheets().contains(theme))
-					.then((o, n) -> n.getStylesheets().add(theme))
-					.oneShot()
-					.listen();
-		});
-		// TODO theme integration with SceneBuilder will change once base themes and MFXThemeManager are implemented
-	}
+    @Override
+    protected void sceneBuilderIntegration() {
+        SceneBuilderIntegration.ifInSceneBuilder(() -> {
+            String theme = MFXThemeManager.PURPLE_LIGHT.load();
+            When.onChanged(sceneProperty())
+                .condition((o, n) -> n != null && !n.getStylesheets().contains(theme))
+                .then((o, n) -> n.getStylesheets().add(theme))
+                .oneShot()
+                .listen();
+        });
+        // TODO theme integration with SceneBuilder will change once base themes and MFXThemeManager are implemented
+    }
 }

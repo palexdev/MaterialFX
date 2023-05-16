@@ -1,8 +1,6 @@
 package app.popups;
 
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
-import io.github.palexdev.mfxcomponents.controls.buttons.MFXFilledButton;
-import io.github.palexdev.mfxcomponents.controls.buttons.MFXTextButton;
 import io.github.palexdev.mfxcomponents.theming.enums.MFXThemeManager;
 import io.github.palexdev.mfxcomponents.window.MFXRichContent;
 import io.github.palexdev.mfxcomponents.window.popups.MFXTooltip;
@@ -31,19 +29,19 @@ public class PopupTest extends Application {
         StackPane.setAlignment(anchors, Pos.TOP_CENTER);
         StackPane.setMargin(anchors, InsetsBuilder.top(20));
 
-        MFXButton button = new MFXFilledButton("Show Popup");
+        MFXButton button = new MFXButton("Show Popup").filled();
 
         MFXTooltip tooltip = new MFXTooltip(button);
         tooltip.setContent(new MFXRichContent());
         tooltip.setHeader("A tooltip duh!");
         tooltip.setText(lorem);
         tooltip.setPrimaryAction(() -> {
-            MFXButton primary = new MFXTextButton("Learn More");
+            MFXButton primary = new MFXButton("Learn More").text();
             primary.setOnAction(e -> tooltip.setText("I already feel smarter"));
             return primary;
         });
         tooltip.setSecondaryAction(() -> {
-            MFXButton secondary = new MFXTextButton("Cancel");
+            MFXButton secondary = new MFXButton("Cancel").text();
             secondary.setOnAction(e -> tooltip.setText(lorem));
             return secondary;
         });

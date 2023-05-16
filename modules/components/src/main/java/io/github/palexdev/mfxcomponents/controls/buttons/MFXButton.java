@@ -18,168 +18,111 @@
 
 package io.github.palexdev.mfxcomponents.controls.buttons;
 
-import io.github.palexdev.mfxcomponents.behaviors.MFXButtonBehavior;
-import io.github.palexdev.mfxcomponents.controls.base.MFXLabeled;
+import io.github.palexdev.mfxcomponents.behaviors.MFXButtonBehaviorBase;
+import io.github.palexdev.mfxcomponents.controls.base.MFXButtonBase;
 import io.github.palexdev.mfxcomponents.controls.base.MFXSkinBase;
 import io.github.palexdev.mfxcomponents.skins.MFXButtonSkin;
-import io.github.palexdev.mfxcore.base.properties.EventHandlerProperty;
-import io.github.palexdev.mfxcore.observables.When;
-import io.github.palexdev.mfxcore.utils.fx.SceneBuilderIntegration;
-import io.github.palexdev.mfxresources.MFXResources;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import io.github.palexdev.mfxcomponents.theming.base.WithVariants;
+import io.github.palexdev.mfxcomponents.theming.enums.ButtonVariants;
 import javafx.scene.Node;
 
 import java.util.List;
 import java.util.function.Supplier;
 
 /**
- * Custom implementation of a button which extends {@link MFXLabeled}, has its own skin
- * {@link MFXButtonSkin} and its own behavior {@link MFXButtonBehavior}.
+ * Custom implementation of a button which extends {@link MFXButtonBase}, has its own skin
+ * {@link MFXButtonSkin}.
  * <p></p>
- * {@code MFXButton} has 5 variants that mainly override the {@link #defaultStyleClasses()} method
- * to allow themes to style them according to their style classes:
- * <p> - {@link MFXElevatedButton}
- * <p> - {@link MFXFilledButton}
- * <p> - {@link MFXTonalFilledButton}
- * <p> - {@link MFXOutlinedButton}
- * <p> - {@link MFXTextButton}
- * <p></p>
- * <b>This base class is un-styled by the default official themes, a perfect start to implement custom styled buttons.</b>
+ * Material 3 guidelines show 5 variants for common buttons: elevated, filled, tonal filled, outlined and text.
+ * These are implemented through the {@link WithVariants} API. Every new button will be by default an elevated button,
+ * {@link ButtonVariants#ELEVATED}.
  * <p>
  * The default style class of this component is: '.mfx-button'.
  */
-public class MFXButton extends MFXLabeled<MFXButtonBehavior> {
-	//================================================================================
-	// Properties
-	//================================================================================
-	private final EventHandlerProperty<ActionEvent> onAction = new EventHandlerProperty<>() {
-		@Override
-		protected void invalidated() {
-			setEventHandler(ActionEvent.ACTION, get());
-		}
-	};
+public class MFXButton extends MFXButtonBase<MFXButtonBehaviorBase<MFXButton>> implements WithVariants<MFXButton, ButtonVariants> {
 
-	//================================================================================
-	// Constructors
-	//================================================================================
+    //================================================================================
+    // Constructors
+    //================================================================================
+    public MFXButton() {
+        initialize();
+    }
 
-	public MFXButton() {
-		this("");
-	}
+    public MFXButton(String text) {
+        super(text);
+        initialize();
+    }
 
-	public MFXButton(String text) {
-		this(text, null);
-	}
+    public MFXButton(String text, Node icon) {
+        super(text, icon);
+        initialize();
+    }
 
-	public MFXButton(String text, Node icon) {
-		super(text, icon);
-		initialize();
-	}
+    //================================================================================
+    // Variants
+    //================================================================================
+    public MFXButton elevated() {
+        setVariants(ButtonVariants.ELEVATED);
+        return this;
+    }
 
-	//================================================================================
-	// Variants
-	//================================================================================
+    public MFXButton filled() {
+        setVariants(ButtonVariants.FILLED);
+        return this;
+    }
 
-	/**
-	 * @return a new {@link MFXElevatedButton}
-	 */
-	public static MFXElevatedButton elevated() {
-		return new MFXElevatedButton();
-	}
+    public MFXButton outlined() {
+        setVariants(ButtonVariants.OUTLINED);
+        return this;
+    }
 
-	/**
-	 * @return a new {@link MFXFilledButton}
-	 */
-	public static MFXFilledButton filled() {
-		return new MFXFilledButton();
-	}
+    public MFXButton text() {
+        setVariants(ButtonVariants.TEXT);
+        return this;
+    }
 
-	/**
-	 * @return a new {@link MFXTonalFilledButton}
-	 */
-	public static MFXTonalFilledButton tonalFilled() {
-		return new MFXTonalFilledButton();
-	}
+    public MFXButton tonal() {
+        setVariants(ButtonVariants.FILLED_TONAL);
+        return this;
+    }
 
-	/**
-	 * @return a new {@link MFXOutlinedButton}
-	 */
-	public static MFXOutlinedButton outlined() {
-		return new MFXOutlinedButton();
-	}
+    //================================================================================
+    // Methods
+    //================================================================================
+    private void initialize() {
+        elevated();
+    }
 
-	/**
-	 * @return a new {@link MFXTextButton}
-	 */
-	public static MFXTextButton text() {
-		return new MFXTextButton();
-	}
+    //================================================================================
+    // Overridden Methods
+    //================================================================================
+    @Override
+    protected MFXSkinBase<?, ?> buildSkin() {
+        return new MFXButtonSkin<>(this);
+    }
 
-	//================================================================================
-	// Methods
-	//================================================================================
-	private void initialize() {
-		getStyleClass().setAll(defaultStyleClasses());
-		setDefaultBehaviorProvider();
-		sceneBuilderIntegration();
-	}
+    @Override
+    public List<String> defaultStyleClasses() {
+        return List.of("mfx-button");
+    }
 
-	/**
-	 * If not disabled, fires a new {@link ActionEvent}, triggering the {@link EventHandler} specified
-	 * by the {@link #onActionProperty()}.
-	 */
-	public void fire() {
-		if (!isDisabled()) fireEvent(new ActionEvent());
-	}
+    @Override
+    public Supplier<MFXButtonBehaviorBase<MFXButton>> defaultBehaviorProvider() {
+        return () -> new MFXButtonBehaviorBase<>(this);
+    }
 
-	//================================================================================
-	// Overridden Methods
-	//================================================================================
-	@Override
-	public Supplier<MFXButtonBehavior> defaultBehaviorProvider() {
-		return () -> new MFXButtonBehavior(this);
-	}
+    @Override
+    public MFXButton addVariants(ButtonVariants... variants) {
+        return WithVariants.addVariants(this, variants);
+    }
 
-	@Override
-	public List<String> defaultStyleClasses() {
-		return List.of("mfx-button");
-	}
+    @Override
+    public MFXButton setVariants(ButtonVariants... variants) {
+        return WithVariants.setVariants(this, variants);
+    }
 
-	@Override
-	protected MFXSkinBase<?, ?> buildSkin() {
-		return new MFXButtonSkin(this);
-	}
-
-	@Override
-	protected void sceneBuilderIntegration() {
-		SceneBuilderIntegration.ifInSceneBuilder(() -> setText("Button"));
-		SceneBuilderIntegration.ifInSceneBuilder(() -> {
-			String theme = MFXResources.load("sass/md3/mfx-light.css");
-			When.onChanged(sceneProperty())
-					.condition((o, n) -> n != null && !n.getStylesheets().contains(theme))
-					.then((o, n) -> n.getStylesheets().add(theme))
-					.oneShot()
-					.listen();
-		});
-		// TODO theme integration with SceneBuilder will change once base themes and MFXThemeManager are implemented
-	}
-
-	//================================================================================
-	// Getters/Setters
-	//================================================================================
-	public EventHandler<ActionEvent> getOnAction() {
-		return onAction.get();
-	}
-
-	/**
-	 * Specifies the action to execute when an {@link ActionEvent} is fired on this button.
-	 */
-	public EventHandlerProperty<ActionEvent> onActionProperty() {
-		return onAction;
-	}
-
-	public void setOnAction(EventHandler<ActionEvent> onAction) {
-		this.onAction.set(onAction);
-	}
+    @Override
+    public MFXButton removeVariants(ButtonVariants... variants) {
+        return WithVariants.removeVariants(this, variants);
+    }
 }

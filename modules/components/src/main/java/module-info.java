@@ -8,9 +8,9 @@ module mfx.components {
 
     // Behaviors
     exports io.github.palexdev.mfxcomponents.behaviors;
-    exports io.github.palexdev.mfxcomponents.behaviors.base;
 
     // Controls
+    exports io.github.palexdev.mfxcomponents.controls;
     exports io.github.palexdev.mfxcomponents.controls.base;
     exports io.github.palexdev.mfxcomponents.controls.buttons;
     exports io.github.palexdev.mfxcomponents.controls.fab;

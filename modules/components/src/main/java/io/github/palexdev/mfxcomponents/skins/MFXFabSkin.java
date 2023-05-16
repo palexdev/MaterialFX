@@ -19,13 +19,11 @@
 package io.github.palexdev.mfxcomponents.skins;
 
 import io.github.palexdev.mfxcomponents.behaviors.MFXFabBehavior;
-import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
 import io.github.palexdev.mfxcomponents.controls.fab.MFXFabBase;
 import io.github.palexdev.mfxcore.base.beans.Position;
 import io.github.palexdev.mfxcore.controls.BoundLabel;
 import io.github.palexdev.mfxcore.observables.When;
 import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
-import io.github.palexdev.mfxcore.utils.fx.TextUtils;
 import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -39,16 +37,13 @@ import static io.github.palexdev.mfxcore.observables.When.onInvalidated;
  * Default skin implementation for {@link MFXFabBase} components, extends {@link MFXButtonSkin} since the
  * layout and functionalities are the same.
  * <p>
- * However keep in mind that this skin is meant to be used with behaviors of type {@link MFXFabBehavior}, not only for
- * animations but also for layout purposes. (TODO can this be improved)
- * <p>
  * The min width computation is overridden to return {@link Region#USE_COMPUTED_SIZE}, while the
  * pref width property is overridden to adapt to the {@link MFXFabBase#extendedProperty()}.
  * <p></p>
  * The layout strategy is also overridden so that the label is never truncated, this is also needed for the animations
  * to look as expected. Also, FABs are not supposed to be truncated since they are important UI elements.
  */
-public class MFXFabSkin extends MFXButtonSkin {
+public class MFXFabSkin extends MFXButtonSkin<MFXFabBase, MFXFabBehavior> {
     protected When<Number> lwWhen;
 
     //================================================================================
@@ -69,7 +64,7 @@ public class MFXFabSkin extends MFXButtonSkin {
      * two states: text only, icon and text.
      */
     @Override
-    protected BoundLabel createLabel(MFXButton labeled) {
+    protected BoundLabel createLabel(MFXFabBase labeled) {
         BoundLabel bl = super.createLabel(labeled);
         bl.contentDisplayProperty().unbind();
         bl.setContentDisplay(ContentDisplay.LEFT);
@@ -90,10 +85,8 @@ public class MFXFabSkin extends MFXButtonSkin {
             .listen();
 
         // Text changes or icon changes need the label to be placed correctly
-        //noinspection OptionalGetWithoutIsPresent
         lwWhen = onInvalidated(label.widthProperty())
-            .condition(v -> fab.getFabBehavior().isPresent())
-            .then(v -> label.setTranslateX(fab.getFabBehavior().get().computeLabelDisplacement()))
+            .then(v -> label.setTranslateX(fab.getBehavior().computeLabelDisplacement()))
             .invalidating(fab.behaviorProviderProperty())
             .listen();
     }
@@ -109,9 +102,9 @@ public class MFXFabSkin extends MFXButtonSkin {
         MFXFontIcon icon = fab.getIcon();
         double iW = (icon != null) ? icon.getLayoutBounds().getWidth() : 0.0;
         double gap = (icon != null) ? fab.getGraphicTextGap() : 0.0;
-        return fab.isExtended() && !fab.getFabBehavior().map(MFXFabBehavior::isChangingIcon).orElse(false) ?
-                leftInset + iW + gap + snapSizeX(TextUtils.computeTextWidth(fab.getFont(), fab.getText())) + rightInset :
-                leftInset + iW + rightInset;
+        return fab.isExtended() && !fab.getBehavior().isChangingIcon() ?
+            leftInset + iW + gap + tmCache.getSnappedWidth() + rightInset :
+            leftInset + iW + rightInset;
     }
 
     @Override
@@ -128,7 +121,7 @@ public class MFXFabSkin extends MFXButtonSkin {
         );
 
         label.resizeRelocate(labelPos.getX(), labelPos.getY(), lW, lH);
-        rg.resizeRelocate(0, 0, fab.getWidth(), fab.getHeight());
+        surface.resizeRelocate(0, 0, fab.getWidth(), fab.getHeight());
     }
 
     @Override
@@ -146,6 +139,6 @@ public class MFXFabSkin extends MFXButtonSkin {
      * @return {@link #getSkinnable()} cast to {@link MFXFabBase}
      */
     protected MFXFabBase getFab() {
-        return (MFXFabBase) getSkinnable();
+        return getSkinnable();
     }
 }

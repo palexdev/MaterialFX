@@ -155,7 +155,6 @@ public abstract class MFXSkinBase<C extends Control & WithBehavior<B>, B extends
 		return super.computePrefHeight(width, topInset, rightInset, bottomInset, leftInset);
 	}
 
-
 	//================================================================================
 	// Getters/Setters
 	//================================================================================

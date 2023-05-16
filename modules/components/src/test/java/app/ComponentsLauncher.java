@@ -18,25 +18,25 @@
 
 package app;
 
-import app.popups.PopupTest;
+import app.buttons.ButtonsPlayground;
 import javafx.application.Application;
 
 public class ComponentsLauncher {
 
-	public static void main(String[] args) {
-		//System.setProperty("prism.order", "sw");
-		//System.setProperty("prism.text", "t2k");
-		//System.setProperty("prism.lcdtext", "false");
-		//System.setProperty("prism.vsync", "false");
-		//System.setProperty("prism.showdirty", "true");
-		//System.setProperty("prism.forceGPU","true");
-		//System.setProperty("prism.verbose", "true");
-		//System.setProperty("javafx.animation.fullspeed", "true");
-		System.setProperty("glass.disableGrab", "true");
-		Application.launch(PopupTest.class, args);
-	}
+    public static void main(String[] args) {
+        //System.setProperty("prism.order", "sw");
+        //System.setProperty("prism.text", "t2k");
+        //System.setProperty("prism.lcdtext", "false");
+        //System.setProperty("prism.vsync", "false");
+        //System.setProperty("prism.showdirty", "true");
+        //System.setProperty("prism.forceGPU","true");
+        //System.setProperty("prism.verbose", "true");
+        //System.setProperty("javafx.animation.fullspeed", "true");
+        System.setProperty("glass.disableGrab", "true");
+        Application.launch(ButtonsPlayground.class, args);
+    }
 
-	public static String load(String name) {
-		return ComponentsLauncher.class.getResource(name).toExternalForm();
-	}
+    public static String load(String name) {
+        return ComponentsLauncher.class.getResource(name).toExternalForm();
+    }
 }
