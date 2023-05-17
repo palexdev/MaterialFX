@@ -16,6 +16,43 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.19.0] - 17-05-2023
+
+### Added
+
+- Implemented segmented buttons
+- Implemented "helper" node to implement the concept of 'state layer' described by Material Design 3 guidelines, check
+  MaterialSurface javadocs for more info
+- Now MFXButton express its variants through the WithVariant API, added enumerator implementing Variant
+- PseudoClasses: added new pseudo classes. Also added a method to check whether a pseudo class is currently active on a
+  given Node
+
+### Changed
+
+- Completely reviewed the buttons class hierarchy. Now MFXButton extends from a common class for all kind of buttons
+  MFXButtonBase.
+  The consequences of this change are: 1) MFXSelectable now extends MFXButtonBase 2) MFXFabBase extends MFXButtonBase
+  and thanks to generics it's not needed anymore to cast the behavior class 3) Behaviors have been reorganized as well.
+  MFXButtonBehavior has become MFXButtonBehaviorBase and thanks to generics can be used as base for all kind of buttons
+  that extend from MFXButtonBase.
+- MFXIconButtonBehavior: most of the API has been moved to the base behavior for selectables MFXSelectableBehaviorBase
+- MFXControl: use defaultLayoutStrategy() instead of LayoutStrategy.defaultStrategy() during property initialization
+- MFXControl: forgot to override the defaultLayoutStrategy()
+- MFXSelectable: since this now extends MFXButtonBase, the onAction property and fire() are not needed anymore
+- MFXFabBase: no need for the getFabBehavior() method anymore as it now extends MFXButtonBase
+- Components that have variants don't have static methods to set a variant anymore. Rather those methods have been
+  made 'object methods', thanks to fluent API now the variant can be easily set after invoking the constructor, allowing
+  for more customization in just one line
+- Labeled components, that make use of skins of type MFXLabeledSkin, can now leverage a cache to retrieve the text sizes
+  which updates only when the text or the font change, making layout computations much faster
+- Components that need to visually distinguish between the various interaction states (hover, focus, press,...) now make
+  use of the aforementioned MaterialSurface region
+
+### Fixed
+
+- MFXFabBehavior: fixed the icon switch animation for extended FABs as the width and label displacement were computed
+  wrongly
+
 ## [11.8.0] - 07-05-2023
 
 ### Added

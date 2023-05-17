@@ -16,7 +16,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
-## [Unreleased]
+## [11.6.0] - 17-05-2023
 
 ### Added
 

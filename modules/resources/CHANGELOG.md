@@ -16,12 +16,18 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
-## [Unreleased]
+## [11.6.0] - 17-05-2023
+
+### Added
+
+- Introduced the styles for the segmented buttons
 
 ### Changed
 
 - MFXIconWrapper: adapt to the new MFXRippleGenerator. Also avoid building the handlers if the generator is not going to
   be used
+- FontAwesomeSolid use a parallel Stream to build the cache
+- Adapt resources to the new MaterialSurface introduced by the components module
 
 ## [11.5.0] - 07-05-2023
 
