@@ -16,6 +16,24 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.19.2] - 23-05-2023
+
+### Changed
+
+- Minor changes to some constructors. I think it's better to avoid calling the other constructors if a property is not
+  needed to be initialized. JavaFX doesn't instantiate its properties until they are required
+- MFXIconButton: make asToggle() an instance method with fluent API
+- MFXButtonSkin: add null check for content display When
+- MFXSegmentSkin: the content display When is not needed for this button
+- MFXPlainContent and MFXRichContent replace Text with the new Label implementation offered by MFXCore
+
+### Fixed
+
+- MFXPopup and MFXTooltip: before calling getWindow() on the owner' scene, ensure that it is not null by wrapping the
+  Window result in another Optional
+- MFXPopup and MFXTooltip: it's not necessary to explicitly hide the popup if the owner's window has been closed before.
+  Doing so would raise and exception
+
 ## [11.19.0] - 17-05-2023
 
 ### Added

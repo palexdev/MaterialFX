@@ -817,12 +817,13 @@
   -fx-min-height: 24px;
 }
 
-.mfx-popup .content > .plain > .text,
-.mfx-tooltip .content > .plain > .text {
+.mfx-popup .content > .plain > .label,
+.mfx-tooltip .content > .plain > .label {
   -fx-font-family: "Roboto";
   -fx-font-weight: 400;
   -fx-font-size: 12px;
-  -fx-fill: #322F35;
+  -fx-text-fill: #322F35;
+  -fx-wrap-text: true;
   -fx-wrapping-width: 200px;
 }
 
@@ -844,12 +845,13 @@
   -fx-padding: 8px 0px 0px 0px;
 }
 
-.mfx-popup .content > .rich > .text,
-.mfx-tooltip .content > .rich > .text {
+.mfx-popup .content > .rich > .label,
+.mfx-tooltip .content > .rich > .label {
   -fx-font-family: "Roboto";
   -fx-font-weight: 400;
   -fx-font-size: 14px;
-  -fx-fill: #CAC4D0;
+  -fx-text-fill: #CAC4D0;
+  -fx-wrap-text: true;
   -fx-wrapping-width: 300px;
 }
 
@@ -858,5 +860,5 @@
   -fx-font-family: "Roboto Medium";
   -fx-font-weight: 500;
   -fx-font-size: 14px;
-  -fx-fill: #CAC4D0;
+  -fx-text-fill: #CAC4D0;
 }

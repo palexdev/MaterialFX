@@ -175,7 +175,7 @@ public class MFXSegmentedButtonSkin extends MFXSkinBase<MFXSegmentedButton, MFXS
      * Its default style class is '.segment' and uses skins of type {@link MFXSegmentSkin}.
      */
     public static class MFXSegment extends MFXSelectable<MFXSelectableBehaviorBase<MFXSegment>> {
-        private final IconProperty icon = new IconProperty() {
+        private final IconProperty icon = new IconProperty(new MFXFontIcon()) {
             @Override
             public void set(MFXFontIcon newValue) {
                 MFXFontIcon oldValue = get();
@@ -191,22 +191,22 @@ public class MFXSegmentedButtonSkin extends MFXSkinBase<MFXSegmentedButton, MFXS
         };
 
         public MFXSegment() {
-            this("");
+            initialize();
         }
 
         public MFXSegment(String text) {
-            this(text, new MFXFontIcon());
+            super(text);
+            setIcon(new MFXFontIcon());
+            initialize();
         }
 
         public MFXSegment(String text, MFXFontIcon icon) {
-            setText(text);
+            super(text);
             setIcon(icon);
             initialize();
         }
 
         private void initialize() {
-            getStyleClass().setAll(defaultStyleClasses());
-            setDefaultBehaviorProvider();
             graphicProperty().bind(iconProperty());
         }
 
@@ -248,6 +248,10 @@ public class MFXSegmentedButtonSkin extends MFXSkinBase<MFXSegmentedButton, MFXS
         public MFXSegmentSkin(MFXSegment button) {
             super(button);
             initTextMeasurementCache();
+        }
+
+        @Override
+        protected void addListeners() {
         }
 
         @Override

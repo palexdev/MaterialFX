@@ -3,7 +3,7 @@ package io.github.palexdev.mfxcomponents.window;
 import io.github.palexdev.mfxcomponents.controls.base.MFXStyleable;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableObjectProperty;
-import io.github.palexdev.mfxcore.controls.Text;
+import io.github.palexdev.mfxcore.controls.Label;
 import io.github.palexdev.mfxcore.utils.fx.StyleUtils;
 import io.github.palexdev.mfxeffects.enums.ElevationLevel;
 import javafx.beans.property.SimpleStringProperty;
@@ -35,8 +35,8 @@ public class MFXRichContent extends VBox implements MFXStyleable {
     private final StringProperty header = new SimpleStringProperty();
     private final StringProperty text = new SimpleStringProperty();
 
-    protected Text lHeader;
-    protected Text lText;
+    protected Label lHeader;
+    protected Label lText;
     protected HBox actionsBox;
     protected MFXButton primaryAction;
     protected MFXButton secondaryAction;
@@ -63,11 +63,11 @@ public class MFXRichContent extends VBox implements MFXStyleable {
     // Methods
     //================================================================================
     protected void build() {
-        lHeader = new Text();
+        lHeader = new Label();
         lHeader.getStyleClass().setAll("header");
         lHeader.textProperty().bind(headerProperty());
 
-        lText = new Text();
+        lText = new Label();
         lText.textProperty().bind(textProperty());
 
         actionsBox = new HBox();

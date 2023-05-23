@@ -33,15 +33,16 @@ $wrapping-width: 300px !default;
   -fx-padding: $actions-padding;
 }
 
-.mfx-popup .content > .rich > .text,
-.mfx-tooltip .content > .rich > .text {
+.mfx-popup .content > .rich > .label,
+.mfx-tooltip .content > .rich > .label {
   @include Typography.BodyMedium();
-  -fx-fill: $text-color;
+  -fx-text-fill: $text-color;
+  -fx-wrap-text: true;
   -fx-wrapping-width: $wrapping-width;
 }
 
 .mfx-popup .content > .rich > .header,
 .mfx-tooltip .content > .rich > .header {
   @include Typography.TitleSmall();
-  -fx-fill: $text-color;
+  -fx-text-fill: $text-color;
 }

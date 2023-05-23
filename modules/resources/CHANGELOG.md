@@ -16,6 +16,13 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.6.1] - 23-05-2023
+
+### Changed
+
+- MFXIconWrapper: start with an empty icon
+- Minor changes to the stylesheets
+
 ## [11.6.0] - 17-05-2023
 
 ### Added

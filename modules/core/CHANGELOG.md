@@ -16,6 +16,18 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.6.1] - 23-05-2023
+
+### Added
+
+- Added simple extension of Label, to allow setting the wrapping width (rather than the max width directly), setting the
+  font smoothing algorithm (without the need of selecting the text node in CSS), and to allow the retrieval of the
+  Label's Text node as well as executing an action when retrieved
+
+### Changed
+
+- BoundLabel: move Text node detection code to the new base class, Label
+
 ## [11.6.0] - 17-05-2023
 
 ### Added

@@ -55,23 +55,20 @@ public class MFXIconButton extends MFXSelectable<MFXIconButtonBehavior> implemen
     // Constructors
     //================================================================================
     public MFXIconButton() {
-        this(null);
+        this(new MFXFontIcon());
     }
 
     public MFXIconButton(MFXFontIcon icon) {
-        initialize();
         setIcon(icon);
+        initialize();
     }
 
     /**
-     * Shortcut to create a new {@link MFXIconButton} that can be selected.
-     *
-     * @see #selectableProperty()
+     * Fluent way to set {@link #selectableProperty()} to true.
      */
-    public static MFXIconButton asToggle() {
-        MFXIconButton button = new MFXIconButton();
-        button.setSelectable(true);
-        return button;
+    public MFXIconButton asToggle() {
+        setSelectable(true);
+        return this;
     }
 
     //================================================================================
@@ -96,9 +93,6 @@ public class MFXIconButton extends MFXSelectable<MFXIconButtonBehavior> implemen
     // Methods
     //================================================================================
     private void initialize() {
-        getStyleClass().setAll(defaultStyleClasses());
-        setDefaultBehaviorProvider();
-        sceneBuilderIntegration();
         graphicProperty().bind(iconProperty());
         setSelectable(false);
     }
@@ -146,10 +140,10 @@ public class MFXIconButton extends MFXSelectable<MFXIconButtonBehavior> implemen
     // Styleable Properties
     //================================================================================
     private final StyleableBooleanProperty selectable = new StyleableBooleanProperty(
-            StyleableProperties.SELECTABLE,
-            this,
-            "selectable",
-            false
+        StyleableProperties.SELECTABLE,
+        this,
+        "selectable",
+        false
     ) {
         @Override
         protected void invalidated() {
@@ -158,10 +152,10 @@ public class MFXIconButton extends MFXSelectable<MFXIconButtonBehavior> implemen
     };
 
     private final StyleableDoubleProperty size = new StyleableDoubleProperty(
-            StyleableProperties.SIZE,
-            this,
-            "size",
-            40.0
+        StyleableProperties.SIZE,
+        this,
+        "size",
+        40.0
     );
 
     public boolean isSelectable() {
@@ -208,23 +202,23 @@ public class MFXIconButton extends MFXSelectable<MFXIconButtonBehavior> implemen
         private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
         private static final CssMetaData<MFXIconButton, Boolean> SELECTABLE =
-                FACTORY.createBooleanCssMetaData(
-                        "-mfx-selectable",
-                        MFXIconButton::selectableProperty,
-                        false
-                );
+            FACTORY.createBooleanCssMetaData(
+                "-mfx-selectable",
+                MFXIconButton::selectableProperty,
+                false
+            );
 
         private static final CssMetaData<MFXIconButton, Number> SIZE =
-                FACTORY.createSizeCssMetaData(
-                        "-mfx-size",
-                        MFXIconButton::sizeProperty,
-                        40.0
-                );
+            FACTORY.createSizeCssMetaData(
+                "-mfx-size",
+                MFXIconButton::sizeProperty,
+                40.0
+            );
 
         static {
             cssMetaDataList = StyleUtils.cssMetaDataList(
-                    MFXSelectable.getClassCssMetaData(),
-                    SELECTABLE, SIZE
+                MFXSelectable.getClassCssMetaData(),
+                SELECTABLE, SIZE
             );
         }
     }

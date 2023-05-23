@@ -153,8 +153,10 @@ public class MFXButtonSkin<T extends MFXButtonBase<B>, B extends MFXButtonBehavi
     public void dispose() {
         surface.dispose();
         label.getTextNode().ifPresent(n -> n.opacityProperty().unbind());
-        cdWhen.dispose();
-        cdWhen = null;
+        if (cdWhen != null) {
+            cdWhen.dispose();
+            cdWhen = null;
+        }
         super.dispose();
     }
 }

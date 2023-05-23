@@ -48,15 +48,14 @@ public class MFXFab extends MFXFabBase implements WithVariants<MFXFab, FABVarian
     // Constructors
     //================================================================================
     public MFXFab() {
-        this("");
     }
 
     public MFXFab(String text) {
-        this(text, null);
+        super(text);
     }
 
     public MFXFab(MFXFontIcon icon) {
-        this("", icon);
+        super(icon);
     }
 
     public MFXFab(String text, MFXFontIcon icon) {

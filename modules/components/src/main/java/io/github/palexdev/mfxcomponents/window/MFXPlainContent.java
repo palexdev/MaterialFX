@@ -1,7 +1,7 @@
 package io.github.palexdev.mfxcomponents.window;
 
 import io.github.palexdev.mfxcomponents.controls.base.MFXStyleable;
-import io.github.palexdev.mfxcore.controls.Text;
+import io.github.palexdev.mfxcore.controls.Label;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
@@ -29,7 +29,7 @@ public class MFXPlainContent extends StackPane implements MFXStyleable {
     public MFXPlainContent(String text) {
         setText(text);
 
-        Text lText = new Text();
+        Label lText = new Label();
         lText.textProperty().bind(textProperty());
 
         getStyleClass().setAll(defaultStyleClasses());

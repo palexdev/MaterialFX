@@ -24,6 +24,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.PopupControl;
 import javafx.scene.control.Skin;
 import javafx.scene.input.MouseEvent;
@@ -317,16 +318,15 @@ public class MFXTooltip extends PopupControl implements IMFXPopup {
          * This check is due to a JavaFX bug in WindowStage.setBounds(...) method which doesn't check for the window
          * to be not null before doing anything on it.
          * This seems to happen when the Popup is open but the main window is being closed.
-         * Animations at such stage cannot be used
+         * Animations at such stage cannot be used, also, it's not necessary to explicitly hide it since in theory the
+         * framework will handle it automatically
          */
         boolean showing = Optional.ofNullable(getOwner())
-            .map(o -> o.getScene().getWindow())
+            .flatMap(n -> Optional.ofNullable(n.getScene()))
+            .map(Scene::getWindow)
             .map(Window::isShowing)
             .orElse(true);
-        if (!showing) {
-            super.hide();
-            return;
-        }
+        if (!showing) return;
 
         retrieveSkin().ifPresentOrElse(
             IMFXPopupSkin::animateOut,

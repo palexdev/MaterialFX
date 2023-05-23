@@ -65,27 +65,29 @@ public class MFXFabBase extends MFXButtonBase<MFXFabBehavior> {
     //================================================================================
     // Properties
     //================================================================================
-    private final IconProperty icon = new IconProperty();
+    private final IconProperty icon = new IconProperty(new MFXFontIcon());
 
     //================================================================================
     // Constructors
     //================================================================================
     public MFXFabBase() {
-        this("");
+        initialize();
     }
 
     public MFXFabBase(String text) {
-        this(text, null);
+        super(text);
+        initialize();
     }
 
     public MFXFabBase(MFXFontIcon icon) {
-        this("", icon);
+        setIcon(icon);
+        initialize();
     }
 
     public MFXFabBase(String text, MFXFontIcon icon) {
-        super(text, icon);
-        initialize();
+        super(text);
         setIcon(icon);
+        initialize();
     }
 
     //================================================================================
@@ -93,7 +95,6 @@ public class MFXFabBase extends MFXButtonBase<MFXFabBehavior> {
     //================================================================================
     private void initialize() {
         graphicProperty().bind(icon);
-        sceneBuilderIntegration();
 
         // This is needed since the default value is 'false'
         // This makes the FAB have the correct sizes at init when "collapsed"

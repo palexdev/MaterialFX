@@ -22,9 +22,10 @@ $wrapping-width: 200px !default;
   -fx-min-height: $min-height;
 }
 
-.mfx-popup .content > .plain > .text,
-.mfx-tooltip .content > .plain > .text {
+.mfx-popup .content > .plain > .label,
+.mfx-tooltip .content > .plain > .label {
   @include Typography.BodySmall();
-  -fx-fill: $text-color;
+  -fx-text-fill: $text-color;
+  -fx-wrap-text: true;
   -fx-wrapping-width: $wrapping-width;
 }

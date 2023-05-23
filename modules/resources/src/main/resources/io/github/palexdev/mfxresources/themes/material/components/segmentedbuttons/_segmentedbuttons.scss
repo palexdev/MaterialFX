@@ -1,7 +1,6 @@
 @use '../../tokens/theme' as Theme;
 @use '../../tokens/typography' as Typography;
 @use '../../abstracts/ripple' as Ripple;
-@use '../../abstracts/theme_utils' as ThemeUtils;
 
 // Component-level tokens (Unselected)
 $bg-color: transparent !default;
@@ -106,7 +105,7 @@ $text-color-selected-disabled: rgba($text-color-selected, Theme.GetStateLayer('d
 }
 
 .mfx-segmented-button > .segment:selected .mfx-font-icon {
-  -mfx-description: "fas-check";
+  -mfx-description: 'fas-check';
   -mfx-color: $icon-color-selected;
 }
 
