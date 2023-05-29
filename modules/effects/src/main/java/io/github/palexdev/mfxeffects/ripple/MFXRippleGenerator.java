@@ -310,7 +310,7 @@ public class MFXRippleGenerator extends RippleGeneratorBase {
         disposed = true;
         getChildren().clear();
         disable();
-        state.dispose();
+        if (state != null) state.dispose();
         owner = null;
     }
 

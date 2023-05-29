@@ -19,6 +19,7 @@
 package io.github.palexdev.mfxcore.utils.fx;
 
 import io.github.palexdev.mfxcore.controls.Text;
+import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -107,40 +108,57 @@ public class CSSFragment {
 
 	/**
 	 * If this CSS fragment has not been applied yet to the given {@link Scene}, applies it
-	 * using {@link Scene#getStylesheets()}.
-	 *
-	 * @see #isAppliedOn(Scene)
-	 */
-	public void applyOn(Scene scene) {
-		if (!isAppliedOn(scene))
-			scene.getStylesheets().add(toDataUri());
-	}
+     * using {@link Scene#getStylesheets()}.
+     *
+     * @see #isAppliedOn(Scene)
+     */
+    public void applyOn(Scene scene) {
+        if (!isAppliedOn(scene))
+            scene.getStylesheets().add(toDataUri());
+    }
 
-	/**
-	 * Checks whether this CSS Fragment has already been applied to the given {@link Parent}
-	 * by checking if its stylesheets list contains this (converted to a Data URI).
-	 */
-	public boolean isAppliedOn(Parent parent) {
-		return parent.getStylesheets().contains(toDataUri());
-	}
+    /**
+     * If this CSS fragment has not been applied yet as the {@link Application}'s global user agent stylesheet, calls
+     * {@link Application#setUserAgentStylesheet(String)}.
+     */
+    public void setGlobal() {
+        if (!isGlobal())
+            Application.setUserAgentStylesheet(toDataUri());
+    }
 
-	/**
-	 * Checks whether this CSS Fragment has already been applied to the given {@link Scene}
-	 * by checking if its stylesheets list contains this (converted to a Data URI).
-	 */
-	public boolean isAppliedOn(Scene scene) {
-		return scene.getStylesheets().contains(toDataUri());
-	}
+    /**
+     * Checks whether this CSS fragment has already been applied to the given {@link Parent}
+     * by checking if its stylesheets list contains this (converted to a Data URI).
+     */
+    public boolean isAppliedOn(Parent parent) {
+        return parent.getStylesheets().contains(toDataUri());
+    }
 
-	//================================================================================
-	// Overridden Methods
-	//================================================================================
+    /**
+     * Checks whether this CSS fragment has already been applied to the given {@link Scene}
+     * by checking if its stylesheets list contains this (converted to a Data URI).
+     */
+    public boolean isAppliedOn(Scene scene) {
+        return scene.getStylesheets().contains(toDataUri());
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		CSSFragment that = (CSSFragment) o;
+    /**
+     * Checks whether this CSS fragment has already been applied as the {@link Application}'s global user agent stylesheet,
+     * by checking if {@link Application#getUserAgentStylesheet()} is equal to this (converted to a Data URI).
+     */
+    public boolean isGlobal() {
+        return Objects.equals(Application.getUserAgentStylesheet(), toDataUri());
+    }
+
+    //================================================================================
+    // Overridden Methods
+    //================================================================================
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CSSFragment that = (CSSFragment) o;
 		return css.equals(that.css);
 	}
 

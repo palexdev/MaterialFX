@@ -19,7 +19,6 @@ import io.github.palexdev.mfxeffects.animations.motion.M3Motion;
 import javafx.animation.PauseTransition;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
@@ -27,7 +26,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.PopupControl;
 import javafx.scene.control.Skin;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Window;
 import javafx.util.Duration;
 
@@ -83,9 +81,9 @@ public class MFXTooltip extends PopupControl implements IMFXPopup {
     private PauseTransition countdown;
 
     private boolean installed = false;
-    private EventHandler<MouseEvent> mouseMove;
-    private EventHandler<MouseEvent> mouseExit;
+    private boolean indirect = false;
     private When<?> hoverWhen;
+    private When<?> ownerHoverWhen;
 
     //================================================================================
     // Constructors
@@ -122,6 +120,13 @@ public class MFXTooltip extends PopupControl implements IMFXPopup {
         Node owner = getOwner();
         if (owner == null)
             throw new NullPointerException("Tooltip's owner cannot be null!");
+
+        if (!indirect) {
+            if (owner instanceof MFXControl) return install(((MFXControl<?>) owner));
+            if (owner instanceof MFXLabeled) return install(((MFXLabeled<?>) owner));
+        }
+        indirect = false;
+
         delayer = PauseBuilder.build()
             .setOnFinished(e -> open())
             .getAnimation();
@@ -130,17 +135,6 @@ public class MFXTooltip extends PopupControl implements IMFXPopup {
             .setOnFinished(e -> hide())
             .getAnimation();
         countdown.durationProperty().bind(outDelayProperty());
-
-        mouseMove = e -> {
-            countdown.stop();
-            if (isShowing()) return;
-            if (Animations.isPlaying(delayer)) return;
-            delayer.playFromStart();
-        };
-        mouseExit = e -> {
-            if (Animations.isPlaying(countdown)) return;
-            countdown.playFromStart();
-        };
 
         hoverWhen = When.onChanged(hoverProperty())
             .then((o, n) -> {
@@ -151,9 +145,19 @@ public class MFXTooltip extends PopupControl implements IMFXPopup {
                 }
             })
             .listen();
-
-        owner.addEventFilter(MouseEvent.MOUSE_MOVED, mouseMove);
-        owner.addEventFilter(MouseEvent.MOUSE_EXITED, mouseExit);
+        ownerHoverWhen = When.onChanged(owner.hoverProperty())
+            .then((o, n) -> {
+                if (n) {
+                    countdown.stop();
+                    if (Animations.isPlaying(delayer)) return;
+                    delayer.playFromStart();
+                } else {
+                    delayer.stop();
+                    if (Animations.isPlaying(countdown)) return;
+                    countdown.playFromStart();
+                }
+            })
+            .listen();
         installed = true;
         return this;
     }
@@ -162,20 +166,24 @@ public class MFXTooltip extends PopupControl implements IMFXPopup {
      * Delegates to {@link #install()} but first calls {@link #dispose()} and {@link #setOwner(Node)}, thus
      * allowing to also change the owner at anytime.
      */
-    public void install(Node owner) {
+    public MFXTooltip install(Node owner) {
         if (installed) dispose();
         setOwner(owner);
-        install();
+        return install();
     }
 
-    public void install(MFXControl<?> control) {
+    protected MFXTooltip install(MFXControl<?> control) {
         if (installed) dispose();
+        indirect = true;
         control.setMFXTooltip(this);
+        return this;
     }
 
-    public void install(MFXLabeled<?> labeled) {
+    protected MFXTooltip install(MFXLabeled<?> labeled) {
         if (installed) dispose();
+        indirect = true;
         labeled.setMFXTooltip(this);
+        return this;
     }
 
     /**
@@ -184,18 +192,15 @@ public class MFXTooltip extends PopupControl implements IMFXPopup {
      */
     public void dispose() {
         if (!installed) return;
-        Node owner = getOwner();
         delayer = null;
         countdown = null;
-        if (owner != null) {
-            owner.removeEventFilter(MouseEvent.MOUSE_MOVED, mouseMove);
-            owner.removeEventFilter(MouseEvent.MOUSE_EXITED, mouseExit);
-        }
-        mouseMove = null;
-        mouseExit = null;
         if (hoverWhen != null) {
             hoverWhen.dispose();
             hoverWhen = null;
+        }
+        if (ownerHoverWhen != null) {
+            ownerHoverWhen.dispose();
+            ownerHoverWhen = null;
         }
         base.setOwnerRef(null);
         installed = false;

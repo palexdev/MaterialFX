@@ -13,6 +13,7 @@ module mfx.components {
     exports io.github.palexdev.mfxcomponents.controls;
     exports io.github.palexdev.mfxcomponents.controls.base;
     exports io.github.palexdev.mfxcomponents.controls.buttons;
+    exports io.github.palexdev.mfxcomponents.controls.checkbox;
     exports io.github.palexdev.mfxcomponents.controls.fab;
 
     // Layout
@@ -23,6 +24,7 @@ module mfx.components {
     exports io.github.palexdev.mfxcomponents.skins.base;
 
     // Theming
+    exports io.github.palexdev.mfxcomponents.theming;
     exports io.github.palexdev.mfxcomponents.theming.base;
     exports io.github.palexdev.mfxcomponents.theming.enums;
 

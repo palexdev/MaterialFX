@@ -95,7 +95,7 @@ public class MFXPopupSkin<P extends IMFXPopup & Skinnable> implements Skin<P>, I
         if (Animations.isPlaying(outAnimation)) outAnimation.stop();
         scale.setX(inScaleX);
         scale.setY(inScaleY);
-        inAnimation.play();
+        inAnimation.playFromStart();
     }
 
     /**
@@ -122,7 +122,7 @@ public class MFXPopupSkin<P extends IMFXPopup & Skinnable> implements Skin<P>, I
                     .getAnimation();
         }
         if (Animations.isPlaying(inAnimation)) inAnimation.stop();
-        outAnimation.play();
+        outAnimation.playFromStart();
     }
 
     /**

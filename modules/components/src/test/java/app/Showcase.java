@@ -16,18 +16,19 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app.buttons;
+package app;
 
-import app.ComponentsLauncher;
 import app.others.ui.*;
 import fr.brouillard.oss.cssfx.CSSFX;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXIconButton;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXSegmentedButton;
+import io.github.palexdev.mfxcomponents.controls.checkbox.MFXCheckBox;
 import io.github.palexdev.mfxcomponents.controls.fab.MFXFab;
+import io.github.palexdev.mfxcomponents.theming.MaterialThemes;
 import io.github.palexdev.mfxcomponents.theming.enums.FABVariants;
 import io.github.palexdev.mfxcomponents.theming.enums.IconButtonVariants;
-import io.github.palexdev.mfxcomponents.theming.enums.MFXThemeManager;
+import io.github.palexdev.mfxcomponents.theming.enums.PseudoClasses;
 import io.github.palexdev.mfxcore.base.beans.Size;
 import io.github.palexdev.mfxcore.builders.InsetsBuilder;
 import io.github.palexdev.mfxcore.utils.fx.CSSFragment;
@@ -51,13 +52,15 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.scenicview.ScenicView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 import static io.github.palexdev.mfxresources.fonts.IconsProviders.FONTAWESOME_SOLID;
 import static io.github.palexdev.mfxresources.fonts.IconsProviders.randomIcon;
 
-public class ButtonsPlayground extends Application implements MultipleViewApp<String> {
+public class Showcase extends Application implements MultipleViewApp<String> {
     //================================================================================
     // Properties
     //================================================================================
@@ -137,6 +140,7 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
         switcher.register("extended-fabs", s -> extendedFabView());
         switcher.register("icon-buttons", s -> iconButtonsView());
         switcher.register("segmented-buttons", s -> segmentedButtonsView());
+        switcher.register("checkboxes", s -> checkBoxesView());
     }
 
     @Override
@@ -148,8 +152,8 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
     public List<String> getStylesheet() {
         String base = ComponentsLauncher.load("AppBase.css");
         String theme = themeVariant.get().equals("light") ?
-            MFXThemeManager.PURPLE_LIGHT.load() :
-            MFXThemeManager.PURPLE_DARK.load();
+            MaterialThemes.PURPLE_LIGHT.toData() :
+            MaterialThemes.PURPLE_DARK.toData();
         return List.of(base, theme);
     }
 
@@ -227,6 +231,10 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
 
     private Node segmentedButtonsView() {
         return createSegmentedButtonsView("Segmented Buttons");
+    }
+
+    private Node checkBoxesView() {
+        return createCheckBoxesView("CheckBoxes");
     }
 
     // Creators
@@ -408,6 +416,67 @@ public class ButtonsPlayground extends Application implements MultipleViewApp<St
         wDisabled.getSegments().get(2).setDisable(true);
 
         defTP.add(woIcons, wIcons, wDisabled);
+        return defTP;
+    }
+
+    private Node createCheckBoxesView(String title) {
+        TitledFlowPane defTP = new TitledFlowPane(title);
+        defTP.setMaxWidth(350);
+        List<Supplier<MFXCheckBox>> generators = new ArrayList<>(List.of(
+            MFXCheckBox::new,
+            () -> {
+                MFXCheckBox c = new MFXCheckBox();
+                c.setDisable(true);
+                return c;
+            },
+            () -> {
+                MFXCheckBox c = new MFXCheckBox();
+                c.setMouseTransparent(true);
+                PseudoClasses.HOVER.setOn(c, true);
+                return c;
+            },
+            () -> {
+                MFXCheckBox c = new MFXCheckBox();
+                c.setMouseTransparent(true);
+                PseudoClasses.FOCUSED.setOn(c, true);
+                return c;
+            },
+            () -> {
+                MFXCheckBox c = new MFXCheckBox();
+                c.setMouseTransparent(true);
+                PseudoClasses.PRESSED.setOn(c, true);
+                return c;
+            }
+        ));
+
+        // Unchecked
+        for (Supplier<MFXCheckBox> g : generators) {
+            defTP.add(g.get());
+        }
+
+        // Indeterminate
+        for (Supplier<MFXCheckBox> g : generators) {
+            MFXCheckBox c = g.get();
+            c.setAllowIndeterminate(true);
+            c.setIndeterminate(true);
+            defTP.add(c);
+        }
+
+        // Selected
+        for (Supplier<MFXCheckBox> g : generators) {
+            MFXCheckBox c = g.get();
+            c.setSelected(true);
+            defTP.add(c);
+        }
+
+        // Error
+        for (Supplier<MFXCheckBox> g : generators) {
+            MFXCheckBox c = g.get();
+            c.setAllowIndeterminate(true);
+            PseudoClasses.ERROR.setOn(c, true);
+            defTP.add(c);
+        }
+
         return defTP;
     }
 }

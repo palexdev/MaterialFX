@@ -23,7 +23,7 @@ import io.github.palexdev.mfxcomponents.controls.fab.MFXFab;
 import io.github.palexdev.mfxcomponents.layout.LayoutStrategy;
 import io.github.palexdev.mfxcomponents.layout.LayoutStrategy.Defaults;
 import io.github.palexdev.mfxcomponents.layout.MFXResizable;
-import io.github.palexdev.mfxcomponents.theming.enums.MFXThemeManager;
+import io.github.palexdev.mfxcomponents.theming.MaterialThemes;
 import io.github.palexdev.mfxcore.base.properties.NodeProperty;
 import io.github.palexdev.mfxcore.behavior.BehaviorBase;
 import io.github.palexdev.mfxcore.observables.When;
@@ -380,7 +380,7 @@ public class TestLayoutStrategies {
     private <T extends Pane> T setupStage(Supplier<T> paneFactory) {
         try {
             Scene scene = new Scene(paneFactory.get(), 200, 200);
-            MFXThemeManager.PURPLE_LIGHT.addOn(scene);
+            MaterialThemes.PURPLE_LIGHT.applyOn(scene);
             FxToolkit.setupStage(s -> s.setScene(scene));
         } catch (TimeoutException e) {
             throw new RuntimeException(e);

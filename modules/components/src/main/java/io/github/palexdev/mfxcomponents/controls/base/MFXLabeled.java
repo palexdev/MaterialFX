@@ -113,8 +113,8 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 			MFXTooltip oldValue = get();
 			if (oldValue != null) oldValue.dispose();
 			if (oldValue == newValue) return;
-			newValue.install((Node) MFXLabeled.this);
-			super.set(newValue);
+			newValue.install();
+            super.set(newValue);
 		}
 	};
 

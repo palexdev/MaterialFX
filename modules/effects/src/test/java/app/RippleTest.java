@@ -39,7 +39,6 @@ public class RippleTest extends Application {
 		target.setStyle("-fx-border-color: red; -fx-border-radius: 24px");
 
 		MFXRippleGenerator rg = new MFXRippleGenerator(target);
-		rg.setAutoClip(true);
 		rg.enable();
 		target.getChildren().add(rg);
 

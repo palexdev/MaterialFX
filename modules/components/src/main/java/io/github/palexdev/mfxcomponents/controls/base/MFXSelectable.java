@@ -66,14 +66,12 @@ public abstract class MFXSelectable<B extends MFXSelectableBehaviorBase<?>> exte
      * The given parameter is the new requested selection state.
      * <p></p>
      * One can alter the return value according to its needs.
-     * This for example, by default, will return {@code false} if the component has been disabled, following
-     * the logic that a disabled node cannot be interacted with, neither its state changed.
+     * By default, does not alter the requested state.
      * <p></p>
      * BEWARE! Disabling these components when in a {@link SelectionGroup} may produce unexpected results,
      * especially when using the {@link SelectionGroup#atLeastOneSelectedProperty()} mode.
      */
     protected boolean changeSelection(boolean selected) {
-        if (isDisabled()) return false;
         return selected;
     }
 
@@ -81,6 +79,8 @@ public abstract class MFXSelectable<B extends MFXSelectableBehaviorBase<?>> exte
      * This is automatically called by {@link #selectedProperty()} after the selection has changed and has become invalid.
      * <p></p>
      * Allows to execute any action given the new selection state.
+     * <p></p>
+     * By default, de-/activates the ':selected' pseudo-class on the component.
      */
     protected void onSelectionChanged(boolean selected) {
         PseudoClasses.SELECTED.setOn(this, selected);

@@ -16,39 +16,28 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.mfxcomponents.theming.enums;
+package io.github.palexdev.mfxcomponents.theming;
 
-import io.github.palexdev.mfxresources.MFXResources;
-import javafx.scene.Scene;
+import io.github.palexdev.mfxcomponents.theming.base.Theme;
 
-import java.net.URL;
+/**
+ * Enumeration of all the Material Design 3 themes currently offered by MaterialFX. Implements {@link Theme}.
+ */
+public enum MaterialThemes implements Theme {
+    INDIGO_LIGHT("themes/material/md-indigo-light.css"),
+    INDIGO_DARK("themes/material/md-indigo-dark.css"),
+    PURPLE_LIGHT("themes/material/md-purple-light.css"),
+    PURPLE_DARK("themes/material/md-purple-dark.css"),
+    ;
 
-public enum MFXThemeManager {
-	PURPLE_LIGHT("themes/material/md-purple-light.css"),
-	PURPLE_DARK("themes/material/md-purple-dark.css"),
-	;
+    private final String path;
 
-	private final String path;
+    MaterialThemes(String path) {
+        this.path = path;
+    }
 
-	MFXThemeManager(String path) {
-		this.path = path;
-	}
-
-	public String getPath() {
-		return path;
-	}
-
-	public void addOn(Scene scene) {
-		String stylesheet = load();
-		if (!scene.getStylesheets().contains(stylesheet))
-			scene.getStylesheets().add(stylesheet);
-	}
-
-	public String load() {
-		return MFXResources.load(getPath());
-	}
-
-	public URL loadURL() {
-		return MFXResources.loadURL(getPath());
-	}
+    @Override
+    public String path() {
+        return path;
+    }
 }

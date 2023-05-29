@@ -22,16 +22,18 @@ import javafx.css.PseudoClass;
 import javafx.scene.Node;
 
 /**
- * This enumerator keeps references to custom {@link PseudoClass}es needed by MaterialFX components.
+ * This enumerator keeps references to all the {@link PseudoClass}es needed by MaterialFX components.
  */
 public enum PseudoClasses {
     DISABLED(PseudoClass.getPseudoClass("disabled")),
+    ERROR(PseudoClass.getPseudoClass("error")),
     EXTENDED(PseudoClass.getPseudoClass("extended")),
     FIRST(PseudoClass.getPseudoClass("first")),
     FOCUSED(PseudoClass.getPseudoClass("focused")),
     FOCUS_VISIBLE(PseudoClass.getPseudoClass("focus-visible")),
     FOCUS_WITHIN(PseudoClass.getPseudoClass("focus-within")),
     HOVER(PseudoClass.getPseudoClass("hover")),
+    INDETERMINATE(PseudoClass.getPseudoClass("indeterminate")),
     LAST(PseudoClass.getPseudoClass("last")),
     PRESSED(PseudoClass.getPseudoClass("pressed")),
     SELECTABLE(PseudoClass.getPseudoClass("selectable")),

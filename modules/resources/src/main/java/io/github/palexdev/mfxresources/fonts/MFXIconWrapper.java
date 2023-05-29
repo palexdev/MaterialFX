@@ -237,7 +237,7 @@ public class MFXIconWrapper extends StackPane {
 		super.layoutChildren();
 
 		MFXFontIcon icon = getIcon();
-		if (icon != null && !icon.getDescription().isBlank() && getSize() == -1) {
+		if (icon != null && icon.getDescription() != null && !icon.getDescription().isBlank() && getSize() == -1) {
 			double iW = icon.prefWidth(-1);
 			double iH = icon.prefHeight(-1);
 			double size = Math.max(

@@ -98,6 +98,7 @@ public class MaterialSurface extends Region implements MFXStyleable {
     //================================================================================
     private void initialize() {
         setManaged(false);
+        setMaxSize(USE_PREF_SIZE, USE_PREF_SIZE);
         getStyleClass().setAll(defaultStyleClasses());
         getChildren().addAll(bg, rippleGenerator);
 

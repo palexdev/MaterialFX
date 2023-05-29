@@ -23,7 +23,7 @@ import io.github.palexdev.mfxcomponents.behaviors.MFXButtonBehaviorBase;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXIconButton;
 import io.github.palexdev.mfxcomponents.skins.MFXButtonSkin;
-import io.github.palexdev.mfxcomponents.theming.enums.MFXThemeManager;
+import io.github.palexdev.mfxcomponents.theming.MaterialThemes;
 import javafx.scene.Scene;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -123,7 +123,7 @@ public class TestButton {
         StackPane sp = new StackPane();
         try {
             Scene scene = new Scene(sp, 200, 200);
-            MFXThemeManager.PURPLE_LIGHT.addOn(scene);
+            MaterialThemes.PURPLE_LIGHT.applyOn(scene);
             FxToolkit.setupStage(s -> s.setScene(scene));
         } catch (TimeoutException e) {
             throw new RuntimeException(e);

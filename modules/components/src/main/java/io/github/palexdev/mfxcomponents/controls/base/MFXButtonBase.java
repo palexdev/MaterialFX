@@ -1,7 +1,7 @@
 package io.github.palexdev.mfxcomponents.controls.base;
 
 import io.github.palexdev.mfxcomponents.behaviors.MFXButtonBehaviorBase;
-import io.github.palexdev.mfxcomponents.theming.enums.MFXThemeManager;
+import io.github.palexdev.mfxcomponents.theming.MaterialThemes;
 import io.github.palexdev.mfxcore.base.properties.EventHandlerProperty;
 import io.github.palexdev.mfxcore.observables.When;
 import io.github.palexdev.mfxcore.utils.fx.SceneBuilderIntegration;
@@ -79,7 +79,7 @@ public abstract class MFXButtonBase<B extends MFXButtonBehaviorBase<?>> extends 
     protected void sceneBuilderIntegration() {
         SceneBuilderIntegration.ifInSceneBuilder(() -> setText("Button"));
         SceneBuilderIntegration.ifInSceneBuilder(() -> {
-            String theme = MFXThemeManager.PURPLE_LIGHT.load();
+            String theme = MaterialThemes.PURPLE_LIGHT.toData();
             When.onChanged(sceneProperty())
                 .condition((o, n) -> n != null && !n.getStylesheets().contains(theme))
                 .then((o, n) -> n.getStylesheets().add(theme))

@@ -20,8 +20,8 @@ package interactive;
 
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
 import io.github.palexdev.mfxcomponents.controls.fab.MFXFab;
+import io.github.palexdev.mfxcomponents.theming.MaterialThemes;
 import io.github.palexdev.mfxcomponents.theming.enums.FABVariants;
-import io.github.palexdev.mfxcomponents.theming.enums.MFXThemeManager;
 import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
@@ -113,7 +113,7 @@ public class TestInitSize {
     private StackPane setupStage() {
         try {
             Scene scene = new Scene(new StackPane(), 200, 200);
-            MFXThemeManager.PURPLE_LIGHT.addOn(scene);
+            MaterialThemes.PURPLE_LIGHT.applyOn(scene);
             FxToolkit.setupStage(s -> s.setScene(scene));
         } catch (TimeoutException e) {
             throw new RuntimeException(e);

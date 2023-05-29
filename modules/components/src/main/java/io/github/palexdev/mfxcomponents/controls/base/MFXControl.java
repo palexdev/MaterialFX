@@ -114,7 +114,7 @@ public abstract class MFXControl<B extends BehaviorBase<? extends Node>> extends
             MFXTooltip oldValue = get();
             if (oldValue != null) oldValue.dispose();
             if (oldValue == newValue) return;
-            newValue.install((Node) MFXControl.this);
+            newValue.install();
             super.set(newValue);
         }
     };

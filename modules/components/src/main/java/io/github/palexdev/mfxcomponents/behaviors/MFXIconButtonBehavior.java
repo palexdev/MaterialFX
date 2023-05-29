@@ -23,7 +23,11 @@ public class MFXIconButtonBehavior extends MFXSelectableBehaviorBase<MFXIconButt
     @Override
     protected void handleSelection() {
         MFXIconButton btn = getNode();
-        if (!btn.isSelectable()) return;
+        if (!btn.isSelectable()) {
+            // If the button is not a toggle it still acts like a normal button!
+            btn.fire();
+            return;
+        }
         super.handleSelection();
     }
 }

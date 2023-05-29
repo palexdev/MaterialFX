@@ -19,7 +19,7 @@
 package interactive;
 
 import io.github.palexdev.mfxcomponents.controls.fab.MFXFab;
-import io.github.palexdev.mfxcomponents.theming.enums.MFXThemeManager;
+import io.github.palexdev.mfxcomponents.theming.MaterialThemes;
 import io.github.palexdev.mfxcore.builders.InsetsBuilder;
 import io.github.palexdev.mfxcore.utils.fx.ColorUtils;
 import io.github.palexdev.mfxcore.utils.fx.TextUtils;
@@ -235,7 +235,7 @@ public class TestAlignment {
         box.setAlignment(Pos.CENTER);
         try {
             Scene scene = new Scene(box, 400, 400);
-            MFXThemeManager.PURPLE_LIGHT.addOn(scene);
+            MaterialThemes.PURPLE_LIGHT.applyOn(scene);
             FxToolkit.setupStage(s -> s.setScene(scene));
         } catch (TimeoutException e) {
             throw new RuntimeException(e);

@@ -22,9 +22,6 @@ import io.github.palexdev.mfxcomponents.behaviors.MFXFabBehavior;
 import io.github.palexdev.mfxcomponents.skins.MFXFabSkin;
 import io.github.palexdev.mfxcomponents.theming.base.WithVariants;
 import io.github.palexdev.mfxcomponents.theming.enums.FABVariants;
-import io.github.palexdev.mfxcomponents.theming.enums.MFXThemeManager;
-import io.github.palexdev.mfxcore.observables.When;
-import io.github.palexdev.mfxcore.utils.fx.SceneBuilderIntegration;
 import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 
 import java.util.List;
@@ -131,18 +128,5 @@ public class MFXFab extends MFXFabBase implements WithVariants<MFXFab, FABVarian
         WithVariants.removeVariants(this, variants);
         onInitSizesChanged();
         return this;
-    }
-
-    @Override
-    protected void sceneBuilderIntegration() {
-        SceneBuilderIntegration.ifInSceneBuilder(() -> {
-            String theme = MFXThemeManager.PURPLE_LIGHT.load();
-            When.onChanged(sceneProperty())
-                .condition((o, n) -> n != null && !n.getStylesheets().contains(theme))
-                .then((o, n) -> n.getStylesheets().add(theme))
-                .oneShot()
-                .listen();
-        });
-        // TODO theme integration with SceneBuilder will change once base themes and MFXThemeManager are implemented
     }
 }

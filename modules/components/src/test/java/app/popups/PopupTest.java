@@ -1,7 +1,7 @@
 package app.popups;
 
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
-import io.github.palexdev.mfxcomponents.theming.enums.MFXThemeManager;
+import io.github.palexdev.mfxcomponents.theming.MaterialThemes;
 import io.github.palexdev.mfxcomponents.window.MFXRichContent;
 import io.github.palexdev.mfxcomponents.window.popups.MFXTooltip;
 import io.github.palexdev.mfxcore.builders.InsetsBuilder;
@@ -50,7 +50,7 @@ public class PopupTest extends Application {
 
         pane.getChildren().addAll(button, anchors);
         Scene scene = new Scene(pane, 600, 600);
-        MFXThemeManager.PURPLE_LIGHT.addOn(scene);
+        MaterialThemes.PURPLE_LIGHT.applyOn(scene);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

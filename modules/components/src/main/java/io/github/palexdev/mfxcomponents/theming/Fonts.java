@@ -16,26 +16,26 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app;
+package io.github.palexdev.mfxcomponents.theming;
 
-import javafx.application.Application;
+import io.github.palexdev.mfxcomponents.theming.base.Theme;
 
-public class ComponentsLauncher {
+/**
+ * Enumeration of all the font stylesheets offered by MaterialFX. Implements {@link Theme}.
+ */
+public enum Fonts implements Theme {
+    COMFORTAA("fonts/Comfortaa/Comfortaa.css"),
+    OPEN_SANS("fonts/OpenSans/OpenSans.css"),
+    ROBOTO("fonts/Roboto/Roboto.css");
 
-    public static void main(String[] args) {
-        //System.setProperty("prism.order", "sw");
-        //System.setProperty("prism.text", "t2k");
-        //System.setProperty("prism.lcdtext", "false");
-        //System.setProperty("prism.vsync", "false");
-        //System.setProperty("prism.showdirty", "true");
-        //System.setProperty("prism.forceGPU","true");
-        //System.setProperty("prism.verbose", "true");
-        //System.setProperty("javafx.animation.fullspeed", "true");
-        System.setProperty("glass.disableGrab", "true");
-        Application.launch(Sandbox.class, args);
+    private final String path;
+
+    Fonts(String path) {
+        this.path = path;
     }
 
-    public static String load(String name) {
-        return ComponentsLauncher.class.getResource(name).toExternalForm();
+    @Override
+    public String path() {
+        return path;
     }
 }
