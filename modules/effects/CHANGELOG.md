@@ -16,6 +16,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.2.1] - 29-05-2023
+
+### Fixed
+
+- MFXRippleGenerator: fixed NullPointerException occurring in rare occasions due to the state being null
+
 ## [11.2.0] - 17-05-2023
 
 ### Added

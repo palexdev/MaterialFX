@@ -16,6 +16,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.6.2] - 29-05-2023
+
+### Changed
+
+- CSSFragment added methods to support Application.setUserAgentStylesheet(...)
+
 ## [11.6.1] - 23-05-2023
 
 ### Added

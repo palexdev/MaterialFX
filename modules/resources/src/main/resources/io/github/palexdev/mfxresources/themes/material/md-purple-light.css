@@ -95,28 +95,28 @@
   -md-sys-color-primary: #6750A4;
   -md-sys-color-primary-container: #EADDFF;
   -md-sys-color-on-primary: #FFFFFF;
-    -md-sys-color-on-primary-container: #21005D;
-    -md-sys-color-inverse-primary: #D0BCFF;
-    -md-sys-color-secondary: #625B71;
-    -md-sys-color-secondary-container: #E8DEF8;
-    -md-sys-color-on-secondary: #FFFFFF;
-    -md-sys-color-on-secondary-container: #1D192B;
-    -md-sys-color-tertiary: #7D5260;
-    -md-sys-color-tertiary-container: #FFD8E4;
-    -md-sys-color-on-tertiay: #FFFFFF;
-    -md-sys-color-on-tertiary-container: #31111D;
-    -md-sys-color-error: #B3261E;
-    -md-sys-color-error-container: #F9DEDC;
-    -md-sys-color-on-error: #FFFFFF;
-    -md-sys-color-on-error-container: #410E0B;
-    -md-sys-color-surface: #FEF7FF;
-    -md-sys-color-surface-dim: #DED8E1;
-    -md-sys-color-surface-bright: #FEF7FF;
-    -md-sys-color-surface-container-lowest: #FFFFFF;
-    -md-sys-color-surface-container-low: #F7F2FA;
-    -md-sys-color-surface-container: #F3EDF7;
-    -md-sys-color-surface-container-high: #ECE6F0;
-    -md-sys-color-surface-container-highest: #E6E0E9;
+  -md-sys-color-on-primary-container: #21005D;
+  -md-sys-color-inverse-primary: #D0BCFF;
+  -md-sys-color-secondary: #625B71;
+  -md-sys-color-secondary-container: #E8DEF8;
+  -md-sys-color-on-secondary: #FFFFFF;
+  -md-sys-color-on-secondary-container: #1D192B;
+  -md-sys-color-tertiary: #7D5260;
+  -md-sys-color-tertiary-container: #FFD8E4;
+  -md-sys-color-on-tertiay: #FFFFFF;
+  -md-sys-color-on-tertiary-container: #31111D;
+  -md-sys-color-error: #B3261E;
+  -md-sys-color-error-container: #F9DEDC;
+  -md-sys-color-on-error: #FFFFFF;
+  -md-sys-color-on-error-container: #410E0B;
+  -md-sys-color-surface: #FEF7FF;
+  -md-sys-color-surface-dim: #DED8E1;
+  -md-sys-color-surface-bright: #FEF7FF;
+  -md-sys-color-surface-container-lowest: #FFFFFF;
+  -md-sys-color-surface-container-low: #F7F2FA;
+  -md-sys-color-surface-container: #F3EDF7;
+  -md-sys-color-surface-container-high: #ECE6F0;
+  -md-sys-color-surface-container-highest: #E6E0E9;
   -md-sys-color-surface-variant: #E7E0EC;
   -md-sys-color-on-surface: #1D1B20;
   -md-sys-color-on-surface-variant: #49454F;
@@ -354,100 +354,100 @@
 }
 
 .mfx-button.outlined .mfx-font-icon {
-    -mfx-color: #6750A4;
+  -mfx-color: #6750A4;
 }
 
 .mfx-button.outlined .mfx-ripple-generator {
-    -mfx-ripple-color: rgba(103, 80, 164, 0.12);
+  -mfx-ripple-color: rgba(103, 80, 164, 0.12);
 }
 
 /****************************************************************************************************
  * Check Boxes
  ****************************************************************************************************/
 .mfx-checkbox {
-    -fx-font-family: "Roboto Medium";
-    -fx-font-weight: 500;
-    -fx-font-size: 14px;
-    -fx-text-fill: #1D1B20;
+  -fx-font-family: "Roboto Medium";
+  -fx-font-weight: 500;
+  -fx-font-size: 14px;
+  -fx-text-fill: #1D1B20;
 }
 
 .mfx-checkbox > .surface {
-    -fx-pref-width: 40px;
-    -fx-pref-height: 40px;
+  -fx-pref-width: 40px;
+  -fx-pref-height: 40px;
 }
 
 .mfx-checkbox > .surface > .mfx-ripple-generator {
-    -mfx-ripple-color: rgba(103, 80, 164, 0.12);
+  -mfx-ripple-color: rgba(103, 80, 164, 0.12);
 }
 
 .mfx-checkbox > .surface > .bg {
-    -fx-background-color: #6750A4;
-    -fx-background-radius: 100px;
+  -fx-background-color: #6750A4;
+  -fx-background-radius: 100px;
 }
 
 .mfx-checkbox > .mfx-icon-wrapper {
-    -fx-background-radius: 2px;
-    -fx-border-color: #49454F;
-    -fx-border-radius: 2px;
-    -fx-border-width: 2px;
-    -mfx-size: 18px;
+  -fx-background-radius: 2px;
+  -fx-border-color: #49454F;
+  -fx-border-radius: 2px;
+  -fx-border-width: 2px;
+  -mfx-size: 18px;
 }
 
 .mfx-checkbox > .mfx-icon-wrapper > .mfx-font-icon {
-    -mfx-description: "fas-check";
-    -mfx-size: 12px;
-    visibility: hidden;
+  -mfx-description: "fas-check";
+  -mfx-size: 12px;
+  visibility: hidden;
 }
 
 .mfx-checkbox:indeterminate > .mfx-icon-wrapper {
-    -fx-background-color: #6750A4;
-    -fx-border-width: 0px;
+  -fx-background-color: #6750A4;
+  -fx-border-width: 0px;
 }
 
 .mfx-checkbox:selected > .mfx-icon-wrapper {
-    -fx-background-color: #6750A4;
-    -fx-border-width: 0px;
+  -fx-background-color: #6750A4;
+  -fx-border-width: 0px;
 }
 
 .mfx-checkbox:selected > .mfx-icon-wrapper > .mfx-font-icon,
 .mfx-checkbox:indeterminate > .mfx-icon-wrapper > .mfx-font-icon {
-    visibility: visible;
-    -mfx-color: #FFFFFF;
+  visibility: visible;
+  -mfx-color: #FFFFFF;
 }
 
 .mfx-checkbox:indeterminate > .mfx-icon-wrapper > .mfx-font-icon {
-    -mfx-description: "fas-minus";
+  -mfx-description: "fas-minus";
 }
 
 .mfx-checkbox:error > .surface > .mfx-ripple-generator {
-    -mfx-ripple-color: rgba(179, 38, 30, 0.12);
+  -mfx-ripple-color: rgba(179, 38, 30, 0.12);
 }
 
 .mfx-checkbox:error > .surface > .bg {
-    -fx-background-color: #B3261E;
+  -fx-background-color: #B3261E;
 }
 
 .mfx-checkbox:error > .mfx-icon-wrapper {
-    -fx-border-color: #B3261E;
+  -fx-border-color: #B3261E;
 }
 
 .mfx-checkbox:selected:error > .mfx-icon-wrapper,
 .mfx-checkbox:indeterminate:error > .mfx-icon-wrapper {
-    -fx-background-color: #B3261E;
+  -fx-background-color: #B3261E;
 }
 
 .mfx-checkbox:selected:error > .mfx-icon-wrapper > .mfx-font-icon {
-    -mfx-color: #FFFFFF;
+  -mfx-color: #FFFFFF;
 }
 
 .mfx-checkbox:disabled > .mfx-icon-wrapper {
-    -fx-background-color: transparent;
-    -fx-border-color: rgba(29, 27, 32, 0.38);
+  -fx-background-color: transparent;
+  -fx-border-color: rgba(29, 27, 32, 0.38);
 }
 
 .mfx-checkbox:selected:disabled > .mfx-icon-wrapper,
 .mfx-checkbox:indeterminate:disabled > .mfx-icon-wrapper {
-    -fx-background-color: rgba(29, 27, 32, 0.38);
+  -fx-background-color: rgba(29, 27, 32, 0.38);
 }
 
 /****************************************************************************************************
@@ -455,10 +455,10 @@
  ****************************************************************************************************/
 .mfx-button.fab,
 .mfx-button.fab:extended {
-    -fx-font-family: "Roboto Medium";
-    -fx-font-weight: 500;
-    -fx-font-size: 14px;
-    -fx-graphic-text-gap: 8px;
+  -fx-font-family: "Roboto Medium";
+  -fx-font-weight: 500;
+  -fx-font-size: 14px;
+  -fx-graphic-text-gap: 8px;
   -fx-background-radius: 16px;
   -fx-padding: 16px;
   -mfx-init-width: 56px;

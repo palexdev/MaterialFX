@@ -354,100 +354,100 @@
 }
 
 .mfx-button.outlined .mfx-font-icon {
-    -mfx-color: #D0BCFF;
+  -mfx-color: #D0BCFF;
 }
 
 .mfx-button.outlined .mfx-ripple-generator {
-    -mfx-ripple-color: rgba(208, 188, 255, 0.12);
+  -mfx-ripple-color: rgba(208, 188, 255, 0.12);
 }
 
 /****************************************************************************************************
  * Check Boxes
  ****************************************************************************************************/
 .mfx-checkbox {
-    -fx-font-family: "Roboto Medium";
-    -fx-font-weight: 500;
-    -fx-font-size: 14px;
-    -fx-text-fill: #E6E0E9;
+  -fx-font-family: "Roboto Medium";
+  -fx-font-weight: 500;
+  -fx-font-size: 14px;
+  -fx-text-fill: #E6E0E9;
 }
 
 .mfx-checkbox > .surface {
-    -fx-pref-width: 40px;
-    -fx-pref-height: 40px;
+  -fx-pref-width: 40px;
+  -fx-pref-height: 40px;
 }
 
 .mfx-checkbox > .surface > .mfx-ripple-generator {
-    -mfx-ripple-color: rgba(208, 188, 255, 0.12);
+  -mfx-ripple-color: rgba(208, 188, 255, 0.12);
 }
 
 .mfx-checkbox > .surface > .bg {
-    -fx-background-color: #D0BCFF;
-    -fx-background-radius: 100px;
+  -fx-background-color: #D0BCFF;
+  -fx-background-radius: 100px;
 }
 
 .mfx-checkbox > .mfx-icon-wrapper {
-    -fx-background-radius: 2px;
-    -fx-border-color: #CAC4D0;
-    -fx-border-radius: 2px;
-    -fx-border-width: 2px;
-    -mfx-size: 18px;
+  -fx-background-radius: 2px;
+  -fx-border-color: #CAC4D0;
+  -fx-border-radius: 2px;
+  -fx-border-width: 2px;
+  -mfx-size: 18px;
 }
 
 .mfx-checkbox > .mfx-icon-wrapper > .mfx-font-icon {
-    -mfx-description: "fas-check";
-    -mfx-size: 12px;
-    visibility: hidden;
+  -mfx-description: "fas-check";
+  -mfx-size: 12px;
+  visibility: hidden;
 }
 
 .mfx-checkbox:indeterminate > .mfx-icon-wrapper {
-    -fx-background-color: #D0BCFF;
-    -fx-border-width: 0px;
+  -fx-background-color: #D0BCFF;
+  -fx-border-width: 0px;
 }
 
 .mfx-checkbox:selected > .mfx-icon-wrapper {
-    -fx-background-color: #D0BCFF;
-    -fx-border-width: 0px;
+  -fx-background-color: #D0BCFF;
+  -fx-border-width: 0px;
 }
 
 .mfx-checkbox:selected > .mfx-icon-wrapper > .mfx-font-icon,
 .mfx-checkbox:indeterminate > .mfx-icon-wrapper > .mfx-font-icon {
-    visibility: visible;
-    -mfx-color: #381E72;
+  visibility: visible;
+  -mfx-color: #381E72;
 }
 
 .mfx-checkbox:indeterminate > .mfx-icon-wrapper > .mfx-font-icon {
-    -mfx-description: "fas-minus";
+  -mfx-description: "fas-minus";
 }
 
 .mfx-checkbox:error > .surface > .mfx-ripple-generator {
-    -mfx-ripple-color: rgba(242, 184, 181, 0.12);
+  -mfx-ripple-color: rgba(242, 184, 181, 0.12);
 }
 
 .mfx-checkbox:error > .surface > .bg {
-    -fx-background-color: #F2B8B5;
+  -fx-background-color: #F2B8B5;
 }
 
 .mfx-checkbox:error > .mfx-icon-wrapper {
-    -fx-border-color: #F2B8B5;
+  -fx-border-color: #F2B8B5;
 }
 
 .mfx-checkbox:selected:error > .mfx-icon-wrapper,
 .mfx-checkbox:indeterminate:error > .mfx-icon-wrapper {
-    -fx-background-color: #F2B8B5;
+  -fx-background-color: #F2B8B5;
 }
 
 .mfx-checkbox:selected:error > .mfx-icon-wrapper > .mfx-font-icon {
-    -mfx-color: #601410;
+  -mfx-color: #601410;
 }
 
 .mfx-checkbox:disabled > .mfx-icon-wrapper {
-    -fx-background-color: transparent;
-    -fx-border-color: rgba(230, 224, 233, 0.38);
+  -fx-background-color: transparent;
+  -fx-border-color: rgba(230, 224, 233, 0.38);
 }
 
 .mfx-checkbox:selected:disabled > .mfx-icon-wrapper,
 .mfx-checkbox:indeterminate:disabled > .mfx-icon-wrapper {
-    -fx-background-color: rgba(230, 224, 233, 0.38);
+  -fx-background-color: rgba(230, 224, 233, 0.38);
 }
 
 /****************************************************************************************************
@@ -455,10 +455,10 @@
  ****************************************************************************************************/
 .mfx-button.fab,
 .mfx-button.fab:extended {
-    -fx-font-family: "Roboto Medium";
-    -fx-font-weight: 500;
-    -fx-font-size: 14px;
-    -fx-graphic-text-gap: 8px;
+  -fx-font-family: "Roboto Medium";
+  -fx-font-weight: 500;
+  -fx-font-size: 14px;
+  -fx-graphic-text-gap: 8px;
   -fx-background-radius: 16px;
   -fx-padding: 16px;
   -mfx-init-width: 56px;

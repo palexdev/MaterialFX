@@ -16,6 +16,18 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.7.0] - 29-05-2023
+
+### Added
+
+- Added stylesheets for MFXCheckBox
+- Added new theme, indigo color
+
+### Fixed
+
+- MFXIconWrapper: fixed NullPointerException occurring when the icon's description is null
+- Fixed incorrect values for 'error' and 'error-container'
+
 ## [11.6.1] - 23-05-2023
 
 ### Changed

@@ -16,6 +16,34 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.20.0] - 29-05-2023
+
+### Added
+
+- Implemented checkboxes
+- Added UserAgentBuilder: a mechanism that allows to merge a set of given Themes. The goal is to create a single
+  stylesheet that can be set as the Application user-agent, allowing the styling of the entire app in every
+  Window/Scene. Check javadocs for caveats!
+
+### Changed
+
+- Bump VirtualizedFX to version 11.9.4
+- MFXIconButtonBehavior: button should still fire() if not selectable
+- MFXSelectable, changeSelection(...) should not do anything by default
+- MFXFab: SceneBuilder integration is not needed as it is already covered by the super class MFXButtonBase
+- MFXTooltip, replace event handlers with a listener on the hover property
+- MFXPopupSkin: since animations are reused, it is appropriate to use playFromStart() instead of play()
+- Reviewed the theming API, this should be the final implementation. Added MaterialFX fonts as themes too, and also
+  added the JavaFX default themes because...
+
+### Fixed
+
+- MFXTooltip: improve install for MFXControl and MFXLabeled components, make sure that the tooltip is also set on the
+  mfxTooltipProperty()
+- MFXTooltip: a nasty bug would leave the tooltip open when the mouse was not on the owner anymore. After a lot of
+  stressful debugging I found the culprit, when the hover state changes to false, it's important to stop the 'delayer'
+  animation
+
 ## [11.19.2] - 23-05-2023
 
 ### Changed
