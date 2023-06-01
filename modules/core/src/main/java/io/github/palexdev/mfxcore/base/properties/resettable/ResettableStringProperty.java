@@ -22,16 +22,18 @@ import io.github.palexdev.mfxcore.base.properties.base.ResettableProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleStringProperty;
 
+import java.util.Objects;
+
 /**
  * A {@link SimpleStringProperty} that implements {@link ResettableProperty}.
  */
 public class ResettableStringProperty extends ReadOnlyStringWrapper implements ResettableProperty<String> {
-	//================================================================================
-	// Properties
-	//================================================================================
-	private String defaultValue;
-	private boolean fireChangeOnReset = false;
-	private boolean hasBeenReset = false;
+    //================================================================================
+    // Properties
+    //================================================================================
+    private String defaultValue;
+    private boolean fireChangeOnReset = true;
+    private boolean hasBeenReset = false;
 
 	//================================================================================
 	// Constructors
@@ -82,10 +84,7 @@ public class ResettableStringProperty extends ReadOnlyStringWrapper implements R
 
 	@Override
 	protected void fireValueChangedEvent() {
-		if (getValue().equals(defaultValue) && !fireChangeOnReset) {
-			return;
-		}
-
+        if (Objects.equals(getValue(), defaultValue) && !fireChangeOnReset) return;
 		super.fireValueChangedEvent();
 	}
 

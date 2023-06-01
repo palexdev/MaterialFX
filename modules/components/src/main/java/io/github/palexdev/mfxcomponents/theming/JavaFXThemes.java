@@ -19,6 +19,9 @@
 package io.github.palexdev.mfxcomponents.theming;
 
 import io.github.palexdev.mfxcomponents.theming.base.Theme;
+import io.github.palexdev.mfxresources.MFXResources;
+
+import java.io.InputStream;
 
 /**
  * Enumeration of the standard JavaFX themes. This is useful when used with {@link UserAgentBuilder}.
@@ -43,5 +46,11 @@ public enum JavaFXThemes implements Theme {
     @Override
     public String path() {
         return path;
+    }
+
+    @Override
+    public InputStream assets() {
+        String path = path().substring(0, path().lastIndexOf("/") + 1) + "assets.zip";
+        return MFXResources.loadStream(path);
     }
 }

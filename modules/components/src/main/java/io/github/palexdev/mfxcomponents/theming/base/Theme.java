@@ -18,10 +18,13 @@
 
 package io.github.palexdev.mfxcomponents.theming.base;
 
+import io.github.palexdev.mfxcomponents.theming.Deployer;
+import io.github.palexdev.mfxcomponents.theming.UserAgentBuilder;
 import io.github.palexdev.mfxresources.MFXResources;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +35,20 @@ import java.util.Map;
  * <p>
  * Very important is the load mechanism. This interface assumes that stylesheets reside in the MFXResources module, and
  * thus uses {@link MFXResources} to load them. Custom user themes must override {@link #get()}!
+ * <p></p>
+ * Until JavaFX adds support for Themes and multiple user agent stylesheets, this in combination with {@link UserAgentBuilder},
+ * offers a workaround for it. I noticed JavaFX themes were correctly merged but were still missing something: assets.
+ * Their themes use images that unfortunately cannot be retrieved after the merge unless...we deploy them.
+ * <p>
+ * I was thinking about a possible solution and the only idea I came up with was to copy the necessary assets on the disk,
+ * and then during post-processing correct the relative paths to point to the resources on the disk.
+ * <p>
+ * So, for now, the API has been extended to allow themes to deploy any kind of resources they need. The assets should
+ * all be contained in a zip file as then the {@link Deployer} class will extract its contents when {@link #deploy()} is
+ * invoked. All the deployment methods have been made {@code default}, in other words optional. The {@link #assets()} method
+ * by default returns null, this indicates to the {@link Deployer} that there's nothing to do.
+ *
+ * @see Deployer
  */
 public interface Theme {
 
@@ -78,6 +95,52 @@ public interface Theme {
      */
     default void applyOn(Parent parent) {
         parent.getStylesheets().add(toData());
+    }
+
+    /**
+     * @return the stream to the theme's assets, these are expected to be contained in a zip file
+     */
+    default InputStream assets() {
+        return null;
+    }
+
+    /**
+     * Asks the {@link Deployer} to deploy this theme's resources.
+     *
+     * @see Deployer#deploy(Theme)
+     */
+    default void deploy() {
+        try {
+            Deployer.instance().deploy(this);
+        } catch (Exception ex) {
+            System.err.println("Failed to deploy theme: " + name() + ", because: " + ex.getMessage());
+        }
+    }
+
+    /**
+     * This is used by the {@link Deployer} to identify the theme in its cache map, and it is also the parent folder
+     * in which assets will be extracted on the disk.
+     */
+    default String deployName() {
+        return name().toLowerCase();
+    }
+
+    /**
+     * Removes any deployed files from the disk and memory.
+     *
+     * @see Deployer#clean(Theme)
+     */
+    default void clean() {
+        Deployer.instance().clean(this);
+    }
+
+    /**
+     * @return whether the theme has been already deployed before by the {@link Deployer}. Beware, this is just a check
+     * to see if the deployment is in the cache map. No checks are done on the file system as it would be too costly.
+     * And this is true for {@link #deploy()} too, files will be extracted not matter if they are/are not on the disk
+     */
+    default boolean isDeployed() {
+        return Deployer.instance().getDeployed(this) != null;
     }
 
     class Helper {

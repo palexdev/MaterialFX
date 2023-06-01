@@ -21,12 +21,13 @@ package app;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXIconButton;
 import io.github.palexdev.mfxcomponents.controls.checkbox.MFXCheckBox;
-import io.github.palexdev.mfxcomponents.theming.Fonts;
+import io.github.palexdev.mfxcomponents.theming.Deployer;
 import io.github.palexdev.mfxcomponents.theming.JavaFXThemes;
 import io.github.palexdev.mfxcomponents.theming.MaterialThemes;
+import io.github.palexdev.mfxcomponents.theming.UserAgentBuilder;
 import io.github.palexdev.mfxcomponents.window.MFXPlainContent;
 import io.github.palexdev.mfxcomponents.window.popups.MFXTooltip;
-import io.github.palexdev.mfxcomponents.theming.UserAgentBuilder;
+import io.github.palexdev.mfxcore.utils.fx.CSSFragment;
 import io.github.palexdev.mfxeffects.animations.motion.M3Motion;
 import javafx.application.Application;
 import javafx.css.Styleable;
@@ -41,7 +42,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.scenicview.ScenicView;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -107,16 +107,27 @@ public class Sandbox extends Application {
         HBox aBox = new HBox(20, show, close);
         aBox.setAlignment(Pos.CENTER);
 
-        pane.getChildren().add(box);
+        pane.getChildren().add(aBox);
         Scene scene = new Scene(pane, 600, 600);
 
+
+        Deployer.instance().cleanAll();
         // Style app
-        Fonts.COMFORTAA.applyOn(scene);
-        Fonts.ROBOTO.applyOn(scene);
-        UserAgentBuilder.builder()
-            .themes(JavaFXThemes.MODENA, MaterialThemes.INDIGO_DARK)
-            .build()
-            .setGlobal();
+        CSSFragment uas = UserAgentBuilder.builder()
+            .themes(JavaFXThemes.CASPIAN, JavaFXThemes.FXVK, MaterialThemes.INDIGO_DARK)
+            .setResolveAssets(true)
+            .setDeploy(true)
+            .build();
+        uas.setGlobal();
+
+/*        Path path = Path.of(System.getProperty("user.home"), "Desktop", "out.css");
+        try {
+            if (!Files.exists(path)) Files.createFile(path);
+            Files.writeString(path, uas.toString(), CREATE, TRUNCATE_EXISTING);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }*/
+        //setUserAgentStylesheet(path.toUri().toURL().toExternalForm());
         pane.setStyle("-fx-background-color: -md-sys-color-background");
 
         primaryStage.setScene(scene);
@@ -147,7 +158,7 @@ public class Sandbox extends Application {
             Scene scene = new Scene(wrapper);
             scene.setFill(Color.TRANSPARENT);
             setScene(scene);
-            setOnShown(e -> ScenicView.show(scene));
+            //setOnShown(e -> ScenicView.show(scene));
         }
 
         public static CustomDialog example(Parent styleableParent) {

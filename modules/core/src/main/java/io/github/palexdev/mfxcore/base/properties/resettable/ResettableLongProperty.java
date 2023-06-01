@@ -22,6 +22,8 @@ import io.github.palexdev.mfxcore.base.properties.base.ResettableProperty;
 import javafx.beans.property.ReadOnlyLongWrapper;
 import javafx.beans.property.SimpleLongProperty;
 
+import java.util.Objects;
+
 /**
  * A {@link SimpleLongProperty} that implements {@link ResettableProperty}.
  */
@@ -30,7 +32,7 @@ public class ResettableLongProperty extends ReadOnlyLongWrapper implements Reset
 	// Properties
 	//================================================================================
 	private long defaultValue;
-	private boolean fireChangeOnReset = false;
+	private boolean fireChangeOnReset = true;
 	private boolean hasBeenReset = false;
 
 	//================================================================================
@@ -82,10 +84,7 @@ public class ResettableLongProperty extends ReadOnlyLongWrapper implements Reset
 
 	@Override
 	protected void fireValueChangedEvent() {
-		if (getValue() == defaultValue && !fireChangeOnReset) {
-			return;
-		}
-
+		if (Objects.equals(getValue(), defaultValue) && !fireChangeOnReset) return;
 		super.fireValueChangedEvent();
 	}
 

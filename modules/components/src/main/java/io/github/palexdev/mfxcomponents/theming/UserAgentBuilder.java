@@ -29,8 +29,11 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -54,28 +57,40 @@ import java.util.Set;
  * without some caveats which I will discuss later on.
  * <p>
  * The mechanism is rather simple, you can specify a set of themes with {@link #themes(Theme...)}, these will be merged into
- * a single stylesheet by the {@link #build()} method. The result is a {@link CSSFragment} object that,once converted to
+ * a single stylesheet by the {@link #build()} method. The result is a {@link CSSFragment} object that, once converted to
  * a Data URI through {@link CSSFragment#toDataUri()}, can be set as the {@link Application}'s user agent, can be added
  * on a {@link Scene} or on a {@link Parent}. The explicit conversion can be avoided by using one of the convenience
  * method offered by {@link CSSFragment}.
  * <p></p>
+ * With the recent improvements, this build is also capable of managing URL resources and @import statements.
+ * <p>
  * Now, let's talk about the <b>caveats</b>.
  * <p>
  * Before the final stylesheet can be feed to {@link CSSFragment}, it needs to be processed by
- * {@link Processor#process(String)}. In my tests, I found out that Data URIs would fail to work if any of the themes
- * contains {@code at-statements}, such as 'import', 'font-face' and such. For this reason, all those rules must be removed,
- * and unfortunately this is very bad for two reasons:
- * <p> 1) This can work only with 'full themes', stylesheets that do not import/depend on other stylesheets
- * <p> 2) Since fonts, added through imports or directly through font-faces, are removed, there's the risk of text not
- * having the desired font. On this matter though, I found out another interesting fact about JavaFX. It seems that for
- * font-faces it doesn't matter where stylesheets are added. If you add the stylesheet containing the font-faces declarations
- * on the root scene for example, the fonts will be picked in other windows as well, and this is a good news
+ * {@link Processor#preProcess(Theme, String, boolean)} and then by {@link Processor#postProcess(StringBuilder)}.
+ * <p>
+ * The {@link Processor} is a naive attempt at reading CSS files, for this reason it expects first and foremost well formatted,
+ * uncompressed and beautified CSS files. Even in such conditions, there may be unconsidered/unimplemented cases that could
+ * make the process fail. Report any issue, and I'll see if anything can be done to fix it.
+ * <p></p>
+ * Imports and URL resources are supported only if the {@link Theme}s have been deployed and their assets are now accessible
+ * on the filesystem. The processor will attempt at converting any 'local' resource to a path on the disk, and this is
+ * another delicate point of the whole process as the attempt may fail for unexpected reasons.
+ * <p></p>
+ * The whole process can be a bit slow, although considering how big are JavaFX's and MaterialFX's themes, and also
+ * considering that now they have to deploy their resources on the disk first, it's really not that bad.
+ * On my main PCs I didn't notice any major slowdowns, at max 1s. On my tablet, which by the way it's an Android tablet
+ * on which I installed Windows so take into account that, I noticed the same average. Of course mileage may vary!
+ * <p>
+ * Such operations, can be enabled/disabled with: {@link #setResolveAssets(boolean)}, {@link #setDeploy(boolean)}.
  */
 public class UserAgentBuilder {
     //================================================================================
     // Properties
     //================================================================================
     private final Set<Theme> themes = new LinkedHashSet<>();
+    private boolean resolveAssets = false;
+    private boolean deploy = false;
 
     //================================================================================
     // Constructors
@@ -102,20 +117,25 @@ public class UserAgentBuilder {
     }
 
     /**
-     * Iterates over all the themes added through {@link #themes(Theme...)}, loading them with {@link #load(Theme)},
-     * and merging them by using a {@link StringBuilder}.
-     * <p></p>
-     * Before returning the {@link CSSFragment}, the merged stylesheet must be processed to remove all the
-     * {@code at-rules}, as well as removing all the comments.
+     * Iterates over all the themes added through {@link #themes(Theme...)}. If {@link #isDeploy()} has been set to true
+     * the theme is deployed by {@link Theme#deploy()}. Then the data is loaded with {@link #load(Theme)} and pre-processed,
+     * by {@link Processor#preProcess(Theme, String, boolean)}. The processed data is added to a {@link StringBuilder}.
+     * <p>
+     * After all the themes have been processed, the data in the {@link StringBuilder} is post-processed by
+     * {@link Processor#postProcess(StringBuilder)} and finally a new {@link CSSFragment} object is created with the
+     * processed data of the merged stylesheet.
      */
     public CSSFragment build() {
         StringBuilder sb = new StringBuilder();
+        Processor processor = new Processor();
         for (Theme theme : themes) {
-            String loaded = load(theme);
-            sb.append(loaded).append("\n\n");
+            if (isDeploy()) theme.deploy();
+            String data = load(theme);
+            String preProcessed = processor.preProcess(theme, data, resolveAssets);
+            sb.append(preProcessed).append("\n\n");
         }
-        String postProcessed = Processor.process(sb.toString());
-        return new CSSFragment(postProcessed);
+        String postProcess = processor.postProcess(sb);
+        return new CSSFragment(postProcess);
     }
 
     /**
@@ -142,34 +162,99 @@ public class UserAgentBuilder {
     }
 
     //================================================================================
+    // Getters/Setters
+    //================================================================================
+
+    /**
+     * @return whether the {@link Processor} should attempt at resolving @import rules and URL resources
+     */
+    public boolean isResolveAssets() {
+        return resolveAssets;
+    }
+
+    /**
+     * Sets whether the {@link Processor} should attempt at resolving @import rules and URL resources.
+     */
+    public UserAgentBuilder setResolveAssets(boolean resolveAssets) {
+        this.resolveAssets = resolveAssets;
+        return this;
+    }
+
+    /**
+     * @return whether the builder should invoke {@link Theme#deploy()} before the theme data is processed
+     */
+    public boolean isDeploy() {
+        return deploy;
+    }
+
+    /**
+     * Sets whether the builder should invoke {@link Theme#deploy()} before the theme data is processed.
+     */
+    public UserAgentBuilder setDeploy(boolean deploy) {
+        this.deploy = deploy;
+        return this;
+    }
+
+    //================================================================================
     // Internal Classes
     //================================================================================
+
+    /**
+     * Responsible for pre-processing the themes fed to {@link UserAgentBuilder}, as well as post-processing the
+     * merged stylesheet produced by {@link UserAgentBuilder#build()} before it's returned as a {@link CSSFragment}.
+     * <p></p>
+     * This is a basic and naive approach at reading a CSS file. The processor expects well-formatted, uncompressed
+     * and beautified stylesheets. Even in such conditions, the process may fail because on unconsidered/unimplemented
+     * cases.
+     * <p></p>
+     * As already said the {@code Processor} splits its job in two phases: pre-process and post-process.
+     * <p>
+     * During the {@code pre-process} phase, it reads each line of the stylesheet and performs the following modifications:
+     * <p> - Removes any comment, single and multiple lines
+     * <p> - Attempts at converting 'relative' @import statements to disk paths, and stores them in a Set
+     * <p> - Attempts at converting 'relative' URL resources to disk paths
+     * <p> - Every other kind of line is added without any modification
+     * <p></p>
+     * During the {@code post-process} phase, @import statements processed and stored before, are added at the top of the
+     * merged stylesheet.
+     */
     private static class Processor {
         enum Type {
             START_COMMENT,
             END_COMMENT,
             IMPORT,
+            URL,
             OTHER
         }
 
-        /**
-         * Processes the stylesheet merged by {@link UserAgentBuilder#build()} to remove any comment but most importantly
-         * to remove any CSS {@code at-rule} that would cause the stylesheet to not work.
-         * <p></p>
-         * This is a naive and simple implementation, it's expected that the origin stylesheets are valid and well formatted.
-         */
-        public static String process(String data) {
-            String[] lines = data.split("\n");
+        private final Set<String> imports = new LinkedHashSet<>();
 
+        /**
+         * Given a {@link Theme} and its loaded stylesheet in the form of a single String, performs some modifications on
+         * the data.
+         * <p></p>
+         * <p> - Comments are removed.
+         * <p> - Imports are resolved and stored is a Set. The resolve is performed by {@link #resolveImport(Theme, String)}.
+         * If the import resource was found in the deployed resources of the theme (see {@link Deployer}), then the
+         * import directive is converted as follows (without quotes): "@import "file:///PATH_ON_THE_DISK";".
+         * It's super important to add the 'file:///' protocol so that the CSS parser can correctly find the resource
+         * <p> - URLs are resolved by {@link #resolveResource(Theme, String)}. If the resource was found in the deployed
+         * of the theme (see {@link Deployer}), then the URL directive is converted as follows (without quotes):
+         * "url("PATH_ON_THE_DISK");". If the URL points to a network resource then there's no need to convert it.
+         *
+         * @return the pre-processed theme's data
+         */
+        public String preProcess(Theme theme, String data, boolean resolveAssets) {
+            String[] lines = data.split("\n");
             StringBuilder sb = new StringBuilder();
             boolean insideComment = false;
             for (String line : lines) {
                 if (line.isBlank()) continue;
                 Type type = typeOf(line);
 
-                // Ignore comments
+                /* Ignore comments */
                 if (type == Type.START_COMMENT) {
-                    if (line.trim().endsWith("*/")) continue; // One line comment
+                    if (line.trim().endsWith("*/")) continue; /* One line comment */
                     insideComment = true;
                     continue;
                 }
@@ -179,10 +264,26 @@ public class UserAgentBuilder {
                 }
                 if (insideComment) continue;
 
-                // Ignore imports
-                if (type == Type.IMPORT) {
-                    System.err.printf("Unsupported import statement: %s was found, skipping!%n", line);
+                /* Resolved imports should be stored and added back by the post-processing */
+                if (type == Type.IMPORT && resolveAssets) {
+                    Path path = resolveImport(theme, line);
+                    if (path == null || !Files.exists(path)) {
+                        System.err.println("Could not resolve import: " + line);
+                        continue;
+                    }
+                    line = "@import \"file:///" + path.toString().replace("\\", "/") + "\";";
+                    imports.add(line);
                     continue;
+                }
+
+                /* Resolve URLs */
+                if (type == Type.URL && resolveAssets) {
+                    if (!isNetworkResource(line)) {
+                        String[] split = line.split(": ");
+                        Path path = resolveResource(theme, split[1]);
+                        if (path == null || !Files.exists(path)) continue;
+                        line = line.replaceAll("^(\\s+).+", "$1") + split[0] + ": url(" + path + ");";
+                    }
                 }
 
                 if (sb.toString().endsWith("}\n")) sb.append("\n");
@@ -191,10 +292,70 @@ public class UserAgentBuilder {
             return sb.toString();
         }
 
-        private static Type typeOf(String line) {
-            if (line.trim().startsWith("/*")) return Type.START_COMMENT;
-            if (line.trim().endsWith("*/")) return Type.END_COMMENT;
-            if (line.trim().startsWith("@")) return Type.IMPORT;
+        /**
+         * Given the pre-processed data as a {@link StringBuilder} adds all the imports stored by
+         * {@link #preProcess(Theme, String, boolean)} at the top.
+         *
+         * @return the post-processed data as a String
+         */
+        public String postProcess(StringBuilder data) {
+            int offset = 0;
+            for (String imp : imports) {
+                data.insert(offset, imp + "\n");
+                offset += imp.length() + 1;
+            }
+            return data.toString();
+        }
+
+        /**
+         * Responsible for resolving the given CSS @import line to a deployed resource on the disk.
+         */
+        private Path resolveImport(Theme theme, String line) {
+            String[] split = line.replace("\"", "")
+                .replace("'", "")
+                .replace(";", "")
+                .replace("../", "")
+                .split(" ");
+            String path = split[1];
+            Map<String, Path> deployed = Deployer.instance().getDeployed(theme);
+            return deployed.get(path);
+        }
+
+        /**
+         * Responsible for resolving the given CSS URL line to a deployed resource on the disk.
+         * <p>
+         * The resource's name is resolved by {@link #getResourceName(String)}.
+         */
+        private Path resolveResource(Theme theme, String url) {
+            String name = getResourceName(url);
+            Map<String, Path> deployed = Deployer.instance().getDeployed(theme);
+            return deployed.get(name);
+        }
+
+        /**
+         * Polishes the given URL string to get the resource's name.
+         */
+        private String getResourceName(String url) {
+            return url.replace("url(", "").replace(");", "");
+        }
+
+        /**
+         * Checks whether the given URL line is a network resource.
+         * A naive approach that checks whether the string contains "http://" or "https://" or "www.".
+         */
+        private boolean isNetworkResource(String line) {
+            return line.contains("http://") || line.contains("https://") || line.contains("www.");
+        }
+
+        /**
+         * Given the current CSS line being processed, determines its type.
+         */
+        private Type typeOf(String line) {
+            String trim = line.trim();
+            if (trim.startsWith("/*")) return Type.START_COMMENT;
+            if (trim.endsWith("*/")) return Type.END_COMMENT;
+            if (trim.startsWith("@import")) return Type.IMPORT;
+            if (trim.contains("url(")) return Type.URL;
             return Type.OTHER;
         }
     }

@@ -22,6 +22,8 @@ import io.github.palexdev.mfxcore.base.properties.base.ResettableProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 
+import java.util.Objects;
+
 /**
  * A {@link SimpleObjectProperty} that implements {@link ResettableProperty}.
  */
@@ -30,7 +32,7 @@ public class ResettableObjectProperty<T> extends ReadOnlyObjectWrapper<T> implem
 	// Properties
 	//================================================================================
 	private T defaultValue;
-	private boolean fireChangeOnReset = false;
+	private boolean fireChangeOnReset = true;
 	private boolean hasBeenReset = false;
 
 	//================================================================================
@@ -82,10 +84,7 @@ public class ResettableObjectProperty<T> extends ReadOnlyObjectWrapper<T> implem
 
 	@Override
 	protected void fireValueChangedEvent() {
-		if (getValue().equals(defaultValue) && !fireChangeOnReset) {
-			return;
-		}
-
+		if (Objects.equals(getValue(), defaultValue) && !fireChangeOnReset) return;
 		super.fireValueChangedEvent();
 	}
 

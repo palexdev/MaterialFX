@@ -16,6 +16,27 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.21.0] - 01-06-2023
+
+### Added
+
+- Added deployment API to Theme interface. Now themes can specify a zip file of assets needed for them to work properly.
+  This zip file can be extracted on the filesystem so that when merging the theme with UserAgentBuilder the resources
+  will still work
+
+### Changed
+
+- MFXCheckBox: SceneBuilder integration set text to "CheckBox"
+- MFXFabBase; SceneBuilder integration set text to "Floating Action Button"
+- UserAgentBuilder: Implemented code to resolve @import statements and 'local' URL resources. These features will work
+  only if the Theme deploys the needed assets on the disk first
+
+### Fixed
+
+- MFXTooltip and MFXPopup: Partially revert commit d209dd275b9c1c87b8ee578f2362da2abaebfbda. If we don't call close()
+  when the owner's window is not showing anymore terrible things happen, like the entire app crashing with problematic
+  frame reports :\
+
 ## [11.20.0] - 29-05-2023
 
 ### Added

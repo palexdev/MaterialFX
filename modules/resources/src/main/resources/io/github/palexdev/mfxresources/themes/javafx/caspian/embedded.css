@@ -1,4 +1,4 @@
-/**** /home/palexdev/Disks/CrucialExtFat/IdeaProjects/MaterialFX/modules/resources/src/main/resources/io/github/palexdev/mfxresources/themes/javafx/modena/touch.css.tmp ***/
+/**** /home/palexdev/Disks/CrucialExtFat/IdeaProjects/MaterialFX/modules/resources/src/main/resources/io/github/palexdev/mfxresources/themes/javafx/caspian/embedded.css.tmp ***/
 .context-menu .text-input-context-menu {
     -fx-background-color: transparent;
     -fx-background-radius: 0;
@@ -18,58 +18,52 @@
     -fx-scale-shape: true;
 }
 
-.scroll-bar:horizontal, .scroll-bar:horizontal:focused, .scroll-bar:vertical, .scroll-bar:vertical:focused {
+.scroll-bar:horizontal, .scroll-bar:horizontal:focused, .scroll-bar:vertical, .scroll-bar:vertical:focused, .scroll-bar:horizontal > .track-background, .scroll-bar:vertical > .track-background {
     -fx-background-color: transparent;
+}
+
+.scroll-bar:horizontal > .thumb {
+    -fx-background-color: -fx-box-border, linear-gradient(to bottom, derive(-fx-color, 95%), derive(-fx-color, 10%));
+    -fx-background-radius: 4, 3;
+}
+
+.scroll-bar:vertical > .thumb {
+    -fx-background-color: -fx-box-border, linear-gradient(to right, derive(-fx-color, 95%), derive(-fx-color, 10%));
+    -fx-background-radius: 4, 3;
 }
 
 .scroll-bar:horizontal > .track {
     -fx-opacity: 50%;
-    -fx-background-color: linear-gradient(to bottom, derive(-fx-base, -3%), derive(-fx-base, 5%) 50%, derive(-fx-base, -3%));
+    -fx-background-color: linear-gradient(to bottom, derive(-fx-color, -15%), derive(-fx-color, 2.2%) 20%, derive(-fx-color, 60%));
     -fx-background-insets: 0;
+    -fx-background-radius: 4;
 }
 
 .scroll-bar:vertical > .track {
     -fx-opacity: 50%;
-    -fx-background-color: linear-gradient(to right, derive(-fx-base, -3%), derive(-fx-base, 5%) 50%, derive(-fx-base, -3%));
+    -fx-background-color: linear-gradient(to right, derive(-fx-color, -15%), derive(-fx-color, 2.2%) 20%, derive(-fx-color, 60%));
     -fx-background-insets: 0;
-}
-
-.scroll-bar > .thumb {
-    -fx-background-color: derive(-fx-outer-border, -30%), -fx-body-color;
-    -fx-background-radius: 2, 1;
-}
-
-.scroll-bar:vertical > .thumb {
-    -fx-background-color: derive(-fx-outer-border, -30%), -fx-body-color-to-right;
+    -fx-background-radius: 4;
 }
 
 .list-view > .virtual-flow > .corner, .tree-view > .virtual-flow > .corner, .table-view > .virtual-flow > .corner, .tree-table-view > .virtual-flow > .corner, .scroll-pane > .corner {
-    -fx-opacity: 50%;
-    -fx-background-color: derive(-fx-base, 5%);
+    -fx-background-color: transparent;
 }
 
-.list-view > .virtual-flow > .corner, .tree-view > .virtual-flow > .corner, .table-view > .virtual-flow > .corner, .tree-table-view > .virtual-flow > .corner {
-    -fx-background-insets: 0;
+.scroll-pane > .scroll-bar:horizontal, .scroll-pane > .scroll-bar:vertical {
+    -fx-padding: 2;
 }
 
-.text-area > .scroll-pane > .corner {
-    -fx-background-radius: 0;
-}
-
-.scroll-pane > .scroll-bar:vertical {
-    -fx-padding: 1 1 1 0;
-}
-
-.scroll-pane > .scroll-bar:horizontal {
-    -fx-padding: 0 1 1 1;
-}
-
-.list-view > .virtual-flow > .scroll-bar:vertical, .tree-view > .virtual-flow > .scroll-bar:vertical, .table-view > .virtual-flow > .scroll-bar:vertical, .tree-table-view > .virtual-flow > .scroll-bar:vertical, .list-view > .virtual-flow > .scroll-bar:horizontal, .tree-view > .virtual-flow > .scroll-bar:horizontal, .table-view > .virtual-flow > .scroll-bar:horizontal, .tree-table-view > .virtual-flow > .scroll-bar:horizontal {
-    -fx-padding: 0;
+.list-view > .virtual-flow > .scroll-bar:horizontal, .tree-view > .virtual-flow > .scroll-bar:horizontal, .table-view > .virtual-flow > .scroll-bar:horizontal, .tree-table-view > .virtual-flow > .scroll-bar:horizontal, .list-view > .virtual-flow > .scroll-bar:vertical, .tree-view > .virtual-flow > .scroll-bar:vertical, .table-view > .virtual-flow > .scroll-bar:vertical, .tree-table-view > .virtual-flow > .scroll-bar:vertical {
+    -fx-padding: 1;
 }
 
 .text-field {
     -fx-padding: 6 5 6 5;
+}
+
+.text-area .content {
+    -fx-padding: 9 5 9 5;
 }
 
 .caret-handle {

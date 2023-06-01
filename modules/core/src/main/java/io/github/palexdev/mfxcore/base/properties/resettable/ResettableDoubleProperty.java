@@ -22,6 +22,8 @@ import io.github.palexdev.mfxcore.base.properties.base.ResettableProperty;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
 
+import java.util.Objects;
+
 /**
  * A {@link SimpleDoubleProperty} that implements {@link ResettableProperty}.
  */
@@ -30,7 +32,7 @@ public class ResettableDoubleProperty extends ReadOnlyDoubleWrapper implements R
 	// Properties
 	//================================================================================
 	private double defaultValue;
-	private boolean fireChangeOnReset = false;
+	private boolean fireChangeOnReset = true;
 	private boolean hasBeenReset = false;
 
 	//================================================================================
@@ -82,10 +84,7 @@ public class ResettableDoubleProperty extends ReadOnlyDoubleWrapper implements R
 
 	@Override
 	protected void fireValueChangedEvent() {
-		if (getValue() == defaultValue && !fireChangeOnReset) {
-			return;
-		}
-
+		if (Objects.equals(getValue(), defaultValue) && !fireChangeOnReset) return;
 		super.fireValueChangedEvent();
 	}
 

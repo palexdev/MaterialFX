@@ -331,11 +331,14 @@ public class MFXTooltip extends PopupControl implements IMFXPopup {
             .map(Scene::getWindow)
             .map(Window::isShowing)
             .orElse(true);
-        if (!showing) return;
+        if (!showing) {
+            close();
+            return;
+        }
 
         retrieveSkin().ifPresentOrElse(
             IMFXPopupSkin::animateOut,
-            super::hide
+            this::close
         );
     }
 

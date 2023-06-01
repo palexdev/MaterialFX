@@ -25,6 +25,7 @@ import io.github.palexdev.mfxcomponents.skins.MFXFabSkin;
 import io.github.palexdev.mfxcomponents.theming.enums.PseudoClasses;
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableBooleanProperty;
 import io.github.palexdev.mfxcore.observables.When;
+import io.github.palexdev.mfxcore.utils.fx.SceneBuilderIntegration;
 import io.github.palexdev.mfxcore.utils.fx.StyleUtils;
 import io.github.palexdev.mfxresources.base.properties.IconProperty;
 import io.github.palexdev.mfxresources.fonts.IconProvider;
@@ -175,6 +176,12 @@ public class MFXFabBase extends MFXButtonBase<MFXFabBehavior> {
     @Override
     protected MFXSkinBase<?, ?> buildSkin() {
         return new MFXFabSkin(this);
+    }
+
+    @Override
+    protected void sceneBuilderIntegration() {
+        super.sceneBuilderIntegration();
+        SceneBuilderIntegration.ifInSceneBuilder(() -> setText("Floating Action Button"));
     }
 
     //================================================================================

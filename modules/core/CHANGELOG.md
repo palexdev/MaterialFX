@@ -16,6 +16,16 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.6.3] - 01-06-2023
+
+### Changed
+
+- Resettable properties now notify about change when reset by default
+
+### Fixed
+
+- Resettable properties now use Objects.equals(...) to check for equality as it is null safe
+
 ## [11.6.2] - 29-05-2023
 
 ### Changed

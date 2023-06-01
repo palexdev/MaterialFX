@@ -1,128 +1,101 @@
-/*
- * Copyright (c) 2013, 2015, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
-/*******************************************************************************
- *                                                                             *
- * Virtual Keyboard                                                            *
- *                                                                             *
- ******************************************************************************/
-
+/**** /home/palexdev/Disks/CrucialExtFat/IdeaProjects/MaterialFX/modules/resources/src/main/resources/io/github/palexdev/mfxresources/themes/javafx/caspian/fxvk.css.tmp ***/
 .fxvk {
-    -fx-cursor: default;
-    -fx-background-color: linear-gradient(to bottom, rgb(126, 126, 126) 0%, rgb(76, 76, 76) 10%, rgb(84, 84, 84) 100%);
-    -fx-background-insets: 0;
-    -fx-padding: 8 4 10 4;
+  -fx-cursor: default;
+  -fx-background-color: linear-gradient(to bottom, #7e7e7e 0%, #4c4c4c 10%, #545454 100%);
+  -fx-background-insets: 0;
+  -fx-padding: 8 4 10 4;
 }
 
 .fxvk-secondary {
-    -fx-background-color: #ffffff, #ededed;
-    -fx-background-insets: 0, 1;
-    -fx-background-radius: 8;
-    -fx-padding: 10;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.75), 8, 0.0, 0, 0);
+  -fx-background-color: #fff, #ededed;
+  -fx-background-insets: 0, 1;
+  -fx-background-radius: 8;
+  -fx-padding: 10;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, .75), 8, 0, 0, 0);
 }
 
 .backspace-icon {
-    -fx-background-image: url("images/backspace-icon.png");
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
+  -fx-background-image: url(images/backspace-icon.png);
+  -fx-background-repeat: no-repeat;
+  -fx-background-position: center;
 }
 
 .enter-icon {
-    -fx-background-image: url("images/enter-icon.png");
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
+  -fx-background-image: url(images/enter-icon.png);
+  -fx-background-repeat: no-repeat;
+  -fx-background-position: center;
 }
 
 .shift-icon {
-    -fx-background-image: url("images/shift-icon.png");
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
+  -fx-background-image: url(images/shift-icon.png);
+  -fx-background-repeat: no-repeat;
+  -fx-background-position: center;
 }
 
 .capslock-icon {
-    -fx-background-image: url("images/capslock-icon.png");
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
+  -fx-background-image: url(images/capslock-icon.png);
+  -fx-background-repeat: no-repeat;
+  -fx-background-position: center;
 }
 
 .hide-icon {
-    -fx-background-image: url("images/vk-hide.png");
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
+  -fx-background-image: url(images/vk-hide.png);
+  -fx-background-repeat: no-repeat;
+  -fx-background-position: center;
 }
 
 .key {
-    -fx-border-image-source: url("images/vk-light.png");
-    -fx-border-image-slice: 10 fill;
-    -fx-border-image-width: 10;
-    -fx-border-image-repeat: stretch;
-    -fx-border-image-insets: -3 -3 -3 -3;
-    -fx-padding: 3 3 5 0;
+  -fx-border-image-source: url(images/vk-light.png);
+  -fx-border-image-slice: 10 fill;
+  -fx-border-image-width: 10;
+  -fx-border-image-repeat: stretch;
+  -fx-border-image-insets: -3 -3 -3 -3;
+  -fx-padding: 3 3 5 0;
 }
 
 .key:pressed {
-    -fx-border-image-source: url("images/vk-light-pressed.png");
-    -fx-padding: 5 3 3 0;
+  -fx-border-image-source: url(images/vk-light-pressed.png);
+  -fx-padding: 5 3 3 0;
 }
 
 .key-text {
-    -fx-font-weight: bold;
-    -fx-font: bold 24px "Amble";
-    -fx-text-fill: #333333;
+  -fx-font-weight: 700;
+  -fx-font-size: 24px;
+  -fx-font-family: "Amble";
+  -fx-text-fill: #333;
 }
 
 .key-alttext {
-    /*
-        -fx-font-size: 22px;
-        -fx-fill: #333333;
-    */
-    -fx-text-fill: #959595;
-    -fx-font: bold 14px "Amble";
-    -fx-text-alignment: right;
-    -fx-text-origin: top;
+  -fx-text-fill: #959595;
+  -fx-font-weight: 700;
+  -fx-font-size: 14px;
+  -fx-font-family: "Amble";
+  -fx-text-alignment: right;
+  -fx-text-origin: top;
 }
 
 .key-text.multi-char-text {
-    -fx-font: bold 20px "Amble";
+  -fx-font-weight: 700;
+  -fx-font-size: 20px;
+  -fx-font-family: "Amble";
 }
 
 .key-alttext.multi-char-text {
-    -fx-font: bold 12px "Amble";
+  -fx-font-weight: 700;
+  -fx-font-size: 12px;
+  -fx-font-family: "Amble";
 }
 
 .key.special {
-    -fx-border-image-source: url("images/vk-medium.png");
+  -fx-border-image-source: url(images/vk-medium.png);
 }
 
 .key.special:pressed {
-    -fx-border-image-source: url("images/vk-medium-pressed.png");
-    -fx-padding: 5 3 3 0;
+  -fx-border-image-source: url(images/vk-medium-pressed.png);
+  -fx-padding: 5 3 3 0;
 }
 
 .special-text {
-    -fx-font-size: 18px;
-    -fx-fill: rgb(230, 230, 230);
+  -fx-font-size: 18px;
+  -fx-fill: #e6e6e6;
 }

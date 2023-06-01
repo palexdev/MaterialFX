@@ -24,6 +24,7 @@ import io.github.palexdev.mfxcomponents.controls.base.MFXSkinBase;
 import io.github.palexdev.mfxcomponents.skins.MFXCheckBoxSkin;
 import io.github.palexdev.mfxcomponents.theming.enums.PseudoClasses;
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableBooleanProperty;
+import io.github.palexdev.mfxcore.utils.fx.SceneBuilderIntegration;
 import io.github.palexdev.mfxeffects.utils.StyleUtils;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -84,6 +85,12 @@ public class MFXCheckBox extends MFXSelectable<MFXCheckBoxBehavior> {
     @Override
     public Supplier<MFXCheckBoxBehavior> defaultBehaviorProvider() {
         return () -> new MFXCheckBoxBehavior(this);
+    }
+
+    @Override
+    protected void sceneBuilderIntegration() {
+        super.sceneBuilderIntegration();
+        SceneBuilderIntegration.ifInSceneBuilder(() -> setText("CheckBox"));
     }
 
     //================================================================================

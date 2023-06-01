@@ -22,6 +22,8 @@ import io.github.palexdev.mfxcore.base.properties.base.ResettableProperty;
 import javafx.beans.property.ReadOnlyFloatWrapper;
 import javafx.beans.property.SimpleFloatProperty;
 
+import java.util.Objects;
+
 /**
  * A {@link SimpleFloatProperty} that implements {@link ResettableProperty}.
  */
@@ -30,7 +32,7 @@ public class ResettableFloatProperty extends ReadOnlyFloatWrapper implements Res
 	// Properties
 	//================================================================================
 	private float defaultValue;
-	private boolean fireChangeOnReset = false;
+	private boolean fireChangeOnReset = true;
 	private boolean hasBeenReset = false;
 
 	//================================================================================
@@ -82,10 +84,7 @@ public class ResettableFloatProperty extends ReadOnlyFloatWrapper implements Res
 
 	@Override
 	protected void fireValueChangedEvent() {
-		if (getValue() == defaultValue && !fireChangeOnReset) {
-			return;
-		}
-
+		if (Objects.equals(getValue(), defaultValue) && !fireChangeOnReset) return;
 		super.fireValueChangedEvent();
 	}
 

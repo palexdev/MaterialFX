@@ -16,6 +16,16 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.8.0] - 01-06-2023
+
+### Added
+
+- Add resources for themes, allowing them deployment capabilities
+
+### Fixed
+
+- Fonts.css: fix Comfortaa font name
+
 ## [11.7.0] - 29-05-2023
 
 ### Added

@@ -19,6 +19,9 @@
 package io.github.palexdev.mfxcomponents.theming;
 
 import io.github.palexdev.mfxcomponents.theming.base.Theme;
+import io.github.palexdev.mfxresources.MFXResources;
+
+import java.io.InputStream;
 
 /**
  * Enumeration of all the Material Design 3 themes currently offered by MaterialFX. Implements {@link Theme}.
@@ -39,5 +42,15 @@ public enum MaterialThemes implements Theme {
     @Override
     public String path() {
         return path;
+    }
+
+    @Override
+    public InputStream assets() {
+        return MFXResources.loadStream("mfx-assets.zip");
+    }
+
+    @Override
+    public String deployName() {
+        return "mfx-assets";
     }
 }
