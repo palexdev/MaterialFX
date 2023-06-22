@@ -86,11 +86,9 @@ public class MFXNotificationCenterSystem extends AbstractMFXNotificationSystem {
 	public MFXNotificationCenterSystem initOwner(Window owner) {
 		dispose();
 		super.owner = owner;
-		owner.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, onClose);
 		center.setOpacity(0.0);
 		init();
-		if (!dummyStage.isShowing()) dummyStage.show();
-		popup.show(dummyStage);
+		popup.show(owner);
 		return this;
 	}
 
@@ -156,7 +154,7 @@ public class MFXNotificationCenterSystem extends AbstractMFXNotificationSystem {
 
 			if (!isShowing() && !center.isDoNotDisturb()) {
 				init();
-				popup.show(dummyStage);
+				popup.show(owner);
 
 				if (animated) {
 					TimelineBuilder.build().show(250, center).getAnimation().play();
@@ -292,11 +290,7 @@ public class MFXNotificationCenterSystem extends AbstractMFXNotificationSystem {
 	@Override
 	public INotificationSystem dispose() {
 		if (super.owner != null) {
-			super.owner.removeEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, onClose);
 			super.owner = null;
-		}
-		if (dummyStage.isShowing()) {
-			dummyStage.close();
 		}
 		return this;
 	}

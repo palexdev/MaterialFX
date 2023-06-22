@@ -60,9 +60,6 @@ public class NotificationsController {
 
 			MFXNotificationCenter center = MFXNotificationCenterSystem.instance().getCenter();
 			center.setCellFactory(notification -> new MFXNotificationCell(center, notification) {
-				{
-					setPrefHeight(400);
-				}
 			});
 		});
 	}
