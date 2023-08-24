@@ -18,9 +18,9 @@
 
 package io.github.palexdev.mfxcomponents.skins;
 
-import io.github.palexdev.mfxcomponents.behaviors.MFXCheckBoxBehavior;
+import io.github.palexdev.mfxcomponents.behaviors.MFXCheckboxBehavior;
 import io.github.palexdev.mfxcomponents.controls.MaterialSurface;
-import io.github.palexdev.mfxcomponents.controls.checkbox.MFXCheckBox;
+import io.github.palexdev.mfxcomponents.controls.checkbox.MFXCheckbox;
 import io.github.palexdev.mfxcomponents.skins.base.MFXLabeledSkin;
 import io.github.palexdev.mfxcore.observables.When;
 import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
@@ -37,11 +37,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 /**
- * Default skin implementation for {@link MFXCheckBox} components, extends {@link MFXLabeledSkin}.
+ * Default skin implementation for {@link MFXCheckbox} components, extends {@link MFXLabeledSkin}.
  * <p></p>
  * The layout is simple. There are only three nodes: one is the box which also contains the check mark icon,
  * then there's the {@link MaterialSurface} node used to represent the various interaction states, and finally the
- * label (which is removed is setting {@link ContentDisplay#GRAPHIC_ONLY}). The box sits on top of the surface, the label
+ * label (which is removed if setting {@link ContentDisplay#GRAPHIC_ONLY}). The box sits on top of the surface, the label
  * at their right.
  * <p>
  * It is allowed to change the checkbox state by clicking on the label too, as the handlers are added on the entire
@@ -49,7 +49,7 @@ import javafx.scene.paint.Color;
  * when events come from outside the surface area, it's desirable to still show the ripple effect, as a 'fallback' they are
  * generated at the center of the box/surface.
  */
-public class MFXCheckBoxSkin extends MFXLabeledSkin<MFXCheckBox, MFXCheckBoxBehavior> {
+public class MFXCheckboxSkin extends MFXLabeledSkin<MFXCheckbox, MFXCheckboxBehavior> {
     //================================================================================
     // Properties
     //================================================================================
@@ -60,7 +60,7 @@ public class MFXCheckBoxSkin extends MFXLabeledSkin<MFXCheckBox, MFXCheckBoxBeha
     //================================================================================
     // Constructors
     //================================================================================
-    public MFXCheckBoxSkin(MFXCheckBox checkBox) {
+    public MFXCheckboxSkin(MFXCheckbox checkBox) {
         super(checkBox);
         initTextMeasurementCache();
 
@@ -91,11 +91,11 @@ public class MFXCheckBoxSkin extends MFXLabeledSkin<MFXCheckBox, MFXCheckBoxBeha
 
     /**
      * Adds the following listeners:
-     * <p> - A listener on the {@link MFXCheckBox#contentDisplayProperty()} to add/remove the label node
+     * <p> - A listener on the {@link MFXCheckbox#contentDisplayProperty()} to add/remove the label node
      * when the values is/is not {@link ContentDisplay#GRAPHIC_ONLY}.
      */
     private void addListeners() {
-        MFXCheckBox checkBox = getSkinnable();
+        MFXCheckbox checkBox = getSkinnable();
         cdWhen = When.onChanged(checkBox.contentDisplayProperty())
             .then((o, n) -> {
                 if (n == ContentDisplay.GRAPHIC_ONLY) {
@@ -112,8 +112,8 @@ public class MFXCheckBoxSkin extends MFXLabeledSkin<MFXCheckBox, MFXCheckBoxBeha
     // Overridden Methods
     //================================================================================
     @Override
-    protected void initBehavior(MFXCheckBoxBehavior behavior) {
-        MFXCheckBox checkBox = getSkinnable();
+    protected void initBehavior(MFXCheckboxBehavior behavior) {
+        MFXCheckbox checkBox = getSkinnable();
         behavior.init();
         handle(checkBox, MouseEvent.MOUSE_PRESSED, behavior::mousePressed);
         handle(checkBox, MouseEvent.MOUSE_RELEASED, behavior::mouseReleased);
@@ -124,7 +124,7 @@ public class MFXCheckBoxSkin extends MFXLabeledSkin<MFXCheckBox, MFXCheckBoxBeha
 
     @Override
     public double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        MFXCheckBox checkBox = getSkinnable();
+        MFXCheckbox checkBox = getSkinnable();
         double gap = checkBox.getGraphicTextGap();
         double insets = leftInset + rightInset;
         double tW = tmCache.getSnappedWidth();
@@ -141,7 +141,7 @@ public class MFXCheckBoxSkin extends MFXLabeledSkin<MFXCheckBox, MFXCheckBoxBeha
 
     @Override
     public double computePrefHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-        MFXCheckBox checkBox = getSkinnable();
+        MFXCheckbox checkBox = getSkinnable();
         double insets = topInset + bottomInset;
         double tH = tmCache.getSnappedHeight();
         if (checkBox.getContentDisplay() == ContentDisplay.GRAPHIC_ONLY) tH = 0;
@@ -161,7 +161,7 @@ public class MFXCheckBoxSkin extends MFXLabeledSkin<MFXCheckBox, MFXCheckBoxBeha
 
     @Override
     protected void layoutChildren(double x, double y, double w, double h) {
-        MFXCheckBox checkBox = getSkinnable();
+        MFXCheckbox checkBox = getSkinnable();
         double gap = checkBox.getGraphicTextGap();
         layoutInArea(surface, x, y, w, h, 0, HPos.LEFT, VPos.CENTER);
         layoutInArea(icon, x, y, surface.getWidth(), surface.getHeight(), 0, HPos.CENTER, VPos.CENTER);

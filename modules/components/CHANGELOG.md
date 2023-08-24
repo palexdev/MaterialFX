@@ -16,6 +16,16 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.22.0] - 24-08-2023
+
+### Added
+
+- Added tests for the reworked CheckBoxes
+
+### Changed
+
+- CheckBoxes have been reworked
+
 ## [11.21.0] - 01-06-2023
 
 ### Added
@@ -26,7 +36,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- MFXCheckBox: SceneBuilder integration set text to "CheckBox"
+- MFXCheckbox: SceneBuilder integration set text to "Checkbox"
 - MFXFabBase; SceneBuilder integration set text to "Floating Action Button"
 - UserAgentBuilder: Implemented code to resolve @import statements and 'local' URL resources. These features will work
   only if the Theme deploys the needed assets on the disk first

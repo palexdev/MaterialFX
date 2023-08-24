@@ -3,7 +3,7 @@
 ### Components (from material-web)
 
 - [x] Button
-- [ ] Checkbox
+- [x] Checkbox
 - [ ] Field
 - [ ] Radio button
 - [ ] Switch
@@ -28,9 +28,9 @@
 
 ### Module: MaterialFX
 
-- [ ] Behavior API
+- [ ] Behavior API (Done, Experimental/WIP)
 - [x] Buttons
-- [ ] Checkboxes
+- [x] Checkboxes
 - [ ] Radio Buttons
 - [ ] Toggles
 - [ ] Combo-boxes
@@ -47,8 +47,8 @@
 
 #### Roadmap
 
-- [ ] Time to make a Demo app (ASAP)
-- [ ] Theme API and Dark theme
+- [ ] Time to make a Demo app
+- [ ] Theme API and Dark theme (Done, Experimental/WIP)
 - [ ] ColorPicker
 - [ ] TextArea
 - [ ] Cards

@@ -20,7 +20,7 @@ package app;
 
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXIconButton;
-import io.github.palexdev.mfxcomponents.controls.checkbox.MFXCheckBox;
+import io.github.palexdev.mfxcomponents.controls.checkbox.MFXCheckbox;
 import io.github.palexdev.mfxcomponents.theming.Deployer;
 import io.github.palexdev.mfxcomponents.theming.JavaFXThemes;
 import io.github.palexdev.mfxcomponents.theming.MaterialThemes;
@@ -30,15 +30,14 @@ import io.github.palexdev.mfxcomponents.window.popups.MFXTooltip;
 import io.github.palexdev.mfxcore.utils.fx.CSSFragment;
 import io.github.palexdev.mfxeffects.animations.motion.M3Motion;
 import javafx.application.Application;
-import javafx.css.Styleable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -67,7 +66,7 @@ public class Sandbox extends Application {
             .closeSelector()
             .applyOn(iw);*/
 
-        MFXCheckBox cb = new MFXCheckBox("Remember choice");
+        MFXCheckbox cb = new MFXCheckbox("Remember choice");
         cb.setAllowIndeterminate(true);
         cb.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             if (e.getButton() == MouseButton.SECONDARY) cb.setAllowIndeterminate(!cb.isAllowIndeterminate());
@@ -99,13 +98,20 @@ public class Sandbox extends Application {
         HBox box = new HBox(20, btns.toArray(Node[]::new));
         box.setAlignment(Pos.CENTER);
 
-        CustomDialog cd = CustomDialog.example(pane);
+        CustomDialog cd = CustomDialog.example();
         MFXButton show = new MFXButton("Show").filled();
         show.setOnAction(e -> cd.show());
         MFXButton close = new MFXButton("Close").filled();
-        close.setOnAction(e -> cd.hide());
+        close.setOnAction(e -> {
+            //cd.hide();
+            close.getScene().getWindow().hide();
+        });
         HBox aBox = new HBox(20, show, close);
         aBox.setAlignment(Pos.CENTER);
+
+        MFXTooltip tooltip = new MFXTooltip(close);
+        tooltip.setContent(new MFXPlainContent("Close"));
+        tooltip.install();
 
         pane.getChildren().add(aBox);
         Scene scene = new Scene(pane, 600, 600);
@@ -145,26 +151,27 @@ public class Sandbox extends Application {
     }
 
     public static class CustomDialog extends Stage {
-        public CustomDialog(Node content, Parent styleableParent) {
-            StackPane wrapper = new StackPane(content) {
-                @Override
-                public Styleable getStyleableParent() {
-                    return styleableParent;
-                }
-            };
+        public CustomDialog(Node content) {
+            StackPane wrapper = new StackPane(content);
             wrapper.setPrefSize(300, 300);
             wrapper.setStyle("-fx-background-color: -md-sys-color-background");
 
-            Scene scene = new Scene(wrapper);
+            MFXButton close = new MFXButton("Close").outlined();
+            close.setOnAction(e -> hide());
+            MFXTooltip tooltip = new MFXTooltip(close);
+            tooltip.setContent(new MFXPlainContent("Close"));
+            tooltip.install();
+
+            Scene scene = new Scene(new VBox(20, wrapper, close));
             scene.setFill(Color.TRANSPARENT);
             setScene(scene);
             //setOnShown(e -> ScenicView.show(scene));
         }
 
-        public static CustomDialog example(Parent styleableParent) {
-            MFXCheckBox checkBox = new MFXCheckBox("Choice dialog");
+        public static CustomDialog example() {
+            MFXCheckbox checkBox = new MFXCheckbox("Choice dialog");
             checkBox.setStyle("-fx-font-family: 'Comfortaa SemiBold'");
-            return new CustomDialog(checkBox, styleableParent);
+            return new CustomDialog(checkBox);
         }
     }
 }

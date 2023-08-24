@@ -17,7 +17,7 @@ $text-color: Theme.GetSchemeColor('on-surface') !default;
 $ripple-color: Ripple.Ripple('primary') !default;
 
 /****************************************************************************************************
- * Check Boxes
+ * Checkboxes
  ****************************************************************************************************/
 .mfx-checkbox {
   @include Typography.LabelLarge();

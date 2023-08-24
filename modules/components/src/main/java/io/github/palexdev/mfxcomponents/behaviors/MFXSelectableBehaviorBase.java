@@ -33,9 +33,9 @@ public class MFXSelectableBehaviorBase<S extends MFXSelectable<?>> extends MFXBu
      * Responsible for switching the selection state of the component.
      * <p>
      * It's worth specifying that the change is not as simple as just flipping the boolean value. Those who implement
-     * the {@link Selectable} API may be in a {@link SelectionGroup} or, in case of {@link MFXSelectable} components, they
-     * may have the {@link MFXSelectable#changeSelection(boolean)} method overridden. Which means that at the end the new
-     * state depends on those two factors. After requesting the new state with {@link MFXSelectable#setSelected(boolean)},
+     * the {@link Selectable} API may be in a {@link SelectionGroup}.
+     * <p>
+     * After requesting the new state with {@link Selectable#setSelected(boolean)},
      * we must check if the state was effectively changed, and only if so also trigger {@link MFXSelectable#fire()}.
      */
     protected void handleSelection() {

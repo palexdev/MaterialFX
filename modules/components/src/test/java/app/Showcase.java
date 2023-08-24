@@ -23,7 +23,7 @@ import fr.brouillard.oss.cssfx.CSSFX;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXIconButton;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXSegmentedButton;
-import io.github.palexdev.mfxcomponents.controls.checkbox.MFXCheckBox;
+import io.github.palexdev.mfxcomponents.controls.checkbox.MFXCheckbox;
 import io.github.palexdev.mfxcomponents.controls.fab.MFXFab;
 import io.github.palexdev.mfxcomponents.theming.MaterialThemes;
 import io.github.palexdev.mfxcomponents.theming.enums.FABVariants;
@@ -31,6 +31,8 @@ import io.github.palexdev.mfxcomponents.theming.enums.IconButtonVariants;
 import io.github.palexdev.mfxcomponents.theming.enums.PseudoClasses;
 import io.github.palexdev.mfxcore.base.beans.Size;
 import io.github.palexdev.mfxcore.builders.InsetsBuilder;
+import io.github.palexdev.mfxcore.enums.SelectionMode;
+import io.github.palexdev.mfxcore.selection.SelectionGroup;
 import io.github.palexdev.mfxcore.utils.fx.CSSFragment;
 import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import javafx.application.Application;
@@ -234,7 +236,7 @@ public class Showcase extends Application implements MultipleViewApp<String> {
     }
 
     private Node checkBoxesView() {
-        return createCheckBoxesView("CheckBoxes");
+        return createCheckboxesView("Checkboxes");
     }
 
     // Creators
@@ -419,30 +421,30 @@ public class Showcase extends Application implements MultipleViewApp<String> {
         return defTP;
     }
 
-    private Node createCheckBoxesView(String title) {
+    private Node createCheckboxesView(String title) {
         TitledFlowPane defTP = new TitledFlowPane(title);
         defTP.setMaxWidth(350);
-        List<Supplier<MFXCheckBox>> generators = new ArrayList<>(List.of(
-            MFXCheckBox::new,
+        List<Supplier<MFXCheckbox>> generators = new ArrayList<>(List.of(
+                MFXCheckbox::new,
             () -> {
-                MFXCheckBox c = new MFXCheckBox();
+                MFXCheckbox c = new MFXCheckbox();
                 c.setDisable(true);
                 return c;
             },
             () -> {
-                MFXCheckBox c = new MFXCheckBox();
+                MFXCheckbox c = new MFXCheckbox();
                 c.setMouseTransparent(true);
                 PseudoClasses.HOVER.setOn(c, true);
                 return c;
             },
             () -> {
-                MFXCheckBox c = new MFXCheckBox();
+                MFXCheckbox c = new MFXCheckbox();
                 c.setMouseTransparent(true);
                 PseudoClasses.FOCUSED.setOn(c, true);
                 return c;
             },
             () -> {
-                MFXCheckBox c = new MFXCheckBox();
+                MFXCheckbox c = new MFXCheckbox();
                 c.setMouseTransparent(true);
                 PseudoClasses.PRESSED.setOn(c, true);
                 return c;
@@ -450,30 +452,38 @@ public class Showcase extends Application implements MultipleViewApp<String> {
         ));
 
         // Unchecked
-        for (Supplier<MFXCheckBox> g : generators) {
+        for (Supplier<MFXCheckbox> g : generators) {
             defTP.add(g.get());
         }
 
         // Indeterminate
-        for (Supplier<MFXCheckBox> g : generators) {
-            MFXCheckBox c = g.get();
+        for (Supplier<MFXCheckbox> g : generators) {
+            MFXCheckbox c = g.get();
             c.setAllowIndeterminate(true);
-            c.setIndeterminate(true);
+            c.setState(MFXCheckbox.TriState.INDETERMINATE);
             defTP.add(c);
         }
 
         // Selected
-        for (Supplier<MFXCheckBox> g : generators) {
-            MFXCheckBox c = g.get();
+        for (Supplier<MFXCheckbox> g : generators) {
+            MFXCheckbox c = g.get();
             c.setSelected(true);
             defTP.add(c);
         }
 
         // Error
-        for (Supplier<MFXCheckBox> g : generators) {
-            MFXCheckBox c = g.get();
+        for (Supplier<MFXCheckbox> g : generators) {
+            MFXCheckbox c = g.get();
             c.setAllowIndeterminate(true);
             PseudoClasses.ERROR.setOn(c, true);
+            defTP.add(c);
+        }
+
+        // Group
+        SelectionGroup sg = new SelectionGroup(SelectionMode.SINGLE, true);
+        for (int i = 0; i < 4; i++) {
+            MFXCheckbox c = new MFXCheckbox("C" + (i + 1));
+            sg.add(c);
             defTP.add(c);
         }
 

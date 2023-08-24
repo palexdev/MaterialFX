@@ -16,6 +16,18 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.6.4] - 24-08-2023
+
+## Changed
+
+- SelectionProperty: reviewed invalidation logic. The core part has been moved to the invalidated() method, this allows
+  bindings to work, as well as simplifying the process
+- SelectionGroup: reviewed for the above changes
+
+## Fixed
+
+- SelectionGroup: fixed MultipleSelectionHandler logic
+
 ## [11.6.3] - 01-06-2023
 
 ### Changed
@@ -80,7 +92,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Introducing the Selection API that will be used by components such as check boxes, radio buttons, switches and such.
+- Introducing the Selection API that will be used by components such as checkboxes, radio buttons, switches and such.
   However, the API has been developed to be as general purpose as possible, meaning that it can be used with anything
   implementing the needed interface
 - Added tests for the new Selection API

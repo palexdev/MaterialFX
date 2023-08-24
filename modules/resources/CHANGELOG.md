@@ -30,7 +30,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Added stylesheets for MFXCheckBox
+- Added stylesheets for MFXCheckbox
 - Added new theme, indigo color
 
 ### Fixed

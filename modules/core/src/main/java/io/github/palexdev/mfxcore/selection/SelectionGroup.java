@@ -17,13 +17,13 @@ import java.util.*;
  * A {@code SelectionGroup} will work with anything that implements the necessary API described by the {@link Selectable}
  * interface. Not only that, it is also a lot more flexible and convenient.
  * <p>
- * You can set the selection to be single or multiple by just setting the {@link #selectionModeProperty()}, as well as
+ * You can set the selection to be single or multiple, by just setting the {@link #selectionModeProperty()}, as well as
  * tell the group to always keep at least one {@link Selectable} active, by setting the {@link #atLeastOneSelectedProperty()}
  * to true. All of these can be changed anytime, although you better know the side effects of some particular cases, will
  * be listed below.
  * <p>
  * So you now have a grouping API for everything, not only controls, as long as they implement {@link Selectable}, and you
- * also have capabilities such as 'atMost/atLeast one selected', in single and multiple configurations, in just one class!
+ * also have capabilities such as 'at most/at least one selected', in single and multiple configurations, in just one class!
  * <p></p>
  * All of this sounds good right? Well, there are some caveats of course.
  * <p>
@@ -39,10 +39,10 @@ import java.util.*;
  * in the Set. The usage of such collections vastly helps to avoid duplicates while also having fast lookups (contains).
  * <p></p>
  * <b>Special cases when changing config</b>
- * <p> 1) When switching from MULTIPLE to SINGLE selection mode, the selection will be the same only and only is there was
- * only {@code Selectable} in the selection Set, in all other cases the selection is cleared!
+ * <p> 1) When switching from MULTIPLE to SINGLE selection mode, the selection will be the same only and only if there was
+ * only one {@code Selectable} in the selection Set, in all other cases the selection is <b>cleared!</b>
  * <p> 2) When activating the 'atLeastOneSelected' mode, if there are {@code Selectables} in the group the first will
- * be immediately selected! If none is available, the first added to the group will be!
+ * be immediately selected! If none is available, the first added to the group will be.
  * <p> 3) If 'atLeastOneSelected' mode is active and multiple {@code Selectables} are added at the same time to the group,
  * and two or more of them are selected, the last will prevail, the others will be deselected (if in SINGLE selection mode)
  * <p></p>
@@ -108,17 +108,24 @@ public class SelectionGroup {
      * Adds the given {@link Selectable} to this group (if not already present).
      * <p></p>
      * If the given {@code Selectable}'s group is not the same as this, {@link Selectable#setSelectionGroup(SelectionGroup)}
-     * is also called.
-     * <p>
-     * Last but not least, {@link #refresh(Selectable)} is called to ensure that the group' state is right.
+     * is also called. See {@link SelectionGroupProperty}.
+     * <p></p>
+     * When adding a {@code Selectable} to a group, there are a bunch of things to consider. The group has no guarantees
+     * that the given objects are in a state such that its rules won't be broken. For this reason, it's mandatory to perform
+     * a check on the {@code Selectable}'s state by invoking {@link #handleSelection(Selectable, boolean)}. If the returned
+     * correct state is different then it's important to also fix it by invoking {@link Selectable#setSelected(boolean)}.
      */
     public SelectionGroup add(Selectable selectable) {
         if (selectable == null || selectables.contains(selectable)) return this;
         selectables.add(selectable);
 
         SelectionGroup group = selectable.getSelectionGroup();
-        if (group != this) selectable.setSelectionGroup(this);
-        refresh(selectable);
+        if (group != this) {
+            selectable.setSelectionGroup(this);
+
+            boolean state = handler.handle(selectable, selectable.isSelected());
+            selectable.setSelected(state);
+        }
         return this;
     }
 
@@ -211,9 +218,12 @@ public class SelectionGroup {
      * would break the rules of the {@link SelectionGroup}. In other words, when the state is requested to switch to
      * selected/deselected, the property first asks the group if it is allowed, in case it is not, the {@code newValue}
      * parameter is "corrected".
+     * <p></p>
+     * The difference between this and {@link #check(Selectable, boolean)} is that other than returning the correct state for
+     * the given {@link Selectable}, this will also modify the state of the group. In fact, according to the returned state,
+     * the given {@link Selectable} will be also added/removed to/from the selection Set ({@link #getSelection()}).
      */
     protected boolean handleSelection(Selectable selectable, boolean state) {
-        assert selectable != null;
         if (!selectables.contains(selectable)) return state;
         return handler.handle(selectable, state);
     }
@@ -256,12 +266,21 @@ public class SelectionGroup {
     }
 
     /**
-     * Forces the {@link SelectionProperty} of the given {@link Selectable} to re-execute its {@code set(...)} method,
-     * which will then trigger the {@link #handleSelection(Selectable, boolean)} method and thus ensuring that the
-     * group' state is correct.
+     * @return the state of a special flag that indicates whether changes currently occurring in the group are caused
+     * by a "switch" operation. This occurs when the group is in SINGLE selection mode, and a {@link Selectable} is going
+     * to take the place of another one (the current selected).
+     * <p></p>
+     * More details: this flag is set to true when the selection Set is going to be cleared so that the new {@code Selectable}
+     * can take its place. The flag is reset immediately after. However, before the reset, listeners attached to the selection
+     * Set will trigger causing the {@link #handleSelection(Selectable, boolean)} to trigger again. This can be problematic
+     * when the "At least one selected" feature is on because since the "switch" process has not been completed yet, the
+     * group will try to select the first {@code Selectable} in the {@link #getSelectables()} Set, so that the rule is
+     * respected. This behavior is undesired, the flag will stop the group from doing this, afterward the "switch" process
+     * is completed.
+     *
      */
-    protected void refresh(Selectable selectable) {
-        selectable.setSelected(selectable.isSelected());
+    public boolean isSwitching() {
+        return isSwitching;
     }
 
     //================================================================================
@@ -280,7 +299,7 @@ public class SelectionGroup {
             if (!selectables.contains(selectable)) return state;
             if (!state) {
                 if (isAtLeastOneSelected()) {
-                    return !isSwitching && (selection.size() == 1 && selection.contains(selectable) || selection.isEmpty());
+                    return !isSwitching() && (selection.size() == 1 && selection.contains(selectable) || selection.isEmpty());
                 }
                 return false;
             }
@@ -291,7 +310,7 @@ public class SelectionGroup {
         public boolean handle(Selectable selectable, boolean state) {
             if (!state) {
                 if (isAtLeastOneSelected()) {
-                    if (isSwitching) {
+                    if (isSwitching()) {
                         selection.remove(selectable);
                         return false;
                     }
@@ -319,13 +338,28 @@ public class SelectionGroup {
     class MultipleSelectionHandler implements SelectionHandler {
         @Override
         public boolean check(Selectable selectable, boolean state) {
-            return !selectables.contains(selectable) ? state : state || isAtLeastOneSelected() && selection.size() == 1;
+            if (!selectables.contains(selectable)) return state;
+            if (!state) {
+                if (isAtLeastOneSelected()) {
+                    return (selection.size() == 1 && selection.contains(selectable)) || selection.isEmpty();
+                }
+                return false;
+            }
+            return true;
         }
 
         @Override
         public boolean handle(Selectable selectable, boolean state) {
             if (!state) {
-                if (isAtLeastOneSelected() && selection.size() == 1) return true;
+                if (isAtLeastOneSelected()) {
+                    if (selection.size() == 1 && selection.contains(selectable)) {
+                        return true;
+                    }
+                    if (selection.isEmpty()) {
+                        selection.add(selectable);
+                        return true;
+                    }
+                }
                 selection.remove(selectable);
                 return false;
             }

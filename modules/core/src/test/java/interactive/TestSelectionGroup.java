@@ -257,6 +257,22 @@ public class TestSelectionGroup {
     }
 
     @Test
+    void testMultiple3(FxRobot robot) {
+        HBox box = setupStage();
+        List<DummySelectable> selectables = buildSelectables(5);
+        robot.interact(() -> box.getChildren().addAll(selectables));
+
+        SelectionGroup group = new SelectionGroup(SelectionMode.MULTIPLE, true);
+        group.addAll(selectables);
+
+
+        assertEquals(1, group.getSelection().size());
+        assertTrue(group.getSelection().contains(selectables.get(0)));
+
+        for (int i = 1; i < 5; i++) assertFalse(selectables.get(i).isSelected());
+    }
+
+    @Test
     void testAtLeastOne(FxRobot robot) {
         HBox box = setupStage();
         List<DummySelectable> selectables = buildSelectables(5);
@@ -576,6 +592,7 @@ public class TestSelectionGroup {
         private final SelectionProperty selected = new SelectionProperty(this) {
             @Override
             protected void invalidated() {
+                super.invalidated();
                 pseudoClassStateChanged(SELECTED, get());
             }
         };

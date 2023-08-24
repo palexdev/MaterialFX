@@ -33,7 +33,7 @@ public class SelectionProperty extends SimpleBooleanProperty {
         this.selectable = selectable;
     }
 
-    public SelectionProperty(boolean initialValue, Selectable selectable) {
+    public SelectionProperty(Selectable selectable, boolean initialValue) {
         super(initialValue);
         this.selectable = selectable;
     }
@@ -48,20 +48,48 @@ public class SelectionProperty extends SimpleBooleanProperty {
      * Overridden to correctly handle the selection state (true|false) when the {@link Selectable} is/is not in a
      * {@link SelectionGroup}.
      * <p>
-     * When it is in a group, the {@code newValue} is given by {@link SelectionGroup#handleSelection(Selectable, boolean)}.
+     * When it is in a group, the {@code newValue} is given by {@link SelectionGroup#check(Selectable, boolean)}.
      * This is because there are cases in which the selection cannot be set to true/false at the user will,
      * the group's rules will prevail.
      * <p></p>
-     * For example you the group will not allow a {@link Selectable} to be deselected if {@link SelectionGroup#isAtLeastOneSelected()}
+     * For example the group will not allow a {@link Selectable} to be deselected if {@link SelectionGroup#isAtLeastOneSelected()}
      * is true and it is the only one present in the selection list. Cases like this, but not limited to, must be handled
      * by the group.
+     * <p></p>
+     * Now there can be two cases:
+     * <p> 1) The returned state is "selected" and the group' selection Set doesn't contain the {@code Selectable}
+     * <p> 2) The returned state is "deselected" and the group' selection Set contains the {@code Selectable}
+     * <p>
+     * In either cases the {@link #invalidated()} is invoked!
      */
     @Override
     public void set(boolean newValue) {
-        boolean oldValue = get();
         SelectionGroup group = selectable.getSelectionGroup();
-        if (group != null) newValue = group.handleSelection(selectable, newValue);
-        if (newValue == oldValue) return;
+        if (group != null) {
+            newValue = group.check(selectable, newValue);
+            if ((newValue && !group.getSelection().contains(selectable)) ||
+                    !newValue && group.getSelection().contains(selectable)) {
+                invalidated();
+            }
+        }
         super.set(newValue);
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p></p>
+     * Overridden to update the {@link SelectionGroup} assigned to the {@link Selectable} handled by this property.
+     * <p>
+     * If the {@code Selectable} is in a group, and the selection state has changed (or additional checks decide that
+     * invalidation is needed, see {@link #set(boolean)}), then {@link SelectionGroup#handleSelection(Selectable, boolean)}.
+     * <p>
+     * Last but not least, note that the invalidation doesn't occur if the group is changing its state due to a "switch"
+     * operation, see {@link SelectionGroup#isSwitching()}.
+     */
+    @Override
+    protected void invalidated() {
+        SelectionGroup group = selectable.getSelectionGroup();
+        if (group != null && !group.isSwitching())
+            group.handleSelection(selectable, get());
     }
 }

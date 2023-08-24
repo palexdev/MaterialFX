@@ -16,9 +16,6 @@ import javafx.scene.Node;
  * <p></p>
  * Implements the selection API/Behavior through the {@link Selectable} interface.
  * Expects behaviors of type {@link MFXSelectableBehaviorBase}.
- * <p></p>
- * Implementations of this may need to control the way selection works, for this reason there are two methods that are basically
- * hooks for pre/post selection change, see {@link #changeSelection(boolean)} and {@link #onSelectionChanged(boolean)}.
  *
  * @see SelectionProperty
  * @see SelectionGroupProperty
@@ -31,13 +28,8 @@ public abstract class MFXSelectable<B extends MFXSelectableBehaviorBase<?>> exte
     private final SelectionGroupProperty selectionGroup = new SelectionGroupProperty(this);
     private final SelectionProperty selected = new SelectionProperty(this) {
         @Override
-        public void set(boolean newValue) {
-            boolean state = changeSelection(newValue);
-            super.set(state);
-        }
-
-        @Override
         protected void invalidated() {
+            super.invalidated();
             onSelectionChanged(get());
         }
     };
@@ -59,21 +51,6 @@ public abstract class MFXSelectable<B extends MFXSelectableBehaviorBase<?>> exte
     //================================================================================
     // Methods
     //================================================================================
-
-    /**
-     * This is automatically called by the {@link #selectedProperty()} when selection is about to change.
-     * <p>
-     * The given parameter is the new requested selection state.
-     * <p></p>
-     * One can alter the return value according to its needs.
-     * By default, does not alter the requested state.
-     * <p></p>
-     * BEWARE! Disabling these components when in a {@link SelectionGroup} may produce unexpected results,
-     * especially when using the {@link SelectionGroup#atLeastOneSelectedProperty()} mode.
-     */
-    protected boolean changeSelection(boolean selected) {
-        return selected;
-    }
 
     /**
      * This is automatically called by {@link #selectedProperty()} after the selection has changed and has become invalid.

@@ -95,17 +95,14 @@ public class MFXIconButton extends MFXSelectable<MFXIconButtonBehavior> implemen
     private void initialize() {
         graphicProperty().bind(iconProperty());
         setSelectable(false);
+        selectionGroupProperty().addListener(i -> {
+            if (getSelectionGroup() != null) asToggle();
+        });
     }
 
     //================================================================================
     // Overridden Methods
     //================================================================================
-    @Override
-    protected boolean changeSelection(boolean selected) {
-        if (!isSelectable()) return false;
-        return super.changeSelection(selected);
-    }
-
     @Override
     protected MFXSkinBase<?, ?> buildSkin() {
         return new MFXIconButtonSkin(this);

@@ -32,7 +32,7 @@ public class ComponentsLauncher {
         //System.setProperty("prism.verbose", "true");
         //System.setProperty("javafx.animation.fullspeed", "true");
         System.setProperty("glass.disableGrab", "true");
-        Application.launch(Sandbox.class, args);
+        Application.launch(Showcase.class, args);
     }
 
     public static String load(String name) {
