@@ -117,8 +117,7 @@ public class MFXSegmentedButtonSkin extends MFXSkinBase<MFXSegmentedButton, MFXS
     // Overridden Methods
     //================================================================================
     @Override
-    protected void initBehavior(MFXSegmentedButtonBehavior behavior) {
-    }
+    protected void initBehavior(MFXSegmentedButtonBehavior behavior) {}
 
     @Override
     public double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
@@ -247,19 +246,17 @@ public class MFXSegmentedButtonSkin extends MFXSkinBase<MFXSegmentedButton, MFXS
 
         public MFXSegmentSkin(MFXSegment button) {
             super(button);
-            initTextMeasurementCache();
         }
 
         @Override
-        protected void addListeners() {
-        }
+        protected void addListeners() {}
 
         @Override
         public double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
             MFXSegment segment = getSkinnable();
             MFXFontIcon icon = segment.getIcon();
             double insets = leftInset + rightInset;
-            double tW = tmCache.getSnappedWidth();
+            double tW = getCachedTextWidth();
             if (segment.getContentDisplay() == ContentDisplay.GRAPHIC_ONLY) tW = 0;
             double iW = Math.max(LayoutUtils.boundWidth(icon), icon.getSize()) + segment.getGraphicTextGap();
             return insets + tW + iW;
@@ -271,7 +268,7 @@ public class MFXSegmentedButtonSkin extends MFXSkinBase<MFXSegmentedButton, MFXS
             MFXFontIcon icon = segment.getIcon();
             double insets = topInset + bottomInset;
             double iH = Math.max(LayoutUtils.boundHeight(icon), icon.getSize());
-            double tH = tmCache.getSnappedHeight();
+            double tH = getCachedTextHeight();
             return insets + Math.max(iH, tH);
         }
 
@@ -291,7 +288,7 @@ public class MFXSegmentedButtonSkin extends MFXSkinBase<MFXSegmentedButton, MFXS
             MFXFontIcon icon = segment.getIcon();
             double gap = segment.getGraphicTextGap();
             if (icon.getDescription() == null || icon.getDescription().isBlank()) {
-                double lW = tmCache.getSnappedWidth() + gap;
+                double lW = getCachedTextWidth() + gap;
                 double lH = LayoutUtils.boundHeight(label);
                 label.resize(lW, lH);
                 Position lPos = LayoutUtils.computePosition(
@@ -305,15 +302,6 @@ public class MFXSegmentedButtonSkin extends MFXSkinBase<MFXSegmentedButton, MFXS
                 layoutInArea(label, x, y, w, h, 0, HPos.CENTER, VPos.CENTER);
             }
             surface.resizeRelocate(0, 0, segment.getWidth(), segment.getHeight());
-        }
-
-        @Override
-        public void dispose() {
-            tmCache.dispose();
-            tmCache = null;
-            surface.dispose();
-            label.getTextNode().ifPresent(n -> n.opacityProperty().unbind());
-            super.dispose();
         }
     }
 }

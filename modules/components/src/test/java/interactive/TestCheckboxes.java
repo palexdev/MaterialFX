@@ -19,6 +19,7 @@
 package interactive;
 
 import io.github.palexdev.mfxcomponents.controls.checkbox.MFXCheckbox;
+import io.github.palexdev.mfxcomponents.controls.checkbox.TriState;
 import io.github.palexdev.mfxcomponents.theming.MaterialThemes;
 import io.github.palexdev.mfxcomponents.theming.enums.PseudoClasses;
 import io.github.palexdev.mfxcore.builders.InsetsBuilder;
@@ -57,25 +58,25 @@ public class TestCheckboxes {
         robot.interact(() -> box.getChildren().setAll(cb));
 
         cb.setSelected(true);
-        assertCheckbox(cb, MFXCheckbox.TriState.SELECTED);
+		assertCheckbox(cb, TriState.SELECTED);
 
         cb.setSelected(false);
-        assertCheckbox(cb, MFXCheckbox.TriState.UNSELECTED);
+		assertCheckbox(cb, TriState.UNSELECTED);
 
-        cb.setState(MFXCheckbox.TriState.SELECTED);
-        assertCheckbox(cb, MFXCheckbox.TriState.SELECTED);
+		cb.setState(TriState.SELECTED);
+		assertCheckbox(cb, TriState.SELECTED);
 
-        cb.setState(MFXCheckbox.TriState.UNSELECTED);
-        assertCheckbox(cb, MFXCheckbox.TriState.UNSELECTED);
-
-        robot.clickOn(cb);
-        assertCheckbox(cb, MFXCheckbox.TriState.INDETERMINATE);
+		cb.setState(TriState.UNSELECTED);
+		assertCheckbox(cb, TriState.UNSELECTED);
 
         robot.clickOn(cb);
-        assertCheckbox(cb, MFXCheckbox.TriState.SELECTED);
+		assertCheckbox(cb, TriState.INDETERMINATE);
 
         robot.clickOn(cb);
-        assertCheckbox(cb, MFXCheckbox.TriState.UNSELECTED);
+		assertCheckbox(cb, TriState.SELECTED);
+
+        robot.clickOn(cb);
+		assertCheckbox(cb, TriState.UNSELECTED);
     }
 
     @Test
@@ -87,16 +88,16 @@ public class TestCheckboxes {
         cbs[0].stateProperty().bind(cbs[1].stateProperty());
 
         robot.clickOn(cbs[1]);
-        assertCheckbox(cbs[0], MFXCheckbox.TriState.INDETERMINATE);
-        assertCheckbox(cbs[1], MFXCheckbox.TriState.INDETERMINATE);
+		assertCheckbox(cbs[0], TriState.INDETERMINATE);
+		assertCheckbox(cbs[1], TriState.INDETERMINATE);
 
         robot.clickOn(cbs[1]);
-        assertCheckbox(cbs[0], MFXCheckbox.TriState.SELECTED);
-        assertCheckbox(cbs[1], MFXCheckbox.TriState.SELECTED);
+		assertCheckbox(cbs[0], TriState.SELECTED);
+		assertCheckbox(cbs[1], TriState.SELECTED);
 
         robot.clickOn(cbs[1]);
-        assertCheckbox(cbs[0], MFXCheckbox.TriState.UNSELECTED);
-        assertCheckbox(cbs[1], MFXCheckbox.TriState.UNSELECTED);
+		assertCheckbox(cbs[0], TriState.UNSELECTED);
+		assertCheckbox(cbs[1], TriState.UNSELECTED);
     }
 
     @Test
@@ -108,15 +109,15 @@ public class TestCheckboxes {
         sg.addAll(cbs);
 
         // Consistency check, all unselected, not allowing INDETERMINATE
-        for (MFXCheckbox cb : cbs) assertCheckbox(cb, MFXCheckbox.TriState.UNSELECTED);
+		for (MFXCheckbox cb : cbs) assertCheckbox(cb, TriState.UNSELECTED);
 
         cbs[1].setSelected(true);
         cbs[2].setSelected(true);
         cbs[4].setSelected(true);
 
-        assertCheckbox(cbs[1], MFXCheckbox.TriState.SELECTED);
-        assertCheckbox(cbs[2], MFXCheckbox.TriState.SELECTED);
-        assertCheckbox(cbs[4], MFXCheckbox.TriState.SELECTED);
+		assertCheckbox(cbs[1], TriState.SELECTED);
+		assertCheckbox(cbs[2], TriState.SELECTED);
+		assertCheckbox(cbs[4], TriState.SELECTED);
         assertEquals(3, sg.getSelection().size());
         assertTrue(sg.getSelection().containsAll(List.of(cbs[1], cbs[2], cbs[4])));
     }
@@ -130,28 +131,28 @@ public class TestCheckboxes {
         sg.addAll(cbs);
 
         // Consistency check, first selected because of ALOS
-        for (int i = 1; i < 5; i++) assertCheckbox(cbs[i], MFXCheckbox.TriState.UNSELECTED);
-        assertCheckbox(cbs[0], MFXCheckbox.TriState.SELECTED);
+		for (int i = 1; i < 5; i++) assertCheckbox(cbs[i], TriState.UNSELECTED);
+		assertCheckbox(cbs[0], TriState.SELECTED);
 
         cbs[1].setSelected(true);
         cbs[4].setSelected(true);
 
-        assertCheckbox(cbs[0], MFXCheckbox.TriState.SELECTED);
-        assertCheckbox(cbs[1], MFXCheckbox.TriState.SELECTED);
-        assertCheckbox(cbs[4], MFXCheckbox.TriState.SELECTED);
+		assertCheckbox(cbs[0], TriState.SELECTED);
+		assertCheckbox(cbs[1], TriState.SELECTED);
+		assertCheckbox(cbs[4], TriState.SELECTED);
         assertEquals(3, sg.getSelection().size());
         assertTrue(sg.getSelection().containsAll(List.of(cbs[0], cbs[1], cbs[4])));
 
         // Deselect all and check
         for (MFXCheckbox cb : cbs) cb.setSelected(false);
-        for (int i = 0; i < 4; i++) assertCheckbox(cbs[i], MFXCheckbox.TriState.UNSELECTED);
-        assertCheckbox(cbs[4], MFXCheckbox.TriState.SELECTED);
+		for (int i = 0; i < 4; i++) assertCheckbox(cbs[i], TriState.UNSELECTED);
+		assertCheckbox(cbs[4], TriState.SELECTED);
         assertEquals(1, sg.getSelection().size());
         assertTrue(sg.getSelection().contains(cbs[4]));
 
         // Select all and check
         for (MFXCheckbox cb : cbs) cb.setSelected(true);
-        for (MFXCheckbox cb : cbs) assertCheckbox(cb, MFXCheckbox.TriState.SELECTED);
+		for (MFXCheckbox cb : cbs) assertCheckbox(cb, TriState.SELECTED);
         assertEquals(5, sg.getSelection().size());
         assertTrue(sg.getSelection().containsAll(List.of(cbs)));
     }
@@ -165,7 +166,7 @@ public class TestCheckboxes {
         sg.addAll(cbs);
 
         // Consistency check, all unselected, not allowing INDETERMINATE
-        for (MFXCheckbox cb : cbs) assertCheckbox(cb, MFXCheckbox.TriState.UNSELECTED);
+		for (MFXCheckbox cb : cbs) assertCheckbox(cb, TriState.UNSELECTED);
 
         cbs[1].setSelected(true);
         assertEquals(1, sg.getSelection().size());
@@ -177,15 +178,15 @@ public class TestCheckboxes {
         assertTrue(sg.getSelection().contains(cbs[4]));
 
         // Consistency check
-        for (int i = 0; i < 4; i++) assertCheckbox(cbs[i], MFXCheckbox.TriState.UNSELECTED);
-        assertCheckbox(cbs[4], MFXCheckbox.TriState.SELECTED);
+		for (int i = 0; i < 4; i++) assertCheckbox(cbs[i], TriState.UNSELECTED);
+		assertCheckbox(cbs[4], TriState.SELECTED);
 
         // Deselect and select all
         cbs[4].setSelected(false);
         for (MFXCheckbox cb : cbs) cb.setSelected(true);
 
-        for (int i = 0; i < 4; i++) assertCheckbox(cbs[i], MFXCheckbox.TriState.UNSELECTED);
-        assertCheckbox(cbs[4], MFXCheckbox.TriState.SELECTED);
+		for (int i = 0; i < 4; i++) assertCheckbox(cbs[i], TriState.UNSELECTED);
+		assertCheckbox(cbs[4], TriState.SELECTED);
     }
 
     @Test
@@ -200,8 +201,8 @@ public class TestCheckboxes {
         cbs[4].setSelected(true);
         sg.addAll(cbs);
 
-        for (int i = 0; i < 4; i++) assertCheckbox(cbs[i], MFXCheckbox.TriState.UNSELECTED);
-        assertCheckbox(cbs[4], MFXCheckbox.TriState.SELECTED);
+		for (int i = 0; i < 4; i++) assertCheckbox(cbs[i], TriState.UNSELECTED);
+		assertCheckbox(cbs[4], TriState.SELECTED);
         assertEquals(1, sg.getSelection().size());
         assertTrue(sg.getSelection().contains(cbs[4]));
     }
@@ -215,32 +216,32 @@ public class TestCheckboxes {
         sg.addAll(cbs);
 
         // Consistency check, only first selected
-        for (int i = 1; i < 5; i++) assertCheckbox(cbs[i], MFXCheckbox.TriState.UNSELECTED);
-        assertCheckbox(cbs[0], MFXCheckbox.TriState.SELECTED);
+		for (int i = 1; i < 5; i++) assertCheckbox(cbs[i], TriState.UNSELECTED);
+		assertCheckbox(cbs[0], TriState.SELECTED);
         assertEquals(1, sg.getSelection().size());
         assertTrue(sg.getSelection().contains(cbs[0]));
 
         cbs[0].setSelected(false);
-        assertCheckbox(cbs[0], MFXCheckbox.TriState.SELECTED);
+		assertCheckbox(cbs[0], TriState.SELECTED);
         assertEquals(1, sg.getSelection().size());
         assertTrue(sg.getSelection().contains(cbs[0]));
 
         cbs[1].setSelected(true);
-        assertCheckbox(cbs[0], MFXCheckbox.TriState.UNSELECTED);
-        assertCheckbox(cbs[1], MFXCheckbox.TriState.SELECTED);
+		assertCheckbox(cbs[0], TriState.UNSELECTED);
+		assertCheckbox(cbs[1], TriState.SELECTED);
         assertEquals(1, sg.getSelection().size());
         assertTrue(sg.getSelection().contains(cbs[1]));
 
         // Deselect all
         for (MFXCheckbox cb : cbs) cb.setSelected(false);
-        assertCheckbox(cbs[1], MFXCheckbox.TriState.SELECTED);
+		assertCheckbox(cbs[1], TriState.SELECTED);
         assertEquals(1, sg.getSelection().size());
         assertTrue(sg.getSelection().contains(cbs[1]));
 
         // Select all
         for (MFXCheckbox cb : cbs) cb.setSelected(true);
-        assertCheckbox(cbs[1], MFXCheckbox.TriState.UNSELECTED);
-        assertCheckbox(cbs[4], MFXCheckbox.TriState.SELECTED);
+		assertCheckbox(cbs[1], TriState.UNSELECTED);
+		assertCheckbox(cbs[4], TriState.SELECTED);
         assertEquals(1, sg.getSelection().size());
         assertTrue(sg.getSelection().contains(cbs[4]));
     }
@@ -256,13 +257,13 @@ public class TestCheckboxes {
         for (MFXCheckbox cb : cbs) cb.setAllowIndeterminate(true);
         for (MFXCheckbox cb : cbs) {
             assertFalse(cb.isAllowIndeterminate());
-            assertCheckbox(cb, MFXCheckbox.TriState.UNSELECTED);
+			assertCheckbox(cb, TriState.UNSELECTED);
         }
     }
 
-    void assertCheckbox(MFXCheckbox cb, MFXCheckbox.TriState state) {
+	void assertCheckbox(MFXCheckbox cb, TriState state) {
         assertEquals(state, cb.getState());
-        assertEquals(state == MFXCheckbox.TriState.SELECTED, cb.isSelected());
+		assertEquals(state == TriState.SELECTED, cb.isSelected());
         if (cb.getSelectionGroup() != null) {
             assertFalse(cb.isAllowIndeterminate());
         }

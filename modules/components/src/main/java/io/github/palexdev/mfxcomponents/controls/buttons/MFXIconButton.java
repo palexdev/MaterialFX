@@ -41,7 +41,7 @@ import java.util.function.Supplier;
  * M3 guidelines highly suggest to set a tooltip on this kind of buttons, to describe in short what's its purpose
  * and action.
  * <p></p>
- * Last but not least, I want to specify that: as the name suggests this button/toggle is intended to use with icons only,
+ * Last but not least, I want to specify that: as the name suggests this button/toggle is intended to be used with icons only,
  * despite extending {@link MFXSelectable} this is particular also for this detail, the default skin has no node to display
  * the set text!
  */

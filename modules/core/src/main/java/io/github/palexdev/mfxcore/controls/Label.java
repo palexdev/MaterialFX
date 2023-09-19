@@ -20,6 +20,7 @@ package io.github.palexdev.mfxcore.controls;
 
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableDoubleProperty;
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableObjectProperty;
+import io.github.palexdev.mfxcore.observables.When;
 import io.github.palexdev.mfxcore.utils.fx.StyleUtils;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
@@ -50,21 +51,25 @@ import java.util.function.Consumer;
  * A mechanism to detect the addition and retrieval of such node has been added, allowing custom text based controls to
  * take full control on the text node itself rather than the label as a whole.
  * <p>
- * Also, this allows to 'backport' the {@link Text#fontSmoothingTypeProperty()} here, allowing to set the antialiasing
+ * This allows to implement two other useful tricks:
+ * <p> 1) 'Backport' the {@link Text#fontSmoothingTypeProperty()} here, allowing to set the antialiasing
  * method directly on the label. The default font smoothing type for this is set to {@link FontSmoothingType#LCD}.
+ * <p> 2) A way to completely disable the text truncation by always showing the full text and removing the clip
  */
 public class Label extends javafx.scene.control.Label {
     //================================================================================
     // Properties
     //================================================================================
     protected Node textNode;
-    private Consumer<Node> onSetTextNode = null;
+	private Consumer<Node> onSetTextNode = n -> {};
+
+	private When<?> whenFDTE;
+	private boolean forceDisableTextEllipsis = false;
 
     //================================================================================
     // Constructors
     //================================================================================
-    public Label() {
-    }
+	public Label() {}
 
     public Label(String text) {
         super(text);
@@ -79,29 +84,55 @@ public class Label extends javafx.scene.control.Label {
     //================================================================================
 
     /**
-     * Null-safe getter for retrieving the instance of the text node for this label.
-     */
-    public Optional<Node> getTextNode() {
-        return Optional.ofNullable(textNode);
-    }
-
-    /**
      * Responsible for setting the text node instance as well as running the user specified callback,
-     * {@link #onSetTextNode(Consumer)}.
+	 * {@link #onSetTextNode(Consumer)}, and invoking {@link #updateFDTE()}.
      */
     protected void setTextNode(Node textNode) {
         this.textNode = textNode;
-        if (onSetTextNode instanceof Text) {
+		if (textNode instanceof Text) {
             ((Text) textNode).fontSmoothingTypeProperty().bind(fontSmoothingTypeProperty());
             onSetTextNode.accept(textNode);
+			updateFDTE();
         }
     }
 
     /**
-     * Sets the callback that executes when the text node is detected and stored.
+	 * This is responsible for completely removing the text truncation capability of the label. Runs only after the text
+	 * node has been retrieved by {@link #setTextNode(Node)}.
+	 * <p></p>
+	 * <b>How does it work?</b>
+	 * <p>
+	 * First things first, how the JavaFX truncation mechanism works. There are effectively two separate text properties:
+	 * one comes from the label itself, and the other is from the text node in its skin. The two are not bound. In fact,
+	 * the property that specifies what's being shown by the label is the one from the text node (yeah, the one we forcefully
+	 * retrieve here). When the text is truncated, the property from the label will return the full text, instead the one from
+	 * the text node will return the truncated text.
+	 * <p>
+	 * Knowing this, we use a {@link When} construct (so a listener) on the text node's property so that every time it
+	 * changes (it is truncated) we set it back to the full string. Yes, it's a brute force approach, but as far as I know
+	 * it's the only way, you know how it is JavaFX... private, final, immutable, boring...
+	 * <p>
+	 * Additionally, the listener is also responsible for removing the clip applied to the text node. It appears that,
+	 * the text is not only truncated but also clipped for some reason, so restoring the full text may not be enough in some
+	 * cases.
      */
-    public void onSetTextNode(Consumer<Node> action) {
-        this.onSetTextNode = action;
+	protected void updateFDTE() {
+		if (!forceDisableTextEllipsis && whenFDTE != null) {
+			whenFDTE.dispose();
+			whenFDTE = null;
+			return;
+		}
+		Text textNode = (Text) this.textNode;
+		if (textNode == null || whenFDTE != null) return;
+
+		whenFDTE = When.onChanged(textNode.textProperty())
+			.then((o, n) -> {
+				textNode.setClip(null);
+				textNode.setText(getText());
+			})
+			.invalidating(textNode.clipProperty())
+			.executeNow()
+			.listen();
     }
 
     //================================================================================
@@ -223,4 +254,36 @@ public class Label extends javafx.scene.control.Label {
     public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
         return getClassCssMetaData();
     }
+
+	//================================================================================
+	// Getters/Setters
+	//================================================================================
+
+	/**
+	 * Null-safe getter for retrieving the instance of the text node for this label.
+	 */
+	public Optional<Node> getTextNode() {
+		return Optional.ofNullable(textNode);
+	}
+
+	/**
+	 * Sets the callback that executes when the text node is detected and stored.
+	 */
+	public void onSetTextNode(Consumer<Node> action) {
+		this.onSetTextNode = action;
+	}
+
+	public boolean isForceDisableTextEllipsis() {
+		return forceDisableTextEllipsis;
+	}
+
+	/**
+	 * Enables/disables the listener responsible for completely removing the text truncation capabilities from the label.
+	 *
+	 * @see #updateFDTE()
+	 */
+	public void setForceDisableTextEllipsis(boolean forceDisableTextEllipsis) {
+		this.forceDisableTextEllipsis = forceDisableTextEllipsis;
+		updateFDTE();
+	}
 }

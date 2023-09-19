@@ -24,15 +24,18 @@ import io.github.palexdev.mfxcomponents.controls.base.MFXButtonBase;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
 import io.github.palexdev.mfxcomponents.skins.base.MFXLabeledSkin;
 import io.github.palexdev.mfxcomponents.theming.enums.PseudoClasses;
-import io.github.palexdev.mfxcore.observables.When;
 import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
+import io.github.palexdev.mfxeffects.ripple.MFXRippleGenerator;
+import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
+import static io.github.palexdev.mfxcore.events.WhenEvent.intercept;
 import static io.github.palexdev.mfxcore.observables.When.onChanged;
 
 /**
@@ -42,15 +45,12 @@ import static io.github.palexdev.mfxcore.observables.When.onChanged;
  * <p></p>
  * The layout is simple, there are just the label to show the text and the {@link MaterialSurface} responsible for
  * showing the various interaction states (applying an overlay background) and generating ripple effects.
- * About ripple generation, see also {@link MFXButtonBehaviorBase#generateRipple(MouseEvent)} and
- * {@link MFXButtonBehaviorBase#getRippleGenerator()}
  */
 public class MFXButtonSkin<T extends MFXButtonBase<B>, B extends MFXButtonBehaviorBase<T>> extends MFXLabeledSkin<T, B> {
     //================================================================================
     // Properties
     //================================================================================
     protected final MaterialSurface surface;
-    protected When<ContentDisplay> cdWhen;
 
     //================================================================================
     // Constructors
@@ -79,17 +79,18 @@ public class MFXButtonSkin<T extends MFXButtonBase<B>, B extends MFXButtonBehavi
      */
     protected void addListeners() {
         T button = getSkinnable();
-        cdWhen = onChanged(button.contentDisplayProperty())
-            .then((o, n) -> {
-                Node graphic = button.getGraphic();
-                boolean wil = (graphic != null) && (n == ContentDisplay.LEFT);
-                boolean wir = (graphic != null) && (n == ContentDisplay.RIGHT);
-                PseudoClasses.WITH_ICON_LEFT.setOn(button, wil);
-                PseudoClasses.WITH_ICON_RIGHT.setOn(button, wir);
-            })
-            .executeNow()
-            .invalidating(button.graphicProperty())
-            .listen();
+        listeners(
+            onChanged(button.contentDisplayProperty())
+                .then((o, n) -> {
+                    Node graphic = button.getGraphic();
+                    boolean wil = (graphic != null) && (n == ContentDisplay.LEFT);
+                    boolean wir = (graphic != null) && (n == ContentDisplay.RIGHT);
+                    PseudoClasses.WITH_ICON_LEFT.setOn(button, wil);
+                    PseudoClasses.WITH_ICON_RIGHT.setOn(button, wir);
+                })
+                .executeNow()
+                .invalidating(button.graphicProperty())
+        );
     }
 
     //================================================================================
@@ -104,19 +105,37 @@ public class MFXButtonSkin<T extends MFXButtonBase<B>, B extends MFXButtonBehavi
     @Override
     protected void initBehavior(B behavior) {
         T button = getSkinnable();
+        MFXRippleGenerator rg = surface.getRippleGenerator();
         behavior.init();
-        handle(button, MouseEvent.MOUSE_PRESSED, behavior::mousePressed);
-        handle(button, MouseEvent.MOUSE_RELEASED, behavior::mouseReleased);
-        handle(button, MouseEvent.MOUSE_CLICKED, behavior::mouseClicked);
-        handle(button, MouseEvent.MOUSE_EXITED, behavior::mouseExited);
-        handle(button, KeyEvent.KEY_PRESSED, behavior::keyPressed);
+        events(
+            intercept(button, MouseEvent.MOUSE_PRESSED)
+                .process(e -> behavior.mousePressed(e, c -> rg.generate(e))),
+
+            intercept(button, MouseEvent.MOUSE_RELEASED)
+                .process(e -> behavior.mouseReleased(e, c -> rg.release())),
+
+            intercept(button, MouseEvent.MOUSE_CLICKED)
+                .process(behavior::mouseClicked),
+
+            intercept(button, MouseEvent.MOUSE_EXITED)
+                .process(e -> behavior.mouseExited(e, c -> rg.release())),
+
+            intercept(button, KeyEvent.KEY_PRESSED)
+                .process(e -> behavior.keyPressed(e, c -> {
+                    if (e.getCode() == KeyCode.ENTER) {
+                        Bounds b = button.getLayoutBounds();
+                        rg.generate(b.getCenterX(), b.getCenterY());
+                        rg.release();
+                    }
+                }))
+        );
     }
 
     @Override
     public double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
         T button = getSkinnable();
         double insets = leftInset + rightInset;
-        double tW = tmCache.getSnappedWidth();
+        double tW = getCachedTextWidth();
         if (button.getContentDisplay() == ContentDisplay.GRAPHIC_ONLY) tW = 0;
         double gW = (button.getGraphic() != null) ? LayoutUtils.boundWidth(button.getGraphic()) + button.getGraphicTextGap() : 0.0;
         return insets + tW + gW;
@@ -126,7 +145,7 @@ public class MFXButtonSkin<T extends MFXButtonBase<B>, B extends MFXButtonBehavi
     public double computePrefHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
         T button = getSkinnable();
         double insets = topInset + bottomInset;
-        double tH = tmCache.getSnappedHeight();
+        double tH = getCachedTextHeight();
         double gH = button.getGraphic() != null ? LayoutUtils.boundHeight(button.getGraphic()) : 0.0;
         return insets + Math.max(tH, gH);
     }
@@ -152,11 +171,6 @@ public class MFXButtonSkin<T extends MFXButtonBase<B>, B extends MFXButtonBehavi
     @Override
     public void dispose() {
         surface.dispose();
-        label.getTextNode().ifPresent(n -> n.opacityProperty().unbind());
-        if (cdWhen != null) {
-            cdWhen.dispose();
-            cdWhen = null;
-        }
         super.dispose();
     }
 }

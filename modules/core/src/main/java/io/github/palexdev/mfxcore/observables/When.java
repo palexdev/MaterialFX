@@ -18,6 +18,7 @@
 
 package io.github.palexdev.mfxcore.observables;
 
+import io.github.palexdev.mfxcore.behavior.DisposableAction;
 import io.github.palexdev.mfxcore.collections.WeakHashSet;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -55,7 +56,7 @@ import java.util.function.Supplier;
  * have more than one construct per {@link ObservableValue}, which automatically raises the issue:
  * "Which construct you want to dispose?"
  */
-public abstract class When<T> {
+public abstract class When<T> implements DisposableAction {
     //================================================================================
     // Properties
     //================================================================================
@@ -63,6 +64,7 @@ public abstract class When<T> {
     protected ObservableValue<T> observable;
     protected boolean oneShot = false;
     protected boolean execNowOneShot = false;
+	protected boolean active = false;
 
     protected Set<Observable> invalidating;
     protected InvalidationListener invalidatingListener;
@@ -112,6 +114,7 @@ public abstract class When<T> {
         invalidating.forEach(o -> o.addListener(invalidatingListener));
         WeakHashSet<When<?>> set = whens.computeIfAbsent(observable, o -> new WeakHashSet<>());
         set.add(this);
+		active = true;
     }
 
     /**
@@ -184,11 +187,13 @@ public abstract class When<T> {
      * <p>
      * Subclasses should expand this behavior by also disposing: the observable, actions, and any other listener.
      */
+	@Override
     public void dispose() {
         invalidating.forEach(o -> o.removeListener(invalidatingListener));
         invalidating.clear();
         invalidating = null;
         invalidatingListener = null;
+		active = false;
     }
 
     /**
@@ -199,11 +204,18 @@ public abstract class When<T> {
     }
 
     /**
-     * Calls {@link #dispose(When)} on each of the given {@code When} construct.
+	 * Calls {@link #dispose(When)} on each of the given {@code When} constructs.
      */
     public static void dispose(When<?>... whens) {
         for (When<?> w : whens) dispose(w);
     }
+
+	/**
+	 * @return whether the construct is active and not disposed, the flag is set if {@link #register()} run successfully
+	 */
+	public boolean isActive() {
+		return active;
+	}
 
     /**
      * @return whether this construct has been disposed before. By default, checks if the given {@link ObservableValue}
@@ -217,7 +229,7 @@ public abstract class When<T> {
     }
 
     /**
-     * @return the total number of existing When constructs for a given {@link ObservableValue}
+	 * @return the total number of existing {@code When} constructs for a given {@link ObservableValue}
      */
     public static int size(ObservableValue<?> observable) {
         return Optional.ofNullable(whens.get(observable))
@@ -226,7 +238,7 @@ public abstract class When<T> {
     }
 
     /**
-     * @return the total number of existing When constructs for any registered {@link ObservableValue}
+	 * @return the total number of existing {@code When} constructs for any registered {@link ObservableValue}
      */
     public static int totalSize() {
         return whens.keySet().stream()
@@ -273,8 +285,5 @@ public abstract class When<T> {
      * @see WeakHashMap
      * @see WeakHashSet
      */
-    public static class WhensMap extends WeakHashMap<ObservableValue<?>, WeakHashSet<When<?>>> {
-        public WhensMap() {
-        }
-    }
+	public static class WhensMap extends WeakHashMap<ObservableValue<?>, WeakHashSet<When<?>>> {}
 }

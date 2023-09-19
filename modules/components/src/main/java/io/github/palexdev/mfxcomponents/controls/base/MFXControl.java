@@ -18,7 +18,6 @@
 
 package io.github.palexdev.mfxcomponents.controls.base;
 
-import io.github.palexdev.mfxcomponents.behaviors.MFXFabBehavior;
 import io.github.palexdev.mfxcomponents.layout.LayoutStrategy;
 import io.github.palexdev.mfxcomponents.layout.MFXResizable;
 import io.github.palexdev.mfxcomponents.window.popups.MFXTooltip;
@@ -55,12 +54,8 @@ import java.util.function.Supplier;
  * <p></p>
  * The integration with the new Behavior API is achieved by having a specific property, {@link #behaviorProviderProperty()},
  * which allows to change at any time the component's behavior. The property automatically handles initialization and disposal
- * of behaviors. A reference to th current built behavior object is kept to be retrieved via {@link #getBehavior()}.
+ * of behaviors. A reference to the current built behavior object is kept to be retrieved via {@link #getBehavior()}.
  * <p>
- * In MaterialFX, the Behavior API is not a closed API, it's not meant to be private. A user can always take it and invoke
- * its methods directly, extend it, suppress it, do whatever you like. Also, some components' behavior may specify methods
- * that are meant to be called by the user when needed, see {@link MFXFabBehavior} as an example.
- * <p></p>
  * Components that primarily deal with text should extend {@link MFXLabeled} instead.
  * <p></p>
  * Design guidelines (like MD3), may specify in the components' specs the initial/minimum sizes for each component.
@@ -86,301 +81,304 @@ import java.util.function.Supplier;
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
 public abstract class MFXControl<B extends BehaviorBase<? extends Node>> extends Control implements WithBehavior<B>, MFXStyleable, MFXResizable {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private B behavior;
-    private final SupplierProperty<B> behaviorProvider = new SupplierProperty<>() {
-        @Override
-        protected void invalidated() {
-            if (behavior != null) {
-                behavior.dispose();
-            }
-            behavior = get().get();
-            MFXSkinBase skin = (MFXSkinBase) getSkin();
-            if (skin != null && behavior != null) skin.initBehavior(behavior);
-        }
-    };
+	//================================================================================
+	// Properties
+	//================================================================================
+	private B behavior;
+	private final SupplierProperty<B> behaviorProvider = new SupplierProperty<>() {
+		@Override
+		protected void invalidated() {
+			if (behavior != null) {
+				behavior.dispose();
+			}
+			behavior = get().get();
+			MFXSkinBase skin = (MFXSkinBase) getSkin();
+			if (skin != null && behavior != null) skin.initBehavior(behavior);
+		}
+	};
 
-    private final ObjectProperty<LayoutStrategy> layoutStrategy = new SimpleObjectProperty<>(defaultLayoutStrategy()) {
-        @Override
-        protected void invalidated() {
-            onLayoutStrategyChanged();
-        }
-    };
-    private final ObjectProperty<MFXTooltip> mfxTooltip = new SimpleObjectProperty<>() {
-        @Override
-        public void set(MFXTooltip newValue) {
-            MFXTooltip oldValue = get();
-            if (oldValue != null) oldValue.dispose();
-            if (oldValue == newValue) return;
-            newValue.install();
-            super.set(newValue);
-        }
-    };
+	private final ObjectProperty<LayoutStrategy> layoutStrategy = new SimpleObjectProperty<>(defaultLayoutStrategy()) {
+		@Override
+		protected void invalidated() {
+			onLayoutStrategyChanged();
+		}
+	};
+	private final ObjectProperty<MFXTooltip> mfxTooltip = new SimpleObjectProperty<>() {
+		@Override
+		public void set(MFXTooltip newValue) {
+			MFXTooltip oldValue = get();
+			if (oldValue != null) oldValue.dispose();
+			if (oldValue == newValue) return;
+			newValue.install();
+			super.set(newValue);
+		}
+	};
 
-    //================================================================================
-    // Abstract Methods
-    //================================================================================
-    protected abstract MFXSkinBase<?, ?> buildSkin();
+	//================================================================================
+	// Abstract Methods
+	//================================================================================
 
-    //================================================================================
-    // Methods
-    //================================================================================
+	/**
+	 * Create a new instance of the default skin for this component.
+	 */
+	protected abstract MFXSkinBase<?, ?> buildSkin();
 
-    /**
-     * Since this is deeply integrated with the new behavior API, and since the {@link #setSkin(Skin)} method cannot
-     * be overridden, and finally to avoid adding listeners, this is the method to use when you want to change the skin.
-     * <p></p>
-     * Unfortunately, I cannot prevent users from still using the aforementioned method, but I can guarantee you using that
-     * will cause issues and undesired behaviors. You have been warned.
-     */
-    public void changeSkin(MFXSkinBase<?, ?> skin) {
-        if (skin == null)
-            throw new IllegalArgumentException("The new skin cannot be null!");
-        if (behavior != null) behavior.dispose();
-        behavior = getBehaviorProvider().get();
-        ((MFXSkinBase) skin).initBehavior(behavior);
-        setSkin(skin);
-    }
+	//================================================================================
+	// Methods
+	//================================================================================
 
-    /**
-     * This is automatically invoked when either {@link #initHeightProperty()} or {@link #initWidthProperty()} change.
-     * By default, this method triggers a layout request.
-     * <p></p>
-     * The consequence is that the current set {@link LayoutStrategy} will be used to re-compute the component's sizes, and
-     * if it takes into account those init sizes, the component will resize accordingly.
-     */
-    protected void onInitSizesChanged() {
-        requestLayout();
-    }
+	/**
+	 * Since this is deeply integrated with the new behavior API, and since the {@link #setSkin(Skin)} method cannot
+	 * be overridden, and finally to avoid adding listeners, this is the method to use when you want to change the skin.
+	 * <p></p>
+	 * Unfortunately, I cannot prevent users from still using the aforementioned method, but I can guarantee you using that
+	 * will cause issues and undesired behaviors. You have been warned.
+	 */
+	public void changeSkin(MFXSkinBase<?, ?> skin) {
+		if (skin == null)
+			throw new IllegalArgumentException("The new skin cannot be null!");
+		if (behavior != null) behavior.dispose();
+		behavior = getBehaviorProvider().get();
+		((MFXSkinBase) skin).initBehavior(behavior);
+		setSkin(skin);
+	}
 
-    /**
-     * Subclasses can change the actions to perform if the component is being used in SceneBuilder
-     * by overriding this method. Typically called automatically on components' initialization.
-     */
-    protected void sceneBuilderIntegration() {
-    }
+	/**
+	 * This is automatically invoked when either {@link #initHeightProperty()} or {@link #initWidthProperty()} change.
+	 * By default, this method triggers a layout request.
+	 * <p></p>
+	 * The consequence is that the current set {@link LayoutStrategy} will be used to re-compute the component's sizes, and
+	 * if it takes into account those init sizes, the component will resize accordingly.
+	 */
+	protected void onInitSizesChanged() {
+		requestLayout();
+	}
 
-    //================================================================================
-    // Overridden Methods
-    //================================================================================
-    @Override
-    public void onLayoutStrategyChanged() {
-        requestLayout();
-    }
+	/**
+	 * Subclasses can change the actions to perform if the component is being used in SceneBuilder
+	 * by overriding this method. Typically called automatically on components' initialization.
+	 */
+	protected void sceneBuilderIntegration() {}
 
-    @Override
-    public LayoutStrategy defaultLayoutStrategy() {
-        return LayoutStrategy.defaultStrategy()
-            .setPrefWidthFunction(LayoutStrategy.Defaults.DEF_PREF_WIDTH_FUNCTION.andThen(r -> Math.max(r, getInitWidth())))
-            .setPrefHeightFunction(LayoutStrategy.Defaults.DEF_PREF_HEIGHT_FUNCTION.andThen(r -> Math.max(r, getInitHeight())));
-    }
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
+	@Override
+	public void onLayoutStrategyChanged() {
+		requestLayout();
+	}
 
-    @Override
-    public double computeMinWidth(double height) {
-        return getLayoutStrategy().computeMinWidth(this);
-    }
+	@Override
+	public LayoutStrategy defaultLayoutStrategy() {
+		return LayoutStrategy.defaultStrategy()
+			.setPrefWidthFunction(LayoutStrategy.Defaults.DEF_PREF_WIDTH_FUNCTION.andThen(r -> Math.max(r, getInitWidth())))
+			.setPrefHeightFunction(LayoutStrategy.Defaults.DEF_PREF_HEIGHT_FUNCTION.andThen(r -> Math.max(r, getInitHeight())));
+	}
 
-    @Override
-    public double computeMinHeight(double width) {
-        return getLayoutStrategy().computeMinHeight(this);
-    }
+	@Override
+	public double computeMinWidth(double height) {
+		return getLayoutStrategy().computeMinWidth(this);
+	}
 
-    @Override
-    public double computePrefWidth(double height) {
-        return getLayoutStrategy().computePrefWidth(this);
-    }
+	@Override
+	public double computeMinHeight(double width) {
+		return getLayoutStrategy().computeMinHeight(this);
+	}
 
-    @Override
-    public double computePrefHeight(double width) {
-        return getLayoutStrategy().computePrefHeight(this);
-    }
+	@Override
+	public double computePrefWidth(double height) {
+		return getLayoutStrategy().computePrefWidth(this);
+	}
 
-    @Override
-    public double computeMaxWidth(double height) {
-        return getLayoutStrategy().computeMaxWidth(this);
-    }
+	@Override
+	public double computePrefHeight(double width) {
+		return getLayoutStrategy().computePrefHeight(this);
+	}
 
-    @Override
-    public double computeMaxHeight(double width) {
-        return getLayoutStrategy().computeMaxHeight(this);
-    }
+	@Override
+	public double computeMaxWidth(double height) {
+		return getLayoutStrategy().computeMaxWidth(this);
+	}
 
-    @Override
-    protected final MFXSkinBase<?, ?> createDefaultSkin() {
-        MFXSkinBase skin = buildSkin();
-        if (behavior != null) skin.initBehavior(behavior);
-        return skin;
-    }
+	@Override
+	public double computeMaxHeight(double width) {
+		return getLayoutStrategy().computeMaxHeight(this);
+	}
 
-    //================================================================================
-    // Styleable Properties
-    //================================================================================
-    private final StyleableDoubleProperty initHeight = new StyleableDoubleProperty(
-        StyleableProperties.INIT_HEIGHT,
-        this,
-        "initHeight",
-        USE_COMPUTED_SIZE
-    ) {
-        @Override
-        public void invalidated() {
-            onInitSizesChanged();
-        }
-    };
+	@Override
+	protected final MFXSkinBase<?, ?> createDefaultSkin() {
+		MFXSkinBase skin = buildSkin();
+		if (behavior != null) skin.initBehavior(behavior);
+		return skin;
+	}
 
-    private final StyleableDoubleProperty initWidth = new StyleableDoubleProperty(
-        StyleableProperties.INIT_WIDTH,
-        this,
-        "initWidth",
-        USE_COMPUTED_SIZE
-    ) {
-        @Override
-        public void invalidated() {
-            onInitSizesChanged();
-        }
-    };
+	//================================================================================
+	// Styleable Properties
+	//================================================================================
+	private final StyleableDoubleProperty initHeight = new StyleableDoubleProperty(
+		StyleableProperties.INIT_HEIGHT,
+		this,
+		"initHeight",
+		USE_COMPUTED_SIZE
+	) {
+		@Override
+		public void invalidated() {
+			onInitSizesChanged();
+		}
+	};
 
-    public final double getInitHeight() {
-        return initHeight.get();
-    }
+	private final StyleableDoubleProperty initWidth = new StyleableDoubleProperty(
+		StyleableProperties.INIT_WIDTH,
+		this,
+		"initWidth",
+		USE_COMPUTED_SIZE
+	) {
+		@Override
+		public void invalidated() {
+			onInitSizesChanged();
+		}
+	};
 
-    /**
-     * Specifies the component's initial height upon creation.
-     * <p></p>
-     * This can be useful when using components that define certain sizes by specs, in
-     * SceneBuilder and other similar cases. One could also use the '-fx-pref-height' CSS
-     * property JavaFX offers, but the issue is that once it is set by CSS it won't be possible to
-     * overwrite the value in some cases. To overcome this, the size can be set via code, this property
-     * just offers a way to specify the height in CSS and still apply it via code.
-     * <p>
-     * The way initial sizes are applied depends on the set {@link LayoutStrategy}, when this changes the layout request
-     * is automatically triggered by {@link #onInitSizesChanged()}.
-     * <p></p>
-     * Can be set in CSS via the property: '-mfx-init-height'.
-     */
-    protected final StyleableDoubleProperty initHeightProperty() {
-        return initHeight;
-    }
+	public final double getInitHeight() {
+		return initHeight.get();
+	}
 
-    protected final void setInitHeight(double initHeight) {
-        this.initHeight.set(initHeight);
-    }
+	/**
+	 * Specifies the component's initial height upon creation.
+	 * <p></p>
+	 * This can be useful when using components that define certain sizes by specs, in
+	 * SceneBuilder and other similar cases. One could also use the '-fx-pref-height' CSS
+	 * property JavaFX offers, but the issue is that once it is set by CSS it won't be possible to
+	 * overwrite the value in some cases. To overcome this, the size can be set via code, this property
+	 * just offers a way to specify the height in CSS and still apply it via code.
+	 * <p>
+	 * The way initial sizes are applied depends on the set {@link LayoutStrategy}, when this changes the layout request
+	 * is automatically triggered by {@link #onInitSizesChanged()}.
+	 * <p></p>
+	 * Can be set in CSS via the property: '-mfx-init-height'.
+	 */
+	protected final StyleableDoubleProperty initHeightProperty() {
+		return initHeight;
+	}
 
-    public final double getInitWidth() {
-        return initWidth.get();
-    }
+	protected final void setInitHeight(double initHeight) {
+		this.initHeight.set(initHeight);
+	}
 
-    /**
-     * Specifies the component's initial width when created.
-     * <p></p>
-     * This can be useful when using components that define certain sizes by specs, in
-     * SceneBuilder and other similar cases. One could also use the '-fx-pref-width' CSS
-     * property JavaFX offers, but the issue is that once it is set by CSS it won't be possible to
-     * overwrite the value in some cases. To overcome this, the size can be set via code, this property
-     * just offers a way to specify the width in CSS and still apply it via code.
-     * <p>
-     * The way initial sizes are applied depends on the set {@link LayoutStrategy}, when this changes the layout request
-     * is automatically triggered by {@link #onInitSizesChanged()}.
-     * <p></p>
-     * Can be set in CSS via the property: '-mfx-init-width'.
-     */
-    protected final StyleableDoubleProperty initWidthProperty() {
-        return initWidth;
-    }
+	public final double getInitWidth() {
+		return initWidth.get();
+	}
 
-    protected final void setInitWidth(double initWidth) {
-        this.initWidth.set(initWidth);
-    }
+	/**
+	 * Specifies the component's initial width when created.
+	 * <p></p>
+	 * This can be useful when using components that define certain sizes by specs, in
+	 * SceneBuilder and other similar cases. One could also use the '-fx-pref-width' CSS
+	 * property JavaFX offers, but the issue is that once it is set by CSS it won't be possible to
+	 * overwrite the value in some cases. To overcome this, the size can be set via code, this property
+	 * just offers a way to specify the width in CSS and still apply it via code.
+	 * <p>
+	 * The way initial sizes are applied depends on the set {@link LayoutStrategy}, when this changes the layout request
+	 * is automatically triggered by {@link #onInitSizesChanged()}.
+	 * <p></p>
+	 * Can be set in CSS via the property: '-mfx-init-width'.
+	 */
+	protected final StyleableDoubleProperty initWidthProperty() {
+		return initWidth;
+	}
 
-    //================================================================================
-    // CssMetaData
-    //================================================================================
-    private static class StyleableProperties {
-        private static final StyleablePropertyFactory<MFXControl<?>> FACTORY = new StyleablePropertyFactory<>(Control.getClassCssMetaData());
-        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+	protected final void setInitWidth(double initWidth) {
+		this.initWidth.set(initWidth);
+	}
 
-        protected static final CssMetaData<MFXControl<?>, Number> INIT_HEIGHT =
-            FACTORY.createSizeCssMetaData(
-                "-mfx-init-height",
-                MFXControl::initHeightProperty,
-                USE_COMPUTED_SIZE
-            );
+	//================================================================================
+	// CssMetaData
+	//================================================================================
+	private static class StyleableProperties {
+		private static final StyleablePropertyFactory<MFXControl<?>> FACTORY = new StyleablePropertyFactory<>(Control.getClassCssMetaData());
+		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
-        private static final CssMetaData<MFXControl<?>, Number> INIT_WIDTH =
-            FACTORY.createSizeCssMetaData(
-                "-mfx-init-width",
-                MFXControl::initWidthProperty,
-                USE_COMPUTED_SIZE
-            );
+		protected static final CssMetaData<MFXControl<?>, Number> INIT_HEIGHT =
+			FACTORY.createSizeCssMetaData(
+				"-mfx-init-height",
+				MFXControl::initHeightProperty,
+				USE_COMPUTED_SIZE
+			);
 
-        static {
-            cssMetaDataList = StyleUtils.cssMetaDataList(
-                Control.getClassCssMetaData(),
-                INIT_HEIGHT, INIT_WIDTH
-            );
-        }
-    }
+		private static final CssMetaData<MFXControl<?>, Number> INIT_WIDTH =
+			FACTORY.createSizeCssMetaData(
+				"-mfx-init-width",
+				MFXControl::initWidthProperty,
+				USE_COMPUTED_SIZE
+			);
 
-    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
-        return StyleableProperties.cssMetaDataList;
-    }
+		static {
+			cssMetaDataList = StyleUtils.cssMetaDataList(
+				Control.getClassCssMetaData(),
+				INIT_HEIGHT, INIT_WIDTH
+			);
+		}
+	}
 
-    @Override
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return getClassCssMetaData();
-    }
+	public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
+		return StyleableProperties.cssMetaDataList;
+	}
 
-    //================================================================================
-    // Getters/Setters
-    //================================================================================
-    @Override
-    public B getBehavior() {
-        return behavior;
-    }
+	@Override
+	public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+		return getClassCssMetaData();
+	}
 
-    @Override
-    public Supplier<B> getBehaviorProvider() {
-        return behaviorProvider.get();
-    }
+	//================================================================================
+	// Getters/Setters
+	//================================================================================
+	@Override
+	public B getBehavior() {
+		return behavior;
+	}
 
-    @Override
-    public SupplierProperty<B> behaviorProviderProperty() {
-        return behaviorProvider;
-    }
+	@Override
+	public Supplier<B> getBehaviorProvider() {
+		return behaviorProvider.get();
+	}
 
-    @Override
-    public void setBehaviorProvider(Supplier<B> behaviorProvider) {
-        this.behaviorProvider.set(behaviorProvider);
-    }
+	@Override
+	public SupplierProperty<B> behaviorProviderProperty() {
+		return behaviorProvider;
+	}
 
-    @Override
-    public LayoutStrategy getLayoutStrategy() {
-        return layoutStrategy.get();
-    }
+	@Override
+	public void setBehaviorProvider(Supplier<B> behaviorProvider) {
+		this.behaviorProvider.set(behaviorProvider);
+	}
 
-    @Override
-    public ObjectProperty<LayoutStrategy> layoutStrategyProperty() {
-        return layoutStrategy;
-    }
+	@Override
+	public LayoutStrategy getLayoutStrategy() {
+		return layoutStrategy.get();
+	}
 
-    @Override
-    public void setLayoutStrategy(LayoutStrategy layoutStrategy) {
-        this.layoutStrategy.set(layoutStrategy);
-    }
+	@Override
+	public ObjectProperty<LayoutStrategy> layoutStrategyProperty() {
+		return layoutStrategy;
+	}
 
-    public MFXTooltip getMFXTooltip() {
-        return mfxTooltip.get();
-    }
+	@Override
+	public void setLayoutStrategy(LayoutStrategy layoutStrategy) {
+		this.layoutStrategy.set(layoutStrategy);
+	}
 
-    /**
-     * Specifies the {@link MFXTooltip} to use on this control.
-     */
-    public ObjectProperty<MFXTooltip> mfxTooltipProperty() {
-        return mfxTooltip;
-    }
+	public MFXTooltip getMFXTooltip() {
+		return mfxTooltip.get();
+	}
 
-    public void setMFXTooltip(MFXTooltip mfxTooltip) {
-        this.mfxTooltip.set(mfxTooltip);
-    }
+	/**
+	 * Specifies the {@link MFXTooltip} to use on this control.
+	 */
+	public ObjectProperty<MFXTooltip> mfxTooltipProperty() {
+		return mfxTooltip;
+	}
+
+	public void setMFXTooltip(MFXTooltip mfxTooltip) {
+		this.mfxTooltip.set(mfxTooltip);
+	}
 }

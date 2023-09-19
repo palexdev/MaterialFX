@@ -48,10 +48,17 @@ public enum PseudoClasses {
         this.pseudoClass = pseudoClass;
     }
 
+    /**
+     * Activates or deactivates the PseudoClass on the given node.
+     */
     public void setOn(Node node, boolean state) {
         node.pseudoClassStateChanged(pseudoClass, state);
     }
 
+    /**
+     * Checks whether the PseudoClass is active or not on the given node by searching in the
+     * {@link Node#getPseudoClassStates()} Set.
+     */
     public boolean isActiveOn(Node node) {
         return node.getPseudoClassStates().contains(pseudoClass);
     }

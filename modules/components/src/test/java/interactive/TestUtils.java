@@ -16,34 +16,12 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.mfxcomponents.theming.enums;
+package interactive;
 
-import io.github.palexdev.mfxcomponents.controls.fab.MFXFab;
-import io.github.palexdev.mfxcomponents.theming.base.Variant;
-
-/**
- * Enumerator implementing {@link Variant} to define the variants of {@link MFXFab}.
- * <p></p>
- * Note that extended FABs don't have 'small' and 'large' variants, applying those will likely result
- * in un-styled components.
- */
-public enum FABVariants implements Variant {
-	SMALL("small"),
-	LARGE("large"),
-	LOWERED("lowered"),
-	SURFACE("surface"),
-	SECONDARY("secondary"),
-	TERTIARY("tertiary"),
-	;
-
-	private final String styleClass;
-
-	FABVariants(String styleClass) {
-		this.styleClass = styleClass;
-	}
-
-	@Override
-	public String variantStyleClass() {
-		return styleClass;
+public class TestUtils {
+	public static void sleep(long millis) {
+		try {
+			Thread.sleep(millis);
+		} catch (Exception ignored) {}
 	}
 }

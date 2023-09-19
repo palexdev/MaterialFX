@@ -18,7 +18,6 @@
 
 package io.github.palexdev.mfxcomponents.controls.fab;
 
-import io.github.palexdev.mfxcomponents.behaviors.MFXFabBehavior;
 import io.github.palexdev.mfxcomponents.skins.MFXFabSkin;
 import io.github.palexdev.mfxcomponents.theming.base.WithVariants;
 import io.github.palexdev.mfxcomponents.theming.enums.FABVariants;
@@ -27,17 +26,13 @@ import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import java.util.List;
 
 /**
- * Extension of {@link MFXFabBase}. This variant only allows icons to be showed, text will always be
- * set to empty.
+ * Extension of {@link MFXFabBase}. This variant is styled by the default themes, the default style classes are
+ * overridden to: '.mfx-button.fab-base.fab'.
  * <p></p>
  * Implements the {@link WithVariants} API, since these type of FABs have slightly different versions, the
  * variants are described by {@link FABVariants}.
- * <p></p>
- * <b>Important note:</b> users should not use {@link #addVariants(FABVariants...)} or {@link #setVariants(FABVariants...)}
- * to make the FAB extended ({@link FABVariants#EXTENDED}) because this could lead to invisible text. Use {@link #setExtended(boolean)} instead.
  *
  * @see MFXFabSkin
- * @see MFXFabBehavior
  */
 public class MFXFab extends MFXFabBase implements WithVariants<MFXFab, FABVariants> {
 
@@ -57,15 +52,6 @@ public class MFXFab extends MFXFabBase implements WithVariants<MFXFab, FABVarian
 
     public MFXFab(String text, MFXFontIcon icon) {
         super(text, icon);
-    }
-
-    /**
-     * Creates a new {@link MFXFab} which is extended (shows text).
-     */
-    public static MFXFab extended() {
-        MFXFab fab = new MFXFab();
-        fab.setExtended(true);
-        return fab;
     }
 
     //================================================================================
@@ -98,6 +84,14 @@ public class MFXFab extends MFXFabBase implements WithVariants<MFXFab, FABVarian
 
     public MFXFab lowered() {
         setVariants(FABVariants.LOWERED);
+        return this;
+    }
+
+    /**
+     * Sets the FAB to be extended with fluent API.
+     */
+    public MFXFab extended() {
+        setExtended(true);
         return this;
     }
 

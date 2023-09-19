@@ -169,7 +169,7 @@ public class TestLayoutStrategies {
     @Test
     void testFABDefaultStrategy(FxRobot robot) {
         StackPane root = setupStage();
-        MFXFab fab = MFXFab.extended();
+        MFXFab fab = new MFXFab().extended();
         fab.setIcon(FONTAWESOME_SOLID.randomIcon());
         robot.interact(() -> {
             fab.setJavaFXLayoutStrategy();
@@ -192,7 +192,7 @@ public class TestLayoutStrategies {
     @Test
     void testFABStrategyMin(FxRobot robot) {
         StackPane root = setupStage();
-        MFXFab fab = MFXFab.extended();
+        MFXFab fab = new MFXFab().extended();
         fab.setIcon(new MFXFontIcon("fas-circle"));
         robot.interact(() -> root.getChildren().setAll(fab));
 
@@ -261,12 +261,12 @@ public class TestLayoutStrategies {
     @Test
     void testFABStrategyPref(FxRobot robot) {
         StackPane root = setupStage();
-        MFXFab fab = MFXFab.extended();
+        MFXFab fab = new MFXFab().extended();
         fab.setIcon(new MFXFontIcon("fas-circle"));
         robot.interact(() -> root.getChildren().setAll(fab));
 
         /*
-         * At this point the layout strategy is still not set and the extend() method
+		 * At this point the layout strategy is still not set and the extendCollapse() method
          * in the FAB behavior is called causing the pref width to be overridden through
          * the setPrefWidth method
          */
@@ -282,6 +282,8 @@ public class TestLayoutStrategies {
          * This is different from using setPrefSize(...)!
          * And different from setting a minimum size strategy, so...
          */
+		double v = LayoutUtils.boundHeight(fab);
+		System.out.println("Got: " + v);
         assertEquals(72.0, fab.getWidth());
         assertEquals(72.0, fab.getHeight());
 
@@ -299,7 +301,7 @@ public class TestLayoutStrategies {
     @Test
     void testFABStrategyMax(FxRobot robot) {
         StackPane root = setupStage();
-        MFXFab fab = MFXFab.extended();
+        MFXFab fab = new MFXFab().extended();
         fab.setIcon(new MFXFontIcon("fas-circle"));
         robot.interact(() -> root.getChildren().setAll(fab));
 
@@ -315,7 +317,7 @@ public class TestLayoutStrategies {
          * So we have to check: 1) the pref size 2) the actual size
          *
          * We don't check for the prefHeight because only the pref width is overridden by the
-         * extend() method in the FAB behavior
+		 * extendCollapse() method in the FAB behavior
          */
         assertEquals(64.0, fab.getPrefWidth());
         assertEquals(72.0, fab.getWidth());

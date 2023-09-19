@@ -69,32 +69,13 @@ import java.util.function.Supplier;
  * {@link Selectable} too), all the API used for common selectable components is inherited, <b>but</b>:
  * <p> 1) Using the checkbox in a {@link SelectionGroup} will disable the {@link #allowIndeterminateProperty()} and you
  * won't be able to turn it back on until the checkbox is removed from the group. Selection groups are made to work with
- * selectables which are either selected/unselected, indeterminate states make no sense for in a group.
+ * selectables which are either selected/unselected, indeterminate states make no sense in a group.
  * <p> 2) The {@link #selectedProperty()} is bound to the {@link #stateProperty()}. First of all, for this reason
  * you won't be able to set it directly, {@link #setSelected(boolean)} is also overridden to change the {@link #stateProperty()}
  * instead. Second, <b>don't try to unbind it</b>, it's just not meant to work like that.
  */
 // TODO introduce validator
 public class MFXCheckbox extends MFXSelectable<MFXCheckboxBehavior> {
-    //================================================================================
-    // Enums
-    //================================================================================
-    public enum TriState {
-        UNSELECTED,
-        SELECTED,
-        INDETERMINATE,
-        ;
-
-        /**
-         * @return a {@code TriState} constant from the given {@link Boolean} object. When giving a {@code null} value,
-         * this will return the state {@link #INDETERMINATE}
-         */
-        public static TriState from(Boolean b) {
-            if (b == null) return INDETERMINATE;
-            return b ? SELECTED : UNSELECTED;
-        }
-    }
-
     //================================================================================
     // Properties
     //================================================================================

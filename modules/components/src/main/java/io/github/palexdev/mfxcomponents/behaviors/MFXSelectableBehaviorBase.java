@@ -3,11 +3,12 @@ package io.github.palexdev.mfxcomponents.behaviors;
 import io.github.palexdev.mfxcomponents.controls.base.MFXSelectable;
 import io.github.palexdev.mfxcore.selection.Selectable;
 import io.github.palexdev.mfxcore.selection.SelectionGroup;
-import javafx.geometry.Bounds;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+
+import java.util.function.Consumer;
 
 /**
  * Base behavior for all buttons that are also {@link Selectable}s.
@@ -52,19 +53,26 @@ public class MFXSelectableBehaviorBase<S extends MFXSelectable<?>> extends MFXBu
     //================================================================================
     // Overridden Methods
     //================================================================================
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Extended to also call {@link #handleSelection()} on {@link MouseButton#PRIMARY}.
+     */
     @Override
-    public void mouseClicked(MouseEvent me) {
-        if (me.getButton() != MouseButton.PRIMARY) return;
-        handleSelection();
+    public void mouseClicked(MouseEvent me, Consumer<MouseEvent> callback) {
+        if (me.getButton() == MouseButton.PRIMARY) handleSelection();
+        super.mouseClicked(me, callback);
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Extended to also call {@link #handleSelection()} on {@link KeyCode#ENTER}.
+     */
     @Override
-    public void keyPressed(KeyEvent ke) {
-        S selectable = getNode();
-        if (ke.getCode() == KeyCode.ENTER) {
-            Bounds b = selectable.getLayoutBounds();
-            getRippleGenerator().ifPresent(rg -> rg.generate(b.getCenterX(), b.getCenterY()));
-            handleSelection();
-        }
+    public void keyPressed(KeyEvent ke, Consumer<KeyEvent> callback) {
+        if (ke.getCode() == KeyCode.ENTER) handleSelection();
+        super.keyPressed(ke, callback);
     }
 }

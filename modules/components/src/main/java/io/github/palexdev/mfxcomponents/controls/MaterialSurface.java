@@ -6,6 +6,8 @@ import io.github.palexdev.mfxcore.base.properties.styleable.StyleableBooleanProp
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableDoubleProperty;
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableObjectProperty;
 import io.github.palexdev.mfxeffects.animations.Animations;
+import io.github.palexdev.mfxeffects.animations.Animations.KeyFrames;
+import io.github.palexdev.mfxeffects.animations.Animations.TimelineBuilder;
 import io.github.palexdev.mfxeffects.animations.motion.M3Motion;
 import io.github.palexdev.mfxeffects.enums.ElevationLevel;
 import io.github.palexdev.mfxeffects.ripple.MFXRippleGenerator;
@@ -38,7 +40,7 @@ import java.util.function.Consumer;
  * There are also components that may also need a shadow effect to further separate themselves from other UI elements,
  * making them appear 3D. This is implemented with some caveats through the {@link #elevationProperty()}.
  * <p></p>
- * The objectives of this region is to replicate such effects while still keeping the nodes count as low as possible.
+ * The goal of this region is to replicate such effects while still keeping the nodes count as low as possible.
  * Like the name suggests, this is intended to be used like an extra background on top of another region. For this reason,
  * it needs the instance of the region, called 'owner', on which this will act as an overlay.
  * <p></p>
@@ -54,6 +56,7 @@ import java.util.function.Consumer;
  * <p> Cons:
  * <p> - I expect a slight impact on performance since we use two extra nodes now. And also because of the animations, however
  * they can be disabled globally via a public static flag, or per component via {@link #animateBackgroundProperty()}
+ * (more convenient to set it through CSS since most of the time the MaterialSurface is part of a skin)
  * <p> - I expect another very slight impact on performance because to change the opacity according to the current interaction state,
  * a listener is added on the owner's {@link Node#getPseudoClassStates()}. Being a Set, the lookup will still be
  * pretty fast though.
@@ -62,6 +65,7 @@ import java.util.function.Consumer;
  * states. When the skin is being disposed, {@link #dispose()} should be called too. Also, always make sure that this
  * is and remains the first child of the component to avoid this from covering the other children.
  */
+// TODO dragged state is not implemented yet
 public class MaterialSurface extends Region implements MFXStyleable {
     //================================================================================
     // Static Properties
@@ -125,6 +129,7 @@ public class MaterialSurface extends Region implements MFXStyleable {
      * <p></p>
      * The opacity is set immediately or through an animation started by {@link #animateBackground(double)}.
      */
+    // TODO is there a way to remove at least a portion of all these ifs?
     public void handleBackground() {
         final double target;
         if (isOwnerDisabled()) {
@@ -185,8 +190,8 @@ public class MaterialSurface extends Region implements MFXStyleable {
      */
     protected void animateBackground(double target) {
         if (Animations.isPlaying(animation)) animation.stop();
-        animation = Animations.TimelineBuilder.build()
-            .add(Animations.KeyFrames.of(M3Motion.SHORT4, bg.opacityProperty(), target))
+        animation = TimelineBuilder.build()
+            .add(KeyFrames.of(M3Motion.SHORT4, bg.opacityProperty(), target))
             .getAnimation();
         animation.play();
     }
@@ -381,7 +386,7 @@ public class MaterialSurface extends Region implements MFXStyleable {
      * Specifies the elevation level of the owner, not the surface! Each level corresponds to a different {@link DropShadow}
      * effect. {@link ElevationLevel#LEVEL0} corresponds to {@code null}.
      * <p>
-     * Unfortunately since this inferior framework handles the effects in strange ways, the shadow cannot be applied to the
+     * Unfortunately since the crap that is JavaFX, handles the effects in strange ways, the shadow cannot be applied to the
      * surface for various reasons. So, the effect will be applied on the owner instead.
      * <p>
      * Can be set in CSS via the property: '-mfx-elevation'.

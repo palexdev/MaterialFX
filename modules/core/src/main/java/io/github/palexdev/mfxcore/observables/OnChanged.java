@@ -32,8 +32,8 @@ public class OnChanged<T> extends When<T> {
     //================================================================================
     private ChangeListener<T> listener;
     private BiConsumer<T, T> action;
-    private TriConsumer<WeakReference<When<T>>, T, T> otherwise = (w, o, n) -> {};
     private BiFunction<T, T, Boolean> condition = (o, n) -> true;
+	private TriConsumer<WeakReference<When<T>>, T, T> otherwise = (w, o, n) -> {};
 
     //================================================================================
     // Constructors
@@ -51,15 +51,15 @@ public class OnChanged<T> extends When<T> {
         return this;
     }
 
-    public OnChanged<T> otherwise(TriConsumer<WeakReference<When<T>>, T, T> otherwise) {
-        this.otherwise = otherwise;
-        return this;
-    }
-
     public OnChanged<T> condition(BiFunction<T, T, Boolean> condition) {
         this.condition = condition;
         return this;
     }
+
+	public OnChanged<T> otherwise(TriConsumer<WeakReference<When<T>>, T, T> otherwise) {
+		this.otherwise = otherwise;
+		return this;
+	}
 
     public OnChanged<T> executeNow() {
         action.accept(null, observable.getValue());
@@ -74,7 +74,8 @@ public class OnChanged<T> extends When<T> {
     public When<T> listen() {
         // This may happen if executeNow() was executed and this was set to be oneShot
         // for the executeNow methods too
-        if (isDisposed()) return this;
+		// If listener is not null, then this was already registered before and not disposed, exit!
+		if (isDisposed() || listener != null) return this;
 
         if (oneShot) {
             listener = (ov, o, n) -> {

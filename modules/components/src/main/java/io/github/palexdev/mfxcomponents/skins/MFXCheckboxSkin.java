@@ -22,7 +22,6 @@ import io.github.palexdev.mfxcomponents.behaviors.MFXCheckboxBehavior;
 import io.github.palexdev.mfxcomponents.controls.MaterialSurface;
 import io.github.palexdev.mfxcomponents.controls.checkbox.MFXCheckbox;
 import io.github.palexdev.mfxcomponents.skins.base.MFXLabeledSkin;
-import io.github.palexdev.mfxcore.observables.When;
 import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
 import io.github.palexdev.mfxeffects.beans.Position;
 import io.github.palexdev.mfxeffects.ripple.MFXRippleGenerator;
@@ -35,6 +34,9 @@ import javafx.scene.control.ContentDisplay;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+
+import static io.github.palexdev.mfxcore.events.WhenEvent.intercept;
+import static io.github.palexdev.mfxcore.observables.When.onChanged;
 
 /**
  * Default skin implementation for {@link MFXCheckbox} components, extends {@link MFXLabeledSkin}.
@@ -50,131 +52,148 @@ import javafx.scene.paint.Color;
  * generated at the center of the box/surface.
  */
 public class MFXCheckboxSkin extends MFXLabeledSkin<MFXCheckbox, MFXCheckboxBehavior> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final MaterialSurface surface;
-    private final MFXIconWrapper icon;
-    private When<?> cdWhen;
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final MaterialSurface surface;
+	private final MFXIconWrapper icon;
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXCheckboxSkin(MFXCheckbox checkBox) {
-        super(checkBox);
-        initTextMeasurementCache();
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXCheckboxSkin(MFXCheckbox checkBox) {
+		super(checkBox);
+		initTextMeasurementCache();
 
-        // Init icon
-        icon = new MFXIconWrapper(new MFXFontIcon());
-        icon.setCacheShape(false);
+		// Init icon
+		icon = new MFXIconWrapper(new MFXFontIcon());
+		icon.setCacheShape(false);
 
-        // Init surface
-        surface = new MaterialSurface(checkBox)
-            .initRipple(rg -> {
-                rg.setMeToPosConverter(me -> {
-                    if (rg.canGenerateAt(me.getX(), me.getY())) return Position.of(me.getX(), me.getY());
-                    Bounds b = icon.getBoundsInParent();
-                    return Position.of(b.getCenterX(), b.getCenterY());
-                });
-                rg.setRippleColor(Color.web("#d7d1e7"));
-            });
+		// Init surface
+		surface = new MaterialSurface(checkBox)
+			.initRipple(rg -> {
+				rg.setMeToPosConverter(me -> {
+					if (rg.canGenerateAt(me.getX(), me.getY())) return Position.of(me.getX(), me.getY());
+					Bounds b = icon.getBoundsInParent();
+					return Position.of(b.getCenterX(), b.getCenterY());
+				});
+				rg.setRippleColor(Color.web("#d7d1e7"));
+			});
 
-        // Finalize init
-        getChildren().addAll(surface, icon);
-        if (checkBox.getContentDisplay() != ContentDisplay.GRAPHIC_ONLY) getChildren().add(label);
-        addListeners();
-    }
+		// Finalize init
+		getChildren().addAll(surface, icon);
+		if (checkBox.getContentDisplay() != ContentDisplay.GRAPHIC_ONLY) getChildren().add(label);
+		addListeners();
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
+	//================================================================================
+	// Methods
+	//================================================================================
 
-    /**
-     * Adds the following listeners:
-     * <p> - A listener on the {@link MFXCheckbox#contentDisplayProperty()} to add/remove the label node
-     * when the values is/is not {@link ContentDisplay#GRAPHIC_ONLY}.
-     */
-    private void addListeners() {
-        MFXCheckbox checkBox = getSkinnable();
-        cdWhen = When.onChanged(checkBox.contentDisplayProperty())
-            .then((o, n) -> {
-                if (n == ContentDisplay.GRAPHIC_ONLY) {
-                    getChildren().remove(label);
-                }
-                if (o == ContentDisplay.GRAPHIC_ONLY) {
-                    getChildren().add(label);
-                }
-            })
-            .listen();
-    }
+	/**
+	 * Adds the following listeners:
+	 * <p> - A listener on the {@link MFXCheckbox#contentDisplayProperty()} to add/remove the label node
+	 * when the values is/is not {@link ContentDisplay#GRAPHIC_ONLY}.
+	 */
+	private void addListeners() {
+		MFXCheckbox checkBox = getSkinnable();
+		listeners(
+			onChanged(checkBox.contentDisplayProperty())
+				.then((o, n) -> {
+					if (n == ContentDisplay.GRAPHIC_ONLY) {
+						getChildren().remove(label);
+						return;
+					}
+					getChildren().add(label);
+				})
+		);
+	}
 
-    //================================================================================
-    // Overridden Methods
-    //================================================================================
-    @Override
-    protected void initBehavior(MFXCheckboxBehavior behavior) {
-        MFXCheckbox checkBox = getSkinnable();
-        behavior.init();
-        handle(checkBox, MouseEvent.MOUSE_PRESSED, behavior::mousePressed);
-        handle(checkBox, MouseEvent.MOUSE_RELEASED, behavior::mouseReleased);
-        handle(checkBox, MouseEvent.MOUSE_CLICKED, behavior::mouseClicked);
-        handle(checkBox, MouseEvent.MOUSE_EXITED, behavior::mouseExited);
-        handle(checkBox, KeyEvent.KEY_PRESSED, behavior::keyPressed);
-    }
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
 
-    @Override
-    public double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        MFXCheckbox checkBox = getSkinnable();
-        double gap = checkBox.getGraphicTextGap();
-        double insets = leftInset + rightInset;
-        double tW = tmCache.getSnappedWidth();
-        if (checkBox.getContentDisplay() == ContentDisplay.GRAPHIC_ONLY) {
-            tW = 0;
-            gap = 0;
-        }
-        double gW = Math.max(
-            LayoutUtils.boundWidth(surface),
-            icon.getSize()
-        );
-        return insets + gap + tW + gW;
-    }
+	/**
+	 * Initializes the given {@link MFXCheckboxBehavior} to handle events such as: {@link MouseEvent#MOUSE_PRESSED},
+	 * {@link MouseEvent#MOUSE_RELEASED}, {@link MouseEvent#MOUSE_CLICKED}, {@link MouseEvent#MOUSE_EXITED} and
+	 * {@link KeyEvent#KEY_PRESSED}.
+	 */
+	@Override
+	protected void initBehavior(MFXCheckboxBehavior behavior) {
+		MFXCheckbox checkBox = getSkinnable();
+		MFXRippleGenerator rg = surface.getRippleGenerator();
+		behavior.init();
+		events(
+			intercept(checkBox, MouseEvent.MOUSE_PRESSED)
+				.process(behavior::mousePressed),
 
-    @Override
-    public double computePrefHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-        MFXCheckbox checkBox = getSkinnable();
-        double insets = topInset + bottomInset;
-        double tH = tmCache.getSnappedHeight();
-        if (checkBox.getContentDisplay() == ContentDisplay.GRAPHIC_ONLY) tH = 0;
-        double gH = Math.max(LayoutUtils.boundHeight(surface), icon.getSize());
-        return Math.max(tH, gH) + insets;
-    }
+			intercept(checkBox, MouseEvent.MOUSE_RELEASED)
+				.process(behavior::mouseReleased),
 
-    @Override
-    public double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return getSkinnable().prefWidth(height);
-    }
+			intercept(checkBox, MouseEvent.MOUSE_CLICKED)
+				.process(behavior::mouseClicked),
 
-    @Override
-    public double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-        return getSkinnable().prefHeight(width);
-    }
+			intercept(checkBox, MouseEvent.MOUSE_EXITED)
+				.process(behavior::mouseExited),
 
-    @Override
-    protected void layoutChildren(double x, double y, double w, double h) {
-        MFXCheckbox checkBox = getSkinnable();
-        double gap = checkBox.getGraphicTextGap();
-        layoutInArea(surface, x, y, w, h, 0, HPos.LEFT, VPos.CENTER);
-        layoutInArea(icon, x, y, surface.getWidth(), surface.getHeight(), 0, HPos.CENTER, VPos.CENTER);
-        if (checkBox.getContentDisplay() != ContentDisplay.GRAPHIC_ONLY)
-            layoutInArea(label, x + surface.getWidth() + gap, y, w, h, 0, HPos.LEFT, VPos.CENTER);
-    }
+			intercept(checkBox, KeyEvent.KEY_PRESSED)
+				.process(e -> behavior.keyPressed(e, c -> {
+					Bounds b = icon.getLayoutBounds();
+					rg.generate(b.getCenterX(), b.getCenterY());
+				}))
+		);
+	}
 
-    @Override
-    public void dispose() {
-        if (cdWhen != null) {
-            cdWhen.dispose();
-            cdWhen = null;
-        }
-        super.dispose();
-    }
+	@Override
+	public double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+		MFXCheckbox checkBox = getSkinnable();
+		double gap = checkBox.getGraphicTextGap();
+		double insets = leftInset + rightInset;
+		double tW = getCachedTextWidth();
+		if (checkBox.getContentDisplay() == ContentDisplay.GRAPHIC_ONLY) {
+			tW = 0;
+			gap = 0;
+		}
+		double gW = Math.max(
+			LayoutUtils.boundWidth(surface),
+			icon.getSize()
+		);
+		return insets + gap + tW + gW;
+	}
+
+	@Override
+	public double computePrefHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+		MFXCheckbox checkBox = getSkinnable();
+		double insets = topInset + bottomInset;
+		double tH = getCachedTextHeight();
+		if (checkBox.getContentDisplay() == ContentDisplay.GRAPHIC_ONLY) tH = 0;
+		double gH = Math.max(LayoutUtils.boundHeight(surface), icon.getSize());
+		return Math.max(tH, gH) + insets;
+	}
+
+	@Override
+	public double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+		return getSkinnable().prefWidth(height);
+	}
+
+	@Override
+	public double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+		return getSkinnable().prefHeight(width);
+	}
+
+	@Override
+	protected void layoutChildren(double x, double y, double w, double h) {
+		MFXCheckbox checkBox = getSkinnable();
+		double gap = checkBox.getGraphicTextGap();
+		layoutInArea(surface, x, y, w, h, 0, HPos.LEFT, VPos.CENTER);
+		layoutInArea(icon, x, y, surface.getWidth(), surface.getHeight(), 0, HPos.CENTER, VPos.CENTER);
+		if (checkBox.getContentDisplay() != ContentDisplay.GRAPHIC_ONLY)
+			layoutInArea(label, x + surface.getWidth() + gap, y, w, h, 0, HPos.LEFT, VPos.CENTER);
+	}
+
+	@Override
+	public void dispose() {
+		surface.dispose();
+		super.dispose();
+	}
 }

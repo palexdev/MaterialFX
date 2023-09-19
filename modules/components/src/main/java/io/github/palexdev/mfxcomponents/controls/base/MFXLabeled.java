@@ -18,7 +18,6 @@
 
 package io.github.palexdev.mfxcomponents.controls.base;
 
-import io.github.palexdev.mfxcomponents.behaviors.MFXFabBehavior;
 import io.github.palexdev.mfxcomponents.layout.LayoutStrategy;
 import io.github.palexdev.mfxcomponents.layout.LayoutStrategy.Defaults;
 import io.github.palexdev.mfxcomponents.layout.MFXResizable;
@@ -56,11 +55,7 @@ import java.util.function.Supplier;
  * <p></p>
  * The integration with the new Behavior API is achieved by having a specific property, {@link #behaviorProviderProperty()},
  * which allows to change at any time the component's behavior. The property automatically handles initialization and disposal
- * of behaviors. A reference to th current built behavior object is kept to be retrieved via {@link #getBehavior()}.
- * <p>
- * In MaterialFX, the Behavior API is not a closed API, it's not meant to be private. A user can always take it and invoke
- * its methods directly, extend it, suppress it, do whatever you like. Also, some components' behavior may specify methods
- * that are meant to be called by the user when needed, see {@link MFXFabBehavior} as an example.
+ * of behaviors. A reference to the current built behavior object is kept to be retrieved via {@link #getBehavior()}.
  * <p></p>
  * Design guidelines (like MD3), may specify in the components' specs the initial/minimum sizes for each component.
  * For this specific purpose, there are two properties that can be set in CSS: {@link #initHeightProperty()}, {@link #initWidthProperty()}.
@@ -114,15 +109,14 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 			if (oldValue != null) oldValue.dispose();
 			if (oldValue == newValue) return;
 			newValue.install();
-            super.set(newValue);
+			super.set(newValue);
 		}
 	};
 
 	//================================================================================
 	// Constructors
 	//================================================================================
-	public MFXLabeled() {
-	}
+	public MFXLabeled() {}
 
 	public MFXLabeled(String text) {
 		super(text);
@@ -169,14 +163,14 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 	 * if it takes into account those init sizes, the component will resize accordingly.
 	 */
 	protected void onInitSizesChanged() {
+		requestLayout();
 	}
 
 	/**
 	 * Subclasses can change the actions to perform if the component is being used in SceneBuilder
 	 * by overriding this method. Typically called automatically on components' initialization.
 	 */
-	protected void sceneBuilderIntegration() {
-	}
+	protected void sceneBuilderIntegration() {}
 
 	//================================================================================
 	// Overridden Methods

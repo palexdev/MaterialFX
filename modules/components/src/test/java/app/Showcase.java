@@ -24,6 +24,7 @@ import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXIconButton;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXSegmentedButton;
 import io.github.palexdev.mfxcomponents.controls.checkbox.MFXCheckbox;
+import io.github.palexdev.mfxcomponents.controls.checkbox.TriState;
 import io.github.palexdev.mfxcomponents.controls.fab.MFXFab;
 import io.github.palexdev.mfxcomponents.theming.MaterialThemes;
 import io.github.palexdev.mfxcomponents.theming.enums.FABVariants;
@@ -124,7 +125,7 @@ public class Showcase extends Application implements MultipleViewApp<String> {
             String iconDesc = themeVariant.get().equals("light") ? "fas-sun" : "fas-moon";
             themeVariant.set(newVariant);
             loadStyleSheet(scene);
-            themeSwitcher.getBehavior().changeIcon(new MFXFontIcon(iconDesc));
+			themeSwitcher.setIcon(new MFXFontIcon(iconDesc));
         });
         sp.getChildren().add(themeSwitcher);
 
@@ -197,7 +198,7 @@ public class Showcase extends Application implements MultipleViewApp<String> {
 
     private Node extendedFabView() {
         BiFunction<String, MFXFontIcon, MFXFab> generator = (s, i) -> {
-            MFXFab fab = MFXFab.extended();
+            MFXFab fab = new MFXFab().extended();
             fab.setText(s);
             fab.setIcon(i);
             return fab;
@@ -300,7 +301,7 @@ public class Showcase extends Application implements MultipleViewApp<String> {
         btn8.addVariants(FABVariants.LOWERED, FABVariants.LARGE);
 
         btn8.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
-            btn8.getBehavior().changeIcon(randomIcon(FONTAWESOME_SOLID));
+			btn8.setIcon(randomIcon(FONTAWESOME_SOLID));
             e.consume();
         });
 
@@ -342,7 +343,7 @@ public class Showcase extends Application implements MultipleViewApp<String> {
 
         btn6.setExtended(false);
         btn6.setOnAction(e -> btn6.setExtended(!btn6.isExtended()));
-        btn7.setOnAction(e -> btn7.getBehavior().changeIcon(randomIcon(FONTAWESOME_SOLID)));
+		btn7.setOnAction(e -> btn7.setIcon(randomIcon(FONTAWESOME_SOLID)));
 
         defTfp.add(btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8);
         return defTfp;
@@ -460,7 +461,7 @@ public class Showcase extends Application implements MultipleViewApp<String> {
         for (Supplier<MFXCheckbox> g : generators) {
             MFXCheckbox c = g.get();
             c.setAllowIndeterminate(true);
-            c.setState(MFXCheckbox.TriState.INDETERMINATE);
+			c.setState(TriState.INDETERMINATE);
             defTP.add(c);
         }
 

@@ -22,7 +22,6 @@ module mfx.core {
 
 	// Behavior
 	exports io.github.palexdev.mfxcore.behavior;
-	exports io.github.palexdev.mfxcore.behavior.actions;
 
 	// Builders
 	exports io.github.palexdev.mfxcore.builders;
@@ -38,6 +37,9 @@ module mfx.core {
 
 	// Enums
 	exports io.github.palexdev.mfxcore.enums;
+
+	// Events
+	exports io.github.palexdev.mfxcore.events;
 
 	// Filter
 	exports io.github.palexdev.mfxcore.filter;

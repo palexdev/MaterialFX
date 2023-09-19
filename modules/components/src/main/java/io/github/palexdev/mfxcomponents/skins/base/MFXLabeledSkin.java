@@ -60,6 +60,18 @@ public abstract class MFXLabeledSkin<L extends MFXLabeled<B>, B extends Behavior
     }
 
     //================================================================================
+    // Overridden Methods
+    //================================================================================
+    @Override
+    public void dispose() {
+        tmCache.dispose();
+        tmCache = null;
+        label.getTextNode().ifPresent(n -> n.opacityProperty().unbind());
+        super.dispose();
+    }
+
+
+    //================================================================================
     // Getters
     //================================================================================
 

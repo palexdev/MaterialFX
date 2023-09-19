@@ -18,283 +18,347 @@
 
 package io.github.palexdev.mfxcomponents.controls.fab;
 
-import io.github.palexdev.mfxcomponents.behaviors.MFXFabBehavior;
+import io.github.palexdev.mfxcomponents.behaviors.MFXButtonBehaviorBase;
 import io.github.palexdev.mfxcomponents.controls.base.MFXButtonBase;
 import io.github.palexdev.mfxcomponents.controls.base.MFXSkinBase;
 import io.github.palexdev.mfxcomponents.skins.MFXFabSkin;
 import io.github.palexdev.mfxcomponents.theming.enums.PseudoClasses;
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableBooleanProperty;
-import io.github.palexdev.mfxcore.observables.When;
+import io.github.palexdev.mfxcore.base.properties.styleable.StyleableObjectProperty;
 import io.github.palexdev.mfxcore.utils.fx.SceneBuilderIntegration;
 import io.github.palexdev.mfxcore.utils.fx.StyleUtils;
-import io.github.palexdev.mfxresources.base.properties.IconProperty;
-import io.github.palexdev.mfxresources.fonts.IconProvider;
 import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
-import javafx.scene.control.Skin;
-import javafx.scene.text.Font;
+import javafx.geometry.Pos;
+import javafx.scene.transform.Scale;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * Extension of {@link MFXButtonBase} and base class to implement the Floating Action Buttons shown
- * in the MD3 guidelines.
- * <p></p>
- * This base class has one implementation that is styled: {@link MFXFab}.
- * M3 guidelines also show the Extended variant. Since they also show that a standard FAB can transition to an Extended
- * one through an animation, and vice-versa, I decided to merge the Extended variant in the standard one, add a property to extend it,
- * {@link #extendedProperty()}, and implement FAB specific behavior for animations.
- * <p>
- * The default behavior for all {@link MFXFabBase} components is {@link MFXFabBehavior}.
- * <p>
+ * Extension of {@link MFXButtonBase} and base class to implement the Floating Action Buttons shown in the MD3 guidelines.
  * This is meant to be used by users that want an untouched base FAB, this component just like {@link MFXButtonBase} is
- * not styled by the themes by default.
+ * not styled by the themes by default. This base class has one implementation that is styled which is: {@link MFXFab}.
+ * <p></p>
+ * M3 guidelines also show the Extended variant. Since they also show that a standard FAB can transition to an Extended
+ * one through an animation, and vice-versa, I decided to merge the Extended variant into the standard one, and add specific
+ * properties for the animations.
  * <p>
  * It's selector in CSS is: '.mfx-button.fab-base'.
  * <p></p>
- * Since FABs are meant to be used with icons, these enforce the usage of {@link MFXFontIcon}s
- * rather than generic nodes.
+ * Since FABs are meant to be used with icons, these enforce the usage of {@link MFXFontIcon}s rather than generic nodes.
+ * Also, since they are simply buttons with a different appearance and purpose, the behavior used by this is just
+ * {@link MFXButtonBehaviorBase}.
+ * <p></p>
+ * <b>Super important note!</b>
+ * Material Design guidelines show that animations are played when the FAB changes its icon (not extended), or both
+ * the icon and the text (when extended). This brings a nasty issue. Let's consider a simple messaging app with a bottom
+ * navigation bar. The view is wrapped in a scroll pane of course. The pane then has an extended FAB at the bottom right,
+ * just above the navigation bar, that allows the user to perform some important/main action.
+ * <p>
+ * As also seen in the M3 guidelines example, when you switch from one view to another, the FAB also changes.
+ * For example at the 'Chat' view you may have a FAB with a 'message' icon and 'Write' as text.
+ * When switching to another view you may want to change them to something related to the new view.
+ * Both the changes need to be displayed in a single animation of course, and this is not easy to accomplish in JavaFX.
+ * <p>
+ * Since here, the controls are modular. The animation is triggered by a listener in the skin.
+ * And since we are changing two properties we would need to add two listeners, but this would trigger the animation
+ * two times in a row, unless we use some flag to check whether both were changed.
+ * Still, that would not be easy to manage, what happens if we are changing only one of them for example.
+ * In other words, if we want a solution for the above example we need the two changes to be "atomic". Both at the same time.
+ * Of course, it's not possible. So, the solution I came up with it's a pretty basic and recurrent trick: the wrapping technique.
+ * Now, both the FAB's icon and text are wrapped in a single property, {@link #attributesProperty()}.
+ * This solves the above issue, but comes with some caveats:
+ * <p> 1) The FAB's text is now bound to this new property
+ * <p> 2) For the above reason you cannot set the text using the traditional way, {@link #setText(String)} or through
+ * {@link #textProperty()}
+ * <p> 3) Unbinding it would cause malfunctions of course, so you must use {@link #setFabText(String)} instead.
+ * For convenience the wrapping class is immutable, which means you won't be able to change the text or icon without
+ * actually creating a new instance of it.
+ * <p></p>
+ * Also, note that the animation will play even if just only one of the two attributes changed. While this is not
+ * explicitly shown on the M3 Guidelines I believe it's a valid behavior.
  *
  * @see MFXFabSkin
- * @see MFXFabBehavior
  */
-public class MFXFabBase extends MFXButtonBase<MFXFabBehavior> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final IconProperty icon = new IconProperty(new MFXFontIcon());
+public class MFXFabBase extends MFXButtonBase<MFXButtonBehaviorBase<MFXFabBase>> {
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final ObjectProperty<PropsWrapper> attributes = new SimpleObjectProperty<>(PropsWrapper.DEFAULT) {
+		@Override
+		public void set(PropsWrapper newValue) {
+			if (newValue == null) newValue = PropsWrapper.DEFAULT;
+			super.set(newValue);
+		}
+	};
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXFabBase() {
-        initialize();
-    }
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXFabBase() {
+		initialize();
+	}
 
-    public MFXFabBase(String text) {
-        super(text);
-        initialize();
-    }
+	public MFXFabBase(String text) {
+		initialize();
+		setFabText(text);
+	}
 
-    public MFXFabBase(MFXFontIcon icon) {
-        setIcon(icon);
-        initialize();
-    }
+	public MFXFabBase(MFXFontIcon icon) {
+		initialize();
+		setIcon(icon);
+	}
 
-    public MFXFabBase(String text, MFXFontIcon icon) {
-        super(text);
-        setIcon(icon);
-        initialize();
-    }
+	public MFXFabBase(String text, MFXFontIcon icon) {
+		initialize();
+		setAttributes(text, icon);
+	}
 
-    //================================================================================
-    // Methods
-    //================================================================================
-    private void initialize() {
-        graphicProperty().bind(icon);
+	//================================================================================
+	// Methods
+	//================================================================================
+	private void initialize() {
+		textProperty().bind(attributes.map(p -> p != null ? p.getText() : null));
+	}
 
-        // This is needed since the default value is 'false'
-        // This makes the FAB have the correct sizes at init when "collapsed"
-        extend();
-    }
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
+	@Override
+	protected void onInitSizesChanged() {
+		// Reset the prefWidth if not extended and init sizes changed
+		if (!isExtended()) setPrefWidth(USE_COMPUTED_SIZE);
+	}
 
-    /**
-     * This is responsible for triggering the animation that changes the FAB to an Extended one or vice-versa when the
-     * {@link #extendedProperty()} changes.
-     * <p></p>
-     * Implementation details. The default state is standard (non-extended). For this reason this needs to be executed as
-     * soon as the component is created so that it has the correct sizes. When called upon initialization the skin will be
-     * most certainly null, meaning that the animation will need to be postponed.
-     */
-    protected void extend() {
-        boolean extended = isExtended();
-        PseudoClasses.EXTENDED.setOn(this, extended);
+	@Override
+	public Supplier<MFXButtonBehaviorBase<MFXFabBase>> defaultBehaviorProvider() {
+		return () -> new MFXButtonBehaviorBase<>(this);
+	}
 
-        // This is necessary, otherwise padding and other properties may still result outdated!
-        applyCss();
+	@Override
+	public List<String> defaultStyleClasses() {
+		return List.of("mfx-button", "fab-base");
+	}
 
-        Skin<?> skin = getSkin();
-        if (skin == null) {
-            // This is needed because if this property is set before the Skin has been
-            // created it's not possible for the control to correctly compute its
-            // expanded/collapsed size. So, first of all we must wait until the Skin is created,
-            // and then we must also make sure that the control is in the right 'layout state'.
-            // What I mean is that even if the Skin is created there's no guarantee that the
-            // sizes will be correct, remember JavaFX is hot garbage. For this reason we force
-            // to apply the CSS and compute the layout, this should ensure the correctness of the
-            // measurements.
-            When.onChanged(skinProperty())
-                .condition((o, n) -> n != null)
-                .then((o, n) -> {
-                    applyCss();
-                    layout();
-                    getBehavior().extend(false);
-                })
-                .oneShot()
-                .listen();
-            return;
-        }
-        getBehavior().extend(true);
-    }
+	@Override
+	public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
+		return getClassCssMetaData();
+	}
 
-    //================================================================================
-    // Overridden Methods
-    //================================================================================
+	@Override
+	protected MFXSkinBase<?, ?> buildSkin() {
+		return new MFXFabSkin(this);
+	}
 
-    @Override
-    public void onLayoutStrategyChanged() {
-        super.onLayoutStrategyChanged();
-        if (getSkin() == null) return;
-        getBehavior().extend(false);
-    }
+	@Override
+	protected void sceneBuilderIntegration() {
+		super.sceneBuilderIntegration();
+		SceneBuilderIntegration.ifInSceneBuilder(() -> setText("Floating Action Button"));
+	}
 
-    @Override
-    protected void onInitSizesChanged() {
-        // Reset the prefWidth if not extended and init sizes changed
-        if (!isExtended()) setPrefWidth(USE_COMPUTED_SIZE);
-    }
+	//================================================================================
+	// Styleable Properties
+	//================================================================================
+	private final StyleableBooleanProperty animated = new StyleableBooleanProperty(
+		StyleableProperties.ANIMATED,
+		this,
+		"animated",
+		true
+	);
 
-    @Override
-    public Supplier<MFXFabBehavior> defaultBehaviorProvider() {
-        return () -> new MFXFabBehavior(this);
-    }
+	private final StyleableBooleanProperty extended = new StyleableBooleanProperty(
+		StyleableProperties.EXTENDED,
+		this,
+		"extended",
+		false
+	) {
+		@Override
+		protected void invalidated() {
+			PseudoClasses.EXTENDED.setOn(MFXFabBase.this, get());
+		}
+	};
 
-    @Override
-    public List<String> defaultStyleClasses() {
-        return List.of("mfx-button", "fab-base");
-    }
+	private final StyleableObjectProperty<Pos> scalePivot = new StyleableObjectProperty<>(
+		StyleableProperties.SCALE_PIVOT,
+		this,
+		"scalePivot",
+		Pos.BOTTOM_RIGHT
+	);
 
-    @Override
-    public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
-        return getClassCssMetaData();
-    }
+	public boolean isAnimated() {
+		return animated.get();
+	}
 
-    @Override
-    protected MFXSkinBase<?, ?> buildSkin() {
-        return new MFXFabSkin(this);
-    }
+	/**
+	 * Specifies whether to play or not an animation when:ù
+	 * <p> - The FAB transitions from collapsed to extended and vice-versa
+	 * <p> - The icon changes (collapsed)
+	 * <p> - Both the text and icon change (extended)
+	 * <p>
+	 * The animations are managed by the default skin implementation, see {@link MFXFabSkin}.
+	 * <p></p>
+	 * Can be set in CSS via the property: '-mfx-animated'.
+	 */
+	public StyleableBooleanProperty animatedProperty() {
+		return animated;
+	}
 
-    @Override
-    protected void sceneBuilderIntegration() {
-        super.sceneBuilderIntegration();
-        SceneBuilderIntegration.ifInSceneBuilder(() -> setText("Floating Action Button"));
-    }
+	public void setAnimated(boolean animated) {
+		this.animated.set(animated);
+	}
 
-    //================================================================================
-    // Styleable Properties
-    //================================================================================
-    private final StyleableBooleanProperty extended = new StyleableBooleanProperty(
-        StyleableProperties.EXTENDED,
-        this,
-        "extended",
-        false
-    ) {
-        @Override
-        protected void invalidated() {
-            extend();
-        }
-    };
+	public boolean isExtended() {
+		return extended.get();
+	}
 
-    public boolean isExtended() {
-        return extended.get();
-    }
+	/**
+	 * Specifies whether the FAB also shows its text or not.
+	 * <p></p>
+	 * Can be set in CSS via the property: '-mfx-extended'.
+	 *
+	 * @see #animatedProperty()
+	 */
+	public StyleableBooleanProperty extendedProperty() {
+		return extended;
+	}
 
-    /**
-     * Specifies whether the FAB also shows its text or not.
-     * <p>
-     * By default, the change of this property will trigger the animated transition defined in {@link MFXFabBehavior},
-     * can be avoided by changing the behavior, overriding the behavior method, or simply by overriding {@link #extend()}
-     * <p></p>
-     * Also note that {@link MFXFabBehavior#extend(boolean)} is responsible for activating the ":extended" pseudo class on the
-     * FAB which may change the component's appearance if specified by the current active theme.
-     * <p></p>
-     * Can be set in CSS via the property: '-mfx-extended'.
-     */
-    public StyleableBooleanProperty extendedProperty() {
-        return extended;
-    }
+	public void setExtended(boolean extended) {
+		this.extended.set(extended);
+	}
 
-    public void setExtended(boolean extended) {
-        this.extended.set(extended);
-    }
+	public Pos getScalePivot() {
+		return scalePivot.get();
+	}
 
-    //================================================================================
-    // CssMetaData
-    //================================================================================
-    private static class StyleableProperties {
-        private static final StyleablePropertyFactory<MFXFabBase> FACTORY = new StyleablePropertyFactory<>(MFXButtonBase.getClassCssMetaData());
-        private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+	/**
+	 * Specifies the pivot/anchor used by the {@link Scale} transform used for the collapsed FAB when its icon changes.
+	 * <p></p>
+	 * Can be set in CSS via the property: '-mfx-scale-pivot'.
+	 */
+	public StyleableObjectProperty<Pos> scalePivotProperty() {
+		return scalePivot;
+	}
 
-        private static final CssMetaData<MFXFabBase, Boolean> EXTENDED =
-            FACTORY.createBooleanCssMetaData(
-                "-mfx-extended",
-                MFXFabBase::extendedProperty,
-                false
-            );
+	public void setScalePivot(Pos scalePivot) {
+		this.scalePivot.set(scalePivot);
+	}
 
-        static {
-            cssMetaDataList = StyleUtils.cssMetaDataList(
-                MFXButtonBase.getClassCssMetaData(),
-                EXTENDED
-            );
-        }
-    }
+	//================================================================================
+	// CssMetaData
+	//================================================================================
+	private static class StyleableProperties {
+		private static final StyleablePropertyFactory<MFXFabBase> FACTORY = new StyleablePropertyFactory<>(MFXButtonBase.getClassCssMetaData());
+		private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
-    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
-        return StyleableProperties.cssMetaDataList;
-    }
+		private static final CssMetaData<MFXFabBase, Boolean> ANIMATED =
+			FACTORY.createBooleanCssMetaData(
+				"-mfx-animated",
+				MFXFabBase::animatedProperty,
+				true
+			);
 
-    //================================================================================
-    // Getters/Setters
-    //================================================================================
-    public MFXFontIcon getIcon() {
-        return iconProperty().get();
-    }
+		private static final CssMetaData<MFXFabBase, Boolean> EXTENDED =
+			FACTORY.createBooleanCssMetaData(
+				"-mfx-extended",
+				MFXFabBase::extendedProperty,
+				false
+			);
 
-    /**
-     * Specifies the FAB's icon.
-     */
-    public IconProperty iconProperty() {
-        return icon;
-    }
+		private static final CssMetaData<MFXFabBase, Pos> SCALE_PIVOT =
+			FACTORY.createEnumCssMetaData(
+				Pos.class,
+				"-mfx-scale-pivot",
+				MFXFabBase::scalePivotProperty,
+				Pos.BOTTOM_RIGHT
+			);
 
-    public void setIcon(MFXFontIcon icon) {
-        iconProperty().set(icon);
-    }
+		static {
+			cssMetaDataList = StyleUtils.cssMetaDataList(
+				MFXButtonBase.getClassCssMetaData(),
+				ANIMATED, EXTENDED, SCALE_PIVOT
+			);
+		}
+	}
 
-    /**
-     * Delegate of {@link IconProperty#setDescription(String)}.
-     */
-    public IconProperty setIconDescription(String description) {
-        return icon.setDescription(description);
-    }
+	public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
+		return StyleableProperties.cssMetaDataList;
+	}
 
-    /**
-     * Delegate of {@link IconProperty#setProvider(IconProvider)}.
-     *
-     * @see MFXFontIcon#setIconsProvider(IconProvider)
-     */
-    public IconProperty setIconProvider(IconProvider provider) {
-        return icon.setProvider(provider);
-    }
+	//================================================================================
+	// Getters/Setters
+	//================================================================================
+	public void setAttributes(PropsWrapper attributes) {
+		this.attributes.set(attributes);
+	}
 
-    /**
-     * Delegate of {@link IconProperty#setProvider(Font, Function)}.
-     *
-     * @see MFXFontIcon#setIconsProvider(Font, Function)
-     */
-    public IconProperty setIconProvider(Font font, Function<String, Character> converter) {
-        return icon.setProvider(font, converter);
-    }
+	public void setAttributes(String text, MFXFontIcon icon) {
+		this.attributes.set(new PropsWrapper(text, icon));
+	}
 
-    /**
-     * Delegate of {@link IconProperty#setProvider(IconProvider, String)}.
-     */
-    public IconProperty setIconProvider(IconProvider provider, String description) {
-        return icon.setProvider(provider, description);
-    }
+	public void setAttributes(String text, Supplier<MFXFontIcon> iconSupplier) {
+		this.attributes.set(new PropsWrapper(text, iconSupplier.get()));
+	}
+
+	/**
+	 * Specifies the wrapper object containing both the current icon and text of the FAB.
+	 * <p></p>
+	 * For convenience, and to avoid too many checks, you won't be able to set {@code null} as a value, it will
+	 * always be corrected to a default value with empty text and {@code null} icon.
+	 */
+	public ObjectProperty<PropsWrapper> attributesProperty() {
+		return attributes;
+	}
+
+	public PropsWrapper getAttributes() {
+		return attributes.get();
+	}
+
+	/**
+	 * Use this method to set the FAB's text since the default property {@link #textProperty()} is bound to
+	 * {@link #attributesProperty()}.
+	 */
+	public void setFabText(String text) {
+		PropsWrapper attributes = getAttributes();
+		this.attributes.set(new PropsWrapper(text, attributes.getIcon()));
+	}
+
+	public String getFabText() {
+		return getAttributes().getText();
+	}
+
+	public void setIcon(MFXFontIcon icon) {
+		PropsWrapper attributes = getAttributes();
+		this.attributes.set(new PropsWrapper(attributes.getText(), icon));
+	}
+
+	public MFXFontIcon getIcon() {
+		return getAttributes().getIcon();
+	}
+
+	//================================================================================
+	// Internal Classes
+	//================================================================================
+	public static class PropsWrapper {
+		public static final PropsWrapper DEFAULT = new PropsWrapper("", null);
+		private final String text;
+		private final MFXFontIcon icon;
+
+		public PropsWrapper(String text, MFXFontIcon icon) {
+			this.text = text;
+			this.icon = icon;
+		}
+
+		public String getText() {
+			return text;
+		}
+
+		public MFXFontIcon getIcon() {
+			return icon;
+		}
+	}
 }
