@@ -1,0 +1,21 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ResourcesLauncher" type="Application" factoryName="Application">
+    <envs>
+      <env name="__GLX_VENDOR_LIBRARY_NAME" value="nvidia" />
+      <env name="__NV_PRIME_RENDER_OFFLOAD" value="1" />
+      <env name="DRI_PRIME" value="1" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="app.ResourcesLauncher" />
+    <module name="MaterialFX.resources.test" />
+    <option name="VM_PARAMETERS" value="-Dglass.disableGrab=true;" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="app.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

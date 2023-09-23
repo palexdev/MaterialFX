@@ -48,7 +48,7 @@ import java.util.function.Function;
  * <p>
  * Now integrates with {@link MFXIconWrapper} in many ways with fluent API.
  */
-public class MFXFontIcon extends Text {
+public class MFXFontIcon extends Text implements Cloneable {
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -64,6 +64,18 @@ public class MFXFontIcon extends Text {
 
 	public MFXFontIcon(IconDescriptor icon) {
 		this(icon.getDescription());
+	}
+
+	public MFXFontIcon(IconDescriptor icon, Color color) {
+		this(icon.getDescription(), color);
+	}
+
+	public MFXFontIcon(IconDescriptor icon, double size) {
+		this(icon.getDescription(), size);
+	}
+
+	public MFXFontIcon(IconDescriptor icon, double size, Color color) {
+		this(icon.getDescription(), size, color);
 	}
 
 	public MFXFontIcon(String description) {
@@ -242,8 +254,9 @@ public class MFXFontIcon extends Text {
 		return color;
 	}
 
-	public void setColor(Color color) {
+	public MFXFontIcon setColor(Color color) {
 		this.color.set(color);
+		return this;
 	}
 
 	public String getDescription() {
@@ -261,6 +274,11 @@ public class MFXFontIcon extends Text {
 
 	public MFXFontIcon setDescription(String code) {
 		this.description.set(code);
+		return this;
+	}
+
+	public MFXFontIcon setDescription(IconDescriptor description) {
+		this.description.set(description.getDescription());
 		return this;
 	}
 
@@ -328,6 +346,20 @@ public class MFXFontIcon extends Text {
 	@Override
 	public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
 		return getClassCssMetaData();
+	}
+
+	/**
+	 * Creates a new {@code MFXFontIcon} instance with the same properties from this.
+	 */
+	@SuppressWarnings({"MethodDoesntCallSuperMethod", "CloneDoesntDeclareCloneNotSupportedException"})
+	@Override
+	protected MFXFontIcon clone() {
+		MFXFontIcon clone = new MFXFontIcon();
+		clone.setDescriptionConverter(getDescriptionConverter());
+		clone.setDescription(getDescription());
+		clone.setSize(getSize());
+		clone.setColor(getColor());
+		return clone;
 	}
 
 	@Override

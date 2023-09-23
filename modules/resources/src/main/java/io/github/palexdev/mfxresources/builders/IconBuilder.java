@@ -18,6 +18,7 @@
 
 package io.github.palexdev.mfxresources.builders;
 
+import io.github.palexdev.mfxresources.fonts.IconDescriptor;
 import io.github.palexdev.mfxresources.fonts.IconsProviders;
 import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import javafx.css.PseudoClass;
@@ -78,6 +79,11 @@ public class IconBuilder {
 		return this;
 	}
 
+	public IconBuilder setDescription(IconDescriptor description) {
+		icon.setDescription(description);
+		return this;
+	}
+
 	public IconBuilder setSize(double size) {
 		icon.setSize(size);
 		return this;
@@ -101,6 +107,8 @@ public class IconBuilder {
 	public IconWrapperBuilder wrap() {
 		return new IconWrapperBuilder(icon.wrap());
 	}
+
+	public IconWrapperBuilder wrapperBuilder() {return icon.wrapperBuilder();}
 
 	//================================================================================
 	// Node Delegate Methods

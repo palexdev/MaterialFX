@@ -19,9 +19,11 @@
 package io.github.palexdev.mfxresources.builders;
 
 import io.github.palexdev.mfxeffects.beans.Position;
+import io.github.palexdev.mfxresources.fonts.IconDescriptor;
 import io.github.palexdev.mfxresources.fonts.IconsProviders;
 import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import io.github.palexdev.mfxresources.fonts.MFXIconWrapper;
+import io.github.palexdev.mfxresources.fonts.MFXIconWrapper.AnimationPresets;
 import javafx.css.PseudoClass;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -113,6 +115,18 @@ public class IconWrapperBuilder {
 	public IconWrapperBuilder setIcon(Font font, Function<String, Character> converter, String desc) {
 		wrapper.setIcon(font, converter, desc);
 		return this;
+	}
+
+	public MFXIconWrapper setAnimated(boolean animated) {
+		return wrapper.setAnimated(animated);
+	}
+
+	public MFXIconWrapper setIcon(IconDescriptor descriptor) {
+		return wrapper.setIcon(descriptor);
+	}
+
+	public MFXIconWrapper setAnimationProvider(AnimationPresets preset) {
+		return wrapper.setAnimationProvider(preset);
 	}
 
 	//================================================================================

@@ -19,6 +19,9 @@
 package io.github.palexdev.mfxresources.fonts.fontawesome;
 
 import io.github.palexdev.mfxresources.fonts.IconDescriptor;
+import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
+import io.github.palexdev.mfxresources.utils.EnumUtils;
+import javafx.scene.paint.Color;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -216,6 +219,28 @@ public enum FontAwesomeRegular implements IconDescriptor {
     @Override
     public Map<String, Character> getCache() {
         return cache();
+    }
+
+    /**
+     * @return a new {@link MFXFontIcon} with a random {@link IconDescriptor} from this enumeration
+     */
+    public static MFXFontIcon random() {
+        FontAwesomeRegular desc = EnumUtils.randomEnum(FontAwesomeRegular.class);
+        return new MFXFontIcon(desc);
+    }
+
+    /**
+     * @return a new {@link MFXFontIcon} with a random {@link IconDescriptor} from this enumeration and the given size
+     */
+    public static MFXFontIcon random(double size) {
+        return random().setSize(size);
+    }
+
+    /**
+     * @return a new {@link MFXFontIcon} with a random {@link IconDescriptor} from this enumeration, the given color and size
+     */
+    public static MFXFontIcon random(Color color, double size) {
+        return random().setColor(color).setSize(size);
     }
 
     /**

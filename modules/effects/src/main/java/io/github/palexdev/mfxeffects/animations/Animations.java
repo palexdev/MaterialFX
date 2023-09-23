@@ -21,6 +21,8 @@ package io.github.palexdev.mfxeffects.animations;
 import io.github.palexdev.mfxeffects.beans.AnimationsData;
 import io.github.palexdev.mfxeffects.enums.Interpolators;
 import javafx.animation.*;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.binding.BooleanExpression;
 import javafx.beans.value.WritableValue;
 import javafx.event.ActionEvent;
@@ -131,6 +133,54 @@ public class Animations {
 	}
 
 	/**
+	 * Allows to perform a given action as a {@link Runnable} as soon as the given {@link Animation} reaches the given
+	 * {@link Animation.Status}. This is simply done by attaching an {@link InvalidationListener} to the animation's
+	 * {@link Animation#statusProperty()}.
+	 * <p></p>
+	 * <b>Trivia</b>
+	 * <p></p>
+	 * {@link Animation}s have a feature that allows user to specify an action to perform as soon as it ends, I'm talking
+	 * about the {@link Animation#onFinishedProperty()}. There is an issue though. If the animation is stopped,
+	 * {@link Animation#stop()}, the action won't trigger. 'Stop' and 'Finish' are two different states, but JavaFX devs
+	 * didn't make such distinction explicit, in fact when an animation ends, its status property will be set to
+	 * {@link Animation.Status#STOPPED}.
+	 * <p>
+	 * It may be useful in some occasions to perform an action once the animation stops, rather than just on finish.
+	 * And so I created this generic method to fill this gap, working on any state you need.
+	 *
+	 * @param oneShot specifies whether the listener should be removed after the first execution
+	 */
+	public static void onStatus(Animation animation, Animation.Status status, Runnable action, boolean oneShot) {
+		if (animation == null) return;
+		InvalidationListener l = new InvalidationListener() {
+			@Override
+			public void invalidated(Observable observable) {
+				if (animation.getStatus() == status) {
+					action.run();
+					if (oneShot) animation.statusProperty().removeListener(this);
+				}
+			}
+		};
+		animation.statusProperty().addListener(l);
+	}
+
+	/**
+	 * Convenience method for {@link #onStatus(Animation, Animation.Status, Runnable, boolean)}, performs the given
+	 * action on {@link Animation.Status#PAUSED}.
+	 */
+	public static void onPaused(Animation animation, Runnable action, boolean oneShot) {
+		onStatus(animation, Animation.Status.PAUSED, action, oneShot);
+	}
+
+	/**
+	 * Convenience method for {@link #onStatus(Animation, Animation.Status, Runnable, boolean)}, performs the given
+	 * action on {@link Animation.Status#STOPPED}.
+	 */
+	public static void onStopped(Animation animation, Runnable action, boolean oneShot) {
+		onStatus(animation, Animation.Status.STOPPED, action, oneShot);
+	}
+
+	/**
 	 * @return true if the given animation status is RUNNING, otherwise false
 	 */
 	public static boolean isPlaying(Animation animation) {
@@ -233,6 +283,15 @@ public class Animations {
 		 */
 		public AbstractBuilder add(KeyFrame... keyFrames) {
 			addAnimation(new Timeline(keyFrames));
+			return this;
+		}
+
+		/**
+		 * If the given condition returns true, then a new {@link Timeline} is built with the given keyframe and added to
+		 * the 'main' animation by calling {@link #addAnimation(Animation)}.
+		 */
+		public AbstractBuilder addConditional(Supplier<Boolean> condition, KeyFrame keyFrame) {
+			if (condition.get()) addAnimation(new Timeline(keyFrame));
 			return this;
 		}
 

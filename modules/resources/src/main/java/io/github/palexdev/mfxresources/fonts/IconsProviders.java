@@ -22,8 +22,6 @@ import io.github.palexdev.mfxresources.MFXResources;
 import io.github.palexdev.mfxresources.fonts.fontawesome.FontAwesomeBrands;
 import io.github.palexdev.mfxresources.fonts.fontawesome.FontAwesomeRegular;
 import io.github.palexdev.mfxresources.fonts.fontawesome.FontAwesomeSolid;
-import io.github.palexdev.mfxresources.utils.EnumUtils;
-import javafx.scene.paint.Color;
 
 import java.io.InputStream;
 import java.util.function.Function;
@@ -58,85 +56,6 @@ public enum IconsProviders implements IconProvider {
 	@Override
 	public InputStream load() {
 		return MFXResources.loadFont(font);
-	}
-
-	/**
-	 * Creates a new {@link MFXFontIcon} with a random icon description extracted from the values of "this" enumerator
-	 * constant.
-	 *
-	 * @param size  the size of the icon
-	 * @param color the color of the icon
-	 */
-	public MFXFontIcon randomIcon(double size, Color color) {
-		MFXFontIcon icon = new MFXFontIcon();
-		String desc;
-		switch (this) {
-			case FONTAWESOME_BRANDS: {
-				icon.setIconsProvider(FONTAWESOME_BRANDS);
-				desc = EnumUtils.randomEnum(FontAwesomeBrands.class).getDescription();
-				break;
-			}
-			case FONTAWESOME_REGULAR: {
-				icon.setIconsProvider(FONTAWESOME_REGULAR);
-				desc = EnumUtils.randomEnum(FontAwesomeRegular.class).getDescription();
-				break;
-			}
-			case FONTAWESOME_SOLID: {
-				icon.setIconsProvider(FONTAWESOME_SOLID);
-				desc = EnumUtils.randomEnum(FontAwesomeSolid.class).getDescription();
-				break;
-			}
-			default:
-				return icon;
-		}
-		icon.setDescription(desc);
-		icon.setColor(color);
-		icon.setSize(size);
-		return icon;
-	}
-
-	/**
-	 * Creates a new {@link MFXFontIcon} with a random icon description extracted from the values of "this" enumerator
-	 * constant.
-	 */
-	public MFXFontIcon randomIcon() {
-		MFXFontIcon icon = new MFXFontIcon();
-		String desc;
-		switch (this) {
-			case FONTAWESOME_BRANDS: {
-				icon.setIconsProvider(FONTAWESOME_BRANDS);
-				desc = EnumUtils.randomEnum(FontAwesomeBrands.class).getDescription();
-				break;
-			}
-			case FONTAWESOME_REGULAR: {
-				icon.setIconsProvider(FONTAWESOME_REGULAR);
-				desc = EnumUtils.randomEnum(FontAwesomeRegular.class).getDescription();
-				break;
-			}
-			case FONTAWESOME_SOLID: {
-				icon.setIconsProvider(FONTAWESOME_SOLID);
-				desc = EnumUtils.randomEnum(FontAwesomeSolid.class).getDescription();
-				break;
-			}
-			default:
-				return icon;
-		}
-		icon.setDescription(desc);
-		return icon;
-	}
-
-	/**
-	 * Same as {@link #randomIcon(double, Color)}, allows usage from a static context.
-	 */
-	public static MFXFontIcon randomIcon(IconsProviders provider, double size, Color color) {
-		return provider.randomIcon(size, color);
-	}
-
-	/**
-	 * Same as {@link #randomIcon()}, allows usage from a static context.
-	 */
-	public static MFXFontIcon randomIcon(IconsProviders provider) {
-		return provider.randomIcon();
 	}
 
 	/**
