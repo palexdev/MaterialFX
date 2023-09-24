@@ -391,10 +391,10 @@
   -fx-border-radius: 2px;
   -fx-border-width: 2px;
   -mfx-size: 18px;
+    -mfx-animation-preset: CLIP;
 }
 
 .mfx-checkbox > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-description: "fas-check";
   -mfx-size: 12px;
   visibility: hidden;
 }
@@ -413,10 +413,6 @@
 .mfx-checkbox:indeterminate > .mfx-icon-wrapper > .mfx-font-icon {
   visibility: visible;
   -mfx-color: #381E72;
-}
-
-.mfx-checkbox:indeterminate > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-description: "fas-minus";
 }
 
 .mfx-checkbox:error > .surface > .mfx-ripple-generator {

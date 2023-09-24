@@ -70,10 +70,10 @@ public class TestCheckboxes {
 		assertCheckbox(cb, TriState.UNSELECTED);
 
         robot.clickOn(cb);
-		assertCheckbox(cb, TriState.INDETERMINATE);
+		assertCheckbox(cb, TriState.SELECTED);
 
         robot.clickOn(cb);
-		assertCheckbox(cb, TriState.SELECTED);
+		assertCheckbox(cb, TriState.INDETERMINATE);
 
         robot.clickOn(cb);
 		assertCheckbox(cb, TriState.UNSELECTED);
@@ -88,12 +88,12 @@ public class TestCheckboxes {
         cbs[0].stateProperty().bind(cbs[1].stateProperty());
 
         robot.clickOn(cbs[1]);
-		assertCheckbox(cbs[0], TriState.INDETERMINATE);
-		assertCheckbox(cbs[1], TriState.INDETERMINATE);
-
-        robot.clickOn(cbs[1]);
 		assertCheckbox(cbs[0], TriState.SELECTED);
 		assertCheckbox(cbs[1], TriState.SELECTED);
+
+        robot.clickOn(cbs[1]);
+		assertCheckbox(cbs[0], TriState.INDETERMINATE);
+		assertCheckbox(cbs[1], TriState.INDETERMINATE);
 
         robot.clickOn(cbs[1]);
 		assertCheckbox(cbs[0], TriState.UNSELECTED);

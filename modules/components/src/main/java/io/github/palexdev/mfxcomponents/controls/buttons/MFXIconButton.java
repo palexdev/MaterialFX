@@ -13,6 +13,7 @@ import io.github.palexdev.mfxcore.utils.fx.StyleUtils;
 import io.github.palexdev.mfxresources.base.properties.IconProperty;
 import io.github.palexdev.mfxresources.fonts.IconProvider;
 import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
+import io.github.palexdev.mfxresources.fonts.MFXIconWrapper;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
@@ -136,6 +137,13 @@ public class MFXIconButton extends MFXSelectable<MFXIconButtonBehavior> implemen
     //================================================================================
     // Styleable Properties
     //================================================================================
+    private final StyleableBooleanProperty animated = new StyleableBooleanProperty(
+        StyleableProperties.ANIMATED,
+        this,
+        "animated",
+        true
+    );
+
     private final StyleableBooleanProperty selectable = new StyleableBooleanProperty(
         StyleableProperties.SELECTABLE,
         this,
@@ -154,6 +162,23 @@ public class MFXIconButton extends MFXSelectable<MFXIconButtonBehavior> implemen
         "size",
         40.0
     );
+
+    public boolean isAnimated() {
+        return animated.get();
+    }
+
+    /**
+     * Specifies whether to play an animation when switching icons.
+     * <p>
+     * In the default skin the animation is built and played by the {@link MFXIconWrapper} that contains the icons.
+     */
+    public StyleableBooleanProperty animatedProperty() {
+        return animated;
+    }
+
+    public void setAnimated(boolean animated) {
+        this.animated.set(animated);
+    }
 
     public boolean isSelectable() {
         return selectable.get();
@@ -198,6 +223,13 @@ public class MFXIconButton extends MFXSelectable<MFXIconButtonBehavior> implemen
         private static final StyleablePropertyFactory<MFXIconButton> FACTORY = new StyleablePropertyFactory<>(MFXSelectable.getClassCssMetaData());
         private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
 
+        private static final CssMetaData<MFXIconButton, Boolean> ANIMATED =
+            FACTORY.createBooleanCssMetaData(
+                "-mfx-animated",
+                MFXIconButton::animatedProperty,
+                true
+            );
+
         private static final CssMetaData<MFXIconButton, Boolean> SELECTABLE =
             FACTORY.createBooleanCssMetaData(
                 "-mfx-selectable",
@@ -215,7 +247,7 @@ public class MFXIconButton extends MFXSelectable<MFXIconButtonBehavior> implemen
         static {
             cssMetaDataList = StyleUtils.cssMetaDataList(
                 MFXSelectable.getClassCssMetaData(),
-                SELECTABLE, SIZE
+                ANIMATED, SELECTABLE, SIZE
             );
         }
     }

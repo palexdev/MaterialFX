@@ -44,10 +44,10 @@ $ripple-color: Ripple.Ripple('primary') !default;
   -fx-border-radius: $icon-wrapper-radius;
   -fx-border-width: $icon-wrapper-bd-width;
   -mfx-size: $icon-wrapper-size;
+  -mfx-animation-preset: CLIP;
 }
 
 .mfx-checkbox > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-description: "fas-check";
   -mfx-size: $icon-size;
   visibility: hidden;
 }
@@ -76,10 +76,6 @@ $icon-color: Theme.GetSchemeColor('on-primary') !default;
 .mfx-checkbox:indeterminate > .mfx-icon-wrapper > .mfx-font-icon {
   visibility: visible;
   -mfx-color: $icon-color;
-}
-
-.mfx-checkbox:indeterminate > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-description: "fas-minus";
 }
 
 // Component-level tokens (error)

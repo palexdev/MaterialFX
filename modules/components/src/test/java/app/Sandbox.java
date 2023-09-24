@@ -19,15 +19,15 @@
 package app;
 
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXButton;
-import io.github.palexdev.mfxcomponents.controls.fab.MFXFab;
+import io.github.palexdev.mfxcomponents.controls.buttons.MFXIconButton;
+import io.github.palexdev.mfxcomponents.controls.checkbox.MFXCheckbox;
 import io.github.palexdev.mfxcomponents.theming.MaterialThemes;
 import io.github.palexdev.mfxcore.builders.InsetsBuilder;
-import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
+import io.github.palexdev.mfxcore.utils.fx.CSSFragment;
 import io.github.palexdev.mfxresources.fonts.fontawesome.FontAwesomeSolid;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.scenicview.ScenicView;
@@ -40,19 +40,22 @@ public class Sandbox extends Application {
         pane.setAlignment(Pos.CENTER);
         pane.setPadding(InsetsBuilder.all(10));
 
-        MFXFab fab = new MFXFab("Floating Action Button", new MFXFontIcon(FontAwesomeSolid.CALCULATOR));
-        fab.setExtended(true);
+        MFXCheckbox cb = new MFXCheckbox("Check");
+        cb.setSelected(true);
+        cb.setAllowIndeterminate(true);
 
-        MFXButton btn = new MFXButton("Extend");
-        btn.setOnAction(e -> fab.setExtended(!fab.isExtended()));
+        MFXIconButton ib = new MFXIconButton().asToggle().outlined();
+        CSSFragment.Builder.build()
+            .addSelector(".mfx-icon-wrapper")
+            .border("red")
+            .addStyle("-mfx-round: true")
+            .addStyle("-mfx-animation-preset: SLIDE_RIGHT")
+            .closeSelector()
+            .applyOn(ib);
+        MFXButton b = new MFXButton("Change icon");
+        b.setOnAction(e -> ib.setIcon(FontAwesomeSolid.random()));
 
-        MFXButton btn2 = new MFXButton("Change Icon");
-        btn2.setOnAction(e -> fab.setIcon(FontAwesomeSolid.random()));
-
-        HBox box = new HBox(30, btn, btn2);
-        box.setAlignment(Pos.CENTER);
-
-        pane.getChildren().addAll(fab, box);
+        pane.getChildren().addAll(cb, ib, b);
         Scene scene = new Scene(pane, 600, 600);
         MaterialThemes.INDIGO_LIGHT.applyOn(scene);
         stage.setScene(scene);

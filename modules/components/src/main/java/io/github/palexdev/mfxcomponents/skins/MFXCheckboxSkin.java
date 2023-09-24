@@ -21,12 +21,20 @@ package io.github.palexdev.mfxcomponents.skins;
 import io.github.palexdev.mfxcomponents.behaviors.MFXCheckboxBehavior;
 import io.github.palexdev.mfxcomponents.controls.MaterialSurface;
 import io.github.palexdev.mfxcomponents.controls.checkbox.MFXCheckbox;
+import io.github.palexdev.mfxcomponents.controls.checkbox.TriState;
 import io.github.palexdev.mfxcomponents.skins.base.MFXLabeledSkin;
 import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
+import io.github.palexdev.mfxeffects.animations.Animations.KeyFrames;
+import io.github.palexdev.mfxeffects.animations.Animations.SequentialBuilder;
+import io.github.palexdev.mfxeffects.animations.Animations.TimelineBuilder;
+import io.github.palexdev.mfxeffects.animations.motion.M3Motion;
 import io.github.palexdev.mfxeffects.beans.Position;
 import io.github.palexdev.mfxeffects.ripple.MFXRippleGenerator;
 import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import io.github.palexdev.mfxresources.fonts.MFXIconWrapper;
+import javafx.animation.Animation;
+import javafx.animation.Interpolator;
+import javafx.animation.Timeline;
 import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -34,9 +42,11 @@ import javafx.scene.control.ContentDisplay;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 import static io.github.palexdev.mfxcore.events.WhenEvent.intercept;
 import static io.github.palexdev.mfxcore.observables.When.onChanged;
+import static io.github.palexdev.mfxcore.observables.When.onInvalidated;
 
 /**
  * Default skin implementation for {@link MFXCheckbox} components, extends {@link MFXLabeledSkin}.
@@ -57,6 +67,7 @@ public class MFXCheckboxSkin extends MFXLabeledSkin<MFXCheckbox, MFXCheckboxBeha
 	//================================================================================
 	private final MaterialSurface surface;
 	private final MFXIconWrapper icon;
+	private Animation scaleAnimation;
 
 	//================================================================================
 	// Constructors
@@ -66,8 +77,9 @@ public class MFXCheckboxSkin extends MFXLabeledSkin<MFXCheckbox, MFXCheckboxBeha
 		initTextMeasurementCache();
 
 		// Init icon
-		icon = new MFXIconWrapper(new MFXFontIcon());
+		icon = new MFXIconWrapper();
 		icon.setCacheShape(false);
+		icon.animatedProperty().bind(checkBox.animatedProperty());
 
 		// Init surface
 		surface = new MaterialSurface(checkBox)
@@ -93,7 +105,7 @@ public class MFXCheckboxSkin extends MFXLabeledSkin<MFXCheckbox, MFXCheckboxBeha
 	/**
 	 * Adds the following listeners:
 	 * <p> - A listener on the {@link MFXCheckbox#contentDisplayProperty()} to add/remove the label node
-	 * when the values is/is not {@link ContentDisplay#GRAPHIC_ONLY}.
+	 * when the value is/is not {@link ContentDisplay#GRAPHIC_ONLY}.
 	 */
 	private void addListeners() {
 		MFXCheckbox checkBox = getSkinnable();
@@ -105,8 +117,63 @@ public class MFXCheckboxSkin extends MFXLabeledSkin<MFXCheckbox, MFXCheckboxBeha
 						return;
 					}
 					getChildren().add(label);
+				}),
+
+			onInvalidated(checkBox.stateProperty())
+				.then(s -> {
+					if (s == TriState.SELECTED) {
+						icon.setIcon(checkBox.getSelectedIcon());
+						return;
+					}
+					if (s == TriState.INDETERMINATE) {
+						icon.setIcon(checkBox.getIndeterminateIcon());
+						return;
+					}
+					icon.setIcon((MFXFontIcon) null);
 				})
+				.executeNow(),
+
+			onInvalidated(checkBox.selectedIconProperty())
+				.condition(s -> checkBox.isSelected())
+				.then(icon::setIcon),
+
+			onInvalidated(checkBox.indeterminateIconProperty())
+				.condition(s -> checkBox.isIndeterminate())
+				.then(icon::setIcon)
 		);
+	}
+
+	/**
+	 * This is responsible for scaling down and up the box node when the state transitions from:
+	 * <p> - UNSELECTED to SELECTED (and vice-versa)
+	 * <p> - INDETERMINATE to UNSELECTED (if indeterminate enabled)
+	 */
+	protected void scale() {
+		MFXCheckbox checkbox = getSkinnable();
+		TriState state = checkbox.getState();
+		if (state == TriState.SELECTED || state == TriState.UNSELECTED) {
+			if (scaleAnimation == null) {
+				Duration d = Duration.millis(125);
+				Interpolator i = M3Motion.LINEAR;
+				Timeline down = TimelineBuilder.build()
+					.add(KeyFrames.of(d, icon.scaleXProperty(), 0.9, i))
+					.add(KeyFrames.of(d, icon.scaleYProperty(), 0.9, i))
+					.getAnimation();
+				Timeline up = TimelineBuilder.build()
+					.add(KeyFrames.of(d, icon.scaleXProperty(), 1.0, i))
+					.add(KeyFrames.of(d, icon.scaleYProperty(), 1.0, i))
+					.getAnimation();
+				scaleAnimation = SequentialBuilder.build()
+					.add(down)
+					.add(up)
+					.setOnFinished(e -> {
+						icon.setScaleX(1.0);
+						icon.setScaleY(1.0);
+					})
+					.getAnimation();
+			}
+			scaleAnimation.playFromStart();
+		}
 	}
 
 	//================================================================================
@@ -125,16 +192,16 @@ public class MFXCheckboxSkin extends MFXLabeledSkin<MFXCheckbox, MFXCheckboxBeha
 		behavior.init();
 		events(
 			intercept(checkBox, MouseEvent.MOUSE_PRESSED)
-				.process(behavior::mousePressed),
+				.process(e -> behavior.mousePressed(e, c -> rg.generate(e))),
 
 			intercept(checkBox, MouseEvent.MOUSE_RELEASED)
-				.process(behavior::mouseReleased),
+				.process(e -> behavior.mouseReleased(e, c -> rg.release())),
 
 			intercept(checkBox, MouseEvent.MOUSE_CLICKED)
-				.process(behavior::mouseClicked),
+				.process(e -> behavior.mouseClicked(e, c -> scale())),
 
 			intercept(checkBox, MouseEvent.MOUSE_EXITED)
-				.process(behavior::mouseExited),
+				.process(e -> behavior.mouseExited(e, c -> rg.release())),
 
 			intercept(checkBox, KeyEvent.KEY_PRESSED)
 				.process(e -> behavior.keyPressed(e, c -> {

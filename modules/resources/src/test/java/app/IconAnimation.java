@@ -54,12 +54,17 @@ public class IconAnimation extends Application {
 		//wrapper.setBackground(Background.fill(Color.PURPLE));
 
 		String css = """
+						.mfx-icon-wrapper {
+							-fx-background-color: blue;
+						}
+			   
 			.mfx-icon-wrapper .mfx-ripple-generator {
 				-mfx-ripple-color: lightgrey;
 				-mfx-ripple-radius: 64px;
 			}
 			   
 			.mfx-icon-wrapper .mfx-font-icon {
+				-mfx-color: white;
 				-mfx-size: 64px;
 			}
 			""";

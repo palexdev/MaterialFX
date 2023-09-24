@@ -4,8 +4,10 @@ import io.github.palexdev.mfxcomponents.behaviors.MFXIconButtonBehavior;
 import io.github.palexdev.mfxcomponents.controls.MaterialSurface;
 import io.github.palexdev.mfxcomponents.controls.base.MFXSkinBase;
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXIconButton;
-import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
-import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
+import io.github.palexdev.mfxcore.builders.bindings.DoubleBindingBuilder;
+import io.github.palexdev.mfxeffects.ripple.MFXRippleGenerator;
+import io.github.palexdev.mfxresources.fonts.MFXIconWrapper;
+import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.input.KeyEvent;
@@ -13,7 +15,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 import static io.github.palexdev.mfxcore.events.WhenEvent.intercept;
-import static io.github.palexdev.mfxcore.observables.When.onChanged;
+import static io.github.palexdev.mfxcore.observables.When.onInvalidated;
 
 /**
  * Default skin implementation for {@link MFXIconButton}s. Doesn't extend {@link MFXButtonSkin} as one may expect since
@@ -25,12 +27,12 @@ import static io.github.palexdev.mfxcore.observables.When.onChanged;
  * {@link MaterialSurface} responsible for showing the various interaction states (applying an overlay background)
  * and generating ripple effects.
  */
-// TODO maybe one day the icon could be wrapped in a MFXIconWrapper allowing the icon switch to be animated too
 public class MFXIconButtonSkin extends MFXSkinBase<MFXIconButton, MFXIconButtonBehavior> {
 	//================================================================================
 	// Properties
 	//================================================================================
 	private final MaterialSurface surface;
+	private final MFXIconWrapper icon;
 
 	//================================================================================
 	// Constructors
@@ -38,14 +40,20 @@ public class MFXIconButtonSkin extends MFXSkinBase<MFXIconButton, MFXIconButtonB
 	public MFXIconButtonSkin(MFXIconButton button) {
 		super(button);
 
+		// Init icon wrapper
+		icon = new MFXIconWrapper();
+		icon.animatedProperty().bind(button.animatedProperty());
+		icon.sizeProperty().bind(DoubleBindingBuilder.build()
+			.setMapper(() -> Math.max(button.getWidth(), button.getHeight()))
+			.addSources(button.widthProperty(), button.heightProperty())
+			.get());
+
 		// Init surface
 		surface = new MaterialSurface(button)
 			.initRipple(rg -> rg.setRippleColor(Color.web("#d7d1e7")));
 
 		// Finalize init
-		MFXFontIcon icon = button.getIcon();
-		getChildren().add(surface);
-		if (icon != null) getChildren().add(icon);
+		getChildren().addAll(surface, icon);
 		addListeners();
 	}
 
@@ -60,11 +68,9 @@ public class MFXIconButtonSkin extends MFXSkinBase<MFXIconButton, MFXIconButtonB
 	private void addListeners() {
 		MFXIconButton button = getSkinnable();
 		listeners(
-			onChanged(button.iconProperty())
-				.then((o, n) -> {
-					if (o != null) getChildren().remove(o);
-					if (n != null) getChildren().add(n);
-				})
+			onInvalidated(button.iconProperty())
+				.then(icon::setIcon)
+				.executeNow()
 		);
 	}
 
@@ -80,22 +86,26 @@ public class MFXIconButtonSkin extends MFXSkinBase<MFXIconButton, MFXIconButtonB
 	@Override
 	protected void initBehavior(MFXIconButtonBehavior behavior) {
 		MFXIconButton button = getSkinnable();
+		MFXRippleGenerator rg = surface.getRippleGenerator();
 		behavior.init();
 		events(
 			intercept(button, MouseEvent.MOUSE_PRESSED)
-				.process(behavior::mousePressed),
+				.process(e -> behavior.mousePressed(e, c -> rg.generate(e))),
 
 			intercept(button, MouseEvent.MOUSE_RELEASED)
-				.process(behavior::mouseReleased),
+				.process(e -> behavior.mouseReleased(e, c -> rg.release())),
 
 			intercept(button, MouseEvent.MOUSE_CLICKED)
 				.process(behavior::mouseClicked),
 
 			intercept(button, MouseEvent.MOUSE_EXITED)
-				.process(behavior::mouseExited),
+				.process(e -> behavior.mouseExited(e, c -> rg.release())),
 
 			intercept(button, KeyEvent.KEY_PRESSED)
-				.process(behavior::keyPressed)
+				.process(e -> behavior.keyPressed(e, c -> {
+					Bounds b = button.getLayoutBounds();
+					rg.generate(b.getCenterX(), b.getCenterY());
+				}))
 		);
 	}
 
@@ -111,36 +121,12 @@ public class MFXIconButtonSkin extends MFXSkinBase<MFXIconButton, MFXIconButtonB
 
 	@Override
 	public double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-		MFXIconButton button = getSkinnable();
-		MFXFontIcon icon = button.getIcon();
-		double size = button.getSize();
-		double val;
-		if (icon == null) {
-			val = size;
-		} else {
-			val = Math.max(size, Math.max(
-				LayoutUtils.boundWidth(icon),
-				LayoutUtils.boundHeight(icon)
-			));
-		}
-		return leftInset + val + rightInset;
+		return leftInset + getSkinnable().getSize() + rightInset;
 	}
 
 	@Override
 	public double computePrefHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-		MFXIconButton button = getSkinnable();
-		MFXFontIcon icon = button.getIcon();
-		double size = button.getSize();
-		double val;
-		if (icon == null) {
-			val = size;
-		} else {
-			val = Math.max(size, Math.max(
-				LayoutUtils.boundWidth(icon),
-				LayoutUtils.boundHeight(icon)
-			));
-		}
-		return leftInset + val + rightInset;
+		return topInset + getSkinnable().getSize() + bottomInset;
 	}
 
 	@Override
@@ -156,11 +142,9 @@ public class MFXIconButtonSkin extends MFXSkinBase<MFXIconButton, MFXIconButtonB
 	@Override
 	protected void layoutChildren(double x, double y, double w, double h) {
 		MFXIconButton button = getSkinnable();
-		MFXFontIcon icon = button.getIcon();
-
 		surface.resizeRelocate(0, 0, button.getWidth(), button.getHeight());
-		if (icon == null) return;
-		layoutInArea(icon, x, y, w, h, 0, HPos.CENTER, VPos.CENTER);
+		icon.autosize();
+		positionInArea(icon, x, y, w, h, 0, HPos.CENTER, VPos.CENTER);
 	}
 
 	@Override

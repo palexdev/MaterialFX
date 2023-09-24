@@ -30,6 +30,7 @@ import io.github.palexdev.mfxresources.base.properties.IconProperty;
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.css.*;
 import javafx.event.EventHandler;
@@ -197,7 +198,7 @@ public class MFXIconWrapper extends StackPane {
 				removeEventHandler(MouseEvent.MOUSE_PRESSED, pressHandler);
 				removeEventHandler(MouseEvent.MOUSE_RELEASED, releaseHandler);
 				removeEventHandler(MouseEvent.MOUSE_EXITED, exitHandler);
-				super.getChildren().remove(rg);
+				removeChild(rg);
 				rg = null;
 			}
 			return this;
@@ -297,6 +298,10 @@ public class MFXIconWrapper extends StackPane {
 	 * Convenience method for calling {@code super.getChildren().add(child)}.
 	 */
 	protected void addChild(Node child) {
+		if (!Platform.isFxApplicationThread()) {
+			Platform.runLater(() -> super.getChildren().add(child));
+			return;
+		}
 		super.getChildren().add(child);
 	}
 
@@ -304,6 +309,10 @@ public class MFXIconWrapper extends StackPane {
 	 * Convenience method for calling {@code super.getChildren().remove(child)}.
 	 */
 	protected void removeChild(Node child) {
+		if (!Platform.isFxApplicationThread()) {
+			Platform.runLater(() -> super.getChildren().remove(child));
+			return;
+		}
 		super.getChildren().remove(child);
 	}
 

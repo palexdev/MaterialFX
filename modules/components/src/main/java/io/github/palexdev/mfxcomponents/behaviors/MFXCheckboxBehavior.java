@@ -21,6 +21,7 @@ package io.github.palexdev.mfxcomponents.behaviors;
 import io.github.palexdev.mfxcomponents.controls.checkbox.MFXCheckbox;
 import io.github.palexdev.mfxcomponents.controls.checkbox.TriState;
 import io.github.palexdev.mfxcore.selection.SelectionProperty;
+import io.github.palexdev.mfxcore.utils.EnumUtils;
 import javafx.event.ActionEvent;
 
 /**
@@ -53,7 +54,7 @@ public class MFXCheckboxBehavior extends MFXSelectableBehaviorBase<MFXCheckbox> 
 	 * <p> 2) The checkbox is {@code indeterminate}, sets the state to {@code selected}
 	 * <p> 3) The checkbox is not selected, sets the state to {@code indeterminate}
 	 * <p>
-	 * In short, the cycle is: UNSELECTED -> INDETERMINATE (if allowed) -> SELECTED
+	 * In short, the cycle is: UNSELECTED -> SELECTED -> INDETERMINATE (if allowed)
 	 * <p></p>
 	 * <b>Note:</b> this method will not invoke {@link MFXCheckbox#fire()}, as it is handled by the checkbox' {@link SelectionProperty},
 	 * this is done to make {@link ActionEvent}s work also when the property is bound. I've not yet decided if this will
@@ -65,17 +66,10 @@ public class MFXCheckboxBehavior extends MFXSelectableBehaviorBase<MFXCheckbox> 
 		if (checkBox.stateProperty().isBound()) return;
 
 		TriState oldState = checkBox.getState();
-		if (checkBox.isAllowIndeterminate()) {
-			if (oldState == TriState.INDETERMINATE) {
-				checkBox.setState(TriState.SELECTED);
-				return;
-			}
-			if (oldState == TriState.UNSELECTED) {
-				checkBox.setState(TriState.INDETERMINATE);
-				return;
-			}
-		}
-		checkBox.setState(oldState == TriState.UNSELECTED ? TriState.SELECTED : TriState.UNSELECTED);
+		TriState newState = EnumUtils.next(TriState.class, oldState);
+		if (newState == TriState.INDETERMINATE && !checkBox.isAllowIndeterminate())
+			newState = EnumUtils.next(TriState.class, newState);
+		checkBox.setState(newState);
 		// fire() is handled by the state property, to make bindings work too
 	}
 }

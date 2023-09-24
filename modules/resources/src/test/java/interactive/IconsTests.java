@@ -20,6 +20,7 @@ package interactive;
 
 import io.github.palexdev.mfxeffects.enums.RippleState;
 import io.github.palexdev.mfxeffects.ripple.MFXRippleGenerator;
+import io.github.palexdev.mfxeffects.ripple.base.RippleGenerator;
 import io.github.palexdev.mfxresources.builders.IconWrapperBuilder;
 import io.github.palexdev.mfxresources.fonts.IconsProviders;
 import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
@@ -29,6 +30,7 @@ import io.github.palexdev.mfxresources.fonts.fontawesome.FontAwesomeRegular;
 import io.github.palexdev.mfxresources.fonts.fontawesome.FontAwesomeSolid;
 import io.github.palexdev.mfxresources.utils.EnumUtils;
 import javafx.beans.binding.Bindings;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -91,13 +93,13 @@ public class IconsTests {
 		assertEquals(64.0, icon.get().getSize());
 		Thread.sleep(sleep);
 
-		icon.set(IconsProviders.FONTAWESOME_SOLID.randomIcon(64.0, Color.RED));
+		icon.set(FontAwesomeSolid.random(Color.RED, 64.0));
 		robot.interact(() -> root.getChildren().setAll(icon.get()));
 		assertEquals(64.0, icon.get().getFont().getSize());
 		assertEquals(64.0, icon.get().getSize());
 		Thread.sleep(sleep);
 
-		icon.set(IconsProviders.FONTAWESOME_BRANDS.randomIcon(64.0, Color.RED));
+		icon.set(FontAwesomeSolid.random(Color.RED, 64.0));
 		robot.interact(() -> root.getChildren().setAll(icon.get()));
 		assertEquals(64.0, icon.get().getFont().getSize());
 		assertEquals(64.0, icon.get().getSize());
@@ -203,16 +205,11 @@ public class IconsTests {
 			.setDescription(EnumUtils.randomEnum(FontAwesomeBrands.class).getDescription());
 		Thread.sleep(sleep);
 
-		robot.interact(() -> wrapper.setIcon(
-			IconsProviders.randomIcon(
-				IconsProviders.FONTAWESOME_REGULAR,
-				64.0,
-				Color.web("#454545")
-			)
-		));
+		robot.interact(() -> wrapper.setIcon(FontAwesomeSolid.random(Color.web("#454545"), 64.0)));
 		Thread.sleep(sleep);
 
 		robot.interact(() -> {
+			wrapper.getIcon().setIconsProvider(IconsProviders.FONTAWESOME_REGULAR);
 			wrapper.getIcon().setDescription(FontAwesomeRegular.SQUARE.getDescription());
 			wrapper.setStyle("-mfx-enable-ripple: true;\n-mfx-round: true;\n-mfx-ripple-pref-size: \"128.0 128.0\"");
 		});
@@ -240,7 +237,13 @@ public class IconsTests {
 			.enableRippleGenerator(true)
 			.get();
 		robot.interact(() -> root.getChildren().setAll(icon));
-		assertTrue(icon.getChildren().get(0) instanceof MFXRippleGenerator);
+		for (Node child : icon.getChildren()) {
+			if (child instanceof RippleGenerator) {
+				assertEquals(0, child.getViewOrder());
+				continue;
+			}
+			assertEquals(1, child.getViewOrder());
+		}
 	}
 
 	@Test
@@ -251,7 +254,13 @@ public class IconsTests {
 			.enableRippleGenerator(true)
 			.get();
 		robot.interact(() -> root.getChildren().setAll(icon));
-		assertTrue(icon.getChildren().get(0) instanceof MFXRippleGenerator);
+		for (Node child : icon.getChildren()) {
+			if (child instanceof RippleGenerator) {
+				assertEquals(0, child.getViewOrder());
+				continue;
+			}
+			assertEquals(1, child.getViewOrder());
+		}
 
 		robot.interact(() -> icon.enableRippleGenerator(false));
 		assertTrue(icon.getChildren().size() == 1 && !(icon.getChildren().get(0) instanceof MFXRippleGenerator));

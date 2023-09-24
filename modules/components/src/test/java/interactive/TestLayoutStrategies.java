@@ -29,6 +29,7 @@ import io.github.palexdev.mfxcore.behavior.BehaviorBase;
 import io.github.palexdev.mfxcore.observables.When;
 import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
 import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
+import io.github.palexdev.mfxresources.fonts.fontawesome.FontAwesomeSolid;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
@@ -50,7 +51,6 @@ import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 
 import static io.github.palexdev.mfxcomponents.theming.enums.FABVariants.*;
-import static io.github.palexdev.mfxresources.fonts.IconsProviders.FONTAWESOME_SOLID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -170,7 +170,7 @@ public class TestLayoutStrategies {
     void testFABDefaultStrategy(FxRobot robot) {
         StackPane root = setupStage();
         MFXFab fab = new MFXFab().extended();
-        fab.setIcon(FONTAWESOME_SOLID.randomIcon());
+        fab.setIcon(FontAwesomeSolid.random());
         robot.interact(() -> {
             fab.setJavaFXLayoutStrategy();
             root.getChildren().setAll(fab);

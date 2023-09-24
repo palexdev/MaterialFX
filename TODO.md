@@ -56,3 +56,8 @@
 - [ ] Check Combo-boxes
 - [ ] Split Button
 - [ ] Progress Button
+
+#### Misc/Remainders
+
+- StyleableProperties should be split. The ones dependent on the skin from the ones dependent on the control
+- Resolve icon provider from a string description (through prefix)

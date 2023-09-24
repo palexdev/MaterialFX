@@ -24,10 +24,15 @@ import io.github.palexdev.mfxcomponents.controls.base.MFXSkinBase;
 import io.github.palexdev.mfxcomponents.skins.MFXCheckboxSkin;
 import io.github.palexdev.mfxcomponents.theming.enums.PseudoClasses;
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableBooleanProperty;
+import io.github.palexdev.mfxcore.base.properties.styleable.StyleableStringProperty;
 import io.github.palexdev.mfxcore.selection.Selectable;
 import io.github.palexdev.mfxcore.selection.SelectionGroup;
 import io.github.palexdev.mfxcore.utils.fx.SceneBuilderIntegration;
 import io.github.palexdev.mfxeffects.utils.StyleUtils;
+import io.github.palexdev.mfxresources.fonts.IconDescriptor;
+import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
+import io.github.palexdev.mfxresources.fonts.MFXIconWrapper;
+import io.github.palexdev.mfxresources.fonts.fontawesome.FontAwesomeSolid;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.css.CssMetaData;
@@ -73,6 +78,12 @@ import java.util.function.Supplier;
  * <p> 2) The {@link #selectedProperty()} is bound to the {@link #stateProperty()}. First of all, for this reason
  * you won't be able to set it directly, {@link #setSelected(boolean)} is also overridden to change the {@link #stateProperty()}
  * instead. Second, <b>don't try to unbind it</b>, it's just not meant to work like that.
+ * <p> 3) Previously the icon was changed according to the state by the theme. Now, since the checkbox is animated, the
+ * icon's description/identifier has been moved from the themes to code for one reason. Every time the state changes, a
+ * new icon is created and switched from the old one, this is because for the animation this uses the new API introduced
+ * by {@link MFXIconWrapper}. That being said, I didn't want to hard code it, so I added to properties to specify the icons
+ * in CSS: {@link #selectedIconProperty()} and {@link #indeterminateIconProperty()}. Also, keep in mind that you can even
+ * disable the animations via {@link #animatedProperty()} or change the animation in CSS, again see {@link MFXIconWrapper}.
  */
 // TODO introduce validator
 public class MFXCheckbox extends MFXSelectable<MFXCheckboxBehavior> {
@@ -158,6 +169,13 @@ public class MFXCheckbox extends MFXSelectable<MFXCheckboxBehavior> {
     //================================================================================
     // Styleable Properties
     //================================================================================
+	private final StyleableBooleanProperty animated = new StyleableBooleanProperty(
+		StyleableProperties.ANIMATED,
+		this,
+		"animated",
+		true
+	);
+
     private final StyleableBooleanProperty allowIndeterminate = new StyleableBooleanProperty(
         StyleableProperties.ALLOW_INDETERMINATE,
         this,
@@ -176,6 +194,35 @@ public class MFXCheckbox extends MFXSelectable<MFXCheckboxBehavior> {
             if (!state && isIndeterminate()) setState(TriState.UNSELECTED);
         }
     };
+
+	private final StyleableStringProperty selectedIcon = new StyleableStringProperty(
+		StyleableProperties.SELECTED_ICON,
+		this,
+		"selectedIcon",
+		"fas-check"
+	);
+
+	private final StyleableStringProperty indeterminateIcon = new StyleableStringProperty(
+		StyleableProperties.INDETERMINATE_ICON,
+		this,
+		"indeterminateBean",
+		"fas-minus"
+	);
+
+	public boolean isAnimated() {
+		return animated.get();
+	}
+
+	/**
+	 * Specifies whether to play animations when the checkbox' state changes.
+	 */
+	public StyleableBooleanProperty animatedProperty() {
+		return animated;
+	}
+
+	public void setAnimated(boolean animated) {
+		this.animated.set(animated);
+	}
 
     public boolean isAllowIndeterminate() {
         return allowIndeterminate.get();
@@ -196,12 +243,55 @@ public class MFXCheckbox extends MFXSelectable<MFXCheckboxBehavior> {
         this.allowIndeterminate.set(allowIndeterminate);
     }
 
+	public String getSelectedIcon() {
+		return selectedIcon.get();
+	}
+
+	/**
+	 * Specifies the {@link IconDescriptor} as a String, used to build a new {@link MFXFontIcon} when the checkbox is
+	 * selected.
+	 * <p>
+	 * As of now, only {@link FontAwesomeSolid} are supported.
+	 */
+	public StyleableStringProperty selectedIconProperty() {
+		return selectedIcon;
+	}
+
+	public void setSelectedIcon(String selectedIcon) {
+		this.selectedIcon.set(selectedIcon);
+	}
+
+	public String getIndeterminateIcon() {
+		return indeterminateIcon.get();
+	}
+
+	/**
+	 * Specifies the {@link IconDescriptor} as a String, used to build a new {@link MFXFontIcon} when the checkbox is
+	 * indeterminate.
+	 * <p>
+	 * As of now, only {@link FontAwesomeSolid} are supported.
+	 */
+	public StyleableStringProperty indeterminateIconProperty() {
+		return indeterminateIcon;
+	}
+
+	public void setIndeterminateIcon(String indeterminateIcon) {
+		this.indeterminateIcon.set(indeterminateIcon);
+	}
+
     //================================================================================
     // CssMetaData
     //================================================================================
     private static class StyleableProperties {
         private static final StyleablePropertyFactory<MFXCheckbox> FACTORY = new StyleablePropertyFactory<>(MFXSelectable.getClassCssMetaData());
         private static final List<CssMetaData<? extends Styleable, ?>> cssMetaDataList;
+
+		private static final CssMetaData<MFXCheckbox, Boolean> ANIMATED =
+			FACTORY.createBooleanCssMetaData(
+				"-mfx-animated",
+				MFXCheckbox::animatedProperty,
+				true
+			);
 
         private static final CssMetaData<MFXCheckbox, Boolean> ALLOW_INDETERMINATE =
             FACTORY.createBooleanCssMetaData(
@@ -210,10 +300,24 @@ public class MFXCheckbox extends MFXSelectable<MFXCheckboxBehavior> {
                 false
             );
 
+		private static final CssMetaData<MFXCheckbox, String> SELECTED_ICON =
+			FACTORY.createStringCssMetaData(
+				"-mfx-selected-icon",
+				MFXCheckbox::selectedIconProperty,
+				"fas-check"
+			);
+
+		private static final CssMetaData<MFXCheckbox, String> INDETERMINATE_ICON =
+			FACTORY.createStringCssMetaData(
+				"-mfx-indeterminate-icon",
+				MFXCheckbox::indeterminateIconProperty,
+				"fas-minus"
+			);
+
         static {
             cssMetaDataList = StyleUtils.cssMetaDataList(
                 MFXSelectable.getClassCssMetaData(),
-                ALLOW_INDETERMINATE
+				ANIMATED, ALLOW_INDETERMINATE, SELECTED_ICON, INDETERMINATE_ICON
             );
         }
     }
