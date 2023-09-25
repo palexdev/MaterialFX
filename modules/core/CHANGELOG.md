@@ -16,15 +16,41 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.7.0] - 25-09-2023
+
+### Added
+
+- Label: added a way to completely disable the text truncation functionality. This is yet again one of the things JavaFX
+  imposes, now if you use my extension you have this possibility too
+- Implemented equivalent of When constructs for Events: the WhenEvent construct
+- Added tests for the new WhenEvent construct
+
+### Changed
+
+- The Behavior API has been reviewed. Now the base class (BehaviorBase) acts like an interface by offering a bunch of
+  methods that covers most of the input event types in JavaFX. This adds a level of abstraction that allows skin to bind
+  to the behavior without knowing anything about it. Not only that, the main issue I was facing is that sometimes when
+  an event occurs after calling the behavior code, we may want to execute some additional action in the view (this is
+  one of the differences with the standard MVC pattern). To keep the level of modularity we need, the new methods allow
+  passing an additional argument, which is a callback that gives access to the event, this way the skin can register
+  some additional actions to perform on its building blocks without adding any dependency on the behavior side.
+  The other important change is that now the behavior allows registering only EventHandlers. Listeners for properties
+  have been moved to MFXSkinBase
+- Minor changes to When, OnChanged and OnInvalidated, to align with the new WhenEvent construct
+
+### Removed
+
+- For the Behavior review, the action package and classes have been removed
+
 ## [11.6.4] - 24-08-2023
 
-## Changed
+### Changed
 
 - SelectionProperty: reviewed invalidation logic. The core part has been moved to the invalidated() method, this allows
   bindings to work, as well as simplifying the process
 - SelectionGroup: reviewed for the above changes
 
-## Fixed
+### Fixed
 
 - SelectionGroup: fixed MultipleSelectionHandler logic
 

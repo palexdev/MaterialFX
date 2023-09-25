@@ -16,6 +16,36 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.9.0] - 25-09-2023
+
+### Added
+
+- MFXFontIcon: added constructors with IconDescriptor args
+- MFXFontIcon: implement cloneable interface. Now calling clone() on an icon will produce a new MFXFontIcon object with
+  the same properties (size, colors, icon...)
+- MFXIconWrapper: introduced animations functionality. Now icons can be switched through an animation that is either
+  predefined (see AnimationPresets) or custom. Make sure to read the docs to understand how they work
+
+### Changed
+
+- IconBuilder: added some new methods
+- IconWrapperBuilder: added new methods to reflect changes in MFXIconWrapper
+- Moved generate random icon methods from IconProviders to enumeration classes
+- MFXIconWrapper: do not use listeners on the icon and size properties, rather override the set/invalidated methods
+  inline for a little boost in performance
+- MFXIconWrapper: children are not maintained in the desired order in the wrapper's list, rather it now uses the
+  viewOrder property to achieve the same, this too should give a little performance boost
+- _checkbox.scss: M3 guidelines show a CLIP animation when switching states. Also remove '-mfx-description' properties
+  for the changes made to MFXCheckbox
+
+### Fixed
+
+- MFXIconWrapper: set the ripple generator to not be managed automatically and make sure to position and resize it in
+  the layoutChildren method. This caused the ripple to not show in some cases
+- MFXIconWrapper: for how it handles icons add/remove it may happen to cause an IllegalStateException if the change is
+  not done on the application thread, this was not necessary before. Simply ensure we are on FX thread otherwise
+  runLater
+
 ## [11.8.0] - 01-06-2023
 
 ### Added

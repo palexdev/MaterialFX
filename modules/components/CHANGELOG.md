@@ -16,6 +16,54 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.23.0] - 25-09-2023
+
+### Added
+
+- MFXIconButton: added support for animated icon switching
+- MFXCheckbox: added support for animated state change as shown by M3 guidelines. Now the icon of SELECTED and
+  INDETERMINATE state needs to be changed through two new properties since the skin has been modified as well for this
+- MFXCheckboxSkin: implemented animations as shown by M3 guidelines. Now the icon is wrapped in a MFXIconWrapper
+- MFXIconButtonSkin: the icon is now contained by a MFXIconWrapper which is also used to play the icon switch animation
+
+### Changed
+
+- Behavior implementations have been reviewed and adapted to the core API changes. In particular: all code
+  related to retrieval of nodes in the skin, animations or layout computations, has been moved/removed
+- MFXButtonBehaviorBase: removed ripple generator retrieval. Using callbacks in the skin now
+- MFXCheckboxBehavior: removed icon retrieval. Using callbacks in the skin now
+- MFXCheckboxBehavior: replace ifs with EnumUtils.next(...) utility. Also, now the states order has been changed as
+  shown
+  by M3 guidelines: UNSELECTED -> SELECTED -> INDETERMINATE
+- MFXSelectableBehaviorBase: added documentation and minor adaptions to the aforementioned API changes
+- MFXSkinBase API has been changed as a result of the Behavior API review. Now it's the skin to manage listeners, while
+  still maintaining a delegate method to register EventHandlers on the control's behavior
+- MFXCheckbox: moved TriState enumerator to separate class
+- MFXFabBase has been deeply changed. First of all, now the text and icon properties are stored in a wrapping object,
+  see class documentation on why. The behavior type has changed to MFXButtonBehaviorBase. Since animations related stuff
+  has been moved from the behavior to its skin, there are new properties to control them
+- In all skins, the disposal method has been reviewed. There were repetitions and unnecessary code that could be moved
+  to
+  the superclasses
+- All skins now register listeners and handlers through the When and WhenEvent constructs, and make use of the new
+  correlated methods in MFXSkinBase.
+- Skins that previously were relying on the behavior class to perform some additional action on their building blocks
+  now make use of callbacks, given by the reviewed Behavior API
+- All skins inheriting from MFXLabeledSkin: make sure to use the getCachedTextWidth() and getCachedTextHeight() methods
+  instead of using the tmCache object directly
+- MFXFabSkin has been completely redone from scratch
+
+### Removed
+
+- MFXFabBehavior: animations and layout computations moved to the skin, as a result, the class remained empty, so it's
+  been removed. Now FABs use generic MFXButtonBehaviorBase
+- Removed EXTENDED constant from FABVariants as it was not used
+
+### Fixed
+
+- MFXCheckboxSkin and MFXIconButtonSkin: re-enabled ripple generation, oversight of recent update to Skin and Behavior
+  APIs
+
 ## [11.22.0] - 24-08-2023
 
 ### Added

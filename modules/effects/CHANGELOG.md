@@ -16,6 +16,24 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.3.0] - 25-09-2023
+
+### Added
+
+- Animations: added methods to perform a given action when a certain animation's status changes. It can be very useful
+  to do something when an animation is stopped (make sure to read docs on the why, and the difference between
+  finished/stopped)
+- Animations: added addConditional(...) method to AbstractBuilder too
+
+### Changed
+
+- AnimationFactory: remade animations using the later-introduced Animations class
+- AnimationFactory: do not reset anymore Node translate properties before animating, it's better/more flexible leaving
+  it to the user
+- AnimationFactory: slide transitions have been reviewed/fixed the translation is not calculated by using the node's
+  bounds anymore. Rather, the distance between the Node and the chosen side of its parent is computed, so that the Node
+  will always go outside. Additionally, a global variable allows setting an extra offset that is added to this distance
+
 ## [11.2.1] - 29-05-2023
 
 ### Fixed
