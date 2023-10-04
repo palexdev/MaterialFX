@@ -16,6 +16,23 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.24.0] - 04-10-2023
+
+### Added
+
+- Theme: added new convenience method to set it as the global UA
+
+### Changed
+
+- MFXControl, MFXLabeled and MFXSkinBase base classes have been restructured to move them in the Core module
+
+### Fixed
+
+- MFXPopup and MFXTooltip: fix regression in hide() method. Attempting to close when the owner's windows had already
+  been closed would result in a JavaFX exception. Altough, from my testings this issue seem to occur only in one
+  specific case: when the app was closed through 'Platform.exit()' and the popup was open
+- MFXPopupSkin: properly handle not animated popups
+
 ## [11.23.0] - 25-09-2023
 
 ### Added

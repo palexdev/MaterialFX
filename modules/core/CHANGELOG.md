@@ -16,6 +16,19 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.8.0] - 04-10-2023
+
+### Added
+
+- Added 'java.prefs' module
+- With the new Behavior API, and the recent acknowledgement on how to build UI components following the MVC pattern, I
+  decided to bring the base classes here from the Components module
+  Now any project that wants to implement custom components like this, and doesn't want to rely on the Components module
+  can just add this as a dependency
+- Label: added new useful property to observe for text truncation
+- Implemented simple event bus. Imported from my personal recent projects
+- Implemented abstraction over Java's Preferences API. This also is imported from my recent personal projects
+
 ## [11.7.0] - 25-09-2023
 
 ### Added
