@@ -1,3 +1,0 @@
-<component name="DependencyValidationManager">
-  <scope name="Themes" pattern="file[MaterialFX.resources.main]:resources/io/github/palexdev/mfxresources/themes//*" />
-</component>

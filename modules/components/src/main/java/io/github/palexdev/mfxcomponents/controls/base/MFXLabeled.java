@@ -22,10 +22,10 @@ import io.github.palexdev.mfxcomponents.layout.LayoutStrategy;
 import io.github.palexdev.mfxcomponents.layout.LayoutStrategy.Defaults;
 import io.github.palexdev.mfxcomponents.layout.MFXResizable;
 import io.github.palexdev.mfxcomponents.window.popups.MFXTooltip;
-import io.github.palexdev.mfxcore.base.properties.functional.SupplierProperty;
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableDoubleProperty;
 import io.github.palexdev.mfxcore.behavior.BehaviorBase;
-import io.github.palexdev.mfxcore.behavior.WithBehavior;
+import io.github.palexdev.mfxcore.controls.Labeled;
+import io.github.palexdev.mfxcore.controls.SkinBase;
 import io.github.palexdev.mfxcore.utils.fx.StyleUtils;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -33,69 +33,33 @@ import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
 import javafx.scene.Node;
-import javafx.scene.control.Labeled;
-import javafx.scene.control.Skin;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 /**
- * Base class for MaterialFX components that are text based. The idea is to have a separate hierarchy of components from the JavaFX one,
- * that perfectly integrates with the new Behavior, Skin and Theming APIs.
- * <p>
- * Extends {@link Labeled} and implements {@link WithBehavior}, {@link MFXStyleable} and {@link MFXResizable}.
- * Enforces the use of {@link MFXSkinBase} instances as Skin implementations and makes the {@link #createDefaultSkin()}
- * final thus denying users to override it. To set custom skins you should override the new provided method {@link #buildSkin()}.
- * <p>
- * I wanted to avoid adding a listener of the skin property for memory and performance reasons. Every time a skin is created
- * it's needed to pass the current built behavior to the skin for initialization. A good hook place for this call was the
- * {@link #createDefaultSkin()} method, but this would make it harder for users to override it because then you would also
- * have to take into account the behavior initialization. Having a new method maintains the usual simplicity of setting
- * custom skins while avoiding listeners for better performance.
+ * Extension of {@link Labeled} and base class for text-based MaterialFX controls. The idea is to have a separate
+ * hierarchy of components from the JavaFX one that perfectly integrates with the new Behavior, Skin and Theming APIs.
+ * In addition to the integrations brought by {@link Labeled}, this also implements {@link MFXStyleable} and {@link MFXResizable}.
  * <p></p>
- * The integration with the new Behavior API is achieved by having a specific property, {@link #behaviorProviderProperty()},
- * which allows to change at any time the component's behavior. The property automatically handles initialization and disposal
- * of behaviors. A reference to the current built behavior object is kept to be retrieved via {@link #getBehavior()}.
+ * Note: as already mentioned the correct way to change the skin is not to call {@link #changeSkin(SkinBase)}. The method
+ * accepts instances of type {@link SkinBase}, however, keep in mind that in order for the {@link LayoutStrategy} to work,
+ * it's needed a skin of type {@link MFXSkinBase}.
  * <p></p>
  * Design guidelines (like MD3), may specify in the components' specs the initial/minimum sizes for each component.
- * For this specific purpose, there are two properties that can be set in CSS: {@link #initHeightProperty()}, {@link #initWidthProperty()}.
- * <p>
- * Since this always implements {@link MFXResizable}, it redefines the JavaFX's layout strategy by extending it to take
- * into account the aforementioned sizes.
+ * For this specific purpose, there are two properties that can be set in CSS: {@link #initHeightProperty()}
+ * and {@link #initWidthProperty()}.
  * <p></p>
- * <b>Important Note: </b><p>
- * To avoid adding listeners that would harm the performance, and since the {@link #setSkin(Skin)} method cannot be overridden,
- * the correct way to change the skin of any component is to use {@link #changeSkin(MFXSkinBase)}. It will ensure the
- * initialization of the behavior and overall the correct state of the component.
- * <p>
- * As a consequence components inheriting from this (almost if not all MFX components) do not support the "-fx-skin" CSS
- * property, you'll have to do it in code.
- * <p>
- * Unfortunately, I cannot prevent users from still using the aforementioned method, but I can guarantee you using that
- * will cause issues and undesired behaviors. You have been warned.
+ * Last but not least, MaterialFX components, descendants of this, support the usage of custom tooltips through the property
+ * {@link #mfxTooltipProperty()}.
  *
- * @param <B> the behavior type used by the component
  * @see MFXSkinBase
  * @see MFXResizable
+ * @see MFXTooltip
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
-public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends Labeled implements WithBehavior<B>, MFXStyleable, MFXResizable {
+public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends Labeled<B> implements MFXStyleable, MFXResizable {
 	//================================================================================
 	// Properties
 	//================================================================================
-	private B behavior;
-	private final SupplierProperty<B> behaviorProvider = new SupplierProperty<>() {
-		@Override
-		protected void invalidated() {
-			if (behavior != null) {
-				behavior.dispose();
-			}
-			behavior = get().get();
-			MFXSkinBase skin = (MFXSkinBase) getSkin();
-			if (skin != null && behavior != null) skin.initBehavior(behavior);
-		}
-	};
-
 	private final ObjectProperty<LayoutStrategy> layoutStrategy = new SimpleObjectProperty<>(defaultLayoutStrategy()) {
 		@Override
 		protected void invalidated() {
@@ -140,22 +104,6 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 	//================================================================================
 
 	/**
-	 * Since this is deeply integrated with the new behavior API, and since the {@link #setSkin(Skin)} method cannot
-	 * be overridden, and finally to avoid adding listeners, this is the method to use when you want to change the skin.
-	 * <p></p>
-	 * Unfortunately, I cannot prevent users from still using the aforementioned method, but I can guarantee you using that
-	 * will cause issues and undesired behaviors. You have been warned.
-	 */
-	public void changeSkin(MFXSkinBase<?, ?> skin) {
-		if (skin == null)
-			throw new IllegalArgumentException("The new skin cannot be null!");
-		if (behavior != null) behavior.dispose();
-		behavior = getBehaviorProvider().get();
-		((MFXSkinBase) skin).initBehavior(behavior);
-		setSkin(skin);
-	}
-
-	/**
 	 * This is automatically invoked when either {@link #initHeightProperty()} or {@link #initWidthProperty()} change.
 	 * By default, this method triggers a layout request.
 	 * <p></p>
@@ -165,12 +113,6 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 	protected void onInitSizesChanged() {
 		requestLayout();
 	}
-
-	/**
-	 * Subclasses can change the actions to perform if the component is being used in SceneBuilder
-	 * by overriding this method. Typically called automatically on components' initialization.
-	 */
-	protected void sceneBuilderIntegration() {}
 
 	//================================================================================
 	// Overridden Methods
@@ -215,20 +157,6 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 	@Override
 	public double computeMaxHeight(double width) {
 		return getLayoutStrategy().computeMaxHeight(this);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * <p></p>
-	 * Overridden to make sure the behavior object is initialized by the skin upon its creation.
-	 *
-	 * @see MFXSkinBase
-	 */
-	@Override
-	protected final MFXSkinBase<?, ?> createDefaultSkin() {
-		MFXSkinBase skin = buildSkin();
-		if (behavior != null) skin.initBehavior(behavior);
-		return skin;
 	}
 
 	//================================================================================
@@ -393,26 +321,6 @@ public abstract class MFXLabeled<B extends BehaviorBase<? extends Node>> extends
 	//================================================================================
 	// Getters/Setters
 	//================================================================================
-	@Override
-	public B getBehavior() {
-		return behavior;
-	}
-
-	@Override
-	public Supplier<B> getBehaviorProvider() {
-		return behaviorProvider.get();
-	}
-
-	@Override
-	public SupplierProperty<B> behaviorProviderProperty() {
-		return behaviorProvider;
-	}
-
-	@Override
-	public void setBehaviorProvider(Supplier<B> behaviorProvider) {
-		this.behaviorProvider.set(behaviorProvider);
-	}
-
 	@Override
 	public LayoutStrategy getLayoutStrategy() {
 		return layoutStrategy.get();

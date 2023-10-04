@@ -6,6 +6,8 @@ module mfx.core {
 
 	requires transitive mfx.localization;
 
+	requires java.prefs;
+
 	// Base
 	exports io.github.palexdev.mfxcore.base;
 	exports io.github.palexdev.mfxcore.base.beans;
@@ -40,6 +42,7 @@ module mfx.core {
 
 	// Events
 	exports io.github.palexdev.mfxcore.events;
+	exports io.github.palexdev.mfxcore.events.bus;
 
 	// Filter
 	exports io.github.palexdev.mfxcore.filter;
@@ -50,6 +53,9 @@ module mfx.core {
 
 	// Selection
 	exports io.github.palexdev.mfxcore.selection;
+
+	// Settings
+	exports io.github.palexdev.mfxcore.settings;
 
 	// Utils
 	exports io.github.palexdev.mfxcore.utils;

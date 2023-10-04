@@ -322,8 +322,8 @@ public class MFXTooltip extends PopupControl implements IMFXPopup {
         /*
          * This check is due to a JavaFX bug in WindowStage.setBounds(...) method which doesn't check for the window
          * to be not null before doing anything on it.
-         * This seems to happen when the Popup is open but the main window is being closed.
-         * Animations at such stage cannot be used, also, it's not necessary to explicitly hide it since in theory the
+         * This seems to happen when the Popup is open, but the main window is being closed.
+         * Animations at such stage cannot be used; also, it's not necessary to explicitly hide it since in theory the
          * framework will handle it automatically
          */
         boolean showing = Optional.ofNullable(getOwner())
@@ -331,10 +331,7 @@ public class MFXTooltip extends PopupControl implements IMFXPopup {
             .map(Scene::getWindow)
             .map(Window::isShowing)
             .orElse(true);
-        if (!showing) {
-            close();
-            return;
-        }
+        if (!showing) return;
 
         retrieveSkin().ifPresentOrElse(
             IMFXPopupSkin::animateOut,

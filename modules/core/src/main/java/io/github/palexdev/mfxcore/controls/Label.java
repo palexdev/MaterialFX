@@ -22,6 +22,8 @@ import io.github.palexdev.mfxcore.base.properties.styleable.StyleableDoublePrope
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableObjectProperty;
 import io.github.palexdev.mfxcore.observables.When;
 import io.github.palexdev.mfxcore.utils.fx.StyleUtils;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
@@ -32,6 +34,7 @@ import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -42,19 +45,20 @@ import java.util.function.Consumer;
  * lead to the desired behavior, and it's not intuitive as well. Let me explain, by setting the max width, you are limiting
  * the label's width regardless the state of {@link #wrapTextProperty()}. However, there are cases in which you may want
  * to limit the width only if the text should be wrapped. And here's when this comes in handy. The property can be set by
- * code or CSS ('-fx-wrapping-width' property) and it's implemented by overriding the {@link #computeMaxWidth(double)}
+ * code or CSS ('-fx-wrapping-width' property), and it's implemented by overriding the {@link #computeMaxWidth(double)}
  * method. If the text should be wrapped and the specified wrapping width is greater than 0, then the latter will be used
- * as the label's max width. Otherwise, uses the default computation.
+ * as the label's max width. Otherwise, use the default computation.
  * <p></p>
  * This also adds a new feature/workaround. In JavaFX Labels are composed by two nodes at max: the icon/graphic and the
- * text. For performance reasons probably the text node is not added to the control until the text is not null and not empty.
- * A mechanism to detect the addition and retrieval of such node has been added, allowing custom text based controls to
- * take full control on the text node itself rather than the label as a whole.
+ * text. For performance reasons, probably the text node is not added to the control until the text is not null and not empty.
+ * A mechanism to detect the addition and retrieval of such node has been added, allowing custom text-based controls to
+ * take full control of the text node itself rather than the label as a whole.
  * <p>
- * This allows to implement two other useful tricks:
+ * This allows to implement three other useful tricks:
  * <p> 1) 'Backport' the {@link Text#fontSmoothingTypeProperty()} here, allowing to set the antialiasing
  * method directly on the label. The default font smoothing type for this is set to {@link FontSmoothingType#LCD}.
  * <p> 2) A way to completely disable the text truncation by always showing the full text and removing the clip
+ * <p> 3) A way to detect when the label's text is truncated, {@link #truncatedProperty()}
  */
 public class Label extends javafx.scene.control.Label {
     //================================================================================
@@ -65,6 +69,8 @@ public class Label extends javafx.scene.control.Label {
 
 	private When<?> whenFDTE;
 	private boolean forceDisableTextEllipsis = false;
+
+	private final ReadOnlyBooleanWrapper truncated = new ReadOnlyBooleanWrapper(false);
 
     //================================================================================
     // Constructors
@@ -90,9 +96,14 @@ public class Label extends javafx.scene.control.Label {
     protected void setTextNode(Node textNode) {
         this.textNode = textNode;
 		if (textNode instanceof Text) {
-            ((Text) textNode).fontSmoothingTypeProperty().bind(fontSmoothingTypeProperty());
+			Text tn = (Text) textNode;
+			tn.fontSmoothingTypeProperty().bind(fontSmoothingTypeProperty());
             onSetTextNode.accept(textNode);
 			updateFDTE();
+			truncated.bind(tn.textProperty().map(s -> {
+				if (forceDisableTextEllipsis) return false;
+				return !Objects.equals(s, getText());
+			}));
         }
     }
 
@@ -112,19 +123,21 @@ public class Label extends javafx.scene.control.Label {
 	 * changes (it is truncated) we set it back to the full string. Yes, it's a brute force approach, but as far as I know
 	 * it's the only way, you know how it is JavaFX... private, final, immutable, boring...
 	 * <p>
-	 * Additionally, the listener is also responsible for removing the clip applied to the text node. It appears that,
+	 * Additionally, the listener is also responsible for removing the clip applied to the text node. It appears that
 	 * the text is not only truncated but also clipped for some reason, so restoring the full text may not be enough in some
 	 * cases.
      */
 	protected void updateFDTE() {
-		if (!forceDisableTextEllipsis && whenFDTE != null) {
-			whenFDTE.dispose();
-			whenFDTE = null;
+		if (!forceDisableTextEllipsis) {
+			if (whenFDTE != null) {
+				whenFDTE.dispose();
+				whenFDTE = null;
+			}
 			return;
 		}
+
 		Text textNode = (Text) this.textNode;
 		if (textNode == null || whenFDTE != null) return;
-
 		whenFDTE = When.onChanged(textNode.textProperty())
 			.then((o, n) -> {
 				textNode.setClip(null);
@@ -203,7 +216,7 @@ public class Label extends javafx.scene.control.Label {
     }
 
     /**
-     * Allows to specify a maximum width for the label that is applied only when it is greater than 0 and
+	 * Allows specifying a maximum width for the label that is applied only when it is greater than 0 and
      * {@link #wrapTextProperty()} set to true.
      * <p>
      * Can be set in CSS via the property: '-fx-wrapping-width'.
@@ -285,5 +298,17 @@ public class Label extends javafx.scene.control.Label {
 	public void setForceDisableTextEllipsis(boolean forceDisableTextEllipsis) {
 		this.forceDisableTextEllipsis = forceDisableTextEllipsis;
 		updateFDTE();
+	}
+
+	public boolean isTruncated() {
+		return truncated.get();
+	}
+
+	/**
+	 * This property allows user's to observe the text property that corresponds to the visualized string, to check
+	 * whether the full text is truncated or not
+	 */
+	public ReadOnlyBooleanProperty truncatedProperty() {
+		return truncated.getReadOnlyProperty();
 	}
 }

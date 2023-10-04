@@ -102,7 +102,7 @@ $ripple-color-error: Ripple.Ripple('error') !default;
 }
 
 .mfx-checkbox:selected:error > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-color: $icon-color-error
+  -mfx-color: $icon-color-error;
 }
 
 // Component-level tokens (disabled)

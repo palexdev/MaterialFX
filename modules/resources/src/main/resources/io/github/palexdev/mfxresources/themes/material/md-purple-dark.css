@@ -1,4 +1,5 @@
 @import '../../fonts/Fonts.css';
+
 .root {
   /* Palette */
   -md-source: #6750A4;
@@ -391,7 +392,7 @@
   -fx-border-radius: 2px;
   -fx-border-width: 2px;
   -mfx-size: 18px;
-    -mfx-animation-preset: CLIP;
+  -mfx-animation-preset: CLIP;
 }
 
 .mfx-checkbox > .mfx-icon-wrapper > .mfx-font-icon {

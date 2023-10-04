@@ -21,6 +21,7 @@ package io.github.palexdev.mfxcomponents.theming.base;
 import io.github.palexdev.mfxcomponents.theming.Deployer;
 import io.github.palexdev.mfxcomponents.theming.UserAgentBuilder;
 import io.github.palexdev.mfxresources.MFXResources;
+import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
@@ -81,6 +82,13 @@ public interface Theme {
      */
     default String toData() {
         return get().toExternalForm();
+    }
+
+    /**
+     * Applies the theme as the global user agent stylesheet, see {@link Application#setUserAgentStylesheet(String)}.
+     */
+    default void applyGlobal() {
+        Application.setUserAgentStylesheet(toData());
     }
 
     /**

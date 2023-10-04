@@ -84,7 +84,12 @@ public class MFXPopupSkin<P extends IMFXPopup & Skinnable> implements Skin<P>, I
      */
     @Override
     public void animateIn() {
-        if (!popup.isAnimated()) return;
+        if (!popup.isAnimated()) {
+            root.setOpacity(1.0);
+            scale.setX(1.0);
+            scale.setY(1.0);
+            return;
+        }
         if (inAnimation == null) {
             inAnimation = TimelineBuilder.build()
                     .add(KeyFrames.of(inDuration, root.opacityProperty(), 1.0, curve))

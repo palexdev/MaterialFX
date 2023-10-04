@@ -5,34 +5,32 @@ plugins {
     id 'com.vanniktech.maven.publish' version "$mavenPublishPlugin" apply false
 }
 
-group 'io.github.palexdev'
+ext {
+    scriptsDir = "$rootDir/scripts"
+}
 
 subprojects {
     apply plugin: "java-library"
     apply plugin: "org.openjfx.javafxplugin"
     apply plugin: "com.vanniktech.maven.publish"
 
+    // Remove vanniktech nonsense
     gradle.taskGraph.whenReady { graph ->
-        if (graph.hasTask(javaSourcesJar)) {
-            javaSourcesJar.enabled = false
-        }
         if (graph.hasTask(simpleJavadocJar)) {
             simpleJavadocJar.enabled = false
         }
     }
+
+    group 'io.github.palexdev'
 
     repositories {
         mavenLocal()
         mavenCentral()
     }
 
-    configurations {
-        testImplementation.extendsFrom compileOnly
-    }
-
     dependencies {
-        testImplementation "org.junit.jupiter:junit-jupiter-api:$junit"
-        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit"
+        testImplementation platform("org.junit:junit-bom:$junit")
+        testImplementation 'org.junit.jupiter:junit-jupiter'
 
         testImplementation "org.testfx:testfx-junit5:$testfx"
         testImplementation "io.github.palexdev:scenicview:$scenicView"
@@ -41,11 +39,7 @@ subprojects {
     javafx {
         version = "$jfx"
         modules = ["javafx.controls", "javafx.fxml"]
-        configuration = "compileOnly"
-    }
-
-    configurations {
-        testImplementation.extendsFrom compileOnly
+        configurations = ['implementation', 'testImplementation']
     }
 
     compileJava {
@@ -53,25 +47,13 @@ subprojects {
         targetCompatibility = "$jdk"
     }
 
-    // The ':all' module is ignored since it is a placeholder module and there is no module-info.java,
-    // making moduleOptions fail
     compileTestJava {
         sourceCompatibility = "$testJdk"
         targetCompatibility = "$testJdk"
-        if (project.name != 'release') {
-            moduleOptions {
-                compileOnClasspath = true
-            }
-        }
     }
 
     test {
         useJUnitPlatform()
-        if (project.name != 'release') {
-            moduleOptions {
-                runOnClasspath = true
-            }
-        }
     }
 }
 

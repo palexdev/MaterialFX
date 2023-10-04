@@ -1,4 +1,3 @@
-/**** /home/palexdev/Disks/CrucialExtFat/IdeaProjects/MaterialFX/modules/resources/src/main/resources/io/github/palexdev/mfxresources/themes/javafx/modena/modena-embedded-performance.css.tmp ***/
 .slider .thumb, .scroll-bar:horizontal > .decrement-button > .decrement-arrow, .scroll-bar:horizontal > .increment-button > .increment-arrow, .scroll-bar:vertical > .decrement-button > .decrement-arrow, .scroll-bar:vertical > .increment-button > .increment-arrow, .context-menu, .menu-up-arrow, .menu-down-arrow, .tab-pane > .tab-header-area > .headers-region > .tab > .tab-container > .tab-close-button, .combo-box-popup > .list-view, .titled-pane:focused > .title > .arrow-button > .arrow, .color-palette, .custom-color-dialog > .color-rect-pane #color-rect-indicator, .custom-color-dialog > .color-rect-pane > .color-bar > #color-bar-indicator, .tooltip {
     -fx-effect: null;
 }
