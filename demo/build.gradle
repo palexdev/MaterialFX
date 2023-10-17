@@ -92,8 +92,9 @@ tasks.register('doPackageAll') {
     doLast {
         if (Os.isFamily(Os.FAMILY_UNIX)) {
             exec {
-                executable "$projectDir/scripts/JLinkPackage.sh"
-                args = ["$buildDir"]
+                mkdir("$layout.buildDirectory/distributions")
+                executable "$rootDir/scripts/JLinkPackage.sh"
+                args = ["$layout.buildDirectory"]
             }
         }
     }

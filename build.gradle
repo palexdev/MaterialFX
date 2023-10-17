@@ -18,8 +18,3 @@ subprojects {
         modules = ['javafx.controls', 'javafx.fxml', 'javafx.media', 'javafx.swing', 'javafx.web']
     }
 }
-
-
-
-
-
