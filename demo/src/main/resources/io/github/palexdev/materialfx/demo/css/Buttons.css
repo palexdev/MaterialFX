@@ -21,7 +21,6 @@
 @import 'MFXColors.css';
 
 .mfx-button {
-	-fx-font-family: 'Visby Round CF Medium';
 	-fx-text-fill: -mfx-text-he;
 }
 
@@ -31,7 +30,7 @@
 }
 
 .mfx-button .text {
-	-fx-font-smoothing-type: lcd;
+	-fx-font-smoothing-type: gray;
 }
 
 #custom {

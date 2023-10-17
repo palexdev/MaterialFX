@@ -73,7 +73,7 @@
 }
 
 .rootPane .sidebar .header {
-	-fx-font-family: 'Visby Round CF Heavy';
+	-fx-font-family: 'Open Sans ExtraBold';
 	-fx-font-size: 24;
 	-fx-text-fill: white;
 }
@@ -91,7 +91,7 @@
 }
 
 .rootPane .sidebar .menu-label {
-	-fx-font-family: 'Visby Round CF Bold';
+	-fx-font-family: 'Open Sans Bold';
 	-fx-font-size: 14;
 	-fx-text-fill: white;
 }
@@ -103,7 +103,7 @@
 	-fx-border-radius: 0;
 	-fx-pref-height: 40;
 
-	-fx-font-family: 'Visby Round CF Demi Bold';
+	-fx-font-family: 'Open Sans SemiBold';
 	-fx-font-size: 13;
 	-fx-text-fill: white;
 }

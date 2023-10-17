@@ -32,11 +32,6 @@
 **************************************************/
 .mfx-combo-box {
 	-fx-min-width: 150;
-	-fx-font-family: 'Visby Round CF Medium';
-}
-
-.mfx-combo-box .floating-text {
-	-fx-font-family: 'Visby Round CF Demi Bold';
 }
 
 #customNCombo {

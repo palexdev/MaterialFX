@@ -20,7 +20,7 @@
 @import 'MFXColors.css';
 
 .header-label {
-	-fx-font-family: 'Visby Round CF Bold';
+	-fx-font-family: 'Open Sans Bold';
 	-fx-font-size: 14;
 	-fx-text-fill: -mfx-text-he;
 }
@@ -30,7 +30,7 @@
 }
 
 .sub-header-label {
-	-fx-font-family: 'Visby Round CF Demi Bold';
+	-fx-font-family: 'Open Sans SemiBold';
 	-fx-text-fill: -mfx-text-he;
 }
 

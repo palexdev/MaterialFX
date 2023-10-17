@@ -26,13 +26,13 @@
 }
 
 .notification .label {
-	-fx-font-family: 'Visby Round CF Bold';
+	-fx-font-family: 'Open Sans Bold';
 	-fx-text-fill: -mfx-text-he;
 }
 
 .notification .content {
 	-fx-padding: 10;
-	-fx-font-family: 'Visby Round CF Medium';
+	-fx-font-family: 'Open Sans SemiBold';
 }
 
 .notification .mfx-button {

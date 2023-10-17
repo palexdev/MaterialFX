@@ -21,19 +21,19 @@
 @import 'MFXColors.css';
 
 .mfx-list-view .virtual-flow .mfx-list-cell .data-label {
-	-fx-font-family: 'Visby Round CF Medium';
+	-fx-font-family: 'Open Sans Regular';
 }
 
 .mfx-list-view .virtual-flow .mfx-list-cell:selected .data-label {
-	-fx-font-family: 'Visby Round CF Demi Bold';
+	-fx-font-family: 'Open Sans SemiBold';
 }
 
 .mfx-check-list-view .virtual-flow .mfx-check-list-cell .data-label {
-	-fx-font-family: 'Visby Round CF Medium';
+	-fx-font-family: 'Open Sans Regular';
 }
 
 .mfx-check-list-view .virtual-flow .mfx-check-list-cell:selected .data-label {
-	-fx-font-family: 'Visby Round CF Demi Bold';
+	-fx-font-family: 'Open Sans SemiBold';
 }
 
 #custList {
@@ -85,6 +85,6 @@
 	-fx-border-color: -mfx-purple;
 	-fx-border-radius: 3;
 	-fx-text-fill: white;
-	-fx-font-family: 'Visby Round CF Demi Bold';
+	-fx-font-family: 'Open Sans SemiBold';
 	-fx-font-size: 14;
 }

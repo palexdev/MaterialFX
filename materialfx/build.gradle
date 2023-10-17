@@ -83,6 +83,8 @@ jar {
 shadowJar {
     mergeServiceFiles()
     dependencies {
+        include(dependency("io.github.palexdev:mfxcore:$mfxcore"))
+        include(dependency("io.github.palexdev:mfxresources:$mfxresources"))
         include(dependency("io.github.palexdev:virtualizedfx:$vfx"))
     }
 }

@@ -1,0 +1,97 @@
+/*
+ * Copyright (C) 2022 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@font-face {
+    font-family: 'Open Sans Bold';
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+    src: url('OpenSans-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Open Sans BoldItalic';
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+    src: url('OpenSans-BoldItalic.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Open Sans ExtraBold';
+    font-weight: 800px;
+    font-style: normal;
+    font-display: swap;
+    src: url('OpenSans-ExtraBold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Open Sans ExtraBoldItalic';
+    font-weight: 800px;
+    font-style: italic;
+    font-display: swap;
+    src: url('OpenSans-ExtraBoldItalic.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Open Sans Light';
+    font-weight: 300px;
+    font-style: normal;
+    font-display: swap;
+    src: url('OpenSans-Light.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Open Sans LightItalic';
+    font-weight: 300px;
+    font-style: italic;
+    font-display: swap;
+    src: url('OpenSans-LightItalic.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Open Sans Italic';
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+    src: url('OpenSans-Italic.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Open Sans SemiBold';
+    font-weight: 600px;
+    font-style: normal;
+    font-display: swap;
+    src: url('OpenSans-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Open Sans Regular';
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+    src: url('OpenSans-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Open Sans SemiBoldItalic';
+    font-weight: 600px;
+    font-style: italic;
+    font-display: swap;
+    src: url('OpenSans-SemiBoldItalic.ttf') format('truetype');
+}

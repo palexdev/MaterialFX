@@ -28,14 +28,14 @@
 	-fx-border-color: transparent;
 	-fx-border-radius: 0;
 
-	-fx-font-family: "Visby Round CF Medium";
+	-fx-font-family: "Open Sans SemiBold";
 	-fx-text-fill: white;
 }
 
 #custDatePicker .floating-text {
 	-fx-background-color: transparent;
 
-	-fx-font-family: "Visby Round CF Demi Bold";
+	-fx-font-family: "Open Sans SemiBold";
 	-fx-text-fill: white;
 }
 
@@ -68,7 +68,7 @@
 
 	-fx-padding: 4;
 	-fx-background-insets: 0;
-	-fx-font-family: "Visby Round CF Medium";
+	-fx-font-family: "Open Sans SemiBold";
 }
 
 #custDatePicker .date-picker-popup .months-combo:focus-within,
@@ -90,7 +90,7 @@
 
 #custDatePicker .date-picker-popup .months-combo .virtual-flow .mfx-combo-box-cell,
 #custDatePicker .date-picker-popup .years-combo .virtual-flow .mfx-combo-box-cell {
-	-fx-font-family: 'Visby Round CF Medium';
+	-fx-font-family: 'Open Sans SemiBold';
 }
 
 #custDatePicker .date-picker-popup .months-combo .virtual-flow .mfx-combo-box-cell:selected .label,
@@ -106,12 +106,12 @@
 }
 
 #custDatePicker .date-picker-popup .week-day {
-	-fx-font-family: 'Visby Round CF Bold';
+	-fx-font-family: 'Open Sans Bold';
 	-fx-text-fill: white;
 }
 
 #custDatePicker .date-picker-popup .mfx-date-cell {
-	-fx-font-family: 'Visby Round CF Medium';
+	-fx-font-family: 'Open Sans SemiBold';
 	-fx-text-fill: white;
 }
 
@@ -123,11 +123,11 @@
 	-fx-background-color: transparent;
 	-fx-border-color: white;
 	-fx-border-width: 2;
-	-fx-font-family: 'Visby Round CF Demi Bold';
+	-fx-font-family: 'Open Sans SemiBold';
 }
 
 #custDatePicker .date-picker-popup .mfx-date-cell:selected {
 	-fx-background-color: white;
-	-fx-font-family: 'Visby Round CF Bold';
+	-fx-font-family: 'Open Sans Bold';
 	-fx-text-fill: #007BF6;
 }

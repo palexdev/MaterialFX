@@ -25,11 +25,11 @@
 **************************************************/
 .mfx-text-field {
 	-fx-min-width: 130;
-	-fx-font-family: 'Visby Round CF Medium';
+	-fx-font-family: 'Open Sans SemiBold';
 }
 
 .mfx-text-field .floating-text {
-	-fx-font-family: 'Visby Round CF Medium';
+	-fx-font-family: 'Open Sans SemiBold';
 }
 
 
@@ -81,6 +81,6 @@
 }
 
 #validationLabel {
-	-fx-font-family: 'Visby Round CF Demi Bold';
+	-fx-font-family: 'Open Sans SemiBold';
 	-fx-font-size: 11;
 }

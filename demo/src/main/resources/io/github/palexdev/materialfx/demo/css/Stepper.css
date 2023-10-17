@@ -22,7 +22,7 @@
 
 .mfx-stepper .mfx-text-field {
 	-mfx-float-mode: disabled;
-	-fx-font-family: 'Visby Round CF Medium';
+	-fx-font-family: 'Open Sans SemiBold';
 	-fx-pref-width: 200;
 }
 
@@ -33,18 +33,18 @@
 }
 
 .mfx-stepper .error-label {
-	-fx-font-family: 'Visby Round CF Medium';
+	-fx-font-family: 'Open Sans SemiBold';
 	-fx-text-fill: -mfx-red;
 }
 
 .mfx-stepper .header-label {
 	-fx-border-color: transparent;
-	-fx-font-family: 'Visby Round CF Demi Bold';
+	-fx-font-family: 'Open Sans SemiBold';
 }
 
 .mfx-stepper .completed-label {
 	-fx-border-color: transparent;
-	-fx-font-family: 'Visby Round CF Bold';
+	-fx-font-family: 'Open Sans Bold';
 	-fx-font-size: 24;
 	-fx-alignment: center;
 	-fx-text-fill: -mfx-green;

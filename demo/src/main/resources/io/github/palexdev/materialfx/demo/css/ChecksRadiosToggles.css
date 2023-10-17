@@ -25,7 +25,6 @@
  * Checkboxes
 **************************************************/
 .mfx-checkbox {
-	-fx-font-family: 'Visby Round CF Medium';
 	-fx-text-fill: -mfx-text-he;
 }
 
@@ -56,7 +55,6 @@
  * Radios
 **************************************************/
 .mfx-radio-button {
-	-fx-font-family: 'Visby Round CF Medium';
 	-fx-text-fill: -mfx-text-he;
 }
 
@@ -79,7 +77,6 @@
  * Toggle Buttons
 **************************************************/
 .mfx-toggle-button {
-	-fx-font-family: 'Visby Round CF Medium';
 	-fx-text-fill: -mfx-text-he;
 }
 
@@ -102,13 +99,11 @@
  * Toggle Nodes
 **************************************************/
 .mfx-circle-toggle-node {
-	-fx-font-family: 'Visby Round CF Medium';
 	-fx-text-fill: -mfx-text-he;
 
 }
 
 .mfx-rectangle-toggle-node {
-	-fx-font-family: 'Visby Round CF Medium';
 	-fx-text-fill: -mfx-text-he;
 	-fx-min-height: 40;
 }
@@ -138,7 +133,6 @@
  * Others
 **************************************************/
 .mfx-button {
-	-fx-font-family: 'Visby Round CF Medium';
 	-fx-text-fill: -mfx-text-he;
 }
 
