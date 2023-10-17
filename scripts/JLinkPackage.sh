@@ -23,6 +23,8 @@
 # I was tired of Gradle shit and also tired of learning about boring Linux commands stuff (the tar command is quantum physic
 # and the zip command on the other hand is very limited) so this is the quickest solution I came up with
 
+# TODO make this cross platform too
+
 BASE_DIR=$1
 IMG_DIR="${BASE_DIR}/image"
 OUT_DIR="${BASE_DIR}/distributions"

@@ -7,6 +7,10 @@ plugins {
     id 'com.github.johnrengelman.shadow' version "$shadowJarPlugin"
 }
 
+// Cross-platform scripts
+apply from: "$scriptsDir/updateJFXRes.gradle"
+apply from: "$scriptsDir/processCSS.gradle"
+
 repositories {
     mavenCentral()
 

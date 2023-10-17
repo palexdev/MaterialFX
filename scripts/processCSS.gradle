@@ -1,0 +1,47 @@
+import groovy.transform.Field
+import org.apache.tools.ant.taskdefs.condition.Os
+
+// Special handling for Windows. Fuck. This. Shit.
+@Field var isWindows = (Os.isFamily(Os.FAMILY_WINDOWS))
+
+tasks.register("processCSS") {
+    doLast {
+        def rootDir = rootProject.projectDir.absolutePath
+        def resDir = "$rootDir/materialfx/src/main/resources/io/github/palexdev/materialfx"
+        List<File> themesDirs = new ArrayList<>()
+        new File(resDir).eachFile {
+            if (it.isDirectory() && it.name != "jfx") themesDirs += it
+        }
+
+        // Check if npm and cssbeautify-cli are installed on the host
+        if (!execute("npm -v")) throw new GradleException("npm command could not be found")
+        if (!execute("cssbeautify-cli -v")) throw new GradleException("cssbeautify-cli command could not be found")
+        logger.warn("All dependencies have been found")
+
+        themesDirs.each { dir ->
+            dir.eachFileRecurse {
+                def name = it.name
+                def path = it.absolutePath
+                def parent = it.parent
+                if (name.endsWith(".css")) { // Unfortunately, doesn't run very well o SCSS files
+                    logger.warn("Beautifying: $name")
+                    def tmp = new File("${path}.tmp")
+                    it.renameTo(tmp)
+                    def beautifyCommand = "cssbeautify-cli -a -i2 -f ${path}.tmp -w $parent/$name"
+                    execute(beautifyCommand)
+                    delete(tmp)
+                }
+            }
+        }
+    }
+}
+
+boolean execute(String str) {
+    if (isWindows) str = "cmd /c " + str // Prepend call to cmd
+    Process proc = new ProcessBuilder().with {
+        command str.split(" ")
+        redirectOutput(ProcessBuilder.Redirect.DISCARD)
+    }.start()
+    proc.waitForOrKill(10_000)
+    return proc.exitValue() == 0
+}

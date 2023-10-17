@@ -1,0 +1,83 @@
+import groovy.transform.Field
+import org.apache.tools.ant.taskdefs.condition.Os
+
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+
+// Special handling for Windows. Fuck. This. Shit.
+@Field var isWindows = (Os.isFamily(Os.FAMILY_WINDOWS))
+
+tasks.register("updateJFXRes") {
+    doLast {
+        def rootDir = rootProject.projectDir.absolutePath
+        def resDir = "$rootDir/materialfx/src/main/resources/io/github/palexdev/materialfx/css/jfx"
+        def caspianDir = "$resDir/caspian"
+        def modenaDir = "$resDir/modena"
+
+        // Check if svn, npm, csso and cssbeautify-cli are installed on the host
+        if (!execute("svn help")) throw new GradleException("svn command could not be found")
+        if (!execute("npm -v")) throw new GradleException("npm command could not be found")
+        if (!execute("csso -v")) throw new GradleException("csso command could not be found")
+        if (!execute("cssbeautify-cli -v")) throw new GradleException("cssbeautify-cli command could not be found")
+        logger.warn("All dependencies have been found")
+
+        // Download the whole repository to a temp dir
+        def tmpDir = Files.createTempDirectory("gradle.tmp").toString()
+        def svnCommand = "svn export --force https://github.com/openjdk/jfx.git/trunk/modules/javafx.controls/src/main/resources/com/sun/javafx/scene/control/skin $tmpDir"
+        logger.warn("Executing svn command")
+        execute(svnCommand)
+
+        // Move the required files to their respective directories
+        logger.warn("Processing Caspian resources")
+        processCssFiles(new File(tmpDir, "caspian"), new File(caspianDir))
+        logger.warn("Zipping Caspian resources")
+        ant.zip(destfile: new File(caspianDir, "assets.zip")) {
+            fileset(dir: new File(caspianDir, "assets/"))
+        }
+        delete(new File(caspianDir, "assets"))
+
+        logger.warn("Processing Modena resources")
+        processCssFiles(new File(tmpDir, "modena"), new File(modenaDir))
+        logger.warn("Zipping Modena resources")
+        ant.zip(destfile: new File(modenaDir, "assets.zip")) {
+            fileset(dir: new File(modenaDir, "assets/"))
+        }
+        delete(new File(modenaDir, "assets"))
+
+        delete(tmpDir)
+        logger.warn("JavaFX resources have been updated successfully")
+    }
+}
+
+boolean execute(String str) {
+    if (isWindows) str = "cmd /c " + str // Prepend call to cmd
+    Process proc = new ProcessBuilder().with {
+        command str.split(" ")
+        redirectOutput(ProcessBuilder.Redirect.DISCARD)
+    }.start()
+    proc.waitForOrKill(10_000)
+    return proc.exitValue() == 0
+}
+
+void processCssFiles(File source, File dest) {
+    source.eachFile {
+        if (it.name.endsWith(".css")) {
+            // Optimize
+            def cssoCommand = "csso $it.absolutePath -o $it.absolutePath --no-restructure"
+            logger.debug(cssoCommand)
+            execute(cssoCommand)
+
+            // Beautify
+            def beautifyCommand = "cssbeautify-cli -a -i2 -f $it.absolutePath -w ${new File(dest, it.name)}"
+            logger.debug(beautifyCommand)
+            execute(beautifyCommand)
+
+            it.delete()
+        } else {
+            def assetsDir = new File(dest, "assets")
+            assetsDir.mkdirs()
+            Files.copy(it.toPath(), new File(dest, "assets/$it.name").toPath(), StandardCopyOption.REPLACE_EXISTING)
+            it.delete()
+        }
+    }
+}

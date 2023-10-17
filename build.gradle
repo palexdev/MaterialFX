@@ -6,6 +6,10 @@ plugins {
 group 'io.github.palexdev'
 version "$materialfx"
 
+ext {
+    scriptsDir = "$rootDir/scripts"
+}
+
 repositories {
     mavenCentral()
 }
