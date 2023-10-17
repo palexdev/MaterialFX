@@ -17,20 +17,20 @@
  */
 
 .mfx-check-list-view {
-	-mfx-track-color: rgb(230, 230, 230);
-	-mfx-thumb-color: rgb(137, 137, 137);
-	-mfx-thumb-hover-color: rgb(89, 88, 91);
+  -mfx-track-color: rgb(230, 230, 230);
+  -mfx-thumb-color: rgb(137, 137, 137);
+  -mfx-thumb-hover-color: rgb(89, 88, 91);
 }
 
 .mfx-check-list-view .virtual-flow .scroll-bar .track {
-	-fx-background-color: -mfx-track-color;
+  -fx-background-color: -mfx-track-color;
 }
 
 .mfx-check-list-view .virtual-flow .scroll-bar .thumb {
-	-fx-background-color: -mfx-thumb-color;
+  -fx-background-color: -mfx-thumb-color;
 }
 
 .mfx-check-list-view .virtual-flow .scroll-bar .thumb:pressed,
 .mfx-check-list-view .virtual-flow .scroll-bar .thumb:hover {
-	-fx-background-color: -mfx-thumb-hover-color;
+  -fx-background-color: -mfx-thumb-hover-color;
 }

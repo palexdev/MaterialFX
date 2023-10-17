@@ -1,38 +1,1803 @@
-@import "MFXButton.css";
-@import "MFXCheckBox.css";
-@import "MFXCheckListCell.css";
-@import "MFXCheckListView.css";
-@import "MFXCheckTreeCell.css";
-@import "MFXCircleToggleNode.css";
-@import "MFXComboBox.css";
-@import "MFXComboBoxCell.css";
-@import "MFXContextMenu.css";
-@import "MFXContextMenuItem.css";
-@import "MFXDateCell.css";
-@import "MFXDatePicker.css";
-@import "MFXDialogs.css";
-@import "MFXFilterComboBox.css";
-@import "MFXFilterDialog.css";
-@import "MFXFilterPane.css";
-@import "MFXListCell.css";
-@import "MFXListView.css";
-@import "MFXMagnifier.css";
-@import "MFXNotificationCenter.css";
-@import "MFXPagination.css";
-@import "MFXPasswordField.css";
-@import "MFXProgressBar.css";
-@import "MFXProgressSpinner.css";
-@import "MFXRadioButton.css";
-@import "MFXRectangleToggleNode.css";
-@import "MFXScrollPane.css";
-@import "MFXSlider.css";
-@import "MFXSpinner.css";
-@import "MFXStepper.css";
-@import "MFXStepperToggle.css";
-@import "MFXTableView.css";
-@import "MFXTextField.css";
-@import "MFXToggleButton.css";
-@import "MFXTooltip.css";
-@import "MFXTreeCell.css";
-@import "MFXTreeItem.css";
-@import "MFXTreeView.css";
+* {
+  -mfx-blue: #2196f3;
+  -mfx-charcoal: #445055;
+  -mfx-green: #4caf50;
+  -mfx-onyx: #353935;
+  -mfx-orange: #ff9800;
+  -mfx-purple: #7a0ed9;
+  -mfx-red: #EF6E6B;
+  -mfx-yellow: #FFEA00;
+  /* High Emphasis */
+  -mfx-text-he: rgba(0, 0, 0, 0.87);
+  /* Medium Emphasis*/
+  -mfx-text-me: rgba(0, 0, 0, 0.60);
+  /* Disabled */
+  -mfx-text-disabled: rgba(0, 0, 0, 0.38);
+}
+
+/* Scroll Panes */
+.mfx-scroll-pane {
+  -fx-background-color: white;
+  -track-color: rgb(230, 230, 230);
+  -thumb-color: rgb(137, 137, 137);
+  -thumb-hover-color: rgb(89, 88, 91);
+}
+
+/* Remove JavaFX crap */
+.mfx-scroll-pane:focused {
+  -fx-background-color: white;
+}
+
+.mfx-scroll-pane > .corner {
+  -fx-background-color: transparent;
+}
+
+.mfx-scroll-pane .viewport {
+  -fx-background-color: transparent;
+}
+
+.mfx-scroll-pane .scroll-bar,
+.mfx-scroll-pane .scroll-bar .decrement-arrow,
+.mfx-scroll-pane .scroll-bar .increment-arrow {
+  -fx-pref-width: 0;
+  -fx-pref-height: 0;
+}
+
+.mfx-scroll-pane .scroll-bar:horizontal .increment-button,
+.mfx-scroll-pane .scroll-bar:horizontal .decrement-button {
+  -fx-background-color: transparent;
+  -fx-background-radius: 0.0em;
+  -fx-padding: 0.0 0.0 10.0 0.0;
+}
+
+.mfx-scroll-pane .scroll-bar:vertical .increment-button,
+.mfx-scroll-pane .scroll-bar:vertical .decrement-button {
+  -fx-background-color: transparent;
+  -fx-background-radius: 0.0em;
+  -fx-padding: 0.0 10.0 0.0 0.0;
+}
+
+.mfx-scroll-pane .scroll-bar .increment-arrow,
+.mfx-scroll-pane .scroll-bar .decrement-arrow {
+  -fx-shape: " ";
+  -fx-padding: 0.15em 0.0;
+}
+
+.mfx-scroll-pane .scroll-bar:horizontal .increment-arrow,
+.mfx-scroll-pane .scroll-bar:horizontal .decrement-arrow {
+  -fx-shape: " ";
+  -fx-padding: 0.0 0.05em;
+}
+
+.mfx-scroll-pane .scroll-bar:vertical .increment-arrow,
+.mfx-scroll-pane .scroll-bar:vertical .decrement-arrow {
+  -fx-shape: " ";
+  -fx-padding: 0.0 0.05em;
+}
+
+/* Customize ScrollBars */
+
+.mfx-scroll-pane .scroll-bar:horizontal .track {
+  -fx-background-color: -track-color;
+  -fx-border-color: transparent;
+  -fx-background-radius: 2.0em;
+  -fx-border-radius: 2.0em;
+  -fx-background-insets: 3;
+}
+
+.mfx-scroll-pane .scroll-bar:vertical .track {
+  -fx-background-color: -track-color;
+  -fx-border-color: transparent;
+  -fx-background-radius: 2.0em;
+  -fx-border-radius: 2.0em;
+  -fx-background-insets: 3;
+}
+
+.mfx-scroll-pane .scroll-bar .decrement-arrow,
+.mfx-scroll-pane .scroll-bar .increment-arrow {
+  -fx-pref-width: 0;
+  -fx-pref-height: 0;
+}
+
+.mfx-scroll-pane .scroll-bar:vertical {
+  -fx-background-color: transparent;
+  -fx-pref-width: 12;
+  -fx-pref-height: 12;
+  -fx-padding: 5 0.5 5 0.5;
+}
+
+.mfx-scroll-pane .scroll-bar:horizontal {
+  -fx-background-color: transparent;
+  -fx-pref-width: 12;
+  -fx-pref-height: 12;
+  -fx-padding: 0.5 5 0.5 5;
+}
+
+.mfx-scroll-pane .scroll-bar:horizontal .thumb,
+.mfx-scroll-pane .scroll-bar:vertical .thumb {
+  -fx-background-color: -thumb-color;
+  -fx-background-insets: 2.0, 0.0, 0.0;
+  -fx-background-radius: 2.0em;
+}
+
+.mfx-scroll-pane .scroll-bar:horizontal .thumb:hover,
+.mfx-scroll-pane .scroll-bar:vertical .thumb:hover {
+  -fx-background-color: -thumb-hover-color;
+  -fx-background-insets: 1.5, 0.0, 0.0;
+  -fx-background-radius: 2.0em;
+}
+
+/* Buttons */
+.mfx-button {
+  -fx-font-family: "Open Sans Regular";
+  -fx-text-fill: -mfx-text-he;
+}
+
+.mfx-button:armed,
+.mfx-button:hover,
+.mfx-button:focused,
+.mfx-button {
+  -fx-background-radius: 3px;
+  -fx-background-insets: 0px;
+}
+
+.mfx-button,
+.mfx-button:armed,
+.mfx-button:focused {
+  -fx-background-color: white;
+}
+
+/* CHECKBOXES */
+.mfx-checkbox {
+  -mfx-main: #6200EE;
+  -mfx-secondary: #424242;
+  -fx-font-family: "Open Sans Regular";
+  -fx-text-fill: -mfx-text-he;
+}
+
+.mfx-checkbox .box {
+  -fx-background-color: transparent;
+  -fx-background-radius: 2;
+  -fx-border-color: -mfx-secondary;
+  -fx-border-radius: 2;
+  -fx-border-width: 1.5;
+  -fx-padding: 2;
+}
+
+.mfx-checkbox .box .mark {
+  visibility: hidden;
+  -mfx-color: white;
+  -mfx-description: "fas-check";
+  -mfx-size: 12;
+}
+
+.mfx-checkbox .ripple-container {
+  -fx-padding: 4;
+}
+
+.mfx-checkbox .ripple-container .mfx-ripple-generator {
+  -mfx-animation-speed: 1.5;
+  -mfx-ripple-color: derive(-mfx-main, 110%);
+  -mfx-ripple-radius: 16;
+}
+
+.mfx-checkbox:selected .box,
+.mfx-checkbox:indeterminate .box {
+  -fx-background-color: -mfx-main;
+  -fx-border-color: -mfx-main;
+}
+
+.mfx-checkbox:selected .box .mark {
+  visibility: visible;
+}
+
+.mfx-checkbox:selected:disabled .box,
+.mfx-checkbox:indeterminate:disabled .box {
+  -fx-background-color: -mfx-secondary;
+  -fx-border-color: -mfx-secondary;
+}
+
+.mfx-checkbox:indeterminate .box .mark {
+  visibility: visible;
+  -mfx-description: "fas-minus";
+}
+
+/* CheckList */
+.mfx-check-list-view {
+  -mfx-track-color: rgb(230, 230, 230);
+  -mfx-thumb-color: rgb(137, 137, 137);
+  -mfx-thumb-hover-color: rgb(89, 88, 91);
+}
+
+.mfx-check-list-view .virtual-flow .scroll-bar .track {
+  -fx-background-color: -mfx-track-color;
+}
+
+.mfx-check-list-view .virtual-flow .scroll-bar .thumb {
+  -fx-background-color: -mfx-thumb-color;
+}
+
+.mfx-check-list-view .virtual-flow .scroll-bar .thumb:pressed,
+.mfx-check-list-view .virtual-flow .scroll-bar .thumb:hover {
+  -fx-background-color: -mfx-thumb-hover-color;
+}
+
+.mfx-check-list-cell {
+  -fx-background-color: white;
+  -fx-border-color: white;
+  -fx-padding: 5;
+}
+
+.mfx-check-list-cell:hover {
+  -fx-background-color: #F5F5F5;
+  -fx-border-color: #F5F5F5;
+}
+
+.mfx-check-list-cell:selected {
+  -fx-background-color: #E1E1E1;
+  -fx-border-color: #E1E1E1;
+}
+
+.mfx-check-list-cell:empty {
+  -fx-background-color: white;
+  -fx-border-color: white;
+}
+
+.mfx-check-list-cell .data-label {
+  -fx-font-family: "Open Sans Regular";
+  -fx-text-fill: -mfx-text-he;
+}
+
+.mfx-check-list-cell .mfx-ripple-generator {
+  -mfx-ripple-color: #C8C8C8;
+}
+
+.mfx-check-list-cell .mfx-checkbox .ripple-container .mfx-ripple-generator {
+  -mfx-ripple-color: transparent;
+}
+
+/* Text Fields */
+.mfx-text-field {
+  -mfx-main: -mfx-purple;
+  -fx-background-color: white;
+  -fx-background-radius: 5;
+  -fx-border-color: lightgray;
+  -fx-border-radius: 5;
+  -fx-padding: 5;
+  -fx-font-family: "Open Sans Regular";
+}
+
+.mfx-text-field:readonly,
+.mfx-text-field:readonly .text-field {
+  -fx-cursor: default;
+}
+
+.mfx-text-field .text-field {
+  /* Selected text highlight */
+  -fx-highlight-fill: #ECE0FD;
+  /* Prompt text color */
+  -fx-prompt-text-fill: -mfx-text-me;
+}
+
+.mfx-text-field .text-field .text {
+  -fx-font-smoothing-type: lcd;
+}
+
+.mfx-text-field:focus-within {
+  -fx-background-insets: 2;
+  -fx-border-color: -mfx-main;
+  -fx-border-width: 1.5;
+  -fx-border-insets: -0.5;
+}
+
+.mfx-text-field .floating-text {
+  -fx-font-family: "Open Sans Regular";
+  -fx-text-fill: -mfx-text-he;
+}
+
+.mfx-text-field:floating .floating-text {
+  -fx-background-color: white;
+}
+
+.mfx-text-field:focus-within .floating-text {
+  -fx-text-fill: -mfx-main;
+}
+
+.mfx-text-field .measure-unit {
+  -fx-font-family: "Open Sans Regular";
+  -fx-text-fill: -mfx-text-he;
+}
+
+.mfx-text-field .text-field {
+  -fx-text-box-border: transparent;
+  -fx-background-color: transparent;
+  -fx-backrgound-insets: 0;
+  -fx-padding: 0;
+}
+
+.mfx-text-field .text-field:focused {
+  -fx-focus-color: transparent;
+  -fx-faint-focus-color: transparent;
+}
+
+.mfx-text-field:disabled {
+  -fx-border-color: rgba(0, 0, 0, 0.1);
+}
+
+.mfx-text-field:disabled .floating-text {
+  -fx-text-fill: -mfx-text-disabled;
+}
+
+.mfx-text-field:disabled .text-field {
+  -fx-text-inner-color: -mfx-text-disabled;
+}
+
+/* Circle Toggle */
+.mfx-circle-toggle-node {
+  -mfx-unselected-color: white;
+  -mfx-selected-color: #EDEDED;
+  -mfx-unselected-border-color: #E1E1E1;
+  -mfx-selected-border-color: #E1E1E1;
+}
+
+.mfx-circle-toggle-node,
+.mfx-circle-toggle-node:armed,
+.mfx-circle-toggle-node:hover,
+.mfx-circle-toggle-node:focused,
+.mfx-circle-toggle-node:selected,
+.mfx-circle-toggle-node:focused:selected {
+  -fx-background-color: transparent;
+  -fx-background-radius: 0;
+  -fx-background-insets: 0;
+}
+
+.mfx-circle-toggle-node .circle {
+  -fx-fill: -mfx-unselected-color;
+  -fx-stroke: -mfx-unselected-border-color;
+}
+
+.mfx-circle-toggle-node:selected .circle {
+  -fx-fill: -mfx-selected-color;
+  -fx-stroke: -mfx-selected-border-color;
+}
+
+.mfx-circle-toggle-node .mfx-text-field {
+  -mfx-float-mode: disabled;
+  -mfx-gap: 0;
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+}
+
+/* Combo */
+.mfx-combo-box {
+  -mfx-track-color: rgb(230, 230, 230);
+  -mfx-thumb-color: rgb(137, 137, 137);
+  -mfx-thumb-hover-color: rgb(89, 88, 91);
+  -mfx-gap: 0;
+  -fx-padding: 3 5 3 5;
+}
+
+.mfx-combo-box .caret .mfx-ripple-generator {
+  -mfx-ripple-color: rgba(98, 0, 238, 0.1);
+  -mfx-ripple-radius: 14;
+}
+
+.mfx-combo-box:focus-within .caret .mfx-font-icon {
+  -mfx-color: -mfx-main;
+}
+
+.mfx-combo-box .combo-popup .virtual-flow {
+  -fx-background-radius: 5;
+  -fx-border-color: #ebebeb;
+  -fx-border-radius: 5;
+}
+
+.mfx-combo-box:disabled .caret .mfx-font-icon {
+  -mfx-color: #bcbcbc;
+}
+
+.mfx-filter-combo-box {
+  -mfx-caret-visible: true;
+}
+
+.mfx-filter-combo-box:popup {
+  -mfx-caret-visible: false;
+  -mfx-editable: false;
+}
+
+.mfx-filter-combo-box .combo-popup .virtual-flow {
+  -fx-background-color: transparent;
+  -fx-background-radius: 0;
+  -fx-max-height: 200;
+}
+
+.mfx-filter-combo-box .combo-popup .search-container {
+  -fx-background-color: white;
+  -fx-background-radius: 5;
+  -fx-border-color: #ebebeb;
+  -fx-border-radius: 5;
+  -fx-padding: 10 5 5 5;
+}
+
+.mfx-filter-combo-box .combo-popup .search-field {
+  -mfx-gap: 0;
+  -mfx-float-mode: disabled;
+  -fx-padding: 5;
+  -fx-display-caret: false;
+}
+
+.mfx-filter-combo-box .combo-popup .search-field,
+.mfx-filter-combo-box .combo-popup .search-field:focus-within {
+  -fx-border-width: 1;
+  -fx-background-insets: 0;
+  -fx-border-color: lightgray;
+}
+
+.mfx-combo-box-cell {
+  -mfx-main: -mfx-purple;
+  -mfx-hover: rgba(98, 0, 238, 0.1);
+  -mfx-selected: rgba(98, 0, 238, 0.2);
+  -fx-background-color: transparent;
+  -fx-background-radius: 5;
+  -fx-padding: 5;
+}
+
+.mfx-combo-box-cell:hover {
+  -fx-background-color: -mfx-hover;
+}
+
+.mfx-combo-box-cell:selected {
+  -fx-background-color: -mfx-selected;
+}
+
+.mfx-combo-box-cell .data-label {
+  -fx-font-family: "Open Sans Regular";
+  -fx-text-fill: -mfx-text-he;
+}
+
+/* Context Menus */
+.mfx-context-menu .line-separator {
+  -fx-stroke: #e1e1e1;
+  -fx-stroke-width: 0.5;
+}
+
+.mfx-context-menu .mfx-scroll-pane {
+  -fx-background-color: white;
+  -fx-background-radius: 5;
+  -fx-background-insets: 1;
+  -fx-border-color: lightgray;
+  -fx-border-radius: 5;
+  -fx-padding: 5;
+  -fx-max-height: 300;
+}
+
+.mfx-context-menu .mfx-scroll-pane .viewport {
+  -fx-background-color: transparent;
+}
+
+.mfx-menu-item {
+  -fx-background-color: transparent;
+  -fx-background-radius: 5;
+  -fx-min-height: 24;
+  -fx-padding: 0 2 0 2;
+  -fx-font-family: "Open Sans Regular";
+  -fx-text-fill: -mfx-text-he;
+}
+
+.mfx-menu-item:hover {
+  -fx-background-color: #ededed;
+}
+
+.mfx-menu-item .label {
+  -fx-padding: 7 0 7 -7;
+  -fx-font-family: "Open Sans Regular";
+  -fx-text-fill: -mfx-text-he;
+}
+
+.mfx-menu-item .label .text {
+  -fx-font-smoothing-type: lcd;
+}
+
+.mfx-menu-item .accelerator {
+  -fx-padding: 0 5 0 15;
+}
+
+.mfx-menu-item:disabled .mfx-font-icon {
+  -mfx-color: #bcbcbc;
+}
+
+/* Date Picker */
+/********************
+Date Picker
+********************/
+.mfx-date-picker {
+  -fx-padding: 3 5 3 5;
+}
+
+.mfx-date-picker .mfx-icon-wrapper .mfx-ripple-generator {
+  -mfx-ripple-radius: 24;
+  -mfx-ripple-color: #F3F1F6;
+}
+
+.mfx-date-picker:focus-within .icon {
+  -mfx-color: -mfx-purple;
+}
+
+.mfx-date-picker:disabled .icon {
+  -mfx-color: #bcbcbc;
+}
+
+/********************
+Popup
+********************/
+.mfx-date-picker .date-picker-popup .content {
+  -fx-background-color: white;
+  -fx-background-radius: 10;
+  -fx-border-color: #ebebeb;
+  -fx-border-radius: 10;
+  -fx-padding: 15;
+  -fx-min-height: 300;
+}
+
+.mfx-date-picker .date-picker-popup .left-arrow:disabled,
+.mfx-date-picker .date-picker-popup .right-arrow:disabled {
+  -fx-opacity: 0.5;
+}
+
+.mfx-date-picker .date-picker-popup .left-arrow .mfx-ripple-generator,
+.mfx-date-picker .date-picker-popup .right-arrow .mfx-ripple-generator {
+  -mfx-ripple-color: #F0E9FF;
+}
+
+.mfx-date-picker .date-picker-popup .months-combo,
+.mfx-date-picker .date-picker-popup .years-combo {
+  -mfx-float-mode: disabled;
+  -mfx-scroll-on-open: true;
+  -fx-border-color: transparent;
+  -fx-min-width: 120;
+  -fx-min-height: 40;
+  -fx-font-family: "Open Sans SemiBold";
+}
+
+.mfx-date-picker .date-picker-popup .months-combo:focus-within,
+.mfx-date-picker .date-picker-popup .years-combo:focus-within {
+  -fx-background-color: #f8f7fa;
+  -fx-text-fill: -mfx-purple;
+}
+
+.mfx-date-picker .date-picker-popup .months-combo .mfx-icon-wrapper .mfx-ripple-generator,
+.mfx-date-picker .date-picker-popup .years-combo .mfx-icon-wrapper .mfx-ripple-generator {
+  -mfx-ripple-color: #F0E9FF;
+}
+
+.mfx-date-picker .date-picker-popup .months-combo .virtual-flow .mfx-combo-box-cell,
+.mfx-date-picker .date-picker-popup .years-combo .virtual-flow .mfx-combo-box-cell {
+  -fx-font-family: "Open Sans SemiBold";
+}
+
+.mfx-date-picker .date-picker-popup .months-combo .virtual-flow .mfx-combo-box-cell:hover,
+.mfx-date-picker .date-picker-popup .years-combo .virtual-flow .mfx-combo-box-cell:hover {
+  -fx-background-color: #f8f7fa;
+}
+
+.mfx-date-picker .date-picker-popup .months-combo .virtual-flow .mfx-combo-box-cell:selected,
+.mfx-date-picker .date-picker-popup .years-combo .virtual-flow .mfx-combo-box-cell:selected {
+  -fx-background-color: #f8f7fa;
+}
+
+.mfx-date-picker .date-picker-popup .months-combo .virtual-flow .mfx-combo-box-cell:selected .label,
+.mfx-date-picker .date-picker-popup .years-combo .virtual-flow .mfx-combo-box-cell:selected .label {
+  -fx-text-fill: -mfx-purple;
+}
+
+.mfx-date-picker .date-picker-popup .week-day {
+  -fx-font-family: "Open Sans SemiBold";
+  -fx-text-fill: -mfx-text-he;
+  -fx-padding: 0 0 5 0;
+}
+
+.mfx-date-cell {
+  -fx-font-family: "Open Sans Regular";
+  -fx-font-size: 13;
+  -fx-text-fill: -mfx-text-he;
+  -fx-padding: 0 1 0 0;
+  -fx-pref-width: 32;
+  -fx-pref-height: 32;
+  -fx-background-radius: 100%;
+  -fx-border-radius: 100%;
+}
+
+.mfx-date-cell .text {
+  -fx-font-smoothing-type: lcd;
+}
+
+.mfx-date-cell:extra {
+  -fx-text-fill: #a9a9a9;
+}
+
+.mfx-date-cell:current {
+  -fx-text-fill: #7a0ed9;
+  -fx-background-color: #F7F6F9;
+  -fx-font-family: "Open Sans SemiBold";
+}
+
+.mfx-date-cell:selected {
+  -fx-text-fill: white;
+  -fx-background-color: #7a0ed9;
+  -fx-font-family: "Open Sans SemiBold";
+}
+
+/* Dialogs */
+/********************
+Base
+********************/
+.mfx-dialog {
+  -fx-background-color: white;
+  -fx-background-radius: 10;
+  -fx-border-color: #ebebeb;
+  -fx-border-radius: 10;
+  -fx-padding: 10;
+}
+
+.mfx-dialog #alwaysOnTop:hover {
+  -fx-background-color: derive(-mfx-purple, 140%);
+}
+
+.mfx-dialog #alwaysOnTop:hover .mfx-font-icon {
+  -mfx-color: derive(-mfx-purple, 30%);
+}
+
+.mfx-dialog:always-on-top #alwaysOnTop {
+  -fx-background-color: derive(-mfx-purple, 140%);
+}
+
+.mfx-dialog:always-on-top #alwaysOnTop .mfx-font-icon {
+  -mfx-color: derive(-mfx-purple, 30%);
+}
+
+.mfx-dialog #minimize:hover {
+  -fx-background-color: derive(-mfx-blue, 105%);
+}
+
+.mfx-dialog #minimize:hover .mfx-font-icon {
+  -mfx-color: -mfx-blue;
+}
+
+.mfx-dialog #close:hover {
+  -fx-background-color: derive(-mfx-red, 90%);
+}
+
+.mfx-dialog #close:hover .mfx-font-icon {
+  -mfx-color: -mfx-red;
+}
+
+.mfx-dialog .header-label {
+  -fx-font-family: "Open Sans Bold";
+  -fx-font-size: 14;
+  -fx-text-fill: -mfx-text-he;
+  -fx-graphic-text-gap: 10;
+}
+
+.mfx-dialog .header-label .text {
+  -fx-font-smoothing-type: lcd;
+}
+
+.mfx-dialog .content-container {
+  -fx-padding: 10 0 10 0;
+}
+
+.mfx-dialog .content-container .scroll-bar:vertical {
+  -fx-pref-width: 15;
+}
+
+.mfx-dialog .content {
+  -fx-font-family: "Open Sans Regular";
+  -fx-text-fill: -mfx-text-he;
+}
+
+.mfx-dialog .content .text {
+  -fx-font-smoothing-type: lcd;
+}
+
+.mfx-dialog .actions-pane .mfx-button {
+  -fx-background-color: transparent;
+  -fx-background-radius: 5;
+  -fx-padding: 7 10 7 10;
+  -fx-font-family: "Open Sans Bold";
+  -fx-text-fill: -mfx-text-he;
+}
+
+.mfx-dialog .actions-pane .mfx-button .mfx-ripple-generator {
+  -mfx-auto-clip: true;
+  -mfx-background-opacity: 0.3;
+  -mfx-ripple-radius: 50;
+}
+
+.mfx-dialog .actions-pane .mfx-button .text {
+  -fx-font-smoothing-type: lcd;
+}
+
+.mfx-dialog .actions-pane .mfx-button:hover {
+  -fx-background-color: #ededf0;
+}
+
+/********************
+Info
+********************/
+.mfx-info-dialog .header-label .mfx-font-icon {
+  -mfx-color: derive(-mfx-blue, 60%);
+}
+
+.mfx-info-dialog .actions-pane .mfx-button {
+  -fx-text-fill: derive(-mfx-blue, -20%);
+}
+
+.mfx-info-dialog .actions-pane .mfx-button .mfx-ripple-generator {
+  -mfx-ripple-color: derive(-mfx-blue, 80%);
+}
+
+.mfx-info-dialog .actions-pane .mfx-button:hover {
+  -fx-background-color: derive(-mfx-blue, 110%);
+}
+
+/********************
+Warn
+********************/
+.mfx-warn-dialog .header-label .mfx-font-icon {
+  -mfx-color: derive(-mfx-orange, 35%);
+}
+
+.mfx-warn-dialog .actions-pane .mfx-button {
+  -fx-text-fill: derive(-mfx-orange, -5%);
+}
+
+.mfx-warn-dialog .actions-pane .mfx-button .mfx-ripple-generator {
+  -mfx-ripple-color: derive(-mfx-orange, 60%);
+}
+
+.mfx-warn-dialog .actions-pane .mfx-button:hover {
+  -fx-background-color: derive(-mfx-orange, 90%);
+}
+
+/********************
+Error
+********************/
+.mfx-error-dialog .header-label .mfx-font-icon {
+  -mfx-color: derive(-mfx-red, 20%);
+}
+
+.mfx-error-dialog .actions-pane .mfx-button {
+  -fx-text-fill: derive(-mfx-red, -5%);
+}
+
+.mfx-error-dialog .actions-pane .mfx-button .mfx-ripple-generator {
+  -mfx-ripple-color: derive(-mfx-red, 65%);
+}
+
+.mfx-error-dialog .actions-pane .mfx-button:hover {
+  -fx-background-color: derive(-mfx-red, 95%);
+}
+
+.mfx-filter-dialog {
+  -mfx-base-color: rgb(76, 0, 225);
+}
+
+.mfx-filter-dialog #headerLabel {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -mfx-font-family: "Open Sans SemiBold";
+}
+
+.mfx-filter-dialog > .mfx-button {
+  -fx-border-color: -mfx-base-color;
+  -fx-border-radius: 5;
+  -fx-font-family: "Open Sans SemiBold";
+}
+
+.mfx-filter-dialog > .mfx-button .text {
+  -fx-fill: -mfx-base-color;
+}
+
+.mfx-filter-dialog > .mfx-button .mfx-ripple-generator {
+  -mfx-ripple-color: derive(-mfx-base-color, 150%);
+}
+
+.mfx-filter-dialog .mfx-list-view .mfx-list-cell:hover {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+}
+
+/* Filter Pane */
+.mfx-filter-pane {
+  -mfx-main: -mfx-purple;
+  -mfx-main-light: #C69DFF;
+  -mfx-main-lighter: #f8f6ff;
+  -mfx-gray: #6b6b6b;
+  -fx-background-color: white;
+  -fx-background-radius: 10;
+  -fx-padding: 7 14 7 14;
+}
+
+/********************
+Header
+********************/
+.mfx-filter-pane .header {
+  -fx-padding: 0 0 7 0;
+}
+
+.mfx-filter-pane .header-label {
+  -fx-font-family: "Open Sans SemiBold";
+  -fx-font-size: 14;
+  -fx-text-fill: -mfx-gray;
+  -fx-font-smoothing-type: gray;
+  -fx-padding: 5;
+}
+
+.mfx-filter-pane .header #filterIcon .mfx-ripple-generator {
+  -mfx-ripple-radius: 20;
+  -mfx-ripple-color: derive(-mfx-main, 120%);
+}
+
+.mfx-filter-pane .header #resetIcon .mfx-ripple-generator {
+  -mfx-ripple-radius: 20;
+  -mfx-ripple-color: derive(-mfx-red, 60%);
+}
+
+.mfx-filter-pane .header #filterIcon .mfx-font-icon,
+.mfx-filter-pane .header #resetIcon .mfx-font-icon {
+  -mfx-color: -mfx-gray;
+}
+
+.mfx-filter-pane .header #filterIcon:hover {
+  -fx-background-color: derive(-mfx-main, 150%);
+}
+
+.mfx-filter-pane .header #resetIcon:hover {
+  -fx-background-color: derive(-mfx-red, 90%);
+}
+
+.mfx-filter-pane .header #filterIcon:hover .mfx-font-icon {
+  -mfx-color: -mfx-main;
+}
+
+.mfx-filter-pane .header #resetIcon:hover .mfx-font-icon {
+  -mfx-color: -mfx-red;
+}
+
+/********************
+Filter Builder
+********************/
+.mfx-filter-pane .filter-combo {
+  -fx-min-height: 36;
+  -fx-min-width: 120;
+}
+
+.mfx-filter-pane .predicates-combo {
+  -fx-min-height: 36;
+  -fx-min-width: 180;
+}
+
+.mfx-filter-pane .mfx-combo-box {
+  -fx-background-color: -mfx-main-lighter;
+  -fx-background-radius: 15;
+  -fx-border-color: #ebebeb;
+  -fx-border-radius: 15;
+  -fx-font-family: "Open Sans SemiBold";
+  -fx-font-size: 14;
+  -fx-text-fill: -mfx-gray;
+}
+
+.mfx-filter-pane .mfx-combo-box .caret .mfx-font-icon {
+  -mfx-color: gray;
+}
+
+.mfx-filter-pane .mfx-combo-box .popup .virtual-flow {
+  -fx-background-color: -mfx-main-lighter;
+  -fx-border-color: #e6e6e6;
+  -fx-border-radius: 5;
+}
+
+.mfx-filter-pane .mfx-combo-box .popup .virtual-flow .mfx-combo-box-cell,
+.mfx-filter-pane .mfx-combo-box .popup .virtual-flow .mfx-combo-box-cell:selected {
+  -fx-background-color: transparent;
+}
+
+.mfx-filter-pane .mfx-combo-box .popup .virtual-flow .mfx-combo-box-cell:hover {
+  -fx-background-color: #F4EBFF;
+}
+
+.mfx-filter-pane .mfx-combo-box .popup .virtual-flow .mfx-combo-box-cell .label {
+  -fx-text-fill: -mfx-gray;
+}
+
+.mfx-filter-pane .mfx-combo-box .popup .virtual-flow .mfx-combo-box-cell:selected .label {
+  -fx-text-fill: -mfx-main;
+}
+
+.mfx-filter-pane .mfx-combo-box:focus-within {
+  -fx-background-color: -mfx-main;
+  -fx-background-insets: 0;
+  -fx-border-color: transparent;
+  -fx-border-width: 1;
+  -fx-border-insets: 0;
+  -fx-text-fill: white;
+}
+
+.mfx-filter-pane .mfx-combo-box .caret .mfx-ripple-generator {
+  -mfx-ripple-color: #C68EF8;
+}
+
+.mfx-filter-pane .mfx-combo-box:focus-within .caret .mfx-font-icon {
+  -mfx-color: white;
+}
+
+.mfx-filter-pane .mfx-text-field {
+  -fx-min-width: 180;
+  -fx-min-height: 36;
+  -fx-background-color: transparent;
+  -fx-border-color: #ebebeb;
+  -fx-border-radius: 15;
+  -fx-padding: 7 8 7 8;
+  -fx-font-family: "Open Sans SemiBold";
+}
+
+.mfx-filter-pane .mfx-text-field:focus-within {
+  -fx-background-insets: 0;
+  -fx-border-width: 1;
+  -fx-border-insets: 0;
+}
+
+.mfx-filter-pane .mfx-button {
+  -fx-pref-width: 135;
+  -fx-pref-height: 36;
+  -fx-background-color: -mfx-main;
+  -fx-background-radius: 15;
+  -fx-text-fill: white;
+  -fx-font-family: "Open Sans Bold";
+}
+
+.mfx-filter-pane .mfx-button .mfx-ripple-generator {
+  -mfx-ripple-color: #C68EF8;
+  -mfx-ripple-radius: 45;
+}
+
+/********************
+Scroll Pane
+********************/
+.mfx-filter-pane .mfx-scroll-pane {
+  -fx-min-height: 100;
+}
+
+.mfx-filter-pane .mfx-scroll-pane .scroll-bar:vertical {
+  -fx-pref-width: 15;
+}
+
+/********************
+Active Filters
+********************/
+.mfx-filter-pane .active-filter {
+  -fx-min-height: 32;
+  -fx-background-color: #B379C1;
+  -fx-background-radius: 15;
+  -fx-padding: 0 15 0 15;
+}
+
+.mfx-filter-pane .active-filter .mfx-font-icon {
+  -mfx-color: white;
+}
+
+.mfx-filter-pane .active-filter .label {
+  -fx-font-family: "Open Sans Regular";
+  -fx-text-fill: white;
+}
+
+.mfx-filter-pane .active-filter .function-text {
+  -fx-font-family: "Open Sans Bold";
+}
+
+.mfx-filter-pane .and-or-text {
+  -fx-font-family: "Open Sans Bold";
+  -fx-font-size: 14;
+  -fx-fill: -mfx-gray;
+}
+
+/* List View */
+.mfx-list-view {
+  -mfx-track-color: rgb(230, 230, 230);
+  -mfx-thumb-color: rgb(137, 137, 137);
+  -mfx-thumb-hover-color: rgb(89, 88, 91);
+}
+
+.mfx-list-view .virtual-flow .scroll-bar .track {
+  -fx-background-color: -mfx-track-color;
+}
+
+.mfx-list-view .virtual-flow .scroll-bar .thumb {
+  -fx-background-color: -mfx-thumb-color;
+}
+
+.mfx-list-view .virtual-flow .scroll-bar .thumb:pressed,
+.mfx-list-view .virtual-flow .scroll-bar .thumb:hover {
+  -fx-background-color: -mfx-thumb-hover-color;
+}
+
+.mfx-list-cell {
+  -fx-background-color: white;
+  -fx-border-color: white;
+  -fx-padding: 5;
+}
+
+.mfx-list-cell:hover {
+  -fx-background-color: #F5F5F5;
+  -fx-border-color: #F5F5F5;
+}
+
+.mfx-list-cell:selected {
+  -fx-background-color: #E1E1E1;
+  -fx-border-color: #E1E1E1;
+}
+
+.mfx-list-cell:empty {
+  -fx-background-color: white;
+  -fx-border-color: white;
+}
+
+.mfx-list-cell .data-label {
+  -fx-font-family: "Open Sans Regular";
+  -fx-text-fill: -mfx-text-he;
+}
+
+.mfx-list-cell .mfx-ripple-generator {
+  -mfx-ripple-color: #C8C8C8;
+}
+
+/* Magnifier */
+.mfx-magnifier .lens-container {
+  -fx-border-color: black;
+  -fx-border-radius: 100%;
+  -fx-border-insets: -1;
+}
+
+.mfx-magnifier .lens-container .lens .cursor {
+  -fx-stroke: red;
+  -fx-stroke-width: 0.3;
+  -fx-arc-width: 0.3;
+  -fx-arc-height: 0.3;
+}
+
+.mfx-magnifier .lens-container .lens .label {
+  -fx-background-color: white;
+  -fx-background-radius: 5;
+  -fx-border-color: lightgray;
+  -fx-border-radius: 5;
+  -fx-padding: 5;
+  -fx-alignment: center;
+  -fx-font-family: "Open Sans SemiBold";
+  -fx-text-fill: -mfx-text-he;
+}
+
+.mfx-magnifier .color-picker {
+  -fx-background-color: white;
+  -fx-background-radius: 5;
+  -fx-border-color: lightgray;
+  -fx-border-radius: 5;
+  -fx-padding: 5 10 5 10;
+  -fx-min-width: 180;
+}
+
+.mfx-magnifier .color-picker .color-square {
+  -fx-stroke: -mfx-text-he;
+  -fx-arc-width: 5;
+  -fx-arc-height: 5;
+}
+
+.mfx-magnifier .color-picker .label {
+  -fx-font-family: "Open Sans SemiBold";
+  -fx-text-fill: -mfx-text-he;
+}
+
+/* Notifications */
+.mfx-notification-center {
+  -fx-background-color: transparent;
+}
+
+/*************************
+Notifications Container
+*************************/
+.mfx-notification-center .popup .notifications-container {
+  -fx-background-color: white;
+  -fx-background-radius: 5;
+  -fx-border-color: lightgray;
+  -fx-border-radius: 5;
+  -fx-border-width: 0.7;
+  -fx-padding: 5 0 5 0;
+}
+
+/*************************
+Notifications Icon
+*************************/
+.mfx-notification-center .notifications-icon {
+  -fx-background-color: white;
+  -fx-background-radius: 100%;
+  -fx-border-color: lightgray;
+  -fx-border-radius: 100%;
+}
+
+.mfx-notification-center .counter {
+  -fx-background-color: -mfx-purple;
+  -fx-background-radius: 100%;
+}
+
+.mfx-notification-center .counter .text {
+  -fx-fill: white;
+  -fx-font-family: "Open Sans Bold";
+  -fx-font-smoothing-type: gray;
+}
+
+/*************************
+Header
+*************************/
+.mfx-notification-center .popup .notifications-container .header {
+  -fx-border-color: transparent transparent lightgray transparent;
+  -fx-border-width: 0.7;
+  -fx-padding: 5 0 5 0;
+}
+
+.mfx-notification-center .popup .notifications-container .header .mfx-text-field {
+  -mfx-float-mode: disabled;
+  -fx-border-color: transparent;
+  -fx-font-family: "Open Sans SemiBold";
+  -fx-font-size: 14;
+  -fx-text-fill: -mfx-onyx;
+}
+
+.mfx-notification-center .popup .notifications-container .header .mfx-toggle-button {
+  -mfx-toggle-color: -mfx-purple;
+  -mfx-untoggle-line-color: derive(-mfx-onyx, 30%);
+  -fx-font-family: "Open Sans SemiBold";
+  -fx-font-size: 12;
+  -fx-text-fill: -mfx-onyx;
+  -fx-font-smoothing-type: gray;
+}
+
+/*************************
+Virtual Flow
+*************************/
+.mfx-notification-center .popup .notifications-container .virtual-flow {
+  -fx-background-color: transparent;
+  -track-color: rgb(230, 230, 230);
+  -thumb-color: rgb(137, 137, 137);
+  -thumb-hover-color: rgb(89, 88, 91);
+}
+
+.mfx-notification-center .popup .notifications-container .virtual-flow .mfx-notification-cell #check {
+  -mfx-checked-color: -mfx-purple;
+  -mfx-unchecked-color: -mfx-onyx;
+}
+
+.mfx-notification-center .popup .notifications-container .virtual-flow .mfx-notification-cell #check .ripple-container .mfx-ripple-generator {
+  -mfx-ripple-color: derive(-mfx-purple, 125%);
+}
+
+.mfx-notification-center .popup .notifications-container .virtual-flow .mfx-notification-cell .mfx-text-field {
+  -mfx-float-mode: disabled;
+  -fx-border-color: transparent;
+}
+
+/*************************
+Actions
+*************************/
+.mfx-notification-center .actions {
+  -fx-border-color: lightgray transparent transparent transparent;
+  -fx-border-width: 0.7;
+  -fx-padding: 10;
+}
+
+.mfx-notification-center .actions .mfx-font-icon {
+  -mfx-color: -mfx-onyx;
+}
+
+.mfx-notification-center .notifications-container .actions .mfx-icon-wrapper .mfx-ripple-generator {
+  -mfx-ripple-radius: 24;
+  -mfx-ripple-color: derive(-mfx-purple, 150%);
+}
+
+/*************************
+Context Menu
+*************************/
+.mfx-notification-center .mfx-context-menu .mfx-scroll-pane {
+  -fx-min-width: 200;
+}
+
+.mfx-notification-center .mfx-context-menu .separator {
+  -fx-padding: 5 0 5 0;
+  -fx-font-family: "Open Sans SemiBold";
+  -fx-text-fill: -mfx-text-he;
+}
+
+.mfx-notification-center .mfx-context-menu .mfx-menu-item .mfx-icon-wrapper {
+  -mfx-size: 0;
+}
+
+.mfx-notification-center .mfx-context-menu .mfx-menu-item:hover {
+  -fx-background-color: derive(-mfx-purple, 150%);
+}
+
+/* Pagination */
+/********************
+Pagination
+********************/
+.mfx-pagination .pages-bar {
+  -fx-background-color: #f0f0f0;
+  -fx-background-radius: 30;
+  -fx-padding: 0 10 0 10;
+}
+
+.mfx-pagination .mfx-icon-wrapper {
+  -fx-background-color: #f0f0f0;
+}
+
+.mfx-pagination .mfx-ripple-generator {
+  -mfx-ripple-radius: 24;
+}
+
+/********************
+Pages
+********************/
+.mfx-pagination .mfx-page {
+  -fx-background-radius: 10;
+  -fx-pref-width: 32;
+  -fx-pref-height: 32;
+  -fx-max-width: 32;
+  -fx-max-height: 32;
+  -fx-font-family: "Open Sans SemiBold";
+  -fx-text-fill: -mfx-text-he;
+}
+
+.mfx-pagination .mfx-page:selected {
+  -fx-background-color: -mfx-purple;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 15, 0.16, 2, 4);
+  -fx-font-size: 14;
+  -fx-text-fill: white;
+}
+
+/********************
+Popup
+********************/
+.pages-popup .virtual-flow {
+  -fx-background-color: #f8f6ff;
+  -fx-background-radius: 5;
+  -fx-border-color: #e6e6e6;
+  -fx-border-radius: 5;
+}
+
+.pages-popup .mfx-list-view {
+  -fx-pref-width: 100;
+  -fx-pref-height: 100;
+}
+
+.pages-popup .virtual-flow .mfx-list-cell {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+}
+
+.pages-popup .virtual-flow .mfx-list-cell:hover {
+  -fx-background-color: #F4EBFF;
+  -fx-background-radius: 5;
+}
+
+/* Password Fields */
+.mfx-password-field:disabled .eye-icon {
+  -mfx-color: #bcbcbc;
+}
+
+/* Progress */
+.mfx-progress-bar .track {
+  -fx-fill: #E0E0E0;
+}
+
+.mfx-progress-bar .bar1,
+.mfx-progress-bar:indeterminate .bar1,
+.mfx-progress-bar:indeterminate .bar2 {
+  -fx-fill: #0F9D58;
+}
+
+.mfx-progress-bar .track,
+.mfx-progress-bar .bar1,
+.mfx-progress-bar .bar2 {
+  -fx-arc-height: 6;
+  -fx-arc-width: 6;
+}
+
+.mfx-progress-bar:disabled .track {
+  -fx-fill: #bcbcbc;
+}
+
+.mfx-progress-spinner:determinate .arc {
+  -fx-stroke: #0F9D58;
+}
+
+.mfx-progress-spinner .percentage {
+  -fx-font-family: "Open Sans SemiBold";
+  -fx-font-smoothing-type: gray;
+  -fx-text-fill: -mfx-text-he;
+}
+
+.mfx-progress-spinner:determinate .percentage {
+  -fx-fill: #4d4d4d;
+}
+
+.mfx-progress-spinner:disabled .arc {
+  visibility: hidden;
+}
+
+.mfx-progress-spinner:disabled .track {
+  -fx-stroke: #bcbcbc;
+}
+
+.mfx-spinner {
+  -fx-background-color: white;
+  -fx-background-radius: 5;
+  -fx-border-color: lightgray;
+  -fx-border-radius: 5;
+  -fx-padding: 5 10 5 10;
+}
+
+.mfx-spinner:focused,
+.mfx-spinner:focus-within {
+  -fx-border-color: -mfx-purple;
+}
+
+.mfx-spinner .mfx-text-field {
+  -fx-background-insets: 0;
+  -fx-border-color: transparent;
+  -fx-border-width: 1;
+  -fx-border-insets: 0;
+  -fx-padding: 5 10 5 10;
+}
+
+.mfx-spinner .mfx-icon-wrapper {
+  -fx-background-color: derive(-mfx-purple, 155%);
+  -mfx-size: 27;
+}
+
+.mfx-spinner .mfx-icon-wrapper:focused,
+.mfx-spinner .mfx-icon-wrapper:hover {
+  -fx-background-color: derive(-mfx-purple, 50%);
+}
+
+.mfx-spinner .mfx-icon-wrapper:focused .mfx-font-icon,
+.mfx-spinner .mfx-icon-wrapper:hover .mfx-font-icon {
+  -mfx-color: white;
+}
+
+.mfx-spinner .mfx-icon-wrapper .mfx-font-icon {
+  -mfx-color: -mfx-purple;
+  -mfx-size: 14;
+}
+
+.mfx-spinner .mfx-icon-wrapper .mfx-ripple-generator {
+  -mfx-ripple-radius: 24;
+  -mfx-ripple-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Radio Button */
+.mfx-radio-button {
+  -mfx-main: #6200EE;
+  -mfx-secondary: #424242;
+  -fx-font-family: "Open Sans Regular";
+  -fx-text-fill: -mfx-text-he;
+  -fx-cursor: HAND;
+}
+
+.mfx-radio-button .radio {
+  -fx-stroke-width: 2.0;
+  -fx-fill: transparent;
+  -fx-stroke: -mfx-secondary;
+}
+
+.mfx-radio-button .dot {
+  -fx-fill: -mfx-main;
+}
+
+.mfx-radio-button .mfx-ripple-generator {
+  -mfx-animation-speed: 2;
+  -mfx-ripple-color: derive(-mfx-main, 110%);
+  -mfx-ripple-radius: 8;
+}
+
+.mfx-radio-button:selected .radio {
+  -fx-stroke: -mfx-main;
+}
+
+.mfx-radio-button:disabled:selected .radio {
+  -fx-stroke: -mfx-secondary;
+}
+
+.mfx-radio-button:disabled:selected .dot {
+  -fx-fill: -mfx-secondary;
+}
+
+/* Rectangle Toggle */
+.mfx-rectangle-toggle-node {
+  -mfx-unselected-color: white;
+  -mfx-selected-color: #EDEDED;
+  -mfx-unselected-border-color: #E1E1E1;
+  -mfx-selected-border-color: #E1E1E1;
+}
+
+.mfx-rectangle-toggle-node,
+.mfx-rectangle-toggle-node:armed,
+.mfx-rectangle-toggle-node:hover,
+.mfx-rectangle-toggle-node:focused,
+.mfx-rectangle-toggle-node:selected,
+.mfx-rectangle-toggle-node:focused:selected {
+  -fx-background-color: TRANSPARENT, TRANSPARENT, TRANSPARENT, TRANSPARENT;
+  -fx-background-radius: 3px;
+  -fx-background-insets: 0px;
+}
+
+.mfx-rectangle-toggle-node {
+  -fx-background-color: -mfx-unselected-color;
+  -fx-background-radius: 10;
+  -fx-border-color: -mfx-unselected-border-color;
+  -fx-border-radius: 10;
+  -fx-padding: 0;
+}
+
+.mfx-rectangle-toggle-node:selected,
+.mfx-rectangle-toggle-node:focused:selected {
+  -fx-background-color: -mfx-selected-color;
+  -fx-background-radius: 10;
+  -fx-border-color: -mfx-selected-border-color;
+  -fx-border-radius: 10;
+}
+
+.mfx-rectangle-toggle-node .mfx-text-field {
+  -mfx-float-mode: disabled;
+  -mfx-gap: 0;
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+}
+
+/* Slider */
+.mfx-slider {
+  -mfx-main-color: rgb(98, 0, 238);
+  -mfx-main-color-hover: rgba(98, 0, 238, 0.1);
+  -mfx-main-color-pressed: rgba(98, 0, 238, 0.3);
+  -mfx-disabled-color: rgb(158, 158, 158);
+}
+
+.mfx-slider .track,
+.mfx-slider .bar {
+  -fx-arc-height: 6;
+  -fx-arc-width: 6;
+}
+
+.mfx-slider .track {
+  -fx-fill: derive(-mfx-main-color, 140%);
+}
+
+.mfx-slider .bar {
+  -fx-fill: -mfx-main-color;
+}
+
+.mfx-slider .thumb-container .thumb {
+  -mfx-color: -mfx-main-color;
+}
+
+.mfx-slider .thumb-container .thumb-radius {
+  -mfx-color: transparent;
+}
+
+.mfx-slider .thumb-container:hover .thumb-radius {
+  -mfx-color: -mfx-main-color-hover;
+}
+
+.mfx-slider .thumb-container:pressed .thumb-radius {
+  -mfx-color: -mfx-main-color-pressed;
+}
+
+.mfx-slider .thumb-container .mfx-ripple-generator {
+  -mfx-ripple-color: -mfx-main-color;
+}
+
+.mfx-slider .tick-even,
+.mfx-slider .tick-odd {
+  -mfx-color: derive(-mfx-main-color, 30%);
+}
+
+.mfx-slider .axis-minor-tick-mark {
+  -fx-stroke: -mfx-main-color-hover;
+}
+
+#popupContent {
+  -fx-background-color: #6E6E6E;
+  -fx-background-radius: 6;
+}
+
+#popupText {
+  -fx-font-family: "Open Sans SemiBold";
+  -fx-font-size: 13;
+  -fx-text-fill: white;
+}
+
+#popupCaret {
+  -mfx-color: #6E6E6E;
+}
+
+.mfx-slider:disabled .bar,
+.mfx-slider:disabled .tick-even,
+.mfx-slider:disabled .tick-odd,
+.mfx-slider:disabled .thumb-container .thumb {
+  -mfx-color: -mfx-disabled-color;
+  -fx-fill: -mfx-disabled-color;
+}
+
+.mfx-slider:disabled .track {
+  -fx-fill: derive(-mfx-disabled-color, 75%);
+}
+
+.mfx-slider:disabled .axis-minor-tick-mark {
+  -fx-stroke: derive(-mfx-disabled-color, 60%);
+}
+
+/* Stepper */
+.mfx-stepper {
+  -mfx-base-color: -mfx-purple;
+  -mfx-alt-color: #BEBEBE;
+  -mfx-bar-background: #EBEBEB;
+  -mfx-progress-color: -mfx-base-color;
+}
+
+.mfx-stepper .track {
+  -fx-fill: -mfx-bar-background;
+}
+
+.mfx-stepper .bar {
+  -fx-fill: -mfx-progress-color;
+}
+
+.mfx-stepper .buttons-box .mfx-button {
+  -mfx-depth-level: level1;
+  -fx-background-color: white;
+  -fx-border-color: -mfx-charcoal;
+  -fx-background-radius: 20;
+  -fx-border-radius: 20;
+  -fx-font-family: 'Open Sans SemiBold';
+  -fx-font-size: 13;
+}
+
+.mfx-stepper .buttons-box .mfx-button .text {
+  -fx-fill: -mfx-text-he;
+}
+
+.mfx-stepper .buttons-box .mfx-button:focused {
+  -fx-background-color: -mfx-base-color;
+  -fx-border-color: -mfx-base-color;
+}
+
+.mfx-stepper .buttons-box .mfx-button:focused .text {
+  -fx-fill: white;
+}
+
+.mfx-stepper .buttons-box .mfx-button .mfx-ripple-generator {
+  -mfx-ripple-color: derive(-mfx-base-color, 70%);
+  -mfx-ripple-radius: 60px;
+}
+
+.mfx-stepper-toggle #circle {
+  -fx-fill: white;
+  -fx-stroke: #EBEBEB;
+}
+
+.mfx-stepper-toggle .mfx-text-field {
+  -mfx-float-mode: disabled;
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-font-family: "Open Sans SemiBold";
+  -fx-font-size: 14;
+  -fx-pref-width: 100;
+  -fx-alignment: CENTER;
+}
+
+.mfx-stepper-toggle:selected #circle {
+  -fx-stroke: -mfx-purple;
+}
+
+.mfx-stepper-toggle:selected .mfx-text-field {
+  -fx-text-fill: -mfx-purple;
+}
+
+.mfx-stepper-toggle:completed #circle {
+  -fx-stroke: -mfx-purple;
+  -fx-fill: -mfx-purple;
+}
+
+.mfx-stepper-toggle:invalid #circle {
+  -fx-stroke: -mfx-red;
+}
+
+.mfx-stepper-toggle:invalid .mfx-text-field {
+  -fx-text-fill: -mfx-red;
+}
+
+/* Table View */
+.mfx-table-view {
+  -fx-background-color: white;
+  -fx-background-radius: 5;
+  -fx-border-color: lightgray;
+  -fx-border-radius: 5;
+  -fx-padding: 0 0 2 0;
+}
+
+.mfx-table-view .columns-container {
+  -fx-border-color: transparent transparent lightgray transparent;
+}
+
+.mfx-table-view .default-footer {
+  -fx-border-color: lightgray transparent transparent transparent;
+  -fx-padding: 10;
+}
+
+.mfx-table-view .default-footer .mfx-icon-wrapper .mfx-ripple-generator {
+  -mfx-ripple-radius: 18;
+}
+
+/********************
+Table Columns
+********************/
+.mfx-table-column {
+  -fx-border-color: transparent white transparent transparent;
+  -fx-padding: 10 15 10 15;
+}
+
+.mfx-table-column:hover,
+.mfx-table-column:dragged {
+  -fx-border-color: transparent lightgray transparent transparent;
+}
+
+/********************
+Table Rows
+********************/
+.mfx-table-row {
+  -fx-background-color: transparent;
+}
+
+.mfx-table-row:hover {
+  -fx-background-color: #F5F5F5;
+}
+
+.mfx-table-row:selected {
+  -fx-background-color: #E1E1E1;
+}
+
+.mfx-table-row .mfx-ripple-generator {
+  -mfx-ripple-radius: 30;
+  -mfx-ripple-color: #C8C8C8;
+}
+
+/********************
+Table Row Cells
+********************/
+.mfx-table-row-cell {
+  -fx-background-color: transparent;
+  -fx-padding: 5 15 5 15;
+}
+
+.mfx-table-row-cell,
+.mfx-table-row-cell:focused {
+  -fx-border-color: transparent;
+}
+
+/********************
+Virtual Flow
+********************/
+.mfx-table-view .virtual-flow {
+  -fx-background-color: transparent;
+  -track-color: rgb(230, 230, 230);
+  -thumb-color: rgb(137, 137, 137);
+  -thumb-hover-color: rgb(89, 88, 91);
+}
+
+/* Switch */
+.mfx-toggle-button {
+  -mfx-main: #6200EE;
+  -mfx-secondary: #424242;
+  -fx-padding: 10;
+}
+
+.mfx-toggle-button .mfx-ripple-generator {
+  -mfx-animation-speed: 1.5;
+  -mfx-ripple-radius: 10;
+  -mfx-ripple-color: -mfx-main;
+  -mfx-ripple-opacity: 0.4;
+}
+
+.mfx-toggle-button .circle {
+  -fx-stroke: transparent;
+  -fx-fill: -mfx-secondary;
+}
+
+.mfx-toggle-button .line {
+  -fx-stroke-line-cap: ROUND;
+  -fx-stroke: -mfx-secondary;
+  -fx-opacity: 0.3;
+}
+
+.mfx-toggle-button:selected .mfx-ripple-generator {
+  -mfx-ripple-color: -mfx-secondary;
+}
+
+.mfx-toggle-button:selected .circle {
+  -fx-fill: -mfx-main;
+}
+
+.mfx-toggle-button:selected .line {
+  -fx-stroke: -mfx-main;
+}
+
+.mfx-toggle-button:disabled .circle,
+.mfx-toggle-button:disabled:selected .circle {
+  -fx-fill: gray;
+}
+
+.mfx-toggle-button:disabled .line,
+.mfx-toggle-button:disabled:selected .line {
+  -fx-stroke: gray;
+}
+
+/* Tooltip */
+.mfx-tooltip .container {
+  -fx-background-color: white;
+  -fx-background-radius: 5;
+  -fx-border-color: lightgray;
+  -fx-border-radius: 5;
+  -fx-max-width: 400;
+}
+
+.mfx-tooltip .container .label {
+  -fx-padding: 5;
+  -fx-font-family: "Open Sans Regular";
+  -fx-text-fill: -mfx-text-he;
+  -fx-graphic-text-gap: 10;
+}
+
+/* Trees */
+.mfx-tree-view {
+  -fx-border-insets: -1;
+  -fx-border-color: lightgray;
+  -fx-border-width: 1.5;
+  -fx-border-radius: 1.5;
+  -fx-background-radius: 1.5;
+}
+
+.mfx-tree-view .viewport {
+  -fx-background-color: white;
+}
+
+.mfx-tree-item {
+  -fx-border-insets: -1;
+}
+
+.mfx-tree-cell {
+  -fx-padding: 0px 0px 0px 5px;
+  -fx-background-radius: 7px;
+}
+
+.mfx-tree-cell .mfx-checkbox .box .mark {
+  -mfx-description: "mfx-variant3-mark";
+  -mfx-size: 8;
+}
+
+.mfx-tree-cell .mfx-ripple-generator {
+  -mfx-ripple-color: rgba(0, 190, 0, 0.3);
+}
+
+.mfx-tree-cell:selected {
+  -fx-background-color: lightgray;
+}
+
+.mfx-tree-cell * {
+  -fx-font-smoothing-type: gray;
+}

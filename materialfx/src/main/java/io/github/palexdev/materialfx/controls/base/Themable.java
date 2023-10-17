@@ -1,8 +1,7 @@
 package io.github.palexdev.materialfx.controls.base;
 
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
-import io.github.palexdev.materialfx.css.themes.Themes;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.materialfx.utils.SceneBuilderIntegration;
 import javafx.scene.Parent;
 
@@ -26,7 +25,7 @@ import java.util.Set;
  * Despite appearances, this is the simplest and <b>fastest</b> solution.
  * <p>
  * Other approaches would involve adding a listener on the scene property of the node to detect when it was available.
- * Then the {@link Themes} were added to the scene. This is not feasible as controls have two scenes in two separate moments:
+ * Then the {@link Theme} were added to the scene. This is not feasible as controls have two scenes in two separate moments:
  * <p> 1) When the control is dragged into the main scene, the "drag effect" you see is basically a moving popup, so it's not the main scene
  * <p> 2) When the mouse is released and the control is placed, it is then in the main scene
  * <p>
@@ -47,17 +46,18 @@ import java.util.Set;
  * <p> - For Linux users: ~/.scenebuilder
  * In the folder relative to your OS, create a file named exactly like this: MFX_SB_OFF
  */
+// TODO this needs to be checked (in particular SceneBuilder integration)
 public interface Themable {
 
 	/**
 	 * Implementations should return the {@link Parent} node onto which themes and stylesheets will be applied.
-	 * Most of the case its themselves.
+	 * Most of the cases are themselves.
 	 */
 	Parent toParent();
 
 	/**
 	 * Implementations of this should return the {@link Theme} responsible for styling themselves, most MaterialFX controls
-	 * return one of the constants offered by {@link Stylesheets}.
+	 * return one of the constants offered by {@link MaterialFXStylesheets}.
 	 */
 	Theme getTheme();
 
@@ -89,7 +89,7 @@ public interface Themable {
 		protected static void themeIt(Themable t) {
 			Parent parent = t.toParent();
 			Set<String> stylesheets = new HashSet<>(parent.getStylesheets());
-			String theme = t.getTheme().loadTheme();
+			String theme = t.getTheme().toData();
 			if (stylesheets.contains(theme)) return;
 			parent.getStylesheets().add(theme);
 		}

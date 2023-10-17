@@ -19,11 +19,11 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.factories.InsetsFactory;
 import io.github.palexdev.materialfx.selection.TreeSelectionModel;
 import io.github.palexdev.materialfx.selection.base.ITreeSelectionModel;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -158,7 +158,7 @@ public class MFXTreeView<T> extends MFXScrollPane {
 
 	@Override
 	public Theme getTheme() {
-		return Stylesheets.TREE_VIEW;
+		return MaterialFXStylesheets.TREE_VIEW;
 	}
 
 	/**

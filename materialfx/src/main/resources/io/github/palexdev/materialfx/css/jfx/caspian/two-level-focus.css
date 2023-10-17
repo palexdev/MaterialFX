@@ -1,0 +1,71 @@
+.choice-box:showing {
+    -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
+}
+
+.text-input:focused:internal-focus {
+    -fx-highlight-fill: -fx-accent;
+    -fx-highlight-text-fill: white;
+}
+
+.text-input:focused:external-focus {
+    -fx-highlight-fill: -fx-control-inner-background;
+    -fx-highlight-text-fill: -fx-text-inner-color;
+}
+
+.text-field:focused:external-focus {
+    -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
+}
+
+.text-field:focused:internal-focus {
+    -fx-background-color: -fx-shadow-highlight-color, -fx-text-box-border, -fx-control-inner-background;
+    -fx-prompt-text-fill: transparent;
+}
+
+.text-area:focused:internal-focus {
+    -fx-background-color: -fx-shadow-highlight-color, -fx-text-box-border, -fx-control-inner-background;
+}
+
+.text-area:focused:external-focus {
+    -fx-background-color: -fx-focus-color, -fx-text-box-border, -fx-control-inner-background;
+}
+
+.slider {
+    -fx-padding: 5;
+}
+
+.slider:focused:external-focus {
+    -fx-background-color: -fx-focus-color, -fx-control-inner-background;
+    -fx-background-insets: -.4, 1;
+    -fx-background-radius: 3.4, 2;
+}
+
+.slider:focused:internal-focus {
+    -fx-background-color: transparent;
+}
+
+.slider:focused:external-focus .thumb {
+    -fx-background-color: derive(-fx-color, -36%), derive(-fx-color, 73%), linear-gradient(to bottom, derive(-fx-color, -19%), derive(-fx-color, 61%));
+    -fx-background-insets: 0, 1, 2;
+}
+
+.list-view:focused:external-focus > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected, .table-view:focused:external-focus > .virtual-flow > .clipped-container > .sheet > .table-row-cell:filled:selected, .table-view:focused:external-focus > .virtual-flow > .clipped-container > .sheet > .table-row-cell > .table-cell:selected, .table-view:row-selection:focused:external-focus > .virtual-flow > .clipped-container > .sheet > .table-row-cell:selected:filled {
+    -fx-background-color: #d3d3d3;
+    -fx-background: -fx-control-inner-background;
+    -fx-text-fill: -fx-text-inner-color;
+}
+
+.list-view:focused:internal-focus, .table-view:focused:internal-focus {
+    -fx-background-color: -fx-box-border, -fx-control-inner-background;
+    -fx-background-insets: 0, 1;
+}
+
+.combo-box-base:focused:showing {
+    -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-background-radius: 5, 5, 4, 3;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-padding: 0;
+}
+
+.combo-box-base:editable:focused:showing > .text-field:focused {
+    -fx-prompt-text-fill: transparent;
+}

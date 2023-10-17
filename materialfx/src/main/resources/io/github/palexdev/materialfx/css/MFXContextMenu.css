@@ -19,21 +19,21 @@
 @import "MFXScrollPane.css";
 
 .mfx-context-menu .line-separator {
-	-fx-stroke: #e1e1e1;
-	-fx-stroke-width: 0.5;
+  -fx-stroke: #e1e1e1;
+  -fx-stroke-width: 0.5;
 }
 
 .mfx-context-menu .mfx-scroll-pane {
-	-fx-background-color: white;
-	-fx-background-radius: 5;
-	-fx-background-insets: 1;
-	-fx-border-color: lightgray;
-	-fx-border-radius: 5;
-	-fx-padding: 5;
-	-fx-max-height: 300;
+  -fx-background-color: white;
+  -fx-background-radius: 5;
+  -fx-background-insets: 1;
+  -fx-border-color: lightgray;
+  -fx-border-radius: 5;
+  -fx-padding: 5;
+  -fx-max-height: 300;
 }
 
 .mfx-context-menu .mfx-scroll-pane .viewport {
-	-fx-background-color: transparent;
+  -fx-background-color: transparent;
 }
 

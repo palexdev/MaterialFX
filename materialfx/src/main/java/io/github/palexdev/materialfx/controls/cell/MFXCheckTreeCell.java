@@ -20,8 +20,8 @@ package io.github.palexdev.materialfx.controls.cell;
 
 import io.github.palexdev.materialfx.controls.MFXCheckTreeItem;
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.css.PseudoClass;
@@ -100,6 +100,6 @@ public class MFXCheckTreeCell<T> extends MFXSimpleTreeCell<T> {
 
 	@Override
 	public Theme getTheme() {
-		return Stylesheets.CHECK_TREE_CELL;
+		return MaterialFXStylesheets.CHECK_TREE_CELL;
 	}
 }

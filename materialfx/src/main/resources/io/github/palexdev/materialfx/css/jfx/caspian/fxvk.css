@@ -1,0 +1,100 @@
+.fxvk {
+  -fx-cursor: default;
+  -fx-background-color: linear-gradient(to bottom, #7e7e7e 0%, #4c4c4c 10%, #545454 100%);
+  -fx-background-insets: 0;
+  -fx-padding: 8 4 10 4;
+}
+
+.fxvk-secondary {
+  -fx-background-color: #fff, #ededed;
+  -fx-background-insets: 0, 1;
+  -fx-background-radius: 8;
+  -fx-padding: 10;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, .75), 8, 0, 0, 0);
+}
+
+.backspace-icon {
+  -fx-background-image: url(images/backspace-icon.png);
+  -fx-background-repeat: no-repeat;
+  -fx-background-position: center;
+}
+
+.enter-icon {
+  -fx-background-image: url(images/enter-icon.png);
+  -fx-background-repeat: no-repeat;
+  -fx-background-position: center;
+}
+
+.shift-icon {
+  -fx-background-image: url(images/shift-icon.png);
+  -fx-background-repeat: no-repeat;
+  -fx-background-position: center;
+}
+
+.capslock-icon {
+  -fx-background-image: url(images/capslock-icon.png);
+  -fx-background-repeat: no-repeat;
+  -fx-background-position: center;
+}
+
+.hide-icon {
+  -fx-background-image: url(images/vk-hide.png);
+  -fx-background-repeat: no-repeat;
+  -fx-background-position: center;
+}
+
+.key {
+  -fx-border-image-source: url(images/vk-light.png);
+  -fx-border-image-slice: 10 fill;
+  -fx-border-image-width: 10;
+  -fx-border-image-repeat: stretch;
+  -fx-border-image-insets: -3 -3 -3 -3;
+  -fx-padding: 3 3 5 0;
+}
+
+.key:pressed {
+  -fx-border-image-source: url(images/vk-light-pressed.png);
+  -fx-padding: 5 3 3 0;
+}
+
+.key-text {
+  -fx-font-weight: 700;
+  -fx-font-size: 24px;
+  -fx-font-family: "Amble";
+  -fx-text-fill: #333;
+}
+
+.key-alttext {
+  -fx-text-fill: #959595;
+  -fx-font-weight: 700;
+  -fx-font-size: 14px;
+  -fx-font-family: "Amble";
+  -fx-text-alignment: right;
+  -fx-text-origin: top;
+}
+
+.key-text.multi-char-text {
+  -fx-font-weight: 700;
+  -fx-font-size: 20px;
+  -fx-font-family: "Amble";
+}
+
+.key-alttext.multi-char-text {
+  -fx-font-weight: 700;
+  -fx-font-size: 12px;
+  -fx-font-family: "Amble";
+}
+
+.key.special {
+  -fx-border-image-source: url(images/vk-medium.png);
+}
+
+.key.special:pressed {
+  -fx-border-image-source: url(images/vk-medium-pressed.png);
+  -fx-padding: 5 3 3 0;
+}
+
+.special-text {
+  -fx-font-size: 18px;
+  -fx-fill: #e6e6e6;
+}

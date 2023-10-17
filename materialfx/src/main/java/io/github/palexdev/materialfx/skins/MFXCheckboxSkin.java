@@ -22,8 +22,9 @@ import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
-import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import io.github.palexdev.materialfx.skins.base.MFXLabeledSkinBase;
+import io.github.palexdev.mfxcore.builders.bindings.DoubleBindingBuilder;
+import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import javafx.geometry.Insets;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -34,80 +35,79 @@ import javafx.scene.shape.Circle;
  * This is the implementation of the {@code Skin} associated with every {@link MFXCheckbox}.
  */
 public class MFXCheckboxSkin extends MFXLabeledSkinBase<MFXCheckbox> {
-    //================================================================================
-    // Properties
-    //================================================================================
-    private final MFXIconWrapper box;
+	//================================================================================
+	// Properties
+	//================================================================================
+	private final MFXIconWrapper box;
 
-    private final StackPane rippleContainer;
-    private final Circle rippleContainerClip;
-    private final MFXCircleRippleGenerator rippleGenerator;
+	private final StackPane rippleContainer;
+	private final Circle rippleContainerClip;
+	private final MFXCircleRippleGenerator rippleGenerator;
 
-    //================================================================================
-    // Constructors
-    //================================================================================
-    public MFXCheckboxSkin(MFXCheckbox checkbox) {
-        super(checkbox);
+	//================================================================================
+	// Constructors
+	//================================================================================
+	public MFXCheckboxSkin(MFXCheckbox checkbox) {
+		super(checkbox);
 
-        MFXFontIcon mark = new MFXFontIcon();
-        mark.getStyleClass().add("mark");
-        box = new MFXIconWrapper(mark, -1);
-        box.getStyleClass().add("box");
+		MFXFontIcon mark = new MFXFontIcon();
+		mark.getStyleClass().add("mark");
+		box = new MFXIconWrapper(mark, -1);
+		box.getStyleClass().add("box");
 
-        rippleContainer = new StackPane();
-        rippleGenerator = new MFXCircleRippleGenerator(rippleContainer);
-        rippleGenerator.setManaged(false);
-        rippleGenerator.setAnimateBackground(false);
-        rippleGenerator.setCheckBounds(false);
-        rippleGenerator.setClipSupplier(() -> null);
-        rippleGenerator.setRipplePositionFunction(event -> {
-            PositionBean position = new PositionBean();
-            position.setX(Math.min(event.getX(), rippleContainer.getWidth()));
-            position.setY(Math.min(event.getY(), rippleContainer.getHeight()));
-            return position;
-        });
+		rippleContainer = new StackPane();
+		rippleGenerator = new MFXCircleRippleGenerator(rippleContainer);
+		rippleGenerator.setManaged(false);
+		rippleGenerator.setAnimateBackground(false);
+		rippleGenerator.setCheckBounds(false);
+		rippleGenerator.setClipSupplier(() -> null);
+		rippleGenerator.setRipplePositionFunction(event -> {
+			PositionBean position = new PositionBean();
+			position.setX(Math.min(event.getX(), rippleContainer.getWidth()));
+			position.setY(Math.min(event.getY(), rippleContainer.getHeight()));
+			return position;
+		});
 
-        rippleContainer.getChildren().addAll(rippleGenerator, box);
-        rippleContainer.getStyleClass().add("ripple-container");
+		rippleContainer.getChildren().addAll(rippleGenerator, box);
+		rippleContainer.getStyleClass().add("ripple-container");
 
-        rippleContainerClip = new Circle();
-        rippleContainerClip.centerXProperty().bind(rippleContainer.widthProperty().divide(2.0));
-        rippleContainerClip.centerYProperty().bind(rippleContainer.heightProperty().divide(2.0));
-        rippleContainer.setClip(rippleContainerClip);
+		rippleContainerClip = new Circle();
+		rippleContainerClip.centerXProperty().bind(rippleContainer.widthProperty().divide(2.0));
+		rippleContainerClip.centerYProperty().bind(rippleContainer.heightProperty().divide(2.0));
+		rippleContainerClip.radiusProperty().bind(DoubleBindingBuilder.build()
+			.setMapper(() -> {
+				double boxSize = box.getSize();
+				Insets boxPadding = rippleContainer.getPadding();
+				return boxPadding.getLeft() + boxSize / 2 + boxPadding.getRight();
+			})
+			.addSources(box.sizeProperty(), rippleContainer.paddingProperty())
+			.get()
+		);
+		rippleContainer.setClip(rippleContainerClip);
 
-        updateAlignment();
-        initContainer();
+		updateAlignment();
+		initContainer();
 
-        getChildren().setAll(topContainer);
-        addListeners();
-    }
+		getChildren().setAll(topContainer);
+		addListeners();
+	}
 
-    //================================================================================
-    // Overridden Methods
-    //================================================================================
-    @Override
-    protected void addListeners() {
-        super.addListeners();
-        MFXCheckbox checkbox = getSkinnable();
+	//================================================================================
+	// Overridden Methods
+	//================================================================================
+	@Override
+	protected void addListeners() {
+		super.addListeners();
+		MFXCheckbox checkbox = getSkinnable();
 
-        checkbox.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-            rippleGenerator.generateRipple(event);
-            checkbox.fire();
-        });
-    }
+		checkbox.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+			rippleGenerator.generateRipple(event);
+			checkbox.fire();
+		});
+	}
 
-    @Override
-    protected void layoutChildren(double contentX, double contentY, double contentWidth, double contentHeight) {
-        super.layoutChildren(contentX, contentY, contentWidth, contentHeight);
-
-        double boxSize = box.getSize();
-        Insets boxPadding = rippleContainer.getPadding();
-        double boxClipRadius = boxPadding.getLeft() + boxSize / 2 + boxPadding.getRight();
-        rippleContainerClip.setRadius(boxClipRadius);
-    }
-
-    @Override
-    protected Pane getControlContainer() {
-        return rippleContainer;
-    }
+	@Override
+	protected Pane getControlContainer() {
+		return rippleContainer;
+	}
 }

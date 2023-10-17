@@ -22,10 +22,10 @@ import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXTreeItem;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeCell;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
-import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.materialfx.utils.NodeUtils;
+import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 
@@ -155,6 +155,6 @@ public class MFXSimpleTreeCell<T> extends AbstractMFXTreeCell<T> {
 
     @Override
     public Theme getTheme() {
-        return Stylesheets.TREE_CELL;
+		return MaterialFXStylesheets.TREE_CELL;
     }
 }

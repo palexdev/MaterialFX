@@ -17,132 +17,131 @@
  */
 
 @import "MFXColors.css";
+
 @import "Fonts.css";
 
 .mfx-notification-center {
-	-fx-background-color: transparent;
+  -fx-background-color: transparent;
 }
 
 /*************************
 Notifications Container
 *************************/
 .mfx-notification-center .popup .notifications-container {
-	-fx-background-color: white;
-	-fx-background-radius: 5;
-	-fx-border-color: lightgray;
-	-fx-border-radius: 5;
-	-fx-border-width: 0.7;
-	-fx-padding: 5 0 5 0;
+  -fx-background-color: white;
+  -fx-background-radius: 5;
+  -fx-border-color: lightgray;
+  -fx-border-radius: 5;
+  -fx-border-width: 0.7;
+  -fx-padding: 5 0 5 0;
 }
 
 /*************************
 Notifications Icon
 *************************/
 .mfx-notification-center .notifications-icon {
-	-fx-background-color: white;
-	-fx-background-radius: 100%;
-	-fx-border-color: lightgray;
-	-fx-border-radius: 100%;
+  -fx-background-color: white;
+  -fx-background-radius: 100%;
+  -fx-border-color: lightgray;
+  -fx-border-radius: 100%;
 }
 
 .mfx-notification-center .counter {
-	-fx-background-color: -mfx-purple;
-	-fx-background-radius: 100%;
+  -fx-background-color: -mfx-purple;
+  -fx-background-radius: 100%;
 }
 
 .mfx-notification-center .counter .text {
-	-fx-fill: white;
-	-fx-font-family: "Open Sans Bold";
-	-fx-font-smoothing-type: gray;
+  -fx-fill: white;
+  -fx-font-family: "Open Sans Bold";
+  -fx-font-smoothing-type: gray;
 }
 
 /*************************
 Header
 *************************/
 .mfx-notification-center .popup .notifications-container .header {
-	-fx-border-color: transparent transparent lightgray transparent;
-	-fx-border-width: 0.7;
-	-fx-padding: 5 0 5 0;
+  -fx-border-color: transparent transparent lightgray transparent;
+  -fx-border-width: 0.7;
+  -fx-padding: 5 0 5 0;
 }
 
 .mfx-notification-center .popup .notifications-container .header .mfx-text-field {
-	-mfx-float-mode: disabled;
-	-fx-border-color: transparent;
-	-fx-font-family: "Open Sans SemiBold";
-	-fx-font-size: 14;
-	-fx-text-fill: -mfx-onyx;
+  -mfx-float-mode: disabled;
+  -fx-border-color: transparent;
+  -fx-font-family: "Open Sans SemiBold";
+  -fx-font-size: 14;
+  -fx-text-fill: -mfx-onyx;
 }
 
 .mfx-notification-center .popup .notifications-container .header .mfx-toggle-button {
-	-mfx-toggle-color: -mfx-purple;
-	-mfx-untoggle-line-color: derive(-mfx-onyx, 30%);
-
-	-fx-font-family: "Open Sans SemiBold";
-	-fx-font-size: 12;
-	-fx-text-fill: -mfx-onyx;
-	-fx-font-smoothing-type: gray;
+  -mfx-toggle-color: -mfx-purple;
+  -mfx-untoggle-line-color: derive(-mfx-onyx, 30%);
+  -fx-font-family: "Open Sans SemiBold";
+  -fx-font-size: 12;
+  -fx-text-fill: -mfx-onyx;
+  -fx-font-smoothing-type: gray;
 }
 
 /*************************
 Virtual Flow
 *************************/
 .mfx-notification-center .popup .notifications-container .virtual-flow {
-	-fx-background-color: transparent;
-
-	-track-color: rgb(230, 230, 230);
-	-thumb-color: rgb(137, 137, 137);
-	-thumb-hover-color: rgb(89, 88, 91);
+  -fx-background-color: transparent;
+  -track-color: rgb(230, 230, 230);
+  -thumb-color: rgb(137, 137, 137);
+  -thumb-hover-color: rgb(89, 88, 91);
 }
 
 .mfx-notification-center .popup .notifications-container .virtual-flow .mfx-notification-cell #check {
-	-mfx-checked-color: -mfx-purple;
-	-mfx-unchecked-color: -mfx-onyx;
+  -mfx-checked-color: -mfx-purple;
+  -mfx-unchecked-color: -mfx-onyx;
 }
 
 .mfx-notification-center .popup .notifications-container .virtual-flow .mfx-notification-cell #check .ripple-container .mfx-ripple-generator {
-	-mfx-ripple-color: derive(-mfx-purple, 125%);
+  -mfx-ripple-color: derive(-mfx-purple, 125%);
 }
 
 .mfx-notification-center .popup .notifications-container .virtual-flow .mfx-notification-cell .mfx-text-field {
-	-mfx-float-mode: disabled;
-	-fx-border-color: transparent;
+  -mfx-float-mode: disabled;
+  -fx-border-color: transparent;
 }
 
 /*************************
 Actions
 *************************/
 .mfx-notification-center .actions {
-	-fx-border-color: lightgray transparent transparent transparent;
-	-fx-border-width: 0.7;
-	-fx-padding: 10;
+  -fx-border-color: lightgray transparent transparent transparent;
+  -fx-border-width: 0.7;
+  -fx-padding: 10;
 }
 
 .mfx-notification-center .actions .mfx-font-icon {
-	-mfx-color: -mfx-onyx;
+  -mfx-color: -mfx-onyx;
 }
 
 .mfx-notification-center .notifications-container .actions .mfx-icon-wrapper .mfx-ripple-generator {
-	-mfx-ripple-radius: 24;
-	-mfx-ripple-color: derive(-mfx-purple, 150%)
+  -mfx-ripple-radius: 24;
+  -mfx-ripple-color: derive(-mfx-purple, 150%);
 }
 
 /*************************
 Context Menu
 *************************/
 .mfx-notification-center .mfx-context-menu .mfx-scroll-pane {
-	-fx-min-width: 200;
+  -fx-min-width: 200;
 }
 
 .mfx-notification-center .mfx-context-menu .separator {
-	-fx-padding: 5 0 5 0;
-	-fx-font-family: "Open Sans SemiBold";
-	-fx-text-fill: -mfx-text-he;
+  -fx-padding: 5 0 5 0;
+  -fx-font-family: "Open Sans SemiBold";
+  -fx-text-fill: -mfx-text-he;
 }
 
 .mfx-notification-center .mfx-context-menu .mfx-menu-item .mfx-icon-wrapper {
-	-mfx-size: 0;
+  -mfx-size: 0;
 }
 
 .mfx-notification-center .mfx-context-menu .mfx-menu-item:hover {
-	-fx-background-color: derive(-mfx-purple, 150%);
+  -fx-background-color: derive(-mfx-purple, 150%);
 }

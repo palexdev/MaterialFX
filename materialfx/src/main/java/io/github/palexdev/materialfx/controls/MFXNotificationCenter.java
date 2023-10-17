@@ -22,14 +22,14 @@ import io.github.palexdev.materialfx.collections.TransformableListWrapper;
 import io.github.palexdev.materialfx.controls.base.MFXMenuControl;
 import io.github.palexdev.materialfx.controls.base.Themable;
 import io.github.palexdev.materialfx.controls.cell.MFXNotificationCell;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.enums.NotificationCounterStyle;
 import io.github.palexdev.materialfx.enums.NotificationState;
 import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.notifications.base.INotification;
 import io.github.palexdev.materialfx.selection.MultipleSelectionModel;
 import io.github.palexdev.materialfx.skins.MFXNotificationCenterSkin;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.materialfx.utils.ListChangeHelper;
 import io.github.palexdev.materialfx.utils.ListChangeHelper.Change;
 import io.github.palexdev.materialfx.utils.ListChangeProcessor;
@@ -717,7 +717,7 @@ public class MFXNotificationCenter extends Control implements MFXMenuControl, Th
 
 	@Override
 	public Theme getTheme() {
-		return Stylesheets.NOTIFICATION_CENTER;
+		return MaterialFXStylesheets.NOTIFICATION_CENTER;
 	}
 
 	@Override

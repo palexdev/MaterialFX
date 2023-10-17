@@ -20,9 +20,9 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.controls.base.MFXLabeled;
 import io.github.palexdev.materialfx.controls.base.Themable;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.skins.MFXRadioButtonSkin;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import javafx.css.*;
 import javafx.scene.Parent;
@@ -253,7 +253,7 @@ public class MFXRadioButton extends RadioButton implements MFXLabeled, Themable 
 
 	@Override
 	public Theme getTheme() {
-		return Stylesheets.RADIO_BUTTON;
+		return MaterialFXStylesheets.RADIO_BUTTON;
 	}
 
 	@Override

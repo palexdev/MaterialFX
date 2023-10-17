@@ -39,9 +39,6 @@ module MaterialFX {
 	exports io.github.palexdev.materialfx.controls.legacy;
 	exports io.github.palexdev.materialfx.controls.models.spinner;
 
-	// CSS Package
-	exports io.github.palexdev.materialfx.css;
-
 	// Dialogs Package
 	exports io.github.palexdev.materialfx.dialogs;
 
@@ -79,8 +76,9 @@ module MaterialFX {
 	exports io.github.palexdev.materialfx.skins.base;
 	exports io.github.palexdev.materialfx.skins.legacy;
 
-	// Themes Package
-	exports io.github.palexdev.materialfx.css.themes;
+	// Theming Package
+	exports io.github.palexdev.materialfx.theming;
+	exports io.github.palexdev.materialfx.theming.base;
 
 	// Utils Package
 	exports io.github.palexdev.materialfx.utils;

@@ -21,12 +21,12 @@ package io.github.palexdev.materialfx.controls;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeCell;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
 import io.github.palexdev.materialfx.controls.cell.MFXSimpleTreeCell;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.factories.InsetsFactory;
 import io.github.palexdev.materialfx.selection.TreeSelectionModel;
 import io.github.palexdev.materialfx.selection.base.ITreeSelectionModel;
 import io.github.palexdev.materialfx.skins.MFXTreeItemSkin;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import javafx.beans.property.*;
 import javafx.collections.ListChangeListener;
 import javafx.css.*;
@@ -284,7 +284,7 @@ public class MFXTreeItem<T> extends AbstractMFXTreeItem<T> {
 
 	@Override
 	public Theme getTheme() {
-		return Stylesheets.TREE_ITEM;
+		return MaterialFXStylesheets.TREE_ITEM;
 	}
 
 	@Override

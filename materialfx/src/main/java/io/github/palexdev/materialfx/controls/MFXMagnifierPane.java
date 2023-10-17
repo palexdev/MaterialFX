@@ -23,9 +23,9 @@ import io.github.palexdev.materialfx.beans.properties.styleable.StyleableBoolean
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableDoubleProperty;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableObjectProperty;
 import io.github.palexdev.materialfx.controls.base.Themable;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.skins.MFXMagnifierPaneSkin;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
@@ -153,7 +153,7 @@ public class MFXMagnifierPane extends Control implements Themable {
 
 	@Override
 	public Theme getTheme() {
-		return Stylesheets.MAGNIFIER;
+		return MaterialFXStylesheets.MAGNIFIER;
 	}
 
 	@Override

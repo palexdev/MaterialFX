@@ -27,17 +27,17 @@ import io.github.palexdev.materialfx.beans.properties.functional.ConsumerPropert
 import io.github.palexdev.materialfx.beans.properties.functional.FunctionProperty;
 import io.github.palexdev.materialfx.beans.properties.functional.SupplierProperty;
 import io.github.palexdev.materialfx.controls.cell.MFXDateCell;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.enums.FloatMode;
-import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import io.github.palexdev.materialfx.skins.MFXDatePickerSkin;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.materialfx.utils.DateTimeUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.others.ReusableScheduledExecutor;
 import io.github.palexdev.materialfx.utils.others.dates.DateStringConverter;
 import io.github.palexdev.materialfx.utils.others.dates.DayOfWeekStringConverter;
 import io.github.palexdev.materialfx.utils.others.dates.MonthStringConverter;
+import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import javafx.beans.property.*;
 import javafx.css.PseudoClass;
 import javafx.geometry.HPos;
@@ -286,7 +286,7 @@ public class MFXDatePicker extends MFXTextField {
 
     @Override
     public Theme getTheme() {
-        return Stylesheets.DATE_PICKER;
+		return MaterialFXStylesheets.DATE_PICKER;
     }
 
     @Override

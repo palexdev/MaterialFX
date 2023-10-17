@@ -17,19 +17,20 @@
  */
 
 @import "Fonts.css";
+
 @import "MFXColors.css";
 
 .mfx-tooltip .container {
-	-fx-background-color: white;
-	-fx-background-radius: 5;
-	-fx-border-color: lightgray;
-	-fx-border-radius: 5;
-	-fx-max-width: 400;
+  -fx-background-color: white;
+  -fx-background-radius: 5;
+  -fx-border-color: lightgray;
+  -fx-border-radius: 5;
+  -fx-max-width: 400;
 }
 
 .mfx-tooltip .container .label {
-	-fx-padding: 5;
-	-fx-font-family: "Open Sans Regular";
-	-fx-text-fill: -mfx-text-he;
-	-fx-graphic-text-gap: 10;
+  -fx-padding: 5;
+  -fx-font-family: "Open Sans Regular";
+  -fx-text-fill: -mfx-text-he;
+  -fx-graphic-text-gap: 10;
 }

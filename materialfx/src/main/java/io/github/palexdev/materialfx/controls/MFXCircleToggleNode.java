@@ -19,10 +19,10 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.controls.base.AbstractMFXToggleNode;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.enums.TextPosition;
 import io.github.palexdev.materialfx.skins.MFXCircleToggleNodeSkin;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import javafx.css.*;
 import javafx.scene.Node;
@@ -190,7 +190,7 @@ public class MFXCircleToggleNode extends AbstractMFXToggleNode {
 
 	@Override
 	public Theme getTheme() {
-		return Stylesheets.CIRCLE_TOGGLE_NODE;
+		return MaterialFXStylesheets.CIRCLE_TOGGLE_NODE;
 	}
 
 	@Override

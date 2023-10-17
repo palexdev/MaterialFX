@@ -23,9 +23,9 @@ import io.github.palexdev.materialfx.beans.properties.functional.ConsumerPropert
 import io.github.palexdev.materialfx.beans.properties.functional.SupplierProperty;
 import io.github.palexdev.materialfx.controls.base.Themable;
 import io.github.palexdev.materialfx.controls.models.spinner.SpinnerModel;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.skins.MFXSpinnerSkin;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.beans.property.*;
 import javafx.geometry.Orientation;
@@ -152,7 +152,7 @@ public class MFXSpinner<T> extends Control implements Themable {
 
     @Override
     public Theme getTheme() {
-        return Stylesheets.SPINNER;
+		return MaterialFXStylesheets.SPINNER;
     }
 
     @Override

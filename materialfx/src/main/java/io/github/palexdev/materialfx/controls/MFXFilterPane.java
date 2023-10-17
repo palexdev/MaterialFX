@@ -20,12 +20,12 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.beans.FilterBean;
 import io.github.palexdev.materialfx.controls.base.Themable;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.enums.ChainMode;
 import io.github.palexdev.materialfx.filter.base.AbstractFilter;
 import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.skins.MFXFilterPaneSkin;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.materialfx.utils.PredicateUtils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -264,7 +264,7 @@ public class MFXFilterPane<T> extends Control implements Themable {
 
 	@Override
 	public Theme getTheme() {
-		return Stylesheets.FILTER_PANE;
+		return MaterialFXStylesheets.FILTER_PANE;
 	}
 
 	@Override

@@ -17,36 +17,36 @@
  */
 
 @import "Fonts.css";
+
 @import "MFXColors.css";
 
 .mfx-date-cell {
-	-fx-font-family: "Open Sans Regular";
-	-fx-font-size: 13;
-	-fx-text-fill: -mfx-text-he;
-	-fx-padding: 0 1 0 0;
-	-fx-pref-width: 32;
-	-fx-pref-height: 32;
-
-	-fx-background-radius: 100%;
-	-fx-border-radius: 100%;
+  -fx-font-family: "Open Sans Regular";
+  -fx-font-size: 13;
+  -fx-text-fill: -mfx-text-he;
+  -fx-padding: 0 1 0 0;
+  -fx-pref-width: 32;
+  -fx-pref-height: 32;
+  -fx-background-radius: 100%;
+  -fx-border-radius: 100%;
 }
 
 .mfx-date-cell .text {
-	-fx-font-smoothing-type: lcd;
+  -fx-font-smoothing-type: lcd;
 }
 
 .mfx-date-cell:extra {
-	-fx-text-fill: #a9a9a9;
+  -fx-text-fill: #a9a9a9;
 }
 
 .mfx-date-cell:current {
-	-fx-text-fill: #7a0ed9;
-	-fx-background-color: #F7F6F9;
-	-fx-font-family: "Open Sans SemiBold";
+  -fx-text-fill: #7a0ed9;
+  -fx-background-color: #F7F6F9;
+  -fx-font-family: "Open Sans SemiBold";
 }
 
 .mfx-date-cell:selected {
-	-fx-text-fill: white;
-	-fx-background-color: #7a0ed9;
-	-fx-font-family: "Open Sans SemiBold";
+  -fx-text-fill: white;
+  -fx-background-color: #7a0ed9;
+  -fx-font-family: "Open Sans SemiBold";
 }

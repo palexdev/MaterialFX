@@ -17,48 +17,47 @@
  */
 
 .mfx-toggle-button {
-	-mfx-main: #6200EE;
-	-mfx-secondary: #424242;
-
-	-fx-padding: 10;
+  -mfx-main: #6200EE;
+  -mfx-secondary: #424242;
+  -fx-padding: 10;
 }
 
 .mfx-toggle-button .mfx-ripple-generator {
-	-mfx-animation-speed: 1.5;
-	-mfx-ripple-radius: 10;
-	-mfx-ripple-color: -mfx-main;
-	-mfx-ripple-opacity: 0.4;
+  -mfx-animation-speed: 1.5;
+  -mfx-ripple-radius: 10;
+  -mfx-ripple-color: -mfx-main;
+  -mfx-ripple-opacity: 0.4;
 }
 
 .mfx-toggle-button .circle {
-	-fx-stroke: transparent;
-	-fx-fill: -mfx-secondary;
+  -fx-stroke: transparent;
+  -fx-fill: -mfx-secondary;
 }
 
 .mfx-toggle-button .line {
-	-fx-stroke-line-cap: ROUND;
-	-fx-stroke: -mfx-secondary;
-	-fx-opacity: 0.3;
+  -fx-stroke-line-cap: ROUND;
+  -fx-stroke: -mfx-secondary;
+  -fx-opacity: 0.3;
 }
 
 .mfx-toggle-button:selected .mfx-ripple-generator {
-	-mfx-ripple-color: -mfx-secondary;
+  -mfx-ripple-color: -mfx-secondary;
 }
 
 .mfx-toggle-button:selected .circle {
-	-fx-fill: -mfx-main;
+  -fx-fill: -mfx-main;
 }
 
 .mfx-toggle-button:selected .line {
-	-fx-stroke: -mfx-main;
+  -fx-stroke: -mfx-main;
 }
 
 .mfx-toggle-button:disabled .circle,
 .mfx-toggle-button:disabled:selected .circle {
-	-fx-fill: gray;
+  -fx-fill: gray;
 }
 
 .mfx-toggle-button:disabled .line,
 .mfx-toggle-button:disabled:selected .line {
-	-fx-stroke: gray;
+  -fx-stroke: gray;
 }

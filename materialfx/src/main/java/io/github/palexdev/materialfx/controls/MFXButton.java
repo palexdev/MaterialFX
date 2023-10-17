@@ -20,12 +20,12 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.controls.base.Themable;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.enums.ButtonType;
 import io.github.palexdev.materialfx.skins.MFXButtonSkin;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import javafx.beans.property.*;
 import javafx.css.*;
@@ -356,7 +356,7 @@ public class MFXButton extends Button implements Themable {
 
 	@Override
 	public Theme getTheme() {
-		return Stylesheets.BUTTON;
+		return MaterialFXStylesheets.BUTTON;
 	}
 
 	@Override

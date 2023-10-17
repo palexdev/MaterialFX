@@ -28,11 +28,11 @@ import io.github.palexdev.materialfx.beans.properties.styleable.StyleableBoolean
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableIntegerProperty;
 import io.github.palexdev.materialfx.controls.base.MFXCombo;
 import io.github.palexdev.materialfx.controls.cell.MFXComboBoxCell;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.selection.ComboBoxSelectionModel;
 import io.github.palexdev.materialfx.skins.MFXComboBoxSkin;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.materialfx.utils.*;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
 import io.github.palexdev.materialfx.validation.MFXValidator;
@@ -280,7 +280,7 @@ public class MFXComboBox<T> extends MFXTextField implements MFXCombo<T> {
 
     @Override
     public Theme getTheme() {
-        return Stylesheets.COMBO_BOX;
+		return MaterialFXStylesheets.COMBO_BOX;
     }
 
     @Override

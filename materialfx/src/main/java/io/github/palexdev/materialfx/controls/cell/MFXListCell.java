@@ -21,9 +21,9 @@ package io.github.palexdev.materialfx.controls.cell;
 import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.controls.MFXListView;
 import io.github.palexdev.materialfx.controls.cell.base.AbstractMFXListCell;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectExpression;
 import javafx.scene.Node;
@@ -142,7 +142,7 @@ public class MFXListCell<T> extends AbstractMFXListCell<T> {
 
 	@Override
 	public Theme getTheme() {
-		return Stylesheets.LIST_CELL;
+		return MaterialFXStylesheets.LIST_CELL;
 	}
 
 	@Override

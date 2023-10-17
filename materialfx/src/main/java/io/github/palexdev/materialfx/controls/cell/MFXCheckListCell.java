@@ -22,9 +22,9 @@ import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.controls.MFXCheckListView;
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.cell.base.AbstractMFXListCell;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectExpression;
@@ -172,6 +172,6 @@ public class MFXCheckListCell<T> extends AbstractMFXListCell<T> {
 
 	@Override
 	public Theme getTheme() {
-		return Stylesheets.CHECK_LIST_CELL;
+		return MaterialFXStylesheets.CHECK_LIST_CELL;
 	}
 }

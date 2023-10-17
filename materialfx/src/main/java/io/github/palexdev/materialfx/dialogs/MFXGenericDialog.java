@@ -21,8 +21,8 @@ package io.github.palexdev.materialfx.dialogs;
 import io.github.palexdev.materialfx.beans.properties.EventHandlerProperty;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.ScrollUtils;
 import javafx.beans.property.*;
@@ -293,7 +293,7 @@ public class MFXGenericDialog extends AbstractMFXDialog {
 
     @Override
     public Theme getTheme() {
-        return Stylesheets.DIALOGS;
+        return MaterialFXStylesheets.DIALOGS;
     }
 
     //================================================================================

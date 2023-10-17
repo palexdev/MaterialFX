@@ -17,79 +17,80 @@
  */
 
 @import "Fonts.css";
+
 @import "MFXColors.css";
 
 .mfx-text-field {
-	-mfx-main: -mfx-purple;
-
-	-fx-background-color: white;
-	-fx-background-radius: 5;
-	-fx-border-color: lightgray;
-	-fx-border-radius: 5;
-	-fx-padding: 5;
-
-	-fx-font-family: "Open Sans Regular";
+  -mfx-main: -mfx-purple;
+  -fx-background-color: white;
+  -fx-background-radius: 5;
+  -fx-border-color: lightgray;
+  -fx-border-radius: 5;
+  -fx-padding: 5;
+  -fx-font-family: "Open Sans Regular";
 }
 
 .mfx-text-field:readonly,
 .mfx-text-field:readonly .text-field {
-	-fx-cursor: default;
+  -fx-cursor: default;
 }
 
 .mfx-text-field .text-field {
-	-fx-highlight-fill: #ECE0FD; /* Selected text highlight */
-	-fx-prompt-text-fill: -mfx-text-me; /* Prompt text color */
+  /* Selected text highlight */
+  -fx-highlight-fill: #ECE0FD;
+  /* Prompt text color */
+  -fx-prompt-text-fill: -mfx-text-me;
 }
 
 .mfx-text-field .text-field .text {
-	-fx-font-smoothing-type: lcd;
+  -fx-font-smoothing-type: lcd;
 }
 
 .mfx-text-field:focus-within {
-	-fx-background-insets: 2;
-	-fx-border-color: -mfx-main;
-	-fx-border-width: 1.5;
-	-fx-border-insets: -0.5;
+  -fx-background-insets: 2;
+  -fx-border-color: -mfx-main;
+  -fx-border-width: 1.5;
+  -fx-border-insets: -0.5;
 }
 
 .mfx-text-field .floating-text {
-	-fx-font-family: "Open Sans Regular";
-	-fx-text-fill: -mfx-text-he;
+  -fx-font-family: "Open Sans Regular";
+  -fx-text-fill: -mfx-text-he;
 }
 
 .mfx-text-field:floating .floating-text {
-	-fx-background-color: white;
+  -fx-background-color: white;
 }
 
 .mfx-text-field:focus-within .floating-text {
-	-fx-text-fill: -mfx-main;
+  -fx-text-fill: -mfx-main;
 }
 
 .mfx-text-field .measure-unit {
-	-fx-font-family: "Open Sans Regular";
-	-fx-text-fill: -mfx-text-he;
+  -fx-font-family: "Open Sans Regular";
+  -fx-text-fill: -mfx-text-he;
 }
 
 .mfx-text-field .text-field {
-	-fx-text-box-border: transparent;
-	-fx-background-color: transparent;
-	-fx-backrgound-insets: 0;
-	-fx-padding: 0;
+  -fx-text-box-border: transparent;
+  -fx-background-color: transparent;
+  -fx-backrgound-insets: 0;
+  -fx-padding: 0;
 }
 
 .mfx-text-field .text-field:focused {
-	-fx-focus-color: transparent;
-	-fx-faint-focus-color: transparent;
+  -fx-focus-color: transparent;
+  -fx-faint-focus-color: transparent;
 }
 
 .mfx-text-field:disabled {
-	-fx-border-color: rgba(0, 0, 0, 0.1);
+  -fx-border-color: rgba(0, 0, 0, 0.1);
 }
 
 .mfx-text-field:disabled .floating-text {
-	-fx-text-fill: -mfx-text-disabled;
+  -fx-text-fill: -mfx-text-disabled;
 }
 
 .mfx-text-field:disabled .text-field {
-	-fx-text-inner-color: -mfx-text-disabled;
+  -fx-text-inner-color: -mfx-text-disabled;
 }

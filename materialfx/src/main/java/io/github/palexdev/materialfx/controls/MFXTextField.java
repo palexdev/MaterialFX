@@ -24,15 +24,15 @@ import io.github.palexdev.materialfx.beans.properties.styleable.StyleableInteger
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableObjectProperty;
 import io.github.palexdev.materialfx.controls.base.MFXMenuControl;
 import io.github.palexdev.materialfx.controls.base.Themable;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.enums.FloatMode;
-import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.skins.MFXTextFieldSkin;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import io.github.palexdev.materialfx.validation.MFXValidator;
 import io.github.palexdev.materialfx.validation.Validated;
+import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import javafx.beans.property.*;
 import javafx.css.CssMetaData;
 import javafx.css.PseudoClass;
@@ -294,7 +294,7 @@ public class MFXTextField extends TextField implements Validated, MFXMenuControl
 
     @Override
     public Theme getTheme() {
-        return Stylesheets.TEXT_FIELD;
+		return MaterialFXStylesheets.TEXT_FIELD;
     }
 
     @Override

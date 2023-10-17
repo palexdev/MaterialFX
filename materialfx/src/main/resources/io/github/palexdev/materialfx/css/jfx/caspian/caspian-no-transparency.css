@@ -1,0 +1,32 @@
+.context-menu {
+  -fx-background-radius: 0;
+}
+
+.choice-box > .context-menu {
+  -fx-background-radius: 0;
+}
+
+.combo-box-popup > .list-view {
+  -fx-background-insets: 0 -1 -1 0, 1 0 1 1;
+  -fx-effect: null;
+}
+
+.combo-box-popup > .list-view > .virtual-flow > .scroll-bar:vertical {
+  -fx-background-insets: 0, 0 0 1 1;
+  -fx-padding: -1 -2 -1 0;
+}
+
+.color-palette {
+  -fx-background-radius: 0;
+  -fx-effect: null;
+}
+
+.tooltip {
+  -fx-effect: null;
+  -fx-background-insets: 0 0 -1 0, 1, 2;
+}
+
+.date-picker-popup {
+  -fx-background-radius: 0;
+  -fx-effect: null;
+}

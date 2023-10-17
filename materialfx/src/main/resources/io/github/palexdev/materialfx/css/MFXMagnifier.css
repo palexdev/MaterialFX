@@ -17,49 +17,49 @@
  */
 
 @import "Fonts.css";
+
 @import "MFXColors.css";
 
 .mfx-magnifier .lens-container {
-	-fx-border-color: black;
-	-fx-border-radius: 100%;
-	-fx-border-insets: -1;
+  -fx-border-color: black;
+  -fx-border-radius: 100%;
+  -fx-border-insets: -1;
 }
 
 .mfx-magnifier .lens-container .lens .cursor {
-	-fx-stroke: red;
-	-fx-stroke-width: 0.3;
-	-fx-arc-width: 0.3;
-	-fx-arc-height: 0.3;
+  -fx-stroke: red;
+  -fx-stroke-width: 0.3;
+  -fx-arc-width: 0.3;
+  -fx-arc-height: 0.3;
 }
 
 .mfx-magnifier .lens-container .lens .label {
-	-fx-background-color: white;
-	-fx-background-radius: 5;
-	-fx-border-color: lightgray;
-	-fx-border-radius: 5;
-	-fx-padding: 5;
-	-fx-alignment: center;
-
-	-fx-font-family: "Open Sans SemiBold";
-	-fx-text-fill: -mfx-text-he;
+  -fx-background-color: white;
+  -fx-background-radius: 5;
+  -fx-border-color: lightgray;
+  -fx-border-radius: 5;
+  -fx-padding: 5;
+  -fx-alignment: center;
+  -fx-font-family: "Open Sans SemiBold";
+  -fx-text-fill: -mfx-text-he;
 }
 
 .mfx-magnifier .color-picker {
-	-fx-background-color: white;
-	-fx-background-radius: 5;
-	-fx-border-color: lightgray;
-	-fx-border-radius: 5;
-	-fx-padding: 5 10 5 10;
-	-fx-min-width: 180;
+  -fx-background-color: white;
+  -fx-background-radius: 5;
+  -fx-border-color: lightgray;
+  -fx-border-radius: 5;
+  -fx-padding: 5 10 5 10;
+  -fx-min-width: 180;
 }
 
 .mfx-magnifier .color-picker .color-square {
-	-fx-stroke: -mfx-text-he;
-	-fx-arc-width: 5;
-	-fx-arc-height: 5;
+  -fx-stroke: -mfx-text-he;
+  -fx-arc-width: 5;
+  -fx-arc-height: 5;
 }
 
 .mfx-magnifier .color-picker .label {
-	-fx-font-family: "Open Sans SemiBold";
-	-fx-text-fill: -mfx-text-he;
+  -fx-font-family: "Open Sans SemiBold";
+  -fx-text-fill: -mfx-text-he;
 }

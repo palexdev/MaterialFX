@@ -23,11 +23,11 @@ import io.github.palexdev.materialfx.controls.MFXSlider;
 import io.github.palexdev.materialfx.enums.SliderEnums.SliderMode;
 import io.github.palexdev.materialfx.enums.SliderEnums.SliderPopupSide;
 import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
-import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
 import io.github.palexdev.materialfx.utils.AnimationUtils.PauseBuilder;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.NumberUtils;
+import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -122,12 +122,10 @@ public class MFXSliderSkin extends SkinBase<MFXSlider> {
         track = buildRectangle("track");
         track.heightProperty().bind(slider.heightProperty());
         track.widthProperty().bind(slider.widthProperty());
-        track.setFill(Color.rgb(82, 0, 237, 0.3));
         track.setStroke(Color.GOLD);
 
         bar = buildRectangle("bar");
         bar.heightProperty().bind(slider.heightProperty());
-        bar.setFill(Color.GREEN);
         bar.setMouseTransparent(true);
 
         thumb = slider.getThumbSupplier().get();

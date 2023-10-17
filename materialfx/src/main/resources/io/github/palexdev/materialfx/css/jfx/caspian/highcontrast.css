@@ -1,0 +1,33 @@
+.scene {
+    -fx-accent: #6ecfff;
+    -fx-mid-text-color: black;
+    -fx-selection-bar: linear-gradient(from 0% 0% to 0% 100%, -fx-background 7%, derive(-fx-background, -15%) 100%);
+}
+
+.menu-item:focused .label {
+    -fx-text-fill: black;
+}
+
+.radio-menu-item:focused:checked .radio {
+    -fx-background-color: #000;
+}
+
+.check-menu-item:focused:checked .check {
+    -fx-background-color: #000;
+}
+
+.menu:selected .arrow {
+    -fx-background-color: #000;
+}
+
+.toggle-button:selected {
+    -fx-background-color: -fx-shadow-highlight-color, linear-gradient(from 0% 0% to 0% 100%, derive(-fx-color, -90%) 0%, derive(-fx-color, -60%) 100%), linear-gradient(from 0% 0% to 0% 100%, derive(-fx-color, -80%) 0%, derive(-fx-color, -65%) 45%, derive(-fx-color, -50%) 99%, derive(-fx-color, -60%) 100%), linear-gradient(from 0% 0% to 100% 0%, rgba(0, 0, 0, .3) 0%, transparent 10%, transparent 90%, rgba(0, 0, 0, .3) 100%);
+    -fx-background-insets: 0 0 -1 0, 0, 1, 1;
+    -fx-text-fill: white;
+}
+
+.toggle-button:selected:focused {
+    -fx-color: -fx-focused-base;
+    -fx-background-color: -fx-focus-color, linear-gradient(from 0% 0% to 0% 100%, derive(-fx-color, -90%) 0%, derive(-fx-color, -60%) 100%), linear-gradient(from 0% 0% to 0% 100%, derive(-fx-color, -80%) 0%, derive(-fx-color, -65%) 45%, derive(-fx-color, -50%) 99%, derive(-fx-color, -60%) 100%), linear-gradient(from 0% 0% to 100% 0%, rgba(0, 0, 0, .3) 0%, transparent 10%, transparent 90%, rgba(0, 0, 0, .3) 100%);
+    -fx-background-insets: -1.4, 0, 1, 1;
+}

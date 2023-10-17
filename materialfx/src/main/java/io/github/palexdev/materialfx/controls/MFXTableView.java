@@ -23,12 +23,12 @@ import io.github.palexdev.materialfx.collections.TransformableList;
 import io.github.palexdev.materialfx.collections.TransformableListWrapper;
 import io.github.palexdev.materialfx.controls.base.Themable;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.filter.base.AbstractFilter;
 import io.github.palexdev.materialfx.selection.MultipleSelectionModel;
 import io.github.palexdev.materialfx.selection.base.IMultipleSelectionModel;
 import io.github.palexdev.materialfx.skins.MFXTableViewSkin;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.materialfx.utils.ListChangeHelper;
 import io.github.palexdev.materialfx.utils.ListChangeProcessor;
 import io.github.palexdev.materialfx.utils.others.observables.When;
@@ -297,7 +297,7 @@ public class MFXTableView<T> extends Control implements Themable {
 
 	@Override
 	public Theme getTheme() {
-		return Stylesheets.TABLE_VIEW;
+		return MaterialFXStylesheets.TABLE_VIEW;
 	}
 
 	@Override

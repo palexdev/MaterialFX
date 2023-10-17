@@ -20,8 +20,8 @@ package io.github.palexdev.materialfx.controls.cell;
 
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import io.github.palexdev.materialfx.controls.base.Themable;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.virtualizedfx.cell.Cell;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
@@ -128,7 +128,7 @@ public class MFXDateCell extends Label implements Cell<LocalDate>, Themable {
 
 	@Override
 	public Theme getTheme() {
-		return Stylesheets.DATE_CELL;
+		return MaterialFXStylesheets.DATE_CELL;
 	}
 
 	@Override

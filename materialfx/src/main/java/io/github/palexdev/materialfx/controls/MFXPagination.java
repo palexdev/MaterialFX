@@ -22,9 +22,9 @@ import io.github.palexdev.materialfx.beans.properties.functional.FunctionPropert
 import io.github.palexdev.materialfx.beans.properties.functional.SupplierProperty;
 import io.github.palexdev.materialfx.controls.base.Themable;
 import io.github.palexdev.materialfx.controls.cell.MFXPage;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.skins.MFXPaginationSkin;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.materialfx.utils.NumberUtils;
 import javafx.beans.property.*;
 import javafx.geometry.Orientation;
@@ -207,7 +207,7 @@ public class MFXPagination extends Control implements Themable {
 
 	@Override
 	public Theme getTheme() {
-		return Stylesheets.PAGINATION;
+		return MaterialFXStylesheets.PAGINATION;
 	}
 
 	@Override

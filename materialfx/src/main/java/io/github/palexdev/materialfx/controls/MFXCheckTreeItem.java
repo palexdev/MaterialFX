@@ -21,11 +21,11 @@ package io.github.palexdev.materialfx.controls;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeCell;
 import io.github.palexdev.materialfx.controls.base.AbstractMFXTreeItem;
 import io.github.palexdev.materialfx.controls.cell.MFXCheckTreeCell;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.selection.TreeCheckModel;
 import io.github.palexdev.materialfx.selection.base.ITreeCheckModel;
 import io.github.palexdev.materialfx.skins.MFXCheckTreeItemSkin;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.Event;
@@ -117,7 +117,7 @@ public class MFXCheckTreeItem<T> extends MFXTreeItem<T> {
 
 	@Override
 	public Theme getTheme() {
-		return Stylesheets.TREE_ITEM;
+		return MaterialFXStylesheets.TREE_ITEM;
 	}
 
 	/**

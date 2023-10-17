@@ -17,13 +17,14 @@
  */
 
 @import "Fonts.css";
+
 @import "MFXTextField.css";
 
 .mfx-rectangle-toggle-node {
-	-mfx-unselected-color: white;
-	-mfx-selected-color: #EDEDED;
-	-mfx-unselected-border-color: #E1E1E1;
-	-mfx-selected-border-color: #E1E1E1;
+  -mfx-unselected-color: white;
+  -mfx-selected-color: #EDEDED;
+  -mfx-unselected-border-color: #E1E1E1;
+  -mfx-selected-border-color: #E1E1E1;
 }
 
 .mfx-rectangle-toggle-node,
@@ -32,31 +33,30 @@
 .mfx-rectangle-toggle-node:focused,
 .mfx-rectangle-toggle-node:selected,
 .mfx-rectangle-toggle-node:focused:selected {
-	-fx-background-color: TRANSPARENT, TRANSPARENT, TRANSPARENT, TRANSPARENT;
-	-fx-background-radius: 3px;
-	-fx-background-insets: 0px;
+  -fx-background-color: TRANSPARENT, TRANSPARENT, TRANSPARENT, TRANSPARENT;
+  -fx-background-radius: 3px;
+  -fx-background-insets: 0px;
 }
 
 .mfx-rectangle-toggle-node {
-	-fx-background-color: -mfx-unselected-color;
-	-fx-background-radius: 10;
-	-fx-border-color: -mfx-unselected-border-color;
-	-fx-border-radius: 10;
-	-fx-padding: 0;
+  -fx-background-color: -mfx-unselected-color;
+  -fx-background-radius: 10;
+  -fx-border-color: -mfx-unselected-border-color;
+  -fx-border-radius: 10;
+  -fx-padding: 0;
 }
 
 .mfx-rectangle-toggle-node:selected,
 .mfx-rectangle-toggle-node:focused:selected {
-	-fx-background-color: -mfx-selected-color;
-	-fx-background-radius: 10;
-	-fx-border-color: -mfx-selected-border-color;
-	-fx-border-radius: 10;
+  -fx-background-color: -mfx-selected-color;
+  -fx-background-radius: 10;
+  -fx-border-color: -mfx-selected-border-color;
+  -fx-border-radius: 10;
 }
 
 .mfx-rectangle-toggle-node .mfx-text-field {
-	-mfx-float-mode: disabled;
-	-mfx-gap: 0;
-
-	-fx-background-color: transparent;
-	-fx-border-color: transparent;
+  -mfx-float-mode: disabled;
+  -mfx-gap: 0;
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
 }

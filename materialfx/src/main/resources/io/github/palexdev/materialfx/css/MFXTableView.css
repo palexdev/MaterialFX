@@ -17,79 +17,78 @@
  */
 
 .mfx-table-view {
-	-fx-background-color: white;
-	-fx-background-radius: 5;
-	-fx-border-color: lightgray;
-	-fx-border-radius: 5;
-	-fx-padding: 0 0 2 0;
+  -fx-background-color: white;
+  -fx-background-radius: 5;
+  -fx-border-color: lightgray;
+  -fx-border-radius: 5;
+  -fx-padding: 0 0 2 0;
 }
 
 .mfx-table-view .columns-container {
-	-fx-border-color: transparent transparent lightgray transparent;
+  -fx-border-color: transparent transparent lightgray transparent;
 }
 
 .mfx-table-view .default-footer {
-	-fx-border-color: lightgray transparent transparent transparent;
-	-fx-padding: 10;
+  -fx-border-color: lightgray transparent transparent transparent;
+  -fx-padding: 10;
 }
 
 .mfx-table-view .default-footer .mfx-icon-wrapper .mfx-ripple-generator {
-	-mfx-ripple-radius: 18;
+  -mfx-ripple-radius: 18;
 }
 
 /********************
 Table Columns
 ********************/
 .mfx-table-column {
-	-fx-border-color: transparent white transparent transparent;
-	-fx-padding: 10 15 10 15;
+  -fx-border-color: transparent white transparent transparent;
+  -fx-padding: 10 15 10 15;
 }
 
 .mfx-table-column:hover,
 .mfx-table-column:dragged {
-	-fx-border-color: transparent lightgray transparent transparent;
+  -fx-border-color: transparent lightgray transparent transparent;
 }
 
 /********************
 Table Rows
 ********************/
 .mfx-table-row {
-	-fx-background-color: transparent;
+  -fx-background-color: transparent;
 }
 
 .mfx-table-row:hover {
-	-fx-background-color: #F5F5F5;
+  -fx-background-color: #F5F5F5;
 }
 
 .mfx-table-row:selected {
-	-fx-background-color: #E1E1E1;
+  -fx-background-color: #E1E1E1;
 }
 
 .mfx-table-row .mfx-ripple-generator {
-	-mfx-ripple-radius: 30;
-	-mfx-ripple-color: #C8C8C8;
+  -mfx-ripple-radius: 30;
+  -mfx-ripple-color: #C8C8C8;
 }
 
 /********************
 Table Row Cells
 ********************/
 .mfx-table-row-cell {
-	-fx-background-color: transparent;
-	-fx-padding: 5 15 5 15;
+  -fx-background-color: transparent;
+  -fx-padding: 5 15 5 15;
 }
 
 .mfx-table-row-cell,
 .mfx-table-row-cell:focused {
-	-fx-border-color: transparent;
+  -fx-border-color: transparent;
 }
 
 /********************
 Virtual Flow
 ********************/
 .mfx-table-view .virtual-flow {
-	-fx-background-color: transparent;
-
-	-track-color: rgb(230, 230, 230);
-	-thumb-color: rgb(137, 137, 137);
-	-thumb-hover-color: rgb(89, 88, 91);
+  -fx-background-color: transparent;
+  -track-color: rgb(230, 230, 230);
+  -thumb-color: rgb(137, 137, 137);
+  -thumb-hover-color: rgb(89, 88, 91);
 }

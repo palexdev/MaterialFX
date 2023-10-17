@@ -19,5 +19,5 @@
 /* This insets value is needed for fixing a strange layout issue
     that occurs whe the border is set to whatever color */
 .mfx-tree-item {
-	-fx-border-insets: -1;
+  -fx-border-insets: -1;
 }

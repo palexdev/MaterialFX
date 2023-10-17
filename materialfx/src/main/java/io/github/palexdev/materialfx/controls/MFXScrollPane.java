@@ -19,9 +19,9 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.controls.base.Themable;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.skins.MFXScrollPaneSkin;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -165,7 +165,7 @@ public class MFXScrollPane extends ScrollPane implements Themable {
 
 	@Override
 	public Theme getTheme() {
-		return Stylesheets.SCROLL_PANE;
+		return MaterialFXStylesheets.SCROLL_PANE;
 	}
 
 	@Override

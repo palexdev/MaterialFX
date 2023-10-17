@@ -21,10 +21,10 @@ package io.github.palexdev.materialfx.controls;
 import io.github.palexdev.materialfx.beans.properties.EventHandlerProperty;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle.MFXStepperToggleEvent;
 import io.github.palexdev.materialfx.controls.base.Themable;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.enums.StepperToggleState;
 import io.github.palexdev.materialfx.skins.MFXStepperSkin;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import io.github.palexdev.materialfx.validation.MFXValidator;
@@ -684,7 +684,7 @@ public class MFXStepper extends Control implements Themable {
 
 	@Override
 	public Theme getTheme() {
-		return Stylesheets.STEPPER;
+		return MaterialFXStylesheets.STEPPER;
 	}
 
 	@Override

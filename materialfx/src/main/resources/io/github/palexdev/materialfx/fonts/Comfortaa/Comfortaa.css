@@ -1,0 +1,57 @@
+/*
+ * Copyright (C) 2022 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@font-face {
+    font-family: 'Comfortaa Bold';
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+    src: url('Comfortaa-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Comfortaa Light';
+    font-weight: 300px;
+    font-style: normal;
+    font-display: swap;
+    src: url('Comfortaa-Light.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Comfortaa Medium';
+    font-weight: 500px;
+    font-style: normal;
+    font-display: swap;
+    src: url('Comfortaa-Medium.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Comfortaa Regular';
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+    src: url('Comfortaa-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Comfortaa SemiBold';
+    font-weight: 600px;
+    font-style: normal;
+    font-display: swap;
+    src: url('Comfortaa-SemiBold.ttf') format('truetype');
+}

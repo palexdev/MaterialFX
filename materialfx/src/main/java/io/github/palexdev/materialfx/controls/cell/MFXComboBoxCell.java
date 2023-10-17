@@ -21,8 +21,8 @@ package io.github.palexdev.materialfx.controls.cell;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.base.MFXCombo;
 import io.github.palexdev.materialfx.controls.base.Themable;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.virtualizedfx.cell.Cell;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
@@ -153,7 +153,7 @@ public class MFXComboBoxCell<T> extends HBox implements Cell<T>, Themable {
 
 	@Override
 	public Theme getTheme() {
-		return Stylesheets.COMBO_BOX_CELL;
+		return MaterialFXStylesheets.COMBO_BOX_CELL;
 	}
 
 	@Override

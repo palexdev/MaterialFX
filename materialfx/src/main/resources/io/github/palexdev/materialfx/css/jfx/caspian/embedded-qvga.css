@@ -1,0 +1,7 @@
+.text-field {
+    -fx-padding: 3 5 3 5;
+}
+
+.text-area .content {
+    -fx-padding: 3 5 3 5;
+}

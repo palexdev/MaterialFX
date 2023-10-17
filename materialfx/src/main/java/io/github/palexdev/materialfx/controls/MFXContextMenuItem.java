@@ -21,9 +21,9 @@ package io.github.palexdev.materialfx.controls;
 import io.github.palexdev.materialfx.beans.properties.EventHandlerProperty;
 import io.github.palexdev.materialfx.beans.properties.functional.SupplierProperty;
 import io.github.palexdev.materialfx.controls.base.Themable;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.skins.MFXContextMenuItemSkin;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
@@ -105,7 +105,7 @@ public class MFXContextMenuItem extends Labeled implements Themable {
 
 	@Override
 	public Theme getTheme() {
-		return Stylesheets.CONTEXT_MENU_ITEM;
+		return MaterialFXStylesheets.CONTEXT_MENU_ITEM;
 	}
 
 	@Override

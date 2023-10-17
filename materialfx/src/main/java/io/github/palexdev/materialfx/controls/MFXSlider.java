@@ -22,16 +22,16 @@ import io.github.palexdev.materialfx.beans.NumberRange;
 import io.github.palexdev.materialfx.beans.PositionBean;
 import io.github.palexdev.materialfx.beans.properties.functional.SupplierProperty;
 import io.github.palexdev.materialfx.controls.base.Themable;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.effects.ripple.MFXCircleRippleGenerator;
 import io.github.palexdev.materialfx.enums.SliderEnums.SliderMode;
 import io.github.palexdev.materialfx.enums.SliderEnums.SliderPopupSide;
-import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import io.github.palexdev.materialfx.skins.MFXSliderSkin;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.NumberUtils;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
+import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -891,7 +891,7 @@ public class MFXSlider extends Control implements Themable {
 
     @Override
     public Theme getTheme() {
-        return Stylesheets.SLIDER;
+		return MaterialFXStylesheets.SLIDER;
     }
 
     @Override

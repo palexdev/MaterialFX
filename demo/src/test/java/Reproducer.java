@@ -2,11 +2,12 @@ import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
-import io.github.palexdev.materialfx.css.CSSFragment;
-import io.github.palexdev.materialfx.css.themes.MFXThemeManager;
-import io.github.palexdev.materialfx.css.themes.Themes;
 import io.github.palexdev.materialfx.demo.model.Model;
 import io.github.palexdev.materialfx.demo.model.Person;
+import io.github.palexdev.materialfx.theming.CSSFragment;
+import io.github.palexdev.materialfx.theming.JavaFXThemes;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.UserAgentBuilder;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -22,7 +23,13 @@ public class Reproducer extends Application {
         box.setAlignment(Pos.TOP_CENTER);
         box.setPadding(new Insets(20));
 
-        MFXThemeManager.addOn(box, Themes.DEFAULT, Themes.LEGACY);
+        UserAgentBuilder.builder()
+            .themes(JavaFXThemes.MODENA)
+            .themes(MaterialFXStylesheets.forAssemble(true))
+            .setResolveAssets(true)
+            .setDeploy(true)
+            .build()
+            .setGlobal();
 
         MFXTableView<Person> table = new MFXTableView<>(Model.people);
         MFXTableColumn<Person> name = new MFXTableColumn<>("Name");

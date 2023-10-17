@@ -17,66 +17,67 @@
  */
 
 @import "Fonts.css";
+
 @import "MFXColors.css";
 
 /********************
 Pagination
 ********************/
 .mfx-pagination .pages-bar {
-	-fx-background-color: #f0f0f0;
-	-fx-background-radius: 30;
-	-fx-padding: 0 10 0 10;
+  -fx-background-color: #f0f0f0;
+  -fx-background-radius: 30;
+  -fx-padding: 0 10 0 10;
 }
 
 .mfx-pagination .mfx-icon-wrapper {
-	-fx-background-color: #f0f0f0;
+  -fx-background-color: #f0f0f0;
 }
 
 .mfx-pagination .mfx-ripple-generator {
-	-mfx-ripple-radius: 24;
+  -mfx-ripple-radius: 24;
 }
 
 /********************
 Pages
 ********************/
 .mfx-pagination .mfx-page {
-	-fx-background-radius: 10;
-	-fx-pref-width: 32;
-	-fx-pref-height: 32;
-	-fx-max-width: 32;
-	-fx-max-height: 32;
-	-fx-font-family: "Open Sans SemiBold";
-	-fx-text-fill: -mfx-text-he;
+  -fx-background-radius: 10;
+  -fx-pref-width: 32;
+  -fx-pref-height: 32;
+  -fx-max-width: 32;
+  -fx-max-height: 32;
+  -fx-font-family: "Open Sans SemiBold";
+  -fx-text-fill: -mfx-text-he;
 }
 
 .mfx-pagination .mfx-page:selected {
-	-fx-background-color: -mfx-purple;
-	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 15, 0.16, 2, 4);
-	-fx-font-size: 14;
-	-fx-text-fill: white;
+  -fx-background-color: -mfx-purple;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 15, 0.16, 2, 4);
+  -fx-font-size: 14;
+  -fx-text-fill: white;
 }
 
 /********************
 Popup
 ********************/
 .pages-popup .virtual-flow {
-	-fx-background-color: #f8f6ff;
-	-fx-background-radius: 5;
-	-fx-border-color: #e6e6e6;
-	-fx-border-radius: 5;
+  -fx-background-color: #f8f6ff;
+  -fx-background-radius: 5;
+  -fx-border-color: #e6e6e6;
+  -fx-border-radius: 5;
 }
 
 .pages-popup .mfx-list-view {
-	-fx-pref-width: 100;
-	-fx-pref-height: 100;
+  -fx-pref-width: 100;
+  -fx-pref-height: 100;
 }
 
 .pages-popup .virtual-flow .mfx-list-cell {
-	-fx-background-color: transparent;
-	-fx-border-color: transparent;
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
 }
 
 .pages-popup .virtual-flow .mfx-list-cell:hover {
-	-fx-background-color: #F4EBFF;
-	-fx-background-radius: 5;
+  -fx-background-color: #F4EBFF;
+  -fx-background-radius: 5;
 }

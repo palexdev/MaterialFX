@@ -20,12 +20,12 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableBooleanProperty;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableStringProperty;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
-import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import io.github.palexdev.materialfx.i18n.I18N;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
+import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import javafx.beans.binding.Bindings;
 import javafx.css.CssMetaData;
 import javafx.css.PseudoClass;
@@ -270,7 +270,7 @@ public class MFXPasswordField extends MFXTextField {
 
     @Override
     public Theme getTheme() {
-        return Stylesheets.PASSWORD_FIELD;
+		return MaterialFXStylesheets.PASSWORD_FIELD;
     }
 
     //================================================================================

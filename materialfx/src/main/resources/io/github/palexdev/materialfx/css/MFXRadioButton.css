@@ -17,42 +17,42 @@
  */
 
 @import "Fonts.css";
+
 @import "MFXColors.css";
 
 .mfx-radio-button {
-	-mfx-main: #6200EE;
-	-mfx-secondary: #424242;
-
-	-fx-font-family: "Open Sans Regular";
-	-fx-text-fill: -mfx-text-he;
-	-fx-cursor: HAND;
+  -mfx-main: #6200EE;
+  -mfx-secondary: #424242;
+  -fx-font-family: "Open Sans Regular";
+  -fx-text-fill: -mfx-text-he;
+  -fx-cursor: HAND;
 }
 
 .mfx-radio-button .radio {
-	-fx-stroke-width: 2.0;
-	-fx-fill: transparent;
-	-fx-stroke: -mfx-secondary;
+  -fx-stroke-width: 2.0;
+  -fx-fill: transparent;
+  -fx-stroke: -mfx-secondary;
 }
 
 .mfx-radio-button .dot {
-	-fx-fill: -mfx-main;
+  -fx-fill: -mfx-main;
 }
 
 .mfx-radio-button .mfx-ripple-generator {
-	-mfx-animation-speed: 2;
-	-mfx-ripple-color: derive(-mfx-main, 110%);
-	-mfx-ripple-radius: 8;
+  -mfx-animation-speed: 2;
+  -mfx-ripple-color: derive(-mfx-main, 110%);
+  -mfx-ripple-radius: 8;
 }
 
 .mfx-radio-button:selected .radio {
-	-fx-stroke: -mfx-main;
+  -fx-stroke: -mfx-main;
 }
 
 .mfx-radio-button:disabled:selected .radio {
-	-fx-stroke: -mfx-secondary;
+  -fx-stroke: -mfx-secondary;
 }
 
 .mfx-radio-button:disabled:selected .dot {
-	-fx-fill: -mfx-secondary;
+  -fx-fill: -mfx-secondary;
 }
 

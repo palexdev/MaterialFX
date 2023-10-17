@@ -19,12 +19,12 @@
 package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.controls.base.Themable;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.enums.StepperToggleState;
 import io.github.palexdev.materialfx.enums.TextPosition;
 import io.github.palexdev.materialfx.skins.MFXStepperSkin;
 import io.github.palexdev.materialfx.skins.MFXStepperToggleSkin;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import io.github.palexdev.materialfx.validation.MFXValidator;
 import io.github.palexdev.materialfx.validation.Validated;
@@ -390,7 +390,7 @@ public class MFXStepperToggle extends Control implements Validated, Themable {
 
 	@Override
 	public Theme getTheme() {
-		return Stylesheets.STEPPER_TOGGLE;
+		return MaterialFXStylesheets.STEPPER_TOGGLE;
 	}
 
 	@Override

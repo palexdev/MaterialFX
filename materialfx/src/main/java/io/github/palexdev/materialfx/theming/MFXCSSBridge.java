@@ -16,7 +16,7 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.css;
+package io.github.palexdev.materialfx.theming;
 
 import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;

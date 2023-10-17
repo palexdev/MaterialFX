@@ -17,42 +17,43 @@
  */
 
 @import "MFXComboBox.css";
+
 @import "MFXColors.css";
 
 .mfx-filter-combo-box {
-	-mfx-caret-visible: true;
+  -mfx-caret-visible: true;
 }
 
 .mfx-filter-combo-box:popup {
-	-mfx-caret-visible: false;
-	-mfx-editable: false;
+  -mfx-caret-visible: false;
+  -mfx-editable: false;
 }
 
 .mfx-filter-combo-box .combo-popup .virtual-flow {
-	-fx-background-color: transparent;
-	-fx-background-radius: 0;
-	-fx-max-height: 200;
+  -fx-background-color: transparent;
+  -fx-background-radius: 0;
+  -fx-max-height: 200;
 }
 
 .mfx-filter-combo-box .combo-popup .search-container {
-	-fx-background-color: white;
-	-fx-background-radius: 5;
-	-fx-border-color: #ebebeb;
-	-fx-border-radius: 5;
-	-fx-padding: 10 5 5 5;
+  -fx-background-color: white;
+  -fx-background-radius: 5;
+  -fx-border-color: #ebebeb;
+  -fx-border-radius: 5;
+  -fx-padding: 10 5 5 5;
 }
 
 .mfx-filter-combo-box .combo-popup .search-field {
-	-mfx-gap: 0;
-	-mfx-float-mode: disabled;
-	-fx-padding: 5;
-	-fx-display-caret: false;
+  -mfx-gap: 0;
+  -mfx-float-mode: disabled;
+  -fx-padding: 5;
+  -fx-display-caret: false;
 }
 
 .mfx-filter-combo-box .combo-popup .search-field,
 .mfx-filter-combo-box .combo-popup .search-field:focus-within {
-	-fx-border-width: 1;
-	-fx-background-insets: 0;
-	-fx-border-color: lightgray;
+  -fx-border-width: 1;
+  -fx-background-insets: 0;
+  -fx-border-color: lightgray;
 }
 

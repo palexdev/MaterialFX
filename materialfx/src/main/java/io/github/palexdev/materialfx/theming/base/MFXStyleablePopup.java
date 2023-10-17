@@ -16,9 +16,10 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.materialfx.css;
+package io.github.palexdev.materialfx.theming.base;
 
 import io.github.palexdev.materialfx.controls.MFXPopup;
+import io.github.palexdev.materialfx.theming.MFXCSSBridge;
 import javafx.collections.ObservableList;
 import javafx.scene.Parent;
 import javafx.scene.control.PopupControl;

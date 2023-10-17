@@ -17,48 +17,50 @@
  */
 
 @import "Fonts.css";
+
 @import "MFXColors.css";
+
 @import "MFXStepperToggle.css";
 
 .mfx-stepper {
-	-mfx-base-color: -mfx-purple;
-	-mfx-alt-color: #BEBEBE;
-	-mfx-bar-background: #EBEBEB;
-	-mfx-progress-color: -mfx-base-color;
+  -mfx-base-color: -mfx-purple;
+  -mfx-alt-color: #BEBEBE;
+  -mfx-bar-background: #EBEBEB;
+  -mfx-progress-color: -mfx-base-color;
 }
 
 .mfx-stepper .track {
-	-fx-fill: -mfx-bar-background;
+  -fx-fill: -mfx-bar-background;
 }
 
 .mfx-stepper .bar {
-	-fx-fill: -mfx-progress-color;
+  -fx-fill: -mfx-progress-color;
 }
 
 .mfx-stepper .buttons-box .mfx-button {
-	-mfx-depth-level: level1;
-	-fx-background-color: white;
-	-fx-border-color: -mfx-charcoal;
-	-fx-background-radius: 20;
-	-fx-border-radius: 20;
-	-fx-font-family: 'Open Sans SemiBold';
-	-fx-font-size: 13;
+  -mfx-depth-level: level1;
+  -fx-background-color: white;
+  -fx-border-color: -mfx-charcoal;
+  -fx-background-radius: 20;
+  -fx-border-radius: 20;
+  -fx-font-family: 'Open Sans SemiBold';
+  -fx-font-size: 13;
 }
 
 .mfx-stepper .buttons-box .mfx-button .text {
-	-fx-fill: -mfx-text-he;
+  -fx-fill: -mfx-text-he;
 }
 
 .mfx-stepper .buttons-box .mfx-button:focused {
-	-fx-background-color: -mfx-base-color;
-	-fx-border-color: -mfx-base-color;
+  -fx-background-color: -mfx-base-color;
+  -fx-border-color: -mfx-base-color;
 }
 
 .mfx-stepper .buttons-box .mfx-button:focused .text {
-	-fx-fill: white;
+  -fx-fill: white;
 }
 
 .mfx-stepper .buttons-box .mfx-button .mfx-ripple-generator {
-	-mfx-ripple-color: derive(-mfx-base-color, 70%);
-	-mfx-ripple-radius: 60px;
+  -mfx-ripple-color: derive(-mfx-base-color, 70%);
+  -mfx-ripple-radius: 60px;
 }

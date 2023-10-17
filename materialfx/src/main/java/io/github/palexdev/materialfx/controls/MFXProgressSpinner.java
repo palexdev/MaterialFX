@@ -22,9 +22,9 @@ import io.github.palexdev.materialfx.beans.NumberRange;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableDoubleProperty;
 import io.github.palexdev.materialfx.beans.properties.styleable.StyleableObjectProperty;
 import io.github.palexdev.materialfx.controls.base.Themable;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.skins.MFXProgressSpinnerSkin;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.materialfx.utils.StyleablePropertiesUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -346,7 +346,7 @@ public class MFXProgressSpinner extends ProgressIndicator implements Themable {
 
 	@Override
 	public Theme getTheme() {
-		return Stylesheets.PROGRESS_SPINNER;
+		return MaterialFXStylesheets.PROGRESS_SPINNER;
 	}
 
 	@Override

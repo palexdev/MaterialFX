@@ -20,9 +20,9 @@ package io.github.palexdev.materialfx.dialogs;
 
 import io.github.palexdev.materialfx.beans.FilterBean;
 import io.github.palexdev.materialfx.controls.MFXFilterPane;
-import io.github.palexdev.materialfx.css.themes.Stylesheets;
-import io.github.palexdev.materialfx.css.themes.Theme;
 import io.github.palexdev.materialfx.filter.base.AbstractFilter;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.base.Theme;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
@@ -77,7 +77,7 @@ public class MFXFilterDialog<T> extends MFXGenericDialog {
 
     @Override
     public Theme getTheme() {
-        return Stylesheets.FILTER_DIALOG;
+        return MaterialFXStylesheets.FILTER_DIALOG;
     }
 
     //================================================================================

@@ -1,0 +1,23 @@
+.context-menu {
+    -fx-effect: null;
+}
+
+.combo-box-popup > .list-view {
+    -fx-effect: null;
+}
+
+.color-palette {
+    -fx-background-radius: 0;
+    -fx-effect: null;
+}
+
+.tooltip {
+    -fx-background-color: #1e1e1e;
+    -fx-background-radius: 0;
+    -fx-effect: null;
+}
+
+.date-picker-popup {
+    -fx-background-radius: 0;
+    -fx-effect: null;
+}

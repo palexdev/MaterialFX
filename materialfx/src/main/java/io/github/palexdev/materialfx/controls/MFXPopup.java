@@ -21,12 +21,10 @@ package io.github.palexdev.materialfx.controls;
 import io.github.palexdev.materialfx.beans.Alignment;
 import io.github.palexdev.materialfx.beans.PopupPositionBean;
 import io.github.palexdev.materialfx.beans.PositionBean;
-import io.github.palexdev.materialfx.css.MFXCSSBridge;
-import io.github.palexdev.materialfx.css.MFXStyleablePopup;
-import io.github.palexdev.materialfx.css.themes.MFXThemeManager;
-import io.github.palexdev.materialfx.css.themes.Themes;
 import io.github.palexdev.materialfx.effects.Interpolators;
 import io.github.palexdev.materialfx.skins.MFXPopupSkin;
+import io.github.palexdev.materialfx.theming.MFXCSSBridge;
+import io.github.palexdev.materialfx.theming.base.MFXStyleablePopup;
 import io.github.palexdev.materialfx.utils.AnimationUtils.KeyFrames;
 import io.github.palexdev.materialfx.utils.AnimationUtils.TimelineBuilder;
 import io.github.palexdev.materialfx.utils.NodeUtils;
@@ -141,8 +139,6 @@ public class MFXPopup extends PopupControl implements MFXStyleablePopup {
         setAutoFix(true);
         setAutoHide(true);
         setHideOnEscape(true);
-        MFXThemeManager.addOn(this, Themes.DEFAULT, Themes.LEGACY);
-
         hover.addListener(invalidated -> pseudoClassStateChanged(HOVER_PSEUDO_CLASS, hover.get()));
     }
 
