@@ -21,8 +21,8 @@ package io.github.palexdev.materialfx.builders.control;
 import io.github.palexdev.materialfx.builders.base.INodeBuilder;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.utils.NodeUtils;
+import io.github.palexdev.materialfx.utils.RandomUtils;
 import io.github.palexdev.mfxresources.fonts.IconDescriptor;
-import io.github.palexdev.mfxresources.fonts.IconsProviders;
 import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import javafx.scene.paint.Color;
 
@@ -55,8 +55,9 @@ public class IconBuilder implements INodeBuilder<MFXFontIcon> {
     // Delegate Methods
     //================================================================================
 
-    public static MFXFontIcon getRandomIcon(IconsProviders provider, double size, Color color) {
-        return provider.randomIcon(size, color);
+    public static <E extends Enum<? extends IconDescriptor>> MFXFontIcon getRandomIcon(Class<E> k, double size, Color color) {
+        IconDescriptor desc = (IconDescriptor) RandomUtils.randFromArray(k.getEnumConstants());
+        return new MFXFontIcon(desc, size, color);
     }
 
     public IconBuilder setColor(Color color) {

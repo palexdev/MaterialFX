@@ -28,6 +28,8 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junit"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit"
 
+    api "io.github.palexdev:mfxcore:$mfxcore"
+    api "io.github.palexdev:mfxresources:$mfxresources"
     api "io.github.palexdev:virtualizedfx:$vfx"
 }
 

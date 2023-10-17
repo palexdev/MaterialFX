@@ -5,12 +5,12 @@ import io.github.palexdev.materialfx.controls.MFXSimpleNotification;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.enums.NotificationPos;
 import io.github.palexdev.materialfx.factories.InsetsFactory;
-import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import io.github.palexdev.materialfx.notifications.MFXNotificationCenterSystem;
 import io.github.palexdev.materialfx.notifications.MFXNotificationSystem;
 import io.github.palexdev.materialfx.notifications.base.INotification;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import io.github.palexdev.materialfx.utils.RandomUtils;
+import io.github.palexdev.mfxresources.fonts.fontawesome.FontAwesomeSolid;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -37,13 +37,13 @@ public class NotificationsTest extends Application {
         stackPane.getChildren().add(notificationCenter);
 
         MFXNotificationCenterSystem.instance()
-                .initOwner(primaryStage)
-                .setOpenOnNew(false)
-                .setCloseAutomatically(true)
-                .setPosition(NotificationPos.TOP_LEFT);
+            .initOwner(primaryStage)
+            .setOpenOnNew(false)
+            .setCloseAutomatically(true)
+            .setPosition(NotificationPos.TOP_LEFT);
         MFXNotificationSystem.instance()
-                .initOwner(primaryStage)
-                .setPosition(NotificationPos.TOP_RIGHT);
+            .initOwner(primaryStage)
+            .setPosition(NotificationPos.TOP_RIGHT);
         stackPane.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             switch (event.getCode()) {
                 case A -> MFXNotificationCenterSystem.instance().publish(createDummyNotification());
@@ -63,7 +63,7 @@ public class NotificationsTest extends Application {
 
     private INotification createDummyNotification() {
         MFXTextField label = MFXTextField.asLabel("Random Label n." + RandomUtils.random.nextInt());
-        label.setLeadingIcon(new MFXIconWrapper(MFXFontIcon.getRandomIcon(18, ColorUtils.getRandomColor()), 24));
+        label.setLeadingIcon(new MFXIconWrapper(FontAwesomeSolid.random(ColorUtils.getRandomColor(), 18), 24));
         label.setAlignment(Pos.CENTER_LEFT);
         label.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(label, Priority.ALWAYS);

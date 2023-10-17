@@ -5,10 +5,10 @@ import io.github.palexdev.materialfx.controls.MFXSimpleNotification;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.enums.ButtonType;
-import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import io.github.palexdev.materialfx.notifications.base.INotification;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import io.github.palexdev.materialfx.utils.RandomUtils;
+import io.github.palexdev.mfxresources.fonts.fontawesome.FontAwesomeSolid;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.HPos;
@@ -62,7 +62,7 @@ public class PopupTest extends Application {
 
 	private INotification createDummyNotification() {
 		MFXTextField label = MFXTextField.asLabel("Random Label n." + RandomUtils.random.nextInt());
-		label.setLeadingIcon(MFXFontIcon.getRandomIcon(32, ColorUtils.getRandomColor()));
+		label.setLeadingIcon(FontAwesomeSolid.random(ColorUtils.getRandomColor(), 32));
 		label.setAlignment(Pos.CENTER_LEFT);
 		label.setMaxWidth(Double.MAX_VALUE);
 		HBox.setHgrow(label, Priority.ALWAYS);
@@ -78,8 +78,8 @@ public class PopupTest extends Application {
 		notification.setOnUpdateElapsed((longElapsed, stringElapsed) -> Platform.runLater(() -> time.setText(stringElapsed)));
 		time.setText(notification.getTimeToStringConverter().apply(notification.getElapsedTime()));
 		box.setStyle("" +
-				"-fx-background-color: transparent;\n" +
-				"-fx-border-color: red");
+			"-fx-background-color: transparent;\n" +
+			"-fx-border-color: red");
 		return notification;
 	}
 }
