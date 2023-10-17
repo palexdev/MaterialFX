@@ -16,6 +16,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+# [11.16.1] - 08-04-2023
+
+## Changed
+
+- Make some dependencies transitive
+
 # [11.16.0] - 08-04-2023
 
 ## Changed
