@@ -54,7 +54,7 @@ import java.util.Set;
  * clumsy when it comes to new features, it's a shame really.
  * <p></p>
  * This builder is an attempt at supporting such use cases, and while it's true that the goal can be achieved, it doesn't come
- * without some caveats which I will discuss later on.
+ * without any caveats that I will discuss later on.
  * <p>
  * The mechanism is rather simple, you can specify a set of themes with {@link #themes(Theme...)}, these will be merged into
  * a single stylesheet by the {@link #build()} method. The result is a {@link CSSFragment} object that, once converted to
@@ -74,15 +74,15 @@ import java.util.Set;
  * make the process fail. Report any issue, and I'll see if anything can be done to fix it.
  * <p></p>
  * Imports and URL resources are supported only if the {@link Theme}s have been deployed and their assets are now accessible
- * on the filesystem. The processor will attempt at converting any 'local' resource to a path on the disk, and this is
+ * on the filesystem. The processor will attempt to convert any 'local' resource to a path on the disk, and this is
  * another delicate point of the whole process as the attempt may fail for unexpected reasons.
  * <p></p>
  * The whole process can be a bit slow, although considering how big are JavaFX's and MaterialFX's themes, and also
  * considering that now they have to deploy their resources on the disk first, it's really not that bad.
- * On my main PCs I didn't notice any major slowdowns, at max 1s. On my tablet, which by the way it's an Android tablet
- * on which I installed Windows so take into account that, I noticed the same average. Of course mileage may vary!
+ * On my main PCs I didn't notice any major slowdowns, at max 1s. On my tablet, which by the way, it's an Android tablet
+ * on which I installed Windows, so take into account that, I noticed the same average. Mileage may vary!
  * <p>
- * Such operations, can be enabled/disabled with: {@link #setResolveAssets(boolean)}, {@link #setDeploy(boolean)}.
+ * Such operations can be enabled/disabled with: {@link #setResolveAssets(boolean)}, {@link #setDeploy(boolean)}.
  */
 public class UserAgentBuilder {
     //================================================================================
@@ -107,7 +107,7 @@ public class UserAgentBuilder {
     //================================================================================
 
     /**
-     * Allows to specify all the themes that will be merged by {@link #build()}.
+     * Allows specifying all the themes that will be merged by {@link #build()}.
      * <p>
      * The themes are stored in a {@link LinkedHashSet}, ensuring insertion order and avoiding duplicates.
      */
@@ -240,7 +240,7 @@ public class UserAgentBuilder {
          * It's super important to add the 'file:///' protocol so that the CSS parser can correctly find the resource
          * <p> - URLs are resolved by {@link #resolveResource(Theme, String)}. If the resource was found in the deployed
          * of the theme (see {@link Deployer}), then the URL directive is converted as follows (without quotes):
-         * "url("PATH_ON_THE_DISK");". If the URL points to a network resource then there's no need to convert it.
+         * "url("PATH_ON_THE_DISK");". If the URL points to a network resource, then there's no need to convert it.
          *
          * @return the pre-processed theme's data
          */

@@ -16,6 +16,22 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.3.1] - 19-10-2023
+
+### Added
+
+- Added base class, FluentTransition, for Transitions that want to use fluent API
+
+### Changed
+
+- Make ConsumerTransition extend from FluentTransition
+- Make MomentumTransition extend from FluentTransition
+- MomentumTransition: allow negative displacements by separating the sign from the value in a new variable called '
+  direction'
+- MomentumTransition: Up until now, Interpolators had almost no effect on the transition because the 'frac' value was
+  not being used. Modified the deltaFrameTime computation to use the 'frac' parameter instead of the current time
+  property
+
 ## [11.3.0] - 25-09-2023
 
 ### Added

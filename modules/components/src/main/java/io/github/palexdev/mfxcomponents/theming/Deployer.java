@@ -86,7 +86,7 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
  * }
  * </pre>
  * <p></p>
- * Last but not least, there are method to also delete any deployed resource: {@link #clean(Theme)} and {@link #cleanAll()}.
+ * Last but not least, there are methods to also delete any deployed resource: {@link #clean(Theme)} and {@link #cleanAll()}.
  */
 public class Deployer {
     //================================================================================
@@ -208,7 +208,7 @@ public class Deployer {
     }
 
     /**
-     * Utility method to delete a path whether it is a file or directory, in other words what Java should have already had
+     * Utility method to delete a path whether it is a file or directory, in other words, what Java should have already had
      * in their java.io/java.nio mess.
      */
     private void delete(Path path) throws IOException {
