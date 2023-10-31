@@ -94,9 +94,8 @@ public class MFXNotificationSystem extends AbstractMFXNotificationSystem {
 	public MFXNotificationSystem initOwner(Window owner) {
 		dispose();
 		super.owner = owner;
-		owner.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, onClose);
 		PositionBean positionBean = computePosition();
-		popup.show(dummyStage, positionBean.getX(), positionBean.getY());
+		popup.show(owner, positionBean.getX(), positionBean.getY());
 		return this;
 	}
 
@@ -113,7 +112,7 @@ public class MFXNotificationSystem extends AbstractMFXNotificationSystem {
 				closeAfterTransition.playFromStart();
 			}
 		});
-		popup.show(dummyStage, position.getX(), position.getY());
+		popup.show(owner, position.getX(), position.getY());
 	}
 
 	/**
@@ -144,7 +143,7 @@ public class MFXNotificationSystem extends AbstractMFXNotificationSystem {
 
 			if (!isShowing()) {
 				init();
-				popup.show(dummyStage);
+				popup.show(owner);
 
 				notificationContainer.getChildren().setAll(notification.getContent());
 				notificationContainer.applyCss();
@@ -274,7 +273,6 @@ public class MFXNotificationSystem extends AbstractMFXNotificationSystem {
 	@Override
 	public INotificationSystem dispose() {
 		if (super.owner != null) {
-			super.owner.removeEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, onClose);
 			super.owner = null;
 		}
 		return this;

@@ -77,8 +77,6 @@ public abstract class AbstractMFXNotificationSystem implements INotificationSyst
 	//================================================================================
 	protected Screen screen = Screen.getPrimary();
 	protected Window owner;
-	protected final Stage dummyStage;
-	protected final EventHandler<WindowEvent> onClose;
 	protected final MFXPopup popup;
 	protected NotificationPos position;
 	protected Insets spacing;
@@ -97,12 +95,6 @@ public abstract class AbstractMFXNotificationSystem implements INotificationSyst
 	protected AbstractMFXNotificationSystem() {
 		position = NotificationPos.BOTTOM_RIGHT;
 		spacing = InsetsFactory.all(15);
-
-		dummyStage = new Stage();
-		dummyStage.initStyle(StageStyle.UTILITY);
-		dummyStage.setOpacity(0.0);
-		dummyStage.show();
-		onClose = event -> dummyStage.close();
 
 		popup = new MFXPopup();
 		popup.setAnimated(false);
