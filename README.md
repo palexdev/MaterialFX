@@ -1,3 +1,4 @@
+<!--@formatter:off-->
 [![HitCount](http://hits.dwyl.com/PAlex404/MaterialFX.svg)](http://hits.dwyl.com/PAlex404/MaterialFX)
 ![GitHub Workflow Status](https://github.com/palexdev/materialfx/actions/workflows/gradle.yml/badge.svg)
 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/io.github.palexdev/materialfx?server=https%3A%2F%2Fs01.oss.sonatype.org&style=flat-square)
@@ -59,7 +60,8 @@
 
 ## Important notes
 
-Please, **before** using this library and submitting an issue complaining that controls are **not styled and bugged** check how the **stilying system has changed** since
+Please, **before** using this library and submitting an issue complaining that controls are **not styled and bugged**
+check how the **stilying system has changed** since
 version 11.14.0
 
 <!-- ABOUT THE PROJECT -->
@@ -275,54 +277,46 @@ features.
 ## Theming System
 
 Since MaterialFX 11.14.0 the way controls are styles through CSS has drastically changed. Before telling you about the
-new
-Theming System, and about its pros and cons, let's talk a bit on the history of this project, the causes that brought to
-this drastic change.
+new Theming System, and about its pros and cons, let's talk a bit on the history of this project, the causes that
+brought to this drastic change.
 
 When I started developing MaterialFX I was a complete noob, I knew nothing about JavaFX. But I really wanted to use it
-and
-to make it look good. Competitors had broken libraries that made usage difficult for the end user, I didn't like them at
-all.  
+and to make it look good. Competitors had broken libraries that made usage difficult for the end user, I didn't like
+them at all.  
 And so the journey begun, MaterialFX is born. Like any newbies, what do you do when you know nothing but want to
 learn?  
 You check others work and try to copy them but still make the changes you want to implement.  
 This lead me to create controls that made use of the infamous `getUserAgentStylesheet()` method. For those of you that
-do not
-know about it, a developer of custom controls is supposed to override that method to provide a CSS stylesheet to define
-the
-author intended style for the custom control.  
+do not know about it, a developer of custom controls is supposed to override that method to provide a CSS stylesheet to
+define the author's intended style for the custom control.  
 Sounds great right, just the thing I need... Well, I'd say that if only it worked properly. This system has been the
-root
-cause of CSS issues right from the start of the project, with little I could do to fix it **properly**.  
+root cause of CSS issues right from the start of the project, with little I could do to fix it **properly**.  
 _(Little secret that almost no one know: I actually sent a PR on the JavaFX repo to improve the system and make it
-dynamic,
-guess what, it's still there lol)_
+dynamic, guess what, it's still there lol)_
 
 The two most annoying issues caused by this system are:
 
 1) The little buggers didn't think of nested custom controls. For example, if a custom control(parent) has a skin that
-   uses other
-   custom controls(children), the user agent of the parent will be **completely ignored** by the children, the result is
-   a
-   bunch of children that **cannot** be styled in any way unless you create a custom skin yourself. A fix I implemented
-   for this
-   in the past, was to override inline the `getUserAgentStylesheet()` method of each children node to use the one of the
-   parent,
-   and even this drastic solution was working half the time (didn't work in some user cases)
+   uses other custom controls(children), the user agent of the parent will be **completely ignored** by the children,
+   the result is a bunch of children that **cannot** be styled in any way unless you create a custom skin yourself.
+   A fix I implemented for this in the past, was to override inline the `getUserAgentStylesheet()` method of each
+   children node to use the one of the parent, and even this drastic solution was working half the time (didn't work in
+   some user cases)
 2) For some reason, sometimes stylesheets provided by the user were half or completely **ignored** leading to half/not
    styled(as intended) custom controls. This was the most annoying issue, as the causes would vary from case to case,
-   not always
-   there was a easy/feasible solution, a nightmare, really
+   not always there was an easy/feasible solution, a nightmare, really
 
 **End of the rant**  
 How can I fix it? I asked myself many many times.  
 Recently I've been working on a rewrite of [MaterialFX](https://github.com/palexdec/MaterialFX/tree/rewrite), this new
 version will have controls based on the new Material Design 3 Guidelines, will implement modular themes thanks to the
-usage
-of [SASS](https://sass-lang.com/) and a Theming API that will let user change themes, implement new ones, very easily.  
+usage of [SASS](https://sass-lang.com/) and a Theming API that will let user change themes, implement new ones, very easily.  
 So the idea is to backport at least the concept on the main branch at least until the rewrite is done.
 
-**The Theme API**  
+**The Theme API**
+
+<details>
+<summary>Previous System (changed because of performance issues)</summary>
 An interface called `Theme` allows users to define custom themes entries. It defines the bare minimum for a theme,
 its path and a way to load it.  
 There are two implementations of this interface:
@@ -382,6 +376,84 @@ nodes or scenes.
   by adding a custom stylesheet on itself or on its parent. There's also an emergency system to completely shut down the
   SceneBuilder integration, more info
   here: [Themable](https://github.com/palexdev/MaterialFX/blob/main/materialfx/src/main/java/io/github/palexdev/materialfx/controls/base/Themable.java)
+</details>
+<br></br>
+<details>
+<summary>New system</summary>
+The best way to style a JavaFX app is to set its User-Agent Stylesheet by calling `Application.setUserAgentStylesheet(...)`.
+The issue with this is that JavaFX's default theme is overridden, and so, any other non-custom control will not be styled.
+This is good if you are going to use only custom controls, but obviously bad if you are going to use JavaFX's controls or
+any other control from other libraries that rely on the JavaFX's default theme.
+There is no easy way around this. There is a proposal to enhance the system on the JavaFX page, but it won't come anytime
+soon. So, I came up with a pretty decent workaround. If I can't set multiple User-Agents then I will build a single one.
+So, let's see how the API works.
+
+An interface called `Theme`, allows users to define custom theme entries. It specifies the bare minimum properties a
+theme must have: its path and a way to load it. There are two implementations of this interface:
+
+1) `JavaFXThemes`: this enumerator defines the JavaFX's default themes. Since JavaFX 8 the default one is `MODENA`.
+    The funny thing about all this crap is that, JavaFX's User-Agents are actually split in multiple CSS files, there is a
+    main file and then others that are added according to certain system's properties the app is running on. So, they are allowed
+    to use multiple files, but we are not....thanks for nothing I guess.
+2) `MaterialFXStylesheets`: this enumerator defines all the stylesheets for each MaterialFX control.
+   However, to make things work as intended, all of them have been merged into a single CSS file called `DefaultTheme.css`.
+   The same thing has been done for legacy controls too, the aio CSS file is called `LegacyControls.css`
+
+Now, the missing core part. The class responsible for building a single User-Agent stylesheet is: `UserAgentBuilder`.
+There are three main aspects of the system you should know, and I'm going to explain them after giving you a short code
+example:
+
+```java
+UserAgentBuilder.builder()
+    .themes(JavaFXThemes.MODENA) // Optional if you don't need JavaFX's default theme, still recommended though
+    .themes(MaterialFXStylesheets.forAssemble(true)) // Adds the MaterialFX's default theme. The boolean argument is to include legacy controls
+    .setDeploy(true) // Whether to deploy each theme's assets on a temporary dir on the disk
+    .setResolveAssets(true) // Whether to try resolving @import statements and resources urls
+    .build() // Assembles all the added themes into a single CSSFragment (very powerful class check its documentation)
+    .setGlobal(); // Finally, sets the produced stylesheet as the global User-Agent stylesheet
+```
+
+1) First and foremost, the build has to know which themes/stylesheets you want to combine, add them through the
+   `themes(...)` method.
+2) Themes are allowed to have assets. You see, when they are combined into one single stylesheets, resources are likely
+   to fail loading. So, fonts, images and such will not be available anymore. To overcome this issue, there's only one way,
+   deploying all the needed resources on the disk. Assets should be packed in a `.zip` file, and you should be **very careful**
+   at the structure inside it. When extracting the files the structure will be honored.
+3) Deploying the assets in most cases is not enough. Let's say a CSS file has this statement `@import ../fonts/Font.css`.
+   You know how the API works and packed the font into a zip file, the structure is as follows `fonts/Font.css`.
+   The file is going to be extracted in a directory on the disk, let's say `osTempDir/myassets/fonts/Font.css`.
+   (You can change the root dir's name by overriding the Theme's `deployName()` method)
+   Now, as you may guess, that import statement needs to be changed so that it points to the resource on the disk.
+   This is exactly what `setResolveAssets(true)` attempts to do. The result will be something like this:
+   `@import osTempDir/myassets/fonts/Font.css`
+
+**Pros**
+- The biggest pro is to have a more reliable styling system. With this, users shouldn't have any issue anymore
+while styling MaterialFX controls with their custom stylesheets.
+Of course, I consider the system experimental, I don't expect to not have even a single report about CSS bugs,
+but they should be way less and much easier to fix. Since the theme is set as the app's global User-Agent, it will be applied
+on all the Stages/Scenes of the app, which is great
+- Another pro is to have less code duplication as now I don't need to override the infamous getUserAgentStylesheet() anymore anywhere
+- This change should have also impacted on memory usage in a good way as now controls do not store the "url" to their stylesheet anymore
+- Potentially, you could now create a single theme, that is applied consistently everywhere in your apps, with as much
+stylesheets as you want
+
+**Cons**
+- The main con is that now theming must be managed by the user. Since controls are not styled by default anymore, the user
+must use the `UserAgentBuilder` to create the theme and set it as the application User-Agent (you can check the code snippet
+above to see how to do it).
+- The system is fragile and naive. CSS files need to be well written and formatted, and even in that case,
+there may still be issues while parsing or once the aio User-Agent is set.
+- The generated theme won't be able to access "local" resources anymore. For this reason, themes now have to deploy assets
+if needed, which surely introduces some overhead. Not only that, for the previous point, resolving "local" assets to
+"absolute" assets may fail and can be hard to set up.
+- SceneBuilder integration is tricky and error/bug prone.
+MaterialFX controls are capable of detecting if they are being used in SceneBuilder and can automatically style themselves.
+From my little testings, it seems that this doesn't break the styling system in any way.
+I was able to style a button by adding a custom stylesheet on itself or on its parent.
+There's also an emergency system to completely shut down the SceneBuilder integration, more info here: [Themable](https://github.com/palexdev/MaterialFX/blob/main/materialfx/src/main/java/io/github/palexdev/materialfx/controls/base/Themable.java)
+
+</details>
 
 <!-- CONTRIBUTING -->
 
@@ -406,9 +478,10 @@ Distributed under the GNU LGPLv3 License. See `LICENSE` for more information.
 
 ## Contact
 
-Alex - alessandro.parisi406@gmail.com  
-[![Discord](https://img.shields.io/discord/771702793378988054?label=Discord&style=flat-square)](https://discord.com/invite/zFa93NE)
-<br /><br />
+Alex - alessandro.parisi406@gmail.com
+<br></br>
+[Discussions](https://github.com/palexdev/MaterialFX/discussions)
+<br></br>
 Project Link: [https://github.com/palexdev/MaterialFX](https://github.com/palexdev/MaterialFX)
 
 <!-- DONATION -->
