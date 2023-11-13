@@ -35,9 +35,9 @@ import io.github.palexdev.materialfx.filter.BooleanFilter;
 import io.github.palexdev.materialfx.filter.EnumFilter;
 import io.github.palexdev.materialfx.filter.base.AbstractFilter;
 import io.github.palexdev.materialfx.filter.base.NumberFilter;
-import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import io.github.palexdev.materialfx.i18n.I18N;
 import io.github.palexdev.materialfx.utils.NodeUtils;
+import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -78,6 +78,7 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
 	private final MFXStageDialog dialog;
 	private final StringProperty query = new SimpleStringProperty();
 	private boolean avoidQueryReset = false;
+	private InvalidationListener filtersListener = invalidated -> updateFilters();
 
 	//================================================================================
 	// Constructors
@@ -118,7 +119,7 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
 	//================================================================================
 	private void addListeners() {
 		MFXFilterPane<T> filterPane = getSkinnable();
-		filterPane.getActiveFilters().addListener((InvalidationListener) invalidated -> updateFilters());
+		filterPane.getActiveFilters().addListener(filtersListener);
 	}
 
 	/**
@@ -391,5 +392,13 @@ public class MFXFilterPaneSkin<T> extends SkinBase<MFXFilterPane<T>> {
 	@Override
 	protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
 		return getSkinnable().prefHeight(-1);
+	}
+
+	@Override
+	public void dispose() {
+		MFXFilterPane<T> filterPane = getSkinnable();
+		filterPane.getActiveFilters().removeListener(filtersListener);
+		filtersListener = null;
+		super.dispose();
 	}
 }
