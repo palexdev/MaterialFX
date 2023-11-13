@@ -20,6 +20,7 @@ package io.github.palexdev.materialfx.controls;
 
 import io.github.palexdev.materialfx.controls.base.Themable;
 import io.github.palexdev.materialfx.skins.MFXScrollPaneSkin;
+import io.github.palexdev.materialfx.theming.CSSFragment;
 import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
 import io.github.palexdev.materialfx.theming.base.Theme;
 import io.github.palexdev.materialfx.utils.ColorUtils;
@@ -32,6 +33,8 @@ import javafx.scene.control.Skin;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
+import java.util.Objects;
+
 /**
  * This is the implementation of a scroll pane following Google's material design guidelines in JavaFX.
  * <p>
@@ -42,6 +45,7 @@ public class MFXScrollPane extends ScrollPane implements Themable {
 	// Properties
 	//================================================================================
 	private final String STYLE_CLASS = "mfx-scroll-pane";
+	private String colorsStylesheet;
 
 	//================================================================================
 	// Constructors
@@ -60,7 +64,6 @@ public class MFXScrollPane extends ScrollPane implements Themable {
 	//================================================================================
 	private void initialize() {
 		getStyleClass().add(STYLE_CLASS);
-		addListeners();
 		sceneBuilderIntegration();
 	}
 
@@ -71,17 +74,38 @@ public class MFXScrollPane extends ScrollPane implements Themable {
 	/**
 	 * Specifies the color of the scrollbars' track.
 	 */
-	private final ObjectProperty<Paint> trackColor = new SimpleObjectProperty<>(Color.rgb(132, 132, 132));
+	private final ObjectProperty<Paint> trackColor = new SimpleObjectProperty<>(Color.rgb(132, 132, 132)) {
+		@Override
+		public void set(Paint newValue) {
+			Paint old = get();
+			if (!Objects.equals(old, newValue)) setColors();
+			super.set(newValue);
+		}
+	};
 
 	/**
 	 * Specifies the color of the scrollbars' thumb.
 	 */
-	private final ObjectProperty<Paint> thumbColor = new SimpleObjectProperty<>(Color.rgb(137, 137, 137));
+	private final ObjectProperty<Paint> thumbColor = new SimpleObjectProperty<>(Color.rgb(137, 137, 137)) {
+		@Override
+		public void set(Paint newValue) {
+			Paint old = get();
+			if (!Objects.equals(old, newValue)) setColors();
+			super.set(newValue);
+		}
+	};
 
 	/**
 	 * Specifies the color of the scrollbars' thumb when mouse hover.
 	 */
-	private final ObjectProperty<Paint> thumbHoverColor = new SimpleObjectProperty<>(Color.rgb(89, 88, 91));
+	private final ObjectProperty<Paint> thumbHoverColor = new SimpleObjectProperty<>(Color.rgb(89, 88, 91)) {
+		@Override
+		public void set(Paint newValue) {
+			Paint old = get();
+			if (!Objects.equals(old, newValue)) setColors();
+			super.set(newValue);
+		}
+	};
 
 	public Paint getTrackColor() {
 		return trackColor.get();
@@ -120,38 +144,21 @@ public class MFXScrollPane extends ScrollPane implements Themable {
 	}
 
 	/**
-	 * Adds listeners for colors change and calls setColors().
-	 */
-	private void addListeners() {
-		this.trackColor.addListener((observable, oldValue, newValue) -> {
-			if (!newValue.equals(oldValue)) {
-				setColors();
-			}
-		});
-
-		this.thumbColor.addListener((observable, oldValue, newValue) -> {
-			if (!newValue.equals(oldValue)) {
-				setColors();
-			}
-		});
-
-		this.thumbHoverColor.addListener((observable, oldValue, newValue) -> {
-			if (!newValue.equals(oldValue)) {
-				setColors();
-			}
-		});
-	}
-
-	/**
 	 * Sets the CSS looked-up colors
 	 */
 	private void setColors() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("-mfx-track-color: ").append(ColorUtils.toCss(trackColor.get()))
-				.append(";\n-mfx-thumb-color: ").append(ColorUtils.toCss(thumbColor.get()))
-				.append(";\n-mfx-thumb-hover-color: ").append(ColorUtils.toCss(thumbHoverColor.get()))
-				.append(";");
-		setStyle(sb.toString());
+		if (colorsStylesheet != null) {
+			getStylesheets().remove(colorsStylesheet);
+		}
+		colorsStylesheet = CSSFragment.Builder.build()
+			.addSelector(".mfx-scroll-pane")
+			.addStyle("-track-color: " + ColorUtils.toCss(trackColor.get()))
+			.addStyle("-thumb-color: " + ColorUtils.toCss(thumbColor.get()))
+			.addStyle("-thumb-hover-color: " + ColorUtils.toCss(thumbHoverColor.get()))
+			.closeSelector()
+			.toCSS()
+			.toDataUri();
+		getStylesheets().add(colorsStylesheet);
 	}
 
 	//================================================================================
