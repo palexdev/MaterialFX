@@ -1,10 +1,11 @@
 [![HitCount](http://hits.dwyl.com/PAlex404/MaterialFX.svg)](http://hits.dwyl.com/PAlex404/MaterialFX)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/palexdev/materialfx/Java%20CI%20with%20Gradle?label=github%20build&style=flat-square)
+![GitHub Workflow Status](https://github.com/palexdev/materialfx/actions/workflows/gradle.yml/badge.svg)
 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/io.github.palexdev/materialfx?server=https%3A%2F%2Fs01.oss.sonatype.org&style=flat-square)
 [![javadoc](https://javadoc.io/badge2/io.github.palexdev/materialfx/javadoc.svg?logo=java)](https://javadoc.io/doc/io.github.palexdev/materialfx)
 ![GitHub issues](https://img.shields.io/github/issues-raw/palexdev/materialfx?style=flat-square)
 ![GitHub pull requests](https://img.shields.io/github/issues-pr/palexdev/materialfx?style=flat-square)
 ![GitHub](https://img.shields.io/github/license/palexdev/materialfx?style=flat-square)
+[![JFXCentral](https://img.shields.io/badge/Find_me_on-JFXCentral-blue?logo=googlechrome&logoColor=white)](https://www.jfx-central.com/libraries/materialfx)
 ---
 
 <!-- PROJECT LOGO -->
