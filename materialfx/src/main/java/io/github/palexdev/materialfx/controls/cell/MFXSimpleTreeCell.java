@@ -141,7 +141,7 @@ public class MFXSimpleTreeCell<T> extends AbstractMFXTreeCell<T> {
         MFXIconWrapper disclosureNode = getDisclosureNode();
 
         if (!item.getItems().isEmpty()) {
-            MFXFontIcon icon = new MFXFontIcon("mfx-chevron-right", 12.5);
+            MFXFontIcon icon = new MFXFontIcon();
             icon.getStyleClass().add("disclosure-icon");
             disclosureNode.setIcon(icon);
         } else {

@@ -37,3 +37,8 @@
 .mfx-tree-cell * {
   -fx-font-smoothing-type: gray;
 }
+
+.mfx-tree-cell .disclosure-icon {
+  -mfx-description: "fas-chevron-right";
+  -mfx-size: 13px;
+}
