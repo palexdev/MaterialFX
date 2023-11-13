@@ -2,9 +2,9 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXContextMenu;
 import io.github.palexdev.materialfx.controls.MFXContextMenuItem;
 import io.github.palexdev.materialfx.factories.InsetsFactory;
-import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import io.github.palexdev.materialfx.utils.ColorUtils;
 import io.github.palexdev.materialfx.utils.StringUtils;
+import io.github.palexdev.mfxresources.fonts.fontawesome.FontAwesomeSolid;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -24,10 +24,10 @@ public class ContextTest extends Application {
         Label labelSeparator = new Label("Separator");
         labelSeparator.setPadding(InsetsFactory.of(5, 3, 5, 0));
         menu.addSeparator(labelSeparator);
-        menu.addItem(new MFXContextMenuItem("Separated Item", MFXFontIcon.getRandomIcon(12, ColorUtils.getRandomColor())));
+		menu.addItem(new MFXContextMenuItem("Separated Item", FontAwesomeSolid.random(ColorUtils.getRandomColor(), 12)));
 
         menu.addLineSeparator(MFXContextMenu.Builder.getLineSeparator());
-        menu.addItem(new MFXContextMenuItem("LSeparated Item", MFXFontIcon.getRandomIcon(12, ColorUtils.getRandomColor())));
+		menu.addItem(new MFXContextMenuItem("LSeparated Item", FontAwesomeSolid.random(ColorUtils.getRandomColor(), 12)));
 
         menu.install();
 
@@ -40,7 +40,7 @@ public class ContextTest extends Application {
     private void populateMenu(MFXContextMenu menu, int num) {
         MFXContextMenuItem[] items = new MFXContextMenuItem[num];
         for (int i = 0; i < num; i++) {
-            MFXContextMenuItem item = new MFXContextMenuItem("Menu Item " + (i + 1), MFXFontIcon.getRandomIcon(12, ColorUtils.getRandomColor()));
+			MFXContextMenuItem item = new MFXContextMenuItem("Menu Item " + (i + 1), FontAwesomeSolid.random(ColorUtils.getRandomColor(), 12));
             item.setAccelerator("Alt + " + StringUtils.randAlphabetic(1).toUpperCase());
             items[i] = item;
         }

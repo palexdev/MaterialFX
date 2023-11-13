@@ -43,7 +43,7 @@ import java.util.function.Predicate;
  * To make the filter system flexible and yet highly specialized, every implementation must specify a
  * {@link StringConverter} which is used to convert the query to an object of type U.
  * <p></p>
- * At this point we have all the basic elements to describe how the {@link Predicate} is predicate is produced.
+ * At this point we have all the basic elements to describe how the {@link Predicate} is produced.
  * Every implementation of this base class has some predefined {@link BiPredicate} which operate on U objects.
  * The query is converted to an object of type U, and the extractor gets the U field from a T object, both U
  * objects are fed to the {@link BiPredicate}. In code:
@@ -131,6 +131,12 @@ public abstract class AbstractFilter<T, U> {
 	 *      return t -> biPredicate.test(extractor.apply(t), convertedQuery);
 	 * }
 	 * </pre>
+	 * <p></p>
+	 * <b>WARN:</b> this method should not be used to convert {@link FilterBean}s to {@link Predicate}.
+	 * A {@link FilterBean} already has a {@link BiPredicate} that specifies its filter behavior. This method instead
+	 * selects a {@link BiPredicate} according to the value of {@link #selectedPredicateIndexProperty()}, which may have
+	 * changed since the creation of the {@link FilterBean}, leading to another filter being used instead.
+	 * For this reason, use {@link #predicateFor(String, FilterBean)} instead.
 	 */
 	public Predicate<T> predicateFor(String input) {
 		checkIndex();
@@ -153,15 +159,11 @@ public abstract class AbstractFilter<T, U> {
 	 * }
 	 * </pre>
 	 * <p></p>
-	 * <b>WARN:</b> to be honest this method should have been removed but I wanted to keep it
-	 * since it adds some flexibility to the filter system. Note that using this method may lead
-	 * to inconsistencies in UI controls since the given argument is not a {@link BiPredicateBean},
-	 * which means that it won't be added to the predicates list of this filter, and the selected predicate index
-	 * property won't be updated. This also means that any other method that relies on that index will fail.
+	 * This is used by {@link FilterBean}s to convert themselves into a {@link Predicate}.
 	 */
-	public Predicate<T> predicateFor(String input, BiPredicate<U, U> biPredicate) {
+	public Predicate<T> predicateFor(String input, FilterBean<T, U> bean) {
 		U convertedInput = getValue(input);
-		return t -> biPredicate.test(extractor.apply(t), convertedInput);
+		return t -> bean.getPredicateBean().predicate().test(extractor.apply(t), convertedInput);
 	}
 
 	/**

@@ -31,7 +31,7 @@ import java.util.function.Predicate;
  * It wraps the following data:
  * <p> - A String which is the query
  * <p> - An object of type {@link AbstractFilter}, which is effectively responsible for producing the {@link Predicate}
- * <p> - A {@link BiPredicateBean}, which is used by {@link AbstractFilter}, see {@link AbstractFilter#predicateFor(String)} or {@link AbstractFilter#predicateFor(String, BiPredicate)}
+ * <p> - A {@link BiPredicateBean}, which is used by {@link AbstractFilter}, see {@link AbstractFilter#predicateFor(String, FilterBean)}
  * <p> - A {@link ChainMode} enumeration to specify how this filter should be combined with other filters
  *
  * @param <T> the type of objects to filter
@@ -65,10 +65,10 @@ public class FilterBean<T, U> {
 	//================================================================================
 
 	/**
-	 * Calls {@link AbstractFilter#predicateFor(String)} with the query specified by this bean.
+	 * Calls {@link AbstractFilter#predicateFor(String, FilterBean)} with the query specified by this bean.
 	 */
 	public Predicate<T> predicate() {
-		return filter.predicateFor(query);
+		return filter.predicateFor(query, this);
 	}
 
 	/**
