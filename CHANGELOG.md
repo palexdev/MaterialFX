@@ -16,6 +16,23 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+# [11.17.0] - 13-11-2023
+
+## Changed
+
+- Update Gradle and some dependencies
+- Import build scripts from the `rewrite` branch
+- Improved notification systems thanks to @infinite-dev22 (PR#325)
+- Backport and replace the Theming API from the `rewrite` branch, performance now should be vastly better
+- Explicitly add MFXCore and MFXResources as dependencies to always use their latest version
+
+## Fixed
+
+- Fixed MFXSimpleTreeCell still using old MFXResources for the arrow icon. It is now set in CSS
+- Fixed how FilterBeans produce Predicates, leading to the wrong filter being built
+- Fixed exceptions being thrown when changing the MFXFilterPane's skin, due to a listener not being disposed
+- Fixed MFXScrollPane not changing the track and thumb colors because the respective color tokens in CSS were changed
+
 # [11.16.1] - 08-04-2023
 
 ## Changed
