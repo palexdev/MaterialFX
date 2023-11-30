@@ -36,7 +36,8 @@ public enum Language {
 	RUSSIAN(Locale.forLanguageTag("ru")),
 	SIMPLIFIED_CHINESE(Locale.SIMPLIFIED_CHINESE),
 	SPANISH(Locale.forLanguageTag("es")),
-	TRADITIONAL_CHINESE(Locale.TRADITIONAL_CHINESE);
+	TRADITIONAL_CHINESE(Locale.TRADITIONAL_CHINESE),
+	TURKISH(Locale.forLanguageTag("tr"));
 
 	private final Locale locale;
 
