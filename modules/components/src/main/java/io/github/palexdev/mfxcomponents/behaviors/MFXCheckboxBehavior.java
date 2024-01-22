@@ -23,6 +23,12 @@ import io.github.palexdev.mfxcomponents.controls.checkbox.TriState;
 import io.github.palexdev.mfxcore.selection.SelectionProperty;
 import io.github.palexdev.mfxcore.utils.EnumUtils;
 import javafx.event.ActionEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+
+import java.util.function.Consumer;
 
 /**
  * This is the default behavior used by all {@link MFXCheckbox} components.
@@ -42,6 +48,28 @@ public class MFXCheckboxBehavior extends MFXSelectableBehaviorBase<MFXCheckbox> 
 	//================================================================================
 	// Overridden Methods
 	//================================================================================
+
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Overridden to not trigger {@link MFXCheckbox#fire()} twice as it is already handled by {@link #handleSelection()}
+	 */
+	@Override
+	public void mouseClicked(MouseEvent me, Consumer<MouseEvent> callback) {
+		if (me.getButton() == MouseButton.PRIMARY) handleSelection();
+		if (callback != null) callback.accept(me);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Overridden to not trigger {@link MFXCheckbox#fire()} twice as it is already handled by {@link #handleSelection()}
+	 */
+	@Override
+	public void keyPressed(KeyEvent ke, Consumer<KeyEvent> callback) {
+		if (ke.getCode() == KeyCode.ENTER) handleSelection();
+		if (callback != null) callback.accept(ke);
+	}
 
 	/**
 	 * {@inheritDoc}

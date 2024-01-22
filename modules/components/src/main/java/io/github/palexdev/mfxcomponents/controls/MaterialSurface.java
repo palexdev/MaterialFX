@@ -66,6 +66,7 @@ import java.util.function.Consumer;
  * is and remains the first child of the component to avoid this from covering the other children.
  */
 // TODO dragged state is not implemented yet
+// TODO we should implement a way to specify extra states too (such as selected), even though out of specs
 public class MaterialSurface extends Region implements MFXStyleable {
     //================================================================================
     // Static Properties
@@ -124,7 +125,7 @@ public class MaterialSurface extends Region implements MFXStyleable {
      * The opacity is determined by the current interaction state on the owner. The values are specified by:
      * {@link #hoverOpacityProperty()}, {@link #focusOpacityProperty()} and {@link #pressOpacityProperty()}.
      * <p></p>
-     * The state check are delegated to: {@link #isOwnerDisabled()}, {@link #isOwnerPressed()},
+     * The state checks are delegated to: {@link #isOwnerDisabled()}, {@link #isOwnerPressed()},
      * {@link #isOwnerFocused()} and {@link #isOwnerHover()}, listed in order of priority.
      * <p></p>
      * The opacity is set immediately or through an animation started by {@link #animateBackground(double)}.

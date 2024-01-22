@@ -1,6 +1,12 @@
 package io.github.palexdev.mfxcomponents.behaviors;
 
 import io.github.palexdev.mfxcomponents.controls.buttons.MFXIconButton;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+
+import java.util.function.Consumer;
 
 /**
  * This is the default behavior used by all {@link MFXIconButton} components.
@@ -20,6 +26,29 @@ public class MFXIconButtonBehavior extends MFXSelectableBehaviorBase<MFXIconButt
     //================================================================================
     // Overridden Methods
     //================================================================================
+
+    /**
+     * {@inheritDoc}
+     * <p></p>
+     * Overridden to not trigger {@link MFXIconButton#fire()} twice as it is already handled by {@link #handleSelection()}
+     */
+    @Override
+    public void mouseClicked(MouseEvent me, Consumer<MouseEvent> callback) {
+        if (me.getButton() == MouseButton.PRIMARY) handleSelection();
+        if (callback != null) callback.accept(me);
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p></p>
+     * Overridden to not trigger {@link MFXIconButton#fire()} twice as it is already handled by {@link #handleSelection()}
+     */
+    @Override
+    public void keyPressed(KeyEvent ke, Consumer<KeyEvent> callback) {
+        if (ke.getCode() == KeyCode.ENTER) handleSelection();
+        if (callback != null) callback.accept(ke);
+    }
+
     @Override
     protected void handleSelection() {
         MFXIconButton btn = getNode();

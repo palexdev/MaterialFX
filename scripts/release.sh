@@ -15,6 +15,7 @@ function printHelp() {
   echo ''
   echo ''
   echo 'Before running this script makes sure that your JAVA_HOME environment variable is set and correct'
+  echo 'This must be executed from within the scripts directory'
 }
 
 function checkArgs() {

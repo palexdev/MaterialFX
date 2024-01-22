@@ -47,4 +47,8 @@ public class PositionUtils {
 	public static boolean isRight(Pos pos) {
 		return pos == Pos.TOP_RIGHT || pos == Pos.CENTER_RIGHT || pos == Pos.BOTTOM_RIGHT;
 	}
+
+	public static boolean isBaseline(Pos pos) {
+		return pos == Pos.BASELINE_LEFT || pos == Pos.BASELINE_CENTER || pos == Pos.BASELINE_RIGHT;
+	}
 }

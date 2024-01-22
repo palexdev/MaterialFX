@@ -176,7 +176,7 @@ public class WhenEvent<T extends Event> implements DisposableAction {
 
 	/**
 	 * Invoked by {@link #register()} if everything went well. Here, the construct is added to a static Map that retains
-	 * all the built constructs, the mapping is as follows: Node -> Set<WhenEvent<?>>.
+	 * all the built constructs, the mapping is as follows: {@code Node -> Set<WhenEvent<?>>}.
 	 * <p>
 	 * Finally, the built {@link EventHandler} is added on the specified Node.
 	 */

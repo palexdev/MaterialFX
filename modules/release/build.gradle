@@ -35,6 +35,24 @@ shadowJar {
     archiveClassifier = null
 }
 
+sourcesJar {
+    var projects = [
+            project(':core'),
+            project(':components'),
+            project(":effects"),
+            project(':localization'),
+            project(':resources')
+    ]
+    from projects.collect {
+        exclude("module-info.java")
+        it.sourceSets.main.allSource
+    }
+    dependsOn(':resources:compileSass')
+}
+
+shadowJar.finalizedBy javadocJar
+shadowJar.finalizedBy sourcesJar
+
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.S01)
     signAllPublications()
