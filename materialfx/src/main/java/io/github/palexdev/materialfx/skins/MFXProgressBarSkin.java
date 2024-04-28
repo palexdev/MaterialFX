@@ -170,7 +170,7 @@ public class MFXProgressBarSkin extends SkinBase<MFXProgressBar> {
 	protected void updateProgress() {
 		MFXProgressBar progressBar = getSkinnable();
 
-		double width = ((progressBar.getWidth()) * (progressBar.getProgress() * 100)) / 100;
+		double width = progressBar.getWidth() * progressBar.getProgress();
 		bar1.setWidth(width);
 	}
 
