@@ -16,6 +16,22 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.9.0] - 21-05-2024
+
+### Added
+
+- Allow When constructs to use a specific listener
+- Add consume(MouseEvent) method to resizers
+- Add new simple utility to move nodes around
+
+### Changed
+
+- Make resizers use fluent API for setters
+
+### Fixed
+
+- SkinBase: whoops, fix double add in listeners' list
+
 ## [11.8.0] - 04-10-2023
 
 ### Added

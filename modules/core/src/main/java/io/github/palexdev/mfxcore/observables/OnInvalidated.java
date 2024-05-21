@@ -30,7 +30,7 @@ public class OnInvalidated<T> extends When<T> {
     //================================================================================
     // Properties
     //================================================================================
-    private InvalidationListener listener;
+    protected InvalidationListener listener;
     private Consumer<T> action;
     private BiConsumer<WeakReference<When<T>>, T> otherwise = (w, t) -> {};
     private Function<T, Boolean> condition = t -> true;
@@ -40,6 +40,27 @@ public class OnInvalidated<T> extends When<T> {
     //================================================================================
     public OnInvalidated(ObservableValue<T> observable) {
         super(observable);
+    }
+
+    /**
+     * Build a "wrapping" {@code OnInvalidated} construct for the given observable and {@link InvalidationListener}.
+     * <p>
+     * This should be used specifically when several listeners will execute the same action. To improve performance and
+     * memory usage, you can build the listener yourself and create the construct with this.
+     * <p>
+     * Automatically active upon creation!
+     * <p></p>
+     * <b>Note</b> however that this special construct will not have any of its features working (no action, no condition,
+     * no otherwise, etc.) because the listener is not built but the construct, of course.
+     */
+    public static <T> OnInvalidated<T> withListener(ObservableValue<T> observable, InvalidationListener il) {
+        return new OnInvalidated<>(observable) {
+            {
+                listener = il;
+                register();
+                observable.addListener(listener);
+            }
+        };
     }
 
     //================================================================================

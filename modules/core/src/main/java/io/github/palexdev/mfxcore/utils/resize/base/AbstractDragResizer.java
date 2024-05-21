@@ -37,6 +37,7 @@ import javafx.scene.shape.Rectangle;
 import java.util.Arrays;
 import java.util.EnumSet;
 
+// TODO documentation
 public abstract class AbstractDragResizer<T extends Node> {
 	protected T node;
 	private double margin = 6.0;
@@ -116,7 +117,7 @@ public abstract class AbstractDragResizer<T extends Node> {
 		nodeW = nodeW();
 		nodeH = nodeH();
 		draggedZone = getZoneByEvent(event);
-		event.consume();
+		consume(event);
 	}
 
 	protected void handleMoved(MouseEvent event) {
@@ -135,6 +136,10 @@ public abstract class AbstractDragResizer<T extends Node> {
 			resizeHandler.onResize(node, nodeX, nodeY, nodeW, nodeH);
 			triggerMouseRelease();
 		}
+	}
+
+	protected void consume(MouseEvent event) {
+		event.consume();
 	}
 
 	protected void triggerMouseRelease() {
@@ -228,24 +233,27 @@ public abstract class AbstractDragResizer<T extends Node> {
 		return margin;
 	}
 
-	public void setMargin(double margin) {
+	public AbstractDragResizer<T> setMargin(double margin) {
 		this.margin = margin;
+		return this;
 	}
 
 	public DragResizeHandler<T> getResizeHandler() {
 		return resizeHandler;
 	}
 
-	public void setResizeHandler(DragResizeHandler<T> resizeHandler) {
+	public AbstractDragResizer<T> setResizeHandler(DragResizeHandler<T> resizeHandler) {
 		this.resizeHandler = resizeHandler;
+		return this;
 	}
 
 	public EnumSet<Zone> getAllowedZones() {
 		return allowedZones;
 	}
 
-	public void setAllowedZones(Zone... allowedZones) {
+	public AbstractDragResizer<T> setAllowedZones(Zone... allowedZones) {
 		this.allowedZones.clear();
 		this.allowedZones.addAll(Arrays.asList(allowedZones));
+		return this;
 	}
 }

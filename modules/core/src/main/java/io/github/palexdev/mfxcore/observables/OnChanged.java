@@ -30,7 +30,7 @@ public class OnChanged<T> extends When<T> {
     //================================================================================
     // Properties
     //================================================================================
-    private ChangeListener<T> listener;
+    protected ChangeListener<T> listener;
     private BiConsumer<T, T> action;
     private BiFunction<T, T, Boolean> condition = (o, n) -> true;
 	private TriConsumer<WeakReference<When<T>>, T, T> otherwise = (w, o, n) -> {};
@@ -40,6 +40,27 @@ public class OnChanged<T> extends When<T> {
     //================================================================================
     public OnChanged(ObservableValue<T> observable) {
         super(observable);
+    }
+
+    /**
+     * Build a "wrapping" {@code OnChanged} construct for the given observable and {@link ChangeListener}.
+     * <p>
+     * This should be used specifically when several listeners will execute the same action. To improve performance and
+     * memory usage, you can build the listener yourself and create the construct with this.
+     * <p>
+     * Automatically active upon creation!
+     * <p></p>
+     * <b>Note</b> however that this special construct will not have any of its features working (no action, no condition,
+     * no otherwise, etc.) because the listener is not built but the construct, of course.
+     */
+    public static <T> OnChanged<T> withListener(ObservableValue<T> observable, ChangeListener<T> cl) {
+        return new OnChanged<>(observable) {
+            {
+                listener = cl;
+                register();
+                observable.addListener(cl);
+            }
+        };
     }
 
     //================================================================================

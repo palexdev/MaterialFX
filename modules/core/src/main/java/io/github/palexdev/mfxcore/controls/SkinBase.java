@@ -25,7 +25,6 @@ import io.github.palexdev.mfxcore.events.WhenEvent;
 import io.github.palexdev.mfxcore.observables.When;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -120,7 +119,6 @@ public abstract class SkinBase<C extends javafx.scene.control.Control & WithBeha
 			if (!w.isActive()) w.listen();
 			this.listeners.add(w);
 		}
-		Collections.addAll(this.listeners, listeners);
 	}
 
 	//================================================================================

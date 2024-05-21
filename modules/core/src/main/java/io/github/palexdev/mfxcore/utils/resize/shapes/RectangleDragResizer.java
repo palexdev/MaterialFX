@@ -100,15 +100,17 @@ public class RectangleDragResizer extends AbstractDragResizer<Rectangle> {
 		return minWidthFunction;
 	}
 
-	public void setMinWidthFunction(Function<Rectangle, Double> minWidthFunction) {
+	public RectangleDragResizer setMinWidthFunction(Function<Rectangle, Double> minWidthFunction) {
 		this.minWidthFunction = minWidthFunction;
+		return this;
 	}
 
 	public Function<Rectangle, Double> getMinHeightFunction() {
 		return minHeightFunction;
 	}
 
-	public void setMinHeightFunction(Function<Rectangle, Double> minHeightFunction) {
+	public RectangleDragResizer setMinHeightFunction(Function<Rectangle, Double> minHeightFunction) {
 		this.minHeightFunction = minHeightFunction;
+		return this;
 	}
 }

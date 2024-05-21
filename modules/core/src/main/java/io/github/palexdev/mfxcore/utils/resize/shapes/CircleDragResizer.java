@@ -143,7 +143,8 @@ public class CircleDragResizer extends AbstractDragResizer<Circle> {
 		return minRadiusFunction;
 	}
 
-	public void setMinRadiusFunction(Function<Circle, Double> minRadiusFunction) {
+	public CircleDragResizer setMinRadiusFunction(Function<Circle, Double> minRadiusFunction) {
 		this.minRadiusFunction = minRadiusFunction;
+		return this;
 	}
 }

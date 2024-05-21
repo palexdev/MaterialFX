@@ -99,15 +99,17 @@ public class RegionDragResizer extends AbstractDragResizer<Region> {
 		return minWidthFunction;
 	}
 
-	public void setMinWidthFunction(Function<Region, Double> minWidthFunction) {
+	public RegionDragResizer setMinWidthFunction(Function<Region, Double> minWidthFunction) {
 		this.minWidthFunction = minWidthFunction;
+		return this;
 	}
 
 	public Function<Region, Double> getMinHeightFunction() {
 		return minHeightFunction;
 	}
 
-	public void setMinHeightFunction(Function<Region, Double> minHeightFunction) {
+	public RegionDragResizer setMinHeightFunction(Function<Region, Double> minHeightFunction) {
 		this.minHeightFunction = minHeightFunction;
+		return this;
 	}
 }

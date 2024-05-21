@@ -33,7 +33,9 @@ subprojects {
         testImplementation 'org.junit.jupiter:junit-jupiter'
 
         testImplementation "org.testfx:testfx-junit5:$testfx"
-        testImplementation "io.github.palexdev:scenicview:$scenicView"
+        testImplementation("io.github.palexdev:scenicview:$scenicView") {
+            exclude group: "org.openjfx"
+        }
     }
 
     javafx {
