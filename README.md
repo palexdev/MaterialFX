@@ -508,6 +508,8 @@ contact me by email and tell me. Also contact me if for some some reason you don
 - Alaa Abu Zidan
 - Alex Hawk
 - Aloento
+- brr53 
+- Eugen Gubin
 - Mauro de Wit
 - Mohammad Chaudhry (thank you very much for the huge donation, YOU are the legend)
 - Jtpatato21
