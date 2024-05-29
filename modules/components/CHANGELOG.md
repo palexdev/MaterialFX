@@ -16,6 +16,19 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.24.3] - 29-05-2024
+
+### Fixed
+
+- Fixed exception caused by the UserAgentBuilder when both deploy and resolveAssets options are active but the theme
+  has nothing to deploy
+
+## [11.24.2] - 22-01-2024
+
+### Fixed
+
+- Fixed bug in selectable components' behavior triggering fire() twice and thus causing any action to be performed twice
+
 ## [11.24.1] - 19-10-2023
 
 ### Changed

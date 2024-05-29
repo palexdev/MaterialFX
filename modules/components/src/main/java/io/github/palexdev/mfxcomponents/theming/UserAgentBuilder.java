@@ -31,10 +31,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * The best way to style a JavaFX application is to use {@link Application#setUserAgentStylesheet(String)} because the
@@ -318,7 +315,7 @@ public class UserAgentBuilder {
                 .split(" ");
             String path = split[1];
             Map<String, Path> deployed = Deployer.instance().getDeployed(theme);
-            return deployed.get(path);
+            return Optional.of(deployed).map(m -> m.get(path)).orElse(null);
         }
 
         /**
@@ -329,7 +326,7 @@ public class UserAgentBuilder {
         private Path resolveResource(Theme theme, String url) {
             String name = getResourceName(url);
             Map<String, Path> deployed = Deployer.instance().getDeployed(theme);
-            return deployed.get(name);
+            return Optional.of(deployed).map(m -> m.get(name)).orElse(null);
         }
 
         /**
