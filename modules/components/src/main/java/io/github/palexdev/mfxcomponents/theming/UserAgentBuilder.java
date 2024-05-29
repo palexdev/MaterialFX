@@ -315,7 +315,7 @@ public class UserAgentBuilder {
                 .split(" ");
             String path = split[1];
             Map<String, Path> deployed = Deployer.instance().getDeployed(theme);
-            return Optional.of(deployed).map(m -> m.get(path)).orElse(null);
+			return Optional.ofNullable(deployed).map(m -> m.get(path)).orElse(null);
         }
 
         /**
@@ -326,7 +326,7 @@ public class UserAgentBuilder {
         private Path resolveResource(Theme theme, String url) {
             String name = getResourceName(url);
             Map<String, Path> deployed = Deployer.instance().getDeployed(theme);
-            return Optional.of(deployed).map(m -> m.get(name)).orElse(null);
+			return Optional.ofNullable(deployed).map(m -> m.get(name)).orElse(null);
         }
 
         /**

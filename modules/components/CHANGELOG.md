@@ -16,6 +16,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.24.4] - 29-05-2024
+
+### Fixed
+
+- Fixed mistake of previous release
+
 ## [11.24.3] - 29-05-2024
 
 ### Fixed
