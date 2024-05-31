@@ -61,7 +61,7 @@
 ## Important notes
 
 Please, **before** using this library and submitting an issue complaining that controls are **not styled and bugged**
-check how the **stilying system has changed** since
+check how the **styling system has changed** since
 version 11.14.0
 
 <!-- ABOUT THE PROJECT -->
