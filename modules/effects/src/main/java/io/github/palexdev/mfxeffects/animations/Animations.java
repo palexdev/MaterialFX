@@ -287,6 +287,15 @@ public class Animations {
 		}
 
 		/**
+		 * If the given condition is true, then a new {@link Timeline} is built with the given keyframe and added to
+		 * the 'main' animation by calling {@link #addAnimation(Animation)}.
+		 */
+		public AbstractBuilder addIf(boolean condition, KeyFrame keyFrame) {
+			if (condition) addAnimation(new Timeline(keyFrame));
+			return this;
+		}
+
+		/**
 		 * If the given condition returns true, then a new {@link Timeline} is built with the given keyframe and added to
 		 * the 'main' animation by calling {@link #addAnimation(Animation)}.
 		 */
@@ -598,9 +607,16 @@ public class Animations {
 		/**
 		 * Adds the specified KeyFrame to the timeline only if the given condition is true.
 		 */
+		public TimelineBuilder addIf(boolean condition, KeyFrame keyFrame) {
+			if (condition) timeline.getKeyFrames().add(keyFrame);
+			return this;
+		}
+
+		/**
+		 * Adds the specified KeyFrame to the timeline only if the given condition is true.
+		 */
 		public TimelineBuilder addIf(Supplier<Boolean> condition, KeyFrame keyFrame) {
-			if (condition.get())
-				timeline.getKeyFrames().add(keyFrame);
+			if (condition.get()) timeline.getKeyFrames().add(keyFrame);
 			return this;
 		}
 
