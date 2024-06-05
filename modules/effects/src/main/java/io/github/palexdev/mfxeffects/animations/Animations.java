@@ -290,7 +290,7 @@ public class Animations {
 		 * If the given condition returns true, then a new {@link Timeline} is built with the given keyframe and added to
 		 * the 'main' animation by calling {@link #addAnimation(Animation)}.
 		 */
-		public AbstractBuilder addConditional(Supplier<Boolean> condition, KeyFrame keyFrame) {
+		public AbstractBuilder addIf(Supplier<Boolean> condition, KeyFrame keyFrame) {
 			if (condition.get()) addAnimation(new Timeline(keyFrame));
 			return this;
 		}
@@ -598,7 +598,7 @@ public class Animations {
 		/**
 		 * Adds the specified KeyFrame to the timeline only if the given condition is true.
 		 */
-		public TimelineBuilder addConditional(Supplier<Boolean> condition, KeyFrame keyFrame) {
+		public TimelineBuilder addIf(Supplier<Boolean> condition, KeyFrame keyFrame) {
 			if (condition.get())
 				timeline.getKeyFrames().add(keyFrame);
 			return this;
