@@ -87,6 +87,58 @@ public abstract class SkinBase<C extends javafx.scene.control.Control & WithBeha
 	protected abstract void initBehavior(B behavior);
 
 	//================================================================================
+	// Methods
+	//================================================================================
+
+	/**
+	 * Convenience method for {@link #computeMinWidth(double, double, double, double, double)} without the need to pass
+	 * the insets.
+	 */
+	protected double computeMinWidth(double height) {
+		return computeMinWidth(height, snappedTopInset(), snappedRightInset(), snappedBottomInset(), snappedLeftInset());
+	}
+
+	/**
+	 * Convenience method for {@link #computeMinHeight(double, double, double, double, double)} without the need to pass
+	 * the insets.
+	 */
+	protected double computeMinHeight(double width) {
+		return computeMinHeight(width, snappedTopInset(), snappedRightInset(), snappedBottomInset(), snappedLeftInset());
+	}
+
+	/**
+	 * Convenience method for {@link #computePrefWidth(double, double, double, double, double)} without the need to pass
+	 * the insets.
+	 */
+	protected double computePrefWidth(double height) {
+		return computePrefWidth(height, snappedTopInset(), snappedRightInset(), snappedBottomInset(), snappedLeftInset());
+	}
+
+	/**
+	 * Convenience method for {@link #computePrefHeight(double, double, double, double, double)} without the need to pass
+	 * the insets.
+	 */
+	protected double computePrefHeight(double width) {
+		return computePrefHeight(width, snappedTopInset(), snappedRightInset(), snappedBottomInset(), snappedLeftInset());
+	}
+
+	/**
+	 * Convenience method for {@link #computeMaxWidth(double, double, double, double, double)} without the need to pass
+	 * the insets.
+	 */
+	protected double computeMaxWidth(double height) {
+		return computeMaxWidth(height, snappedTopInset(), snappedRightInset(), snappedBottomInset(), snappedLeftInset());
+	}
+
+	/**
+	 * Convenience method for {@link #computeMaxHeight(double, double, double, double, double)} without the need to pass
+	 * the insets.
+	 */
+	protected double computeMaxHeight(double width) {
+		return computeMaxHeight(width, snappedTopInset(), snappedRightInset(), snappedBottomInset(), snappedLeftInset());
+	}
+
+	//================================================================================
 	// Delegate Methods
 	//================================================================================
 
