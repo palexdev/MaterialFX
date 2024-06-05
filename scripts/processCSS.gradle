@@ -14,9 +14,15 @@ tasks.register("processCSS") {
         }
 
         // Check if npm and cssbeautify-cli are installed on the host
-        if (!execute("npm -v")) throw new GradleException("npm command could not be found")
-        if (!execute("cssbeautify-cli -v")) throw new GradleException("cssbeautify-cli command could not be found")
-        logger.warn("All dependencies have been found")
+        if (!execute("npm -v")) {
+            logger.error("npm command could not be found")
+            return
+        }
+        if (!execute("cssbeautify-cli -v")) {
+            logger.error("cssbeautify-cli command could not be found")
+            return
+        }
+        logger.info("All dependencies have been found")
 
         themesDirs.each { dir ->
             dir.eachFileRecurse {
@@ -38,10 +44,14 @@ tasks.register("processCSS") {
 
 boolean execute(String str) {
     if (isWindows) str = "cmd /c " + str // Prepend call to cmd
-    Process proc = new ProcessBuilder().with {
-        command str.split(" ")
-        redirectOutput(ProcessBuilder.Redirect.DISCARD)
-    }.start()
-    proc.waitForOrKill(10_000)
-    return proc.exitValue() == 0
+    try {
+        Process proc = new ProcessBuilder().with {
+            command str.split(" ")
+            redirectOutput(ProcessBuilder.Redirect.DISCARD)
+        }.start()
+        proc.waitForOrKill(10_000)
+        return proc.exitValue() == 0
+    } catch (java.lang.Throwable t) {
+        return -1;
+    }
 }
