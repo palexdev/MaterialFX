@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="ComponentsLauncher" type="Application" factoryName="Application" nameIsGenerated="true">
+  <configuration default="false" name="ComponentsLauncher_NVIDIA" type="Application" factoryName="Application">
     <envs>
       <env name="__GLX_VENDOR_LIBRARY_NAME" value="nvidia" />
       <env name="__NV_PRIME_RENDER_OFFLOAD" value="1" />

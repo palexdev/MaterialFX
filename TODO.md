@@ -59,5 +59,7 @@
 
 #### Misc/Remainders
 
+- Allow generating themes at runtime
+- Use variables rather than variables directly
 - StyleableProperties should be split. The ones dependent on the skin from the ones dependent on the control
 - Resolve icon provider from a string description (through prefix)

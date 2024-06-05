@@ -1,3 +1,5 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
 plugins {
     id 'java-library'
     id 'org.openjfx.javafxplugin' version "$jfxPlugin" apply false
@@ -39,7 +41,9 @@ subprojects {
     }
 
     javafx {
-        version = "$jfx"
+        // Workaround for Linux ARM64 because JavaFX is not updated as often for this architecture
+        var isLinuxArm = (Os.isFamily(Os.FAMILY_UNIX)) && "aarch64".equals(System.getProperty("os.arch"))
+        version = isLinuxArm ? "21.0.1" : "$jfx"
         modules = ["javafx.controls", "javafx.fxml"]
         configurations = ['implementation', 'testImplementation']
     }
