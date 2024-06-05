@@ -27,16 +27,18 @@ import io.github.palexdev.mfxcore.base.properties.styleable.StyleableBooleanProp
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableObjectProperty;
 import io.github.palexdev.mfxcore.utils.fx.SceneBuilderIntegration;
 import io.github.palexdev.mfxcore.utils.fx.StyleUtils;
+import io.github.palexdev.mfxresources.base.properties.IconProperty;
+import io.github.palexdev.mfxresources.fonts.IconProvider;
 import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
 import javafx.geometry.Pos;
+import javafx.scene.text.Font;
 import javafx.scene.transform.Scale;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -54,34 +56,11 @@ import java.util.function.Supplier;
  * Also, since they are simply buttons with a different appearance and purpose, the behavior used by this is just
  * {@link MFXButtonBehaviorBase}.
  * <p></p>
- * <b>Super important note!</b>
- * Material Design guidelines show that animations are played when the FAB changes its icon (not extended), or both
- * the icon and the text (when extended). This brings a nasty issue. Let's consider a simple messaging app with a bottom
- * navigation bar. The view is wrapped in a scroll pane of course. The pane then has an extended FAB at the bottom right,
- * just above the navigation bar, that allows the user to perform some important/main action.
- * <p>
- * As also seen in the M3 guidelines example, when you switch from one view to another, the FAB also changes.
- * For example at the 'Chat' view you may have a FAB with a 'message' icon and 'Write' as text.
- * When switching to another view you may want to change them to something related to the new view.
- * Both the changes need to be displayed in a single animation of course, and this is not easy to accomplish in JavaFX.
- * <p>
- * Since here, the controls are modular. The animation is triggered by a listener in the skin.
- * And since we are changing two properties we would need to add two listeners, but this would trigger the animation
- * two times in a row, unless we use some flag to check whether both were changed.
- * Still, that would not be easy to manage, what happens if we are changing only one of them for example.
- * In other words, if we want a solution for the above example we need the two changes to be "atomic". Both at the same time.
- * Of course, it's not possible. So, the solution I came up with it's a pretty basic and recurrent trick: the wrapping technique.
- * Now, both the FAB's icon and text are wrapped in a single property, {@link #attributesProperty()}.
- * This solves the above issue, but comes with some caveats:
- * <p> 1) The FAB's text is now bound to this new property
- * <p> 2) For the above reason you cannot set the text using the traditional way, {@link #setText(String)} or through
- * {@link #textProperty()}
- * <p> 3) Unbinding it would cause malfunctions of course, so you must use {@link #setFabText(String)} instead.
- * For convenience the wrapping class is immutable, which means you won't be able to change the text or icon without
- * actually creating a new instance of it.
- * <p></p>
- * Also, note that the animation will play even if just only one of the two attributes changed. While this is not
- * explicitly shown on the M3 Guidelines I believe it's a valid behavior.
+ * As shown by the Material Design 3 guidelines, FABs can communicate changes (text/icon changes) through animations.
+ * These are handled by the default skin {@link MFXFabSkin} and can be enabled/disabled via the {@link #animatedProperty()}.
+ * A little suggestion, when changing the attributes of an extended FAB, you should first change the text and then the icon.
+ * This is because the default skin will play the animation as soon as the text changes, so you have a smoother animation
+ * if you change the icon afterward (this applies only to extended FABs!).
  *
  * @see MFXFabSkin
  */
@@ -89,52 +68,40 @@ public class MFXFabBase extends MFXButtonBase<MFXButtonBehaviorBase<MFXFabBase>>
 	//================================================================================
 	// Properties
 	//================================================================================
-	private final ObjectProperty<PropsWrapper> attributes = new SimpleObjectProperty<>(PropsWrapper.DEFAULT) {
-		@Override
-		public void set(PropsWrapper newValue) {
-			if (newValue == null) newValue = PropsWrapper.DEFAULT;
-			super.set(newValue);
-		}
-	};
+	private final IconProperty icon = new IconProperty();
 
 	//================================================================================
 	// Constructors
 	//================================================================================
 	public MFXFabBase() {
-		initialize();
+		this("");
 	}
 
 	public MFXFabBase(String text) {
-		initialize();
-		setFabText(text);
+		this(text, null);
 	}
 
 	public MFXFabBase(MFXFontIcon icon) {
-		initialize();
-		setIcon(icon);
+		this("", icon);
 	}
 
 	public MFXFabBase(String text, MFXFontIcon icon) {
+		super(text);
+		setIcon(icon);
 		initialize();
-		setAttributes(text, icon);
 	}
 
 	//================================================================================
 	// Methods
 	//================================================================================
 	private void initialize() {
-		textProperty().bind(attributes.map(p -> p != null ? p.getText() : null));
+		graphicProperty().bind(icon);
+		setPickOnBounds(false);
 	}
 
 	//================================================================================
 	// Overridden Methods
 	//================================================================================
-	@Override
-	protected void onInitSizesChanged() {
-		// Reset the prefWidth if not extended and init sizes changed
-		if (!isExtended()) setPrefWidth(USE_COMPUTED_SIZE);
-	}
-
 	@Override
 	public Supplier<MFXButtonBehaviorBase<MFXFabBase>> defaultBehaviorProvider() {
 		return () -> new MFXButtonBehaviorBase<>(this);
@@ -195,12 +162,8 @@ public class MFXFabBase extends MFXButtonBase<MFXButtonBehaviorBase<MFXFabBase>>
 	}
 
 	/**
-	 * Specifies whether to play or not an animation when:ù
-	 * <p> - The FAB transitions from collapsed to extended and vice-versa
-	 * <p> - The icon changes (collapsed)
-	 * <p> - Both the text and icon change (extended)
-	 * <p>
-	 * The animations are managed by the default skin implementation, see {@link MFXFabSkin}.
+	 * Specifies whether to animate the component when its attributes (text/icon) change.
+	 * The animations are implemented and managed by the default skin {@link MFXFabSkin}.
 	 * <p></p>
 	 * Can be set in CSS via the property: '-mfx-animated'.
 	 */
@@ -292,73 +255,50 @@ public class MFXFabBase extends MFXButtonBase<MFXButtonBehaviorBase<MFXFabBase>>
 	//================================================================================
 	// Getters/Setters
 	//================================================================================
-	public void setAttributes(PropsWrapper attributes) {
-		this.attributes.set(attributes);
-	}
-
-	public void setAttributes(String text, MFXFontIcon icon) {
-		this.attributes.set(new PropsWrapper(text, icon));
-	}
-
-	public void setAttributes(String text, Supplier<MFXFontIcon> iconSupplier) {
-		this.attributes.set(new PropsWrapper(text, iconSupplier.get()));
+	public MFXFontIcon getIcon() {
+		return iconProperty().get();
 	}
 
 	/**
-	 * Specifies the wrapper object containing both the current icon and text of the FAB.
-	 * <p></p>
-	 * For convenience, and to avoid too many checks, you won't be able to set {@code null} as a value, it will
-	 * always be corrected to a default value with empty text and {@code null} icon.
+	 * Specifies the FAB's icon.
 	 */
-	public ObjectProperty<PropsWrapper> attributesProperty() {
-		return attributes;
-	}
-
-	public PropsWrapper getAttributes() {
-		return attributes.get();
-	}
-
-	/**
-	 * Use this method to set the FAB's text since the default property {@link #textProperty()} is bound to
-	 * {@link #attributesProperty()}.
-	 */
-	public void setFabText(String text) {
-		PropsWrapper attributes = getAttributes();
-		this.attributes.set(new PropsWrapper(text, attributes.getIcon()));
-	}
-
-	public String getFabText() {
-		return getAttributes().getText();
+	public IconProperty iconProperty() {
+		return icon;
 	}
 
 	public void setIcon(MFXFontIcon icon) {
-		PropsWrapper attributes = getAttributes();
-		this.attributes.set(new PropsWrapper(attributes.getText(), icon));
+		iconProperty().set(icon);
 	}
 
-	public MFXFontIcon getIcon() {
-		return getAttributes().getIcon();
+	/**
+	 * Delegate of {@link IconProperty#setDescription(String)}.
+	 */
+	public IconProperty setIconDescription(String description) {
+		return icon.setDescription(description);
 	}
 
-	//================================================================================
-	// Internal Classes
-	//================================================================================
-	public static class PropsWrapper {
-		public static final PropsWrapper DEFAULT = new PropsWrapper("", null);
-		private final String text;
-		private final MFXFontIcon icon;
+	/**
+	 * Delegate of {@link IconProperty#setProvider(IconProvider)}.
+	 *
+	 * @see MFXFontIcon#setIconsProvider(IconProvider)
+	 */
+	public IconProperty setIconProvider(IconProvider provider) {
+		return icon.setProvider(provider);
+	}
 
-		public PropsWrapper(String text, MFXFontIcon icon) {
-			this.text = text;
-			this.icon = icon;
-		}
+	/**
+	 * Delegate of {@link IconProperty#setProvider(Font, Function)}.
+	 *
+	 * @see MFXFontIcon#setIconsProvider(Font, Function)
+	 */
+	public IconProperty setIconProvider(Font font, Function<String, Character> converter) {
+		return icon.setProvider(font, converter);
+	}
 
-		public String getText() {
-			return text;
-		}
-
-		public MFXFontIcon getIcon() {
-			return icon;
-		}
+	/**
+	 * Delegate of {@link IconProperty#setProvider(IconProvider, String)}.
+	 */
+	public IconProperty setIconProvider(IconProvider provider, String description) {
+		return icon.setProvider(provider, description);
 	}
 }

@@ -28,7 +28,7 @@ public class ComponentsLauncher {
         //System.setProperty("prism.lcdtext", "false");
         //System.setProperty("prism.vsync", "false");
         //System.setProperty("prism.showdirty", "true");
-        //System.setProperty("prism.forceGPU","true");
+        System.setProperty("prism.forceGPU", "true");
         //System.setProperty("prism.verbose", "true");
         //System.setProperty("javafx.animation.fullspeed", "true");
         System.setProperty("glass.disableGrab", "true");
