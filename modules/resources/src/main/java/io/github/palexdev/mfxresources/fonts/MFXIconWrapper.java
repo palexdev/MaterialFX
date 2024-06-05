@@ -118,10 +118,10 @@ public class MFXIconWrapper extends StackPane {
 			MFXFontIcon oldValue = get();
 			if (isAnimated() && newValue != null) {
 				super.set(newValue);
-				newValue.setVisible(false);
-				addChild(newValue);
 				if (animation != null) animation.stop(MFXIconWrapper.this);
-				if (animationProvider != null) {
+				if (!isDisabled() && animationProvider != null) {
+					newValue.setVisible(false);
+					addChild(newValue);
 					animation = animationProvider.apply(oldValue, newValue);
 					animation.play();
 					return;
@@ -170,7 +170,6 @@ public class MFXIconWrapper extends StackPane {
 		setMinSize(USE_PREF_SIZE, USE_PREF_SIZE);
 		setMaxSize(USE_PREF_SIZE, USE_PREF_SIZE);
 		addEventHandler(MouseEvent.MOUSE_PRESSED, e -> requestFocus());
-		setAnimationPreset(AnimationPresets.FADE);
 	}
 
 	/**
