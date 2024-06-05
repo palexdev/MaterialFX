@@ -18,15 +18,13 @@
 
 package io.github.palexdev.mfxcomponents.controls.base;
 
-import io.github.palexdev.mfxcomponents.layout.MFXResizable;
 import io.github.palexdev.mfxcore.behavior.BehaviorBase;
 import io.github.palexdev.mfxcore.behavior.WithBehavior;
 import io.github.palexdev.mfxcore.controls.SkinBase;
 import javafx.scene.control.Control;
 
 /**
- * Simple extension of {@link SkinBase} that makes all the width and height related methods public, to allow their usage
- * by the new layout API, see {@link MFXResizable}.
+ * Simple extension of {@link SkinBase} that makes all the width and height related methods public.
  */
 public abstract class MFXSkinBase<C extends Control & WithBehavior<B>, B extends BehaviorBase<C>> extends SkinBase<C, B> {
 

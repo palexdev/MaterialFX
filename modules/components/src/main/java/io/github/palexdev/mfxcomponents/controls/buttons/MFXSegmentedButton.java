@@ -3,7 +3,6 @@ package io.github.palexdev.mfxcomponents.controls.buttons;
 import io.github.palexdev.mfxcomponents.behaviors.MFXSegmentedButtonBehavior;
 import io.github.palexdev.mfxcomponents.controls.base.MFXControl;
 import io.github.palexdev.mfxcomponents.controls.base.MFXSkinBase;
-import io.github.palexdev.mfxcomponents.layout.LayoutStrategy;
 import io.github.palexdev.mfxcomponents.skins.MFXSegmentedButtonSkin;
 import io.github.palexdev.mfxcomponents.skins.MFXSegmentedButtonSkin.MFXSegment;
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableIntegerProperty;
@@ -125,16 +124,6 @@ public class MFXSegmentedButton extends MFXControl<MFXSegmentedButtonBehavior> {
     }
 
     @Override
-    public LayoutStrategy defaultLayoutStrategy() {
-        return LayoutStrategy.defaultStrategy()
-            .setPrefWidthFunction(LayoutStrategy.Defaults.DEF_PREF_WIDTH_FUNCTION.andThen(r -> Math.max(r, getInitWidth())))
-            .setPrefHeightFunction(LayoutStrategy.Defaults.DEF_PREF_HEIGHT_FUNCTION.andThen(r -> {
-                double target = getInitHeight() - getDensity() * 4;
-                return Math.max(r, target);
-            }));
-    }
-
-    @Override
     public List<String> defaultStyleClasses() {
         return List.of("mfx-segmented-button");
     }
@@ -165,7 +154,7 @@ public class MFXSegmentedButton extends MFXControl<MFXSegmentedButtonBehavior> {
 
     /**
      * This property can be used to 'compress' the segmented button's height. Valid values are from 0 to 5, and each step
-     * will remove 4px from the prefHeight (handled by the default layout strategy).
+     * will remove 4px from the prefHeight (handled by the default skin).
      * <p></p>
      * Can be set in CSS via the property: '-mfx-density'.
      */

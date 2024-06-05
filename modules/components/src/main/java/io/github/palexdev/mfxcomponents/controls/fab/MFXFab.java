@@ -105,22 +105,16 @@ public class MFXFab extends MFXFabBase implements WithVariants<MFXFab, FABVarian
 
     @Override
     public MFXFab addVariants(FABVariants... variants) {
-        WithVariants.addVariants(this, variants);
-        onInitSizesChanged();
-        return this;
+        return WithVariants.addVariants(this, variants);
     }
 
     @Override
     public MFXFab setVariants(FABVariants... variants) {
-        WithVariants.setVariants(this, variants);
-        onInitSizesChanged();
-        return this;
+        return WithVariants.setVariants(this, variants);
     }
 
     @Override
     public MFXFab removeVariants(FABVariants... variants) {
-        WithVariants.removeVariants(this, variants);
-        onInitSizesChanged();
-        return this;
+        return WithVariants.removeVariants(this, variants);
     }
 }
