@@ -51,7 +51,8 @@ boolean execute(String str) {
         }.start()
         proc.waitForOrKill(10_000)
         return proc.exitValue() == 0
-    } catch (java.lang.Throwable t) {
-        return -1;
+    } catch (Throwable e) {
+        logger.error(e.getMessage())
+        return -1
     }
 }
