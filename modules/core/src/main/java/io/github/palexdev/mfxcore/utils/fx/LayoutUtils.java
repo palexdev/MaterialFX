@@ -169,6 +169,20 @@ public class LayoutUtils {
 	}
 
 	/**
+	 * Convenience method for {@code node.getLayoutBounds().getWidth()}.
+	 */
+	public static double getWidth(Node node) {
+		return node.getLayoutBounds().getWidth();
+	}
+
+	/**
+	 * Convenience method for {@code node.getLayoutBounds().getHeight()}.
+	 */
+	public static double getHeight(Node node) {
+		return node.getLayoutBounds().getHeight();
+	}
+
+	/**
 	 * @return a new {@link BoundingBox} object with 0 as all
 	 * parameters (x, y, width and height).
 	 */
