@@ -158,10 +158,10 @@ $scheme: () !default;
 @function GetStateLayer($state) {
   $val: map.get((
     'hover': 8%,
-    'focus': 12%,
-    'focused': 12%,
-    'press': 12%,
-    'pressed': 12%,
+    'focus': 10%,
+    'focused': 10%,
+    'press': 10%,
+    'pressed': 10%,
     'dragged': 16%,
     'disabled': 12%,
     'disabled-text': 38%,
