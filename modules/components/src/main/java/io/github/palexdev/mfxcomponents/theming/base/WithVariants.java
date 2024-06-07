@@ -18,13 +18,12 @@
 
 package io.github.palexdev.mfxcomponents.theming.base;
 
-import io.github.palexdev.mfxcomponents.controls.base.MFXControl;
-import io.github.palexdev.mfxcomponents.controls.base.MFXLabeled;
 import io.github.palexdev.mfxcomponents.controls.base.MFXStyleable;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
 
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -100,71 +99,47 @@ public interface WithVariants<N extends Node, V extends Variant> {
 	}
 
 	/**
-	 * Replaces the given control' style classes with its base ones, then adds the specified variants.
-	 * <p>
-	 * Style classes are filtered by a {@link LinkedHashSet} to avoid duplicates while keeping the specified order.
+	 * Adds all the given variants to the given node and to the set returned by {@link #getAppliedVariants()}.
 	 */
 	@SafeVarargs
-	static <C extends MFXControl<?>, V extends Variant> C setVariants(C control, V... variants) {
-		Set<String> classes = new LinkedHashSet<>(control.defaultStyleClasses());
-		for (V variant : variants) {
-			classes.add(variant.variantStyleClass());
+	static <V extends Variant, N extends Node & WithVariants<N, V>> N addVariants(N node, V... variants) {
+		Set<V> appliedVariants = node.getAppliedVariants();
+		List<String> classes = new ArrayList<>();
+		for (V v : variants) {
+			if (appliedVariants.add(v))
+				classes.add(v.variantStyleClass());
 		}
-		control.getStyleClass().setAll(classes);
-		return control;
+		node.getStyleClass().addAll(classes);
+		return node;
 	}
 
 	/**
-	 * Removes all the given variants from the given control.
+	 * First removes all currently applied variants, then adds the new given ones with {@link #addVariants(Node, Variant[])}.
 	 */
 	@SafeVarargs
-	static <C extends MFXControl<?>, V extends Variant> C removeVariants(C control, V... variants) {
-		ObservableList<String> styleClass = control.getStyleClass();
-		for (V variant : variants) {
-			styleClass.remove(variant.variantStyleClass());
-		}
-		return control;
+	static <V extends Variant, N extends Node & WithVariants<N, V>> N setVariants(N node, V... variants) {
+		Set<V> appliedVariants = node.getAppliedVariants();
+		// Remove all applied previously applied variants
+		String[] toRemove = appliedVariants.stream().map(Variant::variantStyleClass).toArray(String[]::new);
+		node.getStyleClass().removeAll(toRemove);
+		// Update applied variants Ser
+		appliedVariants.clear();
+		Collections.addAll(appliedVariants, variants);
+
+		// Add all new variants
+		return addVariants(node, variants);
 	}
 
 	/**
-	 * Adds all the given variants to the given labeled.
-	 * <p>
-	 * Style classes are filtered by a {@link LinkedHashSet} to avoid duplicates while keeping the specified order.
+	 * Removes all the given variants from the given node.
 	 */
 	@SafeVarargs
-	static <L extends MFXLabeled<?>, V extends Variant> L addVariants(L labeled, V... variants) {
-		Set<String> classes = new LinkedHashSet<>(labeled.getStyleClass());
-		for (V variant : variants) {
-			classes.add(variant.variantStyleClass());
+	static <V extends Variant, N extends Node & WithVariants<N, V>> N removeVariants(N node, V... variants) {
+		Set<V> appliedVariants = node.getAppliedVariants();
+		for (V v : variants) {
+			if (appliedVariants.remove(v))
+				node.getStyleClass().remove(v.variantStyleClass());
 		}
-		labeled.getStyleClass().setAll(classes);
-		return labeled;
-	}
-
-	/**
-	 * Replaces the given labeled' style classes with its base ones, then adds the specified variants.
-	 * <p>
-	 * Style classes are filtered by a {@link LinkedHashSet} to avoid duplicates while keeping the specified order.
-	 */
-	@SafeVarargs
-	static <L extends MFXLabeled<?>, V extends Variant> L setVariants(L labeled, V... variants) {
-		Set<String> classes = new LinkedHashSet<>(labeled.defaultStyleClasses());
-		for (V variant : variants) {
-			classes.add(variant.variantStyleClass());
-		}
-		labeled.getStyleClass().setAll(classes);
-		return labeled;
-	}
-
-	/**
-	 * Removes all the given variants from the given labeled.
-	 */
-	@SafeVarargs
-	static <L extends MFXLabeled<?>, V extends Variant> L removeVariants(L labeled, V... variants) {
-		ObservableList<String> styleClass = labeled.getStyleClass();
-		for (V variant : variants) {
-			styleClass.remove(variant.variantStyleClass());
-		}
-		return labeled;
+		return node;
 	}
 }
