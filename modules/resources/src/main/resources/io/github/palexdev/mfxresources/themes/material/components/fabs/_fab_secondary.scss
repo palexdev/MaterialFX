@@ -23,10 +23,10 @@ $ripple-color: Ripple.Ripple('on-secondary-container');
   -fx-background-color: $surface-tint;
 }
 
-.mfx-button.fab.secondary .mfx-font-icon {
+.mfx-button.fab.secondary > .label > .mfx-font-icon {
   -mfx-color: $icon-color;
 }
 
-.mfx-button.fab.secondary .mfx-ripple-generator {
+.mfx-button.fab.secondary > .surface > .mfx-ripple-generator {
   -mfx-ripple-color: $ripple-color;
 }
