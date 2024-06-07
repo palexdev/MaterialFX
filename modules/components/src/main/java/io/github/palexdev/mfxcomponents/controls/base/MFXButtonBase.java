@@ -20,7 +20,7 @@ import java.util.List;
  * <p>
  * Such components expect behaviors of type {@link MFXButtonBehaviorBase}.
  * <p></p>
- * Since it's the base class to implement any kind of button, the selector is CSS is set by default to: '.mfx-button.base'.
+ * Since it's the base class to implement any kind of button, the selector is CSS is set by default to: '.mfx-button-base'.
  */
 public abstract class MFXButtonBase<B extends MFXButtonBehaviorBase<?>> extends MFXLabeled<B> {
     //================================================================================
@@ -72,7 +72,7 @@ public abstract class MFXButtonBase<B extends MFXButtonBehaviorBase<?>> extends 
     //================================================================================
     @Override
     public List<String> defaultStyleClasses() {
-        return List.of("mfx-button", "base");
+        return List.of("mfx-button-base");
     }
 
     @Override
