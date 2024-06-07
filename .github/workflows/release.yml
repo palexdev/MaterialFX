@@ -1,9 +1,9 @@
 name: 'Release new versions'
 on:
   workflow_run:
-    workflows: [Build rewrite]
-    types:
-      - completed
+    workflows: [ Build rewrite ]
+    branches: [ rewrite ]
+    types: [ completed ]
     
 jobs:
   # Only if the build action was successful
