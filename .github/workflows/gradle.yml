@@ -1,6 +1,3 @@
-# This workflow will build a Java project with Gradle
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
-
 name: 'Build rewrite'
 
 on:
@@ -8,6 +5,9 @@ on:
     branches: [ rewrite ]
   pull_request:
     branches: [ rewrite ]
+
+env:
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
 
 jobs:
   # Only if last commit does not contain [RELEASE]
@@ -19,14 +19,14 @@ jobs:
 
       - name: Get Last Commit
         run: |
-          $val = git show --pretty=format:"%s" -s HEAD
-          echo "MESSAGE=$val" >> $env.GITHUB_ENV
+          $tmp = git show --pretty=format:"%s" -s HEAD
+          Write-Output "::set-env name=CommitMessage::$tmp"
         shell: pwsh
 
       - name: Check Last Commit
         id: check_commit
         run: |
-          if ($env:LAST_COMMIT_TITLE -match '\[RELEASE\]') {
+          if ($env:CommitMessage -match '\[RELEASE\]') {
             echo "::set-output name=executable::true"
           } else {
             echo "::set-output name=executable::false"

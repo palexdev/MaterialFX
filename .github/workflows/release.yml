@@ -1,10 +1,14 @@
 name: 'Release'
+
 on:
   push:
     branches: [ rewrite ]
   pull_request:
     branches: [ rewrite ]
-    
+
+env:
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+
 jobs:
   # Only if last commit contains [RELEASE]
   check:
@@ -15,14 +19,14 @@ jobs:
     
       - name: Get Last Commit
         run: |
-          $val = git show --pretty=format:"%s" -s HEAD
-          echo "MESSAGE=$val" >> $env.GITHUB_ENV
+          $tmp = git show --pretty=format:"%s" -s HEAD
+          Write-Output "::set-env name=CommitMessage::$tmp"
         shell: pwsh
 
       - name: Check Last Commit
         id: check_commit
         run: |
-          if ($env:LAST_COMMIT_TITLE -match '\[RELEASE\]') {
+          if ($env:CommitMessage -match '\[RELEASE\]') {
             echo "::set-output name=executable::true"
           } else {
             echo "::set-output name=executable::false"
@@ -32,8 +36,7 @@ jobs:
       - name: Extract Modules from Commit Message
         id: extract_modules
         run: |
-          $commitMessage = $env:LAST_COMMIT_TITLE
-          if ($commitMessage -match '\[RELEASE\] Modules: (.*)') {
+          if ($env:CommitMessage -match '\[RELEASE\] Modules: (.*)') {
             $modules = $matches[1] -split ', '
             echo "::set-output name=modules::$($modules -join ',')"
           } else {
@@ -46,9 +49,16 @@ jobs:
       modules: ${{ steps.extract_modules.outputs.modules }}
 
   release:
+    environment: MavenEnv
     runs-on: windows-latest
     needs: check
     if: ${{ needs.check.outputs.executable == 'true' }}
+    env:
+      ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_USERNAME }}
+      ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_PASSWORD }}
+      ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.GPG_ID }}
+      ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PASSWORD }}
+      ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_KEY }}
 
     steps:
       - name: Checkout code
@@ -69,10 +79,18 @@ jobs:
       - name: Release modules
         run: |
           # Iterate over modules
-          $modules = ${{ needs.check.outputs.modules }} -split ','
+          $modules = "${{ needs.check.outputs.modules }}" -split ','
           foreach ($module in $modules) {
             echo "Releasing module: $module"
-            ./gradlew $module:publish $module:closeAndReleaseRepository
+            switch ($module) {
+              "core" { ./gradlew core:publish core:closeAndReleaseRepository }
+              "resources" { ./gradlew resources:publish resources:closeAndReleaseRepository }
+              "effects" { ./gradlew effects:publish effects:closeAndReleaseRepository }
+              "localization" { ./gradlew localization:publish localization:closeAndReleaseRepository }
+              "components" { ./gradlew components:publish components:closeAndReleaseRepository }
+              "release" { ./gradlew release:publish release:closeAndReleaseRepository }
+              default { Write-Host "Unrecognized module" }
+            }
           }
         shell: pwsh
           
