@@ -26,8 +26,8 @@ $ripple-default: Ripple.Ripple('on-primary') !default;
   -fx-background-color: $surface-tint;
 }
 
-.mfx-icon-button.filled .mfx-font-icon,
-.mfx-icon-button.filled:selectable:selected .mfx-font-icon {
+.mfx-icon-button.filled > .mfx-icon-wrapper > .mfx-font-icon,
+.mfx-icon-button.filled:selectable:selected > .mfx-icon-wrapper > .mfx-font-icon {
   -mfx-color: $icon-default;
 }
 
@@ -44,6 +44,6 @@ $ripple-default: Ripple.Ripple('on-primary') !default;
   -fx-background-color: $surface-tint-toggle;
 }
 
-.mfx-icon-button.filled:selectable .mfx-font-icon {
+.mfx-icon-button.filled:selectable > .mfx-icon-wrapper > .mfx-font-icon {
   -mfx-color: $icon-unselected;
 }

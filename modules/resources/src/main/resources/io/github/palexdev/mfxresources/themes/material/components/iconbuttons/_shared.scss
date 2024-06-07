@@ -34,17 +34,17 @@ $padding: 4px;
   -fx-background-color: $bg-color-disabled;
 }
 
-.mfx-icon-button .mfx-font-icon,
-.mfx-icon-button.filled .mfx-font-icon,
-.mfx-icon-button.filled-tonal .mfx-font-icon,
-.mfx-icon-button.outlined .mfx-font-icon {
+.mfx-icon-button > .mfx-icon-wrapper > .mfx-font-icon,
+.mfx-icon-button.filled > .mfx-icon-wrapper > .mfx-font-icon,
+.mfx-icon-button.filled-tonal > .mfx-icon-wrapper > .mfx-font-icon,
+.mfx-icon-button.outlined > .mfx-icon-wrapper > .mfx-font-icon {
   -mfx-size: $icon-size;
 }
 
-.mfx-icon-button:disabled .mfx-font-icon,
-.mfx-icon-button.filled:disabled .mfx-font-icon,
-.mfx-icon-button.filled-tonal:disabled .mfx-font-icon,
-.mfx-icon-button.outlined:disabled .mfx-font-icon {
+.mfx-icon-button:disabled > .mfx-icon-wrapper > .mfx-font-icon,
+.mfx-icon-button.filled:disabled > .mfx-icon-wrapper > .mfx-font-icon,
+.mfx-icon-button.filled-tonal:disabled > .mfx-icon-wrapper > .mfx-font-icon,
+.mfx-icon-button.outlined:disabled > .mfx-icon-wrapper > .mfx-font-icon {
   -fx-opacity: Theme.GetStateLayer('disabled-text');
   -mfx-color: $icon-color-disabled;
 }
