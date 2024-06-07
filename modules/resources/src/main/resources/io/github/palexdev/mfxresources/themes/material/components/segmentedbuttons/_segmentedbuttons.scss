@@ -21,16 +21,10 @@ $spacing: 8px !default;
 $radius: 100px !default;
 $insets: -1px !default;
 $padding: 4px 12px 4px 12px !default;
-$min-height: 40px !default;
-$min-width: 48px !default;
 
 /****************************************************************************************************
  * Segmented Buttons
  ****************************************************************************************************/
-.mfx-segmented-button {
-  -mfx-init-height: $min-height;
-}
-
 .mfx-segmented-button > .segment {
   @include Typography.LabelLarge();
   -fx-text-fill: $text-color;
@@ -39,18 +33,17 @@ $min-width: 48px !default;
   -fx-border-color: $bd-color;
   -fx-border-insets: $insets;
   -fx-padding: $padding;
-  -mfx-init-width: $min-width;
 }
 
 .mfx-segmented-button > .segment > .surface > .bg {
   -fx-background-color: $surface-tint;
 }
 
-.mfx-segmented-button > .segment .mfx-font-icon {
+.mfx-segmented-button > .segment > .label > .mfx-font-icon {
   -mfx-color: $icon-color;
 }
 
-.mfx-segmented-button > .segment > .mfx-ripple-generator {
+.mfx-segmented-button > .segment > .surface > .mfx-ripple-generator {
   -mfx-ripple-color: $ripple;
 }
 
@@ -81,7 +74,7 @@ $min-width: 48px !default;
   -fx-border-color: $bd-color-disabled;
 }
 
-.mfx-segmented-button > .segment:disabled .mfx-font-icon {
+.mfx-segmented-button > .segment:disabled > .label > .mfx-font-icon {
   -mfx-color: $icon-color-disabled;
 }
 
@@ -104,7 +97,7 @@ $text-color-selected-disabled: rgba($text-color-selected, Theme.GetStateLayer('d
   -fx-background-color: $surface-tint-selected;
 }
 
-.mfx-segmented-button > .segment:selected .mfx-font-icon {
+.mfx-segmented-button > .segment:selected > .label > .mfx-font-icon {
   -mfx-description: 'fas-check';
   -mfx-color: $icon-color-selected;
 }
@@ -113,6 +106,6 @@ $text-color-selected-disabled: rgba($text-color-selected, Theme.GetStateLayer('d
   -fx-text-fill: $text-color-selected-disabled;
 }
 
-.mfx-segmented-button > .segment:selected:disabled .mfx-font-icon {
+.mfx-segmented-button > .segment:selected:disabled > .label > .mfx-font-icon {
   -mfx-color: $icon-color-selected-disabled;
 }
