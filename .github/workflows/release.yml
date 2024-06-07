@@ -1,16 +1,14 @@
-name: 'Release new versions'
+name: 'Release'
 on:
-  workflow_run:
-    workflows: [ Build rewrite ]
+  push:
     branches: [ rewrite ]
-    types: [ completed ]
+  pull_request:
+    branches: [ rewrite ]
     
 jobs:
-  # Only if the build action was successful
   # Only if last commit contains [RELEASE]
   check:
     runs-on: windows-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -21,34 +19,36 @@ jobs:
           echo "MESSAGE=$val" >> $env.GITHUB_ENV
         shell: pwsh
 
-      - name: Extract Modules from Commit Message
-        run: |
-          $commitMessage = $env:LAST_COMMIT_TITLE
-          $modules = [regex]::Matches($commitMessage, '(?<=\[RELEASE\] Modules: )([^,]+)')
-          $moduleList = @()
-          foreach ($module in $modules) {
-            $moduleList += $module.Value.Trim()
-          }
-          echo "MODULES=$moduleList" >> $env:GITHUB_ENV
-        shell: pwsh
-
       - name: Check Last Commit
+        id: check_commit
         run: |
           if ($env:LAST_COMMIT_TITLE -match '\[RELEASE\]') {
-            echo "EXECUTABLE=true" >> $env:GITHUB_ENV
+            echo "::set-output name=executable::true"
           } else {
-            echo "EXECUTABLE=false" >> $env:GITHUB_ENV
+            echo "::set-output name=executable::false"
           }
         shell: pwsh
+
+      - name: Extract Modules from Commit Message
+        id: extract_modules
+        run: |
+          $commitMessage = $env:LAST_COMMIT_TITLE
+          if ($commitMessage -match '\[RELEASE\] Modules: (.*)') {
+            $modules = $matches[1] -split ', '
+            echo "::set-output name=modules::$($modules -join ',')"
+          } else {
+            echo "::set-output name=modules::"
+          }
+        shell: pwsh
+
+    outputs:
+      executable: ${{ steps.check_commit.outputs.executable }}
+      modules: ${{ steps.extract_modules.outputs.modules }}
 
   release:
     runs-on: windows-latest
-    needs: check-commit
-    env:
-      MESSAGE: ${{ needs.check-commit.env.MESSAGE }}
-      MODULES: ${{ needs.check-commit.env.MODULES }}
-      EXECUTABLE: ${{ needs.check-commit.env.EXECUTABLE }}
-    if: ${{ env.EXECUTABLE == 'true' }}
+    needs: check
+    if: ${{ needs.check.outputs.executable == 'true' }}
 
     steps:
       - name: Checkout code
@@ -63,10 +63,14 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Build with Gradle
+        run: ./gradlew build -x test -x processCSS
+
       - name: Release modules
         run: |
           # Iterate over modules
-          foreach ($module in $env.MODULES) {
+          $modules = ${{ needs.check.outputs.modules }} -split ','
+          foreach ($module in $modules) {
             echo "Releasing module: $module"
             ./gradlew $module:publish $module:closeAndReleaseRepository
           }
