@@ -14,7 +14,8 @@
 - [ ] Dialog
 - [ ] Divider
 - [x] Elevation
-- [ ] Focus Ring
+- [ ] Focus Ring/Focus Indicator
+- [ ] Dragged state layer (only surface needs to be changed)
 - [x] Icon
 - [ ] List
 - [ ] Menu
@@ -59,7 +60,6 @@
 
 #### Misc/Remainders
 
-- Optimize CSS
 - Allow generating themes at runtime
 - Use variables rather than variables directly
 - StyleableProperties should be split. The ones dependent on the skin from the ones dependent on the control
