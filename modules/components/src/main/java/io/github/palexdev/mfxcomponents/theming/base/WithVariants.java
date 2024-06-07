@@ -87,18 +87,16 @@ public interface WithVariants<N extends Node, V extends Variant> {
 	N removeVariants(V... variants);
 
 	/**
-	 * Adds all the given variants to the given control.
-	 * <p>
-	 * Style classes are filtered by a {@link LinkedHashSet} to avoid duplicates while keeping the specified order.
+	 * @return a {@link Set} containing all the applied variants, useful for such queries since it is way faster than
+	 * checking the {@link N#getStyleClass()} list
 	 */
-	@SafeVarargs
-	static <C extends MFXControl<?>, V extends Variant> C addVariants(C control, V... variants) {
-		Set<String> classes = new LinkedHashSet<>(control.getStyleClass());
-		for (V variant : variants) {
-			classes.add(variant.variantStyleClass());
-		}
-		control.getStyleClass().setAll(classes);
-		return control;
+	Set<V> getAppliedVariants();
+
+	/**
+	 * @return whether the given variant is contained in {@link #getAppliedVariants()}
+	 */
+	default boolean isVariantApplied(V variant) {
+		return getAppliedVariants().contains(variant);
 	}
 
 	/**
