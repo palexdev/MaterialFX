@@ -211,21 +211,22 @@ public class MFXSegmentedButton extends MFXControl<MFXSegmentedButtonBehavior> {
     /**
      * Adds the given segment to the button.
      */
-    public void addSegment(MFXSegment segment) {
+    public MFXSegmentedButton addSegment(MFXSegment segment) {
         segments.add(segment);
+        return this;
     }
 
     /**
      * Builds a new {@link MFXSegment} with the given parameters, then adds it to the button.
      */
-    public void addSegment(MFXFontIcon icon, String text) {
-        addSegment(new MFXSegment(text, icon));
+    public MFXSegmentedButton addSegment(MFXFontIcon icon, String text) {
+        return addSegment(new MFXSegment(text, icon));
     }
 
     /**
      * Builds a new {@link MFXSegment} from the given supplier, them adds it to the button.
      */
-    public void addSegment(Supplier<MFXSegment> supplier) {
-        addSegment(supplier.get());
+    public MFXSegmentedButton addSegment(Supplier<MFXSegment> supplier) {
+        return addSegment(supplier.get());
     }
 }
