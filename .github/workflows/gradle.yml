@@ -10,18 +10,49 @@ on:
     branches: [ rewrite ]
 
 jobs:
-  build:
-
+  # Only if last commit does not contain [RELEASE]
+  check:
     runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get Last Commit
+        run: |
+          $val = git show --pretty=format:"%s" -s HEAD
+          echo "MESSAGE=$val" >> $env.GITHUB_ENV
+        shell: pwsh
+
+      - name: Check Last Commit
+        id: check_commit
+        run: |
+          if ($env:LAST_COMMIT_TITLE -match '\[RELEASE\]') {
+            echo "::set-output name=executable::true"
+          } else {
+            echo "::set-output name=executable::false"
+          }
+        shell: pwsh
+
+    outputs:
+      executable: ${{ steps.check_commit.outputs.executable }}
+
+  build:
+    runs-on: windows-latest
+    needs: check
+    if: ${{ needs.check.outputs.executable == 'false' }}
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: '21'
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+
       - name: Build with Gradle
         run: ./gradlew build -x test -x processCSS
