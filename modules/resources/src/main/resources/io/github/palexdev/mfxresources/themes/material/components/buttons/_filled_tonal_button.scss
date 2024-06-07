@@ -34,10 +34,10 @@ $elevation-hover: 1 !default;
   -mfx-elevation: ThemeUtils.ElevationLevel($elevation-hover);
 }
 
-.mfx-button.filled-tonal .mfx-font-icon {
+.mfx-button.filled-tonal > .label > .mfx-font-icon {
   -mfx-color: $icon-color;
 }
 
-.mfx-button.filled-tonal .mfx-ripple-generator {
+.mfx-button.filled-tonal > .surface > .mfx-ripple-generator {
   -mfx-ripple-color: $ripple-color;
 }

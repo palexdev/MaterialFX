@@ -11,11 +11,10 @@ $text-color-disabled: Theme.GetSchemeColor('on-surface') !default;
 $icon-size: 18px !default;
 $icon-color-disabled: $text-color-disabled !default;
 
-$min-width: -1px !default;
-$min-height: 40px !default;
-$padding: 0px 24px 0px 24px !default;
-$padding-icon-left: 0px 24px 0px 16px !default;
-$padding-icon-right: 0px 16px 0px 24px !default;
+$padding: 24px !default;
+$padding-text: 12px !default;
+$padding-icon: 16px !default;
+
 $elements-gap: 8px !default;
 $alignment: CENTER !default;
 
@@ -24,18 +23,16 @@ $elevation-disabled: 0 !default;
 /****************************************************************************************************
  * Buttons shared properties
  ****************************************************************************************************/
-.mfx-button.elevated,
-.mfx-button.filled,
-.mfx-button.filled-tonal,
-.mfx-button.text,
-.mfx-button.outlined {
+.mfx-button {
   @include Typography.LabelLarge();
   -fx-graphic-text-gap: $elements-gap;
   -fx-background-radius: $bg-radius;
   -fx-alignment: $alignment;
-  -fx-padding: $padding;
-  -mfx-init-width: $min-width;
-  -mfx-init-height: $min-height;
+  -fx-padding: 0px $padding 0px $padding;
+
+  &.text {
+    -fx-padding: 0px $padding-text 0px $padding-text;
+  }
 
   > .surface > .bg {
     -fx-background-radius: $bg-radius;
@@ -51,11 +48,7 @@ $elevation-disabled: 0 !default;
   -fx-background-color: $bg-color-disabled;
 }
 
-.mfx-button.elevated:disabled > .surface,
-.mfx-button.filled:disabled > .surface,
-.mfx-button.filled-tonal:disabled > .surface,
-.mfx-button.text:disabled > .surface,
-.mfx-button.outlined:disabled > .surface {
+.mfx-button:disabled > .surface {
   -mfx-elevation: ThemeUtils.ElevationLevel($elevation-disabled);
 }
 
@@ -64,39 +57,35 @@ $elevation-disabled: 0 !default;
   -fx-background-color: transparent;
 }
 
-.mfx-button.elevated .mfx-font-icon,
-.mfx-button.filled .mfx-font-icon,
-.mfx-button.filled-tonal .mfx-font-icon,
-.mfx-button.text .mfx-font-icon,
-.mfx-button.outlined .mfx-font-icon {
+.mfx-button > .label > .mfx-font-icon {
   -mfx-size: $icon-size;
 }
 
-.mfx-button.elevated:disabled .mfx-font-icon,
-.mfx-button.filled:disabled .mfx-font-icon,
-.mfx-button.filled-tonal:disabled .mfx-font-icon,
-.mfx-button.text:disabled .mfx-font-icon,
-.mfx-button.outlined:disabled .mfx-font-icon {
+.mfx-button:disabled > .label > .mfx-font-icon {
   -mfx-color: $icon-color-disabled;
 }
 
 /* Label text is solid, label node is opaque, this is the correct way to get the right disabled color */
-.mfx-button:disabled .label {
+.mfx-button:disabled > .label {
   -fx-opacity: Theme.GetStateLayer('disabled-text');
 }
 
-.mfx-button.elevated:with-icon-left,
-.mfx-button.filled:with-icon-left,
-.mfx-button.filled-tonal:with-icon-left,
-.mfx-button.text:with-icon-left,
-.mfx-button.outlined:with-icon-left {
-  -fx-padding: $padding-icon-left;
+.mfx-button {
+  &:with-icon-left {
+    -fx-padding: 0px $padding 0px $padding-icon;
+  }
+
+  &.text:with-icon-left {
+    -fx-padding: 0px $padding-icon 0px $padding-text;
+  }
 }
 
-.mfx-button.elevated:with-icon-right,
-.mfx-button.filled:with-icon-right,
-.mfx-button.filled-tonal:with-icon-right,
-.mfx-button.text:with-icon-right,
-.mfx-button.outlined:with-icon-right {
-  -fx-padding: $padding-icon-right;
+.mfx-button {
+  &:with-icon-right {
+    -fx-padding: 0px $padding-icon 0px $padding;
+  }
+
+  &.text:with-icon-right {
+    -fx-padding: 0px $padding-text 0px $padding-icon;
+  }
 }

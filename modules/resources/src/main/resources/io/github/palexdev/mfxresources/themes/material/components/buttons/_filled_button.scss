@@ -34,7 +34,7 @@ $elevation-hover: 1 !default;
   -mfx-elevation: ThemeUtils.ElevationLevel($elevation-hover);
 }
 
-.mfx-button.filled .mfx-font-icon {
+.mfx-button.filled > .label > .mfx-font-icon {
   -mfx-color: $icon-color;
 }
 

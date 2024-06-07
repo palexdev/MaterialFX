@@ -40,10 +40,10 @@ $ripple-color: Ripple.Ripple('primary') !default;
   -fx-border-color: $bd-color-focused;
 }
 
-.mfx-button.outlined .mfx-font-icon {
+.mfx-button.outlined > .label > .mfx-font-icon {
   -mfx-color: $icon-color;
 }
 
-.mfx-button.outlined .mfx-ripple-generator {
+.mfx-button.outlined > .surface > .mfx-ripple-generator {
   -mfx-ripple-color: $ripple-color;
 }
