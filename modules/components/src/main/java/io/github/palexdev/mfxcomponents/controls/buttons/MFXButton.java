@@ -26,6 +26,7 @@ import io.github.palexdev.mfxcomponents.theming.base.WithVariants;
 import io.github.palexdev.mfxcomponents.theming.enums.ButtonVariants;
 import javafx.scene.Node;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -40,6 +41,10 @@ import java.util.function.Supplier;
  * The default style class of this component is: '.mfx-button'.
  */
 public class MFXButton extends MFXButtonBase<MFXButtonBehaviorBase<MFXButton>> implements WithVariants<MFXButton, ButtonVariants> {
+    //================================================================================
+    // Properties
+    //================================================================================
+    private final EnumSet<ButtonVariants> variants = EnumSet.noneOf(ButtonVariants.class);
 
     //================================================================================
     // Constructors
@@ -124,5 +129,10 @@ public class MFXButton extends MFXButtonBase<MFXButtonBehaviorBase<MFXButton>> i
     @Override
     public MFXButton removeVariants(ButtonVariants... variants) {
         return WithVariants.removeVariants(this, variants);
+    }
+
+    @Override
+    public EnumSet<ButtonVariants> getAppliedVariants() {
+        return variants;
     }
 }

@@ -23,6 +23,7 @@ import io.github.palexdev.mfxcomponents.theming.base.WithVariants;
 import io.github.palexdev.mfxcomponents.theming.enums.FABVariants;
 import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 
+import java.util.EnumSet;
 import java.util.List;
 
 /**
@@ -35,6 +36,10 @@ import java.util.List;
  * @see MFXFabSkin
  */
 public class MFXFab extends MFXFabBase implements WithVariants<MFXFab, FABVariants> {
+    //================================================================================
+    // Properties
+    //================================================================================
+    private final EnumSet<FABVariants> variants = EnumSet.noneOf(FABVariants.class);
 
     //================================================================================
     // Constructors
@@ -116,5 +121,10 @@ public class MFXFab extends MFXFabBase implements WithVariants<MFXFab, FABVarian
     @Override
     public MFXFab removeVariants(FABVariants... variants) {
         return WithVariants.removeVariants(this, variants);
+    }
+
+    @Override
+    public EnumSet<FABVariants> getAppliedVariants() {
+        return variants;
     }
 }

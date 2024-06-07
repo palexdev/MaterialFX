@@ -19,6 +19,7 @@ import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
 import javafx.scene.text.Font;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -50,6 +51,7 @@ public class MFXIconButton extends MFXSelectable<MFXIconButtonBehavior> implemen
     //================================================================================
     // Properties
     //================================================================================
+    private final EnumSet<IconButtonVariants> variants = EnumSet.noneOf(IconButtonVariants.class);
     private final IconProperty icon = new IconProperty();
 
     //================================================================================
@@ -132,6 +134,11 @@ public class MFXIconButton extends MFXSelectable<MFXIconButtonBehavior> implemen
     @Override
     public MFXIconButton removeVariants(IconButtonVariants... variants) {
         return WithVariants.removeVariants(this, variants);
+    }
+
+    @Override
+    public EnumSet<IconButtonVariants> getAppliedVariants() {
+        return variants;
     }
 
     //================================================================================
