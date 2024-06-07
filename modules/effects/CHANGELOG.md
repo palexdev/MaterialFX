@@ -16,6 +16,16 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.4.0] - 05-06-2024
+
+### Added
+
+- Animations: add some more conditional methods
+
+### Changed
+
+- Animations: rename some methods for convenience
+
 ## [11.3.1] - 19-10-2023
 
 ### Added

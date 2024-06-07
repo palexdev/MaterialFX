@@ -16,6 +16,21 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.10.0] - 05-06-2024
+
+### Changed
+
+- Update Material themes palettes
+- Update state layer opacities
+- Nuke custom min sizes properties
+- Optimize and update generated CSS
+- MFXIconWrapper: do not set default animation for icon change as this causes bugs in components that do not need the
+  animation
+
+### Removed
+
+- Delete svg source files for FontAwesome, useless, too many, hurts dev performance
+
 ## [11.9.1] - 04-10-2023
 
 ### Changed

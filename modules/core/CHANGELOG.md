@@ -16,6 +16,13 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.10.0] - 05-06-2024
+
+### Added
+
+- Add some more util methods to LayoutUtils
+- SkinBase: add some convenience methods to compute sizes without the need of specifying insets as parameters
+
 ## [11.9.0] - 21-05-2024
 
 ### Added

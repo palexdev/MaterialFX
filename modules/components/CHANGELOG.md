@@ -16,11 +16,30 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.25.0] - 05-06-2024
+
+### Added
+
+- WithVariants: added API to query applied variants
+
+### Changed
+
+- Review MFXFabBase and MFXFabSkin
+- WithVariants: only three methods are needed for add/set/remove
+- MFXButtonBase: only one style class, also renamed to '.mfx-button-base'; this allows optimizing CSS
+- Components for which specs specify min width/height now have the values declared in their default skins as protected
+  static members (not final! makes them easily changeable)
+
+### Removed
+
+- Nuke LayoutStrategy API and init sizes properties
+
 ## [11.24.4] - 29-05-2024
 
 ### Fixed
 
 - Fixed mistake of previous release
+- MFXFabSkin: the scale animation must also reposition the label otherwise new icons may end up being misaligned
 
 ## [11.24.3] - 29-05-2024
 

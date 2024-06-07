@@ -52,6 +52,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.scenicview.ScenicView;
@@ -112,7 +113,7 @@ public class Showcase extends Application implements MultipleViewApp<String> {
             .applyOn(sp);
 
         Size ws = UIUtils.getWindowSize();
-        Scene scene = new Scene(sp, ws.getWidth(), ws.getHeight());
+		Scene scene = new Scene(new StackPane(sp), ws.getWidth(), ws.getHeight());
         loadStyleSheet(scene);
         stage.setScene(scene);
         stage.setTitle("Buttons Playground");
