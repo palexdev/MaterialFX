@@ -296,11 +296,29 @@ public class Animations {
 		}
 
 		/**
+		 * If the given condition is true, then a new {@link Timeline} is built with a KeyFrame build by the given supplier and added to
+		 * the 'main' animation by calling {@link #addAnimation(Animation)}.
+		 */
+		public AbstractBuilder addIf(boolean condition, Supplier<KeyFrame> keyFrame) {
+			if (condition) addAnimation(new Timeline(keyFrame.get()));
+			return this;
+		}
+
+		/**
 		 * If the given condition returns true, then a new {@link Timeline} is built with the given keyframe and added to
 		 * the 'main' animation by calling {@link #addAnimation(Animation)}.
 		 */
 		public AbstractBuilder addIf(Supplier<Boolean> condition, KeyFrame keyFrame) {
 			if (condition.get()) addAnimation(new Timeline(keyFrame));
+			return this;
+		}
+
+		/**
+		 * If the given condition returns true, then a new {@link Timeline} is built with a KeyFrame built by the given supplier and added to
+		 * the 'main' animation by calling {@link #addAnimation(Animation)}.
+		 */
+		public AbstractBuilder addIf(Supplier<Boolean> condition, Supplier<KeyFrame> keyFrame) {
+			if (condition.get()) addAnimation(new Timeline(keyFrame.get()));
 			return this;
 		}
 
@@ -613,10 +631,26 @@ public class Animations {
 		}
 
 		/**
+		 * Adds a KeyFrame build by the given supplier only if the given condition is true.
+		 */
+		public TimelineBuilder addIf(boolean condition, Supplier<KeyFrame> keyFrameSupplier) {
+			if (condition) timeline.getKeyFrames().add(keyFrameSupplier.get());
+			return this;
+		}
+
+		/**
 		 * Adds the specified KeyFrame to the timeline only if the given condition is true.
 		 */
 		public TimelineBuilder addIf(Supplier<Boolean> condition, KeyFrame keyFrame) {
 			if (condition.get()) timeline.getKeyFrames().add(keyFrame);
+			return this;
+		}
+
+		/**
+		 * Adds a KeyFrame built by the given supplier only if the given condition is true.
+		 */
+		public TimelineBuilder addIf(Supplier<Boolean> condition, Supplier<KeyFrame> keyFrame) {
+			if (condition.get()) timeline.getKeyFrames().add(keyFrame.get());
 			return this;
 		}
 
