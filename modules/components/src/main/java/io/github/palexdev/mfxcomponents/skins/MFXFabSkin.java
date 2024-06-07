@@ -19,7 +19,11 @@
 package io.github.palexdev.mfxcomponents.skins;
 
 import io.github.palexdev.mfxcomponents.behaviors.MFXButtonBehaviorBase;
+import io.github.palexdev.mfxcomponents.controls.fab.MFXFab;
 import io.github.palexdev.mfxcomponents.controls.fab.MFXFabBase;
+import io.github.palexdev.mfxcomponents.theming.base.Variant;
+import io.github.palexdev.mfxcomponents.theming.base.WithVariants;
+import io.github.palexdev.mfxcomponents.theming.enums.FABVariants;
 import io.github.palexdev.mfxcore.controls.BoundLabel;
 import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
 import io.github.palexdev.mfxeffects.animations.Animations;
@@ -72,7 +76,7 @@ public class MFXFabSkin extends MFXButtonSkin<MFXFabBase, MFXButtonBehaviorBase<
 
 	// Scale animation parameters
 	protected Duration SCALE_DOWN_DURATION = M3Motion.MEDIUM1;
-	protected Duration SCALE_UP_DURATION = M3Motion.LONG3;
+	protected Duration SCALE_UP_DURATION = M3Motion.LONG2;
 	protected Interpolator SCALE_CURVE = M3Motion.EMPHASIZED;
 
 	// Extend/collapse animation parameters
@@ -421,8 +425,10 @@ public class MFXFabSkin extends MFXButtonSkin<MFXFabBase, MFXButtonBehaviorBase<
 	 */
 	protected class ScaleAnimation extends SequentialBuilder {
 		private final MFXFabBase fab = getSkinnable();
+		private final double w;
 
 		public ScaleAnimation() {
+			w = computeTargetWidth();
 			add(scaleDown());
 			add(scaleUp());
 		}
@@ -439,7 +445,8 @@ public class MFXFabSkin extends MFXButtonSkin<MFXFabBase, MFXButtonBehaviorBase<
 			return TimelineBuilder.build()
 				.add(KeyFrames.of(SCALE_UP_DURATION, scale.xProperty(), 1.0, SCALE_CURVE))
 				.add(KeyFrames.of(SCALE_UP_DURATION, scale.yProperty(), 1.0, SCALE_CURVE))
-				.addIf(() -> icon != null, KeyFrames.of(SCALE_UP_DURATION, icon.opacityProperty(), 1.0, SCALE_CURVE))
+				.addIf(icon != null, KeyFrames.of(1, e -> label.setTranslateX(computeLabelDisplacement(w))))
+				.addIf(icon != null, () -> KeyFrames.of(SCALE_UP_DURATION, icon.opacityProperty(), 1.0, SCALE_CURVE))
 				.getAnimation();
 		}
 	}
