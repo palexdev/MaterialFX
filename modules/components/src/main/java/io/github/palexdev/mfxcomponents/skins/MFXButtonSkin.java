@@ -52,6 +52,9 @@ public class MFXButtonSkin<T extends MFXButtonBase<B>, B extends MFXButtonBehavi
     //================================================================================
     protected final MaterialSurface surface;
 
+    // Specs
+    protected static double MIN_HEIGHT = 40.0;
+
     //================================================================================
     // Constructors
     //================================================================================
@@ -129,6 +132,11 @@ public class MFXButtonSkin<T extends MFXButtonBase<B>, B extends MFXButtonBehavi
                     }
                 }))
         );
+    }
+
+    @Override
+    public double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return Math.max(MIN_HEIGHT, super.computeMinHeight(width, topInset, rightInset, bottomInset, leftInset));
     }
 
     @Override

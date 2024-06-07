@@ -48,6 +48,10 @@ public class MFXSegmentedButtonSkin extends MFXSkinBase<MFXSegmentedButton, MFXS
     protected WeakReference<MFXSegment> first;
     protected WeakReference<MFXSegment> last;
 
+    // Specs
+    protected static double MIN_SEGMENT_WIDTH = 48.0;
+    protected static double MIN_HEIGHT = 40.0;
+
     //================================================================================
     // Constructors
     //================================================================================
@@ -118,6 +122,14 @@ public class MFXSegmentedButtonSkin extends MFXSkinBase<MFXSegmentedButton, MFXS
     //================================================================================
     @Override
     protected void initBehavior(MFXSegmentedButtonBehavior behavior) {}
+
+    @Override
+    public double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+        MFXSegmentedButton button = getSkinnable();
+        int density = button.getDensity();
+        double minH = MIN_HEIGHT - (4.0 * density);
+        return Math.max(minH, super.computeMinHeight(width, topInset, rightInset, bottomInset, leftInset));
+    }
 
     @Override
     public double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
@@ -240,7 +252,7 @@ public class MFXSegmentedButtonSkin extends MFXSkinBase<MFXSegmentedButton, MFXS
     /**
      * Default skin used by {@link MFXSegment} and simple extension of {@link MFXButtonSkin}.
      * <p>
-     * What changes is the layout strategy. According to MD3 guidelines a segment's label (text + icon) is always centered.
+     * What changes is the layout strategy. According to MD3 guidelines, a segment's label (text + icon) is always centered.
      */
     public static class MFXSegmentSkin extends MFXButtonSkin<MFXSegment, MFXSelectableBehaviorBase<MFXSegment>> {
 
@@ -250,6 +262,11 @@ public class MFXSegmentedButtonSkin extends MFXSkinBase<MFXSegmentedButton, MFXS
 
         @Override
         protected void addListeners() {}
+
+        @Override
+        public double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+            return Math.max(MIN_SEGMENT_WIDTH, super.computeMinWidth(height, topInset, rightInset, bottomInset, leftInset));
+        }
 
         @Override
         public double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {

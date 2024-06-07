@@ -61,7 +61,6 @@ public class MFXFabSkin extends MFXButtonSkin<MFXFabBase, MFXButtonBehaviorBase<
 	//================================================================================
 	// Properties
 	//================================================================================
-	// TODO define min sizes in Skins
 	private Animation ecAnimation;
 	private Animation sAnimation;
 	private final Scale scale = new Scale(1, 1);
@@ -81,6 +80,15 @@ public class MFXFabSkin extends MFXButtonSkin<MFXFabBase, MFXButtonBehaviorBase<
 	protected Duration OPACITY_DURATION = M3Motion.SHORT2;
 	protected Duration OPACITY_DURATION_EXTENDED = M3Motion.EXTRA_LONG2;
 	protected Interpolator RESIZE_CURVE = M3Motion.EMPHASIZED;
+
+	// Specs
+	protected static double MIN_HEIGHT = 56.0;
+	protected static double MIN_WIDTH = 56.0;
+	protected static double MIN_WIDTH_EXTENDED = 80.0;
+
+	// Specs Small
+	protected static double MIN_SIZE_SMALL = 40.0;
+	protected static double MIN_SIZE_LARGE = 96.0;
 
 	//================================================================================
 	// Constructors
@@ -219,6 +227,29 @@ public class MFXFabSkin extends MFXButtonSkin<MFXFabBase, MFXButtonBehaviorBase<
 		return snapPositionX(((w - iW) / 2.0) - label.getLayoutX());
 	}
 
+	/**
+	 * Returns the appropriate minimum width as specified by the Material Design 3 guidelines for "collapsed" FABs
+	 * according to the variant:
+	 * <p> - {@link FABVariants#SMALL} -> {@link #MIN_SIZE_SMALL}
+	 * <p> - {@link FABVariants#LARGE} -> {@link #MIN_SIZE_LARGE}
+	 * <p> - Standard -> {@link #MIN_WIDTH}
+	 * <p>
+	 * Little note: since this skin is for any FAB implementation starting from {@link MFXFabBase}, and because variants
+	 * are only managed by the default implementation {@link MFXFab}, this will also check if the {@link #getSkinnable()}
+	 * instance is the default implementation to use {@link WithVariants#isVariantApplied(Variant)}.
+	 * Otherwise always returns {@link #MIN_WIDTH}.
+	 */
+	protected double getSpecsMinWidth() {
+		MFXFabBase base = getSkinnable();
+		if (base instanceof MFXFab) {
+			MFXFab fab = (MFXFab) base;
+			return fab.isVariantApplied(FABVariants.SMALL) ? MIN_SIZE_SMALL :
+				fab.isVariantApplied(FABVariants.LARGE) ? MIN_SIZE_LARGE :
+					MIN_WIDTH;
+		}
+		return MIN_WIDTH;
+	}
+
 	//================================================================================
 	// Overridden Methods
 	//================================================================================
@@ -277,15 +308,16 @@ public class MFXFabSkin extends MFXButtonSkin<MFXFabBase, MFXButtonBehaviorBase<
 			MFXFontIcon icon = fab.getIcon();
 			double iW = (icon != null) ? LayoutUtils.getWidth(icon) + leftInset + rightInset : 0.0;
 			double iH = (icon != null) ? LayoutUtils.getHeight(icon) + topInset + bottomInset : 0.0;
-			return Math.max(Math.max(iW, iH), 56.0);
+			double minW = getSpecsMinWidth();
+			return Math.max(Math.max(iW, iH), minW);
 		}
-		return 80.0;
+		return MIN_WIDTH_EXTENDED;
 	}
 
 	@Override
 	public double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
 		MFXFabBase fab = getSkinnable();
-		return !fab.isExtended() ? computeMinWidth(-1) : 56.0;
+		return !fab.isExtended() ? computeMinWidth(-1) : MIN_HEIGHT;
 	}
 
 	@Override
