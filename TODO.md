@@ -20,8 +20,8 @@
 - [ ] List
 - [ ] Menu
 - [x] Popups/Tooltips
-- [ ] Progress indicator (circular)
-- [ ] Progress indicator (linear)
+- [x] Progress indicator (circular)
+- [x] Progress indicator (linear)
 - [x] Ripple
 - [ ] Select
 - [ ] Slider
@@ -60,6 +60,7 @@
 
 #### Misc/Remainders
 
+- Rename scss files
 - Allow generating themes at runtime
 - Use variables rather than variables directly
 - StyleableProperties should be split. The ones dependent on the skin from the ones dependent on the control
