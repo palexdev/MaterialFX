@@ -16,6 +16,16 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.26.0] - 15-06-2024
+
+### Added
+
+- Implemented linear and circular progress indicators
+
+### Changed
+
+- MFXSkinBase: implement initBehavior method to avoid boiler plate code in skins that do not need it
+
 ## [11.25.0] - 05-06-2024
 
 ### Added

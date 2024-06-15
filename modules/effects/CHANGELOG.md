@@ -16,6 +16,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.4.1] - 15-06-2024
+
+### Added
+
+- Animations: add auto reverse method to TimelineBuilder
+
 ## [11.4.0] - 05-06-2024
 
 ### Added

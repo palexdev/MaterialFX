@@ -16,6 +16,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.10.1] - 15-06-2024
+
+### Added
+
+- CSSFragment: add border width method to builder
+
 ## [11.10.0] - 05-06-2024
 
 ### Added
