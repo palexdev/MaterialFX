@@ -121,9 +121,6 @@ public class MFXSegmentedButtonSkin extends MFXSkinBase<MFXSegmentedButton, MFXS
     // Overridden Methods
     //================================================================================
     @Override
-    protected void initBehavior(MFXSegmentedButtonBehavior behavior) {}
-
-    @Override
     public double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
         MFXSegmentedButton button = getSkinnable();
         int density = button.getDensity();

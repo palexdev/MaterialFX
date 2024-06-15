@@ -39,6 +39,16 @@ public abstract class MFXSkinBase<C extends Control & WithBehavior<B>, B extends
 	// Overridden Methods
 	//================================================================================
 
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * This override avoids boiler plate code by automatically calling {@link B#init()}.
+	 */
+	@Override
+	protected void initBehavior(B behavior) {
+		behavior.init();
+	}
+
 	@Override
 	public double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
 		return super.computeMinWidth(height, topInset, rightInset, bottomInset, leftInset);
