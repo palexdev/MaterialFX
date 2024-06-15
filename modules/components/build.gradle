@@ -18,6 +18,11 @@ java {
     tasks.withType(Jar).each { it.archiveBaseName.set("components") }
 }
 
+task testRun(type: JavaExec) {
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'app.ComponentsLauncher'
+}
+
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.S01)
     signAllPublications()
