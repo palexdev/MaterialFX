@@ -387,6 +387,11 @@ public class CSSFragment {
 			return this;
 		}
 
+		public Builder borderWidth(double val) {
+			addStyle("-fx-border-width: " + val);
+			return this;
+		}
+
 		public Builder padding(String val) {
 			addStyle("-fx-padding: " + val);
 			return this;
@@ -574,7 +579,7 @@ public class CSSFragment {
 			return this;
 		}
 
-		public Builder arcWidth(String val) {
+		public Builder arcWidth(double val) {
 			addStyle("-fx-arc-width: " + val);
 			return this;
 		}
