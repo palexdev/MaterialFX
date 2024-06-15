@@ -757,6 +757,14 @@ public class Animations {
 		}
 
 		/**
+		 * Sets the {@link Timeline#autoReverseProperty()}.
+		 */
+		public TimelineBuilder setAutoReverse(boolean autoReverse) {
+			timeline.setAutoReverse(autoReverse);
+			return this;
+		}
+
+		/**
 		 * Sets the timeline cycle count.
 		 */
 		public TimelineBuilder setCycleCount(int cycleCount) {
