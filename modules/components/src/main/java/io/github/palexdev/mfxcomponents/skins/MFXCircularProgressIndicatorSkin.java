@@ -49,7 +49,7 @@ import static io.github.palexdev.mfxcore.observables.When.onInvalidated;
  * <p></p>
  * Now, to be precise, this skin is extremely complex, even more than {@link MFXLinearProgressIndicatorSkin},
  * for three reasons:
- * <p> 1) to replicate the design described by the Material Design 3 guidelines this complexity is <bbneeded</b>.
+ * <p> 1) to replicate the design described by the Material Design 3 guidelines this complexity is <b>needed</b>.
  * The nodes count is actually lesser than the other skin, but their handling is much more intricate.
  * <p> 2) just like the linear design, the circular indicator shows a gap between the arc and the track when the progress
  * is not indeterminate. Arcs are rotated and sized appropriately for the gap to work as intended.
