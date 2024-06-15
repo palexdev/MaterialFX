@@ -83,12 +83,12 @@ jobs:
           foreach ($module in $modules) {
             echo "Releasing module: $module"
             switch ($module) {
-              "core" { ./gradlew core:publish core:closeAndReleaseRepository }
-              "resources" { ./gradlew resources:publish resources:closeAndReleaseRepository }
-              "effects" { ./gradlew effects:publish effects:closeAndReleaseRepository }
-              "localization" { ./gradlew localization:publish localization:closeAndReleaseRepository }
-              "components" { ./gradlew components:publish components:closeAndReleaseRepository }
-              "release" { ./gradlew release:publish release:closeAndReleaseRepository }
+              "core" { ./gradlew core:publish core:releaseRepository }
+              "resources" { ./gradlew resources:publish resources:releaseRepository }
+              "effects" { ./gradlew effects:publish effects:releaseRepository }
+              "localization" { ./gradlew localization:publish localization:releaseRepository }
+              "components" { ./gradlew components:publish components:releaseRepository }
+              "release" { ./gradlew release:publish release:releaseRepository }
               default { Write-Host "Unrecognized module" }
             }
           }
