@@ -1,0 +1,31 @@
+@import 'shared';
+
+// Tokens
+$stroke-width: 4px !default;
+$stroke-type: CENTERED !default;
+$stroke-cap: ROUND !default;
+$stroke-join: ROUND !default;
+
+/****************************************************************************************************
+ * Circular Progress Indicators
+ ****************************************************************************************************/
+.mfx-progress-indicator {
+  > .container {
+    > .arc {
+      -fx-fill: transparent;
+      -fx-stroke: $main-color;
+      -fx-stroke-width: $stroke-width;
+      -fx-stroke-type: $stroke-type;
+      -fx-stroke-line-cap: $stroke-cap;
+      -fx-stroke-line-join: $stroke-join;
+    }
+
+    > .arc.track {
+      -fx-stroke: $track-color;
+    }
+  }
+
+  &:indeterminate > .container > .arc.left {
+    -fx-stroke: $main-color;
+  }
+}

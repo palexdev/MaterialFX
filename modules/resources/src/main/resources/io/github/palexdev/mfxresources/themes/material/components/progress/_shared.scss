@@ -1,0 +1,5 @@
+@use '../../tokens/theme' as Theme;
+
+// Shared component-level-tokens
+$main-color: Theme.GetSchemeColor('primary') !default;
+$track-color: Theme.GetSchemeColor('secondary-container') !default;

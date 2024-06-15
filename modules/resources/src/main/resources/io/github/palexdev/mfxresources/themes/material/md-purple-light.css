@@ -772,6 +772,40 @@
 }
 
 /****************************************************************************************************
+ * Linear Progress Indicators
+ ****************************************************************************************************/
+.mfx-progress-indicator > .bar,
+.mfx-progress-indicator > .stop {
+  -fx-background-color: #6750A4;
+  -fx-background-radius: 4px;
+}
+
+.mfx-progress-indicator > .segment {
+  -fx-background-color: #E8DEF8;
+  -fx-background-radius: 4px;
+}
+
+/****************************************************************************************************
+ * Circular Progress Indicators
+ ****************************************************************************************************/
+.mfx-progress-indicator > .container > .arc {
+  -fx-fill: transparent;
+  -fx-stroke: #6750A4;
+  -fx-stroke-width: 4px;
+  -fx-stroke-type: CENTERED;
+  -fx-stroke-line-cap: ROUND;
+  -fx-stroke-line-join: ROUND;
+}
+
+.mfx-progress-indicator > .container > .arc.track {
+  -fx-stroke: #E8DEF8;
+}
+
+.mfx-progress-indicator:indeterminate > .container > .arc.left {
+  -fx-stroke: #6750A4;
+}
+
+/****************************************************************************************************
  * Segmented Buttons
  ****************************************************************************************************/
 .mfx-segmented-button > .segment {
