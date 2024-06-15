@@ -15,6 +15,7 @@ module mfx.components {
     exports io.github.palexdev.mfxcomponents.controls.buttons;
     exports io.github.palexdev.mfxcomponents.controls.checkbox;
     exports io.github.palexdev.mfxcomponents.controls.fab;
+    exports io.github.palexdev.mfxcomponents.controls.progress;
 
     // Skins
     exports io.github.palexdev.mfxcomponents.skins;
