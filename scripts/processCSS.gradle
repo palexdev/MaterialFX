@@ -7,18 +7,21 @@ import org.apache.tools.ant.taskdefs.condition.Os
 tasks.register("processCSS") {
     doLast {
         def rootDir = rootProject.projectDir.absolutePath
-        def resDir = "$rootDir/modules/resources/src/main/resources/io/github/palexdev/mfxresources/themes"
-        List<File> themesDirs = new ArrayList<>()
-        new File(resDir).eachFile {
-            if (it.isDirectory() && it.name != "javafx") themesDirs += it
-        }
+        def resDir = "$rootDir/modules/resources/src/main/resources/io/github/palexdev/mfxresources/sass/themes"
+        List<File> themesDirs = Arrays.stream(new File(resDir).listFiles())
+            .filter(File::isDirectory)
+            .toList()
 
-        // Check if npm and cssbeautify-cli are installed on the host
-        if (!execute("npm -v")) {
+        // Check if npm, cleancss-cli and cssbeautify-cli are installed on the host
+        if (!execute(["npm", "-v"])) {
             logger.error("npm command could not be found")
             return
         }
-        if (!execute("cssbeautify-cli -v")) {
+        if (!execute(["cleancss", "-v"])) {
+            logger.error("cleancss command could not be found")
+            return
+        }
+        if (!execute(["cssbeautify-cli", "-v"])) {
             logger.error("cssbeautify-cli command could not be found")
             return
         }
@@ -28,13 +31,26 @@ tasks.register("processCSS") {
             dir.eachFileRecurse {
                 def name = it.name
                 def path = it.absolutePath
-                def parent = it.parent
-                if (name.endsWith(".css")) { // Unfortunately, doesn't run very well o SCSS files
+                if (!name.startsWith("tmp") && name.endsWith(".css")) {
+                    // Unfortunately, doesn't run very well on SCSS files
+                    def tmp = new File("${dir}/tmp.css")
+                    logger.warn("Optimizing: $name")
+                    execute([
+                        "cleancss",
+                        "-O1", "all:on;specialComments:all",
+                        "--format", "beautify",
+                        "${path}" as String,
+                        "-o", "${tmp}" as String
+                    ])
+
                     logger.warn("Beautifying: $name")
-                    def tmp = new File("${path}.tmp")
-                    it.renameTo(tmp)
-                    def beautifyCommand = "cssbeautify-cli -a -i2 -f ${path}.tmp -w $parent/$name"
-                    execute(beautifyCommand)
+                    execute([
+                        "cssbeautify-cli",
+                        "-i2",
+                        "-f", "${tmp}" as String,
+                        "-w", "${path}" as String
+                    ])
+
                     delete(tmp)
                 }
             }
@@ -42,13 +58,10 @@ tasks.register("processCSS") {
     }
 }
 
-boolean execute(String str) {
-    if (isWindows) str = "cmd /c " + str // Prepend call to cmd
+boolean execute(List<String> cmd) {
+    if (isWindows) cmd.addAll(0, "cmd", "/c") // Prepend call to cmd
     try {
-        Process proc = new ProcessBuilder().with {
-            command str.split(" ")
-            redirectOutput(ProcessBuilder.Redirect.DISCARD)
-        }.start()
+        Process proc = new ProcessBuilder(cmd).start()
         proc.waitForOrKill(10_000)
         return proc.exitValue() == 0
     } catch (Throwable e) {
