@@ -1,0 +1,58 @@
+@use '../../abstracts/functions' as *;
+@use '../../abstracts/maps' as *;
+@use '../../themes/theme' as *;
+
+// Material
+$md-filled-tonal-styles: (
+  root: (
+    bg-color: GetSchemeColor('secondary-container'),
+    fg-color: GetSchemeColor('on-secondary-container'),
+  ),
+  icon: (
+    mfx-color: GetSchemeColor('on-secondary-container'),
+  ),
+  surface: (
+    elevation: LEVEL0,
+    hover: (
+      elevation: LEVEL1,
+    ),
+  ),
+  surface-bg: (
+    bg-color: GetSchemeColor('on-secondary-container'),
+  ),
+  surface-ripple: (
+    ripple-color: Ripple('on-secondary-container'),
+  ),
+) !default;
+
+@mixin MaterialFilledTonal($overrides: ()) {
+  /*!***************************************************************************************************
+   * Filled Tonal Buttons
+   ****************************************************************************************************/
+  $styles: DeepMerge($md-filled-tonal-styles, $overrides);
+
+  .mfx-button.filled-tonal {
+    @include ApplyStyles($styles, root);
+
+    > .label > .mfx-font-icon {
+      @include ApplyStyles($styles, icon);
+    }
+
+    > .surface {
+      @include ApplyStyles($styles, surface);
+    }
+
+    > .surface > .bg {
+      @include ApplyStyles($styles, surface-bg)
+    }
+
+    > .surface > .mfx-ripple-generator {
+      @include ApplyStyles($styles, surface-ripple);
+    }
+
+    // Hover
+    &:hover > .surface {
+      @include ApplyStyles($styles, surface, hover);
+    }
+  }
+}

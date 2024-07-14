@@ -1,0 +1,155 @@
+@use '../abstracts/functions' as *;
+@use '../abstracts/maps' as *;
+@use '../base/typography' as *;
+@use '../themes/theme' as *;
+
+$base-styles: (
+  segment: (
+    bd-insets: -1px,
+    text-gap: 8px,
+    padding: (4px 12px 4px 12px),
+    first: (
+      bd-radius: (999px 0px 0px 999px),
+      bg-radius: (999px 0px 0px 999px),
+    ),
+    last: (
+      bd-radius: (0px 999px 999px 0px),
+      bg-radius: (0px 999px 999px 0px),
+    ),
+  ),
+  label: (
+    disabled: (
+      opacity: 1.0,
+    )
+  ),
+  icon: (
+    selected: (
+      mfx-description: 'fas-check',
+    ),
+  ),
+  surface-bg: (
+    first: (
+      bg-radius: (999px 0px 0px 999px),
+    ),
+    last: (
+      bg-radius: (0px 999px 999px 0px),
+    ),
+  ),
+) !default;
+
+// Material
+$md-styles: (
+  segment: (
+    bd-color: GetSchemeColor('outline'),
+    bg-color: transparent,
+    fg-color: GetSchemeColor('on-surface'),
+    disabled: (
+      bd-color: ApplyMDStateLayer('outline', disabled),
+      fg-color: ApplyMDStateLayer('on-surface', disabled-text),
+    ),
+    selected: (
+      bg-color: GetSchemeColor('secondary-container'),
+      fg-color: GetSchemeColor('on-secondary-container'),
+    ),
+    selected-disabled: (
+      fg-color: ApplyMDStateLayer('on-secondary-container', disabled-text),
+    ),
+  ),
+  icon: (
+    mfx-color: GetSchemeColor('on-surface'),
+    disabled: (
+      mfx-color: ApplyMDStateLayer('on-surface', disabled-text),
+    ),
+    selected: (
+      mfx-color: GetSchemeColor('on-secondary-container'),
+    ),
+    selected-disabled: (
+      mfx-color: ApplyMDStateLayer('on-secondary-container', disabled-text),
+    ),
+  ),
+  surface-bg: (
+    bg-color: GetSchemeColor('on-surface'),
+    selected: (
+      bg-color: GetSchemeColor('on-secondary-container'),
+    ),
+  ),
+  surface-ripple: (
+    ripple-color: Ripple('on-surface'),
+  ),
+) !default;
+
+@mixin MaterialSegmentedButtons($overrides: ()) {
+  /*!***************************************************************************************************
+   * Segmented Buttons
+   ****************************************************************************************************/
+  $styles: DeepMerge($base-styles, $md-styles, $overrides);
+
+  .mfx-segmented-button > .segment {
+    @include LabelLarge();
+    @include ApplyStyles($styles, segment);
+
+    > .label > .mfx-font-icon {
+      @include ApplyStyles($styles, icon);
+    }
+
+    > .surface > .bg {
+      @include ApplyStyles($styles, surface-bg);
+    }
+
+    > .surface > .mfx-ripple-generator {
+      @include ApplyStyles($styles, surface-ripple);
+    }
+
+    // First & Last
+    &:first {
+      @include ApplyStyles($styles, segment, first);
+
+      > .surface > .bg {
+        @include ApplyStyles($styles, surface-bg, first);
+      }
+    }
+
+    &:last {
+      @include ApplyStyles($styles, segment, last);
+
+      > .surface > .bg {
+        @include ApplyStyles($styles, surface-bg, last);
+      }
+    }
+
+    // Selected
+    &:selected {
+      @include ApplyStyles($styles, segment, selected);
+
+      > .label > .mfx-font-icon {
+        @include ApplyStyles($styles, icon, selected);
+      }
+
+      > .surface > .bg {
+        @include ApplyStyles($styles, surface-bg, selected);
+      }
+    }
+
+    // Disabled
+    &:disabled {
+      @include ApplyStyles($styles, segment, disabled);
+
+      > .label {
+        @include ApplyStyles($styles, label, disabled);
+      }
+
+      > .label > .mfx-font-icon {
+        @include ApplyStyles($styles, icon, disabled);
+      }
+    }
+
+    // Selected & Disabled
+    &:selected:disabled {
+      @include ApplyStyles($styles, segment, selected-disabled);
+
+      > .label > .mfx-font-icon {
+        @include ApplyStyles($styles, icon, selected-disabled);
+      }
+    }
+  }
+}

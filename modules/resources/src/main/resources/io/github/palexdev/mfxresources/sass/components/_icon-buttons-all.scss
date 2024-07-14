@@ -1,0 +1,13 @@
+@use 'iconbuttons/icon-buttons-base' as *;
+@use 'iconbuttons/icon-buttons-standard' as *;
+@use 'iconbuttons/icon-buttons-filled' as *;
+@use 'iconbuttons/icon-buttons-filled-tonal' as *;
+@use 'iconbuttons/icon-buttons-outlined' as *;
+
+@mixin MaterialIconButtons() {
+  @include MaterialBase();
+  @include MaterialStandard();
+  @include MaterialFilled();
+  @include MaterialFilledTonal();
+  @include MaterialOutlined();
+}

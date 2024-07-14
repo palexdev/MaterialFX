@@ -1,0 +1,9 @@
+@use 'tooltips/tooltips-base' as *;
+@use 'tooltips/tooltips-plain' as *;
+@use 'tooltips/tooltips-rich' as *;
+
+@mixin MaterialTooltips() {
+  @include TooltipsBase();
+  @include MaterialTooltipsPlain();
+  @include MaterialTooltipsRich();
+}

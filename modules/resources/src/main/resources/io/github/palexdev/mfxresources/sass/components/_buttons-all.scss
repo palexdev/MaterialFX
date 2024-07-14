@@ -1,0 +1,15 @@
+@use 'buttons/buttons-base' as *;
+@use 'buttons/buttons-elevated' as *;
+@use 'buttons/buttons-filled' as *;
+@use 'buttons/buttons-filled-tonal' as *;
+@use 'buttons/buttons-outlined' as *;
+@use 'buttons/buttons-text' as *;
+
+@mixin MaterialButtons() {
+  @include MaterialBase();
+  @include MaterialElevated();
+  @include MaterialFilled();
+  @include MaterialFilledTonal();
+  @include MaterialOutlined();
+  @include MaterialText();
+}

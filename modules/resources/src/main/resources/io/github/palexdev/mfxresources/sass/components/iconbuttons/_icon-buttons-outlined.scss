@@ -1,0 +1,68 @@
+@use '../../abstracts/functions' as *;
+@use '../../abstracts/logging' as *;
+@use '../../abstracts/maps' as *;
+@use '../../themes/theme' as *;
+
+// Material
+$md-styles: (
+  root: (
+    bg-color: transparent,
+    bd-color: GetSchemeColor('outline'),
+    bd-radius: 999px,
+    selected: (
+      bg-color: GetSchemeColor('inverse-surface'),
+      bd-color: transparent,
+    )
+  ),
+  icon: (
+    mfx-color: GetSchemeColor('on-surface-variant'),
+    selected: (
+      mfx-color: GetSchemeColor('inverse-on-surface'),
+    ),
+  ),
+  surface-bg: (
+    bg-color: GetSchemeColor('on-surface-variant'),
+    selected: (
+      bg-color: GetSchemeColor('inverse-on-surface'),
+    ),
+  ),
+  surface-ripple: (
+    ripple-color: Ripple('on-surface-variant'),
+  )
+) !default;
+
+@mixin MaterialOutlined($overrides: ()) {
+  /*!***************************************************************************************************
+   * Outlined IconButtons
+   ****************************************************************************************************/
+  $styles: DeepMerge($md-styles, $overrides);
+
+  .mfx-icon-button.outlined {
+    @include ApplyStyles($styles, root);
+
+    > .mfx-icon-wrapper > .mfx-font-icon {
+      @include ApplyStyles($styles, icon);
+    }
+
+    > .surface > .bg {
+      @include ApplyStyles($styles, surface-bg);
+    }
+
+    > .surface > .mfx-ripple-generator {
+      @include ApplyStyles($styles, surface-ripple);
+    }
+  }
+
+  // Selectable
+  .mfx-icon-button.outlined:selectable:selected {
+    @include ApplyStyles($styles, root, selected);
+
+    > .mfx-icon-wrapper > .mfx-font-icon {
+      @include ApplyStyles($styles, icon, selected);
+    }
+
+    > .surface > .bg {
+      @include ApplyStyles($styles, surface-bg, selected);
+    }
+  }
+}

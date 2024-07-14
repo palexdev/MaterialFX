@@ -1,0 +1,20 @@
+@use '../../abstracts/maps' as *;
+@use '../../themes/theme' as *;
+
+$base-styles: (
+  content: (
+    mfx-offset: '8 8'
+  ),
+) !default;
+
+@mixin TooltipsBase($overrides: ()) {
+  /****************************************************************************************************
+   * Popups and Tooltips Shared Properties
+   ****************************************************************************************************/
+  $styles: DeepMerge($base-styles, $overrides);
+
+  .mfx-popup .content,
+  .mfx-tooltip .content {
+    @include ApplyStyles($styles, content);
+  }
+}

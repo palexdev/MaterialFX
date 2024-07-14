@@ -1,0 +1,49 @@
+@use '../../abstracts/maps' as *;
+@use '../../themes/theme' as *;
+
+$base-styles: (
+  arc: (
+    stroke-cap: ROUND,
+    stroke-join: ROUND,
+    stroke-type: CENTERED,
+    stroke-width: 4px,
+  ),
+) !default;
+
+// Material
+$md-styles: (
+  arc: (
+    fill: transparent,
+    stroke: GetSchemeColor('primary'),
+    indeterminate-left: (
+      stroke: GetSchemeColor('primary'),
+    ),
+  ),
+  track: (
+    stroke: GetSchemeColor('secondary-container'),
+  ),
+) !default;
+
+@mixin MaterialCircular($overrides: ()) {
+  /*!***************************************************************************************************
+   * Circular Progress Indicators
+   ****************************************************************************************************/
+  $styles: DeepMerge($base-styles, $md-styles, $overrides);
+
+  .mfx-progress-indicator {
+    > .container {
+      > .arc {
+        @include ApplyStyles($styles, arc);
+      }
+
+      > .arc.track {
+        @include ApplyStyles($styles, track);
+      }
+    }
+
+    // Indeterminate
+    &:indeterminate > .container > .arc.left {
+      @include ApplyStyles($styles, arc, indeterminate-left);
+    }
+  }
+}

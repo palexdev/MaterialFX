@@ -1,0 +1,43 @@
+@use '../../abstracts/functions' as *;
+@use '../../abstracts/maps' as *;
+@use '../../base/typography' as *;
+@use '../../themes/theme' as *;
+
+$base-styles: (
+  content: (
+    min-height: 24px,
+    padding: 8px,
+  ),
+  label: (
+    wrap-text: true,
+    wrapping-width: 200px,
+  ),
+) !default;
+
+// Material
+$md-styles: (
+  content: (
+    bg-color: GetSchemeColor('inverse-surface'),
+    bg-radius: GetShape(extra-small),
+  ),
+  label: (
+    fg-color: GetSchemeColor('inverse-on-surface'),
+  ),
+) !default;
+
+@mixin MaterialTooltipsPlain($overrides: ()) {
+  /****************************************************************************************************
+   * Plain Content
+   ****************************************************************************************************/
+  $styles: DeepMerge($base-styles, $md-styles, $overrides);
+
+  .mfx-popup .content > .plain,
+  .mfx-tooltip .content > .plain {
+    @include ApplyStyles($styles, content);
+
+    > .label {
+      @include BodySmall();
+      @include ApplyStyles($styles, label);
+    }
+  }
+}

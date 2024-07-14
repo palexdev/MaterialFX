@@ -1,0 +1,13 @@
+@use './fabs/fabs-base' as *;
+@use './fabs/fabs-primary' as *;
+@use './fabs/fabs-secondary' as *;
+@use './fabs/fabs-tertiary' as *;
+@use './fabs/fabs-surface' as *;
+
+@mixin MaterialFABs() {
+  @include Base();
+  @include MaterialPrimary();
+  @include MaterialSecondary();
+  @include MaterialTertiary();
+  @include MaterialSurface();
+}

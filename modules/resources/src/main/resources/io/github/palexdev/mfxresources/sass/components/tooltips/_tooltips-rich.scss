@@ -1,0 +1,59 @@
+@use '../../abstracts/functions' as *;
+@use '../../abstracts/maps' as *;
+@use '../../base/typography' as *;
+@use '../../themes/theme' as *;
+
+$base-styles: (
+  content: (
+    padding: (12px 16px 8px 16px),
+    spacing: 8px,
+    elevation: LEVEL2,
+  ),
+  label: (
+    wrapping-width: 300px,
+  ),
+  actions: (
+    padding: (8px 0px 0px 0px),
+    spacing: 8px,
+  ),
+) !default;
+
+// Material
+$md-styles: (
+  content: (
+    bg-color: GetSchemeColor('surface-container'),
+    bg-radius: GetShape(medium),
+  ),
+  header: (
+    fg-color: GetSchemeColor('on-surface-variant'),
+  ),
+  label: (
+    fg-color: GetSchemeColor('on-surface-variant'),
+  ),
+) !default;
+
+@mixin MaterialTooltipsRich($overrides: ()) {
+  /****************************************************************************************************
+   * Rich Content
+   ****************************************************************************************************/
+  $styles: DeepMerge($base-styles, $md-styles, $overrides);
+
+  .mfx-popup .content > .rich,
+  .mfx-tooltip .content > .rich {
+    @include ApplyStyles($styles, content);
+
+    > .header {
+      @include TitleSmall();
+      @include ApplyStyles($styles, header);
+    }
+
+    > .label {
+      @include BodyMedium();
+      @include ApplyStyles($styles, label);
+    }
+
+    > .actions {
+      @include ApplyStyles($styles, actions);
+    }
+  }
+}

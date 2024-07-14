@@ -1,0 +1,22 @@
+@use '../abstracts/functions' as *;
+@use '../abstracts/maps' as *;
+@use '../themes/theme' as *;
+
+$surface-styles: (
+  root: (
+    mfx-hover: GetStateLayer('hover'),
+    mfx-focus: GetStateLayer('focus'),
+    mfx-press: GetStateLayer('press'),
+  ),
+) !default;
+
+@mixin Surfaces($overrides: ()) {
+  /*!***************************************************************************************************
+   * Surfaces (a.k.a fancy backgrounds)
+   ****************************************************************************************************/
+  $styles: DeepMerge($surface-styles, $overrides);
+
+  .surface {
+    @include ApplyStyles($styles, root);
+  }
+}

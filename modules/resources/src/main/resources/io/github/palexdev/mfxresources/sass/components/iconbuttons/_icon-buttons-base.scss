@@ -1,0 +1,63 @@
+@use '../../abstracts/functions' as *;
+@use '../../abstracts/maps' as *;
+@use '../../themes/theme' as *;
+
+$base-styles: (
+  root: (
+    bg-radius: 999px,
+    mfx-size: 40px,
+    padding: 4px,
+  ),
+  icon: (
+    mfx-size: 24px,
+  ),
+  surface-bg: (
+    bg-radius: 999px,
+  ),
+) !default;
+
+// Material
+$md-styles: (
+  root: (
+    disabled: (
+      bg-color: ApplyMDStateLayer('on-surface', disabled),
+    ),
+  ),
+  icon: (
+    disabled:(
+      mfx-color: GetSchemeColor('on-surface'),
+      opacity: GetStateLayer('disabled-text'),
+    ),
+  )
+) !default;
+
+@mixin MaterialBase($overrides: ()) {
+  /*!**************************************************************************************************
+   * IconButtons Shared Properties
+   ****************************************************************************************************/
+  $styles: DeepMerge($base-styles, $md-styles, $overrides);
+
+  .mfx-icon-button,
+  .mfx-icon-button.filled,
+  .mfx-icon-button.filled-tonal,
+  .mfx-icon-button.outlined {
+    @include ApplyStyles($styles, root);
+
+    > .mfx-icon-wrapper > .mfx-font-icon {
+      @include ApplyStyles($styles, icon);
+    }
+
+    > .surface > .bg {
+      @include ApplyStyles($styles, surface-bg);
+    }
+
+    // Disabled
+    &:disabled {
+      @include ApplyStyles($styles, root, disabled);
+    }
+
+    &:disabled > .mfx-icon-wrapper > .mfx-font-icon {
+      @include ApplyStyles($styles, icon, disabled);
+    }
+  }
+}

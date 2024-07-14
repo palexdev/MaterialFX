@@ -1,0 +1,67 @@
+@use '../../abstracts/functions' as *;
+@use '../../abstracts/maps' as *;
+@use '../../themes/theme' as *;
+
+// Material
+$md-styles-text: (
+  root: (
+    bg-color: transparent,
+    fg-color: GetSchemeColor('primary'),
+    padding: 0px 12px 0px 12px,
+    ic-left: (
+      padding: 0px 16px 0px 12px,
+    ),
+    ic-right: (
+      padding: 0px 12px 0px 16px,
+    ),
+    disabled: (
+      bg-color: transparent,
+    ),
+  ),
+  icon: (
+    mfx-color: GetSchemeColor('primary'),
+  ),
+  surface-bg: (
+    bg-color: GetSchemeColor('primary'),
+  ),
+  surface-ripple: (
+    ripple-color: Ripple('primary'),
+  ),
+);
+
+@mixin MaterialText($overrides: ()) {
+  /****************************************************************************************************
+   * Text Buttons
+   ****************************************************************************************************/
+  $styles: DeepMerge($md-styles-text, $overrides);
+
+  .mfx-button.text {
+    @include ApplyStyles($styles, root);
+
+    > .label > .mfx-font-icon {
+      @include ApplyStyles($styles, icon);
+    }
+
+    > .surface > .bg {
+      @include ApplyStyles($styles, surface-bg);
+    }
+
+    > .surface > .mfx-ripple-generator {
+      @include ApplyStyles($styles, surface-ripple);
+    }
+
+    // Icon left/right
+    &:with-icon-left {
+      @include ApplyStyles($styles, root, ic-left);
+    }
+
+    &:with-icon-right {
+      @include ApplyStyles($styles, root, ic-right);
+    }
+
+    // Disabled
+    &:disabled {
+      @include ApplyStyles($styles, root, disabled);
+    }
+  }
+}

@@ -1,0 +1,118 @@
+@use '../../abstracts/maps' as *;
+@use '../../base/typography' as *;
+@use '../../themes/theme' as *;
+
+$base-styes: (
+  root: (
+    bg-radius: 16px,
+    text-gap: 8px,
+    padding: 16px,
+    small: (
+      bg-radius: 12px,
+      padding: 0px,
+    ),
+    large: (
+      bg-radius: 28px,
+    ),
+  ),
+  label: (
+    disabled: (
+      opacity: 1.0,
+    ),
+  ),
+  icon: (
+    mfx-size: 24px,
+    large: (
+      mfx-size: 36px,
+    ),
+  ),
+  surface: (
+    elevation: LEVEL3,
+    hover: (
+      elevation: LEVEL4,
+    ),
+    lowered: (
+      elevation: LEVEL1,
+    ),
+    hover-low: (
+      elevation: LEVEL2,
+    ),
+  ),
+  surface-bg: (
+    bg-radius: 16px,
+    small: (
+      bg-radius: 12px,
+    ),
+    large: (
+      bg-radius: 28px,
+    )
+  ),
+) !default;
+
+@mixin Base($overrides: ()) {
+  /*!***************************************************************************************************
+   * FABs Shared Properties
+   ****************************************************************************************************/
+  $styles: DeepMerge($base-styes, $overrides);
+
+  .mfx-button.fab,
+  .mfx-button.fab:extended {
+    @include LabelLarge();
+    @include ApplyStyles($styles, root);
+
+    > .label > .mfx-font-icon {
+      @include ApplyStyles($styles, icon);
+    }
+
+    > .surface {
+      @include ApplyStyles($styles, surface);
+    }
+
+    > .surface > .bg {
+      @include ApplyStyles($styles, surface-bg);
+    }
+
+    // Hover
+    &:hover > .surface {
+      @include ApplyStyles($styles, surface, hover)
+    }
+
+    // Disabled
+    &:disabled > .label {
+      @include ApplyStyles($styles, label, disabled);
+    }
+  }
+
+  // Special Variants
+  .mfx-button.fab.small {
+    @include ApplyStyles($styles, root, small);
+
+    > .surface > .bg {
+      @include ApplyStyles($styles, surface-bg, small);
+    }
+  }
+
+  .mfx-button.fab.large {
+    @include ApplyStyles($styles, root, large);
+
+    > .label > .mfx-font-icon {
+      @include ApplyStyles($styles, icon, large);
+    }
+
+    > .surface > .bg {
+      @include ApplyStyles($styles, surface-bg, large);
+    }
+  }
+
+  .mfx-button.fab.lowered,
+  .mfx-button.fab.lowered:extended {
+    > .surface {
+      @include ApplyStyles($styles, surface, lowered);
+    }
+
+    // Hover
+    &:hover > .surface {
+      @include ApplyStyles($styles, surface, hover-low);
+    }
+  }
+}

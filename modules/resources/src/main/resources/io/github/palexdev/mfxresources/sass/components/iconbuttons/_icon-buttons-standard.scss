@@ -1,0 +1,80 @@
+@use '../../abstracts/functions' as *;
+@use '../../abstracts/logging' as *;
+@use '../../abstracts/maps' as *;
+@use '../../themes/theme' as *;
+
+// Material
+$md-styles: (
+  root: (
+    bg-color: transparent,
+    selected: (
+      bg-color: transparent,
+    ),
+    disabled: (
+      bg-color: transparent,
+    ),
+  ),
+  icon: (
+    mfx-color: GetSchemeColor('on-surface-variant'),
+    selected: (
+      mfx-color: GetSchemeColor('primary'),
+    ),
+    disabled: (
+      mfx-color: GetSchemeColor('on-surface'),
+    ),
+  ),
+  surface-bg: (
+    bg-color: GetSchemeColor('on-surface-variant'),
+    selected: (
+      bg-color: GetSchemeColor('primary'),
+    ),
+  ),
+  surface-ripple: (
+    ripple-color: Ripple('on-surface-variant'),
+  )
+) !default;
+
+@mixin MaterialStandard($overrides: ()) {
+  /*!***************************************************************************************************
+   * Standard IconButtons
+   ****************************************************************************************************/
+  $styles: DeepMerge($md-styles, $overrides);
+
+  .mfx-icon-button {
+    @include ApplyStyles($styles, root);
+
+    > .mfx-icon-wrapper > .mfx-font-icon {
+      @include ApplyStyles($styles, icon);
+    }
+
+    > .surface > .bg {
+      @include ApplyStyles($styles, surface-bg);
+    }
+
+    > .surface > .mfx-ripple-generator {
+      @include ApplyStyles($styles, surface-ripple);
+    }
+
+    // Selectable
+    &:selectable:selected {
+      @include ApplyStyles($styles, root, selected);
+
+      > .mfx-icon-wrapper > .mfx-font-icon {
+        @include ApplyStyles($styles, icon, selected);
+      }
+
+      > .surface > .bg {
+        @include ApplyStyles($styles, surface-bg, selected);
+      }
+    }
+
+    // Disabled
+    &:disabled {
+      @include ApplyStyles($styles, root, disabled);
+
+      > .mfx-icon-wrapper > .mfx-font-icon {
+        @include ApplyStyles($styles, icon, disabled);
+      }
+    }
+  }
+}

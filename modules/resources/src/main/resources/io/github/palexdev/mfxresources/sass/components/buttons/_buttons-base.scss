@@ -1,0 +1,108 @@
+@use '../../abstracts/functions' as *;
+@use '../../abstracts/maps' as *;
+@use '../../base/typography' as *;
+@use '../../themes/theme' as *;
+
+$base-styles: (
+  root: (
+    alignment: CENTER,
+    bg-radius: 20px,
+    padding: 0px 24px 0px 24px,
+    text-gap: 8px,
+    ic-left: (
+      padding: 0px 24px 0px 16px,
+    ),
+    ic-right: (
+      padding: 0px 16px 0px 24px,
+    ),
+  ),
+  label: (
+    padding: 0px 12px 0px 12px,
+    ic-left: (
+      padding: 0px 12px 0px 16px,
+    ),
+    ic-right: (
+      padding: 0px 16px 0px 12px,
+    ),
+  ),
+  icon: (
+    mfx-size: 18px,
+  ),
+  surface-bg: (
+    bg-radius: 20px,
+  ),
+) !default;
+
+// Material
+$md-styles: (
+  root: (
+    disabled: (
+      bg-color: ApplyMDStateLayer('on-surface', disabled),
+      fg-color: GetSchemeColor('on-surface'),
+    ),
+  ),
+  label: (
+    disabled: (
+      opacity: GetStateLayer(disabled-text),
+    ),
+  ),
+  icon: (
+    disabled: (
+      mfx-color: GetSchemeColor('on-surface')
+    ),
+  ),
+  surface: (
+    disabled: (
+      elevation: LEVEL0,
+    ),
+  ),
+) !default;
+
+@mixin MaterialBase($overrides: ()) {
+  /*!***************************************************************************************************
+   * Buttons Shared Styles
+   ****************************************************************************************************/
+  $styles: DeepMerge($base-styles, $md-styles, $overrides);
+
+  .mfx-button {
+    @include LabelLarge();
+    @include ApplyStyles($styles, root);
+
+    > .label > .mfx-font-icon {
+      @include ApplyStyles($styles, icon)
+    }
+
+    > .surface > .bg {
+      @include ApplyStyles($styles, surface-bg);
+    }
+
+    &:with-icon-left {
+      @include ApplyStyles($styles, root, ic-left);
+    }
+
+    &:with-icon-right {
+      @include ApplyStyles($styles, root, ic-right);
+    }
+
+    // Disabled
+    &.elevated:disabled,
+    &.filled:disabled,
+    &.filled-tonal:disabled,
+    &.text:disabled,
+    &.outlined:disabled {
+      @include ApplyStyles($styles, root, disabled);
+    }
+
+    &:disabled > .label {
+      @include ApplyStyles($styles, label, disabled);
+    }
+
+    &:disabled > .label > .mfx-font-icon {
+      @include ApplyStyles($styles, icon, disabled);
+    }
+
+    &:disabled > .surface {
+      @include ApplyStyles($styles, surface, disabled);
+    }
+  }
+}

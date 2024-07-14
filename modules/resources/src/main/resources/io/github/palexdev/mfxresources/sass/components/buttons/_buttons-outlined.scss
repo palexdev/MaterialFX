@@ -1,0 +1,63 @@
+@use '../../abstracts/functions' as *;
+@use '../../abstracts/maps' as *;
+@use '../../themes/theme' as *;
+
+// Material
+$md-styles-outlined: (
+  root: (
+    bg-color: transparent,
+    bd-color: GetSchemeColor('outline'),
+    bd-radius: 20px,
+    bd-width: 1px,
+    fg-color: GetSchemeColor('primary'),
+    focused: (
+      bd-color: GetSchemeColor('primary'),
+    ),
+    disabled: (
+      bg-color: transparent,
+      bd-color: ApplyMDStateLayer('outline', disabled-text),
+    ),
+  ),
+  icon: (
+    mfx-color: GetSchemeColor('primary'),
+  ),
+  surface-bg: (
+    bg-color: GetSchemeColor('primary'),
+  ),
+  surface-ripple: (
+    ripple-color: Ripple('primary'),
+  ),
+) !default;
+
+@mixin MaterialOutlined($overrides: ()) {
+  /*!***************************************************************************************************
+   * Outlined Buttons
+   ****************************************************************************************************/
+  $styles: DeepMerge($md-styles-outlined, $overrides);
+
+  .mfx-button.outlined {
+    @include ApplyStyles($styles, root);
+
+    > .label > .mfx-font-icon {
+      @include ApplyStyles($styles, icon);
+    }
+
+    > .surface > .bg {
+      @include ApplyStyles($styles, surface-bg);
+    }
+
+    > .surface > .mfx-ripple-generator {
+      @include ApplyStyles($styles, surface-ripple);
+    }
+
+    // Focused
+    &:focused {
+      @include ApplyStyles($styles, root, focused);
+    }
+
+    // Disabled
+    &:disabled {
+      @include ApplyStyles($styles, root, disabled);
+    }
+  }
+}

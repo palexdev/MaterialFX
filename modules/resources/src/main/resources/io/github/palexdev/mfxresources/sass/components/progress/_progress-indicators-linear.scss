@@ -1,0 +1,39 @@
+@use '../../abstracts/maps' as *;
+@use '../../themes/theme' as *;
+
+$base-styles: (
+  bar-stop: (
+    bg-radius: 4px,
+  ),
+  segment: (
+    bg-radius: 4px,
+  ),
+) !default;
+
+// Material
+$md-styles: (
+  bar-stop: (
+    bg-color: GetSchemeColor('primary'),
+  ),
+  segment: (
+    bg-color: GetSchemeColor('secondary-container'),
+  ),
+) !default;
+
+@mixin MaterialLinear($overrides: ()) {
+  /*!***************************************************************************************************
+   * Linear Progress Indicators
+   ****************************************************************************************************/
+  $styles: DeepMerge($base-styles, $md-styles, $overrides);
+
+  .mfx-progress-indicator {
+    > .bar,
+    > .stop {
+      @include ApplyStyles($styles, bar-stop);
+    }
+
+    > .segment {
+      @include ApplyStyles($styles, segment);
+    }
+  }
+}

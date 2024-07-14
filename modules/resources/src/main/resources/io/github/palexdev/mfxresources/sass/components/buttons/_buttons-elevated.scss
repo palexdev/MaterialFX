@@ -1,0 +1,58 @@
+@use '../../abstracts/functions' as *;
+@use '../../abstracts/maps' as *;
+@use '../../themes/theme' as *;
+
+// Material
+$md-elevated-styles: (
+  root: (
+    bg-color: GetSchemeColor('surface-container-low'),
+    fg-color: GetSchemeColor('primary'),
+  ),
+  icon: (
+    mfx-color: GetSchemeColor('primary'),
+  ),
+  surface: (
+    elevation: LEVEL1,
+    hover: (
+      elevation: LEVEL2,
+    ),
+  ),
+  surface-bg: (
+    bg-color: GetSchemeColor('primary'),
+  ),
+  surface-ripple: (
+    ripple-color: Ripple('primary'),
+  ),
+) !default;
+
+@mixin MaterialElevated($overrides: ()) {
+  /*!***************************************************************************************************
+   * Elevated Buttons
+   ****************************************************************************************************/
+  $styles: DeepMerge($md-elevated-styles, $overrides);
+
+  .mfx-button.elevated {
+    @include ApplyStyles($styles, root);
+
+    > .label > .mfx-font-icon {
+      @include ApplyStyles($styles, icon);
+    }
+
+    > .surface {
+      @include ApplyStyles($styles, surface);
+    }
+
+    > .surface > .bg {
+      @include ApplyStyles($styles, surface-bg);
+    }
+
+    > .surface > .mfx-ripple-generator {
+      @include ApplyStyles($styles, surface-ripple);
+    }
+
+    // Hover
+    &:hover > .surface {
+      @include ApplyStyles($styles, surface, hover);
+    }
+  }
+}

@@ -1,0 +1,43 @@
+@use '../../abstracts/functions' as *;
+@use '../../abstracts/maps' as *;
+@use '../../themes/theme' as *;
+
+// Material
+$md-styles: (
+  root: (
+    bg-color: GetSchemeColor('secondary-container'),
+    fg-color: GetSchemeColor('on-secondary-container'),
+  ),
+  icon: (
+    mfx-color: GetSchemeColor('on-secondary-container'),
+  ),
+  surface-bg: (
+    bg-color: GetSchemeColor('on-secondary-container'),
+  ),
+  surface-ripple: (
+    ripple-color: Ripple('on-secondary-container'),
+  ),
+) !default;
+
+@mixin MaterialSecondary($overrides: ()) {
+  /*!***************************************************************************************************
+   * Secondary FABs
+   ****************************************************************************************************/
+  $styles: DeepMerge($md-styles, $overrides);
+
+  .mfx-button.fab.secondary {
+    @include ApplyStyles($styles, root);
+
+    > .label > .mfx-font-icon {
+      @include ApplyStyles($styles, icon);
+    }
+
+    > .surface > .bg {
+      @include ApplyStyles($styles, surface-bg);
+    }
+
+    > .surface > .mfx-ripple-generator {
+      @include ApplyStyles($styles, surface-ripple);
+    }
+  }
+}

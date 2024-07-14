@@ -1,0 +1,67 @@
+@use '../../abstracts/functions' as *;
+@use '../../abstracts/logging' as *;
+@use '../../abstracts/maps' as *;
+@use '../../themes/theme' as *;
+
+// Material
+$md-styles: (
+  root: (
+    bg-color: GetSchemeColor('surface-container-highest'),
+    selected: (
+      bg-color: GetSchemeColor('secondary-container'),
+    )
+  ),
+  icon: (
+    mfx-color: GetSchemeColor('on-surface-variant'),
+    selected: (
+      mfx-color: GetSchemeColor('on-secondary-container'),
+    ),
+  ),
+  surface-bg: (
+    bg-color: GetSchemeColor('on-surface-variant'),
+    selected: (
+      bg-color: GetSchemeColor('on-secondary-container'),
+    ),
+  ),
+  surface-ripple: (
+    ripple-color: Ripple('on-surface-variant'),
+  )
+) !default;
+
+@mixin MaterialFilledTonal($overrides: ()) {
+  /*!***************************************************************************************************
+   * Filled Tonal IconButtons
+   ****************************************************************************************************/
+  $styles: DeepMerge($md-styles, $overrides);
+
+  // Standard and Selectable - Selected
+  .mfx-icon-button.filled-tonal,
+  .mfx-icon-button.filled-tonal:selectable:selected {
+    @include ApplyStyles($styles, root, selected);
+
+    > .mfx-icon-wrapper > .mfx-font-icon {
+      @include ApplyStyles($styles, icon, selected);
+    }
+
+    > .surface > .bg {
+      @include ApplyStyles($styles, surface-bg, selected);
+    }
+
+    > .surface > .mfx-ripple-generator {
+      @include ApplyStyles($styles, surface-ripple);
+    }
+  }
+
+  // Selectable - Not selected
+  .mfx-icon-button.filled-tonal:selectable {
+    @include ApplyStyles($styles, root);
+
+    > .mfx-icon-wrapper > .mfx-font-icon {
+      @include ApplyStyles($styles, icon);
+    }
+
+    > .surface > .bg {
+      @include ApplyStyles($styles, surface-bg);
+    }
+  }
+}

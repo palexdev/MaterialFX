@@ -1,0 +1,58 @@
+@use '../../abstracts/functions' as *;
+@use '../../abstracts/maps' as *;
+@use '../../themes/theme' as *;
+
+// Material
+$md-filled-styles: (
+  root: (
+    bg-color: GetSchemeColor('primary'),
+    fg-color: GetSchemeColor('on-primary'),
+  ),
+  icon: (
+    mfx-color: GetSchemeColor('on-primary'),
+  ),
+  surface: (
+    elevation: LEVEL0,
+    hover: (
+      elevation: LEVEL1,
+    ),
+  ),
+  surface-bg: (
+    bg-color: GetSchemeColor('on-primary'),
+  ),
+  surface-ripple: (
+    ripple-color: Ripple('on-primary'),
+  ),
+) !default;
+
+@mixin MaterialFilled($overrides: ()) {
+  /*!***************************************************************************************************
+   * Filled Buttons
+   ****************************************************************************************************/
+  $styles: DeepMerge($md-filled-styles, $overrides);
+
+  .mfx-button.filled {
+    @include ApplyStyles($styles, root);
+
+    > .label > .mfx-font-icon {
+      @include ApplyStyles($styles, icon);
+    }
+
+    > .surface {
+      @include ApplyStyles($styles, surface);
+    }
+
+    > .surface > .bg {
+      @include ApplyStyles($styles, surface-bg)
+    }
+
+    > .surface > .mfx-ripple-generator {
+      @include ApplyStyles($styles, surface-ripple);
+    }
+
+    // Hover
+    &:hover > .surface {
+      @include ApplyStyles($styles, surface, hover);
+    }
+  }
+}
