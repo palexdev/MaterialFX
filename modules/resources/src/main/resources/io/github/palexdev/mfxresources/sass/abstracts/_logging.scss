@@ -1,0 +1,57 @@
+$debug-enable: false !default;
+$warn-enable: true !default;
+$error-enable: true !default;
+
+/// Special mixin which will not generate any CSS. It's used to print debug messages wherever it's not possible to use
+/// DebugFn instead. The message is printed using @debug only if the $debug-enable flag in this module is on (off by default).
+@mixin Debug($str) {
+  @if $debug-enable {
+    @debug "#{$str}";
+  }
+}
+
+/// Special function used to print debug messages in case something wrong but not disruptive has happened. It's possible
+/// to specify what to return by setting the $ret parameter (null by default).
+/// The message is printed using @debug only if the $debug-enable flag in this module is on (off by default).
+@function DebugFn($str, $ret: null) {
+  @if $debug-enable {
+    @debug "#{$str}";
+  }
+  @return $ret;
+}
+
+/// Special mixin which will not generate any CSS. It's used to print warn messages wherever it's not possible to use
+/// WarnFn instead. The message is printed using @warn only if the $warn-enable flag in this module is on (on by default).
+@mixin Warn($str) {
+  @if $warn-enable {
+    @warn "#{$str}";
+  }
+}
+
+/// Special function used to print warn messages in case something wrong but not disruptive has happened. It's possible
+/// to specify what to return by setting the $ret parameter (null by default).
+/// The message is printed using @warn only if the $warn-enable flag in this module is on (on by default).
+@function WarnFn($str, $ret: null) {
+  @if $warn-enable {
+    @warn "#{$str}";
+  }
+  @return $ret;
+}
+
+/// Special mixin which will not generate any CSS. It's used to print error messages wherever it's not possible to use
+/// ErrorFn instead. The message is printed using @error only if the $error-enable flag in this module is on (on by default).
+@mixin Error($str) {
+  @if $error-enable {
+    @error "#{$str}";
+  }
+}
+
+/// Special function used to print error messages in case something wrong happened.
+// It's possible to specify what to return by setting the $ret parameter (null by default).
+/// The message is printed using @error only if the $error-enable flag in this module is on (on by default).
+@function ErrorFn($str, $ret: null) {
+  @if $error-enable {
+    @error "#{$str}";
+  }
+  @return $ret;
+}

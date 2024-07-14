@@ -1,0 +1,19 @@
+@use 'logging' as *;
+@use 'sass:map';
+
+/// Simple function which allows to combine multiple maps into one using the Sass `deep-merge` function in the `map`
+/// module (which allow only two maps as arguments).
+@function DeepMerge($base-map, $to-merge...) {
+  @if $base-map == null {
+    @return WarnFn("Base map is null");
+  }
+  @if length($to-merge) <= 1 {
+    @return DebugFn("No overrides provided", $base-map);
+  }
+
+  $overridden: $base-map;
+  @each $override in $to-merge {
+    $overridden: map.deep-merge($overridden, $override);
+  }
+  @return $overridden;
+}

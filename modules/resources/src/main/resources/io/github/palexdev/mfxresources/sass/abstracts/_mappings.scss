@@ -1,0 +1,103 @@
+@use 'logging' as *;
+
+$fx-mappings: (
+  // Alignment
+  alignment : -fx-alignment,
+  // Background
+  bg-color : -fx-background-color,
+  bg-image : -fx-background-image,
+  bg-insets : -fx-background-insets,
+  bg-position : -fx-background-position,
+  bg-radius : -fx-background-radius,
+  bg-repeat : -fx-background-repeat,
+  // Border
+  bd-color : -fx-border-color,
+  bd-image : -fx-border-image,
+  bd-insets : -fx-border-insets,
+  bd-radius : -fx-border-radius,
+  bd-style : -fx-border-style,
+  bd-width : -fx-border-width,
+  // Cursor
+  cursor : -fx-cursor,
+  // Effect
+  effect : -fx-effect,
+  opacity : -fx-opacity,
+  // Font
+  font : -fx-font,
+  font-family : -fx-font-family,
+  font-size : -fx-font-size,
+  font-style : -fx-font-style,
+  font-weight : -fx-font-weight,
+  // Padding and Margin
+  margin : -fx-margin,
+  padding : -fx-padding,
+  // Shape
+  fill : -fx-fill,
+  shape : -fx-shape,
+  stroke : -fx-stroke,
+  stroke-cap : -fx-stroke-line-cap,
+  stroke-join : -fx-stroke-line-join,
+  stroke-type : -fx-stroke-type,
+  stroke-width : -fx-stroke-width,
+  // Size
+  max-height : -fx-max-height,
+  max-width : -fx-max-width,
+  min-height : -fx-min-height,
+  min-width : -fx-min-width,
+  pref-height : -fx-pref-height,
+  pref-width : -fx-pref-width,
+  // Text
+  fg-color : -fx-text-fill,
+  text-fill : -fx-text-fill,
+  text-gap : -fx-graphic-text-gap,
+  wrap-text : -fx-wrap-text,
+  wrapping-width : -fx-wrapping-width,
+  // Misc
+  blend-mode : -fx-blend-mode,
+  content-display: -fx-content-display,
+  graphic : -fx-graphic,
+  icon-color : -fx-icon-color,
+  rotate : -fx-rotate,
+  scale-x : -fx-scale-x,
+  scale-y : -fx-scale-y,
+  spacing : -fx-spacing,
+  translate-x : -fx-translate-x,
+  translate-y : -fx-translate-y,
+  visibility : visibility,
+);
+
+$cust-mappings: (
+  // Icon Wrappers
+  mfx-animation : -mfx-animation-preset,
+  // Icons
+  mfx-color : -mfx-color,
+  mfx-description: -mfx-description,
+  mfx-size : -mfx-size,
+  // Ripples
+  ripple-color : -mfx-ripple-color,
+  // Surfaces
+  mfx-hover : -mfx-hover-opacity,
+  mfx-focus : -mfx-focus-opacity,
+  mfx-press : -mfx-press-opacity,
+  // Misc
+  elevation : -mfx-elevation,
+  mfx-offset : -mfx-offset,
+) !default;
+
+/// This core method is responsible for resolving 'shortened' properties to the correct ones.
+/// If the $token is not found either in the $fx-mappings or the $cust-mappings maps a warning message will be printed
+/// to the console.
+@mixin ResolveMapping($token, $value) {
+  // First search in JavaFX mappings
+  // Otherwise search in Custom mappings
+  $property: if(
+      map-has-key($fx-mappings, $token),
+      map-get($fx-mappings, $token),
+      map-get($cust-mappings, $token)
+  );
+  @if $property != null {
+    #{$property}: $value;
+  } @else {
+    @include Warn("No mapping found for token '#{$token}'");
+  }
+}

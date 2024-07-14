@@ -1,0 +1,52 @@
+@use 'logging' as *;
+@use '../themes/theme' as *;
+@use 'variables' as *;
+
+/// Given a color and a pseudo state, adjusts the color's opacity with the rgba function according to the given
+/// pseudo-state
+@function ApplyStateLayer($color, $state) {
+  @return rgba($color, GetStateLayer($state));
+}
+
+/// Delegates to ApplyStateLayer, specifically to be used for Material Design themes. The $color parameter has to be
+/// the name of the color, which is then resolved from the scheme map
+@function ApplyMDStateLayer($color, $state) {
+  @return ApplyStateLayer(GetSchemeColor($color), $state);
+}
+
+/// Computes the color of the ripple layer given the base color and the interaction/layer state
+@function RippleLayer($color, $layer_state) {
+  @return rgba(GetSchemeColor($color), GetStateLayer($layer_state));
+}
+
+/// Shortcut for the ripple_layer function with 'pressed' as the interaction state.
+/// On the web, the ripple layer is an actual container that changes its color based on the user interaction with the
+/// component. Here on the desktop the ripple is not a layer but just an effect, because of this, the ripple color
+/// will always refer to the 'pressed' state.
+@function Ripple($color) {
+  @return RippleLayer($color, pressed);
+}
+
+/// Given an elevation level as an integer, returns the corresponding opacity
+@function GetElevation($level) {
+  @if not map-has-key($elevations, $level) {
+    @return WarnFn("Elevation not found for level #{$level}", 0%);
+  }
+  @return map-get($elevations, $level);
+}
+
+/// Given a pseudo-state as a string, returns the corresponding opacity
+@function GetStateLayer($state) {
+  @if not map-has-key($state-layers, $state) {
+    @return WarnFn("Layer for state #{$state} not found", 0%);
+  }
+  @return map-get($state-layers, $state);
+}
+
+/// Given a shape as a string, returns the corresponding radius values
+@function GetShape($shape) {
+  @if not map-has-key($shapes, $shape) {
+    @return WarnFn("Shape not found for descriptor #{$shape}", 0px);
+  }
+  @return map-get($shapes, $shape);
+}
