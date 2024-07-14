@@ -1,0 +1,42 @@
+// Modules import
+@use '../../abstracts/logging' as *;
+@use '../../components/surface' as *;
+@use '../../components/buttons-all' as *;
+@use '../../components/checkboxes' as *;
+@use '../../components/fabs-all' as *;
+@use '../../components/icon-buttons-all' as *;
+@use '../../components/progress-all' as *;
+@use '../../components/segmented-buttons' as *;
+@use '../../components/tooltips-all' as *;
+
+// Surfaces
+@include Debug("Processing Surfaces...");
+@include Surfaces();
+
+// Buttons
+@include Debug("Processing Buttons...");
+@include MaterialButtons();
+
+// Checkboxes
+@include Debug("Processing Checkboxes...");
+@include MaterialCheckboxes();
+
+// FABs
+@include Debug("Processing FABs...");
+@include MaterialFABs();
+
+// Icon Buttons
+@include Debug("Processing Icon Buttons...");
+@include MaterialIconButtons();
+
+// Progress
+@include Debug("Processing Progress Indicators...");
+@include MaterialProgress();
+
+// Segmented Buttons
+@include Debug("Processing Segmented Buttons...");
+@include MaterialSegmentedButtons();
+
+// Tooltips
+@include Debug("Processing Tooltips...");
+@include MaterialTooltips();

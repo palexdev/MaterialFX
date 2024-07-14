@@ -1,0 +1,117 @@
+@use '../../abstracts/logging' as *;
+
+/// This core function is responsible for generating a Material Design 3 color scheme given the palette and the variant
+/// (light or dark mode).
+@function GenerateScheme($palette, $variant) {
+  @if length($palette) == 0 {
+    @return WarnFn("Palette is empty!");
+  }
+
+  @if $variant == 'light' {
+    @return (
+      // Primary Light
+      '-md-sys-color-primary' : GetColor($palette, 'primary', 40),
+      '-md-sys-color-primary-container' : GetColor($palette, 'primary', 90),
+      '-md-sys-color-on-primary' : GetColor($palette, 'primary', 100),
+      '-md-sys-color-on-primary-container' : GetColor($palette, 'primary', 10),
+      '-md-sys-color-inverse-primary' : GetColor($palette, 'primary', 80),
+      // Secondary Light
+      '-md-sys-color-secondary' : GetColor($palette, 'secondary', 40),
+      '-md-sys-color-secondary-container' : GetColor($palette, 'secondary', 90),
+      '-md-sys-color-on-secondary' : GetColor($palette, 'secondary', 100),
+      '-md-sys-color-on-secondary-container' : GetColor($palette, 'secondary', 10),
+      // Tertiary Light
+      '-md-sys-color-tertiary' : GetColor($palette, 'tertiary', 40),
+      '-md-sys-color-tertiary-container' : GetColor($palette, 'tertiary', 90),
+      '-md-sys-color-on-tertiary' : GetColor($palette, 'tertiary', 100),
+      '-md-sys-color-on-tertiary-container' : GetColor($palette, 'tertiary', 10),
+      // Error Light
+      '-md-sys-color-error' : GetColor($palette, 'error', 40),
+      '-md-sys-color-error-container' : GetColor($palette, 'error', 90),
+      '-md-sys-color-on-error' : GetColor($palette, 'error', 100),
+      '-md-sys-color-on-error-container' : GetColor($palette, 'error', 10),
+      // Surface Light
+      '-md-sys-color-surface' : GetColor($palette, 'neutral', 98),
+      '-md-sys-color-surface-dim' : GetColor($palette, 'neutral', 87),
+      '-md-sys-color-surface-bright' : GetColor($palette, 'neutral', 98),
+      '-md-sys-color-surface-container-lowest' : GetColor($palette, 'neutral', 100),
+      '-md-sys-color-surface-container-low' : GetColor($palette, 'neutral', 96),
+      '-md-sys-color-surface-container' : GetColor($palette, 'neutral', 94),
+      '-md-sys-color-surface-container-high' : GetColor($palette, 'neutral', 92),
+      '-md-sys-color-surface-container-highest': GetColor($palette, 'neutral', 90),
+      '-md-sys-color-surface-variant' : GetColor($palette, 'neutral-variant', 90),
+      '-md-sys-color-on-surface' : GetColor($palette, 'neutral', 10),
+      '-md-sys-color-on-surface-variant' : GetColor($palette, 'neutral-variant', 30),
+      '-md-sys-color-inverse-surface' : GetColor($palette, 'neutral', 20),
+      '-md-sys-color-inverse-on-surface' : GetColor($palette, 'neutral', 95),
+      '-md-sys-color-surface-tint' : GetColor($palette, 'primary', 40),
+      // Misc Light
+      '-md-sys-color-background' : GetColor($palette, 'neutral', 98),
+      '-md-sys-color-on-background' : GetColor($palette, 'neutral', 10),
+      '-md-sys-color-outline' : GetColor($palette, 'neutral-variant', 50),
+      '-md-sys-color-outline-variant' : GetColor($palette, 'neutral-variant', 80),
+      '-md-sys-color-shadow' : GetColor($palette, 'neutral', 0),
+      '-md-sys-color-scrim' : GetColor($palette, 'neutral', 0),
+    );
+  } @else {
+    @return (
+      // Primary Dark
+      '-md-sys-color-primary' : GetColor($palette, 'primary', 80),
+      '-md-sys-color-primary-container' : GetColor($palette, 'primary', 30),
+      '-md-sys-color-on-primary' : GetColor($palette, 'primary', 20),
+      '-md-sys-color-on-primary-container' : GetColor($palette, 'primary', 90),
+      '-md-sys-color-inverse-primary' : GetColor($palette, 'primary', 40),
+      // Secondary Dark
+      '-md-sys-color-secondary' : GetColor($palette, 'secondary', 80),
+      '-md-sys-color-secondary-container' : GetColor($palette, 'secondary', 30),
+      '-md-sys-color-on-secondary' : GetColor($palette, 'secondary', 20),
+      '-md-sys-color-on-secondary-container' : GetColor($palette, 'secondary', 90),
+      // Tertiary Dark
+      '-md-sys-color-tertiary' : GetColor($palette, 'tertiary', 80),
+      '-md-sys-color-tertiary-container' : GetColor($palette, 'tertiary', 30),
+      '-md-sys-color-on-tertiary' : GetColor($palette, 'tertiary', 20),
+      '-md-sys-color-on-tertiary-container' : GetColor($palette, 'tertiary', 90),
+      // Error Dark
+      '-md-sys-color-error' : GetColor($palette, 'error', 80),
+      '-md-sys-color-error-container' : GetColor($palette, 'error', 30),
+      '-md-sys-color-on-error' : GetColor($palette, 'error', 20),
+      '-md-sys-color-on-error-container' : GetColor($palette, 'error', 90),
+      // Surface Dark
+      '-md-sys-color-surface' : GetColor($palette, 'neutral', 6),
+      '-md-sys-color-surface-dim' : GetColor($palette, 'neutral', 6),
+      '-md-sys-color-surface-bright' : GetColor($palette, 'neutral', 24),
+      '-md-sys-color-surface-container-lowest' : GetColor($palette, 'neutral', 4),
+      '-md-sys-color-surface-container-low' : GetColor($palette, 'neutral', 10),
+      '-md-sys-color-surface-container' : GetColor($palette, 'neutral', 12),
+      '-md-sys-color-surface-container-high' : GetColor($palette, 'neutral', 17),
+      '-md-sys-color-surface-container-highest': GetColor($palette, 'neutral', 22),
+      '-md-sys-color-surface-variant' : GetColor($palette, 'neutral-variant', 30),
+      '-md-sys-color-on-surface' : GetColor($palette, 'neutral', 90),
+      '-md-sys-color-on-surface-variant' : GetColor($palette, 'neutral-variant', 80),
+      '-md-sys-color-inverse-surface' : GetColor($palette, 'neutral', 90),
+      '-md-sys-color-inverse-on-surface' : GetColor($palette, 'neutral', 20),
+      '-md-sys-color-surface-tint' : GetColor($palette, 'primary', 80),
+      // Misc Dark
+      '-md-sys-color-background' : GetColor($palette, 'neutral', 6),
+      '-md-sys-color-on-background' : GetColor($palette, 'neutral', 90),
+      '-md-sys-color-outline' : GetColor($palette, 'neutral-variant', 60),
+      '-md-sys-color-outline-variant' : GetColor($palette, 'neutral-variant', 30),
+      '-md-sys-color-shadow' : GetColor($palette, 'neutral', 0),
+      '-md-sys-color-scrim' : GetColor($palette, 'neutral', 0),
+    );
+  }
+}
+
+/// Convenience function to get a color from the Material Design 3 palette given: the palette the color's name (without
+/// the prefix) and the luminance value.
+@function GetColor($palette, $name, $luminance) {
+  @if length($palette) == 0 {
+    @return WarnFn("Palette is empty!");
+  }
+
+  $val: map-get($palette, '-md-ref-palette-' + $name + $luminance);
+  @if $val == null {
+    @return WarnFn("Color not found for name #{$name} and luminance #{$luminance}", transparent);
+  }
+  @return $val;
+}

@@ -1,0 +1,75 @@
+@use 'sass:list';
+@use '../abstracts/logging' as *;
+@use '../abstracts/mappings' as *;
+@use '../abstracts/variables' as *;
+
+/// Given the name of a color, and prefixed by the $palette-prefix defined by the theme, returns the associated color in
+/// the palette map
+@function GetPaletteColor($color) {
+  $token: $palette-prefix + $color;
+  $val: map-get($palette, $token);
+  @if $val == null {
+    @return WarnFn("Token #{$token} not found in palette", transparent);
+  }
+  @return $val;
+}
+
+/// Given the name of a color, and prefixed by the $scheme-prefix defined by the theme, returns the associated color in
+/// the palette map
+@function GetSchemeColor($color) {
+  $token: "#{$scheme-prefix + $color}";
+  $val: map-get($scheme, $token);
+  @if $val == null {
+    @debug "Token: #{$token}, Val: #{$val}";
+    @return WarnFn("Token #{$token} not found in scheme", transparent);
+  }
+  @return $val;
+}
+
+/// This core mixin is responsible for applying the styles contained in the given top-level map at the specified path.
+/// See the ABOUT.md file for a better explanation and code examples.
+///
+/// This operation also involves resolving 'shortened' and custom properties to the correct CSS rules.
+@mixin ApplyStyles($map, $path...) {
+  $_styles: $map;
+  @each $selector in $path {
+    $_styles: map-get($_styles, $selector);
+  }
+
+  @if $_styles == null or length($_styles) == 0 {
+    @include Warn("Styles map for path #{inspect($path)} not found or empty");
+  } @else {
+    @each $token, $value in $_styles {
+      $type: type-of($value);
+      @if $type == 'map' {
+        @include Debug("Skipping 'map' for token: #{$token}");
+      } @else if $type == 'list' and length($value) == 2 {
+        #{list.nth($value, 1)}: list.nth($value, 2);
+      } @else {
+        @include ResolveMapping($token, $value);
+      }
+    }
+  }
+}
+
+/// This mixin will expose all color related tokens both from the palette and scheme in the `.root` element, in a way
+/// that is compatible with JavaFX CSS and their color-lookup feature.
+@mixin ExposeTokens() {
+  .root {
+    /*! Palette */
+    @if length($palette) == 0 {
+      @include Warn("Palette is empty");
+    }
+    @each $token, $value in $palette {
+      #{$token}: $value;
+    }
+
+    /*! Scheme */
+    @if length($scheme) == 0 {
+      @include Warn("Scheme is empty");
+    }
+    @each $token, $value in $scheme {
+      #{$token}: $value;
+    }
+  }
+}
