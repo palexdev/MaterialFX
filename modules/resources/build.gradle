@@ -42,7 +42,7 @@ sass {
 }
 
 compileSass {
-    String baseDir = "io/github/palexdev/mfxresources/themes"
+    String baseDir = "io/github/palexdev/mfxresources/sass/themes"
     sourceDir = project.file("src/main/resources/" + baseDir)
     outputDir = project.file("src/main/resources/" + baseDir)
     sourceMap = none
