@@ -16,6 +16,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.10.2] - 19-09-2024
+
+### Changed
+
+- Remake ListChangeHelper from scratch
+
 ## [11.10.1] - 15-06-2024
 
 ### Added
