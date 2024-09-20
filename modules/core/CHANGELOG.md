@@ -16,6 +16,16 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.10.3] - 20-09-2024
+
+### Added
+
+- Backport ExcludingRange from VirtualizedFX as ExcludingIntegerRange, slightly modify it to extend IntegerRange
+
+### Changed
+
+- IntegerRange: add support for Stream and allow expanding range to array
+
 ## [11.10.2] - 19-09-2024
 
 ### Changed
