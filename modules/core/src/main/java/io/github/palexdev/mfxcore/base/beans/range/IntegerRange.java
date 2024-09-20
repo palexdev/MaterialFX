@@ -20,6 +20,8 @@ package io.github.palexdev.mfxcore.base.beans.range;
 
 import java.util.*;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Implementation of {@link NumberRange} to represent an Integer range.
@@ -105,8 +107,30 @@ public class IntegerRange extends NumberRange<Integer> implements Iterable<Integ
 	/**
 	 * Expands a range of integers to an array.
 	 */
+	public static Integer[] expandRangeToArray(IntegerRange range) {
+		return expandRangeToArray(range.getMin(), range.getMax());
+	}
+
+	/**
+	 * Expands a range of integers to an array.
+	 */
 	public static Integer[] expandRangeToArray(int min, int max) {
 		return expandRange(of(min, max)).toArray(Integer[]::new);
+	}
+
+	/**
+	 * @return a sequential {@code Stream} with this range as its source.
+	 */
+	public Stream<Integer> stream() {
+		return StreamSupport.stream(spliterator(), false);
+	}
+
+	/**
+	 * @return Returns a possibly parallel {@code Stream} with this range as its source.
+	 * It is allowable for this method to return a sequential stream.
+	 */
+	public Stream<Integer> parallelStream() {
+		return StreamSupport.stream(spliterator(), true);
 	}
 
 	//================================================================================
