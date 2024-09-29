@@ -16,6 +16,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.11.1] - 29-09-2024
+
+### Fixed
+
+- Unquote shapes and re-generate themes
+
 ## [11.11.0] - 15-06-2024
 
 ### Added
