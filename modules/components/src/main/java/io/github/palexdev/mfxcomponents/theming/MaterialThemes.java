@@ -27,10 +27,10 @@ import java.io.InputStream;
  * Enumeration of all the Material Design 3 themes currently offered by MaterialFX. Implements {@link Theme}.
  */
 public enum MaterialThemes implements Theme {
-    INDIGO_LIGHT("themes/material/md-indigo-light.css"),
-    INDIGO_DARK("themes/material/md-indigo-dark.css"),
-    PURPLE_LIGHT("themes/material/md-purple-light.css"),
-    PURPLE_DARK("themes/material/md-purple-dark.css"),
+    INDIGO_LIGHT("sass/themes/material/md-indigo-light.css"),
+    INDIGO_DARK("sass/themes/material/md-indigo-dark.css"),
+    PURPLE_LIGHT("sass/themes/material/md-purple-light.css"),
+    PURPLE_DARK("sass/themes/material/md-purple-dark.css"),
     ;
 
     private final String path;

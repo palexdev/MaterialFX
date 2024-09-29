@@ -28,14 +28,14 @@ import java.io.InputStream;
  * Implements {@link Theme}.
  */
 public enum JavaFXThemes implements Theme {
-    CASPIAN("themes/javafx/caspian/caspian.css"),
-    CASPIAN_NO_TRANSPARENCY("themes/javafx/caspian/caspian-no-transparency.css"),
-    CASPIAN_TWO_LEVEL_FOCUS("themes/javafx/caspian/two-level-focus.css"),
-    MODENA("themes/javafx/modena/modena.css"),
-    MODENA_NO_TRANSPARENCY("themes/javafx/modena/modena-no-transparency.css"),
-    MODENA_TOUCH("themes/javafx/modena/touch.css"),
-    MODENA_TWO_LEVEL_FOCUS("themes/javafx/modena/two-level-focus.css"),
-    FXVK("themes/javafx/caspian/fxvk.css");
+    CASPIAN("javafx/caspian/caspian.css"),
+    CASPIAN_NO_TRANSPARENCY("javafx/caspian/caspian-no-transparency.css"),
+    CASPIAN_TWO_LEVEL_FOCUS("javafx/caspian/two-level-focus.css"),
+    MODENA("javafx/modena/modena.css"),
+    MODENA_NO_TRANSPARENCY("javafx/modena/modena-no-transparency.css"),
+    MODENA_TOUCH("javafx/modena/touch.css"),
+    MODENA_TWO_LEVEL_FOCUS("javafx/modena/two-level-focus.css"),
+    FXVK("javafx/caspian/fxvk.css");
 
     private final String path;
 
