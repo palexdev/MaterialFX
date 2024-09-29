@@ -21,10 +21,8 @@ package io.github.palexdev.mfxcomponents.theming.base;
 import io.github.palexdev.mfxcomponents.controls.base.MFXStyleable;
 import javafx.scene.Node;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Simple API for components that have variants of themselves.
@@ -99,7 +97,7 @@ public interface WithVariants<N extends Node, V extends Variant> {
 	}
 
 	/**
-	 * Adds all the given variants to the given node and to the set returned by {@link #getAppliedVariants()}.
+	 * Adds all the given variants to the given node and to the Set returned by {@link #getAppliedVariants()}.
 	 */
 	@SafeVarargs
 	static <V extends Variant, N extends Node & WithVariants<N, V>> N addVariants(N node, V... variants) {
@@ -118,16 +116,22 @@ public interface WithVariants<N extends Node, V extends Variant> {
 	 */
 	@SafeVarargs
 	static <V extends Variant, N extends Node & WithVariants<N, V>> N setVariants(N node, V... variants) {
+		// Remove all previously applied variants
 		Set<V> appliedVariants = node.getAppliedVariants();
-		// Remove all applied previously applied variants
-		String[] toRemove = appliedVariants.stream().map(Variant::variantStyleClass).toArray(String[]::new);
-		node.getStyleClass().removeAll(toRemove);
-		// Update applied variants Ser
+		node.getStyleClass().removeAll(appliedVariants.stream()
+			.map(Variant::variantStyleClass)
+			.collect(Collectors.toSet())
+		);
 		appliedVariants.clear();
-		Collections.addAll(appliedVariants, variants);
 
-		// Add all new variants
-		return addVariants(node, variants);
+		// Apply new ones
+		Collections.addAll(appliedVariants, variants);
+		node.getStyleClass().addAll(
+			appliedVariants.stream()
+				.map(Variant::variantStyleClass)
+				.toArray(String[]::new)
+		);
+		return node;
 	}
 
 	/**
@@ -136,10 +140,12 @@ public interface WithVariants<N extends Node, V extends Variant> {
 	@SafeVarargs
 	static <V extends Variant, N extends Node & WithVariants<N, V>> N removeVariants(N node, V... variants) {
 		Set<V> appliedVariants = node.getAppliedVariants();
+		Set<String> toRemove = new HashSet<>();
 		for (V v : variants) {
 			if (appliedVariants.remove(v))
-				node.getStyleClass().remove(v.variantStyleClass());
+				toRemove.add(v.variantStyleClass());
 		}
+		node.getStyleClass().removeAll(toRemove);
 		return node;
 	}
 }
