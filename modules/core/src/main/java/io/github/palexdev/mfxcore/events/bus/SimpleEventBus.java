@@ -1,11 +1,9 @@
 package io.github.palexdev.mfxcore.events.bus;
 
-import io.github.palexdev.mfxcore.collections.WeakHashSet;
-import io.github.palexdev.mfxcore.events.Event;
+import java.util.*;
+import java.util.function.Consumer;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import io.github.palexdev.mfxcore.events.Event;
 
 /**
  * A basic implementation of an event bus. Takes inspiration from many DI frameworks that use similar mechanisms to
@@ -32,7 +30,7 @@ public class SimpleEventBus implements IEventBus {
 	//================================================================================
 	// Properties
 	//===============================================================================
-	private final Map<Class<? extends Event>, Set<Subscriber<Event>>> subscribers = new HashMap<>();
+	private final Map<Class<? extends Event>, PriorityQueue<Subscriber<Event>>> subscribers = new HashMap<>();
 
 	//================================================================================
 	// Methods
@@ -44,7 +42,7 @@ public class SimpleEventBus implements IEventBus {
 	 * all of them passing the given event, so {@link Subscriber#handle(Event)} is triggered.
 	 */
 	protected <E extends Event> void notifySubscribers(E event) {
-		Set<Subscriber<Event>> subscribers = this.subscribers.get(event.getClass());
+		Queue<Subscriber<Event>> subscribers = this.subscribers.get(event.getClass());
 		if (subscribers == null || subscribers.isEmpty()) return;
 		for (Subscriber<Event> s : subscribers) {
 			s.handle(event);
@@ -58,15 +56,42 @@ public class SimpleEventBus implements IEventBus {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <E extends Event> void subscribe(Class<E> evt, Subscriber<E> subscriber) {
-		Set<Subscriber<Event>> set = subscribers.computeIfAbsent(evt, c -> new WeakHashSet<>());
-		set.add((Subscriber<Event>) subscriber);
+		Queue<Subscriber<Event>> queue = subscribers.computeIfAbsent(
+			evt,
+			c -> new PriorityQueue<>(Comparator.comparingInt(Subscriber::priority))
+		);
+		queue.add((Subscriber<Event>) subscriber);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * <p></p>
+	 * Subscribers in this bus are stored in a {@link PriorityQueue}, which automatically sorts them by their
+	 * {@link Subscriber#priority()}. This handy mechanism allows user to priority certain actions over others.
+	 * The lesser the {@code priority} value, the more important the subscriber is.
+	 * <p>
+	 * For subscribers with the same priority, the order is undefined!
+	 */
+	@Override
+	public <E extends Event> void subscribe(Class<E> evt, Consumer<E> subscriber, int priority) {
+		subscribe(evt, new Subscriber<>() {
+			@Override
+			public void handle(E event) {
+				subscriber.accept(event);
+			}
+
+			@Override
+			public int priority() {
+				return priority;
+			}
+		});
 	}
 
 	@Override
 	public <E extends Event> void unsubscribe(Class<E> evt, Subscriber<E> subscriber) {
-		Set<Subscriber<Event>> set = subscribers.get(evt);
-		if (set == null || set.isEmpty()) return;
-		set.remove(subscriber);
+		Queue<Subscriber<Event>> queue = subscribers.get(evt);
+		if (queue == null || queue.isEmpty()) return;
+		queue.remove(subscriber);
 	}
 
 	@Override
