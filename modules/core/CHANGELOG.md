@@ -16,6 +16,18 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 [//]: ##[Unreleased]
 
+## [11.10.4] - 24-10-2024
+
+### Added
+
+- SimpleEventBus: use a PriorityQueue instead which also allows easily implementing a simple priority system between the
+  subscribers
+
+### Fixed
+
+- SimpleEventBus: do not use a WeakHashSet for storing event subscribers as unexpected GC may cause
+  NullPointerExceptions
+
 ## [11.10.3] - 20-09-2024
 
 ### Added
