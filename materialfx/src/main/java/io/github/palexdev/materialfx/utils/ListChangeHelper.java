@@ -39,7 +39,7 @@ public class ListChangeHelper {
                 IntegerRange range = IntegerRange.of(change.getFrom(), change.getTo() - 1);
                 Set<Integer> changed = IntegerRange.expandRangeToSet(range).stream().filter(i -> IntegerRange.inRangeOf(i, indexes)).collect(Collectors.toSet());
 
-                removeFrom = change.getTo();
+                removeFrom = change.getFrom();
                 removeTo = NumberUtils.clamp(change.getRemovedSize() - 1, 0, indexes.getMax());
                 removedAccumulator.addAll(IntegerRange.expandRangeToSet(IntegerRange.of(removeFrom, removeTo)));
 
