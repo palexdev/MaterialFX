@@ -276,6 +276,10 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
         return this;
     }
 
+    public void updateStylesheets() {
+        peer.updateStylesheets();
+    }
+
     //================================================================================
     // Overridden Methods
     //================================================================================
