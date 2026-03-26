@@ -23,7 +23,7 @@ jobs:
       - name: Pull latest changes
         run: git pull origin ${{ github.ref_name }}
 
-      - uses: palexdev/intellij-format-action@main
+      - uses: notdevcody/intellij-format-action@main
         with:
           idea-version: '2025.3.3'
           include-glob: '*.java'
