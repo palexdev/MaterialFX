@@ -19,6 +19,8 @@
 package io.github.palexdev.mfxcore.popups.menu;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import io.github.palexdev.mfxcore.behavior.MFXBehavior;
@@ -29,6 +31,7 @@ import io.github.palexdev.mfxcore.selection.Selectable;
 import io.github.palexdev.mfxcore.selection.SelectionGroupProperty;
 import io.github.palexdev.mfxcore.selection.SelectionProperty;
 import io.github.palexdev.mfxcore.utils.fx.CSSFragment;
+import io.github.palexdev.mfxcore.utils.fx.PseudoClasses;
 import javafx.scene.Node;
 import javafx.scene.layout.Region;
 
@@ -39,10 +42,11 @@ import javafx.scene.layout.Region;
 /// It's important to note that this type of item has a series of limitations and behavior changes:
 /// - It does not support showing submenus, technically possible but a design choice
 /// - You can't specify an icon through the [#graphicProperty()]. The value will be ignored as the slot is reserved for
-/// the checkmark icon
-/// - Triggering the item (via mouse click or keys) does change the selection state of the item, which in turn calls the
-/// set [#actionProperty()] (so the action runs only if the selection changes!!). Unlike the standard icon, running the
-/// action does not close the menu
+///   the checkmark icon
+/// - Triggering the item (via mouse click or keys) does change the selection state of the item (if not bound),
+///   and runs the action specified by the [#actionProperty()]. Unlike the standard item, running the action does not close the menu.
+///   If you want to run an action specifically when the selection changes, use the [#onSelectionChanged(Consumer)]
+///   callback instead
 ///
 /// Such changes are defined in its default skin and behavior implementations: [MFXCheckMenuItemSkin] and [MFXCheckMenuItemBehavior]
 /// respectively.
@@ -69,11 +73,12 @@ public class MFXCheckMenuItem extends MFXMenuItem implements Selectable {
     private final SelectionProperty selected = new SelectionProperty(this) {
         @Override
         protected void onInvalidated() {
-            Runnable action = getAction();
-            if (action != null) action.run();
+            PseudoClasses.SELECTED.setOn(MFXCheckMenuItem.this, get());
+            onSelectionChanged.accept(get());
         }
     };
     private final SelectionGroupProperty selectionGroup = new SelectionGroupProperty(this);
+    private Consumer<Boolean> onSelectionChanged = _ -> {};
 
     //================================================================================
     // Constructors
@@ -133,6 +138,11 @@ public class MFXCheckMenuItem extends MFXMenuItem implements Selectable {
         return selectionGroup;
     }
 
+    @Override
+    public void onSelectionChanged(Consumer<Boolean> onSelectionChanged) {
+        this.onSelectionChanged = Optional.ofNullable(onSelectionChanged).orElse(_ -> {});
+    }
+
     //================================================================================
     // Inner Classes
     //================================================================================
@@ -168,7 +178,8 @@ public class MFXCheckMenuItem extends MFXMenuItem implements Selectable {
         @Override
         protected void runAction() {
             MFXCheckMenuItem item = getNodeAs(MFXCheckMenuItem.class);
-            item.setSelected(!item.isSelected());
+            item.toggle();
+            if (item.getAction() != null) item.getAction().run();
         }
     }
 }
