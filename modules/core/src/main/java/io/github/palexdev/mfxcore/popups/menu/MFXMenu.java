@@ -212,7 +212,11 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
             .condition(e -> e.getButton() == triggerButton)
             .handle(e -> {
                 if (anchorBasedPositioning) {
-                    peer.show(owner, placement);
+                    if (!isShowing()) {
+                        peer.show(owner, placement);
+                    } else {
+                        hide();
+                    }
                     return;
                 }
 
