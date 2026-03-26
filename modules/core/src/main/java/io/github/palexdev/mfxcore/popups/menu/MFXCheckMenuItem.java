@@ -24,6 +24,7 @@ import java.util.function.Supplier;
 import io.github.palexdev.mfxcore.behavior.MFXBehavior;
 import io.github.palexdev.mfxcore.controls.MFXSkinBase;
 import io.github.palexdev.mfxcore.controls.MFXStyleable;
+import io.github.palexdev.mfxcore.popups.menu.MenuBuilder.CheckMenuBuilder;
 import io.github.palexdev.mfxcore.selection.Selectable;
 import io.github.palexdev.mfxcore.selection.SelectionGroupProperty;
 import io.github.palexdev.mfxcore.selection.SelectionProperty;
@@ -91,12 +92,12 @@ public class MFXCheckMenuItem extends MFXMenuItem implements Selectable {
         getStylesheets().add(DEFAULT_CSS);
     }
 
-    public static MenuBuilder checkMenuItem(String text) {
-        return new MenuBuilder(MFXCheckMenuItem::new).text(text);
+    public static CheckMenuBuilder checkMenuItem(String text) {
+        return (CheckMenuBuilder) new CheckMenuBuilder().text(text);
     }
 
-    public static MenuBuilder checkMenuItem(String text, Node graphic) {
-        return new MenuBuilder(MFXCheckMenuItem::new).text(text).graphic(graphic);
+    public static CheckMenuBuilder checkMenuItem(String text, Node graphic) {
+        return (CheckMenuBuilder) new CheckMenuBuilder().text(text).graphic(graphic);
     }
 
     //================================================================================

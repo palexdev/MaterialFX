@@ -41,29 +41,12 @@ public class MenuBuilder {
     // Properties
     //================================================================================
 
-    private final Supplier<MFXMenuItem> itemFactory;
     private Node graphic;
     private String text;
     private KeyStroke shortcut;
     private Runnable action;
     private ObservableList<MFXMenuItem> subItems = FXCollections.observableArrayList();
     private Consumer<MFXMenuItem> cfg;
-
-    // check specific
-    private boolean selected = false;
-    private SelectionGroup group;
-
-    //================================================================================
-    // Constructors
-    //================================================================================
-
-    public MenuBuilder() {
-        this(MFXMenuItem::new);
-    }
-
-    public MenuBuilder(Supplier<MFXMenuItem> itemFactory) {
-        this.itemFactory = itemFactory;
-    }
 
     //================================================================================
     // Static Methods
@@ -106,6 +89,10 @@ public class MenuBuilder {
     // Methods
     //================================================================================
 
+    protected MFXMenuItem create() {
+        return new MFXMenuItem();
+    }
+
     public MenuBuilder graphic(Node graphic) {
         this.graphic = graphic;
         return this;
@@ -139,16 +126,6 @@ public class MenuBuilder {
         return this;
     }
 
-    public MenuBuilder selected(boolean selected) {
-        this.selected = selected;
-        return this;
-    }
-
-    public MenuBuilder group(SelectionGroup group) {
-        this.group = group;
-        return this;
-    }
-
     /// This method can be used to further customize the build [MFXMenuItem].
     ///
     /// For example, one may want to disable the item when a certain condition is not met:
@@ -161,17 +138,52 @@ public class MenuBuilder {
     }
 
     public MFXMenuItem build() {
-        MFXMenuItem item = itemFactory.get();
+        MFXMenuItem item = create();
         item.setText(text);
         item.setGraphic(graphic);
         item.setShortcut(shortcut);
         item.setAction(action);
         item.getSubItems().addAll(subItems);
-        if (item instanceof MFXCheckMenuItem ci) {
-            ci.setSelected(selected);
-            ci.setSelectionGroup(group);
-        }
         if (cfg != null) cfg.accept(item);
         return item;
+    }
+
+    //================================================================================
+    // Inner Classes
+    //================================================================================
+
+    public static class CheckMenuBuilder extends MenuBuilder {
+        private boolean selected = false;
+        private SelectionGroup group;
+        private Consumer<Boolean> onSelectionChanged;
+
+        public CheckMenuBuilder selected(boolean selected) {
+            this.selected = selected;
+            return this;
+        }
+
+        public CheckMenuBuilder group(SelectionGroup group) {
+            this.group = group;
+            return this;
+        }
+
+        public CheckMenuBuilder onSelectionChanged(Consumer<Boolean> onSelectionChanged) {
+            this.onSelectionChanged = onSelectionChanged;
+            return this;
+        }
+
+        @Override
+        protected MFXCheckMenuItem create() {
+            return new MFXCheckMenuItem();
+        }
+
+        @Override
+        public MFXCheckMenuItem build() {
+            MFXCheckMenuItem item = (MFXCheckMenuItem) super.build();
+            if (!item.selectedProperty().isBound()) item.setSelected(selected);
+            item.setSelectionGroup(group);
+            item.onSelectionChanged(onSelectionChanged);
+            return item;
+        }
     }
 }
