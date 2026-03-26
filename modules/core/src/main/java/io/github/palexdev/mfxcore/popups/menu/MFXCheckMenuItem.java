@@ -44,9 +44,11 @@ import javafx.scene.layout.Region;
 /// - You can't specify an icon through the [#graphicProperty()]. The value will be ignored as the slot is reserved for
 ///   the checkmark icon
 /// - Triggering the item (via mouse click or keys) does change the selection state of the item (if not bound),
-///   and runs the action specified by the [#actionProperty()]. Unlike the standard item, running the action does not close the menu.
+///   and runs the action specified by the [#actionProperty()].
 ///   If you want to run an action specifically when the selection changes, use the [#onSelectionChanged(Consumer)]
-///   callback instead
+///   callback instead.<br >
+///   Unlike the standard item, by default running the action does not close the menu.
+///   You can change the behavior through [#setCloseOnAction(boolean)]
 ///
 /// Such changes are defined in its default skin and behavior implementations: [MFXCheckMenuItemSkin] and [MFXCheckMenuItemBehavior]
 /// respectively.
@@ -79,6 +81,7 @@ public class MFXCheckMenuItem extends MFXMenuItem implements Selectable {
     };
     private final SelectionGroupProperty selectionGroup = new SelectionGroupProperty(this);
     private Consumer<Boolean> onSelectionChanged = _ -> {};
+    private boolean closeOnAction = false;
 
     //================================================================================
     // Constructors
@@ -143,6 +146,14 @@ public class MFXCheckMenuItem extends MFXMenuItem implements Selectable {
         this.onSelectionChanged = Optional.ofNullable(onSelectionChanged).orElse(_ -> {});
     }
 
+    public boolean isCloseOnAction() {
+        return closeOnAction;
+    }
+
+    public void setCloseOnAction(boolean closeOnAction) {
+        this.closeOnAction = closeOnAction;
+    }
+
     //================================================================================
     // Inner Classes
     //================================================================================
@@ -179,7 +190,10 @@ public class MFXCheckMenuItem extends MFXMenuItem implements Selectable {
         protected void runAction() {
             MFXCheckMenuItem item = getNodeAs(MFXCheckMenuItem.class);
             item.toggle();
-            if (item.getAction() != null) item.getAction().run();
+            if (item.getAction() != null) {
+                item.getAction().run();
+                if (item.isCloseOnAction()) item.getMenu().getRootMenu().hide();
+            }
         }
     }
 }

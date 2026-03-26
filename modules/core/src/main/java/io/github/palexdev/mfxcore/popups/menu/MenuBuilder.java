@@ -156,6 +156,7 @@ public class MenuBuilder {
         private boolean selected = false;
         private SelectionGroup group;
         private Consumer<Boolean> onSelectionChanged;
+        private boolean closeOnAction = false;
 
         public CheckMenuBuilder selected(boolean selected) {
             this.selected = selected;
@@ -172,6 +173,11 @@ public class MenuBuilder {
             return this;
         }
 
+        public CheckMenuBuilder closeOnAction(boolean closeOnAction) {
+            this.closeOnAction = closeOnAction;
+            return this;
+        }
+
         @Override
         protected MFXCheckMenuItem create() {
             return new MFXCheckMenuItem();
@@ -183,6 +189,7 @@ public class MenuBuilder {
             if (!item.selectedProperty().isBound()) item.setSelected(selected);
             item.setSelectionGroup(group);
             item.onSelectionChanged(onSelectionChanged);
+            item.setCloseOnAction(closeOnAction);
             return item;
         }
     }
