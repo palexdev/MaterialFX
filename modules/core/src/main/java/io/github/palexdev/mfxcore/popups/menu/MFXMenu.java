@@ -254,7 +254,10 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
 
         subMenu.setParentMenu(this);
         subMenu.setSubMenuFactory(subMenuFactory);
-        subMenu.setAnimation(config.animationProvider().get());
+        subMenu.configure(cfg -> cfg
+            .animationProvider(config.animationProvider())
+            .styleableParent(cfg.styleableParent == null ? getRoot() : cfg.styleableParent)
+        );
         return subMenu;
     }
 
