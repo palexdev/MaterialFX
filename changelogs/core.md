@@ -1,3 +1,16 @@
+## 25.4.1 - 26-03-2026 - b4688c15
+
+### Refactoring
+
+- <05cb3d2f> MFXMenu: add missing delegate method to update root's stylesheets
+- <516d4465> MFXMenu: properly propagate config to sub-menus and also propagate styleable parent config if not present
+- <0e9fc948> MFXMenu: close if already showing when using anchor-based positioning
+- <84209f78> MFXCheckMenuItem: allow specifying whether to close the menu when the action is run
+- <823a278f> MFXCheckMenuItem: fix exceptions when selection property is bound, add hook for selection changes, set `:selected` pseudo-class on item accordingly
+- <15c42b63> Split MenuBuilder adding CheckMenuBuilder for check menu items
+
+
+
 ## 25.4.0 - 01-03-2026 - 0e776ec6
 
 ### Removed

@@ -1,5 +1,6 @@
-## Project - 0e776ec6
+## Project - b4688c15
 
+- 26-03-2026 <77f608b4> Update format action
 - 01-03-2026 <204eb6c7> Use latest IntelliJ for code format
 - 01-03-2026 <8cf9ad92> Remove CSSFX from components dependencies as already imported from parent config
 - 27-02-2026 <8311ba46> Add CSSFX as test dependency for all subprojects
