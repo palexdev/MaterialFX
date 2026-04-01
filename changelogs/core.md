@@ -1,3 +1,12 @@
+## 25.5.0 - 01/04/2026 - 4e4abed0
+
+### Refactoring
+
+- <05b869d5> Selectable: add convenience onSelected method and change onSelectionChanged to throw UnsupportedOperationException by default
+- <f5da99bd> Major review of SelectionGroup
+
+
+
 ## 25.4.1 - 26-03-2026 - b4688c15
 
 ### Refactoring

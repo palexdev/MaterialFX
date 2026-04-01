@@ -1,3 +1,11 @@
+## Project - 4e4abed0
+
+- 01/04/2026 <5e2d2081> Update dev scripts
+- 01/04/2026 <f8efe4a5> Upgrade Gradle to v9.4.0
+- 01/04/2026 <de90829c> Update JavaFX to v26 (stable)
+
+
+
 ## Project - b4688c15
 
 - 26-03-2026 <77f608b4> Update format action
