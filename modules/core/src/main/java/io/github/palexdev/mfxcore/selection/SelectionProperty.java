@@ -28,15 +28,10 @@ import javafx.beans.property.SimpleBooleanProperty;
 /// Note that for this purpose this property needs the reference to the [Selectable] on which it will operate
 /// to get the `Selectable`'s [SelectionGroup].
 ///
-///
-/// Last note but not least, if for whatever reason you need to override the `set(...)` method, beware that the
-/// `newValue` parameter may not be right as it may be modified by the `Selectables`'s [SelectionGroup]
-/// (if there's one), since in Java all parameters are passed by value you won't be able to see the right value.
-/// There are two ways to avoid this issue:
-///  1) If you need to execute some kind of side effect, and you don't need the old selection state,
-/// you can move your code to the [#invalidated()] method instead
-///  2) If the above solution cannot be implemented, [SelectionGroup] offers a method to check what the true state
-/// of a `Selectable` should be, therefore use [SelectionGroup#check(Selectable, boolean)] to get the true value
+/// It's highly discouraged to override the [#set(boolean)] method as it may potentially break the interaction between
+/// the property and the selectable's group.<br >
+/// If you need to perform some action when selection state changes, you can override either [#invalidated()] or
+/// [#onInvalidated()] (kept for backward compatibility).
 public class SelectionProperty extends SimpleBooleanProperty {
     //================================================================================
     // Properties
@@ -80,32 +75,18 @@ public class SelectionProperty extends SimpleBooleanProperty {
     @Override
     public void set(boolean newValue) {
         SelectionGroup group = selectable.getSelectionGroup();
-        if (group != null) {
-            newValue = group.check(selectable, newValue);
-            if ((newValue && !group.getSelection().contains(selectable)) ||
-                !newValue && group.getSelection().contains(selectable)) {
-                invalidated();
-            }
+        if (group != null && !group.locked()) {
+            super.set(group.select(selectable, newValue));
+        } else {
+            super.set(newValue);
         }
-        super.set(newValue);
     }
 
-    /// {@inheritDoc}
-    ///
-    /// Overridden to update the [SelectionGroup] assigned to the [Selectable] handled by this property.
-    ///
-    /// If the `Selectable` is in a group, and the selection state has changed (or additional checks decide that
-    /// invalidation is needed, see [#set(boolean)]), then [SelectionGroup#handleSelection(Selectable, boolean)].
-    ///
-    /// Last but not least, note that the invalidation doesn't occur if the group is changing its state due to a "switch"
-    /// operation, see [SelectionGroup#isSwitching()].
     @Override
-    protected final void invalidated() {
-        SelectionGroup group = selectable.getSelectionGroup();
-        if (group != null && !group.isSwitching())
-            group.handleSelection(selectable, get());
+    protected void invalidated() {
         onInvalidated();
     }
 
+    // kept for backward compatibility
     protected void onInvalidated() {}
 }

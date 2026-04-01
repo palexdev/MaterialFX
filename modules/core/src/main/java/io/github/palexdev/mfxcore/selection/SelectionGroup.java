@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * Copyright (C) 2026 Parisi Alessandro - alessandro.parisi406@gmail.com
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
  *
  * MaterialFX is free software: you can redistribute it and/or
@@ -21,13 +21,9 @@ package io.github.palexdev.mfxcore.selection;
 import java.util.*;
 
 import io.github.palexdev.mfxcore.enums.SelectionMode;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
-import javafx.collections.SetChangeListener;
 
 /// Custom implementation and expansion of that pitiful thing that is [javafx.scene.control.ToggleGroup].
 ///
@@ -36,381 +32,178 @@ import javafx.collections.SetChangeListener;
 ///
 /// You can set the selection to be single or multiple, by just setting the [#selectionModeProperty()], as well as
 /// tell the group to always keep at least one [Selectable] active, by setting the [#atLeastOneSelectedProperty()]
-/// to true. All of these can be changed anytime, although you better know the side effects of some particular cases, will
-/// be listed below.
-///
+/// to true. <br >
 /// So you now have a grouping API for everything, not only controls, as long as they implement [Selectable], and you
 /// also have capabilities such as 'at most/at least one selected', in single and multiple configurations, in just one class!
 ///
-/// All of this sounds good right? Well, there are some caveats of course.
+/// #### Caveats
+/// - If you want to use this, you will be forced to use the two custom properties: [SelectionProperty] and [SelectionGroupProperty].
+///   The reason for this is to make the implementation/integration for users less of a pain and less error-prone,
+///   more info can be found in the relative classes' docs.
+/// - Since this also supports multiple selection, for obvious reasons, the selection is a collection of `Selectables`.
+///   To be precise, both the collections used to keep the `Selectables` that are managed by the group, and the ones
+///   that are currently selected, are [SetProperties][SetProperty] backed by a [LinkedHashSet].
+///   The usage of such collections vastly helps to avoid duplicates while also having fast insertions, removals and lookups.
 ///
-/// First of all, keep in mind that if you want to use this you will be forced to use the two custom properties:
-/// [SelectionProperty] and [SelectionGroupProperty], the reason for this is to make the implementation/integration
-/// for users less of a pain and less error-prone, more info can be found in the relative's docs.
+/// ##### Behavior
+/// - When switching from [SelectionMode#MULTIPLE] to [SelectionMode#SINGLE] the selection is cleared.
+///   If [#isAtLeastOneSelected()] is also active then the first entry in the group will be selected.
+/// - When activating the 'atLeastOneSelected' mode, if there are `Selectables` in the group the first will
+///   be immediately selected! If none is available, the first added to the group will be.
+/// - When `atLeastOneSelected` is active, attempts to deselect the selected entry will be blocked.
+/// - When mode is [SelectionMode#SINGLE] and there's already one entry selected, adding new entries will force them to
+///   "well-behave", meaning that if their state is 'selected', they will be flipped back to 'unselected', to respect
+///   the current selection.
 ///
-/// Since this also supports multiple selection, for obvious reasons, the selection is a collection of `Selectables`.
-/// To be precise, both the collections used to keep the `Selectables` that are managed by the group, and the ones
-/// that are currently selected, are [ObservableSet] backed by a [LinkedHashSet].
-/// The usage of such collections vastly helps to avoid duplicates while also having fast lookups (contains).
-///
-/// **Special cases when changing config**
-///  1) When switching from MULTIPLE to SINGLE selection mode, the selection will be the same only and only if there was
-/// only one `Selectable` in the selection Set, in all other cases the selection is **cleared!**
-///  2) When activating the 'atLeastOneSelected' mode, if there are `Selectables` in the group the first will
-/// be immediately selected! If none is available, the first added to the group will be.
-///  3) If 'atLeastOneSelected' mode is active and multiple `Selectables` are added at the same time to the group,
-/// and two or more of them are selected, the last will prevail, the others will be deselected (if in SINGLE selection mode)
-///
-/// Last but not least, to avoid some if statements, this makes use of polymorphism delegating the selection handling to
-/// two internal classes, one for SINGLE selection mode, the other for the MULTIPLE mode.
+/// ##### Implementation Details
+/// - The group is optimized to perform the bare minimum operations required to update the state and to make them appear
+///   to the user as a single operation/"atomic".<br >
+///   In other words, changes to the selection are copy-on-write, the `Set` is first copied (or created empty), modified,
+///   and then set as the new selection.
+/// - Because [Selectables][Selectable] must follow the group's rules, their selection state may need to be adjusted while
+///   the group is transitioning to a new state. While any operation on the group is occurring, it is `locked`.
+///   The [SelectionProperty] and [SelectionGroupProperty] will see this and bypass group's methods (which would lead
+///   to a circular execution, `StackOverflowException`). The logic is very simple actually:
+///   - If the group is locked, it means that the state transition request came from the group, so just call `super.set(...)`
+///   - If the group is _not_ locked, it means the state transition came from the user, but the request may not be honored
+///     as it may break the group's rules, therefore before delegating to `super.set(...)` it needs to consult the group
 public class SelectionGroup {
+
     //================================================================================
     // Properties
     //================================================================================
+
     private final ObjectProperty<SelectionMode> selectionMode = new SimpleObjectProperty<>() {
         @Override
         protected void invalidated() {
             SelectionMode mode = get();
-            if (mode == SelectionMode.SINGLE) {
-                handler = new SingleSelectionHandler();
-                if (selection.size() > 1) selection.clear();
-                return;
-            }
-            handler = new MultipleSelectionHandler();
+            handler = mode == SelectionMode.SINGLE ? new SingleSelectionHandler() : new MultipleSelectionHandler();
+            if (mode == SelectionMode.SINGLE) clearSelection();
         }
     };
     private final BooleanProperty atLeastOneSelected = new SimpleBooleanProperty() {
         @Override
         protected void invalidated() {
-            boolean val = get();
-            if (val && selection.isEmpty() && !selectables.isEmpty()) {
-                getFirstSelectable().ifPresent(s -> s.setSelected(true));
-            }
+            if (get() && isSelectionEmpty())
+                selectables.getFirst().ifPresent(s -> {
+                    try {
+                        locked = true;
+                        s.setSelected(handler.handleSelect(s, true));
+                    } finally {
+                        locked = false;
+                    }
+                });
         }
     };
-
-    private final SequencedSet<Selectable> _selectables = new LinkedHashSet<>();
-    private final ObservableSet<Selectable> selectables = FXCollections.observableSet(_selectables);
-
-    private final SequencedSet<Selectable> _selection = new LinkedHashSet<>();
-    private final ObservableSet<Selectable> selection = FXCollections.observableSet(_selection);
-
+    private final SelectablesSet selectables = new SelectablesSet();
+    private final SelectablesSet selection = new SelectablesSet();
     private SelectionHandler handler;
-    private boolean isSwitching = false;
-    private boolean isRemoval = false;
+    private boolean locked = false;
 
     //================================================================================
     // Constructors
     //================================================================================
+
     public SelectionGroup() {
         this(SelectionMode.SINGLE);
     }
 
     public SelectionGroup(SelectionMode selectionMode) {
-        this(selectionMode, false);
+        setSelectionMode(selectionMode);
     }
 
     public SelectionGroup(SelectionMode selectionMode, boolean atLeastOneSelected) {
         setSelectionMode(selectionMode);
         setAtLeastOneSelected(atLeastOneSelected);
-
-        selectables.addListener(this::onSelectablesChanged);
-        selection.addListener(this::onSelectionChanged);
     }
 
     //================================================================================
     // Methods
     //================================================================================
 
-    /// Adds the given [Selectable] to this group (if not already present).
-    ///
-    /// If the given `Selectable`'s group is not the same as this, [Selectable#setSelectionGroup(SelectionGroup)]
-    /// is also called. See [SelectionGroupProperty].
-    ///
-    /// When adding a `Selectable` to a group, there are a bunch of things to consider. The group has no guarantees
-    /// that the given objects are in a state such that its rules won't be broken. For this reason, it's mandatory to perform
-    /// a check on the `Selectable`'s state by invoking [#handleSelection(Selectable,boolean)]. If the returned
-    /// correct state is different, then it's important to also fix it by invoking [Selectable#setSelected(boolean)].
-    public SelectionGroup add(Selectable selectable) {
-        if (selectable == null || !selectables.add(selectable)) return this;
-
-        SelectionGroup group = selectable.getSelectionGroup();
-        if (group != this) {
-            selectable.setSelectionGroup(this);
-
-            boolean state = handler.handle(selectable, selectable.isSelected());
-            selectable.setSelected(state);
-        }
-        return this;
-    }
-
-    /// Calls [#add(Selectable)] on each given `Selectable`.
-    public SelectionGroup addAll(Selectable... selectables) {
-        for (Selectable selectable : selectables) {
-            add(selectable);
-        }
-        return this;
-    }
-
-    /// Calls [#add(Selectable)] on each given `Selectable`.
-    public SelectionGroup addAll(Collection<? extends Selectable> selectables) {
-        for (Selectable selectable : selectables) {
-            add(selectable);
-        }
-        return this;
-    }
-
-    /// Removes the given [Selectable] from the group (if present).
-    ///
-    /// The removal will also trigger [#onSelectablesChanged(SetChangeListener.Change)].
-    public SelectionGroup remove(Selectable selectable) {
-        if (!selectables.contains(selectable)) return this;
-        isRemoval = true;
-        selectables.remove(selectable);
-        isRemoval = false;
-        return this;
-    }
-
-    /// Calls [#remove(Selectable)] on each given `Selectable`.
-    public SelectionGroup removeAll(Selectable... selectables) {
-        for (Selectable selectable : selectables) {
-            remove(selectable);
-        }
-        return this;
-    }
-
-    /// Calls [#remove(Selectable)] on each given `Selectable`.
-    public SelectionGroup removeAll(Collection<? extends Selectable> selectables) {
-        for (Selectable selectable : selectables) {
-            remove(selectable);
-        }
-        return this;
-    }
-
-    /// Removes all the [Selectables][Selectable] from the group.
-    public SelectionGroup clear() {
-        selectables.clear();
-        return this;
-    }
-
-    /// Given a [Selectable] and its current or 'requested' state returns a value that won't break the rules
-    /// of the `SelectionGroup`.
-    ///
-    /// For example (but there are many other cases), if the 'atLeastOneSelected' mode is on, the given `Selectable`
-    /// is the last selected one, and the requested selection state is 'false', the group won't allow it and return 'true'
-    /// instead.
-    ///
-    /// This is the same mechanism used by [SelectionProperty] to avoid 'illegal' selection states.
-    ///
-    /// Delegates to the current selection handler.
+    /// @see SelectionHandler#check(Selectable, boolean)
     public boolean check(Selectable selectable, boolean state) {
         return handler.check(selectable, state);
     }
 
-    //================================================================================
-    // Protected Methods
-    //================================================================================
-
-    /// Given a [Selectable] and its current or 'requested' state returns a value that won't break the rules
-    /// of the `SelectionGroup`.
-    ///
-    /// This is used by [SelectionProperty] to not feed the [SelectionProperty#set(boolean)] method values that
-    /// would break the rules of the [SelectionGroup]. In other words, when the state is requested to switch to
-    /// selected/deselected, the property first asks the group if it is allowed, in case it is not, the `newValue`
-    /// parameter is "corrected".
-    ///
-    /// The difference between this and [#check(Selectable,boolean)] is that other than returning the correct state for
-    /// the given [Selectable], this will also modify the state of the group. In fact, according to the returned state,
-    /// the given [Selectable] will be also added/removed to/from the selection Set ([#getSelection()]).
-    protected boolean handleSelection(Selectable selectable, boolean state) {
-        if (!selectables.contains(selectable)) return state;
-        return handler.handle(selectable, state);
-    }
-
-    /// Triggers when a [Selectable] is removed from the [ObservableSet] containing all the `Selectables`
-    /// managed by the group.
-    ///
-    /// This will cause the [Selectable] to be also removed from the selection [ObservableSet] (meaning that
-    /// [#onSelectionChanged(SetChangeListener.Change)] will also be triggered) as well as its `SelectionGroup`
-    /// to be set to `null`.
-    protected void onSelectablesChanged(SetChangeListener.Change<? extends Selectable> c) {
-        Selectable removed = c.getElementRemoved();
-        if (c.wasRemoved()) {
-            selection.remove(removed);
-            removed.setSelectionGroup(null);
-        }
-    }
-
-    /// Triggers when a [Selectable] is removed from the [ObservableSet] containing all the `Selectables`
-    /// that are currently selected.
-    ///
-    /// This executes two actions in two specific occasions:
-    ///  1) If the removed `Selectable` is selected and the removal has not been triggered by any of the
-    /// 'remove' methods then the `Selectable` is deselected (`selectable.setSelected(false)`)
-    ///  2) If the selection is now empty, the 'atLeastOneSelected' mode is on and the removal was triggered by one of
-    /// the 'remove' methods, then ensures that there's at least one `Selectable` that is selected by using
-    /// [#getFirstSelectable()] and then if present `selectable.setSelected(true)`
-    protected void onSelectionChanged(SetChangeListener.Change<? extends Selectable> c) {
-        Selectable removed = c.getElementRemoved();
-        if (c.wasRemoved() && removed.isSelected() && !isRemoval) {
-            removed.setSelected(false);
-        }
-        if (c.getSet().isEmpty() && isAtLeastOneSelected() && isRemoval) {
-            getFirstSelectable().ifPresent(s -> s.setSelected(true));
-        }
-    }
-
-    /// @return the state of a special flag that indicates whether changes currently occurring in the group are caused
-    /// by a "switch" operation. This occurs when the group is in SINGLE selection mode, and a [Selectable] is going
-    /// to take the place of another one (the current selected).
-    ///
-    /// More details: this flag is set to true when the selection Set is going to be cleared so that the new `Selectable`
-    /// can take its place. The flag is reset immediately after. However, before the reset, listeners attached to the selection
-    /// Set will trigger, causing the [#handleSelection(Selectable, boolean)] to trigger again. This can be problematic
-    /// when the "At least one selected" feature is on. Since the "switch" process has not been completed yet, the
-    /// group will try to select the first `Selectable` in the [#getSelectables()] Set, so that the rule is
-    /// respected. This behavior is undesired; the flag will stop the group from doing this, afterward the "switch" process
-    /// is completed.
-    public boolean isSwitching() {
-        return isSwitching;
-    }
-
-    //================================================================================
-    // Internal Classes
-    //================================================================================
-    interface SelectionHandler {
-
-        boolean check(Selectable selectable, boolean state);
-
-        boolean handle(Selectable selectable, boolean state);
-    }
-
-    class SingleSelectionHandler implements SelectionHandler {
-        @Override
-        public boolean check(Selectable selectable, boolean state) {
-            if (!selectables.contains(selectable)) return state;
-            if (!state) {
-                if (isAtLeastOneSelected()) {
-                    return !isSwitching() && (selection.size() == 1 && selection.contains(selectable) || selection.isEmpty());
-                }
-                return false;
-            }
-            return true;
-        }
-
-        @Override
-        public boolean handle(Selectable selectable, boolean state) {
-            if (!state) {
-                if (isAtLeastOneSelected()) {
-                    if (isSwitching()) {
-                        selection.remove(selectable);
-                        return false;
-                    }
-                    if (selection.size() == 1 && selection.contains(selectable)) {
-                        return true;
-                    }
-                    if (selection.isEmpty()) {
-                        selection.add(selectable);
-                        return true;
-                    }
-                }
-                selection.remove(selectable);
-                return false;
-            }
-
-            if (selection.contains(selectable)) return true;
-            isSwitching = true;
-            selection.clear();
-            selection.add(selectable);
-            isSwitching = false;
-            return true;
-        }
-    }
-
-    class MultipleSelectionHandler implements SelectionHandler {
-        @Override
-        public boolean check(Selectable selectable, boolean state) {
-            if (!selectables.contains(selectable)) return state;
-            if (!state) {
-                if (isAtLeastOneSelected()) {
-                    return (selection.size() == 1 && selection.contains(selectable)) || selection.isEmpty();
-                }
-                return false;
-            }
-            return true;
-        }
-
-        @Override
-        public boolean handle(Selectable selectable, boolean state) {
-            if (!state) {
-                if (isAtLeastOneSelected()) {
-                    if (selection.size() == 1 && selection.contains(selectable)) {
-                        return true;
-                    }
-                    if (selection.isEmpty()) {
-                        selection.add(selectable);
-                        return true;
-                    }
-                }
-                selection.remove(selectable);
-                return false;
-            }
-            selection.add(selectable);
-            return true;
-        }
-    }
-
-    //================================================================================
-    // Getters
-    //================================================================================
-
-    /// @return an unmodifiable [ObservableSet] which contains all the `Selectables` managed by the group
-    public ObservableSet<Selectable> getSelectables() {
-        return FXCollections.unmodifiableObservableSet(selectables);
-    }
-
-    /// @return an unmodifiable [ObservableSet] which contains all the `Selectables` that are currently selected
-    public ObservableSet<Selectable> getSelection() {
-        return FXCollections.unmodifiableObservableSet(selection);
-    }
-
-    /// @return [#getSelectables()] but as a modifiable List, changes to this collection won't have any effect on the
-    /// group
-    public List<Selectable> getSelectablesList() {
-        return new ArrayList<>(selectables);
-    }
-
-    /// @return [#getSelection()] but as a modifiable List, changes to this collection won't have any effect on the
-    /// group
-    public List<Selectable> getSelectionList() {
-        return new ArrayList<>(selection);
-    }
-
-    /// Convenience method to get the first added [Selectable] of this group. As the group may contain no
-    /// `Selectables`, this returns an [Optional] instead of raising an Exception.
-    protected Optional<Selectable> getFirstSelectable() {
+    /// Locks the group and delegates to [SelectionHandler#handleSelect(Selectable, boolean)].
+    public boolean select(Selectable selectable, boolean state) {
         try {
-            return Optional.of(_selectables.getFirst());
-        } catch (Exception ex) {
-            return Optional.empty();
+            locked = true;
+            return handler.handleSelect(selectable, state);
+        } finally {
+            locked = false;
         }
     }
 
-    /// Convenience method to get the first selected [Selectable] of this group. As the group selection may be empty,
-    /// this returns an [Optional] instead of raising an Exception.
-    public Optional<Selectable> getFirstSelected() {
+    /// Locks the group and delegates to [SelectionHandler#handleAdd(Selectable...)]
+    protected void handleAdd(Selectable... selectables) {
         try {
-            return Optional.of(_selection.getFirst());
-        } catch (Exception ex) {
-            return Optional.empty();
+            locked = true;
+            handler.handleAdd(selectables);
+        } finally {
+            locked = false;
         }
+    }
+
+    /// Locks the group and delegates to [SelectionHandler#handleRemoval(Selectable...)]
+    protected void handleRemoval(Selectable... selectables) {
+        try {
+            locked = true;
+            handler.handleRemoval(selectables);
+        } finally {
+            locked = false;
+        }
+    }
+
+    public SelectionGroup add(Selectable... selectables) {
+        handleAdd(selectables);
+        return this;
+    }
+
+    public SelectionGroup addAll(Collection<? extends Selectable> selectables) {
+        return add(selectables.toArray(Selectable[]::new));
+    }
+
+    public SelectionGroup remove(Selectable... selectables) {
+        handleRemoval(selectables);
+        return this;
+    }
+
+    public SelectionGroup removeAll(Collection<? extends Selectable> selectables) {
+        return remove(selectables.toArray(Selectable[]::new));
+    }
+
+    /// Clears the group's selection. If [#isAtLeastOneSelected()] is `true` the first [Selectable] in [#getSelectables()]
+    /// will be selected.
+    public void clearSelection() {
+        try {
+            locked = true;
+            handler.clearSelection();
+        } finally {
+            locked = false;
+        }
+    }
+
+    /// Removes all [Selectables][Selectable] from the group, preserving their selection state.
+    public SelectionGroup clearGroup() {
+        return removeAll(selectables);
+    }
+
+    //================================================================================
+    // Getters/Setters
+    //================================================================================
+
+    /// @return whether a state transition is occurring on the group
+    public boolean locked() {
+        return locked;
     }
 
     public SelectionMode getSelectionMode() {
         return selectionMode.get();
     }
 
-    /// Specifies the selection mode of the group, can be set to single or multiple selection.
+    /// Specifies the group's [SelectionMode]
     public ObjectProperty<SelectionMode> selectionModeProperty() {
         return selectionMode;
     }
@@ -423,17 +216,350 @@ public class SelectionGroup {
         return atLeastOneSelected.get();
     }
 
-    /// Specifies whether the group should always keep at least one of its `Selectables` selected.
-    ///
-    /// This may be useful for use cases in which a user is forced to pick a choice, no matter what, as long as it is one
-    /// of the offered.
-    ///
-    /// @see SelectionGroup
+    /// Specifies whether at least one [Selectable] from the [selectables Set][#getSelectables()] should be selected at
+    /// all times.
     public BooleanProperty atLeastOneSelectedProperty() {
         return atLeastOneSelected;
     }
 
     public void setAtLeastOneSelected(boolean atLeastOneSelected) {
         this.atLeastOneSelected.set(atLeastOneSelected);
+    }
+
+    /// @return the `Set` of managed [Selectables][Selectable] as a [ReadOnlySetProperty]
+    public ReadOnlySetProperty<Selectable> getSelectables() {
+        return selectables;
+    }
+
+    /// @return the group's current selection as a [ReadOnlySetProperty]
+    public ReadOnlySetProperty<Selectable> getSelection() {
+        return selection;
+    }
+
+    /// @return the group's current selection as an unmodifiable list
+    public List<Selectable> getSelectionList() {
+        return List.copyOf(selection.backingSet);
+    }
+
+    /// @return the first selected entry as an [Optional] (may be absent)
+    public Optional<Selectable> getFirstSelected() {
+        return selection.getFirst();
+    }
+
+    /// @return the last selected entry as an [Optional] (may be absent or same as [#getFirstSelected()])
+    public Optional<Selectable> getLastSelected() {
+        return selection.getLast();
+    }
+
+    public int selectionSize() {
+        return selection.size();
+    }
+
+    public ReadOnlyIntegerProperty selectionSizeProperty() {
+        return selection.sizeProperty();
+    }
+
+    public boolean isSelectionEmpty() {
+        return selection.isEmpty();
+    }
+
+    public ReadOnlyBooleanProperty selectionEmptyProperty() {
+        return selection.emptyProperty();
+    }
+
+    public int groupSize() {
+        return selectables.size();
+    }
+
+    public ReadOnlyIntegerProperty groupSizeProperty() {
+        return selectables.sizeProperty();
+    }
+
+    public boolean isGroupEmpty() {
+        return selectables.isEmpty();
+    }
+
+    public ReadOnlyBooleanProperty groupEmptyProperty() {
+        return selectables.emptyProperty();
+    }
+
+    //================================================================================
+    // Inner Classes
+    //================================================================================
+
+    interface SelectionHandler {
+
+        /// Checks whether the given [Selectable] is allowed to transition to the given selection state.
+        ///
+        /// If it is not part of the group, it returns the given state.<br >
+        ///
+        /// Example: an entry that wants to go to `false`, in a group in [SelectionMode#SINGLE] mode and with [#isAtLeastOneSelected()]
+        /// will be negated and return `true` (stay selected)
+        boolean check(Selectable selectable, boolean state);
+
+        /// Adds or removes the given [Selectable] from the group's selection after checking the request is valid with
+        /// [#check(Selectable, boolean)].
+        ///
+        /// Depending on the [SelectionMode], the [Selectable] can be added/removed or the selection cleared and replaced.
+        boolean handleSelect(Selectable selectable, boolean state);
+
+        /// Adds the given [Selectables][Selectable] to the group, ensuring that the [#isAtLeastOneSelected()] constraint
+        /// is honored.
+        ///
+        /// In [SelectionMode#SINGLE] mode, if the [Selectable] is already selected, it will be flipped to unselected if
+        /// there is already something else selected.
+        void handleAdd(Selectable... selectables);
+
+        /// Removes the given [Selectables][Selectable] from the group, ensuring that the [#isAtLeastOneSelected()]
+        /// constraint is honored.
+        void handleRemoval(Selectable... selectables);
+
+        /// Deselects all group's entries while ensuring that the [#isAtLeastOneSelected()] constraint is honored.
+        void clearSelection();
+    }
+
+    class SingleSelectionHandler implements SelectionHandler {
+
+        @Override
+        public boolean check(Selectable selectable, boolean state) {
+            if (!selectables.contains(selectable)) return state;
+            if (!state) {
+                if (isAtLeastOneSelected()) {
+                    // returns true if selected and therefore cannot flip to unselected state
+                    return selection.getFirst().filter(s -> s == selectable).isPresent();
+                }
+            }
+            return state;
+        }
+
+        @Override
+        public boolean handleSelect(Selectable selectable, boolean state) {
+            // check that requested state is allowed
+            // exit if final state is equal to current one
+            state = check(selectable, state);
+            if (selectable.isSelected() == state) return state;
+
+            ObservableSet<Selectable> copy = selection.copy();
+            if (state) {
+                copy.stream().filter(Selectable::isSelected)
+                    .findFirst()
+                    .ifPresent(s -> s.setSelected(false));
+                copy.clear();
+                copy.add(selectable);
+                selection.set(copy);
+                return true;
+            }
+
+            copy.remove(selectable);
+            selection.set(copy);
+            return false;
+        }
+
+        @Override
+        public void handleAdd(Selectable... selectables) {
+            if (selectables.length == 0) return;
+            Selectable firstSelected = null;
+            for (Selectable selectable : selectables) {
+                SelectionGroup.this.selectables.add(selectable);
+                selectable.setSelectionGroup(SelectionGroup.this);
+                if (selectable.isSelected() && firstSelected == null) {
+                    firstSelected = selectable;
+                    continue;
+                }
+                selectable.setSelected(false);
+            }
+
+            if (isSelectionEmpty() && (isAtLeastOneSelected() || firstSelected != null)) {
+                Optional.ofNullable(firstSelected)
+                    .or(SelectionGroup.this.selectables::getFirst)
+                    .ifPresent(s -> {
+                        s.setSelected(true);
+                        selection.add(s);
+                    });
+            } else if (firstSelected != null) {
+                firstSelected.setSelected(false);
+            }
+        }
+
+        @Override
+        public void handleRemoval(Selectable... selectables) {
+            if (selectables.length == 0) return;
+            boolean needsToUpdate = false;
+            for (Selectable selectable : selectables) {
+                SelectionGroup.this.selectables.remove(selectable);
+                needsToUpdate |= selection.contains(selectable);
+                selectable.setSelectionGroup(null);
+            }
+
+            ObservableSet<Selectable> copy;
+            if (needsToUpdate) {
+                copy = selection.copy();
+                copy.removeIf(s -> !SelectionGroup.this.selectables.contains(s));
+
+                if (isAtLeastOneSelected() && copy.isEmpty()) {
+                    SelectionGroup.this.selectables.getFirst().ifPresent(s -> {
+                        s.setSelected(true);
+                        copy.add(s);
+                    });
+                }
+                selection.set(copy);
+            }
+        }
+
+        @Override
+        public void clearSelection() {
+            if (isGroupEmpty()) return;
+            Selectable first = selectables.getFirst().filter(Selectable::isSelected).orElse(null);
+            for (Selectable selectable : selectables) {
+                if (selectable == first) continue;
+                selectable.setSelected(false);
+            }
+            if (isSelectionEmpty() && !isAtLeastOneSelected()) return;
+
+            ObservableSet<Selectable> empty = selection.newSet();
+            if (isAtLeastOneSelected()) {
+                Selectable toSelect = Optional.ofNullable(first).orElse(selectables.getFirst().get());
+                toSelect.setSelected(true);
+                empty.add(toSelect);
+            } else if (first != null) {
+                first.setSelected(false);
+            }
+            selection.set(empty);
+        }
+    }
+
+    class MultipleSelectionHandler implements SelectionHandler {
+
+        @Override
+        public boolean check(Selectable selectable, boolean state) {
+            if (!selectables.contains(selectable)) return state;
+            if (!state) {
+                if (selectionSize() <= 1 && isAtLeastOneSelected()) {
+                    // returns true if selected and therefore cannot flip to unselected state
+                    return selection.getFirst().filter(s -> s == selectable).isPresent();
+                }
+            }
+            return state;
+        }
+
+        @Override
+        public boolean handleSelect(Selectable selectable, boolean state) {
+            // check that requested state is allowed
+            // exit if final state is equal to current one
+            state = check(selectable, state);
+            if (selectable.isSelected() == state) return state;
+
+            ObservableSet<Selectable> copy = selection.copy();
+            if (state) {
+                copy.add(selectable);
+            } else {
+                copy.remove(selectable);
+            }
+            selection.set(copy);
+            return state;
+        }
+
+        @Override
+        public void handleAdd(Selectable... selectables) {
+            if (selectables.length == 0) return;
+            List<Selectable> selected = new ArrayList<>();
+            for (Selectable selectable : selectables) {
+                if (SelectionGroup.this.selectables.add(selectable)) {
+                    selectable.setSelectionGroup(SelectionGroup.this);
+                    if (selectable.isSelected()) {
+                        selected.add(selectable);
+                    }
+                }
+            }
+
+            if (!selected.isEmpty()) {
+                ObservableSet<Selectable> copy = selection.copy();
+                copy.addAll(selected);
+                selection.set(copy);
+                return;
+            }
+
+            if (isAtLeastOneSelected() && isSelectionEmpty()) {
+                SelectionGroup.this.selectables.getFirst().ifPresent(s -> {
+                    s.setSelected(true);
+                    selection.add(s);
+                });
+            }
+        }
+
+        @Override
+        public void handleRemoval(Selectable... selectables) {
+            if (selectables.length == 0) return;
+            boolean needsToUpdate = false;
+            for (Selectable selectable : selectables) {
+                SelectionGroup.this.selectables.remove(selectable);
+                needsToUpdate |= selection.contains(selectable);
+                selectable.setSelectionGroup(null);
+            }
+
+            ObservableSet<Selectable> copy;
+            if (needsToUpdate) {
+                copy = selection.copy();
+                copy.removeIf(s -> !SelectionGroup.this.selectables.contains(s));
+
+                if (isAtLeastOneSelected() && copy.isEmpty()) {
+                    SelectionGroup.this.selectables.getFirst().ifPresent(s -> {
+                        s.setSelected(true);
+                        copy.add(s);
+                    });
+                }
+                selection.set(copy);
+            }
+        }
+
+        @Override
+        public void clearSelection() {
+            if (isGroupEmpty()) return;
+            Selectable first = selectables.getFirst().filter(Selectable::isSelected).orElse(null);
+            for (Selectable selectable : selectables) {
+                if (selectable == first) continue;
+                selectable.setSelected(false);
+            }
+            if (isSelectionEmpty() && !isAtLeastOneSelected()) return;
+
+            ObservableSet<Selectable> empty = selection.newSet();
+            if (isAtLeastOneSelected()) {
+                Selectable toSelect = Optional.ofNullable(first).orElse(selectables.getFirst().get());
+                toSelect.setSelected(true);
+                empty.add(toSelect);
+            } else if (first != null) {
+                first.setSelected(false);
+            }
+            selection.set(empty);
+        }
+    }
+
+    // Note: get operations must occur before the backing set is replaced (new or copy)
+    private static class SelectablesSet extends SimpleSetProperty<Selectable> {
+        private SequencedSet<Selectable> backingSet;
+
+        public SelectablesSet() {
+            set(newSet());
+        }
+
+        public Optional<Selectable> getFirst() {
+            if (isEmpty()) return Optional.empty();
+            return Optional.of(backingSet.getFirst());
+        }
+
+        public Optional<Selectable> getLast() {
+            if (isEmpty()) return Optional.empty();
+            return Optional.of(backingSet.getLast());
+        }
+
+        private ObservableSet<Selectable> newSet() {
+            backingSet = new LinkedHashSet<>();
+            return FXCollections.observableSet(backingSet);
+        }
+
+        private ObservableSet<Selectable> copy() {
+            backingSet = new LinkedHashSet<>(this);
+            return FXCollections.observableSet(backingSet);
+        }
     }
 }
