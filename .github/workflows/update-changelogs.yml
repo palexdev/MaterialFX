@@ -13,6 +13,7 @@ jobs:
         with:
           # This is needed for the scripts
           fetch-depth: 0
+          submodules: 'recursive'
 
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -20,10 +21,7 @@ jobs:
           distribution: 'zulu'
           java-version: '25'
 
-      - name: Give permissions to script
-        run: chmod +x scripts/UpdateChangelogs
-
       - name: Run script
-        run: java --source 21 ./scripts/UpdateChangelogs
+        run: java -jar ./scripts/binaries/UpdateChangelogs.jar --commit
 
 

@@ -24,7 +24,7 @@ plugins {
 }
 
 ext {
-    scriptsDir = "$rootDir/scripts/gradle"
+    scriptsDir = "$rootDir/gradle"
 }
 
 subprojects {

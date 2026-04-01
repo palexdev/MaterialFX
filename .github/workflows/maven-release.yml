@@ -3,6 +3,7 @@ name: Release on Maven
 on:
   workflow_call: { }
 
+# TODO setup npm to cleanup CSS
 jobs:
   build-release:
     environment: MavenEnv
@@ -20,6 +21,7 @@ jobs:
         with:
           # This is needed for the scripts
           fetch-depth: 0
+          submodules: 'recursive'
 
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -30,8 +32,5 @@ jobs:
       - name: Give permissions to Gradle
         run: chmod +x gradlew
 
-      - name: Give permissions to script
-        run: chmod +x scripts/Release
-
       - name: Release
-        run: java --source 21 ./scripts/Release
+        run: java -jar ./scripts/binaries/Release.jar
