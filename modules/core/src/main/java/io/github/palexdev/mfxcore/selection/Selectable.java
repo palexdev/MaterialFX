@@ -70,6 +70,13 @@ public interface Selectable {
 
     /// Allows specifying a callback to invoke when the selection state of this `Selectable` changes.
     ///
-    /// **This is an optional API. By default, does nothing.**
-    default void onSelectionChanged(Consumer<Boolean> action) {}
+    /// **This is an optional API. By default, throws an `UnsupportedOperationException`.**
+    default void onSelectionChanged(Consumer<Boolean> action) {
+        throw new UnsupportedOperationException("API not implemented by " + getClass());
+    }
+
+    /// Delegate to [#onSelectionChanged(Consumer)] that runs the given action only when selection state is `true`.
+    default void onSelected(Runnable action) {
+        onSelectionChanged(s -> {if (s) action.run();});
+    }
 }

@@ -173,6 +173,10 @@ public class MenuBuilder {
             return this;
         }
 
+        public CheckMenuBuilder onSelected(Runnable onSelected) {
+            return onSelectionChanged(s -> {if (s) onSelected.run();});
+        }
+
         public CheckMenuBuilder closeOnAction(boolean closeOnAction) {
             this.closeOnAction = closeOnAction;
             return this;
