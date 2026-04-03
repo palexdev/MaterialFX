@@ -46,6 +46,9 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.TraversalDirection;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
@@ -115,8 +118,8 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
         @Override
         protected void doShow(Node owner, double x, double y) {
             MFXMenu.tracker.set(MFXMenu.this);
-            getContent().requestFocus(); // Focus the content causing any previously focused item to reset
             super.doShow(owner, x, y);
+            getContent().requestFocusTraversal(TraversalDirection.NEXT); // move focus onto menu content
         }
 
         @Override
