@@ -285,7 +285,7 @@ public class MFXMenuItem extends MFXLabeled {
                     if (subMenuHandler != null) {
                         subMenuHandler.show();
                         subMenuHandler.focus();
-                    } else if (item.getAction() != null) {
+                    } else {
                         runAction();
                     }
                 }
