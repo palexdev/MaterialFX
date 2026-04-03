@@ -151,11 +151,13 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
     private Node owner;
     private Placement placement;
     private MouseButton triggerButton;
+    private boolean enableKeyTrigger;
     private boolean anchorBasedPositioning;
     private MenuConfig config;
     private final ObservableList<MFXMenuItem> items;
 
-    private WhenEvent<?> trigger;
+    private WhenEvent<?> mTrigger;
+    private WhenEvent<?> kTrigger;
 
     private final ReadOnlyDoubleWrapper textColumnWidth = new ReadOnlyDoubleWrapper(Region.USE_COMPUTED_SIZE) {
         @Override
@@ -211,7 +213,7 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
     }
 
     protected void initMenu(Node owner) {
-        trigger = WhenEvent.intercept(owner, MouseEvent.MOUSE_CLICKED)
+        mTrigger = WhenEvent.intercept(owner, MouseEvent.MOUSE_CLICKED)
             .condition(e -> e.getButton() == triggerButton)
             .handle(e -> {
                 if (anchorBasedPositioning) {
@@ -234,6 +236,19 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
             .otherwise((_, _) -> hide())
             .register();
 
+        if (enableKeyTrigger) {
+            kTrigger = WhenEvent.intercept(owner, KeyEvent.KEY_PRESSED)
+                .condition(e -> e.getCode() == KeyCode.ENTER || e.getCode() == KeyCode.SPACE)
+                .handle(e -> {
+                    if (!isShowing()) {
+                        peer.show(owner, placement);
+                    } else {
+                        hide();
+                    }
+                })
+                .register();
+        }
+
         // This effectively works for root menus only
         // Submenus are handled by the cells
         if (getContent() == null)
@@ -241,9 +256,13 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
     }
 
     public void uninstall() {
-        if (trigger != null) {
-            trigger.dispose();
-            trigger = null;
+        if (mTrigger != null) {
+            mTrigger.dispose();
+            mTrigger = null;
+        }
+        if (kTrigger != null) {
+            kTrigger.dispose();
+            kTrigger = null;
         }
         setContent(null);
         owner = null;
@@ -550,6 +569,7 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
         Placement placement,
         Position offset,
         MouseButton triggerButton,
+        boolean enableKeyTrigger,
         boolean anchorBasedPositioning,
         Supplier<PopupAnimation> animationProvider,
         Node styleableParent
@@ -561,6 +581,7 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
             menu.placement = placement;
             menu.setOffset(offset);
             menu.triggerButton = triggerButton;
+            menu.enableKeyTrigger = enableKeyTrigger;
             menu.anchorBasedPositioning = anchorBasedPositioning;
             menu.setAnimation(animationProvider != null ? animationProvider.get() : null);
             menu.peer.setStyleableParent(styleableParent);
@@ -582,6 +603,7 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
             private Placement placement = Placement.placement(Pos.BOTTOM_LEFT, Direction.AFTER, Direction.AFTER);
             private Position offset = Position.origin();
             private MouseButton triggerButton = MouseButton.SECONDARY;
+            private boolean enableKeyTrigger = false;
             private boolean anchorBasedPositioning = true;
             private Supplier<PopupAnimation> animationProvider = null;
             private Node styleableParent;
@@ -598,6 +620,11 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
 
             public Builder triggerButton(MouseButton triggerButton) {
                 this.triggerButton = triggerButton;
+                return this;
+            }
+
+            public Builder enableKeyTrigger(boolean enableKeyTrigger) {
+                this.enableKeyTrigger = enableKeyTrigger;
                 return this;
             }
 
@@ -621,6 +648,7 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
                     placement,
                     offset,
                     triggerButton,
+                    enableKeyTrigger,
                     anchorBasedPositioning,
                     animationProvider,
                     styleableParent
