@@ -18,30 +18,45 @@
 
 package unit.observables;
 
+import java.lang.ref.WeakReference;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import io.github.palexdev.mfxcore.collections.WeakHashSet;
+import io.github.palexdev.mfxcore.observables.OnChanged;
+import io.github.palexdev.mfxcore.observables.OnInvalidated;
 import io.github.palexdev.mfxcore.observables.When;
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class WhenTests {
+
+    private final Set<When<?>> whens = new WeakHashSet<>();
+
+    @AfterEach
+    void tearDown() {
+        When.dispose(whens.toArray(When<?>[]::new));
+    }
 
     @Test
     void testMultiple() {
         IntegerProperty prop = new SimpleIntegerProperty();
         AtomicInteger cnt = new AtomicInteger();
 
-        When<Number> oc = When.onChanged(prop)
+        When<Number> oc = onChanged(prop)
             .then((o, n) -> cnt.incrementAndGet())
             .listen();
 
         prop.set(1);
         assertEquals(1, cnt.get());
 
-        When<Number> oi = When.onInvalidated(prop)
+        When<Number> oi = onInvalidated(prop)
             .then(v -> cnt.incrementAndGet())
             .listen();
 
@@ -58,7 +73,7 @@ public class WhenTests {
         IntegerProperty prop = new SimpleIntegerProperty();
         AtomicBoolean changed = new AtomicBoolean(false);
 
-        When.onInvalidated(prop)
+        onInvalidated(prop)
             .then(v -> changed.set(true))
             .oneShot(true)
             .executeNow()
@@ -73,7 +88,7 @@ public class WhenTests {
         IntegerProperty prop = new SimpleIntegerProperty(-1);
         AtomicBoolean changed = new AtomicBoolean(false);
 
-        When.onInvalidated(prop)
+        onInvalidated(prop)
             .then(v -> changed.set(true))
             .oneShot(true)
             .executeNow(() -> prop.get() != -1)
@@ -93,7 +108,7 @@ public class WhenTests {
         StringProperty sProp = new SimpleStringProperty("");
         AtomicBoolean changed = new AtomicBoolean(false);
 
-        When.onInvalidated(prop)
+        onInvalidated(prop)
             .condition(v -> v.intValue() != -1)
             .then(v -> changed.set(true))
             .oneShot(true)
@@ -136,5 +151,45 @@ public class WhenTests {
         assertEquals(3, counter.get());
 
         when.dispose();
+    }
+
+    @Test
+    void testGC() throws Exception {
+        IntegerProperty iProp = new SimpleIntegerProperty();
+        WeakReference<?> ref;
+        When<?> when = onInvalidated(iProp).listen();
+        assertEquals(1, When.totalSize());
+
+        ref = new WeakReference<>(when);
+        when = null;
+        iProp = null;
+        awaitGC(ref);
+        assumeTrue(ref.get() == null, "GC did not collect the When - skipping");
+        assertEquals(0, When.totalSize());
+    }
+
+    //================================================================================
+    // Helpers
+    //================================================================================
+
+    private <T> OnChanged<T> onChanged(ObservableValue<T> ov) {
+        OnChanged<T> when = When.onChanged(ov);
+        whens.add(when);
+        return when;
+    }
+
+    private <T> OnInvalidated<T> onInvalidated(ObservableValue<T> ov) {
+        OnInvalidated<T> when = When.onInvalidated(ov);
+        whens.add(when);
+        return when;
+    }
+
+    /// Hints GC in a short loop until the referent is collected or the attempt limit is reached.
+    /// GC is non-deterministic; callers must guard with assumeTrue(ref.get() == null).
+    private static void awaitGC(WeakReference<?> ref) throws InterruptedException {
+        for (int i = 0; i < 50 && ref.get() != null; i++) {
+            System.gc();
+            Thread.sleep(100);
+        }
     }
 }
