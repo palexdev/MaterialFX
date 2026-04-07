@@ -187,7 +187,7 @@ public class MFXCheckMenuItem extends MFXMenuItem implements Selectable {
         }
 
         @Override
-        protected void runAction() {
+        public void runAction() {
             MFXCheckMenuItem item = getNodeAs(MFXCheckMenuItem.class);
             item.toggle();
             if (item.getAction() != null) {

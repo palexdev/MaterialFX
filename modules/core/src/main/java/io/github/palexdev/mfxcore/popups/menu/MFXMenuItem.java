@@ -314,7 +314,7 @@ public class MFXMenuItem extends MFXLabeled {
             e.consume();
         }
 
-        protected void runAction() {
+        public void runAction() {
             MFXMenuItem item = getNode();
             if (item.getAction() != null) {
                 item.getAction().run();
