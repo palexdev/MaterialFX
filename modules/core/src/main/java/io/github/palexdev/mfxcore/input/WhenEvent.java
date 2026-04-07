@@ -89,12 +89,12 @@ public class WhenEvent<T extends Event> implements Disposable {
     private EventTarget target;
     private EventType<T> eventType;
     private EventHandler<T> handler;
+    private HandlerWrapper handlerWrapper;
     private Consumer<T> action;
     private Function<T, Boolean> condition = e -> true;
     private BiConsumer<WeakReference<WhenEvent<T>>, T> otherwise = (w, e) -> {};
     private boolean oneShot = false;
     private boolean asFilter = false;
-    private RegUnRegWrapper rurWrapper;
     private boolean active = false;
 
     //================================================================================
@@ -138,7 +138,7 @@ public class WhenEvent<T extends Event> implements Disposable {
     /// (meaning that it was already registered before).
     public WhenEvent<T> register() {
         if (isDisposed() || handler != null) return this;
-        rurWrapper = new RegUnRegWrapper();
+        handlerWrapper = new HandlerWrapper(asFilter);
 
         if (oneShot) {
             handler = e -> {
@@ -169,7 +169,7 @@ public class WhenEvent<T extends Event> implements Disposable {
     protected void doRegister() {
         WeakHashSet<WhenEvent<?>> set = whens.computeIfAbsent(target, n -> new WeakHashSet<>());
         set.add(this);
-        rurWrapper.reg();
+        handlerWrapper.register();
         active = true;
     }
 
@@ -209,9 +209,9 @@ public class WhenEvent<T extends Event> implements Disposable {
     public void dispose() {
         if (target != null) {
             if (handler != null) {
-                rurWrapper.unReg();
+                handlerWrapper.unregister();
                 handler = null;
-                rurWrapper = null;
+                handlerWrapper = null;
             }
             handleMapDisposal();
             eventType = null;
@@ -285,11 +285,11 @@ public class WhenEvent<T extends Event> implements Disposable {
 
     /// Utility internal class that allows to remove some ifs when registering/unregistering the [EventHandler]
     /// on the event target.
-    protected class RegUnRegWrapper {
+    class HandlerWrapper {
         private final TriConsumer<EventTarget, EventType<T>, EventHandler<T>> reg;
         private final TriConsumer<EventTarget, EventType<T>, EventHandler<T>> unReg;
 
-        protected RegUnRegWrapper() {
+        HandlerWrapper(boolean asFilter) {
             if (asFilter) {
                 reg = EventTarget::addEventFilter;
                 unReg = EventTarget::removeEventFilter;
@@ -299,11 +299,11 @@ public class WhenEvent<T extends Event> implements Disposable {
             }
         }
 
-        public void reg() {
+        public void register() {
             reg.accept(target, eventType, handler);
         }
 
-        public void unReg() {
+        public void unregister() {
             unReg.accept(target, eventType, handler);
         }
     }
