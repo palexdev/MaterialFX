@@ -23,8 +23,10 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
+import io.github.palexdev.mfxcore.base.TriConsumer;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
+import javafx.event.EventType;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Window;
@@ -53,7 +55,7 @@ public class KeyMap extends HashMap<KeyStroke, BiConsumer<KeyEvent, KeyStroke>> 
     // Properties
     //================================================================================
     private WeakReference<EventTarget> target;
-    private WhenEvent<?> handler;
+    private Handler handler;
 
     //================================================================================
     // Methods
@@ -84,17 +86,15 @@ public class KeyMap extends HashMap<KeyStroke, BiConsumer<KeyEvent, KeyStroke>> 
     /// @param asFilter whether to add the [EventHandler] as a standard handler or as a filter
     public void install(EventTarget target, boolean asFilter) {
         if (this.target != null) uninstall();
-        handler = WhenEvent.intercept(target, KeyEvent.KEY_PRESSED)
-            .handle(this::handleEvent)
-            .asFilter(asFilter)
-            .register();
         this.target = new WeakReference<>(target);
+        handler = new Handler(asFilter);
+        handler.register();
     }
 
     /// Disables the `KeyMap` by removing and disposing the [EventHandler] from the target.
     public void uninstall() {
         if (handler != null) {
-            handler.dispose();
+            handler.unregister();
             handler = null;
         }
         this.target = null;
@@ -113,5 +113,39 @@ public class KeyMap extends HashMap<KeyStroke, BiConsumer<KeyEvent, KeyStroke>> 
     public void dispose() {
         uninstall();
         clear();
+    }
+
+    /// @return whether the `KeyMap` is currently installed on a target
+    public boolean isInstalled() {
+        return target != null;
+    }
+
+    //================================================================================
+    // Inner Classes
+    //================================================================================
+
+    class Handler {
+        private final TriConsumer<EventTarget, EventType<KeyEvent>, EventHandler<KeyEvent>> reg;
+        private final TriConsumer<EventTarget, EventType<KeyEvent>, EventHandler<KeyEvent>> unReg;
+        private final EventHandler<KeyEvent> handler = KeyMap.this::handleEvent;
+
+        public Handler(boolean asFilter) {
+            if (asFilter) {
+                reg = EventTarget::addEventFilter;
+                unReg = EventTarget::removeEventFilter;
+            } else {
+                reg = EventTarget::addEventHandler;
+                unReg = EventTarget::removeEventHandler;
+            }
+        }
+
+        public void register() {
+            reg.accept(target.get(), KeyEvent.KEY_PRESSED, handler);
+        }
+
+        public void unregister() {
+            if (target.get() != null)
+                unReg.accept(target.get(), KeyEvent.KEY_PRESSED, handler);
+        }
     }
 }
