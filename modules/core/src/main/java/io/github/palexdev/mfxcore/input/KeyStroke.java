@@ -63,6 +63,18 @@ public record KeyStroke(
         Collections.addAll(this.modifiers, modifiers);
     }
 
+    /// Creates a new [KeyStroke] using only [KeyCode] objects, expects arrays in this format: `<modifier>...,<key>`<br >
+    /// (key is the last in the sequence, modifiers can be zero or more).
+    public static KeyStroke keyStroke(KeyCode... keys) {
+        if (keys == null || keys.length == 0) throw new IllegalArgumentException("Keys cannot be null or empty");
+        if (keys[keys.length - 1].isModifierKey()) throw new IllegalArgumentException("Last key cannot be a modifier");
+        EnumSet<KeyModifier> modifiers = EnumSet.noneOf(KeyModifier.class);
+        for (int i = 0; i < keys.length - 1; i++) {
+            modifiers.add(KeyModifier.fromKeyCode(keys[i]));
+        }
+        return new KeyStroke(modifiers, keys[keys.length - 1]);
+    }
+
     /// Creates a new [KeyStroke] from the given string. Here's the ideal format for the string:
     /// `<modifier>+<modifier>+...<key>` where:
     /// - Each key/modifier is separated by the sign `+`
