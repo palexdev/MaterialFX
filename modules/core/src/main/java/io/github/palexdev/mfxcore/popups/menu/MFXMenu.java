@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import io.github.palexdev.mfxcore.base.beans.Position;
 import io.github.palexdev.mfxcore.base.properties.NodeProperty;
@@ -33,6 +34,7 @@ import io.github.palexdev.mfxcore.controls.MFXStyleable;
 import io.github.palexdev.mfxcore.input.WhenEvent;
 import io.github.palexdev.mfxcore.popups.*;
 import io.github.palexdev.mfxcore.popups.menu.MFXMenu.MenuConfig.Builder;
+import io.github.palexdev.mfxcore.utils.CollectionUtils;
 import io.github.palexdev.mfxcore.utils.fx.AnchorHandlers.Direction;
 import io.github.palexdev.mfxcore.utils.fx.AnchorHandlers.Placement;
 import javafx.beans.property.*;
@@ -433,6 +435,13 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
     /// @return the list containing the menu's entries.
     public ObservableList<MFXMenuItem> getItems() {
         return items;
+    }
+
+    /// @return a stream consisting of all the items and subitems from this menu
+    /// @see CollectionUtils#flatten(Object, Function)
+    public Stream<MFXMenuItem> getAllItems() {
+        return getItems().stream()
+            .flatMap(c -> CollectionUtils.flatten(c, MFXMenuItem::getSubItems));
     }
 
     /// @return whether the [#parentMenuProperty()]'s value is `null`.

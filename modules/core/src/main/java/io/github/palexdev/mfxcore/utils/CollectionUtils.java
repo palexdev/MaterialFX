@@ -20,7 +20,10 @@ package io.github.palexdev.mfxcore.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 /// Utilities for Java collections.
 public class CollectionUtils {
@@ -38,5 +41,22 @@ public class CollectionUtils {
     @SafeVarargs
     public static <T> List<T> list(T... ts) {
         return new ArrayList<>(Arrays.asList(ts));
+    }
+
+    /// Flattens a tree structure into a sequential stream of nodes using depth-first traversal.
+    ///
+    /// Example usage:
+    ///
+    /// ```
+    /// // Flatten a custom Node tree and collect foo properties
+    /// List<String> foos = flatten(root, Node::getChildren)
+    ///         .map(Node::getFoo)
+    ///         .toList();
+    /// ```
+    public static <T> Stream<T> flatten(T node, Function<T, ? extends Collection<T>> children) {
+        return Stream.concat(
+            Stream.of(node),
+            children.apply(node).stream().flatMap(c -> flatten(c, children))
+        );
     }
 }
