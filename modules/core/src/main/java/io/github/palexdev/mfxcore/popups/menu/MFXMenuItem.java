@@ -192,7 +192,7 @@ public class MFXMenuItem extends MFXLabeled {
         return menu;
     }
 
-    public void setMenu(MFXMenu menu) {
+    protected void setMenu(MFXMenu menu) {
         this.menu = menu;
     }
 
