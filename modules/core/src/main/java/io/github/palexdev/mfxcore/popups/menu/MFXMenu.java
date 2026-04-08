@@ -268,12 +268,13 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
         owner = null;
     }
 
-    protected MFXMenu createSubMenu(ObservableList<MFXMenuItem> items) {
+    protected MFXMenu createSubMenu(MFXMenuItem item) {
         MFXMenu subMenu = Optional.ofNullable(subMenuFactory)
-            .map(f -> f.apply(items))
+            .map(f -> f.apply(item.getSubItems()))
             .orElse(null);
         if (subMenu == null) return null;
 
+        subMenu.owner = item;
         subMenu.setParentMenu(this);
         subMenu.setSubMenuFactory(subMenuFactory);
         subMenu.configure(cfg -> cfg

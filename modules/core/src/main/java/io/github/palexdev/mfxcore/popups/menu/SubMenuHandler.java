@@ -33,7 +33,7 @@ public class SubMenuHandler {
 
     public SubMenuHandler(MFXMenuItem item) {
         this.item = item;
-        subMenu = item.getMenu().createSubMenu(item.getSubItems());
+        subMenu = item.getMenu().createSubMenu(item);
         hideListener = When.onInvalidated(item.getMenu().hoveredItemProperty())
             .then(_ -> hide())
             .listen();
@@ -83,7 +83,7 @@ public class SubMenuHandler {
     public void dispose() {
         hideListener.dispose();
         hideListener = null;
-        subMenu.setContent(null);
+        subMenu.uninstall();
         subMenu = null;
         item = null;
     }
