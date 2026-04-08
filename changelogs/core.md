@@ -1,3 +1,36 @@
+## 25.6.0 - 08/04/2026 - 6986acd6
+
+### Features
+
+- <9c69ffb8> MFXMenu: allow filtering mouse events
+- <57f303f7> MFXMenu: allow retrieving all items from a menu by flattening the tree structure
+- <8822b122> KeyStroke: add keyStroke(KeyCode...) factory method
+- <4794a6c1> KeyModifier: add reverse resolution KeyCode -> KeyModifier
+- <8dd2d05c> Implement ShortcutManager to make KeyStrokes handling automatic/less of a hassle
+- <c8b7a76c> MFXMenu: allow show/hide via key events
+
+### Bug Fixes
+
+- <fb248847> MFXMenuItem: remove superfluous null check on the action which would break MFXCheckMenuItem behavior
+
+### Refactoring
+
+- <79206ca3> MFXMenuItem: hide menu when action is run only if it's available
+- <c87adb7c> MFXMenuItem: restrict setMenu(...) visibility
+- <aaab91a2> ShortcutManager: use MFXMenu.getAllItems and integrate into MFXMenu
+- <0f3fb04c> MFXMenu: minor changes to sub menu creation and handling
+- <0c42ae8e> KeyStroke: rename of(String) factory to fromString(String)
+- <b750b8f8> MFXMenuItem: make runAction method public in behavior
+- <f4ba8c8b> KeyMap: use plain event handlers instead of WhenEvent to avoid potential memory leaks
+- <51cba3de> WhenEvent: minor cleanup
+- <677f2a07> MFXMenu: improve focus handling
+
+### Tests
+
+- <15680427> When, WhenEvent: add GC tests
+
+
+
 ## 25.5.0 - 01/04/2026 - 4e4abed0
 
 ### Refactoring
