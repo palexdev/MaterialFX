@@ -194,9 +194,9 @@ public class ShortcutManager {
 
         public static Action action(KeyStroke shortcut, Runnable action) {return new Action(shortcut, action);}
 
-        /// Uses [KeyStroke#of(String)] to resolve from a string.
+        /// Uses [KeyStroke#fromString(String)] to resolve from a string.
         public static Action action(String shortcut, Runnable action) {
-            return action(KeyStroke.of(shortcut), action);
+            return action(KeyStroke.fromString(shortcut), action);
         }
 
         @Override

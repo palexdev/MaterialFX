@@ -34,7 +34,7 @@ import javafx.scene.input.KeyEvent;
 ///
 /// There are two ways to build a shortcut:
 /// 1) Via the constructors
-/// 2) From a string, see [#of(String)]
+/// 2) From a string, see [#fromString(String)]
 ///
 /// Technically, there's also a third one, which is [#fromEvent(KeyEvent)], but that is more of a utility to check if
 /// a [KeyEvent] corresponds to a certain [KeyStroke].
@@ -72,7 +72,7 @@ public record KeyStroke(
     ///
     /// @throws IllegalArgumentException if the string is `null` or empty
     /// @throws IllegalArgumentException if the key cannot be parsed from the string
-    public static KeyStroke of(String s) {
+    public static KeyStroke fromString(String s) {
         if (s == null || s.trim().isEmpty()) {
             throw new IllegalArgumentException("Key combo string cannot be null or empty");
         }

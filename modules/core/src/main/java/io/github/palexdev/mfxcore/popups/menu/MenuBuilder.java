@@ -108,9 +108,9 @@ public class MenuBuilder {
         return this;
     }
 
-    /// The string should follow the format indicated [here][KeyStroke#of(String)].
+    /// The string should follow the format indicated [here][KeyStroke#fromString(String)].
     public MenuBuilder shortcut(String shortcut) {
-        this.shortcut = KeyStroke.of(shortcut);
+        this.shortcut = KeyStroke.fromString(shortcut);
         return this;
     }
 
