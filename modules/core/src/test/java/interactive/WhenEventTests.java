@@ -57,7 +57,7 @@ public class WhenEventTests {
 
     private Stage stage;
     private final Set<WhenEvent<?>> whens = new WeakHashSet<>();
-    
+
     @Start
     void start(Stage stage) {
         this.stage = stage;
@@ -68,7 +68,7 @@ public class WhenEventTests {
     void tearDown() {
         WhenEvent.dispose(whens.toArray(WhenEvent[]::new));
     }
-    
+
     @Test
     void testMultiple(FxRobot robot) {
         Button btn = setupStage();
@@ -206,7 +206,7 @@ public class WhenEventTests {
         assumeTrue(ref.get() == null, "GC did not collect the WhenEvent - skipping");
         assertEquals(0, WhenEvent.totalSize());
     }
-    
+
     //================================================================================
     // Helpers
     //================================================================================
@@ -222,13 +222,13 @@ public class WhenEventTests {
         }
         return btn;
     }
-    
+
     private <T extends Event> WhenEvent<T> intercept(EventTarget target, EventType<T> evt) {
         WhenEvent<T> when = WhenEvent.intercept(target, evt);
         whens.add(when);
         return when;
     }
-    
+
     /// Hints GC in a short loop until the referent is collected or the attempt limit is reached.
     /// GC is non-deterministic; callers must guard with assumeTrue(ref.get() == null).
     private static void awaitGC(WeakReference<?> ref) throws InterruptedException {
