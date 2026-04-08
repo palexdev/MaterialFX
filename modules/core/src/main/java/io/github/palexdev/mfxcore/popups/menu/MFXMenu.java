@@ -31,6 +31,7 @@ import io.github.palexdev.mfxcore.base.beans.Position;
 import io.github.palexdev.mfxcore.base.properties.NodeProperty;
 import io.github.palexdev.mfxcore.base.properties.PositionProperty;
 import io.github.palexdev.mfxcore.controls.MFXStyleable;
+import io.github.palexdev.mfxcore.input.ShortcutManager;
 import io.github.palexdev.mfxcore.input.WhenEvent;
 import io.github.palexdev.mfxcore.popups.*;
 import io.github.palexdev.mfxcore.popups.menu.MFXMenu.MenuConfig.Builder;
@@ -255,6 +256,9 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
         // Submenus are handled by the cells
         if (getContent() == null)
             peer.setContent(new MFXMenuContent(this));
+
+        // install key shortcuts
+        ShortcutManager.installFor(this);
     }
 
     public void uninstall() {
@@ -267,6 +271,7 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
             kTrigger = null;
         }
         setContent(null);
+        ShortcutManager.uninstallFor(this);
         owner = null;
     }
 

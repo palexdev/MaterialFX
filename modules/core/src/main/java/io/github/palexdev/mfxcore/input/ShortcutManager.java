@@ -87,35 +87,37 @@ public class ShortcutManager {
     /// This is a convenience method that extracts actions from menu items and calls [#installOn(Scene, Action...)]
     /// on the menu's root owner scene. The [Runnable] for the [Action] simply calls [MFXMenuItem.MFXMenuItemBehavior#runAction()].
     ///
+    /// @throws IllegalArgumentException if the menu is not a root menu
     /// @throws IllegalStateException if the menu is not installed yet
     public static void installFor(MFXMenu menu) {
-        MFXMenu root = menu.getRootMenu();
-        if (!root.isInstalled()) throw new IllegalStateException("Menu is not installed yet, therefore owner is null!");
-        Action[] actions = menu.getItems().stream()
+        if (!menu.isRootMenu()) throw new IllegalArgumentException("Menu is not a root menu!");
+        if (!menu.isInstalled()) throw new IllegalStateException("Menu is not installed yet, therefore owner is null!");
+        Action[] actions = menu.getAllItems()
             .filter(it -> it.getShortcut() != null)
             .map(it -> new Action(
                 it.getShortcut(),
-                () -> ((MFXMenuItem.MFXMenuItemBehavior) it.getBehavior()).runAction())
-            )
+                () -> ((MFXMenuItem.MFXMenuItemBehavior) it.getBehavior()).runAction()
+            ))
             .toArray(Action[]::new);
-        installOn(root.getOwner(), actions);
+        installOn(menu.getOwner(), actions);
     }
 
     /// Removes shortcuts for all [MFXMenuItem]s in the given [MFXMenu] that have a shortcut.<br >
     /// Basically the inverse of [#installFor(MFXMenu)].
     ///
+    /// @throws IllegalArgumentException if the menu is not a root menu
     /// @throws IllegalStateException if the menu is not installed yet
     public static void uninstallFor(MFXMenu menu) {
-        MFXMenu root = menu.getRootMenu();
-        if (!root.isInstalled()) throw new IllegalStateException("Menu is not installed yet, therefore owner is null!");
-        Action[] actions = menu.getItems().stream()
+        if (!menu.isRootMenu()) throw new IllegalArgumentException("Menu is not a root menu!");
+        if (!menu.isInstalled()) throw new IllegalStateException("Menu is not installed yet, therefore owner is null!");
+        Action[] actions = menu.getAllItems()
             .filter(it -> it.getShortcut() != null)
             .map(it -> new Action(
                 it.getShortcut(),
-                null) // since we don's include the Runnable in equality checks, we don't need to instantiate them here
-            )
+                null // since we don's include the Runnable in equality checks, we don't need to instantiate them here
+            ))
             .toArray(Action[]::new);
-        uninstallFrom(root.getOwner(), actions);
+        uninstallFrom(menu.getOwner(), actions);
     }
 
     /// Installs the given [Action]s on the scene of the specified [Node].
