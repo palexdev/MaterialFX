@@ -18,6 +18,9 @@
 
 package io.github.palexdev.mfxcore.input;
 
+import java.util.Map;
+import java.util.Optional;
+
 import io.github.palexdev.mfxcore.enums.OS;
 import io.github.palexdev.mfxcore.utils.OSUtils;
 import javafx.scene.input.KeyCode;
@@ -50,6 +53,12 @@ public enum KeyModifier {
     SHIFT(KeyCode.SHIFT),
     ;
 
+    static final Map<KeyCode, KeyModifier> KEY_MODIFIERS = Map.of(
+        KeyCode.ALT, ALT,
+        KeyCode.CONTROL, CONTROL,
+        KeyCode.META, META,
+        KeyCode.SHIFT, SHIFT
+    );
     final KeyCode keyCode;
 
     KeyModifier(KeyCode keyCode) {
@@ -69,6 +78,12 @@ public enum KeyModifier {
         } catch (IllegalArgumentException ex) {
             return null;
         }
+    }
+
+    /// @return a the [KeyModifier] associated with the given [KeyCode] or throws if the given argument is invalid
+    public static KeyModifier fromKeyCode(KeyCode keyCode) {
+        return Optional.ofNullable(KEY_MODIFIERS.get(keyCode))
+            .orElseThrow(() -> new IllegalArgumentException("No KeyModifier found for KeyCode: " + keyCode));
     }
 
     /// Converts the modifier enum constant to a "display" string, the first letter is capital, the others lower case.
