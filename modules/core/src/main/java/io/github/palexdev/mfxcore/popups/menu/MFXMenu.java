@@ -152,10 +152,11 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
     };
 
     private Node owner;
+    private boolean anchorBasedPositioning;
     private Placement placement;
     private MouseButton triggerButton;
+    private boolean filterMouseEvents;
     private boolean enableKeyTrigger;
-    private boolean anchorBasedPositioning;
     private MenuConfig config;
     private final ObservableList<MFXMenuItem> items;
 
@@ -237,6 +238,7 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
                 }
             })
             .otherwise((_, _) -> hide())
+            .asFilter(filterMouseEvents)
             .register();
 
         if (enableKeyTrigger) {
@@ -581,11 +583,12 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
     /// - The `animationProvider` parameter allows you to set the animation for both `root` menus and all the submenus
     /// in the cascade. This is needed because submenus are built internally by [MFXMenuItems][MFXMenuItem] (check default skin).
     public record MenuConfig(
+        boolean anchorBasedPositioning,
         Placement placement,
         Position offset,
         MouseButton triggerButton,
+        boolean filterMouseEvents,
         boolean enableKeyTrigger,
-        boolean anchorBasedPositioning,
         Supplier<PopupAnimation> animationProvider,
         Node styleableParent
     ) implements Config<MFXMenu> {
@@ -593,11 +596,12 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
 
         @Override
         public void apply(MFXMenu menu) {
+            menu.anchorBasedPositioning = anchorBasedPositioning;
             menu.placement = placement;
             menu.setOffset(offset);
             menu.triggerButton = triggerButton;
+            menu.filterMouseEvents = filterMouseEvents;
             menu.enableKeyTrigger = enableKeyTrigger;
-            menu.anchorBasedPositioning = anchorBasedPositioning;
             menu.setAnimation(animationProvider != null ? animationProvider.get() : null);
             menu.peer.setStyleableParent(styleableParent);
             menu.config = this;
@@ -615,13 +619,19 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
         }
 
         public static final class Builder {
+            private boolean anchorBasedPositioning = true;
             private Placement placement = Placement.placement(Pos.BOTTOM_LEFT, Direction.AFTER, Direction.AFTER);
             private Position offset = Position.origin();
             private MouseButton triggerButton = MouseButton.SECONDARY;
+            private boolean filterMouseEvents = false;
             private boolean enableKeyTrigger = false;
-            private boolean anchorBasedPositioning = true;
             private Supplier<PopupAnimation> animationProvider = null;
             private Node styleableParent;
+
+            public Builder anchorBasedPositioning(boolean anchorBasedPositioning) {
+                this.anchorBasedPositioning = anchorBasedPositioning;
+                return this;
+            }
 
             public Builder placement(Placement placement) {
                 this.placement = placement;
@@ -638,13 +648,13 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
                 return this;
             }
 
-            public Builder enableKeyTrigger(boolean enableKeyTrigger) {
-                this.enableKeyTrigger = enableKeyTrigger;
+            public Builder filterMouseEvents(boolean filterMouseEvents) {
+                this.filterMouseEvents = filterMouseEvents;
                 return this;
             }
 
-            public Builder anchorBasedPositioning(boolean anchorBasedPositioning) {
-                this.anchorBasedPositioning = anchorBasedPositioning;
+            public Builder enableKeyTrigger(boolean enableKeyTrigger) {
+                this.enableKeyTrigger = enableKeyTrigger;
                 return this;
             }
 
@@ -660,11 +670,12 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
 
             public MenuConfig build() {
                 return new MenuConfig(
+                    anchorBasedPositioning,
                     placement,
                     offset,
                     triggerButton,
+                    filterMouseEvents,
                     enableKeyTrigger,
-                    anchorBasedPositioning,
                     animationProvider,
                     styleableParent
                 );
