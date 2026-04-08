@@ -19,6 +19,7 @@
 package io.github.palexdev.mfxcore.popups.menu;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import io.github.palexdev.mfxcore.behavior.MFXBehavior;
@@ -318,7 +319,10 @@ public class MFXMenuItem extends MFXLabeled {
             MFXMenuItem item = getNode();
             if (item.getAction() != null) {
                 item.getAction().run();
-                item.getMenu().getRootMenu().hide();
+                // if the menu is not available, it means the action was probably run "manually", without the menu being visible.
+                Optional.ofNullable(item.getMenu())
+                    .map(MFXMenu::getRootMenu)
+                    .ifPresent(MFXMenu::hide);
             }
         }
 
