@@ -1,3 +1,12 @@
+## 25.6.1 - 09/04/2026 - 978316b5
+
+### Refactoring
+
+- <19c7a1de> KeyStroke: return an unmodifiable set of modifiers, do not use + separator for Mac modifiers
+- <f51aa49f> KeyModifier: handle SHORTCUT key, use symbols for Mac modifiers, reorder constants according to conventions
+
+
+
 ## 25.6.0 - 08/04/2026 - 6986acd6
 
 ### Features
