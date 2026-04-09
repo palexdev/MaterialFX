@@ -18,9 +18,8 @@
 
 package io.github.palexdev.mfxcore.input;
 
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import io.github.palexdev.mfxcore.enums.OS;
 import io.github.palexdev.mfxcore.utils.OSUtils;
@@ -46,24 +45,46 @@ import javafx.scene.input.KeyEvent;
 /// according to [KeyCodeUtils#isValidShortcutKey(KeyCode)].
 ///
 /// To display the shortcut in the UI don't use `toString()`, but rather [#toDisplayString()].
-public record KeyStroke(
-    Set<KeyModifier> modifiers,
-    KeyCode key
-) {
+///
+/// #### Implementation Details
+///
+/// The `KeyStroke` class simplifies the definition of key combinations thanks to its simplicity and [KeyModifier] constants.
+/// Unfortunately, there are discrepancies between how a combination is represented in text and which keys actually come
+/// from the OS/JavaFX.<br >
+/// One example is the [KeyModifier#SHORTCUT] modifier, which technically does not exist, and it's a special virtual key
+/// from JavaFX which code depends on the OS. This means that if you register an action for a combination with such modifier
+/// (for example, in [KeyMap]), you would never get an event that matches such combination. So, to fix this annoying issue,
+/// the class stores the modifers both as [an enum set of `KeyModifiers`][#modifiers()] and [a set of `KeyCodes`][#modifiersAsCodes()].<br >
+/// In comparisons (equals/hashCode), only the latter collection is taken into account, while in [#toDisplayString()] only
+/// the first is used.
+public final class KeyStroke {
+
+    //================================================================================
+    // Properties
+    //================================================================================
+
+    private final EnumSet<KeyModifier> modifiers;
+    private final Set<KeyCode> modifiersToCodes;
+    private final KeyCode key;
 
     //================================================================================
     // Constructors
     //================================================================================
-    public KeyStroke {
+
+    private KeyStroke(EnumSet<KeyModifier> modifiers, KeyCode key) {
+        this.modifiers = modifiers;
+        this.modifiersToCodes = modifiers.stream().map(KeyModifier::keyCode).collect(Collectors.toSet());
+        this.key = key;
+    }
+
+    public KeyStroke(KeyCode key, KeyModifier... modifiers) {
         if (key.isModifierKey())
             throw new IllegalArgumentException("Cannot use modifier key as shortcut key: " + key);
         if (!KeyCodeUtils.isValidShortcutKey(key))
             throw new IllegalArgumentException("Invalid shortcut key: " + key);
-    }
-
-    public KeyStroke(KeyCode code, KeyModifier... modifiers) {
-        this(EnumSet.noneOf(KeyModifier.class), code);
-        Collections.addAll(this.modifiers, modifiers);
+        EnumSet<KeyModifier> set = EnumSet.noneOf(KeyModifier.class);
+        Collections.addAll(set, modifiers);
+        this(set, key);
     }
 
     /// Creates a new [KeyStroke] using only [KeyCode] objects, expects arrays in this format: `<modifier>...,<key>`<br >
@@ -151,8 +172,44 @@ public record KeyStroke(
         return sb.toString();
     }
 
+    //================================================================================
+    // Overridden Methods
+    //================================================================================
+
     @Override
-    public Set<KeyModifier> modifiers() {
-        return Collections.unmodifiableSet(modifiers);
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (KeyStroke) obj;
+        return Objects.equals(this.modifiersToCodes, that.modifiersToCodes) &&
+               Objects.equals(this.key, that.key);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(modifiersToCodes, key);
+    }
+
+    @Override
+    public String toString() {
+        return "KeyStroke[" +
+               "modifiers=" + modifiers + ", " +
+               "key=" + key + ']';
+    }
+
+    //================================================================================
+    // Getters/Setters
+    //================================================================================
+
+    public EnumSet<KeyModifier> modifiers() {
+        return EnumSet.copyOf(modifiers);
+    }
+
+    public Set<KeyCode> modifiersAsCodes() {
+        return modifiersToCodes;
+    }
+
+    public KeyCode key() {
+        return key;
     }
 }

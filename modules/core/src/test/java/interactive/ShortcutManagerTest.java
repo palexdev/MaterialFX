@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import io.github.palexdev.mfxcore.input.KeyModifier;
+import io.github.palexdev.mfxcore.input.KeyStroke;
 import io.github.palexdev.mfxcore.input.ShortcutManager;
 import javafx.event.Event;
 import javafx.event.EventTarget;
@@ -41,6 +43,7 @@ import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
+import static io.github.palexdev.mfxcore.input.KeyStroke.keyStroke;
 import static io.github.palexdev.mfxcore.input.ShortcutManager.Action.action;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -136,6 +139,16 @@ public class ShortcutManagerTest {
 
         fire(scene, KeyCode.S, KeyCode.CONTROL, KeyCode.SHIFT);
         assertEquals(0, c.get());
+    }
+
+    @Test
+    @DisplayName("installOn(Scene): Shortcut modifier check")
+    void installOnScene_shortcutModifier() {
+        AtomicInteger c = new AtomicInteger();
+        ShortcutManager.installOn(scene, action(keyStroke(KeyCode.SHORTCUT, KeyCode.A), c::incrementAndGet));
+
+        fire(scene, KeyCode.A, KeyModifier.SHORTCUT.keyCode());
+        assertEquals(1, c.get());
     }
 
     @Test
