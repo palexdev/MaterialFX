@@ -1,3 +1,12 @@
+## 25.6.2 - 09/04/2026 - d68e6202
+
+### Refactoring
+
+- <d6f51108> KeyStroke: separate visual representation from actual key codes because modifiers are OS dependent
+- <901bf93e> MFXMenuItem, MFXCheckMenuItem: do not run the action if the item is disabled
+
+
+
 ## 25.6.1 - 09/04/2026 - 978316b5
 
 ### Refactoring
