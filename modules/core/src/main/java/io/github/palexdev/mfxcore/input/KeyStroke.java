@@ -20,7 +20,10 @@ package io.github.palexdev.mfxcore.input;
 
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.Set;
 
+import io.github.palexdev.mfxcore.enums.OS;
+import io.github.palexdev.mfxcore.utils.OSUtils;
 import io.github.palexdev.mfxcore.utils.fx.KeyCodeUtils;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
@@ -44,7 +47,7 @@ import javafx.scene.input.KeyEvent;
 ///
 /// To display the shortcut in the UI don't use `toString()`, but rather [#toDisplayString()].
 public record KeyStroke(
-    EnumSet<KeyModifier> modifiers,
+    Set<KeyModifier> modifiers,
     KeyCode key
 ) {
 
@@ -142,8 +145,14 @@ public record KeyStroke(
     /// Everything is separated by `+` signs.
     public String toDisplayString() {
         StringBuilder sb = new StringBuilder();
-        modifiers.forEach(m -> sb.append(m).append("+"));
+        String separator = OSUtils.os() == OS.Mac ? "" : "+";
+        modifiers.forEach(m -> sb.append(m).append(separator));
         sb.append(KeyCodeUtils.toDisplayString(key));
         return sb.toString();
+    }
+
+    @Override
+    public Set<KeyModifier> modifiers() {
+        return Collections.unmodifiableSet(modifiers);
     }
 }
