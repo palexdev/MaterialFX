@@ -189,6 +189,7 @@ public class MFXCheckMenuItem extends MFXMenuItem implements Selectable {
         @Override
         public void runAction() {
             MFXCheckMenuItem item = getNodeAs(MFXCheckMenuItem.class);
+            if (item.isDisabled()) return;
             item.toggle();
             if (item.getAction() != null) {
                 item.getAction().run();

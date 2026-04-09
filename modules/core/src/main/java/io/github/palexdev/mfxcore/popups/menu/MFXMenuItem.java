@@ -317,6 +317,7 @@ public class MFXMenuItem extends MFXLabeled {
 
         public void runAction() {
             MFXMenuItem item = getNode();
+            if (item.isDisabled()) return;
             if (item.getAction() != null) {
                 item.getAction().run();
                 // if the menu is not available, it means the action was probably run "manually", without the menu being visible.
