@@ -30,34 +30,52 @@ import javafx.scene.input.KeyCode;
 /// - `CONTROL`
 /// - `META`, which is either the Win key or Cmd key on Mac
 /// - `SHIFT`
+/// - `SHORTCUT`, which is a virtual OS-dependant modifier (Ctrl on Windows, Cmd on Mac)
 ///
 /// Each modifier is associated with a [KeyCode] from JavaFX.
 public enum KeyModifier {
-    ALT(KeyCode.ALT),
     CONTROL(KeyCode.CONTROL) {
         @Override
         public String toString() {
-            return "Ctrl";
+            return OSUtils.os() == OS.Mac ? "⌃" : "Ctrl";
+        }
+    },
+    ALT(KeyCode.ALT) {
+        @Override
+        public String toString() {
+            return OSUtils.os() == OS.Mac ? "⌥" : "Alt";
+        }
+    },
+    SHIFT(KeyCode.SHIFT) {
+        @Override
+        public String toString() {
+            return OSUtils.os() == OS.Mac ? "⇧" : "Shift";
         }
     },
     META(KeyCode.META) {
         @Override
         public String toString() {
             return switch (OSUtils.os()) {
-                case Mac -> "Cmd";
+                case Mac -> "⌘";
                 case Windows -> "Win";
                 default -> "Meta";
             };
         }
     },
-    SHIFT(KeyCode.SHIFT),
+    SHORTCUT(OSUtils.os() == OS.Mac ? KeyCode.META : KeyCode.CONTROL) {
+        @Override
+        public String toString() {
+            return OSUtils.os() == OS.Mac ? "⌘" : "Ctrl";
+        }
+    },
     ;
 
     static final Map<KeyCode, KeyModifier> KEY_MODIFIERS = Map.of(
         KeyCode.ALT, ALT,
         KeyCode.CONTROL, CONTROL,
         KeyCode.META, META,
-        KeyCode.SHIFT, SHIFT
+        KeyCode.SHIFT, SHIFT,
+        KeyCode.SHORTCUT, SHORTCUT
     );
     final KeyCode keyCode;
 
@@ -73,6 +91,7 @@ public enum KeyModifier {
     public static KeyModifier fromString(String s) {
         if ("win".equalsIgnoreCase(s) || "cmd".equalsIgnoreCase(s)) return META;
         if ("ctrl".equalsIgnoreCase(s)) return CONTROL;
+        if ("shortcut".equalsIgnoreCase(s)) return SHORTCUT;
         try {
             return valueOf(s.toUpperCase());
         } catch (IllegalArgumentException ex) {
@@ -84,15 +103,5 @@ public enum KeyModifier {
     public static KeyModifier fromKeyCode(KeyCode keyCode) {
         return Optional.ofNullable(KEY_MODIFIERS.get(keyCode))
             .orElseThrow(() -> new IllegalArgumentException("No KeyModifier found for KeyCode: " + keyCode));
-    }
-
-    /// Converts the modifier enum constant to a "display" string, the first letter is capital, the others lower case.
-    ///
-    /// Exceptions to this rule are:
-    /// - [#CONTROL] which displays the short form "Ctrl"
-    /// - [#META] which returns "Win", "Cmd", "Meta" depending on the [OS]
-    @Override
-    public String toString() {
-        return name().charAt(0) + name().substring(1).toLowerCase();
     }
 }
