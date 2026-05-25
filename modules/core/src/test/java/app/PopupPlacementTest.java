@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.function.Function;
 
 import io.github.palexdev.mfxcore.base.beans.Position;
-import io.github.palexdev.mfxcore.builders.InsetsBuilder;
 import io.github.palexdev.mfxcore.popups.MFXPopup;
 import io.github.palexdev.mfxcore.popups.MFXPopups;
 import io.github.palexdev.mfxcore.utils.fx.AnchorHandlers;
@@ -43,6 +42,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import static io.github.palexdev.mfxcore.observables.When.onInvalidated;
+import static io.github.palexdev.mfxcore.utils.fx.InsetsUtils.top;
 
 public class PopupPlacementTest extends Application {
     static final Label placementInfoLabel = new Label("");
@@ -64,7 +64,7 @@ public class PopupPlacementTest extends Application {
         );
 
         StackPane.setAlignment(placementInfoLabel, Pos.TOP_CENTER);
-        StackPane.setMargin(placementInfoLabel, InsetsBuilder.top(8.0).get());
+        StackPane.setMargin(placementInfoLabel, top(8.0).get());
 
         StackPane root = new StackPane(region, placementInfoLabel);
         Scene scene = new Scene(root, 400, 400);

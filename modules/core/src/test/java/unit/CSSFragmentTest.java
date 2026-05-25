@@ -18,12 +18,12 @@
 
 package unit;
 
-import io.github.palexdev.mfxcore.builders.InsetsBuilder;
 import io.github.palexdev.mfxcore.utils.fx.CSSFragment;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import org.junit.jupiter.api.Test;
 
+import static io.github.palexdev.mfxcore.utils.fx.InsetsUtils.uniform;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CSSFragmentTest {
@@ -91,8 +91,8 @@ public class CSSFragmentTest {
         String built = CSSFragment.Builder.build()
             .select(pane)
             .border(Color.RED)
-            .borderRadius(InsetsBuilder.uniform(12))
-            .padding(InsetsBuilder.uniform(10))
+            .borderRadius(uniform(12))
+            .padding(uniform(10))
             .select(pane, ".label")
             .textFill(Color.GREEN)
             .fontSize(24.0)

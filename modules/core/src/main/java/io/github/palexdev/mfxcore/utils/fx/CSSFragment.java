@@ -21,8 +21,8 @@ package io.github.palexdev.mfxcore.utils.fx;
 import java.util.Base64;
 import java.util.Objects;
 
-import io.github.palexdev.mfxcore.builders.InsetsBuilder;
 import io.github.palexdev.mfxcore.controls.Text;
+import io.github.palexdev.mfxcore.utils.fx.InsetsUtils.InsetsBuilder;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.css.Styleable;
@@ -391,7 +391,7 @@ public class CSSFragment {
         }
 
         public Builder backgroundInsets(Insets val) {
-            style("-fx-background-insets: " + InsetsBuilder.stringify(val));
+            style("-fx-background-insets: " + InsetsUtils.stringify(val));
             return this;
         }
 
@@ -406,7 +406,7 @@ public class CSSFragment {
 
         // Insets cover the vast majority of use cases
         public Builder backgroundRadius(Insets val) {
-            style("-fx-background-radius: " + InsetsBuilder.stringify(val));
+            style("-fx-background-radius: " + InsetsUtils.stringify(val));
             return this;
         }
 
@@ -431,7 +431,7 @@ public class CSSFragment {
         }
 
         public Builder borderInsets(Insets val) {
-            style("-fx-border-insets: " + InsetsBuilder.stringify(val));
+            style("-fx-border-insets: " + InsetsUtils.stringify(val));
             return this;
         }
 
@@ -446,7 +446,7 @@ public class CSSFragment {
 
         // Insets cover the vast majority of use cases
         public Builder borderRadius(Insets val) {
-            style("-fx-border-radius: " + InsetsBuilder.stringify(val));
+            style("-fx-border-radius: " + InsetsUtils.stringify(val));
             return this;
         }
 
@@ -466,7 +466,7 @@ public class CSSFragment {
         }
 
         public Builder padding(Insets val) {
-            style("-fx-padding: " + InsetsBuilder.stringify(val));
+            style("-fx-padding: " + InsetsUtils.stringify(val));
             return this;
         }
 

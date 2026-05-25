@@ -22,7 +22,6 @@ import io.github.palexdev.mfxcomponents.controls.MFXCheckbox;
 import io.github.palexdev.mfxcomponents.controls.MFXSurface;
 import io.github.palexdev.mfxcomponents.skins.base.MFXLabeledSkin;
 import io.github.palexdev.mfxcore.behavior.MFXBehavior;
-import io.github.palexdev.mfxcore.builders.InsetsBuilder;
 import io.github.palexdev.mfxcore.controls.BoundLabel;
 import io.github.palexdev.mfxcore.controls.MFXLabeled;
 import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
@@ -46,6 +45,7 @@ import javafx.scene.paint.Color;
 
 import static io.github.palexdev.mfxcore.input.WhenEvent.intercept;
 import static io.github.palexdev.mfxcore.observables.When.observe;
+import static io.github.palexdev.mfxcore.utils.fx.InsetsUtils.uniform;
 
 /// Default skin implementation for all [MFXCheckboxes][MFXCheckbox]. Extends [MFXLabeledSkin].
 ///
@@ -88,7 +88,7 @@ public class MFXCheckboxSkin extends MFXLabeledSkin {
         rg.setClipSupplier(() -> {
             Region clip = new Region();
             clip.setBackground(new Background(new BackgroundFill(
-                Color.WHITE, InsetsBuilder.uniform(999.0).toRadius(false), Insets.EMPTY))
+                Color.WHITE, uniform(999.0).toRadius(false), Insets.EMPTY))
             );
             return clip;
         });

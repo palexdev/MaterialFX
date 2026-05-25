@@ -23,7 +23,6 @@ import java.util.LinkedList;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import io.github.palexdev.mfxcore.builders.InsetsBuilder;
 import io.github.palexdev.mfxcore.input.WhenEvent;
 import io.github.palexdev.mfxcore.popups.notifications.MFXNotificationPane;
 import io.github.palexdev.mfxcore.popups.notifications.Notification;
@@ -37,6 +36,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import static io.github.palexdev.mfxcore.utils.fx.InsetsUtils.uniform;
+
 public class Playground extends Application {
 
     @Override
@@ -47,7 +48,7 @@ public class Playground extends Application {
 
         MFXNotificationPane np = new MFXNotificationPane();
         np.setAlignment(Pos.TOP_RIGHT);
-        np.setPadding(InsetsBuilder.uniform(10.0).get());
+        np.setPadding(uniform(10.0).get());
         StackPane.setAlignment(np, Pos.TOP_RIGHT);
         np.setMaxVisible(3);
 

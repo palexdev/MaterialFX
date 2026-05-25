@@ -19,7 +19,6 @@
 package io.github.palexdev.mfxcomponents.skins;
 
 import io.github.palexdev.mfxcomponents.controls.MFXButtonsGroup;
-import io.github.palexdev.mfxcore.builders.InsetsBuilder;
 import io.github.palexdev.mfxcore.controls.MFXSkinBase;
 import io.github.palexdev.mfxcore.observables.When;
 import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
@@ -33,6 +32,8 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+
+import static io.github.palexdev.mfxcore.utils.fx.InsetsUtils.uniform;
 
 /// Default skin implementation for all [MFXButtonsGroups][MFXButtonsGroup].
 ///
@@ -71,7 +72,7 @@ public class MFXButtonsGroupSkin extends MFXSkinBase<MFXButtonsGroup> {
         Region clip = new Region();
         clip.setBackground(new Background(new BackgroundFill(
             Color.WHITE,
-            InsetsBuilder.uniform(999.0).toRadius(false),
+            uniform(999.0).toRadius(false),
             Insets.EMPTY))
         );
         getSkinnable().setClip(clip);

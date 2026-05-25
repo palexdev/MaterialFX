@@ -19,7 +19,6 @@
 package io.github.palexdev.mfxcore.utils.fx;
 
 import io.github.palexdev.mfxcore.base.beans.Position;
-import io.github.palexdev.mfxcore.builders.InsetsBuilder;
 import javafx.geometry.*;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -40,11 +39,11 @@ public class LayoutUtils {
 
         Insets snappedMargin = margin == null ? Insets.EMPTY : margin;
         if (snapToPixel && snappedMargin != Insets.EMPTY) {
-            snappedMargin = InsetsBuilder.build()
-                .withTop(parent.snapSpaceY(snappedMargin.getTop()))
-                .withRight(parent.snapSpaceX(snappedMargin.getRight()))
-                .withBottom(parent.snapSpaceY(snappedMargin.getBottom()))
-                .withLeft(parent.snapSpaceX(snappedMargin.getLeft()))
+            snappedMargin = InsetsUtils.insets()
+                .top(parent.snapSpaceY(snappedMargin.getTop()))
+                .right(parent.snapSpaceX(snappedMargin.getRight()))
+                .bottom(parent.snapSpaceY(snappedMargin.getBottom()))
+                .left(parent.snapSpaceX(snappedMargin.getLeft()))
                 .get();
         }
 
@@ -56,11 +55,11 @@ public class LayoutUtils {
     public static double computeXPosition(Region parent, Node child, double areaX, double areaWidth, Insets margin, boolean snapMargin, HPos hAlignment, boolean snapToPixel, boolean computeSizes) {
         Insets snappedMargin = margin == null ? Insets.EMPTY : margin;
         if (snapMargin && snappedMargin != Insets.EMPTY) {
-            snappedMargin = InsetsBuilder.build()
-                .withTop(parent.snapSpaceY(snappedMargin.getTop()))
-                .withRight(parent.snapSpaceX(snappedMargin.getRight()))
-                .withBottom(parent.snapSpaceY(snappedMargin.getBottom()))
-                .withLeft(parent.snapSpaceX(snappedMargin.getLeft()))
+            snappedMargin = InsetsUtils.insets()
+                .top(parent.snapSpaceY(snappedMargin.getTop()))
+                .right(parent.snapSpaceX(snappedMargin.getRight()))
+                .bottom(parent.snapSpaceY(snappedMargin.getBottom()))
+                .left(parent.snapSpaceX(snappedMargin.getLeft()))
                 .get();
         }
 
@@ -74,11 +73,11 @@ public class LayoutUtils {
     public static double computeYPosition(Region parent, Node child, double areaY, double areaHeight, double areaBaselineOffset, Insets margin, boolean snapMargin, VPos vAlignment, boolean snapToPixel, boolean computeSizes) {
         Insets snappedMargin = margin == null ? Insets.EMPTY : margin;
         if (snapMargin) {
-            snappedMargin = InsetsBuilder.build()
-                .withTop(parent.snapSpaceY(snappedMargin.getTop()))
-                .withRight(parent.snapSpaceX(snappedMargin.getRight()))
-                .withBottom(parent.snapSpaceY(snappedMargin.getBottom()))
-                .withLeft(parent.snapSpaceX(snappedMargin.getLeft()))
+            snappedMargin = InsetsUtils.insets()
+                .top(parent.snapSpaceY(snappedMargin.getTop()))
+                .right(parent.snapSpaceX(snappedMargin.getRight()))
+                .bottom(parent.snapSpaceY(snappedMargin.getBottom()))
+                .left(parent.snapSpaceX(snappedMargin.getLeft()))
                 .get();
         }
 

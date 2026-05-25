@@ -25,7 +25,6 @@ module mfx.core {
     exports io.github.palexdev.mfxcore.behavior;
 
     // Builders
-    exports io.github.palexdev.mfxcore.builders;
     exports io.github.palexdev.mfxcore.builders.base;
     exports io.github.palexdev.mfxcore.builders.bindings;
     exports io.github.palexdev.mfxcore.builders.nodes;
