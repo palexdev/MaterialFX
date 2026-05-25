@@ -1,3 +1,11 @@
+## 25.6.4 - 25/05/2026 - 8a46ead5
+
+### Refactoring
+
+- <1c118c59> InsetsBuilder: fix oversight
+
+
+
 ## 25.6.3 - 25/05/2026 - 0b0a3309
 
 ### Refactoring
