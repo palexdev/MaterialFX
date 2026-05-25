@@ -1,6 +1,8 @@
 import groovy.transform.Field
 import org.apache.tools.ant.taskdefs.condition.Os
 
+import java.nio.file.Files
+
 // Special handling for Windows. Fuck. This. Shit.
 @Field var isWindows = (Os.isFamily(Os.FAMILY_WINDOWS))
 
@@ -8,11 +10,12 @@ tasks.register("processCSS") {
     doLast {
         def rootDir = rootProject.projectDir.absolutePath
         def resDir = new File("$rootDir/modules/resources/src/main/resources/io/github/palexdev/mfxresources/sass/themes")
-        def dirs = resDir.listFiles()
-        if (dirs == null || dirs.length == 0) return
-        List<File> themesDirs = Arrays.stream(dirs)
-                .filter(File::isDirectory)
-                .toList()
+        def files = Files.walk(resDir.toPath())
+                .filter(p -> {
+                    def name = p.getFileName().toString()
+                    return !Files.isDirectory(p) && name.endsWith(".css") && !name.startsWith("tmp") && !name.contains("preset")
+                }).toList()
+        if (files.isEmpty()) return
 
         // Check if npm, cleancss-cli and cssbeautify-cli are installed on the host
         if (!execute(["npm", "-v"])) {
@@ -29,36 +32,30 @@ tasks.register("processCSS") {
         }
         logger.info("All dependencies have been found")
 
-        themesDirs.each { dir ->
-            dir.eachFileRecurse {
-                def name = it.name
-                def path = it.absolutePath
-                if (!name.startsWith("tmp") &&
-                    !name.contains("preset") &&
-                    name.endsWith(".css")) {
-                    // Unfortunately, doesn't run very well on SCSS files
-                    def tmp = new File("${dir}/tmp.css")
-                    logger.warn("Optimizing: $name")
-                    execute([
-                            "cleancss",
-                            "-O2", "specialComments:all",
-                            "--format", "beautify",
-                            "--inline", "none",
-                            "${path}" as String,
-                            "-o", "${tmp}" as String
-                    ], new File(path).parentFile)
+        files.each {
+            def name = it.getFileName().toString()
+            def parent = it.getParent().toAbsolutePath()
+            def tmp = new File("${parent}/tmp.css")
 
-                    logger.warn("Beautifying: $name")
-                    execute([
-                            "cssbeautify-cli",
-                            "-i2",
-                            "-f", "${tmp}" as String,
-                            "-w", "${path}" as String
-                    ], new File(path).parentFile)
+            logger.lifecycle("Optimizing: $name")
+            execute([
+                    "cleancss",
+                    "-O2", "specialComments:all",
+                    "--format", "beautify",
+                    "--inline", "none",
+                    "${it}" as String,
+                    "-o", "${tmp}" as String
+            ], parent.toFile())
 
-                    delete(tmp)
-                }
-            }
+            logger.lifecycle("Beautifying: $name")
+            execute([
+                    "cssbeautify-cli",
+                    "-i2",
+                    "-f", "${tmp}" as String,
+                    "-w", "${it}" as String
+            ], parent.toFile())
+
+            delete(tmp)
         }
     }
 }
