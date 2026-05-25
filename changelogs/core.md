@@ -1,3 +1,11 @@
+## 25.6.3 - 25/05/2026 - 0b0a3309
+
+### Refactoring
+
+- <58625458> Review, move and rename InsetsBuilder utility
+
+
+
 ## 25.6.2 - 09/04/2026 - d68e6202
 
 ### Refactoring
