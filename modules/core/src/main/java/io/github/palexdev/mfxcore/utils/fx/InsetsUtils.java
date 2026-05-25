@@ -34,8 +34,8 @@ public class InsetsUtils {
     // Static Methods
     //================================================================================
 
-    public static InsetsUtils insets() {
-        return new InsetsUtils();
+    public static InsetsBuilder insets() {
+        return new InsetsBuilder();
     }
 
     public static InsetsBuilder uniform(double all) {
