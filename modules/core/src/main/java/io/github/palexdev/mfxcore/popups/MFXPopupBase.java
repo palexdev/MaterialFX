@@ -57,6 +57,8 @@ public abstract class MFXPopupBase<P extends Window & Peer, O> implements MFXPop
     private final NodeProperty content = new NodeProperty() {
         @Override
         protected void invalidated() {
+            Node content = get();
+            if (content != null && animation != null) animation.init(MFXPopupBase.this, content);
             onContentChanged();
         }
     };
