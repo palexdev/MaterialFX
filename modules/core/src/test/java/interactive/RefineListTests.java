@@ -18,70 +18,253 @@
 
 package interactive;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import io.github.palexdev.mfxcore.collections.RefineList;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
+import javafx.collections.ListChangeListener;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.testfx.framework.junit5.ApplicationExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(ApplicationExtension.class)
-public class RefineListTests {
-    private final ObservableList<String> source = FXCollections.observableArrayList("A", "B", "C", "D", "E");
+class RefineListTests {
+
+    private RefineList<Integer> list;
+
+    @BeforeAll
+    static void init() {
+        Platform.startup(() -> {});
+    }
+
+    @BeforeEach
+    void setUp() {
+        list = new RefineList<>(FXCollections.observableArrayList(5, 3, 1, 4, 2));
+    }
+
+    //================================================================================
+    // Read/Write Contract
+    //================================================================================
 
     @Test
-    public void sortTest1() {
-        RefineList<String> transformed = new RefineList<>(source);
-        transformed.setComparator(Comparator.reverseOrder());
-
-        assertEquals("A", transformed.getView().get(4));
-        assertEquals(0, transformed.getView().indexOf("E"));
-        assertEquals(4, transformed.viewToSource(0));
-        assertEquals(4, transformed.sourceToView(0));
+    void readsDelegateToView() {
+        list.setPredicate(n -> n > 2);
+        // src has 5 elements, view should expose only 3
+        assertEquals(3, list.size());
     }
 
     @Test
-    public void sortAndFilterTest1() {
-        RefineList<String> transformed = new RefineList<>(source);
-        transformed.setComparator(Comparator.reverseOrder());
-        transformed.setPredicate(s -> s.equals("A") || s.equals("C") || s.equals("E"));
-
-        assertThrows(IndexOutOfBoundsException.class, () -> transformed.getView().get(4));
-        assertEquals("C", transformed.getView().get(1));
-        assertEquals(0, transformed.getView().indexOf("E"));
-        assertEquals(2, transformed.viewToSource(1));
-        assertTrue(transformed.sourceToView(1) < 0);
+    void writesGoToSource() {
+        list.setPredicate(n -> n > 2);
+        list.add(10);
+        // src now has 6 elements, view should expose 4 (> 2)
+        assertEquals(4, list.size());
+        assertTrue(list.getSource().contains(10));
     }
 
     @Test
-    public void testJavaFX1() {
-        SortedList<String> sorted = new SortedList<>(source);
-        sorted.setComparator(Comparator.reverseOrder());
-
-        assertEquals("A", sorted.get(4));
-        assertEquals(0, sorted.indexOf("E"));
-        assertEquals(4, sorted.getSourceIndex(0));
-        assertEquals(4, sorted.getViewIndex(0));
+    void sizeReflectsViewNotSource() {
+        assertEquals(5, list.getSource().size());
+        list.setPredicate(n -> n % 2 == 0);
+        assertEquals(2, list.size());         // view: [2, 4]
+        assertEquals(5, list.getSource().size()); // src untouched
     }
 
     @Test
-    public void testJavaFX2() {
-        SortedList<String> sorted = new SortedList<>(source);
-        sorted.setComparator(Comparator.reverseOrder());
+    void getReflectsView() {
+        list.setComparator(Comparator.naturalOrder());
+        assertEquals(1, list.get(0));
+        assertEquals(5, list.get(4));
+    }
 
-        FilteredList<String> filtered = new FilteredList<>(sorted);
-        filtered.setPredicate(s -> s.equals("A") || s.equals("C") || s.equals("E"));
+    @Test
+    void removeByObjectDelegatesToSource() {
+        list.remove(Integer.valueOf(3));
+        assertFalse(list.getSource().contains(3));
+        assertEquals(4, list.getSource().size());
+    }
 
-        assertThrows(IndexOutOfBoundsException.class, () -> filtered.get(4));
-        assertEquals("C", filtered.get(1));
-        assertEquals(0, filtered.indexOf("E"));
-        assertEquals(2, filtered.getSourceIndex(1));
-        assertTrue(filtered.getViewIndex(1) < 0);
+    //================================================================================
+    // Filtering
+    //================================================================================
+
+    @Test
+    void predicateFiltersView() {
+        list.setPredicate(n -> n > 3);
+        assertEquals(2, list.size());
+        assertTrue(list.containsAll(List.of(4, 5)));
+    }
+
+    @Test
+    void clearingPredicateRestoresAll() {
+        list.setPredicate(n -> n > 3);
+        list.setPredicate(null);
+        assertEquals(5, list.size());
+    }
+
+    @Test
+    void predicateDoesNotMutateSource() {
+        list.setPredicate(n -> n > 3);
+        assertEquals(5, list.getSource().size());
+        assertTrue(list.getSource().containsAll(List.of(1, 2, 3, 4, 5)));
+    }
+
+    //================================================================================
+    // Sorting
+    //================================================================================
+
+    @Test
+    void comparatorSortsView() {
+        list.setComparator(Comparator.naturalOrder());
+        assertEquals(List.of(1, 2, 3, 4, 5), new ArrayList<>(list));
+    }
+
+    @Test
+    void reverseComparatorSortsDescending() {
+        list.setComparator(Comparator.reverseOrder());
+        assertEquals(List.of(5, 4, 3, 2, 1), new ArrayList<>(list));
+    }
+
+    @Test
+    void clearingComparatorRestoresSourceOrder() {
+        list.setComparator(Comparator.naturalOrder());
+        list.setComparator(null);
+        assertEquals(new ArrayList<>(list.getSource()), new ArrayList<>(list));
+    }
+
+    @Test
+    void comparatorDoesNotMutateSource() {
+        list.setComparator(Comparator.naturalOrder());
+        assertEquals(List.of(5, 3, 1, 4, 2), list.getSource());
+    }
+
+    //================================================================================
+    // Filter + Sort Combined
+    //================================================================================
+
+    @Test
+    void filterAndSortCombined() {
+        list.setPredicate(n -> n > 2);
+        list.setComparator(Comparator.naturalOrder());
+        assertEquals(List.of(3, 4, 5), new ArrayList<>(list));
+    }
+
+    @Test
+    void filterAndSortSizeIsCorrect() {
+        list.setPredicate(n -> n % 2 != 0);  // odd: 1, 3, 5
+        list.setComparator(Comparator.reverseOrder());
+        assertEquals(3, list.size());
+        assertEquals(List.of(5, 3, 1), new ArrayList<>(list));
+    }
+
+    //================================================================================
+    // Index Mapping
+    //================================================================================
+
+    @Test
+    void sourceToViewWithSortOnly() {
+        // src: [5, 3, 1, 4, 2], sorted asc: [1, 2, 3, 4, 5]
+        // src index 2 = value 1 → view index 0
+        list.setComparator(Comparator.naturalOrder());
+        assertEquals(0, list.sourceToView(2));
+    }
+
+    @Test
+    void viewToSourceWithSortOnly() {
+        // sorted asc: [1, 2, 3, 4, 5]
+        // view index 0 = value 1 → src index 2
+        list.setComparator(Comparator.naturalOrder());
+        assertEquals(2, list.viewToSource(0));
+    }
+
+    @Test
+    void sourceToViewWithFilterUsesFilteredIndex() {
+        // src: [5, 3, 1, 4, 2], predicate n > 2 → filtered: [5, 3, 4]
+        // src index 1 = value 3 → filtered view index 1
+        list.setPredicate(n -> n > 2);
+        assertEquals(1, list.sourceToView(1));
+    }
+
+    @Test
+    void sourceToViewFilteredOutElementReturnsNegative() {
+        // src index 2 = value 1 → filtered out
+        list.setPredicate(n -> n > 2);
+        assertTrue(list.sourceToView(2) < 0);
+    }
+
+    @Test
+    void sourceToViewWithFilterAndSort() {
+        // src: [5, 3, 1, 4, 2]
+        // filter n > 2 → filtered: [5(src0), 3(src1), 4(src3)]
+        // naturalOrder   → view:    [3,       4,       5      ]
+        list.setPredicate(n -> n > 2);
+        list.setComparator(Comparator.naturalOrder());
+
+        assertEquals(0, list.sourceToView(1)); // 3 → view 0
+        assertEquals(1, list.sourceToView(3)); // 4 → view 1
+        assertEquals(2, list.sourceToView(0)); // 5 → view 2
+    }
+
+    @Test
+    void sourceToViewFilteredOutElementIgnoresSortWhenBothActive() {
+        list.setPredicate(n -> n > 2);
+        list.setComparator(Comparator.naturalOrder());
+        assertTrue(list.sourceToView(2) < 0); // 1 is filtered out
+        assertTrue(list.sourceToView(4) < 0); // 2 is filtered out
+    }
+
+    @Test
+    void sourceToViewAndViewToSourceAreInversesWithFilterAndSort() {
+        // For every view index i, sourceToView(viewToSource(i)) must equal i.
+        list.setPredicate(n -> n > 2);
+        list.setComparator(Comparator.naturalOrder());
+
+        for (int viewIdx = 0; viewIdx < list.size(); viewIdx++) {
+            int srcIdx = list.viewToSource(viewIdx);
+            assertEquals(viewIdx, list.sourceToView(srcIdx),
+                "round-trip failed at view index " + viewIdx);
+        }
+    }
+
+    //================================================================================
+    // Observability
+    //================================================================================
+
+    @Test
+    void listenersFireOnAdd() {
+        AtomicInteger changeCount = new AtomicInteger();
+        list.addListener((ListChangeListener<Integer>) c -> changeCount.incrementAndGet());
+        list.add(6);
+        assertEquals(1, changeCount.get());
+    }
+
+    @Test
+    void listenersReflectViewAfterFilter() {
+        List<Integer> observed = new ArrayList<>();
+        list.setPredicate(n -> n > 2);
+        list.addListener((ListChangeListener<Integer>) c -> {
+            while (c.next()) {
+                if (c.wasAdded()) observed.addAll(c.getAddedSubList());
+            }
+        });
+        list.add(4);  // passes filter, should appear in change
+        list.add(1);  // filtered out, should NOT appear in change
+        assertEquals(List.of(4), observed);
+    }
+
+    @Test
+    void removeListenerStopsNotifications() {
+        AtomicInteger changeCount = new AtomicInteger();
+        ListChangeListener<Integer> listener = c -> changeCount.incrementAndGet();
+        list.addListener(listener);
+        list.add(6);
+        list.removeListener(listener);
+        list.add(7);
+        assertEquals(1, changeCount.get());
     }
 }
