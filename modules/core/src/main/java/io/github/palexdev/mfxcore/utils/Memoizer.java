@@ -30,6 +30,7 @@ import java.util.function.Supplier;
 ///
 /// Given a `Function<T, U> fn`, use `Memoizer.memoize(fn)` to get a new function `Function<T, U> mfn`
 /// which you can use from now on to store/cache the results.
+@Deprecated(forRemoval = true)
 public class Memoizer<T, U> {
     public final Map<T, U> cache = new HashMap<>();
 

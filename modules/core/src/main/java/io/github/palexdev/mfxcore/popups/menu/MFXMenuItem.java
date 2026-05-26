@@ -29,7 +29,6 @@ import io.github.palexdev.mfxcore.controls.MFXSkinBase;
 import io.github.palexdev.mfxcore.controls.MFXStyleable;
 import io.github.palexdev.mfxcore.input.KeyStroke;
 import io.github.palexdev.mfxcore.observables.When;
-import io.github.palexdev.mfxcore.utils.Memoizer;
 import io.github.palexdev.mfxcore.utils.fx.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -48,6 +47,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 
 import static io.github.palexdev.mfxcore.input.WhenEvent.intercept;
+import static io.github.palexdev.mfxcore.utils.Functions.cachedSupplier;
 
 /// Base implementation of menu entries to be used in [MFXMenu]. Extends [MFXLabeled] as the most basic entry has at least
 /// three things: an icon, the text, and the shortcut.
@@ -107,7 +107,7 @@ public class MFXMenuItem extends MFXLabeled {
     private final ObservableList<MFXMenuItem> subItems = FXCollections.observableArrayList();
 
     private final TextMeasurementCache tmc;
-    private Supplier<Node> icRetriever = Memoizer.memoize(() -> lookup(".icon"));
+    private Supplier<Node> icRetriever = cachedSupplier(() -> lookup(".icon"));
 
     //================================================================================
     // Constructors
@@ -181,7 +181,7 @@ public class MFXMenuItem extends MFXLabeled {
     @Override
     protected MFXSkinBase<?> buildSkin() {
         // reset cache!
-        icRetriever = Memoizer.memoize(() -> lookup(".icon"));
+        icRetriever = cachedSupplier(() -> lookup(".icon"));
         return super.buildSkin();
     }
 
