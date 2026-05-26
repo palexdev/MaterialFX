@@ -18,6 +18,8 @@
 
 package io.github.palexdev.mfxcore.utils;
 
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -28,6 +30,15 @@ import io.github.palexdev.mfxlocalization.I18N;
 public class StringUtils {
     public static final String EMPTY = "";
     public static final int INDEX_NOT_FOUND = -1;
+
+    public static String readStream(InputStream stream, Charset charset, String or) {
+        try {
+            return new String(stream.readAllBytes(), charset);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return or;
+        }
+    }
 
     /// Finds the difference between two `Strings`.
     ///
