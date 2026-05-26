@@ -54,9 +54,9 @@ public class SelectionGroupProperty extends SimpleObjectProperty<SelectionGroup>
     /// Overridden to correctly handle the addition/removal of a [Selectable] to/from a [SelectionGroup].
     ///
     /// If the `Selectable` was already in a group, it first needs to be removed from it by calling
-    /// [SelectionGroup#remove(Selectable)].
+    /// [SelectionGroup#remove(Selectable...)].
     ///
-    /// Then it's added to the new group with [SelectionGroup#add(Selectable)] method is invoked.
+    /// Then it's added to the new group with [SelectionGroup#add(Selectable...)] method is invoked.
     ///
     /// Calls to `super.set(...)` are issued only if the group is not locked, see [SelectionGroup] and [SelectionGroup#locked()].
     @Override
