@@ -161,9 +161,17 @@ public class MFXTooltip implements MFXPopup<Node>, MFXStyleable {
                 .handle(_ -> hideDelayed())
                 .asFilter()
                 .register(),
-            When.onInvalidated(owner.hoverProperty()).condition(h -> isShowing() && (!h || !owner.isFocused()))
+            When.onInvalidated(owner.hoverProperty())
+                .condition(h -> isShowing() && (!h && !owner.isFocused()))
                 .then(_ -> hideDelayed())
                 .invalidating(owner.focusedProperty())
+                .listen(),
+            When.onInvalidated(contentProperty().flatMap(Node::hoverProperty))
+                .condition(h -> isShowing() && !h)
+                .then(_ -> {
+                    if (timer.getStatus() == Animation.Status.RUNNING) return;
+                    hide();
+                })
                 .listen()
         );
     }
@@ -180,7 +188,10 @@ public class MFXTooltip implements MFXPopup<Node>, MFXStyleable {
 
         if (!isShowing()) return;
         timer.setDuration(outDelay);
-        timer.setOnFinished(_ -> hide());
+        timer.setOnFinished(_ -> {
+            if (getContent() != null && !getContent().isHover())
+                hide();
+        });
         timer.playFromStart();
     }
 
