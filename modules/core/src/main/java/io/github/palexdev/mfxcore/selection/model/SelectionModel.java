@@ -95,6 +95,7 @@ public class SelectionModel<T> implements ISelectionModel<T> {
             .setOnPermutation(p -> replaceSelection(
                 selection.keySet().stream()
                     .map(p::get)
+                    .filter(Objects::nonNull)
                     .toArray(Integer[]::new)
             ))
             .setOnReplace(rep -> {
@@ -360,6 +361,7 @@ public class SelectionModel<T> implements ISelectionModel<T> {
     /// Uses [List#indexOf(Object)] on each item!!
     @Override
     public void replaceSelection(T... items) {
+        if (items.length == 0) return;
         if (allowsMultipleSelection) {
             ObservableMap<Integer, T> newSelection = newMap();
             for (T item : items) {
@@ -417,8 +419,10 @@ public class SelectionModel<T> implements ISelectionModel<T> {
     public void dispose() {
         ehSupplier = null;
         eh = null;
-        lch.dispose();
-        lch = null;
+        if (lch != null) {
+            lch.dispose();
+            lch = null;
+        }
         items.unbind();
         selection.clear();
         selection.set(null);
