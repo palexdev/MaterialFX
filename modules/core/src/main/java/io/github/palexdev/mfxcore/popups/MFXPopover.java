@@ -201,18 +201,11 @@ public class MFXPopover extends MFXPopupBase<PopupPeer, Node> {
 
         {
             getScene().setRoot(root);
-
-            // You can complain to the JavaFX dick heads for this
-            // For some fucking stupid reason they take into account the content's local bounds (clips and effects)
-            // and shift the popup to some fucking arbitrary position.
-            // Oh, and of course all of this is private bullshit that cannot be overridden.
-            // Reset this crap and FUCK YOU
-            When.observe(() -> {
-                if (root.getTranslateX() != 0.0 || root.getTranslateY() != 0.0) {
-                    root.setTranslateX(0.0);
-                    root.setTranslateY(0.0);
-                }
-            }, root.translateXProperty(), root.translateYProperty()).listen();
+            // this is a crucial configuration
+            // it makes so that during layout/position computations it doesn't take into account effects/transforms
+            // so that the positions computed by AnchorHandler are exact, and effects like drop-shadows
+            // are visualized correctly (no cut/clip)
+            setAnchorLocation(AnchorLocation.CONTENT_TOP_LEFT);
         }
 
         @Override
