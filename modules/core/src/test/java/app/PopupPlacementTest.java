@@ -23,8 +23,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import io.github.palexdev.mfxcore.base.beans.Position;
-import io.github.palexdev.mfxcore.popups.MFXPopup;
-import io.github.palexdev.mfxcore.popups.MFXPopups;
+import io.github.palexdev.mfxcore.popups.*;
 import io.github.palexdev.mfxcore.utils.fx.AnchorHandlers;
 import io.github.palexdev.mfxcore.utils.fx.AnchorHandlers.Placement;
 import io.github.palexdev.mfxcore.utils.fx.CSSFragment;
@@ -54,9 +53,10 @@ public class PopupPlacementTest extends Application {
         CSSFragment.applyOn(
             """
                 .mfx-popover > Rectangle {
-                  -fx-fill: rgba(0, 0, 0, 0.5);
                   -fx-arc-width: 12px;
                   -fx-arc-height: 12px;
+                  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 20, 0, 0, 0);
+                  -fx-fill: rgba(0, 0, 0, 0.5);
                   -fx-stroke: rgba(255, 255, 255, 0.3);
                 }
                 """,
@@ -117,9 +117,13 @@ public class PopupPlacementTest extends Application {
             }
 
             placementInfoLabel.setText(placement.toString());
-            return MFXPopups.popover(cfg -> cfg.styleableParent(this))
+            MFXPopover p = MFXPopups.popover(cfg -> cfg
+                    .styleableParent(this))
+                .setAnimation(new PopupAnimation(PopupAnimationFunction.SCALE))
                 .setContent(_ -> new Rectangle(32.0, 32.0))
                 .show(this, placement);
+            //ScenicView.show(p.getRoot());
+            return p;
         }
 
         @Override

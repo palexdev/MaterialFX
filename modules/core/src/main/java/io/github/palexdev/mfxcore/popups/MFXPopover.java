@@ -19,10 +19,12 @@
 package io.github.palexdev.mfxcore.popups;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import io.github.palexdev.mfxcore.base.beans.Position;
 import io.github.palexdev.mfxcore.controls.MFXStyleable;
+import io.github.palexdev.mfxcore.input.WhenEvent;
 import io.github.palexdev.mfxcore.observables.When;
 import io.github.palexdev.mfxcore.popups.MFXPopover.PopoverConfig.Builder;
 import io.github.palexdev.mfxcore.popups.MFXPopover.PopupPeer;
@@ -32,6 +34,7 @@ import javafx.scene.Node;
 import javafx.scene.control.PopupControl;
 import javafx.stage.PopupWindow;
 import javafx.stage.Window;
+import javafx.stage.WindowEvent;
 
 /// Custom implementation of popovers based on the [MFXPopup] API. It also implements [MFXStyleable], the default CSS
 /// style-class is set to: '.root' and '.mfx-popup.'. This mimics JavaFX popups which also have the '.root' style class
@@ -71,6 +74,7 @@ public class MFXPopover extends MFXPopupBase<PopupPeer, Node> {
     //================================================================================
 
     private boolean preloaded = false;
+    private WhenEvent<WindowEvent> whenOwnerHiding;
 
     //================================================================================
     // Constructors
@@ -133,15 +137,41 @@ public class MFXPopover extends MFXPopupBase<PopupPeer, Node> {
             setPosition(pos);
         }
 
+        // When the owner's window starts hiding, JavaFX would otherwise reach us via the tree-showing
+        // cascade only after the popup's native peer has already been torn down — producing the
+        // 'window has already been closed' crash plus dangling pulse exceptions. Filtering WINDOW_HIDING
+        // (which fires *before* the destructive cascade) lets us finalize the popup synchronously while
+        // every native peer in the chain is still alive.
+        Optional.ofNullable(peer.getOwnerWindow()).ifPresent(w ->
+            whenOwnerHiding = WhenEvent.intercept(w, WindowEvent.WINDOW_HIDING)
+                .handle(_ -> {
+                    if (animation != null) animation.stop();
+                    if (isShowing()) setState(PopupState.HIDING);
+                    placement = null;
+                    this.owner = null;
+                    hidePeer();
+                    setState(PopupState.HIDDEN);
+                })
+                .asFilter()
+                .oneShot()
+                .register()
+        );
+
         if (animation != null) animation.playIn();
         content.setVisible(true);
         setState(PopupState.SHOWN);
     }
 
     @Override
-    public void hide() {
-        peer.indirectHide = true;
-        super.hide();
+    protected void hidePeer() {
+        WhenEvent.dispose(whenOwnerHiding);
+        whenOwnerHiding = null;
+        peer.directHide = true;
+        try {
+            peer.hide();
+        } catch (IllegalStateException ignored) {
+            // Owner stage already disposed the native peer — there's nothing left to tear down.
+        }
     }
 
     /// If the given placement is `null` returns a position of `<0, 0>`.
@@ -197,7 +227,7 @@ public class MFXPopover extends MFXPopupBase<PopupPeer, Node> {
     /// Sets the root to a [PopupRoot].
     protected class PopupPeer extends PopupWindow implements Peer {
         private final PopupRoot root = new PopupRoot();
-        private boolean indirectHide = false;
+        boolean directHide = false;
 
         {
             getScene().setRoot(root);
@@ -210,14 +240,15 @@ public class MFXPopover extends MFXPopupBase<PopupPeer, Node> {
 
         @Override
         public void hide() {
-            // Redirect auto-hide handling to popover hide logic!
-            if (!indirectHide) {
-                MFXPopover.this.hide();
-                setState(PopupState.AUTO_HIDE);
+            if (directHide) {
+                directHide = false;
+                super.hide();
                 return;
             }
-            indirectHide = false;
-            super.hide();
+            // JavaFX initiated this (auto-hide, hide-on-escape, tree-showing cascade).
+            // Redirect to the popover's animated hide so our logic is honored end-to-end.
+            MFXPopover.this.hide();
+            setState(PopupState.AUTO_HIDE);
         }
 
         @Override

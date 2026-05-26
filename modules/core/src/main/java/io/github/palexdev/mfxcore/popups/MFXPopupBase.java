@@ -102,6 +102,18 @@ public abstract class MFXPopupBase<P extends Window & Peer, O> implements MFXPop
     /// Implementations should take into account the offset returned by [#getOffset()].
     protected abstract Position computePosition(O owner, Placement placement);
 
+    /// Why this exists: every popup kind eventually needs to delegate to the underlying JavaFX [Window#hide()],
+    /// but most implementations route incoming hide requests through their own animated flow first (so that
+    /// auto-hide, hide-on-escape, and tree-showing cascades can be intercepted and decorated with animations).
+    /// That redirect creates a chicken-and-egg problem when the framework itself wants to finalize the hide:
+    /// calling the peer's `hide()` would just bounce back into our own logic again.
+    ///
+    /// `hidePeer()` is the single, well-defined escape hatch out of that loop. Concentrating the "actually take
+    /// the popup down" responsibility in one overridable method also lets each implementation handle peer-specific
+    /// teardown concerns (its own bypass-redirect mechanism, native-peer-already-dead races, listener cleanup)
+    /// without leaking those concerns into [#hide()] or into the public [MFXPopup.Peer] contract.
+    protected abstract void hidePeer();
+
     //================================================================================
     // Methods
     //================================================================================
@@ -160,14 +172,14 @@ public abstract class MFXPopupBase<P extends Window & Peer, O> implements MFXPop
 
         if (animation != null) {
             animation.playOut(_ -> {
-                    peer.hide();
+                    hidePeer();
                     setState(PopupState.HIDDEN);
                 }
             );
             return;
         }
 
-        peer.hide();
+        hidePeer();
         setState(PopupState.HIDDEN);
     }
 

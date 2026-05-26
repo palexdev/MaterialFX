@@ -237,11 +237,16 @@ public class MFXDialog extends MFXPopupBase<WindowPeer, Window> {
             lockWhen.dispose();
             lockWhen = null;
         }
-        peer.indirectHide = true;
         super.hide();
 
         if (backdrop != null)
             backdrop.hide();
+    }
+
+    @Override
+    protected void hidePeer() {
+        peer.directHide = true;
+        peer.hide();
     }
 
     /// If the given placement is `null` returns a position of `<0, 0>`.
@@ -335,7 +340,7 @@ public class MFXDialog extends MFXPopupBase<WindowPeer, Window> {
     /// Sets the root node to a [PopupRoot], the style to [StageStyle#TRANSPARENT] and the scene's fill to transparent.
     protected class WindowPeer extends Stage implements Peer {
         private final PopupRoot root = new PopupRoot();
-        private boolean indirectHide = false;
+        boolean directHide = false;
 
         {
             initStyle(StageStyle.TRANSPARENT);
@@ -351,14 +356,14 @@ public class MFXDialog extends MFXPopupBase<WindowPeer, Window> {
 
         @Override
         public void hide() {
-            // Redirect auto-hide handling to dialog hide logic!
-            if (!indirectHide) {
-                MFXDialog.this.hide();
-                setState(PopupState.AUTO_HIDE);
+            if (directHide) {
+                directHide = false;
+                super.hide();
                 return;
             }
-            indirectHide = false;
-            super.hide();
+            // JavaFX initiated this (auto-hide, hide-on-escape). Redirect to dialog's animated hide.
+            MFXDialog.this.hide();
+            setState(PopupState.AUTO_HIDE);
         }
     }
 
