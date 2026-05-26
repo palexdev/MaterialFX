@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.function.Function;
 
 import io.github.palexdev.mfxcore.base.beans.range.IntegerRange;
+import io.github.palexdev.mfxcore.collections.RefineList;
 import io.github.palexdev.mfxcore.utils.fx.ListChangeHelper;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.MapProperty;
@@ -69,13 +70,19 @@ public class SelectionModel<T> implements ISelectionModel<T> {
     //================================================================================
     public SelectionModel(ObservableList<T> items) {
         this.items.set(items);
+        init();
+    }
+
+    /// When the selection source is a [RefineList], indices are tracked in source-space.
+    /// The [ListChangeHelper] is therefore attached to the raw source list so that filter and
+    /// sort changes do not perturb the selection — only physical additions/removals do.
+    public SelectionModel(RefineList<T> list) {
+        this.items.set(list.getSource());
+        init();
     }
 
     public SelectionModel(ListProperty<T> list) {
         this.items.bind(list);
-    }
-
-    {
         init();
     }
 
@@ -96,7 +103,8 @@ public class SelectionModel<T> implements ISelectionModel<T> {
             })
             .setOnRemoved(rem -> {
                 List<Integer> updated = ListChangeHelper.shiftOnRemove(selection.keySet(), rem, rem.first());
-                replaceSelection(updated.toArray(Integer[]::new));
+                if (updated.isEmpty()) clearSelection();
+                else replaceSelection(updated.toArray(Integer[]::new));
             })
             .setOnAdded(add -> {
                 List<Integer> updated = ListChangeHelper.shiftOnAdd(selection.keySet(), add);
