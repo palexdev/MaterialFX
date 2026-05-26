@@ -144,12 +144,12 @@ public abstract class MFXChoiceSkin<T> extends MFXSkinBase<MFXChoice<T>> {
     /// in a [VFXScrollPane] to enable scrolling capabilities. The scroll pane's sizes are overridden:
     /// - the width will be at least the owner's width
     /// - the height will take into account the preferred number of visible items specified by [ExtendedPopoverConfig#itemsToShow()].
-    // TODO implement placeholder
+    // TODO implement placeholder both for split button and popup
     protected MFXPopover buildPopup() {
         MFXChoice<T> choice = getSkinnable();
         VFXList<T, VFXCell<T>> list = new VFXList<>(choice.getItems(), null);
         list.getCellFactory().bind(choice.cellFactoryProperty());
-        list.context().addLocked(ISelectionModel.class, choice.getSelectionModel());
+        list.context().setLocked(ISelectionModel.class, choice.getSelectionModel());
         list.setFocusTraversable(false);
         list.preloadSkin();
 

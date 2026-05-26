@@ -102,7 +102,7 @@ public class MFXCell<T> extends VFXSimpleCell<T> {
     @Override
     public void onCreated(VFXContext<T> context) {
         super.onCreated(context);
-        if ((selectionModel = context.getService(ISelectionModel.class)) != null) {
+        if ((selectionModel = context.get(ISelectionModel.class)) != null) {
             selected.bind(BooleanBindingBuilder.build()
                 .setMapper(() -> {
                     int index = getIndex();
