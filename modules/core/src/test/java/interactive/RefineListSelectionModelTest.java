@@ -333,6 +333,6 @@ class RefineListSelectionModelTest {
         assertEquals(3, list.sourceToView(0)); // apple → view 3
         assertEquals(1, list.sourceToView(3)); // date  → view 1
         assertEquals("apple", list.get(list.sourceToView(0)));
-        assertEquals("date",  list.get(list.sourceToView(3)));
+        assertEquals("date", list.get(list.sourceToView(3)));
     }
 }

@@ -36,7 +36,7 @@ public class Functions {
     // Static Methods
     //================================================================================
 
-    ///@return a new function that caches and returns the results of the given input function
+    /// @return a new function that caches and returns the results of the given input function
     /// (not thread-safe!)
     public static <T, R> Function<T, R> cachedFunction(Function<T, R> fn) {
         return new Function<>() {
@@ -62,7 +62,7 @@ public class Functions {
         };
     }
 
-    ///@return a new supplier that caches and returns the results of the given input supplier. `Null` results are allowed.
+    /// @return a new supplier that caches and returns the results of the given input supplier. `Null` results are allowed.
     /// (not thread-safe!)
     public static <T> Supplier<T> cachedSupplier(Supplier<T> sup) {
         return new Supplier<>() {

@@ -102,6 +102,7 @@ public class RefineList<T> implements ObservableList<T> {
     // Overridden Methods
     //================================================================================
 
+    //@formatter:off
     // Listeners
     @Override public void addListener(ListChangeListener<? super T> listener) {sorted.addListener(listener);}
     @Override public void removeListener(ListChangeListener<? super T> listener) {sorted.removeListener(listener);}
@@ -150,6 +151,7 @@ public class RefineList<T> implements ObservableList<T> {
     // Array Conversions
     @Override public Object[] toArray() {return sorted.toArray();}
     @Override public <T1> T1[] toArray(T1[] a) {return sorted.toArray(a);}
+    //@formatter:on
 
     //================================================================================
     // Getters/Setters
