@@ -1,3 +1,28 @@
+## 25.7.0 - 27/05/2026 - 2f256d4c
+
+### Removed
+
+- <493691f3> Deprecate Memoizer in favor of utilities in Functions.java
+
+### Features
+
+- <e861c6cc> Add readStream method in StringUtils
+
+### Bug Fixes
+
+- <cb733de7> SelectionModel: fix a bunch of minor bugs and inconsistencies
+- <5da3fbc7> Popups: improve hiding logic and avoid IllegalStateException by JavaFX caused by attempting to close a window whose native peer was already disposed
+- <08b74481> MFXTooltip: fix improve show/auto-hide logic
+- <2eed6eab> MFXPopupBase: re-init animation if not null when content changes
+
+### Refactoring
+
+- <c1cfaae1> SelectionModel: better integration with RefineLists
+- <56de0439> Refactor, simplify, improve RefineList
+- <0190f6f4> MFXPopover: implement alternative solution to ignore transforms on popup's root during layout/position computations
+
+
+
 ## 25.6.4 - 25/05/2026 - 8a46ead5
 
 ### Refactoring
