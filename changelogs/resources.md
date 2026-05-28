@@ -1,3 +1,15 @@
+## 25.1.3 - 28/05/2026 - b024b5bf
+
+### Features
+
+- <54162178> Add a bunch of useful font icons to MaterialFX pack
+
+### Style
+
+- <0fe107a6> Minor CSS updates
+
+
+
 ## 25.1.2 - 09-10-2025 - 80d05dc1
 
 ### Bug Fixes

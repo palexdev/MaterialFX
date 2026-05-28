@@ -1,3 +1,15 @@
+## 25.1.0 - 28/05/2026 - b024b5bf
+
+### Refactoring
+
+- <58625458> Review, move and rename InsetsBuilder utility
+
+### Misc
+
+- <c03888a6> Update VirtualizedFX to v25.1.16
+
+
+
 ## 25.1.0 - 08-10-2025 - e163a84b
 
 ### Removed
@@ -58,5 +70,4 @@
 - <eced040c> Forgot to document MFXIconButton
 - <8078729b> Add missing documentation
 - <33afa6d5> Add/update documentation
-
 
