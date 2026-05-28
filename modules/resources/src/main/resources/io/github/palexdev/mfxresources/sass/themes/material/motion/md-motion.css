@@ -17,9 +17,9 @@
  */
 .mfx-button,
 .mfx-icon-button {
-  transition-property        : -fx-background-color, -fx-background-radius;
-  transition-timing-function : cubic-bezier(0.42, 1.67, 0.21, 0.9);
-  transition-duration        : 350ms
+  transition-property: -fx-background-color,-fx-background-radius;
+  transition-timing-function: cubic-bezier(0.42,1.67,0.21,0.9);
+  transition-duration: 350ms
 }
 
 .mfx-button > .surface,
@@ -97,7 +97,7 @@
 .mfx-icon-button.outlined.s,
 .mfx-icon-button.outlined.xl,
 .mfx-icon-button.outlined.xs {
-  transition-property : -fx-background-color, -fx-background-radius, -fx-border-radius;
+  transition-property: -fx-background-color,-fx-background-radius,-fx-border-radius;
   transition-timing-function: cubic-bezier(0.42,1.67,0.21,0.9);
   transition-duration: 350ms
 }
@@ -125,7 +125,7 @@
 .mfx-buttons-group.standard > .mfx-icon-button {
   -fx-scale-x: 1;
   -fx-scale-y: 1;
-  transition-property : -fx-background-color, -fx-background-radius, -fx-scale-x, -fx-scale-y;
+  transition-property: -fx-background-color,-fx-background-radius,-fx-scale-x,-fx-scale-y;
   transition-timing-function: cubic-bezier(0.42,1.67,0.21,0.9);
   transition-duration: 350ms
 }
