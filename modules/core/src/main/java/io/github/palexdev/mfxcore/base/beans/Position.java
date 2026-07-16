@@ -28,7 +28,14 @@ public record Position(double x, double y) {
     //================================================================================
     // Static Methods
     //================================================================================
+
+    // TODO we should replace `of` everywhere with more significant names for static imports
+    @Deprecated(forRemoval = true)
     public static Position of(double x, double y) {
+        return new Position(x, y);
+    }
+
+    public static Position position(double x, double y) {
         return new Position(x, y);
     }
 
@@ -40,11 +47,26 @@ public record Position(double x, double y) {
     //================================================================================
     // Methods
     //================================================================================
-    public Position withX(double x) {
+
+    public Position x(double x) {
         return new Position(x, y);
     }
 
-    public Position withY(double y) {
+    public Position y(double y) {
         return new Position(x, y);
+    }
+
+    //================================================================================
+    // Builder
+    //================================================================================
+
+    //@formatter:off
+    public static class PositionBuilder {
+        public static Position x(double x) {
+            return new Position(x, 0);
+        }
+        public static Position y(double y) {
+            return new Position(0, y);
+        }
     }
 }

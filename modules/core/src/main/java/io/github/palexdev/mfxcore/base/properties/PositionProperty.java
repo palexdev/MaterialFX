@@ -29,6 +29,10 @@ import io.github.palexdev.mfxcore.utils.fx.PropUtils;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.css.*;
 
+import static io.github.palexdev.mfxcore.base.beans.Position.PositionBuilder.x;
+import static io.github.palexdev.mfxcore.base.beans.Position.PositionBuilder.y;
+import static io.github.palexdev.mfxcore.base.beans.Position.position;
+
 /// Simple extension of [ReadOnlyObjectWrapper] for [Position] objects.
 public class PositionProperty extends ReadOnlyObjectWrapper<Position> {
 
@@ -56,24 +60,24 @@ public class PositionProperty extends ReadOnlyObjectWrapper<Position> {
     /// Convenience method to create a new [Position] object with the given parameters and set it
     /// as the new value of this property.
     public void setPosition(double x, double y) {
-        set(Position.of(x, y));
+        set(position(x, y));
     }
 
-    /// Convenience method to set only the x value using [Position#withX(double)].
+    /// Convenience method to set only the x value using [Position#x(double)].
     public void setX(double x) {
         set(
             Optional.ofNullable(get())
-                .map(p -> p.withX(x))
-                .orElseGet(() -> Position.of(x, 0))
+                .map(p -> p.x(x))
+                .orElseGet(() -> x(x))
         );
     }
 
-    /// Convenience method to set only the y value using [Position#withY(double)]
+    /// Convenience method to set only the y value using [Position#y(double)]
     public void setY(double y) {
         set(
             Optional.ofNullable(get())
-                .map(p -> p.withY(y))
-                .orElseGet(() -> Position.of(0, y))
+                .map(p -> p.y(y))
+                .orElseGet(() -> y(y))
         );
     }
 
@@ -139,11 +143,11 @@ public class PositionProperty extends ReadOnlyObjectWrapper<Position> {
             .asStyleable(((CssMetaData) metaData), (_, newValue) ->
                 switch (newValue) {
                     case Position p -> p;
-                    case Number n -> Position.of(n.doubleValue(), n.doubleValue());
+                    case Number n -> position(n.doubleValue(), n.doubleValue());
                     case Number[] arr -> {
                         if (arr.length > 2)
                             System.err.println("Expected 2 or less values for position, got " + Arrays.toString(arr) + " instead.");
-                        yield Position.of(arr[0].doubleValue(), arr[1].doubleValue());
+                        yield position(arr[0].doubleValue(), arr[1].doubleValue());
                     }
                     default ->
                         throw new IllegalArgumentException("Expected number or array for Position, got " + newValue + " instead.");

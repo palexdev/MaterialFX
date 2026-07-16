@@ -29,6 +29,10 @@ import io.github.palexdev.mfxcore.utils.fx.PropUtils;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.css.*;
 
+import static io.github.palexdev.mfxcore.base.beans.Size.SizeBuilder.height;
+import static io.github.palexdev.mfxcore.base.beans.Size.SizeBuilder.width;
+import static io.github.palexdev.mfxcore.base.beans.Size.size;
+
 /// Simple extension of [ReadOnlyObjectWrapper] for [Size] objects.
 public class SizeProperty extends ReadOnlyObjectWrapper<Size> {
 
@@ -56,24 +60,24 @@ public class SizeProperty extends ReadOnlyObjectWrapper<Size> {
     /// Convenience method to create a new [Size] object with the given parameters and set it
     /// as the new value of this property.
     public void setSize(double w, double h) {
-        set(Size.of(w, h));
+        set(size(w, h));
     }
 
-    /// Convenience method to set only the width using [Size#withWidth(double)]
+    /// Convenience method to set only the width using [Size#width(double)]
     public void setWidth(double w) {
         set(
             Optional.ofNullable(get())
-                .map(s -> s.withWidth(w))
-                .orElseGet(() -> Size.of(w, 0.0))
+                .map(s -> s.width(w))
+                .orElseGet(() -> width(w))
         );
     }
 
-    /// Convenience method to set only the height using [Size#withHeight(double)].
+    /// Convenience method to set only the height using [Size#height(double)].
     public void setHeight(double h) {
         set(
             Optional.ofNullable(get())
-                .map(s -> s.withHeight(h))
-                .orElseGet(() -> Size.of(0.0, h))
+                .map(s -> s.height(h))
+                .orElseGet(() -> height(h))
         );
     }
 
@@ -125,11 +129,11 @@ public class SizeProperty extends ReadOnlyObjectWrapper<Size> {
             .asStyleable(((CssMetaData) metaData), (_, newValue) ->
                 switch (newValue) {
                     case Size s -> s;
-                    case Number n -> Size.of(n.doubleValue(), n.doubleValue());
+                    case Number n -> size(n.doubleValue(), n.doubleValue());
                     case Number[] arr -> {
                         if (arr.length > 2)
                             System.err.println("Expected 2 or less values for size, got " + Arrays.toString(arr) + " instead.");
-                        yield Size.of(arr[0].doubleValue(), arr[1].doubleValue());
+                        yield size(arr[0].doubleValue(), arr[1].doubleValue());
                     }
                     default ->
                         throw new IllegalArgumentException("Expected number or array for Size, got " + newValue + " instead.");

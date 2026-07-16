@@ -28,7 +28,13 @@ public record Size(double width, double height) {
     //================================================================================
     // Static Methods
     //================================================================================
+
+    @Deprecated(forRemoval = true)
     public static Size of(double width, double height) {
+        return new Size(width, height);
+    }
+
+    public static Size size(double width, double height) {
         return new Size(width, height);
     }
 
@@ -45,11 +51,22 @@ public record Size(double width, double height) {
     //================================================================================
     // Methods
     //================================================================================
-    public Size withWidth(double width) {
+
+    public Size width(double width) {
         return new Size(width, height);
     }
 
-    public Size withHeight(double height) {
+    public Size height(double height) {
         return new Size(width, height);
+    }
+
+    //================================================================================
+    // Builder
+    //================================================================================
+
+    //@formatter:off
+    public static class SizeBuilder {
+        public static Size width(double w) {return new Size(w, 0);}
+        public static Size height(double h) {return new Size(0, h);}
     }
 }
