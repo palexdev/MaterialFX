@@ -18,9 +18,14 @@
 
 package io.github.palexdev.mfxcore.controls;
 
+import java.util.Optional;
+
 import io.github.palexdev.mfxcore.base.properties.functional.SupplierProperty;
 import io.github.palexdev.mfxcore.behavior.MFXBehavior;
 import io.github.palexdev.mfxcore.behavior.WithBehavior;
+import io.github.palexdev.mfxcore.popups.MFXTooltip;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
@@ -41,7 +46,6 @@ import javafx.scene.control.Skin;
 /// The skin factory is more of a convenience to the user that does not need to inline-override the method responsible for
 /// creating the skin. The new mechanism is much more flexible and automatically integrates with the behavior API.<br >
 /// As a consequence, components that inherit from this do not support the "-fx-skin" CSS property. You'll have to do it in code.
-// TODO integrate MFXTooltip
 public abstract class MFXControl extends Control implements WithBehavior, MFXSkinnable, MFXStyleable {
     //================================================================================
     // Properties
@@ -63,6 +67,22 @@ public abstract class MFXControl extends Control implements WithBehavior, MFXSki
             // The downside of this is that if setSkin(...) is called before, then the factory is ignored
             if (getSkin() != null)
                 setSkin(buildSkin());
+        }
+    };
+
+    private final ObjectProperty<MFXTooltip> tooltip = new SimpleObjectProperty<>() {
+        @Override
+        public void set(MFXTooltip newValue) {
+            MFXTooltip oldValue = get();
+            if (oldValue != null) oldValue.uninstall();
+            if (newValue != null) newValue.install(MFXControl.this);
+            super.set(newValue);
+        }
+
+        @Override
+        public MFXTooltip get() {
+            return Optional.ofNullable(super.get())
+                .orElseGet(() -> ((MFXTooltip) getProperties().get(MFXTooltip.PROP_KEY)));
         }
     };
 
@@ -132,5 +152,17 @@ public abstract class MFXControl extends Control implements WithBehavior, MFXSki
     @Override
     public SupplierProperty<MFXSkinBase<? extends Node>> skinFactoryProperty() {
         return skinFactory;
+    }
+
+    public MFXTooltip tooltip() {
+        return tooltip.get();
+    }
+
+    public ObjectProperty<MFXTooltip> tooltipProp() {
+        return tooltip;
+    }
+
+    public void setTooltip(MFXTooltip tooltip) {
+        this.tooltip.set(tooltip);
     }
 }

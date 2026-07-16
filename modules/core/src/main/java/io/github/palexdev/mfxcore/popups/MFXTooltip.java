@@ -89,6 +89,7 @@ public class MFXTooltip implements MFXPopup<Node>, MFXStyleable {
     //================================================================================
 
     private static final TooltipTracker tracker = new TooltipTracker();
+    public static final String PROP_KEY = MFXTooltip.class.getName();
 
     //================================================================================
     // Properties
@@ -143,9 +144,9 @@ public class MFXTooltip implements MFXPopup<Node>, MFXStyleable {
     // Methods
     //================================================================================
     public void install(Node owner) {
-        if (isInstalled())
-            throw new IllegalStateException("Tooltip is already installed on a node!");
+        if (isInstalled()) throw new IllegalStateException("Tooltip is already installed on a node!");
         this.owner = owner;
+        owner.getProperties().put(PROP_KEY, this);
         initTooltip(owner);
     }
 
@@ -181,7 +182,10 @@ public class MFXTooltip implements MFXPopup<Node>, MFXStyleable {
         hide();
         handlers.forEach(Disposable::dispose);
         handlers.clear();
-        this.owner = null;
+        if (owner != null) {
+            owner.getProperties().remove(PROP_KEY);
+            this.owner = null;
+        }
     }
 
     protected void hideDelayed() {

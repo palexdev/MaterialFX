@@ -19,12 +19,16 @@
 package io.github.palexdev.mfxcore.controls;
 
 import java.util.List;
+import java.util.Optional;
 
 import io.github.palexdev.mfxcore.base.properties.functional.SupplierProperty;
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableDoubleProperty;
 import io.github.palexdev.mfxcore.behavior.MFXBehavior;
 import io.github.palexdev.mfxcore.behavior.WithBehavior;
+import io.github.palexdev.mfxcore.popups.MFXTooltip;
 import io.github.palexdev.mfxcore.utils.fx.StyleUtils;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
@@ -71,6 +75,22 @@ public abstract class MFXLabeled extends Labeled implements WithBehavior, MFXSki
             if (getSkin() != null)
                 setSkin(buildSkin());
 
+        }
+    };
+
+    private final ObjectProperty<MFXTooltip> tooltip = new SimpleObjectProperty<>() {
+        @Override
+        public void set(MFXTooltip newValue) {
+            MFXTooltip old = get();
+            if (old != null) old.uninstall();
+            if (newValue != null) newValue.install(MFXLabeled.this);
+            super.set(newValue);
+        }
+
+        @Override
+        public MFXTooltip get() {
+            return Optional.ofNullable(super.get())
+                .orElseGet(() -> ((MFXTooltip) getProperties().get(MFXTooltip.PROP_KEY)));
         }
     };
 
@@ -207,5 +227,17 @@ public abstract class MFXLabeled extends Labeled implements WithBehavior, MFXSki
     @Override
     public SupplierProperty<MFXSkinBase<? extends Node>> skinFactoryProperty() {
         return skinFactory;
+    }
+
+    public MFXTooltip tooltip() {
+        return tooltip.get();
+    }
+
+    public ObjectProperty<MFXTooltip> tooltipProp() {
+        return tooltip;
+    }
+
+    public void setTooltip(MFXTooltip tooltip) {
+        this.tooltip.set(tooltip);
     }
 }
