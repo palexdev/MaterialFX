@@ -126,6 +126,11 @@ public class MenuBuilder {
         return this;
     }
 
+    public MenuBuilder subItems(MFXMenuItem... items) {
+        this.subItems = FXCollections.observableArrayList(items);
+        return this;
+    }
+
     /// This method can be used to further customize the build [MFXMenuItem].
     ///
     /// For example, one may want to disable the item when a certain condition is not met:
