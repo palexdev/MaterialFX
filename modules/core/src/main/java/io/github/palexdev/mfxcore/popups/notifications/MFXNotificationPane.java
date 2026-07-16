@@ -96,7 +96,6 @@ public class MFXNotificationPane extends Region implements MFXStyleable {
     // Constructors
     //================================================================================
     public MFXNotificationPane() {
-        setPrefSize(100.0, 20.0);
         setMaxSize(USE_PREF_SIZE, USE_PREF_SIZE);
         setDefaultStyleClasses();
         addEventHandler(NotificationEvent.DISMISS, this::onDismissRequest);
