@@ -20,7 +20,9 @@ package io.github.palexdev.mfxcore.popups;
 
 import java.util.*;
 
+import io.github.palexdev.mfxcore.controls.ThemeEngine;
 import io.github.palexdev.mfxcore.utils.fx.CSSFragment;
+import io.github.palexdev.mfxcore.utils.fx.PseudoClasses;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.css.Styleable;
@@ -73,6 +75,10 @@ public class PopupRoot extends StackPane {
         }
         """).toDataUri();
 
+    private static final ThemeEngine themeEngine = ServiceLoader.load(ThemeEngine.class)
+        .findFirst()
+        .orElse(null);
+
     //================================================================================
     // Properties
     //================================================================================
@@ -88,6 +94,12 @@ public class PopupRoot extends StackPane {
     //================================================================================
 
     public PopupRoot() {
+        if (themeEngine != null) {
+            themeEngine.themeModeProperty().subscribe(_ -> {
+                ThemeEngine.ThemeMode mode = themeEngine.resolveThemeMode();
+                PseudoClasses.setOn(this, "dark", mode == ThemeEngine.ThemeMode.DARK);
+            });
+        }
         updateStylesheets();
     }
 
