@@ -58,6 +58,14 @@ public class InsetsUtils {
         return new InsetsBuilder(new Insets(0, 0, 0, left));
     }
 
+    public static InsetsBuilder vertical(double topBottom) {
+        return new InsetsBuilder(new Insets(topBottom, 0, topBottom, 0));
+    }
+
+    public static InsetsBuilder horizontal(double leftRight) {
+        return new InsetsBuilder(new Insets(0, leftRight, 0, leftRight));
+    }
+
     public static boolean isUniform(Insets insets) {
         return insets.getTop() == insets.getRight() &&
                insets.getTop() == insets.getBottom() &&
