@@ -37,7 +37,6 @@ import javafx.scene.control.Skin;
 import javafx.scene.input.GestureEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.PickResult;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 
@@ -70,13 +69,14 @@ public class NodeUtils {
         }
     }
 
-    /// Checks if the specified element is in the hierarchy of the specified node.
-    public static boolean inHierarchy(Node node, Node element) {
-        if (element == null) {
+    /** Returns {@code true} if {@code node} is a descendant of (or equal to) {@code ancestor}.
+     *  Returns {@code true} unconditionally if {@code ancestor} is {@code null}. */
+    public static boolean isDescendantOf(Node node, Node ancestor) {
+        if (ancestor == null) {
             return true;
         }
         while (node != null) {
-            if (node == element) {
+            if (node == ancestor) {
                 return true;
             }
             node = node.getParent();
@@ -84,26 +84,25 @@ public class NodeUtils {
         return false;
     }
 
-    /// Checks if the pressed node is in the hierarchy of the specified node, [PickResult#getIntersectedNode()].
-    public static boolean inHierarchy(Node node, MouseEvent event) {
-        return inHierarchy(node, event.getPickResult().getIntersectedNode());
+    /** Returns {@code true} if the event's intersected node is a descendant of {@code ancestor}. */
+    public static boolean isDescendantOf(MouseEvent event, Node ancestor) {
+        return isDescendantOf(event.getPickResult().getIntersectedNode(), ancestor);
     }
 
-    /// Checks if the pressed node is in the hierarchy of the specified node, [PickResult#getIntersectedNode()].
-    public static boolean inHierarchy(Node node, GestureEvent event) {
-        return inHierarchy(node, event.getPickResult().getIntersectedNode());
+    /** Returns {@code true} if the event's intersected node is a descendant of {@code ancestor}. */
+    public static boolean isDescendantOf(GestureEvent event, Node ancestor) {
+        return isDescendantOf(event.getPickResult().getIntersectedNode(), ancestor);
     }
 
-    /// Checks if the specified node is in hierarchy of the pressed node, [PickResult#getIntersectedNode()].
-    public static boolean inHierarchy(MouseEvent event, Node node) {
-        return inHierarchy(event.getPickResult().getIntersectedNode(), node);
+    /** Returns {@code true} if {@code node} contains the event's intersected node as a descendant. */
+    public static boolean containsEventTarget(MouseEvent event, Node node) {
+        return isDescendantOf(event.getPickResult().getIntersectedNode(), node);
     }
 
-    /// Checks if the specified node is in hierarchy of the pressed node, [PickResult#getIntersectedNode()].
-    public static boolean inHierarchy(GestureEvent event, Node node) {
-        return inHierarchy(event.getPickResult().getIntersectedNode(), node);
+    /** Returns {@code true} if {@code node} contains the event's intersected node as a descendant. */
+    public static boolean containsEventTarget(GestureEvent event, Node node) {
+        return isDescendantOf(event.getPickResult().getIntersectedNode(), node);
     }
-
     /// Convenience method to check if a `Node` is visible by checking both [Node#visibleProperty()] and [Node#opacityProperty()].
     ///
     /// @return true if the `Node` is visible and opacity is not 0.0

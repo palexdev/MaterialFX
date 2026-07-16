@@ -73,8 +73,7 @@ public class WindowMover {
                 .register(),
             intercept(anchor, MOUSE_MOVED)
                 .handle(e -> {
-                    Node iNode = e.getPickResult().getIntersectedNode();
-                    canMove = iNode == anchor;
+                    canMove = NodeUtils.isDescendantOf(e, anchor);
                     setCursor(canMove ? Cursor.HAND : Cursor.DEFAULT);
                 })
                 .asFilter()
