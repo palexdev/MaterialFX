@@ -264,6 +264,7 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
     }
 
     public void uninstall() {
+        getRootMenu().hide();
         if (mTrigger != null) {
             mTrigger.dispose();
             mTrigger = null;
