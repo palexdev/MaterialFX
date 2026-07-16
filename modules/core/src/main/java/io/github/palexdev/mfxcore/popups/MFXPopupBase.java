@@ -52,13 +52,10 @@ public abstract class MFXPopupBase<P extends Window & Peer, O> implements MFXPop
     protected O owner;
     protected Placement placement;
     protected Position offset = Position.origin();
-    protected PopupAnimation animation = new PopupAnimation(PopupAnimationFunction.FADE);
 
     private final NodeProperty content = new NodeProperty() {
         @Override
         protected void invalidated() {
-            Node content = get();
-            if (content != null && animation != null) animation.init(MFXPopupBase.this, content);
             onContentChanged();
         }
     };
@@ -78,7 +75,6 @@ public abstract class MFXPopupBase<P extends Window & Peer, O> implements MFXPop
     //================================================================================
     protected MFXPopupBase() {
         this.peer = buildPeer();
-        if (animation != null) animation.init(this, peer.getScene().getRoot());
         setDefaultStyleClasses();
     }
 
@@ -163,22 +159,9 @@ public abstract class MFXPopupBase<P extends Window & Peer, O> implements MFXPop
     @Override
     public void hide() {
         if (!isShowing()) return;
-        if (animation != null) {
-            animation.stop();
-        }
         setState(PopupState.HIDING);
         placement = null;
         owner = null;
-
-        if (animation != null) {
-            animation.playOut(_ -> {
-                    hidePeer();
-                    setState(PopupState.HIDDEN);
-                }
-            );
-            return;
-        }
-
         hidePeer();
         setState(PopupState.HIDDEN);
     }
@@ -233,23 +216,6 @@ public abstract class MFXPopupBase<P extends Window & Peer, O> implements MFXPop
 
     protected void setState(PopupState state) {
         this.state.set(state);
-    }
-
-    @Override
-    public PopupAnimation getAnimation() {
-        return animation;
-    }
-
-    @Override
-    public void setAnimation(PopupAnimation animation) {
-        if (this.animation != null) {
-            this.animation.stop();
-            this.animation.reset(peer.getScene().getRoot());
-        }
-        this.animation = animation;
-        if (this.animation != null) {
-            this.animation.init(this, peer.getScene().getRoot());
-        }
     }
 
     @Override

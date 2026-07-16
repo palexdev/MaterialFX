@@ -282,16 +282,6 @@ public class MFXTooltip implements MFXPopup<Node>, MFXStyleable {
     }
 
     @Override
-    public PopupAnimation getAnimation() {
-        return peer.getAnimation();
-    }
-
-    @Override
-    public void setAnimation(PopupAnimation animation) {
-        peer.setAnimation(animation);
-    }
-
-    @Override
     public TooltipConfig getConfig() {
         return (TooltipConfig) peer.config;
     }

@@ -46,6 +46,8 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.*;
 
+import static io.github.palexdev.mfxcore.base.beans.Position.position;
+
 /// My custom implementation of dialogs based on the [MFXPopup] API. It also implements [MFXStyleable], the default CSS
 /// style-class is set to '.mfx-dialog'.
 ///
@@ -164,8 +166,6 @@ public class MFXDialog extends MFXPopupBase<WindowPeer, Window> {
     @SuppressWarnings("DataFlowIssue")
     @Override
     protected void doShow(Window owner, double x, double y) {
-        if (animation != null) animation.stop();
-
         this.owner = owner;
         if (owner != null) {
             WhenEvent.intercept(owner, WindowEvent.WINDOW_CLOSE_REQUEST)
@@ -202,7 +202,6 @@ public class MFXDialog extends MFXPopupBase<WindowPeer, Window> {
         if (backdrop != null)
             backdrop.show(owner.getScene().getRoot());
 
-        if (animation != null) animation.playIn();
         content.setVisible(true);
         setState(PopupState.SHOWN);
         if (await) doAwait();
@@ -285,7 +284,7 @@ public class MFXDialog extends MFXPopupBase<WindowPeer, Window> {
 
     @Override
     public Position getPeerPosition() {
-        return Position.of(peer.getX(), peer.getY());
+        return position(peer.getX(), peer.getY());
     }
 
     @Override

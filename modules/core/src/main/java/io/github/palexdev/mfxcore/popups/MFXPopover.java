@@ -36,6 +36,8 @@ import javafx.stage.PopupWindow;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 
+import static io.github.palexdev.mfxcore.base.beans.Position.position;
+
 /// Custom implementation of popovers based on the [MFXPopup] API. It also implements [MFXStyleable], the default CSS
 /// style-class is set to: '.root' and '.mfx-popup.'. This mimics JavaFX popups which also have the '.root' style class
 /// applied. It's recommended to keep it so that if your theme defines some lookup color on the '.root' selector, it gets
@@ -109,8 +111,6 @@ public class MFXPopover extends MFXPopupBase<PopupPeer, Node> {
 
     @Override
     protected void doShow(Node owner, double x, double y) {
-        if (animation != null) animation.stop();
-
         // We need this as a workaround because for some reason when showing/hiding the popover at a very fast rate,
         // it causes the state property to no update, leaving the popover unable to show anymore
         When.onInvalidated(peer.showingProperty())
@@ -145,7 +145,6 @@ public class MFXPopover extends MFXPopupBase<PopupPeer, Node> {
         Optional.ofNullable(peer.getOwnerWindow()).ifPresent(w ->
             whenOwnerHiding = WhenEvent.intercept(w, WindowEvent.WINDOW_HIDING)
                 .handle(_ -> {
-                    if (animation != null) animation.stop();
                     if (isShowing()) setState(PopupState.HIDING);
                     placement = null;
                     this.owner = null;
@@ -157,7 +156,6 @@ public class MFXPopover extends MFXPopupBase<PopupPeer, Node> {
                 .register()
         );
 
-        if (animation != null) animation.playIn();
         content.setVisible(true);
         setState(PopupState.SHOWN);
     }
@@ -198,7 +196,7 @@ public class MFXPopover extends MFXPopupBase<PopupPeer, Node> {
 
     @Override
     public Position getPeerPosition() {
-        return Position.of(peer.getX(), peer.getY());
+        return position(peer.getX(), peer.getY());
     }
 
     @Override

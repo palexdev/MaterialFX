@@ -27,7 +27,7 @@ import io.github.palexdev.mfxcore.behavior.MFXBehavior;
 import io.github.palexdev.mfxcore.controls.MFXControl;
 import io.github.palexdev.mfxcore.controls.MFXSkinBase;
 import io.github.palexdev.mfxcore.controls.MFXStyleable;
-import io.github.palexdev.mfxcore.utils.Memoizer;
+import io.github.palexdev.mfxcore.utils.Functions;
 import io.github.palexdev.mfxcore.utils.fx.StyleUtils;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
@@ -149,7 +149,7 @@ public class MFXMenuContent extends MFXControl implements MFXStyleable {
     /// This property can be used to specify a [Node] to be shown when the menu is empty.<br >
     /// We use a [Supplier] so that the placeholder is created lazily, only when needed.<br >
     /// If your placeholder is always the same (likely to be so), it's recommended to use a caching [Supplier], see
-    /// [Memoizer#memoize(Supplier)].
+    /// [Functions#cachedSupplier(Supplier)].
     public SupplierProperty<Node> placeholderSupplierProperty() {
         return placeholderSupplier;
     }

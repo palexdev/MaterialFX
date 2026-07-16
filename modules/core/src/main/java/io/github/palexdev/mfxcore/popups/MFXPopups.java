@@ -117,11 +117,6 @@ public class MFXPopups {
             return this;
         }
 
-        public Builder<O, P> setAnimation(PopupAnimation animation) {
-            popup.setAnimation(animation);
-            return this;
-        }
-
         /// Node: works only for [MFXMenus][MFXMenu].
         public Builder<O, P> addMenuItems(MFXMenuItem... items) {
             if (popup instanceof MFXMenu m) {

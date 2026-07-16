@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import io.github.palexdev.mfxcore.base.beans.Position;
@@ -33,7 +32,10 @@ import io.github.palexdev.mfxcore.base.properties.PositionProperty;
 import io.github.palexdev.mfxcore.controls.MFXStyleable;
 import io.github.palexdev.mfxcore.input.ShortcutManager;
 import io.github.palexdev.mfxcore.input.WhenEvent;
-import io.github.palexdev.mfxcore.popups.*;
+import io.github.palexdev.mfxcore.popups.MFXPopover;
+import io.github.palexdev.mfxcore.popups.MFXPopup;
+import io.github.palexdev.mfxcore.popups.MFXPopupBase;
+import io.github.palexdev.mfxcore.popups.PopupState;
 import io.github.palexdev.mfxcore.popups.menu.MFXMenu.MenuConfig.Builder;
 import io.github.palexdev.mfxcore.utils.CollectionUtils;
 import io.github.palexdev.mfxcore.utils.fx.AnchorHandlers.Direction;
@@ -55,6 +57,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
+
+import static io.github.palexdev.mfxcore.base.beans.Position.PositionBuilder.x;
+import static io.github.palexdev.mfxcore.base.beans.Position.position;
 
 /// Custom implementation of menus based on the [MFXPopup] API. It also implements [MFXStyleable], the default CSS
 /// style-class is set to '.root' and '.mfx-menu.'. This mimics JavaFX popups which also have the '.root' style class
@@ -180,7 +185,7 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
     private Function<ObservableList<MFXMenuItem>, MFXMenu> subMenuFactory = items ->
         new MFXMenu(items).configure(cfg -> cfg
             .placement(Placement.placement(Pos.TOP_RIGHT, Direction.AFTER, Direction.AFTER))
-            .offset(Position.of(4.0, 0))
+            .offset(x(4.0))
         );
     private final ReadOnlyObjectWrapper<MFXMenu> parent = new ReadOnlyObjectWrapper<>(null);
     private final ObjectProperty<Node> hoveredItem = new SimpleObjectProperty<>();
@@ -231,8 +236,7 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
 
                 // TODO do we need to do this for anchor-based positioning too? probably not
                 if (isShowing()) {
-                    setPosition(Position.of(e.getScreenX(), e.getScreenY()));
-                    if (getAnimation() != null) getAnimation().playIn();
+                    setPosition(position(e.getScreenX(), e.getScreenY()));
                 } else {
                     peer.show(owner, e.getScreenX(), e.getScreenY());
                 }
@@ -288,7 +292,6 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
         subMenu.setParentMenu(this);
         subMenu.setSubMenuFactory(subMenuFactory);
         subMenu.configure(cfg -> cfg
-            .animationProvider(config.animationProvider())
             .styleableParent(cfg.styleableParent == null ? getRoot() : cfg.styleableParent)
         );
         return subMenu;
@@ -379,16 +382,6 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
     @Override
     public void setStyleClass(String... styleClass) {
         peer.setStyleClass(styleClass);
-    }
-
-    @Override
-    public PopupAnimation getAnimation() {
-        return peer.getAnimation();
-    }
-
-    @Override
-    public void setAnimation(PopupAnimation animation) {
-        peer.setAnimation(animation);
     }
 
     @Override
@@ -590,7 +583,6 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
         MouseButton triggerButton,
         boolean filterMouseEvents,
         boolean enableKeyTrigger,
-        Supplier<PopupAnimation> animationProvider,
         Node styleableParent
     ) implements Config<MFXMenu> {
         public static final MenuConfig DEFAULT = builder().build();
@@ -603,7 +595,6 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
             menu.triggerButton = triggerButton;
             menu.filterMouseEvents = filterMouseEvents;
             menu.enableKeyTrigger = enableKeyTrigger;
-            menu.setAnimation(animationProvider != null ? animationProvider.get() : null);
             menu.peer.setStyleableParent(styleableParent);
             menu.config = this;
         }
@@ -626,7 +617,6 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
             private MouseButton triggerButton = MouseButton.SECONDARY;
             private boolean filterMouseEvents = false;
             private boolean enableKeyTrigger = false;
-            private Supplier<PopupAnimation> animationProvider = null;
             private Node styleableParent;
 
             public Builder anchorBasedPositioning(boolean anchorBasedPositioning) {
@@ -659,11 +649,6 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
                 return this;
             }
 
-            public Builder animationProvider(Supplier<PopupAnimation> animationProvider) {
-                this.animationProvider = animationProvider;
-                return this;
-            }
-
             public Builder styleableParent(Node styleableParent) {
                 this.styleableParent = styleableParent;
                 return this;
@@ -677,7 +662,6 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
                     triggerButton,
                     filterMouseEvents,
                     enableKeyTrigger,
-                    animationProvider,
                     styleableParent
                 );
             }
