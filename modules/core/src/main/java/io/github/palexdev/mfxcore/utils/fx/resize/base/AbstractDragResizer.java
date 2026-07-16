@@ -250,4 +250,12 @@ public abstract class AbstractDragResizer<T extends Node> {
         this.allowedZones.addAll(Arrays.asList(allowedZones));
         return this;
     }
+
+    public boolean isResizing() {
+        return draggedZone != Zone.NONE;
+    }
+
+    public Zone getDraggedZone() {
+        return draggedZone;
+    }
 }
