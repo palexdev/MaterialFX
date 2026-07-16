@@ -102,15 +102,17 @@ public class StringUtils {
         return sb.toString();
     }
 
-    public static String titleCaseWord(String str) {
-        if (str.length() > 0) {
-            int firstChar = str.codePointAt(0);
-            if (!Character.isTitleCase(firstChar)) {
-                str = new String(new int[]{Character.toTitleCase(firstChar)}, 0, 1) +
-                      str.substring(Character.offsetByCodePoints(str, 0, 1));
-            }
+    public static String titleCase(String str) {
+        return titleCase(str, " ");
+    }
+
+    public static String titleCase(String str, String separator) {
+        String[] parts = str.split(separator);
+        StringBuilder sb = new StringBuilder();
+        for (String part : parts) {
+            sb.append(part.substring(0, 1).toUpperCase()).append(part.substring(1).toLowerCase()).append(" ");
         }
-        return str;
+        return sb.toString().trim();
     }
 
     /// Checks if a CharSequence contains a search CharSequence irrespective of case,
