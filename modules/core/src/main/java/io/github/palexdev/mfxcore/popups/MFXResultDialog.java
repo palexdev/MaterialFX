@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 
 import io.github.palexdev.mfxcore.events.Event;
 import io.github.palexdev.mfxcore.events.bus.EventBus;
-import io.github.palexdev.mfxcore.events.bus.EventBusNetwork;
+import io.github.palexdev.mfxcore.events.bus.EventsNetwork;
 import javafx.stage.Window;
 
 /// Special extension of [MFXDialog] that pauses code execution to return a certain result to the user before proceeding.
@@ -145,7 +145,7 @@ public class MFXResultDialog<R> extends MFXDialog {
     // Inner Classes
     //================================================================================
 
-    /// Extension of [Event] to be used with the [EventBus] or [EventBusNetwork] systems.<br >
+    /// Extension of [Event] to be used with the [EventBus] or [EventsNetwork] systems.<br >
     /// Can be used to manage the dialog even when the instance is out of reach.
     ///
     /// **Usage:**<br >
