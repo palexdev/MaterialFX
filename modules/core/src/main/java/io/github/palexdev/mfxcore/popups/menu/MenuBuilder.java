@@ -196,8 +196,8 @@ public class MenuBuilder {
         public MFXCheckMenuItem build() {
             MFXCheckMenuItem item = (MFXCheckMenuItem) super.build();
             if (!item.selectedProperty().isBound()) item.setSelected(selected);
-            item.setSelectionGroup(group);
             item.onSelectionChanged(onSelectionChanged);
+            item.setSelectionGroup(group);
             item.setCloseOnAction(closeOnAction);
             return item;
         }
