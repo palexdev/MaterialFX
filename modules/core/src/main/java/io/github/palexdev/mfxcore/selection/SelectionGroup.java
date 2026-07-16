@@ -235,6 +235,10 @@ public class SelectionGroup {
         return selectables;
     }
 
+    public List<Selectable> getSelectablesList() {
+        return List.copyOf(selectables.backingSet);
+    }
+
     /// @return the group's current selection as a [ReadOnlySetProperty]
     public ReadOnlySetProperty<Selectable> getSelection() {
         return selection;
@@ -253,6 +257,39 @@ public class SelectionGroup {
     /// @return the last selected entry as an [Optional] (may be absent or same as [#getFirstSelected()])
     public Optional<Selectable> getLastSelected() {
         return selection.getLast();
+    }
+
+    /// @return the selection as indexes. The group does not store the indexes, and it uses `Sets` to handle the selection.
+    /// This method is a convenience that iterates on the selection `Set` and gathers the indexes of those [Selectables][Selectable]
+    /// that are present in the `Set`
+    public List<Integer> getSelectedIndexes() {
+        List<Integer> selected = new ArrayList<>();
+        Iterator<Selectable> it = selectables.iterator();
+        int i = 0;
+        while (it.hasNext()) {
+            Selectable selectable = it.next();
+            if (selectable.isSelected()) selected.add(i);
+            i++;
+        }
+        return selected;
+    }
+
+    /// Basically the same as [#getSelectedIndexes()], but more convenient for `single` selection mode.
+    /// Because the selection could be empty, this can return `null`. The recommended usage is to wrap the result in
+    /// an [Optional] object.
+    public Integer getSelectedIndex() {
+        Integer idx = null;
+        Iterator<Selectable> it = selectables.iterator();
+        int i = 0;
+        while (it.hasNext()) {
+            Selectable selectable = it.next();
+            if (selectable.isSelected()) {
+                idx = i;
+                break;
+            }
+            i++;
+        }
+        return idx;
     }
 
     public int selectionSize() {
