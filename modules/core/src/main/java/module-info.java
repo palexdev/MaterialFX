@@ -1,3 +1,5 @@
+import io.github.palexdev.mfxcore.controls.ThemeEngine;
+
 module mfx.core {
     requires transitive javafx.controls;
     requires transitive javafx.fxml;
@@ -34,6 +36,7 @@ module mfx.core {
 
     // Controls
     exports io.github.palexdev.mfxcore.controls;
+    uses ThemeEngine;
 
     // Enums
     exports io.github.palexdev.mfxcore.enums;
