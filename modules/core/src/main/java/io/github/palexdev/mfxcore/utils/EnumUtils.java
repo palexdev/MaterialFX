@@ -24,6 +24,13 @@ public class EnumUtils {
     private EnumUtils() {
     }
 
+
+    /// Capitalizes the name of the given enum constant by taking the first character of its [Enum#name()] and the
+    /// substring from 1 in lowercase.
+    public static <E extends Enum<E>> String capitalize(E e) {
+        return e.name().charAt(0) + e.name().substring(1).toLowerCase();
+    }
+
     /// Checks if the given enumerator (as a class) contains the given String,
     /// same as [Enum#valueOf(Class, String)] but case-insensitive.
     ///
