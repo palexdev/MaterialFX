@@ -81,9 +81,9 @@ public class MFXMenuItem extends MFXLabeled {
     private static final String DEFAULT_CSS = new CSSFragment("""
         .mfx-menu-item.sub .svg-icon {
           -fx-background-color: rgba(0, 0, 0, 0.87);
-          -fx-pref-width: 8px;
-          -fx-max-height: 12px;
-          -fx-shape: "M439.1 297.4C451.6 309.9 451.6 330.2 439.1 342.7L279.1 502.7C266.6 515.2 246.3 515.2 233.8 502.7C221.3 490.2 221.3 469.9 233.8 457.4L371.2 320L233.9 182.6C221.4 170.1 221.4 149.8 233.9 137.3C246.4 124.8 266.7 124.8 279.2 137.3L439.2 297.3z";
+          -fx-pref-width: 6px;
+          -fx-max-height: 8px;
+          -fx-shape: "M249.3 235.8c10.2 12.6 9.5 31.1-2.2 42.8l-128 128c-9.2 9.2-22.9 11.9-34.9 6.9S64.5 396.9 64.5 384l0-256c0-12.9 7.8-24.6 19.8-29.6s25.7-2.2 34.9 6.9l128 128 2.2 2.4z";
         }
         
         .mfx-menu-item > .icon {
