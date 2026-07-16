@@ -86,6 +86,7 @@ public interface TaggedEventBus extends EventBus {
         }
 
         /// Creates a [BusTag] for the given name, caching it for reuse.
+        ///
         /// @see EventsNetwork#taggedBus(String)
         public static BusTag tag(String name) {
             return new BusTag(name);

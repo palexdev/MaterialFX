@@ -228,7 +228,7 @@ public class DoublyLinkedList<T> implements Iterable<Elem<T>> {
         // Rewire kept elements in one pass
         for (int i = 0; i < kept.size(); i++) {
             Elem<T> e = kept.get(i);
-            e.prev = i > 0               ? kept.get(i - 1) : null;
+            e.prev = i > 0 ? kept.get(i - 1) : null;
             e.next = i < kept.size() - 1 ? kept.get(i + 1) : null;
         }
 

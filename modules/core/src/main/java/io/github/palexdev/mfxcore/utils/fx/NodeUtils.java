@@ -71,8 +71,10 @@ public class NodeUtils {
         }
     }
 
-    /** Returns {@code true} if {@code node} is a descendant of (or equal to) {@code ancestor}.
-     *  Returns {@code true} unconditionally if {@code ancestor} is {@code null}. */
+    /**
+     * Returns {@code true} if {@code node} is a descendant of (or equal to) {@code ancestor}.
+     * Returns {@code true} unconditionally if {@code ancestor} is {@code null}.
+     */
     public static boolean isDescendantOf(Node node, Node ancestor) {
         if (ancestor == null) {
             return true;
@@ -86,25 +88,34 @@ public class NodeUtils {
         return false;
     }
 
-    /** Returns {@code true} if the event's intersected node is a descendant of {@code ancestor}. */
+    /**
+     * Returns {@code true} if the event's intersected node is a descendant of {@code ancestor}.
+     */
     public static boolean isDescendantOf(MouseEvent event, Node ancestor) {
         return isDescendantOf(event.getPickResult().getIntersectedNode(), ancestor);
     }
 
-    /** Returns {@code true} if the event's intersected node is a descendant of {@code ancestor}. */
+    /**
+     * Returns {@code true} if the event's intersected node is a descendant of {@code ancestor}.
+     */
     public static boolean isDescendantOf(GestureEvent event, Node ancestor) {
         return isDescendantOf(event.getPickResult().getIntersectedNode(), ancestor);
     }
 
-    /** Returns {@code true} if {@code node} contains the event's intersected node as a descendant. */
+    /**
+     * Returns {@code true} if {@code node} contains the event's intersected node as a descendant.
+     */
     public static boolean containsEventTarget(MouseEvent event, Node node) {
         return isDescendantOf(event.getPickResult().getIntersectedNode(), node);
     }
 
-    /** Returns {@code true} if {@code node} contains the event's intersected node as a descendant. */
+    /**
+     * Returns {@code true} if {@code node} contains the event's intersected node as a descendant.
+     */
     public static boolean containsEventTarget(GestureEvent event, Node node) {
         return isDescendantOf(event.getPickResult().getIntersectedNode(), node);
     }
+
     /// Convenience method to check if a `Node` is visible by checking both [Node#visibleProperty()] and [Node#opacityProperty()].
     ///
     /// @return true if the `Node` is visible and opacity is not 0.0
