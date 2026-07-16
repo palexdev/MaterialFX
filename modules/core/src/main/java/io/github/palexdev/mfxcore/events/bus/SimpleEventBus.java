@@ -53,15 +53,21 @@ public class SimpleEventBus implements EventBus {
     // Methods
     //================================================================================
 
-    /// When an event is published by [#publish(Event)] this is called. After getting all the
-    /// `Subscribers` added by [#subscribe(Class,Subscriber)] for the given event's type, loops over
-    /// all of them passing the given event, so [Subscriber#handle(Event)] is triggered.
+    /// When an event is published by [#publish(Event)] this is called. After getting all the `Subscribers` added by
+    /// [#subscribe(Class,Subscriber)] for the given event's type, loops over all of them passing the given event,
+    /// so [Subscriber#handle(Event)] is triggered.
+    ///
+    /// [One-shot subscribers][Subscriber#isOneShot()] are removed as the processing goes.
     protected <E extends Event> void notifySubscribers(E event) {
         Queue<Subscriber<Event>> subscribers = this.subscribers.get(event.getClass());
         if (subscribers == null || subscribers.isEmpty()) return;
-        for (Subscriber<Event> s : subscribers) {
+        Iterator<Subscriber<Event>> it = subscribers.iterator();
+        while (it.hasNext()) {
+            Subscriber<Event> s = it.next();
             s.handle(event);
+            if (s.isOneShot()) it.remove();
         }
+        if (subscribers.isEmpty()) this.subscribers.remove(event.getClass());
     }
 
     //================================================================================

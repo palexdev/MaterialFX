@@ -47,13 +47,18 @@ public interface Subscriber<E extends Event> {
             }
 
             @Override
+            public boolean isOneShot() {
+                return Subscriber.this.isOneShot();
+            }
+
+            @Override
             public int priority() {
                 return Subscriber.this.priority();
             }
         };
     }
 
-    /// @return a new `Subscriber` with overridden [#priority()] method to return the given `priority`.
+    /// @return a new `Subscriber` with an overridden [#priority()] method to return the given `priority`.
     default Subscriber<E> withPriority(int priority) {
         return new Subscriber<>() {
             @Override
@@ -62,10 +67,40 @@ public interface Subscriber<E extends Event> {
             }
 
             @Override
+            public boolean isOneShot() {
+                return Subscriber.this.isOneShot();
+            }
+
+            @Override
             public int priority() {
                 return priority;
             }
         };
+    }
+
+    /// @return a new `Subscriber` with an overridden [#isOneShot()] method to return `true`. Will execute only once
+    default Subscriber<E> oneShot() {
+        return new Subscriber<>() {
+            @Override
+            public void handle(E event) {
+                Subscriber.this.handle(event);
+            }
+
+            @Override
+            public boolean isOneShot() {
+                return true;
+            }
+
+            @Override
+            public int priority() {
+                return Subscriber.super.priority();
+            }
+        };
+    }
+
+    /// @return whether this subscriber is [#oneShot()], by default `false`
+    default boolean isOneShot() {
+        return false;
     }
 
     /// @return the priority of this subscriber, by default 0
