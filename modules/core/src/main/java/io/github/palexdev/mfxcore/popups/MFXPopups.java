@@ -46,146 +46,166 @@ public class MFXPopups {
     // Static Methods
     //================================================================================
 
-    public static Builder<Window, MFXDialog> dialog() {
-        return new Builder<>(new MFXDialog(), null);
+    public static ShowBuilder<Window, MFXDialog> dialog() {
+        return new ShowBuilder<>(new MFXDialog(), null);
     }
 
-    public static Builder<Window, MFXDialog> dialog(Consumer<MFXDialog.DialogConfig.Builder> config) {
+    public static ShowBuilder<Window, MFXDialog> dialog(Consumer<MFXDialog.DialogConfig.Builder> config) {
         MFXDialog.DialogConfig.Builder builder = MFXDialog.DialogConfig.builder();
         config.accept(builder);
-        return new Builder<>(new MFXDialog(), builder.build());
+        return new ShowBuilder<>(new MFXDialog(), builder.build());
     }
 
-    public static Builder<Node, MFXPopover> popover() {
-        return new Builder<>(new MFXPopover(), null);
+    public static ShowBuilder<Node, MFXPopover> popover() {
+        return new ShowBuilder<>(new MFXPopover(), null);
     }
 
-    public static Builder<Node, MFXPopover> popover(Consumer<MFXPopover.PopoverConfig.Builder> config) {
+    public static ShowBuilder<Node, MFXPopover> popover(Consumer<MFXPopover.PopoverConfig.Builder> config) {
         MFXPopover.PopoverConfig.Builder builder = MFXPopover.PopoverConfig.builder();
         config.accept(builder);
-        return new Builder<>(new MFXPopover(), builder.build());
+        return new ShowBuilder<>(new MFXPopover(), builder.build());
     }
 
-    public static Builder<Node, MFXTooltip> tooltip() {
-        return new Builder<>(new MFXTooltip(), null);
+    public static TooltipBuilder tooltip() {
+        return new TooltipBuilder(new MFXTooltip(), null);
     }
 
-    public static Builder<Node, MFXTooltip> tooltip(Consumer<MFXTooltip.TooltipConfig.Builder> config) {
+    public static TooltipBuilder tooltip(Consumer<MFXTooltip.TooltipConfig.Builder> config) {
         MFXTooltip.TooltipConfig.Builder builder = MFXTooltip.TooltipConfig.builder();
         config.accept(builder);
-        return new Builder<>(new MFXTooltip(), builder.build());
+        return new TooltipBuilder(new MFXTooltip(), builder.build());
     }
 
-    public static Builder<Node, MFXMenu> menu() {
-        return new Builder<>(new MFXMenu(), null);
+    public static MenuPopupBuilder menu() {
+        return new MenuPopupBuilder(new MFXMenu(), null);
     }
 
-    public static Builder<Node, MFXMenu> menu(Consumer<MFXMenu.MenuConfig.Builder> config) {
+    public static MenuPopupBuilder menu(Consumer<MFXMenu.MenuConfig.Builder> config) {
         MFXMenu.MenuConfig.Builder builder = MFXMenu.MenuConfig.builder();
         config.accept(builder);
-        return new Builder<>(new MFXMenu(), builder.build());
+        return new MenuPopupBuilder(new MFXMenu(), builder.build());
     }
 
     //================================================================================
-    // Builder
+    // Builders
     //================================================================================
-    public static class Builder<O, P extends MFXPopup<O>> {
-        private final P popup;
 
-        private Builder(P popup, MFXPopup.Config<P> config) {
+    /// Base class for all the popup builders, carries what every [MFXPopup] has in common.
+    abstract static class Builder<O, P extends MFXPopup<O>, B extends Builder<O, P, B>> {
+        protected final P popup;
+
+        protected Builder(P popup, MFXPopup.Config<P> config) {
             this.popup = popup;
             if (config != null) config.apply(popup);
         }
 
-        public Builder<O, P> setContent(Node content) {
+        /// @return this builder as its concrete type `B`
+        @SuppressWarnings("unchecked")
+        protected B self() {
+            return (B) this;
+        }
+
+        public B setContent(Node content) {
             popup.setContent(content);
-            return this;
+            return self();
         }
 
-        public Builder<O, P> setContent(Function<P, Node> contentFn) {
+        /// Variant of [#setContent(Node)] for contents that need the popup itself to be built.
+        public B setContent(Function<P, Node> contentFn) {
             popup.setContent(contentFn.apply(popup));
-            return this;
+            return self();
         }
 
-        public Builder<O, P> setOffset(Position offset) {
+        public B setOffset(Position offset) {
             popup.setOffset(offset);
-            return this;
+            return self();
         }
 
-        public Builder<O, P> setStyleClass(String... styleClass) {
+        public B setStyleClass(String... styleClass) {
             popup.setStyleClass(styleClass);
-            return this;
+            return self();
         }
 
-        /// Node: works only for [MFXMenus][MFXMenu].
-        public Builder<O, P> addMenuItems(MFXMenuItem... items) {
-            if (popup instanceof MFXMenu m) {
-                m.getItems().addAll(items);
-            }
-            return this;
+        /// @return the built popup, without showing nor installing it
+        public P get() {
+            return popup;
+        }
+    }
+
+    /// Builder for popups that are shown on demand: [MFXDialog] and [MFXPopover].
+    public static class ShowBuilder<O, P extends MFXPopup<O>> extends Builder<O, P, ShowBuilder<O, P>> {
+
+        private ShowBuilder(P popup, MFXPopup.Config<P> config) {
+            super(popup, config);
         }
 
-        public Builder<O, P> addMenuItems(MenuBuilder... builders) {
-            return addMenuItems(Arrays.stream(builders)
-                .map(MenuBuilder::build)
-                .toArray(MFXMenuItem[]::new));
-        }
-
-        /// Node: works only for [MFXMenus][MFXMenu].
-        public Builder<O, P> setMenuItems(List<MFXMenuItem> items) {
-            if (popup instanceof MFXMenu m) {
-                m.getItems().setAll(items);
-            }
-            return this;
-        }
-
-        /// Node: works only for [MFXMenus][MFXMenu].
-        public Builder<O, P> setSubMenuFactory(Function<ObservableList<MFXMenuItem>, MFXMenu> factory) {
-            if (popup instanceof MFXMenu m) {
-                m.setSubMenuFactory(factory);
-            }
-            return this;
-        }
-
-        /// Note: for tooltips and menus this will call [MFXTooltip#install(Node)] and [MFXMenu#install(Node)]
-        /// respectively!
+        /// Shows the popup, see [MFXPopup#show(Object, double, double)].
+        ///
+        /// @return the built popup
         public P show(O owner, double x, double y) {
-            if (popup instanceof MFXTooltip t) {
-                t.install(((Node) owner));
-                return popup;
-            }
-            if (popup instanceof MFXMenu m) {
-                m.install(((Node) owner));
-                return popup;
-            }
             popup.show(owner, x, y);
             return popup;
         }
 
-        /// Note: for tooltips and menus this will call [MFXTooltip#install(Node)] and [MFXMenu#install(Node)]
-        /// respectively. The placement is overridden with the given one!
+        /// Shows the popup at the given [Placement], see [MFXPopup#show(Object, Placement)].
+        ///
+        /// @return the built popup
         public P show(O owner, Placement placement) {
-            if (popup instanceof MFXTooltip t) {
-                t.install(((Node) owner));
-                MFXTooltip.TooltipConfig.builder(t.getConfig())
-                    .placement(placement)
-                    .build()
-                    .apply(t);
-                return popup;
-            }
-            if (popup instanceof MFXMenu m) {
-                m.install(((Node) owner));
-                MFXMenu.MenuConfig.builder(m.getConfig())
-                    .placement(placement)
-                    .build()
-                    .apply(m);
-                return popup;
-            }
             popup.show(owner, placement);
             return popup;
         }
+    }
 
-        public P get() {
+    /// Builder for [MFXTooltips][MFXTooltip].
+    public static class TooltipBuilder extends Builder<Node, MFXTooltip, TooltipBuilder> {
+
+        private TooltipBuilder(MFXTooltip popup, MFXPopup.Config<MFXTooltip> config) {
+            super(popup, config);
+        }
+
+        /// Installs the tooltip on the given owner, see [MFXTooltip#install(Node)].
+        ///
+        /// @return the built tooltip
+        public MFXTooltip install(Node owner) {
+            popup.install(owner);
+            return popup;
+        }
+    }
+
+    /// Builder for [MFXMenus][MFXMenu].
+    public static class MenuPopupBuilder extends Builder<Node, MFXMenu, MenuPopupBuilder> {
+
+        private MenuPopupBuilder(MFXMenu popup, MFXPopup.Config<MFXMenu> config) {
+            super(popup, config);
+        }
+
+        public MenuPopupBuilder addItems(MFXMenuItem... items) {
+            popup.getItems().addAll(items);
+            return this;
+        }
+
+        /// Variant of [#addItems(MFXMenuItem...)] which builds the items from the given [MenuBuilders][MenuBuilder].
+        public MenuPopupBuilder addItems(MenuBuilder... builders) {
+            return addItems(Arrays.stream(builders)
+                .map(MenuBuilder::build)
+                .toArray(MFXMenuItem[]::new));
+        }
+
+        public MenuPopupBuilder setItems(List<MFXMenuItem> items) {
+            popup.getItems().setAll(items);
+            return this;
+        }
+
+        public MenuPopupBuilder setSubMenuFactory(Function<ObservableList<MFXMenuItem>, MFXMenu> factory) {
+            popup.setSubMenuFactory(factory);
+            return this;
+        }
+
+        /// Installs the menu on the given owner, see [MFXMenu#install(Node)].
+        ///
+        /// @return the built menu
+        public MFXMenu install(Node owner) {
+            popup.install(owner);
             return popup;
         }
     }
