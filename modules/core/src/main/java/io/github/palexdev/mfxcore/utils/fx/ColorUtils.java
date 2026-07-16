@@ -274,6 +274,22 @@ public class ColorUtils {
         return "hsb(" + Math.round(hue) + "deg, " + Math.round(saturation * 100) + "%, " + Math.round(brightness * 100) + "%)";
     }
 
+    public static int toArgb(Color color) {
+        int a = (int) Math.round(color.getOpacity() * 255.0);
+        int r = (int) Math.round(color.getRed() * 255.0);
+        int g = (int) Math.round(color.getGreen() * 255.0);
+        int b = (int) Math.round(color.getBlue() * 255.0);
+        return (a << 24) | (r << 16) | (g << 8) | b;
+    }
+
+    public static Color fromArgb(int argb) {
+        int a = (argb >>> 24) & 0xFF;
+        int r = (argb >> 16) & 0xFF;
+        int g = (argb >> 8) & 0xFF;
+        int b = argb & 0xFF;
+        return Color.rgb(r, g, b, a / 255.0);
+    }
+
     private static double[] colorToArray(Color color) {
         return new double[]{
             color.getRed(),
