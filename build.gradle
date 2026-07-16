@@ -73,6 +73,10 @@ subprojects {
         useJUnitPlatform()
         // FIXME well, this depends on the Gradle team if they decide to revert a dumb decision
         failOnNoDiscoveredTests = false
+
+        jvmArgs += ['--enable-native-access=ALL-UNNAMED']
+        systemProperty 'glass.platform', 'headless'
+        systemProperty 'prism.order', 'sw'
     }
 }
 

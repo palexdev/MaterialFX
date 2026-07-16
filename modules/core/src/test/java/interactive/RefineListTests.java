@@ -30,6 +30,7 @@ import javafx.collections.ListChangeListener;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.testfx.api.FxToolkit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,7 +40,8 @@ class RefineListTests {
 
     @BeforeAll
     static void init() {
-        Platform.startup(() -> {});
+        if (!FxToolkit.isFXApplicationThreadRunning())
+            Platform.startup(() -> {});
     }
 
     @BeforeEach

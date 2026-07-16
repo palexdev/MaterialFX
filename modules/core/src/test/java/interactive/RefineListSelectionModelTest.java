@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.junit.jupiter.api.*;
+import org.testfx.api.FxToolkit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,7 +21,8 @@ class RefineListSelectionModelTest {
 
     @BeforeAll
     static void initJfx() {
-        Platform.startup(() -> {});
+        if (!FxToolkit.isFXApplicationThreadRunning())
+            Platform.startup(() -> {});
     }
 
     @BeforeEach

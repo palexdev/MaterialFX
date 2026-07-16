@@ -23,13 +23,14 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import io.github.palexdev.mfxcore.base.Disposable;
 import io.github.palexdev.mfxcore.collections.WeakHashSet;
 import io.github.palexdev.mfxcore.observables.OnChanged;
 import io.github.palexdev.mfxcore.observables.OnInvalidated;
 import io.github.palexdev.mfxcore.observables.When;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,11 +38,12 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class WhenTests {
 
-    private final Set<When<?>> whens = new WeakHashSet<>();
+    private static final Set<When<?>> whens = new WeakHashSet<>();
 
-    @AfterEach
+    @BeforeEach
     void tearDown() {
-        When.dispose(whens.toArray(When<?>[]::new));
+        whens.forEach(Disposable::dispose);
+        whens.clear();
     }
 
     @Test

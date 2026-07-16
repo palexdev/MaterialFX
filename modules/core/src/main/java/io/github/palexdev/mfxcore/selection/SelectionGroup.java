@@ -67,6 +67,10 @@ import javafx.collections.ObservableSet;
 ///   - If the group is locked, it means that the state transition request came from the group, so just call `super.set(...)`
 ///   - If the group is _not_ locked, it means the state transition came from the user, but the request may not be honored
 ///     as it may break the group's rules, therefore before delegating to `super.set(...)` it needs to consult the group
+/// - Every path that changes the state commits the [Selectables][Selectable] own [SelectionProperty] _before_ publishing
+///   the new selection `Set`. Since the `Set` fires synchronously, listeners on [#getSelection()] would otherwise observe
+///   entries whose [Selectable#isSelected()] still reports the previous state. The trade-off is that the reverse holds
+///   for `SelectionProperty` listeners: they run before the new selection `Set` is published.
 public class SelectionGroup {
 
     //================================================================================
@@ -346,11 +350,13 @@ public class SelectionGroup {
                     .ifPresent(s -> s.setSelected(false));
                 copy.clear();
                 copy.add(selectable);
+                selectable.setSelected(true);
                 selection.set(copy);
                 return true;
             }
 
             copy.remove(selectable);
+            selectable.setSelected(false);
             selection.set(copy);
             return false;
         }
@@ -455,6 +461,7 @@ public class SelectionGroup {
             } else {
                 copy.remove(selectable);
             }
+            selectable.setSelected(state);
             selection.set(copy);
             return state;
         }

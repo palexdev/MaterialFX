@@ -28,6 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import io.github.palexdev.mfxcore.base.Disposable;
 import io.github.palexdev.mfxcore.collections.WeakHashSet;
 import io.github.palexdev.mfxcore.input.WhenEvent;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventTarget;
 import javafx.event.EventType;
@@ -40,7 +41,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxRobot;
@@ -56,7 +57,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 public class WhenEventTests {
 
     private Stage stage;
-    private final Set<WhenEvent<?>> whens = new WeakHashSet<>();
+    private static final Set<WhenEvent<?>> whens = new WeakHashSet<>();
 
     @Start
     void start(Stage stage) {
@@ -64,9 +65,10 @@ public class WhenEventTests {
         stage.show();
     }
 
-    @AfterEach
+    @BeforeEach
     void tearDown() {
-        WhenEvent.dispose(whens.toArray(WhenEvent[]::new));
+        whens.forEach(Disposable::dispose);
+        whens.clear();
     }
 
     @Test
@@ -117,14 +119,14 @@ public class WhenEventTests {
         Button btn = setupStage();
         AtomicInteger cnt = new AtomicInteger();
 
-        WhenEvent<MouseEvent> w = intercept(btn, MouseEvent.MOUSE_CLICKED)
+        WhenEvent<?> w = intercept(btn, ActionEvent.ACTION)
             .handle(e -> cnt.incrementAndGet())
             .oneShot()
             .register();
 
-        robot.clickOn(btn);
+        robot.interact(btn::fire);
         assertEquals(1, cnt.get());
-        robot.clickOn(btn);
+        robot.interact(btn::fire);
         assertEquals(1, cnt.get());
         assertTrue(w.isDisposed());
         assertEquals(0, WhenEvent.totalSize());
@@ -195,7 +197,7 @@ public class WhenEventTests {
     @Test
     void testGC(FxRobot robot) throws Exception {
         Button btn = setupStage();
-        WeakReference<?> ref;
+        WeakReference<WhenEvent<?>> ref;
         WhenEvent<MouseEvent> when = intercept(btn, MouseEvent.MOUSE_CLICKED).register();
 
         ref = new WeakReference<>(when);
