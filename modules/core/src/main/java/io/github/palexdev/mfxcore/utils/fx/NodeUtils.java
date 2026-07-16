@@ -40,6 +40,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 
+import static io.github.palexdev.mfxcore.base.beans.Size.size;
+
 public class NodeUtils {
 
     private NodeUtils() {
@@ -150,7 +152,7 @@ public class NodeUtils {
         group.applyCss();
         group.layout();
 
-        Size sizes = Size.of(node.prefWidth(-1), node.prefHeight(-1));
+        Size sizes = size(node.prefWidth(-1), node.prefHeight(-1));
         group.getChildren().clear();
         return sizes;
     }

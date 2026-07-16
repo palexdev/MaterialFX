@@ -48,6 +48,8 @@ import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
+import static io.github.palexdev.mfxcore.base.beans.Position.position;
+import static io.github.palexdev.mfxcore.base.beans.Size.size;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(ApplicationExtension.class)
@@ -137,8 +139,8 @@ public class TestCustomControls {
             )
         );
 
-        assertEquals(Size.of(40.0, 80.0), control.size.get());
-        assertEquals(Position.of(25.0, 10.0), control.position.get());
+        assertEquals(size(40.0, 80.0), control.size.get());
+        assertEquals(position(25.0, 10.0), control.position.get());
     }
 
     StackPane setupStage() {

@@ -27,6 +27,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Window;
 
+import static io.github.palexdev.mfxcore.base.beans.Position.position;
 import static io.github.palexdev.mfxcore.utils.fx.AnchorHandlers.Direction.*;
 
 /// This class provides a series of utilities for computing a position relative to a certain anchor, which is represented
@@ -112,63 +113,63 @@ public class AnchorHandlers {
     }
 
     public static Position topLeft(Bounds refBounds, Bounds subjectBounds, Direction hDir, Direction vDir) {
-        return Position.of(
+        return position(
             computeX(refBounds, subjectBounds, HPos.LEFT, hDir),
             computeY(refBounds, subjectBounds, VPos.TOP, vDir)
         );
     }
 
     public static Position topCenter(Bounds refBounds, Bounds subjectBounds, Direction hDir, Direction vDir) {
-        return Position.of(
+        return position(
             computeX(refBounds, subjectBounds, HPos.CENTER, hDir),
             computeY(refBounds, subjectBounds, VPos.TOP, vDir)
         );
     }
 
     public static Position topRight(Bounds refBounds, Bounds subjectBounds, Direction hDir, Direction vDir) {
-        return Position.of(
+        return position(
             computeX(refBounds, subjectBounds, HPos.RIGHT, hDir),
             computeY(refBounds, subjectBounds, VPos.TOP, vDir)
         );
     }
 
     public static Position centerLeft(Bounds refBounds, Bounds subjectBounds, Direction hDir, Direction vDir) {
-        return Position.of(
+        return position(
             computeX(refBounds, subjectBounds, HPos.LEFT, hDir),
             computeY(refBounds, subjectBounds, VPos.CENTER, vDir)
         );
     }
 
     public static Position center(Bounds refBounds, Bounds subjectBounds, Direction hDir, Direction vDir) {
-        return Position.of(
+        return position(
             computeX(refBounds, subjectBounds, HPos.CENTER, hDir),
             computeY(refBounds, subjectBounds, VPos.CENTER, vDir)
         );
     }
 
     public static Position centerRight(Bounds refBounds, Bounds subjectBounds, Direction hDir, Direction vDir) {
-        return Position.of(
+        return position(
             computeX(refBounds, subjectBounds, HPos.RIGHT, hDir),
             computeY(refBounds, subjectBounds, VPos.CENTER, vDir)
         );
     }
 
     public static Position bottomLeft(Bounds refBounds, Bounds subjectBounds, Direction hDir, Direction vDir) {
-        return Position.of(
+        return position(
             computeX(refBounds, subjectBounds, HPos.LEFT, hDir),
             computeY(refBounds, subjectBounds, VPos.BOTTOM, vDir)
         );
     }
 
     public static Position bottomCenter(Bounds refBounds, Bounds subjectBounds, Direction hDir, Direction vDir) {
-        return Position.of(
+        return position(
             computeX(refBounds, subjectBounds, HPos.CENTER, hDir),
             computeY(refBounds, subjectBounds, VPos.BOTTOM, vDir)
         );
     }
 
     public static Position bottomRight(Bounds refBounds, Bounds subjectBounds, Direction hDir, Direction vDir) {
-        return Position.of(
+        return position(
             computeX(refBounds, subjectBounds, HPos.RIGHT, hDir),
             computeY(refBounds, subjectBounds, VPos.BOTTOM, vDir)
         );

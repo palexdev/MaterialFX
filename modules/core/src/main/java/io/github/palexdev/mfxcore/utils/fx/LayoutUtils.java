@@ -24,6 +24,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.Region;
 
+import static io.github.palexdev.mfxcore.base.beans.Position.position;
+
 public class LayoutUtils {
 
     private LayoutUtils() {
@@ -49,7 +51,7 @@ public class LayoutUtils {
 
         double xPosition = computeXPosition(parent, child, areaX, areaWidth, snappedMargin, false, hAlignment, snapToPixel, computeSizes);
         double yPosition = computeYPosition(parent, child, areaY, areaHeight, areaBaselineOffset, snappedMargin, false, vAlignment, snapToPixel, computeSizes);
-        return Position.of(xPosition, yPosition);
+        return position(xPosition, yPosition);
     }
 
     public static double computeXPosition(Region parent, Node child, double areaX, double areaWidth, Insets margin, boolean snapMargin, HPos hAlignment, boolean snapToPixel, boolean computeSizes) {

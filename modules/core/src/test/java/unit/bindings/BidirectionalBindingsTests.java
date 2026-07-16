@@ -30,6 +30,7 @@ import javafx.beans.property.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
+import static io.github.palexdev.mfxcore.base.beans.Size.size;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BidirectionalBindingsTests {
@@ -49,14 +50,14 @@ public class BidirectionalBindingsTests {
 
         MappedBidirectionalBinding<Size, String> wb = MappedBidirectionalBinding.bind(size, width)
             .setFirstToSecondMapper(s -> String.valueOf(s.width()))
-            .setSecondToFirstMapper(s -> Size.of(Double.parseDouble(s), size.getHeight()))
+            .setSecondToFirstMapper(s -> size(Double.parseDouble(s), size.getHeight()))
             .bind();
         MappedBidirectionalBinding<Size, Number> hb = MappedBidirectionalBinding.bind(size, height)
             .setFirstToSecondMapper(Size::height)
-            .setSecondToFirstMapper(h -> Size.of(size.getWidth(), h.doubleValue()))
+            .setSecondToFirstMapper(h -> size(size.getWidth(), h.doubleValue()))
             .bind();
 
-        size.set(Size.of(10.0, 20.0));
+        size.set(size(10.0, 20.0));
         assertEquals("10.0", width.get());
         assertEquals(20.0, height.get());
 

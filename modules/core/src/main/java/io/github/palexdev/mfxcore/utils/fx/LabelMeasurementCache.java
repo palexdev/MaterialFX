@@ -27,6 +27,8 @@ import javafx.scene.Node;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Labeled;
 
+import static io.github.palexdev.mfxcore.base.beans.Size.size;
+
 /// A specialization of [TextMeasurementCache] that operates specifically on [Labels][Labeled].
 ///
 /// Unlike [TextMeasurementCache], this computes the full size of the label, including: padding, graphic, graphic text gap.
@@ -74,7 +76,7 @@ public class LabelMeasurementCache extends ObjectBinding<Size> {
         Node graphic = label.getGraphic();
         double hGap = graphic != null ? label.getGraphicTextGap() : 0.0;
         Size gSize = graphic != null ?
-            Size.of(LayoutUtils.snappedBoundWidth(graphic), LayoutUtils.snappedBoundHeight(graphic)) :
+            size(LayoutUtils.snappedBoundWidth(graphic), LayoutUtils.snappedBoundHeight(graphic)) :
             Size.zero();
         Size tSize = tmc.getValue();
         double hPadding = label.snappedLeftInset() + label.snappedRightInset();
@@ -142,7 +144,7 @@ public class LabelMeasurementCache extends ObjectBinding<Size> {
         VERTICAL {
             @Override
             public Size compute(Size textSize, Size graphicSize, double gap, double hPadding, double vPadding) {
-                return Size.of(
+                return size(
                     hPadding + Math.max(textSize.width(), graphicSize.width()),
                     vPadding + textSize.height() + gap + graphicSize.height()
                 );
@@ -152,7 +154,7 @@ public class LabelMeasurementCache extends ObjectBinding<Size> {
         HORIZONTAL {
             @Override
             public Size compute(Size textSize, Size graphicSize, double gap, double hPadding, double vPadding) {
-                return Size.of(
+                return size(
                     hPadding + textSize.width() + gap + graphicSize.width(),
                     vPadding + Math.max(textSize.height(), graphicSize.height())
                 );
@@ -162,7 +164,7 @@ public class LabelMeasurementCache extends ObjectBinding<Size> {
         CENTER {
             @Override
             public Size compute(Size textSize, Size graphicSize, double gap, double hPadding, double vPadding) {
-                return Size.of(
+                return size(
                     hPadding + Math.max(textSize.width(), graphicSize.width()),
                     vPadding + Math.max(textSize.height(), graphicSize.height())
                 );
@@ -172,7 +174,7 @@ public class LabelMeasurementCache extends ObjectBinding<Size> {
         GRAPHIC_ONLY {
             @Override
             public Size compute(Size textSize, Size graphicSize, double gap, double hPadding, double vPadding) {
-                return Size.of(
+                return size(
                     hPadding + graphicSize.width(),
                     vPadding + graphicSize.height()
                 );
@@ -182,7 +184,7 @@ public class LabelMeasurementCache extends ObjectBinding<Size> {
         TEXT_ONLY {
             @Override
             public Size compute(Size textSize, Size graphicSize, double gap, double hPadding, double vPadding) {
-                return Size.of(
+                return size(
                     hPadding + textSize.width(),
                     vPadding + textSize.height()
                 );

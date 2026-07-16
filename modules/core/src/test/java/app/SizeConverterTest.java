@@ -37,6 +37,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
+import static io.github.palexdev.mfxcore.base.beans.Size.size;
 import static io.github.palexdev.mfxcore.utils.RandomUtils.random;
 
 public class SizeConverterTest extends Application {
@@ -73,7 +74,7 @@ public class SizeConverterTest extends Application {
             StyleableProperties.SIZE,
             this,
             "size",
-            Size.of(100, 100)
+            size(100, 100)
         );
 
         public Size getSize() {
@@ -99,7 +100,7 @@ public class SizeConverterTest extends Application {
             private static final CssMetaData<CustomPane, Size> SIZE = SizeProperty.cssMetaData(
                 "-fx-size",
                 CustomPane::sizeProperty,
-                Size.of(100, 100)
+                size(100, 100)
             );
 
             static {

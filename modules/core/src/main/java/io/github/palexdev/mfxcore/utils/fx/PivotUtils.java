@@ -22,6 +22,10 @@ import io.github.palexdev.mfxcore.base.beans.Position;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 
+import static io.github.palexdev.mfxcore.base.beans.Position.PositionBuilder.x;
+import static io.github.palexdev.mfxcore.base.beans.Position.PositionBuilder.y;
+import static io.github.palexdev.mfxcore.base.beans.Position.position;
+
 public class PivotUtils {
 
     //================================================================================
@@ -38,12 +42,12 @@ public class PivotUtils {
      */
     public static Position pivotPosition(Bounds referenceBounds, Pos pos) {
         return switch (pos) {
-            case TOP_CENTER -> Position.of(referenceBounds.getCenterX(), 0.0);
-            case TOP_RIGHT -> Position.of(referenceBounds.getWidth(), 0.0);
-            case CENTER -> Position.of(referenceBounds.getCenterX(), referenceBounds.getCenterY());
-            case BOTTOM_LEFT -> Position.of(0.0, referenceBounds.getHeight());
-            case BOTTOM_CENTER -> Position.of(referenceBounds.getCenterX(), referenceBounds.getHeight());
-            case BOTTOM_RIGHT -> Position.of(referenceBounds.getWidth(), referenceBounds.getHeight());
+            case TOP_CENTER -> x(referenceBounds.getCenterX());
+            case TOP_RIGHT -> x(referenceBounds.getWidth());
+            case CENTER -> position(referenceBounds.getCenterX(), referenceBounds.getCenterY());
+            case BOTTOM_LEFT -> y(referenceBounds.getHeight());
+            case BOTTOM_CENTER -> position(referenceBounds.getCenterX(), referenceBounds.getHeight());
+            case BOTTOM_RIGHT -> position(referenceBounds.getWidth(), referenceBounds.getHeight());
             default -> Position.origin();
         };
     }
