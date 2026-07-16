@@ -87,11 +87,13 @@ public class MFXTooltip implements MFXPopup<Node>, MFXStyleable {
     //================================================================================
     // Static Properties
     //================================================================================
+
     private static final TooltipTracker tracker = new TooltipTracker();
 
     //================================================================================
     // Properties
     //================================================================================
+
     private final MFXPopover peer = new MFXPopover() {
         @Override
         protected void doShow(Node owner, double x, double y) {
@@ -172,11 +174,11 @@ public class MFXTooltip implements MFXPopup<Node>, MFXStyleable {
                     if (timer.getStatus() == Animation.Status.RUNNING) return;
                     hide();
                 })
-                .listen()
-        );
+                .listen());
     }
 
     public void uninstall() {
+        hide();
         handlers.forEach(Disposable::dispose);
         handlers.clear();
         this.owner = null;
