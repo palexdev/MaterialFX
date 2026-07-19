@@ -37,7 +37,7 @@ public class MaterialFX extends PropertiesFontIconsPack {
     //================================================================================
     // Static Properties
     //================================================================================
-    public static final int size = 6;
+    public static final int size = 7;
 
     //================================================================================
     // Constructors
