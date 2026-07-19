@@ -16,6 +16,8 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
+@use '../../base/vars' as *;
+
 @mixin MaterialButtonsText() {
   .mfx-button.text {
     -fx-background-color : transparent;
@@ -41,7 +43,10 @@
     // Selected
     &.toggle:selected {
       -fx-text-fill : -md-sys-color-primary;
-    }
 
+      > .surface {
+        -mfx-default-opacity: opacity('selected');
+      }
+    }
   }
 }
