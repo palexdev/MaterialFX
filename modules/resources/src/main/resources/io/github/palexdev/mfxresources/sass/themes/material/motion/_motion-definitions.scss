@@ -101,12 +101,337 @@
     > .mfx-icon-button {
       -fx-scale-x         : 1.0;
       -fx-scale-y         : 1.0;
-      transition-property : -fx-background-color, -fx-background-radius, -fx-scale-x, -fx-scale-y;
-      @include motion('expressive-fast-spatial');
+      transition-property : -fx-background-color, -fx-background-radius, -fx-border-radius, -fx-scale-x, -fx-scale-y;
+      @include motion('standard-fast-spatial');
 
       &:pressed:hover {
-        -fx-scale-x : 1.1;
-        -fx-scale-y : 1.1;
+        -fx-scale-x : 1.025;
+        -fx-scale-y : 1.025;
+      }
+    }
+  }
+
+  // Connected group shape morph.
+
+  .mfx-buttons-group.connected {
+    > .mfx-button,
+    > .mfx-icon-button {
+      transition-property : -fx-background-color, -fx-background-radius, -fx-border-color, -fx-border-radius;
+      @include motion('expressive-fast-spatial');
+
+      > .surface {
+        transition-property : -fx-background-radius;
+        @include motion('expressive-fast-spatial');
+      }
+    }
+
+    // Selected: full pill on every corner (round and square alike).
+    > .mfx-button.xs:selected,
+    > .mfx-icon-button.xs:selected {
+      -fx-background-radius : 16px;
+      -fx-border-radius     : 32px;
+
+      > .surface {
+        -fx-background-radius : 32px;
+      }
+    }
+
+    > .mfx-button.s:selected,
+    > .mfx-icon-button.s:selected {
+      -fx-background-radius : 20px;
+      -fx-border-radius     : 40px;
+
+      > .surface {
+        -fx-background-radius : 40px;
+      }
+    }
+
+    > .mfx-button.m:selected,
+    > .mfx-icon-button.m:selected {
+      -fx-background-radius : 28px;
+      -fx-border-radius     : 56px;
+
+      > .surface {
+        -fx-background-radius : 56px;
+      }
+    }
+
+    > .mfx-button.l:selected,
+    > .mfx-icon-button.l:selected {
+      -fx-background-radius : 48px;
+      -fx-border-radius     : 96px;
+
+      > .surface {
+        -fx-background-radius : 96px;
+      }
+    }
+
+    > .mfx-button.xl:selected,
+    > .mfx-icon-button.xl:selected {
+      -fx-background-radius : 68px;
+      -fx-border-radius     : 136px;
+
+      > .surface {
+        -fx-background-radius : 136px;
+      }
+    }
+
+    // Pressed - round variant: inner corner squares down, pill outer edge kept.
+
+    // XS - outer 16, pressed inner 4
+    > .mfx-button.xs.rounded:pressed:hover,
+    > .mfx-icon-button.xs.rounded:pressed:hover {
+      -fx-background-radius : 4px;
+      -fx-border-radius     : 4px;
+
+      > .surface {
+        -fx-background-radius : 4px;
+      }
+    }
+
+    > .mfx-button.xs.rounded:first-child:pressed:hover,
+    > .mfx-icon-button.xs.rounded:first-child:pressed:hover {
+      -fx-background-radius : 16px 4px 4px 16px;
+      -fx-border-radius     : 32px 4px 4px 32px;
+
+      > .surface {
+        -fx-background-radius : 32px 4px 4px 32px;
+      }
+    }
+
+    > .mfx-button.xs.rounded:last-child:pressed:hover,
+    > .mfx-icon-button.xs.rounded:last-child:pressed:hover {
+      -fx-background-radius : 4px 16px 16px 4px;
+      -fx-border-radius     : 4px 32px 32px 4px;
+
+      > .surface {
+        -fx-background-radius : 4px 32px 32px 4px;
+      }
+    }
+
+    > .mfx-button.xs.rounded:only-child:pressed:hover,
+    > .mfx-icon-button.xs.rounded:only-child:pressed:hover {
+      -fx-background-radius : 4px;
+      -fx-border-radius     : 4px;
+
+      > .surface {
+        -fx-background-radius : 4px;
+      }
+    }
+
+    // S - outer 20, pressed inner 4
+    > .mfx-button.s.rounded:pressed:hover,
+    > .mfx-icon-button.s.rounded:pressed:hover {
+      -fx-background-radius : 4px;
+      -fx-border-radius     : 4px;
+
+      > .surface {
+        -fx-background-radius : 4px;
+      }
+    }
+
+    > .mfx-button.s.rounded:first-child:pressed:hover,
+    > .mfx-icon-button.s.rounded:first-child:pressed:hover {
+      -fx-background-radius : 20px 4px 4px 20px;
+      -fx-border-radius     : 40px 4px 4px 40px;
+
+      > .surface {
+        -fx-background-radius : 40px 4px 4px 40px;
+      }
+    }
+
+    > .mfx-button.s.rounded:last-child:pressed:hover,
+    > .mfx-icon-button.s.rounded:last-child:pressed:hover {
+      -fx-background-radius : 4px 20px 20px 4px;
+      -fx-border-radius     : 4px 40px 40px 4px;
+
+      > .surface {
+        -fx-background-radius : 4px 40px 40px 4px;
+      }
+    }
+
+    > .mfx-button.s.rounded:only-child:pressed:hover,
+    > .mfx-icon-button.s.rounded:only-child:pressed:hover {
+      -fx-background-radius : 4px;
+      -fx-border-radius     : 4px;
+
+      > .surface {
+        -fx-background-radius : 4px;
+      }
+    }
+
+    // M - outer 28, pressed inner 4
+    > .mfx-button.m.rounded:pressed:hover,
+    > .mfx-icon-button.m.rounded:pressed:hover {
+      -fx-background-radius : 4px;
+      -fx-border-radius     : 4px;
+
+      > .surface {
+        -fx-background-radius : 4px;
+      }
+    }
+
+    > .mfx-button.m.rounded:first-child:pressed:hover,
+    > .mfx-icon-button.m.rounded:first-child:pressed:hover {
+      -fx-background-radius : 28px 4px 4px 28px;
+      -fx-border-radius     : 56px 4px 4px 56px;
+
+      > .surface {
+        -fx-background-radius : 56px 4px 4px 56px;
+      }
+    }
+
+    > .mfx-button.m.rounded:last-child:pressed:hover,
+    > .mfx-icon-button.m.rounded:last-child:pressed:hover {
+      -fx-background-radius : 4px 28px 28px 4px;
+      -fx-border-radius     : 4px 56px 56px 4px;
+
+      > .surface {
+        -fx-background-radius : 4px 56px 56px 4px;
+      }
+    }
+
+    > .mfx-button.m.rounded:only-child:pressed:hover,
+    > .mfx-icon-button.m.rounded:only-child:pressed:hover {
+      -fx-background-radius : 4px;
+      -fx-border-radius     : 4px;
+
+      > .surface {
+        -fx-background-radius : 4px;
+      }
+    }
+
+    // L - outer 48, pressed inner 12
+    > .mfx-button.l.rounded:pressed:hover,
+    > .mfx-icon-button.l.rounded:pressed:hover {
+      -fx-background-radius : 12px;
+      -fx-border-radius     : 12px;
+
+      > .surface {
+        -fx-background-radius : 12px;
+      }
+    }
+
+    > .mfx-button.l.rounded:first-child:pressed:hover,
+    > .mfx-icon-button.l.rounded:first-child:pressed:hover {
+      -fx-background-radius : 48px 12px 12px 48px;
+      -fx-border-radius     : 96px 12px 12px 96px;
+
+      > .surface {
+        -fx-background-radius : 96px 12px 12px 96px;
+      }
+    }
+
+    > .mfx-button.l.rounded:last-child:pressed:hover,
+    > .mfx-icon-button.l.rounded:last-child:pressed:hover {
+      -fx-background-radius : 12px 48px 48px 12px;
+      -fx-border-radius     : 12px 96px 96px 12px;
+
+      > .surface {
+        -fx-background-radius : 12px 96px 96px 12px;
+      }
+    }
+
+    > .mfx-button.l.rounded:only-child:pressed:hover,
+    > .mfx-icon-button.l.rounded:only-child:pressed:hover {
+      -fx-background-radius : 12px;
+      -fx-border-radius     : 12px;
+
+      > .surface {
+        -fx-background-radius : 12px;
+      }
+    }
+
+    // XL - outer 68, pressed inner 16
+    > .mfx-button.xl.rounded:pressed:hover,
+    > .mfx-icon-button.xl.rounded:pressed:hover {
+      -fx-background-radius : 16px;
+      -fx-border-radius     : 16px;
+
+      > .surface {
+        -fx-background-radius : 16px;
+      }
+    }
+
+    > .mfx-button.xl.rounded:first-child:pressed:hover,
+    > .mfx-icon-button.xl.rounded:first-child:pressed:hover {
+      -fx-background-radius : 68px 16px 16px 68px;
+      -fx-border-radius     : 136px 16px 16px 136px;
+
+      > .surface {
+        -fx-background-radius : 136px 16px 16px 136px;
+      }
+    }
+
+    > .mfx-button.xl.rounded:last-child:pressed:hover,
+    > .mfx-icon-button.xl.rounded:last-child:pressed:hover {
+      -fx-background-radius : 16px 68px 68px 16px;
+      -fx-border-radius     : 16px 136px 136px 16px;
+
+      > .surface {
+        -fx-background-radius : 16px 136px 136px 16px;
+      }
+    }
+
+    > .mfx-button.xl.rounded:only-child:pressed:hover,
+    > .mfx-icon-button.xl.rounded:only-child:pressed:hover {
+      -fx-background-radius : 16px;
+      -fx-border-radius     : 16px;
+
+      > .surface {
+        -fx-background-radius : 16px;
+      }
+    }
+
+    // Pressed - square variant: uniform square-down (no bulged outer edge, so no first/last split).
+
+    > .mfx-button.xs.squared:pressed:hover,
+    > .mfx-icon-button.xs.squared:pressed:hover {
+      -fx-background-radius : 4px;
+      -fx-border-radius     : 4px;
+
+      > .surface {
+        -fx-background-radius : 4px;
+      }
+    }
+
+    > .mfx-button.s.squared:pressed:hover,
+    > .mfx-icon-button.s.squared:pressed:hover {
+      -fx-background-radius : 4px;
+      -fx-border-radius     : 4px;
+
+      > .surface {
+        -fx-background-radius : 4px;
+      }
+    }
+
+    > .mfx-button.m.squared:pressed:hover,
+    > .mfx-icon-button.m.squared:pressed:hover {
+      -fx-background-radius : 4px;
+      -fx-border-radius     : 4px;
+
+      > .surface {
+        -fx-background-radius : 4px;
+      }
+    }
+
+    > .mfx-button.l.squared:pressed:hover,
+    > .mfx-icon-button.l.squared:pressed:hover {
+      -fx-background-radius : 12px;
+      -fx-border-radius     : 12px;
+
+      > .surface {
+        -fx-background-radius : 12px;
+      }
+    }
+
+    > .mfx-button.xl.squared:pressed:hover,
+    > .mfx-icon-button.xl.squared:pressed:hover {
+      -fx-background-radius : 16px;
+      -fx-border-radius     : 16px;
+
+      > .surface {
+        -fx-background-radius : 16px;
       }
     }
   }
@@ -114,7 +439,7 @@
 
 @mixin MaterialFloatingActionButtonsMenuMotion() {
   .mfx-fab-menu > .entry {
-    transition-property : -fx-background-radius, -fx-scale-x, -fx-scale-y;
+    transition-property : -fx-background-color, -fx-background-radius, -fx-scale-x, -fx-scale-y;
     @include motion('expressive-fast-spatial');
   }
 }

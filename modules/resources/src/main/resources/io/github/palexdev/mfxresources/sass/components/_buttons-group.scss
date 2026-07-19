@@ -36,14 +36,276 @@
       -mfx-spacing : 8px;
     }
 
+    // Connected button group.
+
     &.connected {
-      -mfx-spacing : 2px;
+      -mfx-spacing : 4px; // specs say 2px but imo it's too small
 
       > .mfx-button.xs,
       > .mfx-icon-button.xs,
       > .mfx-button.s,
-      > .mfx-icon-button.s, {
+      > .mfx-icon-button.s {
         -fx-min-width : 48px;
+      }
+
+      // Round variant: fully-round outer edge, square inner edge.
+
+      // XS
+      > .mfx-button.xs,
+      > .mfx-icon-button.xs {
+        -fx-background-radius : 8px;
+        -fx-border-radius     : 8px;
+
+        > .surface {
+          -fx-background-radius : 8px;
+        }
+      }
+
+      > .mfx-button.xs:first-child,
+      > .mfx-icon-button.xs:first-child {
+        -fx-background-radius : 16px 8px 8px 16px;
+        -fx-border-radius     : 32px 8px 8px 32px;
+
+        > .surface {
+          -fx-background-radius : 32px 8px 8px 32px;
+        }
+      }
+
+      > .mfx-button.xs:last-child,
+      > .mfx-icon-button.xs:last-child {
+        -fx-background-radius : 8px 16px 16px 8px;
+        -fx-border-radius     : 8px 32px 32px 8px;
+
+        > .surface {
+          -fx-background-radius : 8px 32px 32px 8px;
+        }
+      }
+
+      > .mfx-button.xs:only-child,
+      > .mfx-icon-button.xs:only-child {
+        -fx-background-radius : 16px;
+        -fx-border-radius     : 32px;
+
+        > .surface {
+          -fx-background-radius : 32px;
+        }
+      }
+
+      // S
+      > .mfx-button.s,
+      > .mfx-icon-button.s {
+        -fx-background-radius : 8px;
+        -fx-border-radius     : 8px;
+
+        > .surface {
+          -fx-background-radius : 8px;
+        }
+      }
+
+      > .mfx-button.s:first-child,
+      > .mfx-icon-button.s:first-child {
+        -fx-background-radius : 20px 8px 8px 20px;
+        -fx-border-radius     : 40px 8px 8px 40px;
+
+        > .surface {
+          -fx-background-radius : 40px 8px 8px 40px;
+        }
+      }
+
+      > .mfx-button.s:last-child,
+      > .mfx-icon-button.s:last-child {
+        -fx-background-radius : 8px 20px 20px 8px;
+        -fx-border-radius     : 8px 40px 40px 8px;
+
+        > .surface {
+          -fx-background-radius : 8px 40px 40px 8px;
+        }
+      }
+
+      > .mfx-button.s:only-child,
+      > .mfx-icon-button.s:only-child {
+        -fx-background-radius : 20px;
+        -fx-border-radius     : 40px;
+
+        > .surface {
+          -fx-background-radius : 40px;
+        }
+      }
+
+      // M
+      > .mfx-button.m,
+      > .mfx-icon-button.m {
+        -fx-background-radius : 8px;
+        -fx-border-radius     : 8px;
+
+        > .surface {
+          -fx-background-radius : 8px;
+        }
+      }
+
+      > .mfx-button.m:first-child,
+      > .mfx-icon-button.m:first-child {
+        -fx-background-radius : 28px 8px 8px 28px;
+        -fx-border-radius     : 56px 8px 8px 56px;
+
+        > .surface {
+          -fx-background-radius : 56px 8px 8px 56px;
+        }
+      }
+
+      > .mfx-button.m:last-child,
+      > .mfx-icon-button.m:last-child {
+        -fx-background-radius : 8px 28px 28px 8px;
+        -fx-border-radius     : 8px 56px 56px 8px;
+
+        > .surface {
+          -fx-background-radius : 8px 56px 56px 8px;
+        }
+      }
+
+      > .mfx-button.m:only-child,
+      > .mfx-icon-button.m:only-child {
+        -fx-background-radius : 28px;
+        -fx-border-radius     : 56px;
+
+        > .surface {
+          -fx-background-radius : 56px;
+        }
+      }
+
+      // L
+      > .mfx-button.l,
+      > .mfx-icon-button.l {
+        -fx-background-radius : 16px;
+        -fx-border-radius     : 16px;
+
+        > .surface {
+          -fx-background-radius : 16px;
+        }
+      }
+
+      > .mfx-button.l:first-child,
+      > .mfx-icon-button.l:first-child {
+        -fx-background-radius : 48px 16px 16px 48px;
+        -fx-border-radius     : 96px 16px 16px 96px;
+
+        > .surface {
+          -fx-background-radius : 96px 16px 16px 96px;
+        }
+      }
+
+      > .mfx-button.l:last-child,
+      > .mfx-icon-button.l:last-child {
+        -fx-background-radius : 16px 48px 48px 16px;
+        -fx-border-radius     : 16px 96px 96px 16px;
+
+        > .surface {
+          -fx-background-radius : 16px 96px 96px 16px;
+        }
+      }
+
+      > .mfx-button.l:only-child,
+      > .mfx-icon-button.l:only-child {
+        -fx-background-radius : 48px;
+        -fx-border-radius     : 96px;
+
+        > .surface {
+          -fx-background-radius : 96px;
+        }
+      }
+
+      // XL
+      > .mfx-button.xl,
+      > .mfx-icon-button.xl {
+        -fx-background-radius : 20px;
+        -fx-border-radius     : 20px;
+
+        > .surface {
+          -fx-background-radius : 20px;
+        }
+      }
+
+      > .mfx-button.xl:first-child,
+      > .mfx-icon-button.xl:first-child {
+        -fx-background-radius : 68px 20px 20px 68px;
+        -fx-border-radius     : 136px 20px 20px 136px;
+
+        > .surface {
+          -fx-background-radius : 136px 20px 20px 136px;
+        }
+      }
+
+      > .mfx-button.xl:last-child,
+      > .mfx-icon-button.xl:last-child {
+        -fx-background-radius : 20px 68px 68px 20px;
+        -fx-border-radius     : 20px 136px 136px 20px;
+
+        > .surface {
+          -fx-background-radius : 20px 136px 136px 20px;
+        }
+      }
+
+      > .mfx-button.xl:only-child,
+      > .mfx-icon-button.xl:only-child {
+        -fx-background-radius : 68px;
+        -fx-border-radius     : 136px;
+
+        > .surface {
+          -fx-background-radius : 136px;
+        }
+      }
+
+      // Square variant: same as round but the outer edge is not bulged, so every button keeps the
+      // uniform inner corner size. Declared after the round rules so it wins for `.squared` buttons.
+
+      > .mfx-button.xs.squared,
+      > .mfx-icon-button.xs.squared {
+        -fx-background-radius : 8px;
+        -fx-border-radius     : 8px;
+
+        > .surface {
+          -fx-background-radius : 8px;
+        }
+      }
+
+      > .mfx-button.s.squared,
+      > .mfx-icon-button.s.squared {
+        -fx-background-radius : 8px;
+        -fx-border-radius     : 8px;
+
+        > .surface {
+          -fx-background-radius : 8px;
+        }
+      }
+
+      > .mfx-button.m.squared,
+      > .mfx-icon-button.m.squared {
+        -fx-background-radius : 8px;
+        -fx-border-radius     : 8px;
+
+        > .surface {
+          -fx-background-radius : 8px;
+        }
+      }
+
+      > .mfx-button.l.squared,
+      > .mfx-icon-button.l.squared {
+        -fx-background-radius : 16px;
+        -fx-border-radius     : 16px;
+
+        > .surface {
+          -fx-background-radius : 16px;
+        }
+      }
+
+      > .mfx-button.xl.squared,
+      > .mfx-icon-button.xl.squared {
+        -fx-background-radius : 20px;
+        -fx-border-radius     : 20px;
+
+        > .surface {
+          -fx-background-radius : 20px;
+        }
       }
     }
   }
