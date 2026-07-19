@@ -77,7 +77,7 @@ public class IconUtils {
 
     /// @return a new [MFXFontIcon] with a random icon name from the [FontAwesomeSolid] icons' pack.
     public static MFXFontIcon randomFAS() {
-        return randomIcon("fas");
+        return randomIcon("fas-");
     }
 
     /// @return a random [FontIconsPack] among those registered in [FontIconsPacks].
