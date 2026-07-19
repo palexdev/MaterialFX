@@ -31,6 +31,26 @@
       -mfx-animation : SCALE;
     }
 
+    &.xs {
+      @include LabelLarge();
+      -fx-background-radius : shape('medium');
+      -fx-border-radius     : shape('medium');
+      -fx-padding           : 0px 12px 0px 12px;
+      -mfx-min-size : 40px 40px;
+
+      > .label > .mfx-icon-wrapper > .mfx-font-icon {
+        -mfx-size : 16px
+      }
+
+      > .surface {
+        -fx-background-radius : shape('medium');
+      }
+
+      &:extended {
+        -fx-graphic-text-gap : 4px;
+      }
+    }
+
     &.s {
       @include TitleMedium();
       -fx-background-radius : shape('large');
