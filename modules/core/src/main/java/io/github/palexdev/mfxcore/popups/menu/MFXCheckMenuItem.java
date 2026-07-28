@@ -35,14 +35,15 @@ import io.github.palexdev.mfxcore.utils.fx.PseudoClasses;
 import javafx.scene.Node;
 import javafx.scene.layout.Region;
 
-/// Specialization of [MFXMenuItemSkin] to add selectable options in [MFXMenu].
+/// Specialization of [MFXMenuItem] to add selectable options in [MFXMenu].
 /// Implements [Selectable], has an additional style class which is `.check` (so the complete selector is
 /// `.mfx-menu-item.check`), and an additional default stylesheet to setup the checkmark svg icon (with style class `.mark`).
 ///
 /// It's important to note that this type of item has a series of limitations and behavior changes:
 /// - It does not support showing submenus, technically possible but a design choice
-/// - You can't specify an icon through the [#graphicProperty()]. The value will be ignored as the slot is reserved for
-///   the checkmark icon
+/// - The icon slot is shared between the [#graphicProperty()] and the checkmark: the graphic is shown while the item is
+///   unselected and replaced by the checkmark once selected. Both nodes are kept in the slot, which is therefore sized on
+///   the largest of the two, so that toggling the selection does not change the layout
 /// - Triggering the item (via mouse click or keys) does change the selection state of the item (if not bound),
 ///   and runs the action specified by the [#actionProperty()].
 ///   If you want to run an action specifically when the selection changes, use the [#onSelectionChanged(Consumer)]
@@ -160,16 +161,27 @@ public class MFXCheckMenuItem extends MFXMenuItem implements Selectable {
 
     public static class MFXCheckMenuItemSkin extends MFXMenuItemSkin {
 
+        private final Region checkmark;
+
         public MFXCheckMenuItemSkin(MFXCheckMenuItem item) {
+            checkmark = new Region();
             super(item);
-            Region checkmark = new Region();
             checkmark.getStyleClass().add("mark");
             checkmark.visibleProperty().bind(item.selectedProperty());
-            iconContainer.getChildren().setAll(checkmark);
+            iconContainer.getChildren().addFirst(checkmark);
         }
 
         @Override
-        protected void updateIcon() {}
+        protected void updateIcon(Node oldIcon, Node newIcon) {
+            if (oldIcon != null) {
+                oldIcon.visibleProperty().unbind();
+                iconContainer.getChildren().remove(oldIcon);
+            }
+            if (newIcon != null) {
+                newIcon.visibleProperty().bind(checkmark.visibleProperty().not());
+                iconContainer.getChildren().add(newIcon);
+            }
+        }
 
         @Override
         protected void handleSubMenu() {}
@@ -193,8 +205,13 @@ public class MFXCheckMenuItem extends MFXMenuItem implements Selectable {
             item.toggle();
             if (item.getAction() != null) {
                 item.getAction().run();
-                if (item.isCloseOnAction()) item.getMenu().getRootMenu().hide();
             }
+
+            // if the menu is not available, it means the action was probably run "manually", without the menu being visible.
+            if (item.isCloseOnAction())
+                Optional.ofNullable(item.getMenu())
+                    .map(MFXMenu::getRootMenu)
+                    .ifPresent(MFXMenu::hide);
         }
     }
 }

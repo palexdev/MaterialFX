@@ -396,20 +396,16 @@ public class MFXMenuItem extends MFXLabeled {
                         }
                     })
                     .executeNow(item::isHover),
-                When.onInvalidated(item.graphicProperty()).then(_ -> updateIcon()).executeNow(),
+                When.onChanged(item.graphicProperty()).then(this::updateIcon).executeNow(),
                 When.observe(this::handleSubMenu, item.getSubItems()).executeNow()
             );
 
             trailing.textProperty().bind(item.shortcutProperty().map(KeyStroke::toDisplayString));
         }
 
-        protected void updateIcon() {
-            Node icon = getSkinnable().getGraphic();
-            if (icon == null) {
-                iconContainer.getChildren().clear();
-            } else {
-                iconContainer.getChildren().setAll(icon);
-            }
+        protected void updateIcon(Node oldIcon, Node newIcon) {
+            if (oldIcon != null) iconContainer.getChildren().remove(oldIcon);
+            if (newIcon != null) iconContainer.getChildren().add(newIcon);
         }
 
         /// This method is mainly responsible for creating or disposing the submenu depending on [MFXMenuItem#getSubItems()].
