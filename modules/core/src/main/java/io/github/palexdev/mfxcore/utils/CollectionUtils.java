@@ -18,11 +18,9 @@
 
 package io.github.palexdev.mfxcore.utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /// Utilities for Java collections.
@@ -41,6 +39,31 @@ public class CollectionUtils {
     @SafeVarargs
     public static <T> List<T> list(T... ts) {
         return new ArrayList<>(Arrays.asList(ts));
+    }
+
+    public static <K, V> Map<K, V> map(Object... mappings) {
+        return map(HashMap::new, mappings);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <K, V> Map<K, V> map(Supplier<? extends Map<K, V>> mapFactory, Object... mappings) {
+        if (mappings.length % 2 != 0)
+            throw new IllegalArgumentException("Mappings must be in pairs of key and value");
+        Map<K, V> map = mapFactory.get();
+        for (int i = 0; i < mappings.length; i += 2) {
+            map.put((K) mappings[i], (V) mappings[i + 1]);
+        }
+        return map;
+    }
+
+    public static <T> Set<T> set(T... ts) {
+        return set(HashSet::new, ts);
+    }
+
+    public static <T> Set<T> set(Supplier<? extends Set<T>> setFactory, T... ts) {
+        Set<T> set = setFactory.get();
+        Collections.addAll(set, ts);
+        return set;
     }
 
     /// Flattens a tree structure into a sequential stream of nodes using depth-first traversal.
