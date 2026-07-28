@@ -22,6 +22,7 @@ import java.util.Comparator;
 import java.util.function.*;
 
 import io.github.palexdev.mfxcore.base.TriFunction;
+import io.github.palexdev.mfxcore.base.properties.base.ExtendedProperty;
 import io.github.palexdev.mfxcore.base.properties.functional.*;
 import io.github.palexdev.mfxcore.base.properties.styleable.*;
 import io.github.palexdev.mfxcore.utils.NumberUtils;
@@ -120,6 +121,11 @@ public class PropUtils {
         return longProperty().mapper(val -> NumberUtils.clamp(val, min.get(), max.get())).build();
     }
 
+    @SuppressWarnings("unchecked")
+    private static <N extends Number> ExtendedProperty<N> wrapNumber(Property<Number> property, N defaultValue) {
+        return (ExtendedProperty<N>) ExtendedProperty.wrap(property, defaultValue);
+    }
+
     //================================================================================
     // Builders
     //================================================================================
@@ -190,6 +196,12 @@ public class PropUtils {
             };
         }
 
+        /// Builds the property and wraps it in an [ExtendedProperty] with the given default value. Note that the
+        /// default value goes through the configured mapper too, if any.
+        public ExtendedProperty<Double> extended(Double defaultValue) {
+            return wrapNumber(build(), config.mapped(defaultValue));
+        }
+
         public StyleableDoubleProperty asStyleable(
             CssMetaData<? extends Styleable, Number> metaData, BiFunction<StyleOrigin, Double, Double> applyStyle
         ) {
@@ -253,6 +265,12 @@ public class PropUtils {
                     if (config.onInvalidated != null) config.onInvalidated.accept(get());
                 }
             };
+        }
+
+        /// Builds the property and wraps it in an [ExtendedProperty] with the given default value. Note that the
+        /// default value goes through the configured mapper too, if any.
+        public ExtendedProperty<Float> extended(Float defaultValue) {
+            return wrapNumber(build(), config.mapped(defaultValue));
         }
 
         public StyleableFloatProperty asStyleable(
@@ -320,6 +338,12 @@ public class PropUtils {
             };
         }
 
+        /// Builds the property and wraps it in an [ExtendedProperty] with the given default value. Note that the
+        /// default value goes through the configured mapper too, if any.
+        public ExtendedProperty<Integer> extended(Integer defaultValue) {
+            return wrapNumber(build(), config.mapped(defaultValue));
+        }
+
         public StyleableIntegerProperty asStyleable(
             CssMetaData<? extends Styleable, Number> metaData, BiFunction<StyleOrigin, Integer, Integer> applyStyle
         ) {
@@ -383,6 +407,12 @@ public class PropUtils {
                     if (config.onInvalidated != null) config.onInvalidated.accept(get());
                 }
             };
+        }
+
+        /// Builds the property and wraps it in an [ExtendedProperty] with the given default value. Note that the
+        /// default value goes through the configured mapper too, if any.
+        public ExtendedProperty<Long> extended(Long defaultValue) {
+            return wrapNumber(build(), config.mapped(defaultValue));
         }
 
         public StyleableLongProperty asStyleable(
@@ -450,6 +480,12 @@ public class PropUtils {
             };
         }
 
+        /// Builds the property and wraps it in an [ExtendedProperty] with the given default value. Note that the
+        /// default value goes through the configured mapper too, if any.
+        public ExtendedProperty<String> extended(String defaultValue) {
+            return ExtendedProperty.wrap(build(), config.mapped(defaultValue));
+        }
+
         public StyleableStringProperty asStyleable(
             CssMetaData<? extends Styleable, String> metaData, BiFunction<StyleOrigin, String, String> applyStyle
         ) {
@@ -502,7 +538,7 @@ public class PropUtils {
         }
 
         public ObjectProperty<T> build() {
-            return new SimpleObjectProperty<T>(config.bean, config.name, config.initialValue) {
+            return new SimpleObjectProperty<>(config.bean, config.name, config.initialValue) {
                 @Override
                 public void set(T newValue) {
                     super.set(config.mapper != null ? config.mapper.apply(newValue) : newValue);
@@ -515,9 +551,15 @@ public class PropUtils {
             };
         }
 
+        /// Builds the property and wraps it in an [ExtendedProperty] with the given default value. Note that the
+        /// default value goes through the configured mapper too, if any.
+        public ExtendedProperty<T> extended(T defaultValue) {
+            return ExtendedProperty.wrap(build(), config.mapped(defaultValue));
+        }
+
         public StyleableObjectProperty<T> asStyleable(
             CssMetaData<? extends Styleable, T> metaData, BiFunction<StyleOrigin, T, T> applyStyle) {
-            return new StyleableObjectProperty<T>(metaData, config.bean, config.name, config.initialValue) {
+            return new StyleableObjectProperty<>(metaData, config.bean, config.name, config.initialValue) {
                 @Override
                 public void set(T newValue) {
                     super.set(config.mapper != null ? config.mapper.apply(newValue) : newValue);
@@ -544,5 +586,9 @@ public class PropUtils {
         T initialValue;
         Function<T, T> mapper;
         Consumer<T> onInvalidated;
+
+        T mapped(T value) {
+            return mapper != null ? mapper.apply(value) : value;
+        }
     }
 }
