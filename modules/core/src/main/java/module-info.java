@@ -19,7 +19,6 @@ module mfx.core {
     exports io.github.palexdev.mfxcore.base.properties.base;
     exports io.github.palexdev.mfxcore.base.properties.functional;
     exports io.github.palexdev.mfxcore.base.properties.range;
-    exports io.github.palexdev.mfxcore.base.properties.resettable;
     exports io.github.palexdev.mfxcore.base.properties.styleable;
     exports io.github.palexdev.mfxcore.base.properties.synced;
 
