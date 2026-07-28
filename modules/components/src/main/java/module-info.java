@@ -5,6 +5,7 @@ module mfx.components {
     requires transitive mfx.effects;
     requires transitive mfx.localization;
     requires transitive mfx.resources;
+    requires transitive material.color.utilities;
     requires transitive VirtualizedFX;
 
     // Behaviors

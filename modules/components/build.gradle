@@ -5,6 +5,7 @@ dependencies {
     api(project(':effects'))
     api(project(":localization"))
     api(project(":resources"))
+    api "io.github.palexdev:material-color-utilities:$mcu"
     api("io.github.palexdev:virtualizedfx:$vfx") {
         exclude group: 'io.github.palexdev'
     }
