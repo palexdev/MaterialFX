@@ -71,10 +71,8 @@ public class NodeUtils {
         }
     }
 
-    /**
-     * Returns {@code true} if {@code node} is a descendant of (or equal to) {@code ancestor}.
-     * Returns {@code true} unconditionally if {@code ancestor} is {@code null}.
-     */
+    /// @return `true` if `node` is a descendant of (or equal to) `ancestor`.
+    /// Returns `true` unconditionally if `ancestor` is `null`.
     public static boolean isDescendantOf(Node node, Node ancestor) {
         if (ancestor == null) {
             return true;
@@ -88,30 +86,22 @@ public class NodeUtils {
         return false;
     }
 
-    /**
-     * Returns {@code true} if the event's intersected node is a descendant of {@code ancestor}.
-     */
+    /// @return  `true` if the event's intersected node is a descendant of `ancestor`.
     public static boolean isDescendantOf(MouseEvent event, Node ancestor) {
         return isDescendantOf(event.getPickResult().getIntersectedNode(), ancestor);
     }
 
-    /**
-     * Returns {@code true} if the event's intersected node is a descendant of {@code ancestor}.
-     */
+    /// @return `true` if the event's intersected node is a descendant of `ancestor`.
     public static boolean isDescendantOf(GestureEvent event, Node ancestor) {
         return isDescendantOf(event.getPickResult().getIntersectedNode(), ancestor);
     }
 
-    /**
-     * Returns {@code true} if {@code node} contains the event's intersected node as a descendant.
-     */
+    /// @return `true` if `node` contains the event's intersected node as a descendant.
     public static boolean containsEventTarget(MouseEvent event, Node node) {
         return isDescendantOf(event.getPickResult().getIntersectedNode(), node);
     }
 
-    /**
-     * Returns {@code true} if {@code node} contains the event's intersected node as a descendant.
-     */
+    /// @return `true` if `node` contains the event's intersected node as a descendant.
     public static boolean containsEventTarget(GestureEvent event, Node node) {
         return isDescendantOf(event.getPickResult().getIntersectedNode(), node);
     }
