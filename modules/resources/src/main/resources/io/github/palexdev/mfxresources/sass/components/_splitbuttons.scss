@@ -20,15 +20,6 @@
 
 @mixin MaterialSplitButtons() {
   .mfx-split-button {
-    > .mfx-button.leading .view-cell {
-      -fx-background-color : transparent;
-
-      .surface,
-      .mfx-ripple-generator {
-        visibility : hidden;
-      }
-    }
-
     // XS
     > .mfx-button.leading.xs {
       -fx-background-radius : 16px 4px 4px 16px;
@@ -42,6 +33,12 @@
     > .mfx-button.trailing.xs {
       -fx-background-radius : 4px 16px 16px 4px;
       -fx-border-radius     : 4px 32px 32px 4px;
+      -fx-min-width         : 48px;
+      -fx-padding           : 0px 13px 0px 13px;
+
+      > .label > .mfx-font-icon {
+        -mfx-size : 22px;
+      }
 
       > .surface {
         -fx-background-radius : 4px 16px 16px 4px;
@@ -61,6 +58,12 @@
     > .mfx-button.trailing.s {
       -fx-background-radius : 4px 20px 20px 4px;
       -fx-border-radius     : 4px 40px 40px 4px;
+      -fx-min-width         : 48px;
+      -fx-padding           : 0px 13px 0px 13px;
+
+      > .label > .mfx-font-icon {
+        -mfx-size : 22px;
+      }
 
       > .surface {
         -fx-background-radius : 4px 20px 20px 4px;
@@ -80,6 +83,12 @@
     > .mfx-button.trailing.m {
       -fx-background-radius : 4px 28px 28px 4px;
       -fx-border-radius     : 4px 56px 56px 4px;
+      -fx-min-width         : 56px;
+      -fx-padding           : 0px 15px 0px 15px;
+
+      > .label > .mfx-font-icon {
+        -mfx-size : 26px;
+      }
 
       > .surface {
         -fx-background-radius : 4px 28px 28px 4px;
@@ -99,6 +108,12 @@
     > .mfx-button.trailing.l {
       -fx-background-radius : 8px 48px 48px 8px;
       -fx-border-radius     : 8px 96px 96px 8px;
+      -fx-min-width         : 96px;
+      -fx-padding           : 0px 29px 0px 29px;
+
+      > .label > .mfx-font-icon {
+        -mfx-size : 38px;
+      }
 
       > .surface {
         -fx-background-radius : 8px 48px 48px 8px;
@@ -118,6 +133,12 @@
     > .mfx-button.trailing.xl {
       -fx-background-radius : 12px 68px 68px 12px;
       -fx-border-radius     : 12px 136px 136px 12px;
+      -fx-min-width         : 136px;
+      -fx-padding           : 0px 43px 0px 43px;
+
+      > .label > .mfx-font-icon {
+        -mfx-size : 50px;
+      }
 
       > .surface {
         -fx-background-radius : 12px 68px 68px 12px;
@@ -129,26 +150,8 @@
       -fx-rotate                 : 0deg;
     }
 
-    > .mfx-button.trailing:selected > .label > .mfx-font-icon {
+    &:open > .mfx-button.trailing > .label > .mfx-font-icon {
       -fx-rotate : 180deg;
-    }
-  }
-
-  .mfx-split-button.outlined > .mfx-button {
-    -fx-border-insets : 0.04em;
-    -fx-border-width  : 0.06875em;
-  }
-
-  /* Popup */
-  .mfx-split-button .mfx-popover {
-    -fx-background-color  : -md-sys-color-surface-container;
-    -fx-background-radius : shape('small');
-    -fx-effect            : dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.16, 0, 3);
-    -fx-min-width         : 150px;
-    -fx-max-width         : 280px;
-
-    > .vfx-scroll-pane .vfx-list {
-      -vfx-cell-size : 40px;
     }
   }
 }

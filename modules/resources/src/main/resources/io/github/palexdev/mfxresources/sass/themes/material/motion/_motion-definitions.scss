@@ -75,22 +75,16 @@
 
     &.xs:pressed:hover,
     &.s:pressed:hover {
-      &:hover:pressed {
         -fx-border-radius : shape('small');
-      }
     }
 
     &.m:pressed:hover {
-      &:hover:pressed {
         -fx-border-radius : shape('medium');
-      }
     }
 
     &.l:pressed:hover,
     &.xl:pressed:hover {
-      &:hover:pressed {
         -fx-border-radius : shape('large');
-      }
     }
   }
 }
@@ -446,38 +440,45 @@
 
 @mixin MaterialSplitButtonsMotion() {
   .mfx-split-button {
+    > .mfx-button > .surface {
+      // I fucking hate JavaFX
+      transition-property : -fx-background-color, -fx-background-radius;
+      transition-duration : 0s;
+    }
+
     // XS
     > .mfx-button.leading.xs {
-      &:hover,
-      &:pressed,
-      &:selected {
-        -fx-background-radius : 16px 12px 12px 16px;
-        -fx-border-radius     : 32px 12px 12px 32px;
+      &:pressed:hover {
+        -fx-background-radius : 16px 8px 8px 16px;
+        -fx-border-radius     : 32px 8px 8px 32px;
 
         > .surface {
-          -fx-background-radius : 16px 12px 12px 16px;
+          -fx-background-radius : 16px 8px 8px 16px;
         }
       }
     }
 
-    > .mfx-button.trailing.xs {
-      &:hover,
-      &:pressed,
-      &:selected {
-        -fx-background-radius : 12px 16px 16px 12px;
-        -fx-border-radius     : 12px 32px 32px 12px;
+    > .mfx-button.trailing.xs:hover:pressed {
+      -fx-background-radius : 8px 16px 16px 8px;
+      -fx-border-radius     : 8px 32px 32px 8px;
 
-        > .surface {
-          -fx-background-radius : 12px 16px 16px 12px;
-        }
+      > .surface {
+        -fx-background-radius : 8px 16px 16px 8px;
+      }
+    }
+
+    &:open > .mfx-button.trailing.xs {
+      -fx-background-radius : 16px;
+      -fx-border-radius     : 32px;
+
+      > .surface {
+        -fx-background-radius : 16px;
       }
     }
 
     // S
     > .mfx-button.leading.s {
-      &:hover,
-      &:pressed,
-      &:selected {
+      &:pressed:hover {
         -fx-background-radius : 20px 12px 12px 20px;
         -fx-border-radius     : 40px 12px 12px 40px;
 
@@ -487,24 +488,27 @@
       }
     }
 
-    > .mfx-button.trailing.s {
-      &:hover,
-      &:pressed,
-      &:selected {
-        -fx-background-radius : 12px 20px 20px 12px;
-        -fx-border-radius     : 12px 40px 40px 12px;
+    > .mfx-button.trailing.s:hover:pressed {
+      -fx-background-radius : 12px 20px 20px 12px;
+      -fx-border-radius     : 12px 40px 40px 12px;
 
-        > .surface {
-          -fx-background-radius : 12px 20px 20px 12px;
-        }
+      > .surface {
+        -fx-background-radius : 12px 20px 20px 12px;
+      }
+    }
+
+    &:open > .mfx-button.trailing.s {
+      -fx-background-radius : 20px;
+      -fx-border-radius     : 40px;
+
+      > .surface {
+        -fx-background-radius : 20px;
       }
     }
 
     // M
     > .mfx-button.leading.m {
-      &:hover,
-      &:pressed,
-      &:selected {
+      &:pressed:hover {
         -fx-background-radius : 28px 12px 12px 28px;
         -fx-border-radius     : 56px 12px 12px 56px;
 
@@ -514,24 +518,27 @@
       }
     }
 
-    > .mfx-button.trailing.m {
-      &:hover,
-      &:pressed,
-      &:selected {
-        -fx-background-radius : 12px 28px 28px 12px;
-        -fx-border-radius     : 12px 56px 56px 12px;
+    > .mfx-button.trailing.m:hover:pressed {
+      -fx-background-radius : 12px 28px 28px 12px;
+      -fx-border-radius     : 12px 56px 56px 12px;
 
-        > .surface {
-          -fx-background-radius : 12px 28px 28px 12px;
-        }
+      > .surface {
+        -fx-background-radius : 12px 28px 28px 12px;
+      }
+    }
+
+    &:open > .mfx-button.trailing.m {
+      -fx-background-radius : 28px;
+      -fx-border-radius     : 56px;
+
+      > .surface {
+        -fx-background-radius : 28px;
       }
     }
 
     // L
     > .mfx-button.leading.l {
-      &:hover,
-      &:pressed,
-      &:selected {
+      &:pressed:hover {
         -fx-background-radius : 48px 20px 20px 48px;
         -fx-border-radius     : 96px 20px 20px 96px;
 
@@ -541,24 +548,27 @@
       }
     }
 
-    > .mfx-button.trailing.l {
-      &:hover,
-      &:pressed,
-      &:selected {
-        -fx-background-radius : 20px 48px 48px 20px;
-        -fx-border-radius     : 20px 96px 96px 20px;
+    > .mfx-button.trailing.l:hover:pressed {
+      -fx-background-radius : 20px 48px 48px 20px;
+      -fx-border-radius     : 20px 96px 96px 20px;
 
-        > .surface {
-          -fx-background-radius : 20px 48px 48px 20px;
-        }
+      > .surface {
+        -fx-background-radius : 20px 48px 48px 20px;
+      }
+    }
+
+    &:open > .mfx-button.trailing.l {
+      -fx-background-radius : 48px;
+      -fx-border-radius     : 96px;
+
+      > .surface {
+        -fx-background-radius : 48px;
       }
     }
 
     // XL
     > .mfx-button.leading.xl {
-      &:hover,
-      &:pressed,
-      &:selected {
+      &:pressed:hover {
         -fx-background-radius : 68px 20px 20px 68px;
         -fx-border-radius     : 136px 20px 20px 136px;
 
@@ -568,22 +578,27 @@
       }
     }
 
-    > .mfx-button.trailing.xl {
-      &:hover,
-      &:pressed,
-      &:selected {
-        -fx-background-radius : 20px 68px 68px 20px;
-        -fx-border-radius     : 20px 136px 136px 20px;
+    > .mfx-button.trailing.xl:hover:pressed {
+      -fx-background-radius : 20px 68px 68px 20px;
+      -fx-border-radius     : 20px 136px 136px 20px;
 
-        > .surface {
-          -fx-background-radius : 20px 68px 68px 20px;
-        }
+      > .surface {
+        -fx-background-radius : 20px 68px 68px 20px;
+      }
+    }
+
+    &:open > .mfx-button.trailing.xl {
+      -fx-background-radius : 68px;
+      -fx-border-radius     : 136px;
+
+      > .surface {
+        -fx-background-radius : 68px;
       }
     }
 
     > .mfx-button.trailing > .label > .mfx-font-icon {
       transition-property : -fx-rotate;
-      @include motion('expressive-fast-spatial');
+      @include motion('standard-fast-spatial');
     }
   }
 }
