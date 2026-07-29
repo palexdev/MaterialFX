@@ -24,8 +24,10 @@ import java.util.function.Supplier;
 
 import io.github.palexdev.mfxcomponents.controls.MFXButton.MFXToggleButton;
 import io.github.palexdev.mfxcomponents.controls.MFXIconButton.MFXToggleIconButton;
+import io.github.palexdev.mfxcomponents.controls.base.MFXButtonBase;
 import io.github.palexdev.mfxcomponents.controls.base.MFXToggle;
 import io.github.palexdev.mfxcomponents.skins.MFXButtonsGroupSkin;
+import io.github.palexdev.mfxcomponents.variants.ButtonVariants;
 import io.github.palexdev.mfxcomponents.variants.ButtonVariants.*;
 import io.github.palexdev.mfxcomponents.variants.api.Variant;
 import io.github.palexdev.mfxcomponents.variants.api.VariantsHandler;
@@ -38,9 +40,9 @@ import io.github.palexdev.mfxcore.enums.SelectionMode;
 import io.github.palexdev.mfxcore.selection.Selectable;
 import io.github.palexdev.mfxcore.selection.SelectionGroup;
 import io.github.palexdev.mfxcore.utils.fx.StyleUtils;
-import io.github.palexdev.mfxresources.icon.MFXFontIcon;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlySetProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -52,22 +54,23 @@ import javafx.scene.Node;
 
 import static io.github.palexdev.mfxcore.controls.MFXStyleable.styleClasses;
 
-/// Implementation of the buttons group shown in the Material 3 Expressive specs.<br >
-/// This is essentially a container for a bunch of toggle buttons (either [MFXToggleButton] or [MFXToggleIconButton]).<br >
+/// Implementation of the button group described in the Material 3 Expressive specification.<br>
 /// Extends [MFXControl], the default skin is [MFXButtonsGroupSkin], and the default CSS style class is `.mfx-buttons-group`.
 ///
-/// The selection is handled by a [SelectionGroup] that can be configured through a bunch of delegate methods.
-/// By default, the selection is mode [SelectionMode#SINGLE] and [SelectionGroup#atLeastOneSelectedProperty()] is `false`.
+/// This is essentially a container for a collection of [buttons][MFXButtonBase]. Although nothing prevents you from mixing
+/// different button types, the intended and recommended usage is to use either only standard buttons or only toggle buttons.
 ///
-/// It also implements [WithVariants]. The specs define a bunch of different configurations; we can distinguish two types:
-/// - Configurations that apply on the group itself, like the [GroupVariant] and the [SizeVariant] (inherited from [ButtonsConfig])
-/// - Configurations that apply on the buttons, which are the same defined in [MFXToggleButton] and [MFXToggleIconButton].
-/// To make this more convenient, we grouped them into [ButtonsConfig] and can be set through [#setButtonsConfig(ButtonsConfig)].
-/// When buttons are added to the group, the configuration is automatically applied by [#updateGroup(ListChangeListener.Change)].
+/// For all [toggle buttons][MFXToggle] added to the group, selection is managed by a [SelectionGroup], which can be
+/// configured through delegate methods. By default, the selection mode is [SelectionMode#SINGLE], and
+/// [SelectionGroup#atLeastOneSelectedProperty()] is `false`.
 ///
-/// Buttons can be added or removed through the delegate methods [#addButton(MFXButton)], [#addButtons(MFXButton\[\])],
-/// [#addButton(String, MFXFontIcon)], [#addButtons(Object...)] and [#removeButtons(MFXButton...)].
-/// The list returned by [#getButtons()] is unmodifiable!
+/// This class also implements [WithVariants]. The specification defines several configuration options, which fall into two categories:
+/// - Configurations that apply to the group itself, such as [GroupVariant] and [SizeVariant] (inherited from [ButtonsConfig]).
+/// - Configurations that apply to individual buttons, defined by [ButtonVariants].
+///
+/// For convenience, the latter are grouped into [ButtonsConfig], which can be set through
+/// [#setButtonsConfig(ButtonsConfig)]. Whenever buttons are added to the group, the configuration is automatically
+/// applied by [#updateGroup(ListChangeListener.Change)].
 public class MFXButtonsGroup extends MFXControl implements WithVariants {
     //================================================================================
     // Properties
@@ -75,7 +78,7 @@ public class MFXButtonsGroup extends MFXControl implements WithVariants {
     private final VariantsHandler<MFXButtonsGroup> variantsHandler = new VariantsHandler<>(this);
     private ButtonsConfig buttonsConfig;
 
-    private final ObservableList<MFXToggle> buttons = FXCollections.observableArrayList();
+    private final ObservableList<MFXButtonBase> buttons = FXCollections.observableArrayList();
     private final SelectionGroup selectionGroup = new SelectionGroup();
 
     //================================================================================
@@ -83,7 +86,7 @@ public class MFXButtonsGroup extends MFXControl implements WithVariants {
     //================================================================================
 
     public MFXButtonsGroup() {
-        defaultConfig();
+        defaultVariants();
         buttons.addListener(this::updateGroup);
     }
 
@@ -91,18 +94,13 @@ public class MFXButtonsGroup extends MFXControl implements WithVariants {
     // Config
     //================================================================================
 
-    /// Applies the default variants to the group and its buttons:
-    /// - [GroupVariant#STANDARD]
-    /// - [ButtonsConfig#DEFAULT]
-    public MFXButtonsGroup defaultConfig() {
-        variantsHandler.setVariant(GroupVariant.STANDARD);
-        setButtonsConfig(ButtonsConfig.DEFAULT);
-        return this;
-    }
-
     public MFXButtonsGroup setGroupType(GroupVariant type) {
         variantsHandler.setVariant(type);
         return this;
+    }
+
+    public ButtonsConfig getButtonsConfig() {
+        return buttonsConfig;
     }
 
     public MFXButtonsGroup setButtonsConfig(ButtonsConfig config) {
@@ -112,61 +110,40 @@ public class MFXButtonsGroup extends MFXControl implements WithVariants {
         return this;
     }
 
+    /// Applies the default variants to the group and its buttons:
+    /// - [GroupVariant#STANDARD]
+    /// - [ButtonsConfig#DEFAULT]
+    @Override
+    public MFXButtonsGroup defaultVariants() {
+        variantsHandler.setVariant(GroupVariant.STANDARD);
+        setButtonsConfig(ButtonsConfig.DEFAULT);
+        return this;
+    }
+
     //================================================================================
     // Methods
     //================================================================================
 
-    public MFXButtonsGroup addButton(MFXToggle button) {
-        if (!(button instanceof MFXToggleButton) && !(button instanceof MFXToggleIconButton))
-            throw new IllegalArgumentException("Only MFXToggleButton and MFXToggleIconButton are allowed!");
-        buttons.add(button);
-        return this;
-    }
-
-    public MFXButtonsGroup addButton(MFXToggle... buttons) {
-        for (MFXToggle button : buttons) addButton(button);
-        return this;
-    }
-
-    /// Delegates to [#addButton(MFXButton)] by building a [MFXToggleIconButton] if the given text is `null` or blank,
-    /// otherwise a [MFXToggleButton].
-    public MFXButtonsGroup addButton(String text, MFXFontIcon icon) {
-        return addButton((text == null || text.isBlank()) ?
-            new MFXToggleIconButton(icon) :
-            new MFXToggleButton(text, icon)
-        );
-    }
-
-    /// Convenience method similar to `Map.of(...)` but with an unlimited number of arguments.
-    ///
-    /// Expects an even number of arguments, each pair `<String, MFXFontIcon>` is sent to [#addButton(String, MFXFontIcon)].
-    public MFXButtonsGroup addButtons(Object... args) {
-        if (args.length % 2 != 0)
-            throw new IllegalArgumentException("The number of arguments must be even and follow the format: <text>, <icon>");
-        for (int i = 0; i < args.length; i += 2) {
-            String text = (String) args[i];
-            MFXFontIcon icon = (MFXFontIcon) args[i + 1];
-            addButton(text, icon);
-        }
-        return this;
-    }
-
-    /// Removes the given buttons from the group (also automatically removed from the [SelectionGroup]).
-    public MFXButtonsGroup removeButtons(MFXToggle... buttons) {
-        this.buttons.removeAll(buttons);
+    /// Convenience method to add all the given buttons to the group.
+    public MFXButtonsGroup addButtons(MFXButtonBase... buttons) {
+        this.buttons.addAll(buttons);
         return this;
     }
 
     /// This is responsible for updating the [SelectionGroup] by adding/removing buttons from it when the buttons' list changes.
     ///
     /// Note that for added buttons the [ButtonsConfig] is automatically applied.
-    protected void updateGroup(ListChangeListener.Change<? extends MFXToggle> change) {
+    protected void updateGroup(ListChangeListener.Change<? extends MFXButtonBase> change) {
         while (change.next()) {
             if (change.wasRemoved()) {
-                change.getRemoved().forEach(b -> b.setSelectionGroup(null));
+                change.getRemoved().forEach(b -> {
+                    if (b instanceof MFXToggle t)
+                        t.setSelectionGroup(null);
+                });
             } else if (change.wasAdded()) {
                 change.getAddedSubList().forEach(b -> {
-                    b.setSelectionGroup(selectionGroup);
+                    if (b instanceof MFXToggle t)
+                        t.setSelectionGroup(selectionGroup);
                     buttonsConfig.apply(b);
                 });
             }
@@ -251,8 +228,8 @@ public class MFXButtonsGroup extends MFXControl implements WithVariants {
     // Getters/Setters
     //================================================================================
 
-    public ObservableList<MFXToggle> getButtons() {
-        return FXCollections.unmodifiableObservableList(buttons);
+    public ObservableList<MFXButtonBase> getButtons() {
+        return buttons;
     }
 
     /// Returns the currently selected button.
@@ -261,8 +238,17 @@ public class MFXButtonsGroup extends MFXControl implements WithVariants {
     /// If the selection mode is [SelectionMode#MULTIPLE], then this will return the first selected button.
     public Optional<Selectable> getSelected() {return selectionGroup.getFirstSelected();}
 
-    /// @return all the currently selected buttons.
-    public List<Selectable> getSelection() {return selectionGroup.getSelectionList();}
+    /// @return all the currently selected buttons in an observable collection
+    public ReadOnlySetProperty<Selectable> getSelection() {return selectionGroup.getSelection();}
+
+    /// @return all the currently selected buttons as a list
+    public List<Selectable> getSelectionList() {return selectionGroup.getSelectionList();}
+
+    /// @see SelectionGroup#getSelectedIndexes()
+    public List<Integer> getSelectedIndexes() {return selectionGroup.getSelectedIndexes();}
+
+    /// @see SelectionGroup#getSelectedIndex()
+    public Integer getSelectedIndex() {return selectionGroup.getSelectedIndex();}
 
     public SelectionMode getSelectionMode() {return selectionGroup.getSelectionMode();}
 
@@ -306,18 +292,31 @@ public class MFXButtonsGroup extends MFXControl implements WithVariants {
         }
 
         /// Applies the configuration to the given button.
-        public void apply(MFXToggle btn) {
-            if (btn instanceof MFXToggleButton tb) {
-                tb.setShape(shape);
-                tb.setSize(size);
-                tb.setStyle(style);
-                return;
-            }
-            if (btn instanceof MFXToggleIconButton tib) {
-                tib.setShape(shape);
-                tib.setSize(size);
-                tib.setStyle(style);
-                tib.setWidth(width);
+        public void apply(MFXButtonBase btn) {
+            switch (btn) {
+                case MFXIconButton ib -> {
+                    ib.setShape(shape);
+                    ib.setSize(size);
+                    ib.setStyle(style);
+                    ib.setWidth(width);
+                }
+                case MFXToggleIconButton tib -> {
+                    tib.setShape(shape);
+                    tib.setSize(size);
+                    tib.setStyle(style);
+                    tib.setWidth(width);
+                }
+                case MFXButton b -> {
+                    b.setShape(shape);
+                    b.setSize(size);
+                    b.setStyle(style);
+                }
+                case MFXToggleButton tb -> {
+                    tb.setShape(shape);
+                    tb.setSize(size);
+                    tb.setStyle(style);
+                }
+                default -> {}
             }
         }
 
