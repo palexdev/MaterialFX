@@ -102,6 +102,7 @@ public class MFXButton extends MFXButtonBase implements WithVariants {
     /// - [StyleVariant#ELEVATED]
     /// - [SizeVariant#S]
     /// - [ShapeVariant#ROUNDED]
+    @Override
     public MFXButton defaultVariants() {
         variantsHandler.setVariants(StyleVariant.ELEVATED, SizeVariant.S, ShapeVariant.ROUNDED);
         return this;

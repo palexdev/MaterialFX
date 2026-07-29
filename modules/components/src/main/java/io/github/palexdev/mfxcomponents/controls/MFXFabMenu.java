@@ -115,6 +115,7 @@ public class MFXFabMenu extends MFXControl implements WithVariants {
 
     /// Applies the default variants to the menu and its buttons:
     /// - [StyleVariant#PRIMARY] (will be TONAL_PRIMARY for the buttons)
+    @Override
     public MFXFabMenu defaultVariants() {
         variantsHandler.setVariant(StyleVariant.PRIMARY);
         return this;

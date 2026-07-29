@@ -21,7 +21,6 @@ package io.github.palexdev.mfxcomponents.variants.api;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 import javafx.collections.ObservableMap;
 
@@ -30,7 +29,12 @@ import javafx.collections.ObservableMap;
 /// They are handled internally by the [VariantsHandler] class.
 public interface WithVariants {
 
-    /// @return a [Set] containing all the applied variants
+    /// A quick way to apply the default variants. How and what are defined by implementations!
+    default WithVariants defaultVariants() {
+        return this;
+    }
+
+    /// @return an [ObservableMap] containing all the applied variants
     ObservableMap<Class<?>, Variant> getAppliedVariants();
 
     /// @return an applied [Variant] for the given enum class, or `null` if the variant is not applied.

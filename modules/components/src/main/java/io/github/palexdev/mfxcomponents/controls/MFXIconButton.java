@@ -200,6 +200,7 @@ public class MFXIconButton extends MFXButton {
         /// Applies the default variants to the button:
         /// - [SizeVariant#S]
         /// - [ShapeVariant#ROUNDED]
+        @Override
         public MFXToggleIconButton defaultVariants() {
             variantsHandler.setVariants(SizeVariant.S, ShapeVariant.ROUNDED);
             return this;

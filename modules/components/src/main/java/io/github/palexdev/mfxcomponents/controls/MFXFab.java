@@ -121,6 +121,7 @@ public class MFXFab extends MFXButtonBase implements WithVariants {
     /// Applies the default variants to the fab:
     /// - [StyleVariant#PRIMARY]
     /// - [SizeVariant#S]
+    @Override
     public MFXFab defaultVariants() {
         variantsHandler.setVariants(StyleVariant.PRIMARY, SizeVariant.S);
         return this;
