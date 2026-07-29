@@ -40,6 +40,7 @@ import io.github.palexdev.mfxcore.utils.fx.PseudoClasses;
 import io.github.palexdev.mfxcore.utils.fx.StyleUtils;
 import io.github.palexdev.mfxresources.icon.IconProperty;
 import io.github.palexdev.mfxresources.icon.MFXFontIcon;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ObservableMap;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
@@ -48,8 +49,8 @@ import javafx.scene.Node;
 
 import static io.github.palexdev.mfxcore.controls.MFXStyleable.styleClasses;
 
-/// Implementation of Material Design's 'Floating Action Buttons'. Extends [MFXButtonBase], uses [MFXFabSkin] and
-/// [MFXButtonBehavior] as its default skin and behavior. The default CSS style class is `.mfx-fab`.
+/// Implementation of Material Design's 'Floating Action Buttons'. Extends [MFXButtonBase], uses [MFXFabSkin]
+/// and [MFXButtonBehavior] as its default skin and behavior. The default CSS style class is `.mfx-fab`.
 ///
 /// As stated by the Material Design specs, FABs are highly emphasized buttons that should be used for the most common
 /// or important action on a screen. Because they are intended to be used with icons, it is enforced by the [#iconProperty()]
@@ -69,7 +70,8 @@ import static io.github.palexdev.mfxcore.controls.MFXStyleable.styleClasses;
 /// - Other components use `-fx-min-<width | height>` to adhere to the sizes specified by the specs. That can't be done here.
 ///   To transition the FAB from standard to extended and vice versa, we can't set any bound on it. To overcome this,
 ///   I added a new CSS property [#minSizeProperty()] which is used by the skin to correctly compute the FAB's sizes.
-///   The [#prefWidthProperty()] is used for the transition.
+///   It is driven by the size variants and is read-only from code (see its own docs). The [#prefWidthProperty()] is
+///   used for the transition.
 /// - The label's truncation mechanism is completely disabled, otherwise the animation looks bad, see [Label]
 /// - You can't align the label, it is always positioned at the center. Not only that, it is also translated according to
 ///   the [#extendedProperty()] state. When the FAB is not extended, we need the icon to be centered!
@@ -86,7 +88,7 @@ public class MFXFab extends MFXButtonBase implements WithVariants {
     //================================================================================
 
     public MFXFab() {
-        this("Floating Action Button");
+        this("Action");
     }
 
     public MFXFab(String text) {
@@ -202,14 +204,17 @@ public class MFXFab extends MFXButtonBase implements WithVariants {
     /// (Note on why: even if we override computeMinWidth(...) in the skin, the parent node responsible for laying out
     /// the FAB will still use the value from [#minWidthProperty()] thus interfering with animations)
     ///
-    /// Can be set from CSS via the property: '-mfx-min-size'.
+    /// This is meant to be driven exclusively by the size variants through CSS ('-mfx-min-size'), which is why it is
+    /// exposed as read-only. The skin only re-syncs the FAB's layout on variant changes (see [#setSize(SizeVariant)]),
+    /// so bypassing that path would leave the layout stale until the next unrelated CSS/layout pass. Subclasses that
+    /// really need to force a value can still use the protected [#setMinSize(Size)].
     ///
     /// @see SizeProperty#styleableProperty(CssMetaData, Object, String, Size)
-    public StyleableObjectProperty<Size> minSizeProperty() {
+    public ReadOnlyObjectProperty<Size> minSizeProperty() {
         return minSize;
     }
 
-    public void setMinSize(Size minSize) {
+    protected void setMinSize(Size minSize) {
         this.minSize.set(minSize);
     }
 
@@ -229,7 +234,7 @@ public class MFXFab extends MFXButtonBase implements WithVariants {
 
         private static final CssMetaData<MFXFab, Size> MIN_SIZE = SizeProperty.cssMetaData(
             "-mfx-min-size",
-            MFXFab::minSizeProperty,
+            fab -> fab.minSize,
             Size.zero()
         );
 
