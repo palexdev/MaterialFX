@@ -269,6 +269,8 @@ public class MFXButtonsGroup extends MFXControl implements WithVariants {
     //================================================================================
 
     /// Convenience record for applying a combination of variants to all the buttons in the group.
+    ///
+    /// [StyleVariant#TEXT] is not supported and will fall back to [StyleVariant#FILLED].
     public record ButtonsConfig(
         ShapeVariant shape,
         SizeVariant size,
@@ -286,6 +288,10 @@ public class MFXButtonsGroup extends MFXControl implements WithVariants {
             StyleVariant.FILLED,
             WidthVariant.DEFAULT
         );
+
+        public ButtonsConfig {
+            if (style == StyleVariant.TEXT) style = StyleVariant.FILLED;
+        }
 
         public static ButtonsConfig of(ShapeVariant shape, SizeVariant size, StyleVariant style, WidthVariant width) {
             return new ButtonsConfig(shape, size, style, width);
