@@ -68,7 +68,7 @@ public class MFXIconButton extends MFXButton {
     /// When any of these is given as the argument, the variant is unset and the button falls back to the standard style.
     @Override
     public MFXIconButton setStyle(StyleVariant style) {
-        if (style == StyleVariant.ELEVATED || style == StyleVariant.TEXT) {
+        if (style == null || style == StyleVariant.ELEVATED || style == StyleVariant.TEXT) {
             variantsHandler.unsetVariant(StyleVariant.class);
         } else {
             super.setStyle(style);
