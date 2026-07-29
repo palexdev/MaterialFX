@@ -30,6 +30,7 @@ public class FABVariants {
     // Inner Classes
     //================================================================================
     public enum SizeVariant implements Variant {
+        XS,
         S,
         M,
         L,
