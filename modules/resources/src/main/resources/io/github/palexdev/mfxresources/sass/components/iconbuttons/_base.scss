@@ -33,16 +33,24 @@
       }
     }
 
-    &:selected > .mfx-icon-wrapper > .mfx-font-icon {
-      -mfx-color : -md-sys-color-primary
-    }
-
     & > .surface {
-      -fx-background-color : -md-sys-color-primary;
+      -fx-background-color : -md-sys-color-on-surface-variant;
     }
 
     > .mfx-ripple-generator {
+      -mfx-ripple-color : -md-sys-color-on-surface-variant;
+    }
+
+    &:selected > .surface {
+      -fx-background-color : -md-sys-color-primary;
+    }
+
+    &:selected > .mfx-ripple-generator {
       -mfx-ripple-color : -md-sys-color-primary;
+    }
+
+    &:selected > .mfx-icon-wrapper > .mfx-font-icon {
+      -mfx-color : -md-sys-color-primary
     }
 
     // XS
