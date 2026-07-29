@@ -30,8 +30,10 @@ public class VariantsHandler<S extends Styleable & WithVariants> {
     //================================================================================
     // Properties
     //================================================================================
+
     private final S styleable;
     private final ObservableMap<Class<?>, Variant> variantsMap;
+    private ObservableMap<Class<?>, Variant> _unmodifiable;
     private boolean batchUpdate = false;
 
     //================================================================================
@@ -86,6 +88,9 @@ public class VariantsHandler<S extends Styleable & WithVariants> {
     }
 
     public ObservableMap<Class<?>, Variant> getAppliedVariantsUnmodifiable() {
-        return FXCollections.unmodifiableObservableMap(variantsMap);
+        if (_unmodifiable == null) {
+            _unmodifiable = FXCollections.unmodifiableObservableMap(variantsMap);
+        }
+        return _unmodifiable;
     }
 }
