@@ -33,15 +33,10 @@
       -mfx-ripple-color : -md-sys-color-on-secondary-container;
     }
 
-    // Hover
-    &:hover > .surface {
-      -mfx-elevation : LEVEL1;
-    }
-
     // Selected
     &.toggle:selected {
       -fx-background-color : -md-sys-color-secondary;
-      -fx-text-fill        : -md-sys-color-on-primary;
+      -fx-text-fill        : -md-sys-color-on-secondary;
 
       > .label > .mfx-font-icon {
         -mfx-color : -md-sys-color-on-secondary;

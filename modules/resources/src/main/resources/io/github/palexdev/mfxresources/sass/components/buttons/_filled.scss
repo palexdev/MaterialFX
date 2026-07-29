@@ -33,11 +33,6 @@
       -mfx-ripple-color : -md-sys-color-on-primary;
     }
 
-    // Hover
-    &:hover > .surface {
-      -mfx-elevation : LEVEL1;
-    }
-
     // Unselected
     &.toggle {
       -fx-background-color : -md-sys-color-surface-container;

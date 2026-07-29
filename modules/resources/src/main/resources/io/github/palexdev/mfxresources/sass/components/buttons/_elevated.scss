@@ -36,16 +36,6 @@
       -mfx-ripple-color : -md-sys-color-primary;
     }
 
-    // Hover
-    &:hover > .surface {
-      -mfx-elevation : LEVEL2;
-    }
-
-    // Pressed
-    &:pressed > .surface {
-      -mfx-elevation : LEVEL1;
-    }
-
     // Selected
     &.toggle:selected {
       -fx-background-color : -md-sys-color-primary;
