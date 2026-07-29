@@ -24,25 +24,14 @@ import io.github.palexdev.mfxcore.observables.When;
 import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
-
-import static io.github.palexdev.mfxcore.utils.fx.InsetsUtils.uniform;
 
 /// Default skin implementation for all [MFXButtonsGroups][MFXButtonsGroup].
 ///
 /// The layout is simple: every button is [MFXButtonsGroup#getButtons()] is positioned in a row spaced by
 /// the [MFXButtonsGroup#spacingProperty()]'s value, just like a [HBox].
-///
-/// The peculiarity of this skin is that the group is also clipped. Material 3 specs show that the first and the last
-/// buttons are fully rounded at the left and at the right respectively. Implementing this in CSS would have been a nightmare,
-/// as it would also break the animations.
 public class MFXButtonsGroupSkin extends MFXSkinBase<MFXButtonsGroup> {
 
     //================================================================================
@@ -51,7 +40,6 @@ public class MFXButtonsGroupSkin extends MFXSkinBase<MFXButtonsGroup> {
 
     public MFXButtonsGroupSkin(MFXButtonsGroup group) {
         super(group);
-        buildClip();
         addListeners();
     }
 
@@ -65,17 +53,6 @@ public class MFXButtonsGroupSkin extends MFXSkinBase<MFXButtonsGroup> {
         listeners(
             When.observe(group::requestLayout, group.spacingProperty())
         );
-    }
-
-    /// Builds and sets the clip for the [MFXButtonsGroup], making the first and last buttons appear rounded.
-    protected void buildClip() {
-        Region clip = new Region();
-        clip.setBackground(new Background(new BackgroundFill(
-            Color.WHITE,
-            uniform(999.0).toRadius(false),
-            Insets.EMPTY))
-        );
-        getSkinnable().setClip(clip);
     }
 
     //================================================================================
@@ -115,11 +92,6 @@ public class MFXButtonsGroupSkin extends MFXSkinBase<MFXButtonsGroup> {
         for (Node child : getChildren()) {
             layoutInArea(child, x + advance, y, w, h, 0.0, HPos.LEFT, VPos.CENTER);
             advance += child.getLayoutBounds().getWidth() + group.getSpacing();
-        }
-
-        Node clip = group.getClip();
-        if (clip != null) {
-            clip.resizeRelocate(0, 0, group.getWidth(), group.getHeight());
         }
     }
 
