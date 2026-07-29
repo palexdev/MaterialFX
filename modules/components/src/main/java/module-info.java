@@ -1,3 +1,6 @@
+import io.github.palexdev.mfxcomponents.theming.MFXThemeEngine;
+import io.github.palexdev.mfxcore.controls.ThemeEngine;
+
 module mfx.components {
     requires transitive javafx.controls;
 
@@ -24,7 +27,8 @@ module mfx.components {
     exports io.github.palexdev.mfxcomponents.skins;
 
     // Theming
-    // TODO
+    exports io.github.palexdev.mfxcomponents.theming;
+    provides ThemeEngine with MFXThemeEngine.Provider;
 
     // Variants
     exports io.github.palexdev.mfxcomponents.variants.api;
