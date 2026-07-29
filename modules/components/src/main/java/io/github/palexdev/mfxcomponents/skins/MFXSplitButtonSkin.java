@@ -18,49 +18,59 @@
 
 package io.github.palexdev.mfxcomponents.skins;
 
-import java.util.Objects;
-
 import io.github.palexdev.mfxcomponents.controls.MFXButton;
-import io.github.palexdev.mfxcomponents.controls.MFXButton.MFXToggleButton;
 import io.github.palexdev.mfxcomponents.controls.MFXSplitButton;
-import io.github.palexdev.mfxcomponents.skins.base.MFXChoiceSkin;
 import io.github.palexdev.mfxcomponents.variants.ButtonVariants.SizeVariant;
 import io.github.palexdev.mfxcomponents.variants.ButtonVariants.StyleVariant;
+import io.github.palexdev.mfxcore.controls.MFXSkinBase;
+import io.github.palexdev.mfxcore.popups.MFXPopups;
 import io.github.palexdev.mfxcore.popups.PopupState;
+import io.github.palexdev.mfxcore.popups.menu.MFXMenu;
 import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
+import io.github.palexdev.mfxcore.utils.fx.PseudoClasses;
 import io.github.palexdev.mfxresources.icon.MFXFontIcon;
-import javafx.beans.InvalidationListener;
-import javafx.beans.value.ObservableValue;
+import javafx.beans.binding.Bindings;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.CacheHint;
-import javafx.scene.Node;
 import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Control;
-import javafx.scene.control.Label;
 
+import static io.github.palexdev.mfxcore.observables.When.observe;
 import static io.github.palexdev.mfxcore.observables.When.onInvalidated;
 
-/// Default skin implementation for all [MFXSplitButtons][MFXSplitButton]. Extends [MFXChoiceSkin].
+/// Default skin implementation for all [MFXSplitButtons][MFXSplitButton].
 ///
-/// It is composed of two nodes:
-/// - A leading [MFXButton] which is used as a container for the view cell described in [MFXChoiceSkin]. In fact, its
-/// [MFXButton#contentDisplayProperty()] is set to [ContentDisplay#GRAPHIC_ONLY]. The button is set up to execute the
-/// action specified by the [MFXSplitButton#onActionProperty()] when triggered.
-/// - A trailing [MFXButton] which is used to show the popup with the various choices. This button is also set to display
-/// the [MFXFontIcon] only.
+/// The split button is not a single node with a fancy shape, but rather a container for two plain [MFXButtons][MFXButton]
+/// built and entirely managed by this skin. They can be selected in CSS with '.leading' and '.trailing', which is what
+/// the themes use to give each half the proper asymmetric radius.
 ///
-/// Between the two buttons there is a gap, 2px by default, can be changed by overriding the class and setting the [#GAP] variable.
+/// The leading button is the one carrying the primary action: its text, graphic and `onAction` properties are bound to
+/// the corresponding ones of the [MFXSplitButton]. Since the handler is invoked by the leading button itself, the
+/// [ActionEvents][ActionEvent] fired by both halves are consumed by this skin, so that they never bubble up to the
+/// [MFXSplitButton] and cause a second, spurious invocation. This is also why [MFXSplitButton#trigger()] is a no-op.
 ///
-/// The variants in [MFXSplitButton] are applied to the aforementioned buttons too, so that we can leverage the CSS styles
-/// already defined for [MFXButton] and its variants.
-public class MFXSplitButtonSkin<T> extends MFXChoiceSkin<T> {
+/// The trailing button only shows a [MFXFontIcon] and acts as the owner of the [MFXMenu] built by [#buildMenu()].
+/// The menu is configured by [MFXSplitButton#menuConfigProperty()], and its entries are kept in sync with the
+/// [MFXSplitButton#getMenuItems()] list through a content binding. While the menu is open, the ':open' pseudo state is
+/// activated on the [MFXSplitButton], which is what the themes use to rotate the icon by 180deg.
+///
+/// Finally, since the two halves are standard buttons, they know nothing about the variants applied on the
+/// [MFXSplitButton]. Keeping them in sync is the job of [#updateVariants()].
+///
+/// The layout is trivial: the leading button is laid out at the left, the trailing one at the right, separated by [#GAP].
+public class MFXSplitButtonSkin extends MFXSkinBase<MFXSplitButton> {
     //================================================================================
     // Properties
     //================================================================================
+
     private final MFXButton lead;
-    private final MFXToggleButton trail;
-    private InvalidationListener variantsUpdater = _ -> updateVariants();
+    private final MFXButton trail;
+    private final MFXMenu menu;
+
+    private EventHandler<ActionEvent> consumeHandler = Event::consume;
 
     protected double GAP = 2.0;
 
@@ -68,47 +78,58 @@ public class MFXSplitButtonSkin<T> extends MFXChoiceSkin<T> {
     // Constructors
     //================================================================================
 
-    public MFXSplitButtonSkin(MFXSplitButton<T> button) {
-        lead = new MFXButton();
-        trail = new MFXToggleButton();
+    public MFXSplitButtonSkin(MFXSplitButton button) {
         super(button);
 
         // Init
-        lead.onActionProperty().bind(button.onActionProperty()
-            .map(c -> _ -> c.accept(button.getSelectedItem()))
-        );
-        lead.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        lead = new MFXButton();
+        lead.textProperty().bind(button.textProperty());
+        lead.graphicProperty().bind(button.graphicProperty());
+        lead.onActionProperty().bind(button.onActionProperty());
+        lead.addEventHandler(ActionEvent.ACTION, consumeHandler);
         lead.getStyleClass().add("leading");
-        lead.setManaged(false);
 
         MFXFontIcon trailIcon = new MFXFontIcon();
         trailIcon.setCache(true);
         trailIcon.setCacheHint(CacheHint.ROTATE);
+        trail = new MFXButton();
         trail.setGraphic(trailIcon);
         trail.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        trail.addEventHandler(ActionEvent.ACTION, consumeHandler);
         trail.getStyleClass().add("trailing");
-        trail.setManaged(false);
-        trail.onSelectionChanged(s -> {
-            if (s && !popup.isShowing()) {
-                popup.show(trail, popupConfig.placement());
-            } else if (popup.isShowing()) {
-                popup.hide();
-            }
-        });
+
+        if ((menu = buildMenu()) != null) {
+            menu.install(trail);
+        }
 
         // Finalize
-        updateVariants();
-        button.getAppliedVariants().addListener(variantsUpdater);
-        getChildren().addAll(lead, trail);
+        addListeners();
+        getChildren().setAll(lead, trail);
     }
 
     //================================================================================
     // Methods
     //================================================================================
 
-    /// This is responsible for setting the variants set on the [MFXSplitButton], on the two leading and trailing buttons too.
+    /// Adds listeners to the following properties:
+    /// - [MFXSplitButton#menuConfigProperty()] to re-apply the config on the menu
+    /// - [MFXMenu#stateProperty()] to de-/activate the ':open' pseudo state on the [MFXSplitButton]
+    /// - [MFXSplitButton#getAppliedVariants()] to call [#updateVariants()]
+    protected void addListeners() {
+        MFXSplitButton button = getSkinnable();
+        listeners(
+            onInvalidated(button.menuConfigProperty())
+                .then(cfg -> cfg.apply(menu)),
+            onInvalidated(menu.stateProperty())
+                .then(s -> PseudoClasses.OPEN.setOn(button, s == PopupState.SHOWING || s == PopupState.SHOWN)),
+            observe(this::updateVariants, button.getAppliedVariants()).executeNow()
+        );
+    }
+
+    /// Responsible for mirroring the [StyleVariant] and [SizeVariant] applied on the [MFXSplitButton] onto the leading
+    /// and trailing buttons, since they are standard [MFXButtons][MFXButton] and thus have their own variants.
     protected void updateVariants() {
-        MFXSplitButton<T> button = getControl();
+        MFXSplitButton button = getControl();
         StyleVariant style = button.getAppliedVariant(StyleVariant.class);
         SizeVariant size = button.getAppliedVariant(SizeVariant.class);
         lead.setStyle(style);
@@ -117,52 +138,21 @@ public class MFXSplitButtonSkin<T> extends MFXChoiceSkin<T> {
         trail.setSize(size);
     }
 
+    /// Builds the [MFXMenu] shown by the trailing button, applying the [MFXSplitButton#menuConfigProperty()] on it and
+    /// keeping its entries in sync with the [MFXSplitButton#getMenuItems()] list through a content binding.
+    ///
+    /// @return the newly built menu
+    protected MFXMenu buildMenu() {
+        MFXSplitButton button = getSkinnable();
+        MFXMenu menu = MFXPopups.menu().get();
+        button.getMenuConfig().apply(menu);
+        Bindings.bindContent(menu.getItems(), button.getMenuItems());
+        return menu;
+    }
+
     //================================================================================
     // Overridden Methods
     //================================================================================
-
-    /// {@inheritDoc}
-    ///
-    /// To avoid cluttering CSS, we override this to implement a trick on the view cell. Since the button's font and text
-    /// color are already defined, and especially considering that font size depends on the set [SizeVariant], we bind those
-    /// properties from the leading button to the view cell.
-    ///
-    /// To do that, we perform a [Node#lookup(String)] on the cell's node and search for a '.label' node.
-    /// So, we expect either the cell to be a label or to contain one.
-    ///
-    /// Finally, this is also responsible for setting the view cell as the graphic of the leading button.
-    // FIXME this trick must be removed in some way
-    @Override
-    protected void buildViewCell() {
-        super.buildViewCell();
-        if (viewCell == null) {
-            lead.setGraphic(null);
-            return;
-        }
-
-        Node node = viewCell.toNode();
-        ObservableValue<?> ov = node instanceof Control c ? c.skinProperty() : node.sceneProperty();
-        onInvalidated(ov)
-            .condition(Objects::nonNull)
-            .then(_ -> {
-                if (node.lookup(".label") instanceof Label label) {
-                    label.fontProperty().bind(lead.fontProperty());
-                    label.textFillProperty().bind(lead.textFillProperty());
-                }
-            })
-            .oneShot(true)
-            .executeNow(() -> node.getScene() != null)
-            .listen();
-        lead.setGraphic(node);
-    }
-
-    @Override
-    protected void onPopupState(PopupState state) {
-        super.onPopupState(state);
-        if (state == PopupState.HIDING) {
-            trail.setSelected(false);
-        }
-    }
 
     @Override
     protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
@@ -201,15 +191,14 @@ public class MFXSplitButtonSkin<T> extends MFXChoiceSkin<T> {
 
     @Override
     public void dispose() {
-        MFXSplitButton<T> button = getControl();
-        button.getAppliedVariants().removeListener(variantsUpdater);
-        variantsUpdater = null;
-        lead.onActionProperty().unbind();
-        super.dispose();
-    }
+        MFXSplitButton button = getControl();
+        lead.removeEventHandler(ActionEvent.ACTION, consumeHandler);
+        trail.removeEventHandler(ActionEvent.ACTION, consumeHandler);
+        consumeHandler = null;
 
-    @Override
-    protected MFXSplitButton<T> getControl() {
-        return (MFXSplitButton<T>) super.getControl();
+        Bindings.unbindContent(menu.getItems(), button.getMenuItems());
+        menu.uninstall();
+
+        super.dispose();
     }
 }
