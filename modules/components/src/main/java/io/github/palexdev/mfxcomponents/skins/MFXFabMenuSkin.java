@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * Copyright (C) 2026 Parisi Alessandro - alessandro.parisi406@gmail.com
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
  *
  * MaterialFX is free software: you can redistribute it and/or
@@ -26,7 +26,6 @@ import io.github.palexdev.mfxcomponents.controls.MFXFab;
 import io.github.palexdev.mfxcomponents.controls.MFXFabMenu;
 import io.github.palexdev.mfxcomponents.variants.FABVariants.StyleVariant;
 import io.github.palexdev.mfxcore.base.beans.Position;
-import io.github.palexdev.mfxcore.builders.bindings.ObjectBindingBuilder;
 import io.github.palexdev.mfxcore.controls.MFXSkinBase;
 import io.github.palexdev.mfxcore.enums.Corner;
 import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
@@ -40,8 +39,6 @@ import io.github.palexdev.mfxeffects.animations.motion.M3Motion.MotionPreset;
 import javafx.animation.Animation;
 import javafx.animation.ParallelTransition;
 import javafx.animation.Timeline;
-import javafx.beans.InvalidationListener;
-import javafx.beans.binding.ObjectBinding;
 import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -53,6 +50,7 @@ import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 
 import static io.github.palexdev.mfxcore.input.WhenEvent.intercept;
+import static io.github.palexdev.mfxcore.observables.When.observe;
 import static io.github.palexdev.mfxcore.observables.When.onInvalidated;
 
 /// Default skin implementation for all [MFXFabMenus][MFXFabMenu], expects behaviors of type [MFXFabMenuBehavior].
@@ -90,11 +88,8 @@ public class MFXFabMenuSkin extends MFXSkinBase<MFXFabMenu> {
     // Properties
     //================================================================================
     private final MFXFab entry;
-    protected InvalidationListener btnsListner = _ -> updateChildren();
-    protected InvalidationListener varsListener = _ -> updateStyle();
 
     private final Scale scale;
-    private ObjectBinding<Position> spb;
 
     private Animation animation;
     protected double ANIMATIONS_DELAY = 40.0;
@@ -109,26 +104,14 @@ public class MFXFabMenuSkin extends MFXSkinBase<MFXFabMenu> {
         // Init
         entry = new MFXFab();
         entry.getStyleClass().add("entry");
-        entry.setStyle(menu.getAppliedVariant(StyleVariant.class));
         entry.onActionProperty().bind(menu.onActionProperty());
-
-        spb = ObjectBindingBuilder.<Position>build()
-            .setMapper(() -> {
-                Pos pos = menu.getScalePivot();
-                return PivotUtils.pivotPosition(entry.getLayoutBounds(), pos);
-            })
-            .addSources(menu.scalePivotProperty(), entry.layoutBoundsProperty())
-            .get();
 
         scale = new Scale();
         scale.xProperty().bind(entry.scaleXProperty());
         scale.yProperty().bind(entry.scaleYProperty());
-        scale.pivotXProperty().bind(spb.map(Position::x));
-        scale.pivotYProperty().bind(spb.map(Position::y));
         entry.getTransforms().add(scale);
 
         // Finalize
-        updateChildren();
         addListeners();
     }
 
@@ -150,11 +133,11 @@ public class MFXFabMenuSkin extends MFXSkinBase<MFXFabMenu> {
             onInvalidated(menu.focusedProperty())
                 .condition(f -> !f || !menu.isFocusWithin())
                 .then(_ -> getBehavior().close())
-                .invalidating(menu.focusWithinProperty())
+                .invalidating(menu.focusWithinProperty()),
+            observe(menu::requestLayout, menu.scalePivotProperty()),
+            observe(this::updateChildren, menu.getButtons()).executeNow(),
+            observe(this::updateStyle, menu.getAppliedVariants())
         );
-
-        menu.getButtons().addListener(btnsListner);
-        menu.getAppliedVariants().addListener(varsListener);
     }
 
     /// Updates the children's list of this component with the 'entry' FAB from this skin, and the FABs contained in
@@ -175,13 +158,15 @@ public class MFXFabMenuSkin extends MFXSkinBase<MFXFabMenu> {
         newList.add(entry);
         for (MFXFab f : menu.getButtons()) {
             f.setVisible(false);
-            f.getStyleClass().add("item");
+            if (!f.getStyleClass().contains("item"))
+                f.getStyleClass().add("item");
             f.setOpacity(0.0);
             f.setExtended(false);
             // Make them focus traversable only if the menu is open
             f.focusTraversableProperty().bind(menu.openProperty());
             newList.add(f);
         }
+        updateStyle();
         getChildren().setAll(newList);
     }
 
@@ -328,23 +313,18 @@ public class MFXFabMenuSkin extends MFXSkinBase<MFXFabMenu> {
             f.relocate(fX, advance);
             advance += advanceMul * (f.getHeight() + (gap / 2.0));
         }
+
+        // Update scale pivot
+        Pos scalePivot = menu.getScalePivot();
+        Position scalePos = PivotUtils.pivotPosition(entry.getLayoutBounds(), scalePivot);
+        scale.setPivotX(scalePos.x());
+        scale.setPivotY(scalePos.y());
     }
 
     @Override
     public void dispose() {
-        MFXFabMenu menu = getSkinnable();
-        menu.getButtons().removeListener(btnsListner);
-        menu.getAppliedVariants().removeListener(varsListener);
-        btnsListner = null;
-        varsListener = null;
-
         scale.xProperty().unbind();
         scale.yProperty().unbind();
-        scale.pivotXProperty().unbind();
-        scale.pivotYProperty().unbind();
-        spb.dispose();
-        spb = null;
-
         super.dispose();
     }
 
