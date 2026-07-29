@@ -102,22 +102,22 @@
   transition-duration: 350ms
 }
 
-.mfx-button.outlined.s:pressed:hover:hover:pressed,
-.mfx-button.outlined.xs:pressed:hover:hover:pressed,
-.mfx-icon-button.outlined.s:pressed:hover:hover:pressed,
-.mfx-icon-button.outlined.xs:pressed:hover:hover:pressed {
+.mfx-button.outlined.s:pressed:hover,
+.mfx-button.outlined.xs:pressed:hover,
+.mfx-icon-button.outlined.s:pressed:hover,
+.mfx-icon-button.outlined.xs:pressed:hover {
   -fx-border-radius: 8px
 }
 
-.mfx-button.outlined.m:pressed:hover:hover:pressed,
-.mfx-icon-button.outlined.m:pressed:hover:hover:pressed {
+.mfx-button.outlined.m:pressed:hover,
+.mfx-icon-button.outlined.m:pressed:hover {
   -fx-border-radius: 12px
 }
 
-.mfx-button.outlined.l:pressed:hover:hover:pressed,
-.mfx-button.outlined.xl:pressed:hover:hover:pressed,
-.mfx-icon-button.outlined.l:pressed:hover:hover:pressed,
-.mfx-icon-button.outlined.xl:pressed:hover:hover:pressed {
+.mfx-button.outlined.l:pressed:hover,
+.mfx-button.outlined.xl:pressed:hover,
+.mfx-icon-button.outlined.l:pressed:hover,
+.mfx-icon-button.outlined.xl:pressed:hover {
   -fx-border-radius: 16px
 }
 
@@ -125,155 +125,509 @@
 .mfx-buttons-group.standard > .mfx-icon-button {
   -fx-scale-x: 1;
   -fx-scale-y: 1;
-  transition-property: -fx-background-color,-fx-background-radius,-fx-scale-x,-fx-scale-y;
-  transition-timing-function: cubic-bezier(0.42,1.67,0.21,0.9);
+  transition-property: -fx-background-color,-fx-background-radius,-fx-border-radius,-fx-scale-x,-fx-scale-y;
+  transition-timing-function: cubic-bezier(0.27,1.06,0.18,1);
   transition-duration: 350ms
 }
 
 .mfx-buttons-group.standard > .mfx-button:pressed:hover,
 .mfx-buttons-group.standard > .mfx-icon-button:pressed:hover {
-  -fx-scale-x: 1.1;
-  -fx-scale-y: 1.1
+  -fx-scale-x: 1.025;
+  -fx-scale-y: 1.025
 }
 
-.mfx-fab-menu > .entry {
-  transition-property: -fx-background-radius,-fx-scale-x,-fx-scale-y;
+.mfx-buttons-group.connected > .mfx-button,
+.mfx-buttons-group.connected > .mfx-icon-button {
+  transition-property: -fx-background-color,-fx-background-radius,-fx-border-color,-fx-border-radius;
   transition-timing-function: cubic-bezier(0.42,1.67,0.21,0.9);
   transition-duration: 350ms
 }
 
-.mfx-split-button > .mfx-button.leading.xs:hover,
-.mfx-split-button > .mfx-button.leading.xs:pressed,
-.mfx-split-button > .mfx-button.leading.xs:selected {
-  -fx-background-radius: 16px 12px 12px 16px;
-  -fx-border-radius: 32px 12px 12px 32px
+.mfx-buttons-group.connected > .mfx-button > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button > .surface {
+  transition-property: -fx-background-radius;
+  transition-timing-function: cubic-bezier(0.42,1.67,0.21,0.9);
+  transition-duration: 350ms
 }
 
-.mfx-split-button > .mfx-button.leading.xs:hover > .surface,
-.mfx-split-button > .mfx-button.leading.xs:pressed > .surface,
-.mfx-split-button > .mfx-button.leading.xs:selected > .surface {
-  -fx-background-radius: 16px 12px 12px 16px
+.mfx-buttons-group.connected > .mfx-button.xs:selected,
+.mfx-buttons-group.connected > .mfx-icon-button.xs:selected {
+  -fx-background-radius: 16px;
+  -fx-border-radius: 32px
 }
 
-.mfx-split-button > .mfx-button.trailing.xs:hover,
-.mfx-split-button > .mfx-button.trailing.xs:pressed,
-.mfx-split-button > .mfx-button.trailing.xs:selected {
-  -fx-background-radius: 12px 16px 16px 12px;
-  -fx-border-radius: 12px 32px 32px 12px
+.mfx-buttons-group.connected > .mfx-button.xs:selected > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.xs:selected > .surface {
+  -fx-background-radius: 32px
 }
 
-.mfx-split-button > .mfx-button.trailing.xs:hover > .surface,
-.mfx-split-button > .mfx-button.trailing.xs:pressed > .surface,
-.mfx-split-button > .mfx-button.trailing.xs:selected > .surface {
-  -fx-background-radius: 12px 16px 16px 12px
+.mfx-buttons-group.connected > .mfx-button.s:selected,
+.mfx-buttons-group.connected > .mfx-icon-button.s:selected {
+  -fx-background-radius: 20px;
+  -fx-border-radius: 40px
 }
 
-.mfx-split-button > .mfx-button.leading.s:hover,
-.mfx-split-button > .mfx-button.leading.s:pressed,
-.mfx-split-button > .mfx-button.leading.s:selected {
+.mfx-buttons-group.connected > .mfx-button.s:selected > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.s:selected > .surface {
+  -fx-background-radius: 40px
+}
+
+.mfx-buttons-group.connected > .mfx-button.m:selected,
+.mfx-buttons-group.connected > .mfx-icon-button.m:selected {
+  -fx-background-radius: 28px;
+  -fx-border-radius: 56px
+}
+
+.mfx-buttons-group.connected > .mfx-button.m:selected > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.m:selected > .surface {
+  -fx-background-radius: 56px
+}
+
+.mfx-buttons-group.connected > .mfx-button.l:selected,
+.mfx-buttons-group.connected > .mfx-icon-button.l:selected {
+  -fx-background-radius: 48px;
+  -fx-border-radius: 96px
+}
+
+.mfx-buttons-group.connected > .mfx-button.l:selected > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.l:selected > .surface {
+  -fx-background-radius: 96px
+}
+
+.mfx-buttons-group.connected > .mfx-button.xl:selected,
+.mfx-buttons-group.connected > .mfx-icon-button.xl:selected {
+  -fx-background-radius: 68px;
+  -fx-border-radius: 136px
+}
+
+.mfx-buttons-group.connected > .mfx-button.xl:selected > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.xl:selected > .surface {
+  -fx-background-radius: 136px
+}
+
+.mfx-buttons-group.connected > .mfx-button.xs.rounded:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.xs.rounded:pressed:hover {
+  -fx-background-radius: 4px;
+  -fx-border-radius: 4px
+}
+
+.mfx-buttons-group.connected > .mfx-button.xs.rounded:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.xs.rounded:pressed:hover > .surface {
+  -fx-background-radius: 4px
+}
+
+.mfx-buttons-group.connected > .mfx-button.xs.rounded:first-child:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.xs.rounded:first-child:pressed:hover {
+  -fx-background-radius: 16px 4px 4px 16px;
+  -fx-border-radius: 32px 4px 4px 32px
+}
+
+.mfx-buttons-group.connected > .mfx-button.xs.rounded:first-child:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.xs.rounded:first-child:pressed:hover > .surface {
+  -fx-background-radius: 32px 4px 4px 32px
+}
+
+.mfx-buttons-group.connected > .mfx-button.xs.rounded:last-child:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.xs.rounded:last-child:pressed:hover {
+  -fx-background-radius: 4px 16px 16px 4px;
+  -fx-border-radius: 4px 32px 32px 4px
+}
+
+.mfx-buttons-group.connected > .mfx-button.xs.rounded:last-child:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.xs.rounded:last-child:pressed:hover > .surface {
+  -fx-background-radius: 4px 32px 32px 4px
+}
+
+.mfx-buttons-group.connected > .mfx-button.xs.rounded:only-child:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.xs.rounded:only-child:pressed:hover {
+  -fx-background-radius: 4px;
+  -fx-border-radius: 4px
+}
+
+.mfx-buttons-group.connected > .mfx-button.xs.rounded:only-child:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.xs.rounded:only-child:pressed:hover > .surface {
+  -fx-background-radius: 4px
+}
+
+.mfx-buttons-group.connected > .mfx-button.s.rounded:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.s.rounded:pressed:hover {
+  -fx-background-radius: 4px;
+  -fx-border-radius: 4px
+}
+
+.mfx-buttons-group.connected > .mfx-button.s.rounded:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.s.rounded:pressed:hover > .surface {
+  -fx-background-radius: 4px
+}
+
+.mfx-buttons-group.connected > .mfx-button.s.rounded:first-child:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.s.rounded:first-child:pressed:hover {
+  -fx-background-radius: 20px 4px 4px 20px;
+  -fx-border-radius: 40px 4px 4px 40px
+}
+
+.mfx-buttons-group.connected > .mfx-button.s.rounded:first-child:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.s.rounded:first-child:pressed:hover > .surface {
+  -fx-background-radius: 40px 4px 4px 40px
+}
+
+.mfx-buttons-group.connected > .mfx-button.s.rounded:last-child:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.s.rounded:last-child:pressed:hover {
+  -fx-background-radius: 4px 20px 20px 4px;
+  -fx-border-radius: 4px 40px 40px 4px
+}
+
+.mfx-buttons-group.connected > .mfx-button.s.rounded:last-child:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.s.rounded:last-child:pressed:hover > .surface {
+  -fx-background-radius: 4px 40px 40px 4px
+}
+
+.mfx-buttons-group.connected > .mfx-button.s.rounded:only-child:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.s.rounded:only-child:pressed:hover {
+  -fx-background-radius: 4px;
+  -fx-border-radius: 4px
+}
+
+.mfx-buttons-group.connected > .mfx-button.s.rounded:only-child:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.s.rounded:only-child:pressed:hover > .surface {
+  -fx-background-radius: 4px
+}
+
+.mfx-buttons-group.connected > .mfx-button.m.rounded:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.m.rounded:pressed:hover {
+  -fx-background-radius: 4px;
+  -fx-border-radius: 4px
+}
+
+.mfx-buttons-group.connected > .mfx-button.m.rounded:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.m.rounded:pressed:hover > .surface {
+  -fx-background-radius: 4px
+}
+
+.mfx-buttons-group.connected > .mfx-button.m.rounded:first-child:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.m.rounded:first-child:pressed:hover {
+  -fx-background-radius: 28px 4px 4px 28px;
+  -fx-border-radius: 56px 4px 4px 56px
+}
+
+.mfx-buttons-group.connected > .mfx-button.m.rounded:first-child:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.m.rounded:first-child:pressed:hover > .surface {
+  -fx-background-radius: 56px 4px 4px 56px
+}
+
+.mfx-buttons-group.connected > .mfx-button.m.rounded:last-child:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.m.rounded:last-child:pressed:hover {
+  -fx-background-radius: 4px 28px 28px 4px;
+  -fx-border-radius: 4px 56px 56px 4px
+}
+
+.mfx-buttons-group.connected > .mfx-button.m.rounded:last-child:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.m.rounded:last-child:pressed:hover > .surface {
+  -fx-background-radius: 4px 56px 56px 4px
+}
+
+.mfx-buttons-group.connected > .mfx-button.m.rounded:only-child:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.m.rounded:only-child:pressed:hover {
+  -fx-background-radius: 4px;
+  -fx-border-radius: 4px
+}
+
+.mfx-buttons-group.connected > .mfx-button.m.rounded:only-child:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.m.rounded:only-child:pressed:hover > .surface {
+  -fx-background-radius: 4px
+}
+
+.mfx-buttons-group.connected > .mfx-button.l.rounded:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.l.rounded:pressed:hover {
+  -fx-background-radius: 12px;
+  -fx-border-radius: 12px
+}
+
+.mfx-buttons-group.connected > .mfx-button.l.rounded:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.l.rounded:pressed:hover > .surface {
+  -fx-background-radius: 12px
+}
+
+.mfx-buttons-group.connected > .mfx-button.l.rounded:first-child:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.l.rounded:first-child:pressed:hover {
+  -fx-background-radius: 48px 12px 12px 48px;
+  -fx-border-radius: 96px 12px 12px 96px
+}
+
+.mfx-buttons-group.connected > .mfx-button.l.rounded:first-child:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.l.rounded:first-child:pressed:hover > .surface {
+  -fx-background-radius: 96px 12px 12px 96px
+}
+
+.mfx-buttons-group.connected > .mfx-button.l.rounded:last-child:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.l.rounded:last-child:pressed:hover {
+  -fx-background-radius: 12px 48px 48px 12px;
+  -fx-border-radius: 12px 96px 96px 12px
+}
+
+.mfx-buttons-group.connected > .mfx-button.l.rounded:last-child:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.l.rounded:last-child:pressed:hover > .surface {
+  -fx-background-radius: 12px 96px 96px 12px
+}
+
+.mfx-buttons-group.connected > .mfx-button.l.rounded:only-child:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.l.rounded:only-child:pressed:hover {
+  -fx-background-radius: 12px;
+  -fx-border-radius: 12px
+}
+
+.mfx-buttons-group.connected > .mfx-button.l.rounded:only-child:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.l.rounded:only-child:pressed:hover > .surface {
+  -fx-background-radius: 12px
+}
+
+.mfx-buttons-group.connected > .mfx-button.xl.rounded:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.xl.rounded:pressed:hover {
+  -fx-background-radius: 16px;
+  -fx-border-radius: 16px
+}
+
+.mfx-buttons-group.connected > .mfx-button.xl.rounded:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.xl.rounded:pressed:hover > .surface {
+  -fx-background-radius: 16px
+}
+
+.mfx-buttons-group.connected > .mfx-button.xl.rounded:first-child:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.xl.rounded:first-child:pressed:hover {
+  -fx-background-radius: 68px 16px 16px 68px;
+  -fx-border-radius: 136px 16px 16px 136px
+}
+
+.mfx-buttons-group.connected > .mfx-button.xl.rounded:first-child:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.xl.rounded:first-child:pressed:hover > .surface {
+  -fx-background-radius: 136px 16px 16px 136px
+}
+
+.mfx-buttons-group.connected > .mfx-button.xl.rounded:last-child:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.xl.rounded:last-child:pressed:hover {
+  -fx-background-radius: 16px 68px 68px 16px;
+  -fx-border-radius: 16px 136px 136px 16px
+}
+
+.mfx-buttons-group.connected > .mfx-button.xl.rounded:last-child:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.xl.rounded:last-child:pressed:hover > .surface {
+  -fx-background-radius: 16px 136px 136px 16px
+}
+
+.mfx-buttons-group.connected > .mfx-button.xl.rounded:only-child:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.xl.rounded:only-child:pressed:hover {
+  -fx-background-radius: 16px;
+  -fx-border-radius: 16px
+}
+
+.mfx-buttons-group.connected > .mfx-button.xl.rounded:only-child:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.xl.rounded:only-child:pressed:hover > .surface {
+  -fx-background-radius: 16px
+}
+
+.mfx-buttons-group.connected > .mfx-button.xs.squared:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.xs.squared:pressed:hover {
+  -fx-background-radius: 4px;
+  -fx-border-radius: 4px
+}
+
+.mfx-buttons-group.connected > .mfx-button.xs.squared:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.xs.squared:pressed:hover > .surface {
+  -fx-background-radius: 4px
+}
+
+.mfx-buttons-group.connected > .mfx-button.s.squared:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.s.squared:pressed:hover {
+  -fx-background-radius: 4px;
+  -fx-border-radius: 4px
+}
+
+.mfx-buttons-group.connected > .mfx-button.s.squared:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.s.squared:pressed:hover > .surface {
+  -fx-background-radius: 4px
+}
+
+.mfx-buttons-group.connected > .mfx-button.m.squared:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.m.squared:pressed:hover {
+  -fx-background-radius: 4px;
+  -fx-border-radius: 4px
+}
+
+.mfx-buttons-group.connected > .mfx-button.m.squared:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.m.squared:pressed:hover > .surface {
+  -fx-background-radius: 4px
+}
+
+.mfx-buttons-group.connected > .mfx-button.l.squared:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.l.squared:pressed:hover {
+  -fx-background-radius: 12px;
+  -fx-border-radius: 12px
+}
+
+.mfx-buttons-group.connected > .mfx-button.l.squared:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.l.squared:pressed:hover > .surface {
+  -fx-background-radius: 12px
+}
+
+.mfx-buttons-group.connected > .mfx-button.xl.squared:pressed:hover,
+.mfx-buttons-group.connected > .mfx-icon-button.xl.squared:pressed:hover {
+  -fx-background-radius: 16px;
+  -fx-border-radius: 16px
+}
+
+.mfx-buttons-group.connected > .mfx-button.xl.squared:pressed:hover > .surface,
+.mfx-buttons-group.connected > .mfx-icon-button.xl.squared:pressed:hover > .surface {
+  -fx-background-radius: 16px
+}
+
+.mfx-fab-menu > .entry {
+  transition-property: -fx-background-color,-fx-background-radius,-fx-scale-x,-fx-scale-y;
+  transition-timing-function: cubic-bezier(0.42,1.67,0.21,0.9);
+  transition-duration: 350ms
+}
+
+.mfx-split-button > .mfx-button > .surface {
+  transition-property: -fx-background-color,-fx-background-radius;
+  transition-duration: 0s
+}
+
+.mfx-split-button > .mfx-button.leading.xs:pressed:hover {
+  -fx-background-radius: 16px 8px 8px 16px;
+  -fx-border-radius: 32px 8px 8px 32px
+}
+
+.mfx-split-button > .mfx-button.leading.xs:pressed:hover > .surface {
+  -fx-background-radius: 16px 8px 8px 16px
+}
+
+.mfx-split-button > .mfx-button.trailing.xs:hover:pressed {
+  -fx-background-radius: 8px 16px 16px 8px;
+  -fx-border-radius: 8px 32px 32px 8px
+}
+
+.mfx-split-button > .mfx-button.trailing.xs:hover:pressed > .surface {
+  -fx-background-radius: 8px 16px 16px 8px
+}
+
+.mfx-split-button:open > .mfx-button.trailing.xs {
+  -fx-background-radius: 16px;
+  -fx-border-radius: 32px
+}
+
+.mfx-split-button:open > .mfx-button.trailing.xs > .surface {
+  -fx-background-radius: 16px
+}
+
+.mfx-split-button > .mfx-button.leading.s:pressed:hover {
   -fx-background-radius: 20px 12px 12px 20px;
   -fx-border-radius: 40px 12px 12px 40px
 }
 
-.mfx-split-button > .mfx-button.leading.s:hover > .surface,
-.mfx-split-button > .mfx-button.leading.s:pressed > .surface,
-.mfx-split-button > .mfx-button.leading.s:selected > .surface {
+.mfx-split-button > .mfx-button.leading.s:pressed:hover > .surface {
   -fx-background-radius: 20px 12px 12px 20px
 }
 
-.mfx-split-button > .mfx-button.trailing.s:hover,
-.mfx-split-button > .mfx-button.trailing.s:pressed,
-.mfx-split-button > .mfx-button.trailing.s:selected {
+.mfx-split-button > .mfx-button.trailing.s:hover:pressed {
   -fx-background-radius: 12px 20px 20px 12px;
   -fx-border-radius: 12px 40px 40px 12px
 }
 
-.mfx-split-button > .mfx-button.trailing.s:hover > .surface,
-.mfx-split-button > .mfx-button.trailing.s:pressed > .surface,
-.mfx-split-button > .mfx-button.trailing.s:selected > .surface {
+.mfx-split-button > .mfx-button.trailing.s:hover:pressed > .surface {
   -fx-background-radius: 12px 20px 20px 12px
 }
 
-.mfx-split-button > .mfx-button.leading.m:hover,
-.mfx-split-button > .mfx-button.leading.m:pressed,
-.mfx-split-button > .mfx-button.leading.m:selected {
+.mfx-split-button:open > .mfx-button.trailing.s {
+  -fx-background-radius: 20px;
+  -fx-border-radius: 40px
+}
+
+.mfx-split-button:open > .mfx-button.trailing.s > .surface {
+  -fx-background-radius: 20px
+}
+
+.mfx-split-button > .mfx-button.leading.m:pressed:hover {
   -fx-background-radius: 28px 12px 12px 28px;
   -fx-border-radius: 56px 12px 12px 56px
 }
 
-.mfx-split-button > .mfx-button.leading.m:hover > .surface,
-.mfx-split-button > .mfx-button.leading.m:pressed > .surface,
-.mfx-split-button > .mfx-button.leading.m:selected > .surface {
+.mfx-split-button > .mfx-button.leading.m:pressed:hover > .surface {
   -fx-background-radius: 28px 12px 12px 28px
 }
 
-.mfx-split-button > .mfx-button.trailing.m:hover,
-.mfx-split-button > .mfx-button.trailing.m:pressed,
-.mfx-split-button > .mfx-button.trailing.m:selected {
+.mfx-split-button > .mfx-button.trailing.m:hover:pressed {
   -fx-background-radius: 12px 28px 28px 12px;
   -fx-border-radius: 12px 56px 56px 12px
 }
 
-.mfx-split-button > .mfx-button.trailing.m:hover > .surface,
-.mfx-split-button > .mfx-button.trailing.m:pressed > .surface,
-.mfx-split-button > .mfx-button.trailing.m:selected > .surface {
+.mfx-split-button > .mfx-button.trailing.m:hover:pressed > .surface {
   -fx-background-radius: 12px 28px 28px 12px
 }
 
-.mfx-split-button > .mfx-button.leading.l:hover,
-.mfx-split-button > .mfx-button.leading.l:pressed,
-.mfx-split-button > .mfx-button.leading.l:selected {
+.mfx-split-button:open > .mfx-button.trailing.m {
+  -fx-background-radius: 28px;
+  -fx-border-radius: 56px
+}
+
+.mfx-split-button:open > .mfx-button.trailing.m > .surface {
+  -fx-background-radius: 28px
+}
+
+.mfx-split-button > .mfx-button.leading.l:pressed:hover {
   -fx-background-radius: 48px 20px 20px 48px;
   -fx-border-radius: 96px 20px 20px 96px
 }
 
-.mfx-split-button > .mfx-button.leading.l:hover > .surface,
-.mfx-split-button > .mfx-button.leading.l:pressed > .surface,
-.mfx-split-button > .mfx-button.leading.l:selected > .surface {
+.mfx-split-button > .mfx-button.leading.l:pressed:hover > .surface {
   -fx-background-radius: 48px 20px 20px 48px
 }
 
-.mfx-split-button > .mfx-button.trailing.l:hover,
-.mfx-split-button > .mfx-button.trailing.l:pressed,
-.mfx-split-button > .mfx-button.trailing.l:selected {
+.mfx-split-button > .mfx-button.trailing.l:hover:pressed {
   -fx-background-radius: 20px 48px 48px 20px;
   -fx-border-radius: 20px 96px 96px 20px
 }
 
-.mfx-split-button > .mfx-button.trailing.l:hover > .surface,
-.mfx-split-button > .mfx-button.trailing.l:pressed > .surface,
-.mfx-split-button > .mfx-button.trailing.l:selected > .surface {
+.mfx-split-button > .mfx-button.trailing.l:hover:pressed > .surface {
   -fx-background-radius: 20px 48px 48px 20px
 }
 
-.mfx-split-button > .mfx-button.leading.xl:hover,
-.mfx-split-button > .mfx-button.leading.xl:pressed,
-.mfx-split-button > .mfx-button.leading.xl:selected {
+.mfx-split-button:open > .mfx-button.trailing.l {
+  -fx-background-radius: 48px;
+  -fx-border-radius: 96px
+}
+
+.mfx-split-button:open > .mfx-button.trailing.l > .surface {
+  -fx-background-radius: 48px
+}
+
+.mfx-split-button > .mfx-button.leading.xl:pressed:hover {
   -fx-background-radius: 68px 20px 20px 68px;
   -fx-border-radius: 136px 20px 20px 136px
 }
 
-.mfx-split-button > .mfx-button.leading.xl:hover > .surface,
-.mfx-split-button > .mfx-button.leading.xl:pressed > .surface,
-.mfx-split-button > .mfx-button.leading.xl:selected > .surface {
+.mfx-split-button > .mfx-button.leading.xl:pressed:hover > .surface {
   -fx-background-radius: 68px 20px 20px 68px
 }
 
-.mfx-split-button > .mfx-button.trailing.xl:hover,
-.mfx-split-button > .mfx-button.trailing.xl:pressed,
-.mfx-split-button > .mfx-button.trailing.xl:selected {
+.mfx-split-button > .mfx-button.trailing.xl:hover:pressed {
   -fx-background-radius: 20px 68px 68px 20px;
   -fx-border-radius: 20px 136px 136px 20px
 }
 
-.mfx-split-button > .mfx-button.trailing.xl:hover > .surface,
-.mfx-split-button > .mfx-button.trailing.xl:pressed > .surface,
-.mfx-split-button > .mfx-button.trailing.xl:selected > .surface {
+.mfx-split-button > .mfx-button.trailing.xl:hover:pressed > .surface {
   -fx-background-radius: 20px 68px 68px 20px
+}
+
+.mfx-split-button:open > .mfx-button.trailing.xl {
+  -fx-background-radius: 68px;
+  -fx-border-radius: 136px
+}
+
+.mfx-split-button:open > .mfx-button.trailing.xl > .surface {
+  -fx-background-radius: 68px
 }
 
 .mfx-split-button > .mfx-button.trailing > .label > .mfx-font-icon {
   transition-property: -fx-rotate;
-  transition-timing-function: cubic-bezier(0.42,1.67,0.21,0.9);
+  transition-timing-function: cubic-bezier(0.27,1.06,0.18,1);
   transition-duration: 350ms
 }
