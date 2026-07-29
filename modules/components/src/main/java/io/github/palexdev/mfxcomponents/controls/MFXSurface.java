@@ -152,14 +152,14 @@ public class MFXSurface extends Region implements MFXStyleable {
         animation.play();
     }
 
-    /// Iterates over the [#getStates()] queue, finds the first that is active and retrieves the associated target opacity.
-    /// If no state is active [State#FALLBACK] is used, which will result in a transparent surface.
+    /// Iterates over the [#getStates()] queue, finds the first that is active, and retrieves the associated target opacity.
+    /// If no state is active, [State#DEFAULT] is used, which will result in a transparent surface.
     public double getTargetOpacity() {
         return states.stream()
             .filter(s -> s.isActive(owner))
             .findFirst()
             .map(s -> s.opacity(this))
-            .orElse(State.FALLBACK.opacity(this));
+            .orElse(State.DEFAULT.opacity(this));
     }
 
     /// Disposes the surface by unregistering any listener and setting the `owner` to `null`.
@@ -187,6 +187,20 @@ public class MFXSurface extends Region implements MFXStyleable {
         "animated",
         true
     );
+
+    private final StyleableDoubleProperty defaultOpacity = new StyleableDoubleProperty(
+        StyleableProperties.DEFAULT_OPACITY,
+        this,
+        "defaultOpacity",
+        0.0
+    ) {
+        @Override
+        public void set(double v) {
+            double oldValue = get();
+            super.set(v);
+            if (!Objects.equals(oldValue, v)) updateOpacity();
+        }
+    };
 
     private final StyleableDoubleProperty disabledOpacity = new StyleableDoubleProperty(
         StyleableProperties.DISABLED_OPACITY,
@@ -284,6 +298,18 @@ public class MFXSurface extends Region implements MFXStyleable {
         this.animated.set(animated);
     }
 
+    public double getDefaultOpacity() {
+        return defaultOpacity.get();
+    }
+
+    public StyleableDoubleProperty defaultOpacityProperty() {
+        return defaultOpacity;
+    }
+
+    public void setDefaultOpacity(double defaultOpacity) {
+        this.defaultOpacity.set(defaultOpacity);
+    }
+
     public double getDisabledOpacity() {
         return disabledOpacity.get();
     }
@@ -377,6 +403,13 @@ public class MFXSurface extends Region implements MFXStyleable {
                 true
             );
 
+        private static final CssMetaData<MFXSurface, Number> DEFAULT_OPACITY =
+            FACTORY.createSizeCssMetaData(
+                "-mfx-default-opacity",
+                MFXSurface::defaultOpacityProperty,
+                0.0
+            );
+
         private static final CssMetaData<MFXSurface, Number> DISABLED_OPACITY =
             FACTORY.createSizeCssMetaData(
                 "-mfx-disabled-opacity",
@@ -417,7 +450,7 @@ public class MFXSurface extends Region implements MFXStyleable {
             cssMetaDataList = StyleUtils.cssMetaDataList(
                 Region.getClassCssMetaData(),
                 ANIMATED,
-                DISABLED_OPACITY, PRESSED_OPACITY, FOCUSED_OPACITY, HOVER_OPACITY,
+                DEFAULT_OPACITY, DISABLED_OPACITY, PRESSED_OPACITY, FOCUSED_OPACITY, HOVER_OPACITY,
                 ELEVATION
             );
         }
@@ -456,7 +489,7 @@ public class MFXSurface extends Region implements MFXStyleable {
     /// 3) the [#opacity()] function which determines the opacity of the surface when the condition is met.
     ///
     /// There are five default states:
-    /// 1) [#FALLBACK]
+    /// 1) [#DEFAULT]
     /// 2) [#DISABLED]
     /// 3) [#PRESSED]
     /// 4) [#FOCUSED]
@@ -471,8 +504,9 @@ public class MFXSurface extends Region implements MFXStyleable {
         // Defaults
         //================================================================================
 
-        /// Special state whose predicate is always `true`. Used when none of the other states is active. Opacity is `0.0`.
-        public static final State FALLBACK = State.of(Integer.MIN_VALUE, _ -> true, _ -> 0.0);
+        /// Special state whose predicate is always `true`. Used when none of the other states is active.
+        /// The opacity is retrieved from [MFXSurface#defaultOpacityProperty()].
+        public static final State DEFAULT = State.of(Integer.MIN_VALUE, _ -> true, MFXSurface::getDefaultOpacity);
 
         /// This state is activated when the node is disabled or the [PseudoClass] `:disabled` is active.
         /// The opacity is retrieved from [MFXSurface#disabledOpacityProperty()].
