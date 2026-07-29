@@ -35,13 +35,13 @@ import io.github.palexdev.mfxeffects.animations.motion.M3Motion;
 import io.github.palexdev.mfxeffects.animations.motion.M3Motion.MotionPreset;
 import io.github.palexdev.mfxeffects.beans.Position;
 import io.github.palexdev.mfxeffects.ripple.MFXRippleGenerator;
-import io.github.palexdev.mfxresources.icon.MFXFontIcon;
 import io.github.palexdev.mfxresources.icon.MFXIconWrapper;
 import javafx.animation.Animation;
 import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
@@ -51,20 +51,29 @@ import javafx.scene.shape.Rectangle;
 import static io.github.palexdev.mfxcore.input.WhenEvent.intercept;
 import static io.github.palexdev.mfxcore.observables.When.onInvalidated;
 
-/// Default skin implementation for all [MFXFabs][MFXFab], extends [MFXLabeledSkin].
+/// Experimental alternative to [MFXFabSkin] that trades the reactive, listener-driven layout for a layout-pass-driven one.
 ///
-/// Because of the numerous animations (and the type) shown by the Material Design specs, this skin is quite complex and
-/// it's precisely tweaked for them to play correctly.
+/// The original skin computes the FAB's size and the label's position inside the property listeners (extended, icon,
+/// variants, ...). Those listeners can fire before the CSS of the FAB's subtree is applied, so the measurements they read
+/// ([LabelMeasurementCache], the icon wrapper bounds, the label's position) are frequently stale and have to be forced
+/// fresh with scattered [Node#applyCss()]/[Parent#layout()] calls, one quirk at a time.
 ///
-/// It is composed of four nodes:
-/// - the label which displays the icon and the text. This label's truncation mechanism is completely disabled (see [Label]),
-///   but it's also clipped by [#clip()] to prevent the text from overflowing when extending/collapsing the FAB.
-/// - the icon from [MFXFab#iconProperty()] is wrapped in a [MFXIconWrapper] because it already has what we need
-///   to animate the icon change when the FAB is not extended
-/// - the [MFXSurface] node to show interaction states (by applying an overlay background)
-/// - the [MFXRippleGenerator] responsible for generating ripple effects
+/// This skin follows a single invariant instead:
 ///
-/// The FAB expand/collapse is handled by [#extend(boolean, boolean)].
+/// > All sizing and positioning is computed **only** inside [#layoutChildren(double, double, double, double)], from live
+/// > measurements. Listeners never measure; they only record an *intent* and request a layout.
+///
+/// Because [#layoutChildren(double, double, double, double)] always runs after the CSS pass, the measurements are always
+/// fresh, so no [Node#applyCss()] hack is needed anywhere. It also makes the layout **self-healing**: every layout pass
+/// re-syncs the FAB to the correct target, so it can never get stuck in a stale state (which is exactly why, in the old
+/// skin, an unrelated event like a hover would "fix" the layout).
+///
+/// As a consequence, most of the old listeners disappear: variant, min-size and text/label changes naturally dirty the
+/// layout and are healed for free. Only two intents remain:
+/// - [#animateNext]: set when [MFXFab#extendedProperty()] toggles, to animate the next re-sync
+/// - [#iconSwitch]: set when [MFXFab#iconProperty()] changes, to play the collapse-then-re-extend effect
+///
+/// Everything else (nodes, behavior/ripple wiring, measurements, min/max sizes) is identical to [MFXFabSkin].
 public class MFXFabSkin extends MFXLabeledSkin {
     //================================================================================
     // Properties
@@ -74,7 +83,8 @@ public class MFXFabSkin extends MFXLabeledSkin {
     private final MFXRippleGenerator rg;
 
     protected boolean init = false;
-    protected boolean switching = false;
+    protected boolean animateNext = false;
+    protected boolean iconSwitch = false;
     protected LabelMeasurementCache lmc;
     protected Animation animation;
 
@@ -110,116 +120,98 @@ public class MFXFabSkin extends MFXLabeledSkin {
     // Methods
     //================================================================================
 
-    /// Adds the following listeners:
-    /// - On [MFXFab#extendedProperty()] to call [#extend(boolean, boolean)]. Note that here we use a special flag `switching`
-    ///   to avoid the [LabelMeasurementCache] from triggering the same method. The flat is reset immediately after.
-    /// - On the [LabelMeasurementCache] to properly size and layout the FAB when any of its dependencies change
-    /// - On [MFXFab#iconProperty()] to properly size and layout the FAB. To be precise, we call [#extend(boolean, boolean)]
-    ///   two times: the first one with both parameters to `false` (collapsing the FAB if it is extended), the second one
-    ///   with [MFXFab#isExtended()] (re-extending the FAB if it is now collapsed) and `true` as the parameters.
-    ///   This animated behavior is showcased in the Material Design 3 specs.
+    /// The listeners only record an intent and request a layout; the actual work happens in
+    /// [#layoutChildren(double, double, double, double)]:
+    /// - [MFXFab#extendedProperty()] sets [#animateNext] so the next re-sync is animated
+    /// - [MFXFab#iconProperty()] sets [#iconSwitch] so the next re-sync plays the collapse-then-re-extend effect
+    ///
+    /// Variant, min-size and text/label changes need no listener: they already dirty the layout and are re-synced by the
+    /// self-healing branch of [#layoutChildren(double, double, double, double)].
     protected void addListeners() {
         MFXFab fab = getControl();
         listeners(
             onInvalidated(fab.extendedProperty())
-                .then(e -> {
-                    switching = true;
-                    extend(e, true);
-                    switching = false;
+                .then(_ -> {
+                    animateNext = true;
+                    fab.requestLayout();
                 }),
-            onInvalidated(lmc)
-                .condition(_ -> !switching)
-                .then(_ -> extend(fab.isExtended(), false)),
             onInvalidated(fab.iconProperty())
                 .then(_ -> {
-                    extend(false, false);
-                    extend(fab.isExtended(), true);
+                    iconSwitch = true;
+                    fab.requestLayout();
                 })
         );
     }
 
-    /// This is responsible for transitioning the FAB from collapsed to extended and vice versa.
-    ///
-    /// Three values are adjusted here:
-    /// - The FAB's width through its [MFXFab#prefWidthProperty()], the value is given by [#computeTargetWidth(boolean)]
-    /// - The label's [Node#translateXProperty()] so that the label or the icon are always centered in the FAB, the value
-    ///   is given by [#computeTargetX(boolean, double)]
-    /// - The text's opacity, `1.0` when extended, `0.0` otherwise. Note! I said the text opacity, not the label!
-    ///   See [MFXLabeled]
-    ///
-    /// @param extend specified whether to extend or collapse
-    /// @param animated specifies whether to extend/collapse with an animation or not
-
-    protected void extend(boolean extend, boolean animated) {
+    /// Instantly sets the FAB's [MFXFab#prefWidthProperty()], the label's [Node#translateXProperty()] and the FAB's
+    /// [MFXFab#textOpacityProperty()] to the targets computed for the given state. Does nothing if already on target, which
+    /// keeps the self-healing branch of [#layoutChildren(double, double, double, double)] from looping.
+    protected void snap(boolean extended) {
         MFXFab fab = getControl();
-        double targetW = snapSizeX(computeTargetWidth(extend));
-        double targetX = snapSizeX(computeTargetX(extend, targetW));
-        double targetO = extend ? 1.0 : 0.0;
+        double w = computeTargetWidth(extended);
+        double x = computeTargetX(extended, w);
+        double o = extended ? 1.0 : 0.0;
+        if (fab.getPrefWidth() == w && label.getTranslateX() == x && fab.getTextOpacity() == o) return;
+        fab.setPrefWidth(w);
+        label.setTranslateX(x);
+        fab.setTextOpacity(o);
+    }
 
-        if (Animations.isPlaying(animation))
-            animation.stop();
-
-        if (!animated) {
-            fab.setPrefWidth(targetW);
-            label.setTranslateX(targetX);
-            fab.setTextOpacity(targetO);
-            return;
-        }
+    /// Animates the same three values adjusted by [#snap(boolean)] toward the targets computed for the given state, using
+    /// the Material 3 motion presets. Any running animation is stopped first.
+    protected void animateTo(boolean extended) {
+        stopAnimation();
+        MFXFab fab = getControl();
+        double w = computeTargetWidth(extended);
+        double x = computeTargetX(extended, w);
+        double o = extended ? 1.0 : 0.0;
 
         MotionPreset eMotion = M3Motion.EXPRESSIVE_DEFAULT_EFFECTS;
         MotionPreset sMotion = M3Motion.EXPRESSIVE_FAST_SPATIAL;
         animation = TimelineBuilder.build()
-            .add(KeyFrames.of(sMotion.millis(), fab.prefWidthProperty(), targetW, sMotion.curve()))
-            .add(KeyFrames.of(sMotion.millis(), label.translateXProperty(), targetX, sMotion.curve()))
-            .add(KeyFrames.of(eMotion.millis(), fab.textOpacityProperty(), targetO, eMotion.curve()))
+            .add(KeyFrames.of(sMotion.millis(), fab.prefWidthProperty(), w, sMotion.curve()))
+            .add(KeyFrames.of(sMotion.millis(), label.translateXProperty(), x, sMotion.curve()))
+            .add(KeyFrames.of(eMotion.millis(), fab.textOpacityProperty(), o, eMotion.curve()))
             .getAnimation();
         animation.play();
     }
 
-    /// Computes the FAB's width according to its extended state. Before the computation we refresh the CSS by calling
-    /// [Node#applyCss()]!
+    protected void stopAnimation() {
+        if (Animations.isPlaying(animation)) animation.stop();
+    }
+
+    /// Computes the FAB's width according to its extended state.
     ///
-    /// Depending on the state, the target is given by:
+    /// The content width is given by:
     /// - Extended: the label's width, which we get from the cache, [LabelMeasurementCache]
-    /// - Collapsed: the icon's width or `0.0` if there's no icon
+    /// - Collapsed: the [#iconWrapper]'s width (the node that is actually displayed)
     ///
     /// The final value, however, is the maximum between: the width given by the [MFXFab#minSizeProperty()] and
     /// the computed value including horizontal padding.
     protected double computeTargetWidth(boolean extended) {
         MFXFab fab = getControl();
-        fab.applyCss(); // Ensure minSize is correct
         double minW = fab.getMinSize().width();
-
-        MFXFontIcon icon = fab.getIcon();
-        double target;
-        if (extended) {
-            target = lmc.get().width();
-        } else {
-            target = icon != null ? LayoutUtils.snappedBoundWidth(icon) : 0.0;
-        }
-        return Math.max(minW, snappedLeftInset() + target + snappedRightInset());
+        double target = contentWidth(extended);
+        return snapSizeX(Math.max(minW, snappedLeftInset() + target + snappedRightInset()));
     }
 
     /// Computes the label's x displacement so that its icon or the label as a whole always appear at the center of the FAB.
     /// Since this is intended to be used in conjunction with [#computeTargetWidth(boolean)], to avoid recomputing such value,
     /// it's accepted as an argument.
     ///
-    /// Depending on the state, the target is given by:
-    /// - Extended: `(targetW - labelW) / 2.0 - startX`. The label's width is not recomputed but retrieved from the cache
-    ///   [LabelMeasurementCache].
-    /// - Collapsed: `(targetW - iW) / 2.0 - startX`. Where `iW` is the icon's width or `0.0` if there's no icon.
-    ///
-    /// The `startX` value is the natural x position of the label.
+    /// The target is given by `(targetW - contentW) / 2.0 - startX`, where `contentW` is the same measurement used by
+    /// [#computeTargetWidth(boolean)] and `startX` is the natural x position of the label. Because the label is laid out
+    /// before this runs (see [#layoutChildren(double, double, double, double)]), `startX` is always fresh.
     protected double computeTargetX(boolean extended, double targetW) {
-        double target;
         double startX = label.getLayoutX();
-        if (extended) {
-            target = (targetW - lmc.get().width()) / 2.0 - startX;
-        } else {
-            double iW = LayoutUtils.snappedBoundWidth(iconWrapper);
-            return (targetW - iW) / 2.0 - startX;
-        }
-        return target;
+        return (targetW - contentWidth(extended)) / 2.0 - startX;
+    }
+
+    /// The width of the FAB's content according to its extended state: the cached label width when extended, otherwise
+    /// the [#iconWrapper]'s width. Shared by [#computeTargetWidth(boolean)] and [#computeTargetX(boolean, double)] so that
+    /// sizing and centering always agree on the same measurement.
+    protected double contentWidth(boolean extended) {
+        return extended ? lmc.getSnappedWidth() : LayoutUtils.snappedBoundWidth(iconWrapper);
     }
 
     /// Clips the FAB's label so that the text does not overflow when animating between extended/collapsed states.
@@ -230,7 +222,6 @@ public class MFXFabSkin extends MFXLabeledSkin {
         r.heightProperty().bind(fab.heightProperty());
         label.setClip(r);
     }
-
 
     //================================================================================
     // Overridden Methods
@@ -295,6 +286,14 @@ public class MFXFabSkin extends MFXLabeledSkin {
         return getSkinnable().prefHeight(width);
     }
 
+    /// The single place where sizing and positioning happen. Runs after the CSS pass, so every measurement is fresh.
+    ///
+    /// The label is laid out first so that [#computeTargetX(boolean, double)] reads a fresh `startX`. Then, in order:
+    /// - if an animation is running and there's no new intent, it is left to play
+    /// - [#iconSwitch]: instantly collapse, then re-extend with an animation if the FAB is extended (the Material 3 effect
+    ///   shown when the icon changes)
+    /// - [#animateNext]: animate the re-sync toward the current extended state
+    /// - otherwise: [#snap(boolean)] to the current state (the self-healing case, e.g. after a variant/text change)
     @Override
     protected void layoutChildren(double x, double y, double w, double h) {
         MFXFab fab = getControl();
@@ -303,8 +302,24 @@ public class MFXFabSkin extends MFXLabeledSkin {
         layoutInArea(label, x, y, w, h, 0, HPos.LEFT, VPos.CENTER);
 
         if (!init) {
-            extend(fab.isExtended(), false);
             init = true;
+            animateNext = false;
+            iconSwitch = false;
+            snap(fab.isExtended());
+            return;
+        }
+
+        if (iconSwitch) {
+            iconSwitch = false;
+            animateNext = false;
+            stopAnimation();
+            snap(false);
+            if (fab.isExtended()) animateTo(true);
+        } else if (animateNext) {
+            animateNext = false;
+            animateTo(fab.isExtended());
+        } else if (!Animations.isPlaying(animation)) {
+            snap(fab.isExtended());
         }
     }
 
