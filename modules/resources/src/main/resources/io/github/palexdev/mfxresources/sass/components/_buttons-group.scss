@@ -19,7 +19,7 @@
 @mixin MaterialButtonsGroup() {
   .mfx-buttons-group {
     > .mfx-button > .surface {
-      -mfx-elevation : NONE !important;
+      -mfx-elevation : LEVEL0 !important;
     }
 
     &.xs {

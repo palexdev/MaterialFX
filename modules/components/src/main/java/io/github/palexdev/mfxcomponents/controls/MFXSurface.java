@@ -42,9 +42,10 @@ import javafx.css.StyleablePropertyFactory;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Effect;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Region;
+
+import static java.util.Optional.ofNullable;
 
 /// Material Design 3 components are stratified. Different layers have different purposes. Two are particularly important:
 /// the `state layer` and the `focus ring layer`.
@@ -99,6 +100,10 @@ public class MFXSurface extends Region implements MFXStyleable {
 
     protected Animation animation;
     protected double lastOpacity = 1.0;
+
+    protected ElevationLevel lastElevation;
+    protected DropShadow shadow;
+    protected Animation elevationAnimation;
 
     //================================================================================
     // Constructors
@@ -165,6 +170,10 @@ public class MFXSurface extends Region implements MFXStyleable {
     /// Disposes the surface by unregistering any listener and setting the `owner` to `null`.
     public void dispose() {
         states.clear();
+        if (Animations.isPlaying(elevationAnimation)) elevationAnimation.stop();
+        if (shadow != null) owner.setEffect(null);
+        shadow = null;
+        elevationAnimation = null;
         owner.getPseudoClassStates().removeListener(stateListener);
         stateListener = null;
         owner = null;
@@ -262,23 +271,35 @@ public class MFXSurface extends Region implements MFXStyleable {
         StyleableProperties.ELEVATION,
         this,
         "elevation",
-        ElevationLevel.NONE
+        ElevationLevel.LEVEL0
     ) {
         @Override
         protected void invalidated() {
-            ElevationLevel lvl = get();
-            if (lvl == null || lvl == ElevationLevel.NONE) {
-                owner.setEffect(null);
+            ElevationLevel lvl = ofNullable(get()).orElse(ElevationLevel.LEVEL0);
+            ElevationLevel last = lastElevation;
+            lastElevation = lvl;
+
+            if (Animations.isPlaying(elevationAnimation))
+                elevationAnimation.stop();
+
+            if (last == null || !ANIMATED || !isAnimated()) {
+                shadow = (lvl == ElevationLevel.LEVEL0) ? null : lvl.toShadow();
+                owner.setEffect(shadow);
                 return;
             }
 
-            Effect effect = owner.getEffect();
-            if (effect == null) {
-                owner.setEffect(lvl.toShadow());
-                return;
+            if (shadow == null) {
+                if (lvl == ElevationLevel.LEVEL0) return;
+                shadow = ElevationLevel.LEVEL0.toShadow();
+                owner.setEffect(shadow);
             }
-            if (effect instanceof DropShadow ds)
-                ElevationLevel.animate(ds, lvl);
+            elevationAnimation = ElevationLevel.animation(shadow, lvl);
+            if (lvl == ElevationLevel.LEVEL0)
+                elevationAnimation.setOnFinished(_ -> {
+                    owner.setEffect(null);
+                    shadow = null;
+                });
+            elevationAnimation.play();
         }
     };
 
@@ -375,7 +396,9 @@ public class MFXSurface extends Region implements MFXStyleable {
     }
 
     /// Specifies the elevation level of the owner, not the surface! Each level corresponds to a different [DropShadow]
-    /// effect.[ElevationLevel#LEVEL0] corresponds to `null`.
+    /// effect. At [ElevationLevel#LEVEL0] no effect is set on the owner at all, since effects are expensive. A zeroed
+    /// shadow is installed on demand only to animate towards a higher level, and removed once the animation back to
+    /// [ElevationLevel#LEVEL0] ends.
     ///
     /// Unfortunately, since the crap that is JavaFX, handles the effects in strange ways, the shadow cannot be applied to the
     /// surface for various reasons. So, the effect will be applied on the owner instead.
@@ -443,7 +466,7 @@ public class MFXSurface extends Region implements MFXStyleable {
                 ElevationLevel.class,
                 "-mfx-elevation",
                 MFXSurface::elevationProperty,
-                ElevationLevel.NONE
+                ElevationLevel.LEVEL0
             );
 
         static {

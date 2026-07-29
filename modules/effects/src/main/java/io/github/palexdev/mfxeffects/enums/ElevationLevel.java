@@ -23,14 +23,13 @@ import java.util.Arrays;
 import io.github.palexdev.mfxeffects.animations.Animations.KeyFrames;
 import io.github.palexdev.mfxeffects.animations.Animations.TimelineBuilder;
 import io.github.palexdev.mfxeffects.animations.motion.M3Motion;
+import javafx.animation.Animation;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 
 /// Enumerator which defines 6 levels of `DropShadow` effects from `LEVEL0` to `LEVEL5`.
 public enum ElevationLevel {
-    NONE(Color.TRANSPARENT, 0, 0, 0, 0),
-
     // 0dp
     LEVEL0(0, 0, 0, 0),
 
@@ -56,11 +55,7 @@ public enum ElevationLevel {
     private final double offsetY;
 
     ElevationLevel(double radius, double spread, double offsetX, double offsetY) {
-        this(Color.rgb(0, 0, 0, 0.20), radius, spread, offsetX, offsetY);
-    }
-
-    ElevationLevel(Color color, double radius, double spread, double offsetX, double offsetY) {
-        this.color = color;
+        this.color = Color.rgb(0, 0, 0, 0.20);
         this.radius = radius;
         this.spread = spread;
         this.offsetX = offsetX;
@@ -102,14 +97,14 @@ public enum ElevationLevel {
         );
     }
 
-    public static void animate(DropShadow current, ElevationLevel next) {
+    public static Animation animation(DropShadow current, ElevationLevel next) {
         M3Motion.MotionPreset m = M3Motion.EXPRESSIVE_SLOW_EFFECTS;
-        TimelineBuilder.build()
+        return TimelineBuilder.build()
             .add(KeyFrames.of(1, current.offsetXProperty(), next.getOffsetX(), m.curve()))
             .add(KeyFrames.of(1, current.offsetYProperty(), next.getOffsetY(), m.curve()))
             .add(KeyFrames.of(m.duration(), current.radiusProperty(), next.getRadius(), m.curve()))
             .add(KeyFrames.of(m.duration(), current.spreadProperty(), next.getSpread(), m.curve()))
-            .getAnimation().play();
+            .getAnimation();
     }
 
     /// Attempts to get the corresponding `DepthLevel` of the given [DropShadow] effect.
