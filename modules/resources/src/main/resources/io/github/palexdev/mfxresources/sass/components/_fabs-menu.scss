@@ -22,8 +22,14 @@
       -mfx-icon : 'fas-plus'
     }
 
+    > .item {
+      -fx-background-radius : 999px;
+      -mfx-elevation        : LEVEL0;
+    }
+
     > .item > .surface {
-      -mfx-elevation : NONE;
+      -fx-background-radius : 999px;
+      -mfx-elevation : LEVEL0;
     }
 
     // Open state
