@@ -25,7 +25,6 @@ import java.util.function.Supplier;
 
 import io.github.palexdev.mfxcomponents.controls.cells.MFXCell;
 import io.github.palexdev.mfxcomponents.popups.ExtendedPopoverConfig;
-import io.github.palexdev.mfxcore.base.beans.Position;
 import io.github.palexdev.mfxcore.base.properties.functional.ConsumerProperty;
 import io.github.palexdev.mfxcore.base.properties.functional.FunctionProperty;
 import io.github.palexdev.mfxcore.behavior.MFXBehavior;
@@ -48,6 +47,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
+import static io.github.palexdev.mfxcore.base.beans.Position.PositionBuilder.y;
+
 /// Base class for all `MaterialFX` components which allow the user to make a choice among a list of options, e.g.:
 /// combo boxes, split buttons.
 ///
@@ -59,6 +60,7 @@ import javafx.scene.input.MouseEvent;
 /// - the [#popupConfigProperty()] to configure the popup
 ///
 /// It's possible to specify an action to run when the selection changes by using the [#onSelectionChangedProperty()].
+@Deprecated(since = "Will become MFXComboBox")
 public abstract class MFXChoice<T> extends MFXControl implements WithSelectionModel<T> {
     //================================================================================
     // Properties
@@ -83,7 +85,7 @@ public abstract class MFXChoice<T> extends MFXControl implements WithSelectionMo
         }
     };
     private final ObjectProperty<ExtendedPopoverConfig> popupConfig = new SimpleObjectProperty<>(
-        ExtendedPopoverConfig.builder().offset(Position.of(0.0, 4.0)).build()
+        ExtendedPopoverConfig.builder().offset(y(4.0)).build()
     );
 
     //================================================================================

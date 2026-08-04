@@ -44,7 +44,8 @@ import static io.github.palexdev.mfxcore.observables.When.onInvalidated;
 
 /// Base skin containing common properties and behavior for all controls based on [MFXChoice].
 ///
-/// It manages the 'view cell' (see [#buildViewCell()] and [#updateViewCell()]) and the popup used to display the choices.
+/// It manages the 'view cell' (see [#buildViewCell()] and [#updateViewCell()]) and the popup used to display the choices.\
+@Deprecated(since = "Will become MFXComboBoxSkin")
 public abstract class MFXChoiceSkin<T> extends MFXSkinBase<MFXChoice<T>> {
     //================================================================================
     // Properties
