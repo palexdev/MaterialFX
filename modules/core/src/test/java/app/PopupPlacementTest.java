@@ -119,7 +119,6 @@ public class PopupPlacementTest extends Application {
             placementInfoLabel.setText(placement.toString());
             MFXPopover p = MFXPopups.popover(cfg -> cfg
                     .styleableParent(this))
-                .setAnimation(new PopupAnimation(PopupAnimationFunction.SCALE))
                 .setContent(_ -> new Rectangle(32.0, 32.0))
                 .show(this, placement);
             //ScenicView.show(p.getRoot());

@@ -18,25 +18,101 @@
 
 package io.github.palexdev.mfxcore.enums;
 
+import javafx.scene.Cursor;
+
+import static javafx.scene.Cursor.*;
+
+/// The eight edges and corners of a box, plus [#NONE] for "nowhere in particular".
 public enum Zone {
-    TOP_RIGHT, TOP_CENTER, TOP_LEFT,
-    BOTTOM_RIGHT, BOTTOM_CENTER, BOTTOM_LEFT,
-    CENTER_RIGHT, CENTER_LEFT,
-    NONE, ALL;
+    TOP_LEFT {
+        @Override
+        public Cursor cursor() {
+            return NW_RESIZE;
+        }
+    },
+    TOP_CENTER {
+        @Override
+        public Cursor cursor() {
+            return N_RESIZE;
+        }
+    },
+    TOP_RIGHT {
+        @Override
+        public Cursor cursor() {
+            return NE_RESIZE;
+        }
+    },
+    CENTER_RIGHT {
+        @Override
+        public Cursor cursor() {
+            return E_RESIZE;
+        }
+    },
+    BOTTOM_RIGHT {
+        @Override
+        public Cursor cursor() {
+            return SE_RESIZE;
+        }
+    },
+    BOTTOM_CENTER {
+        @Override
+        public Cursor cursor() {
+            return S_RESIZE;
+        }
+    },
+    BOTTOM_LEFT {
+        @Override
+        public Cursor cursor() {
+            return SW_RESIZE;
+        }
+    },
+    CENTER_LEFT {
+        @Override
+        public Cursor cursor() {
+            return W_RESIZE;
+        }
+    },
+    NONE {
+        @Override
+        public Cursor cursor() {
+            return null;
+        }
+    };
 
-    public static boolean isRight(Zone zone) {
-        return zone == TOP_RIGHT || zone == CENTER_RIGHT || zone == BOTTOM_RIGHT;
+    private static final Zone[] ALL_ZONES = new Zone[] {
+        TOP_LEFT, TOP_CENTER, TOP_RIGHT, CENTER_RIGHT,
+        BOTTOM_RIGHT, BOTTOM_CENTER, BOTTOM_LEFT, CENTER_LEFT
+    };
+
+    /// @return every zone except [#NONE]
+    public static Zone[] all() {
+        return ALL_ZONES;
     }
 
-    public static boolean isLeft(Zone zone) {
-        return zone == TOP_LEFT || zone == CENTER_LEFT || zone == BOTTOM_LEFT;
+    public boolean isRight() {
+        return this == TOP_RIGHT || this == CENTER_RIGHT || this == BOTTOM_RIGHT;
     }
 
-    public static boolean isTop(Zone zone) {
-        return zone == TOP_LEFT || zone == TOP_CENTER || zone == TOP_RIGHT;
+    public boolean isLeft() {
+        return this == TOP_LEFT || this == CENTER_LEFT || this == BOTTOM_LEFT;
     }
 
-    public static boolean isBottom(Zone zone) {
-        return zone == BOTTOM_RIGHT || zone == BOTTOM_CENTER || zone == BOTTOM_LEFT;
+    public boolean isTop() {
+        return this == TOP_LEFT || this == TOP_CENTER || this == TOP_RIGHT;
     }
+
+    public boolean isBottom() {
+        return this == BOTTOM_RIGHT || this == BOTTOM_CENTER || this == BOTTOM_LEFT;
+    }
+
+    public boolean isCorner() {
+        return this == TOP_LEFT || this == TOP_RIGHT || this == BOTTOM_RIGHT || this == BOTTOM_LEFT;
+    }
+
+    /// @return the resize cursor for this zone, `null` for [#NONE].
+    ///
+    /// Deliberately not [Cursor#DEFAULT]: JavaFX resolves the cursor by walking up from the picked node and taking the
+    /// first non-null one, so `DEFAULT` would claim "the cursor is an arrow here" and block every ancestor. `null`
+    /// means "no opinion, inherit".
+    public abstract Cursor cursor();
 }

@@ -18,7 +18,10 @@
 
 package io.github.palexdev.mfxcore.utils.fx;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 import io.github.palexdev.mfxcore.base.Disposable;
 import javafx.scene.Cursor;
@@ -30,16 +33,20 @@ import static io.github.palexdev.mfxcore.input.WhenEvent.intercept;
 import static javafx.scene.input.MouseEvent.*;
 
 public class WindowMover {
+
     //================================================================================
     // Properties
     //================================================================================
+
     protected Window window;
     protected Node anchor;
-    private List<Disposable> handlers;
+    private final List<Disposable> disposables = new ArrayList<>();
 
     private double deltaX;
     private double deltaY;
     private boolean canMove = true;
+
+    private Predicate<MouseEvent> condition;
 
     //================================================================================
     // Methods
@@ -52,9 +59,9 @@ public class WindowMover {
             throw new IllegalStateException("WindowMover is already installed on window: " + window);
         this.window = window;
         this.anchor = anchor;
-        handlers = List.of(
+        Collections.addAll(disposables,
             intercept(anchor, MOUSE_PRESSED)
-                .condition(_ -> canMove)
+                .condition(this::canMove)
                 .handle(e -> {
                     deltaX = window.getX() - e.getScreenX();
                     deltaY = window.getY() - e.getScreenY();
@@ -63,18 +70,20 @@ public class WindowMover {
                 .asFilter()
                 .register(),
             intercept(anchor, MOUSE_RELEASED)
+                .condition(this::canMove)
                 .handle(_ -> setCursor(Cursor.HAND))
                 .asFilter()
                 .register(),
             intercept(anchor, MOUSE_DRAGGED)
-                .condition(_ -> canMove)
+                .condition(this::canMove)
                 .handle(e -> move(e, deltaX, deltaY))
                 .asFilter()
                 .register(),
             intercept(anchor, MOUSE_MOVED)
                 .handle(e -> {
                     canMove = NodeUtils.isDescendantOf(e, anchor);
-                    setCursor(canMove ? Cursor.HAND : Cursor.DEFAULT);
+                    if (condition != null && !condition.test(e)) return;
+                    setCursor(canMove ? Cursor.HAND : null);
                 })
                 .asFilter()
                 .register()
@@ -83,8 +92,8 @@ public class WindowMover {
 
     public void uninstall() {
         if (window == null) return;
-        handlers.forEach(Disposable::dispose);
-        handlers.clear();
+        disposables.forEach(Disposable::dispose);
+        disposables.clear();
         deltaX = 0;
         deltaY = 0;
         canMove = true;
@@ -99,5 +108,22 @@ public class WindowMover {
 
     protected void setCursor(Cursor cursor) {
         anchor.setCursor(cursor);
+    }
+
+    private boolean canMove(MouseEvent me) {
+        return canMove && (condition == null || condition.test(me));
+    }
+
+    //================================================================================
+    // Getters/Setters
+    //================================================================================
+
+    public Predicate<MouseEvent> condition() {
+        return condition;
+    }
+
+    public WindowMover condition(Predicate<MouseEvent> condition) {
+        this.condition = condition;
+        return this;
     }
 }

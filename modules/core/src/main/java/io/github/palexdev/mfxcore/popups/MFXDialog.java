@@ -24,6 +24,7 @@ import java.util.function.Consumer;
 
 import io.github.palexdev.mfxcore.base.beans.Position;
 import io.github.palexdev.mfxcore.controls.MFXStyleable;
+import io.github.palexdev.mfxcore.enums.Zone;
 import io.github.palexdev.mfxcore.input.WhenEvent;
 import io.github.palexdev.mfxcore.observables.When;
 import io.github.palexdev.mfxcore.popups.MFXDialog.DialogConfig.Builder;
@@ -34,7 +35,7 @@ import io.github.palexdev.mfxcore.utils.fx.AnchorHandlers.Placement;
 import io.github.palexdev.mfxcore.utils.fx.MFXBackdrop;
 import io.github.palexdev.mfxcore.utils.fx.StageUtils;
 import io.github.palexdev.mfxcore.utils.fx.WindowMover;
-import io.github.palexdev.mfxcore.utils.fx.resize.StageResizer;
+import io.github.palexdev.mfxcore.utils.fx.resize.Resizer;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.StringProperty;
@@ -88,7 +89,7 @@ public class MFXDialog extends MFXPopupBase<WindowPeer, Window> {
     private When<?> lockWhen;
 
     private WindowMover mover;
-    private StageResizer resizer;
+    private Resizer<Stage> resizer;
 
     protected boolean await = false;
     protected boolean inNestedLoop = false;
@@ -141,17 +142,21 @@ public class MFXDialog extends MFXPopupBase<WindowPeer, Window> {
         if (lockInPlace)
             throw new IllegalStateException("Dialog is configured to be lock in place");
         if (mover != null) mover.uninstall();
-        mover = StageUtils.makeDraggable(peer, anchor);
+        mover = StageUtils.makeDraggable(peer, anchor)
+            .condition(_ -> resizer == null || resizer.detectedZone() == Zone.NONE);
     }
 
     public void setResizable(boolean resizable) {
         if (!resizable) {
-            if (resizer != null) resizer.dispose();
+            if (resizer != null) {
+                resizer.dispose();
+                resizer = null;
+            }
             return;
         }
 
         if (resizer != null) resizer.dispose();
-        resizer = StageUtils.makeResizable(peer, peer.getRoot());
+        resizer = StageUtils.makeResizable(peer);
     }
 
     //================================================================================

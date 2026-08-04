@@ -18,10 +18,11 @@
 
 package io.github.palexdev.mfxcore.utils.fx;
 
-import io.github.palexdev.mfxcore.utils.fx.resize.StageResizer;
+import io.github.palexdev.mfxcore.utils.fx.resize.Resizer;
+import io.github.palexdev.mfxcore.utils.fx.resize.targets.StageTarget;
 import javafx.scene.Node;
-import javafx.scene.layout.Region;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.Window;
 
 /// This class contains utilities to be used on [Windows][Window].
@@ -47,16 +48,16 @@ public class StageUtils {
         return mover;
     }
 
+
     /// Makes the given [Stage] resizable.
     ///
-    /// Ideally, you may want to use this on custom windows that cannot use the native resizing. All windows must have
-    /// a scene and therefore a node to show the content. If the content is a [Region] (which is a resizable node),
-    /// it can be used to also resize the window.
+    /// Expects the stage to be either [StageStyle#TRANSPARENT] or [StageStyle#UNDECORATED].
     ///
-    /// This makes use of [StageResizer].
-    public static StageResizer makeResizable(Stage stage, Region byRegion) {
-        StageResizer resizer = new StageResizer(byRegion, stage);
-        resizer.makeResizable();
-        return resizer;
+    /// @see Resizer
+    /// @see StageTarget
+    public static Resizer<Stage> makeResizable(Stage stage) {
+        if (stage.getStyle() != StageStyle.TRANSPARENT && stage.getStyle() != StageStyle.UNDECORATED)
+            throw new IllegalArgumentException("Expected transparent or undecorated stage");
+        return Resizer.resizer(stage).install();
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * Copyright (C) 2026 Parisi Alessandro - alessandro.parisi406@gmail.com
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
  *
  * MaterialFX is free software: you can redistribute it and/or
@@ -16,11 +16,14 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.mfxcore.utils.fx.resize.base;
+package io.github.palexdev.mfxcore.utils.fx.resize;
 
-import javafx.scene.Node;
+import io.github.palexdev.mfxcore.utils.fx.resize.targets.ResizeTarget;
 
+/// The `ResizeHandler` is a callback that can be used to override the default resize behavior of a [Resizer].
+/// When a handler is set through [Resizer#resizeHandler(ResizeHandler)], it will skip [ResizeTarget#apply(double, double, double, double)]
+/// and call [#resize(Object, double, double, double, double)] instead.
 @FunctionalInterface
-public interface DragResizeHandler<T extends Node> {
-    void onResize(T node, double x, double y, double w, double h);
+public interface ResizeHandler<T> {
+    void resize(T target, double x, double y, double w, double h);
 }

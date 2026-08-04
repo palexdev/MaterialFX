@@ -23,6 +23,8 @@ import javafx.application.Application;
 public class Launcher {
 
     public static void main(String[] args) {
-        Application.launch(PopupPlacementTest.class, args);
+        System.setProperty("prism.verbose", "true");
+        System.setProperty("prism.forceGPU", "true");
+        Application.launch(Playground.class, args);
     }
 }
