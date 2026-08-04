@@ -29,19 +29,13 @@ public record Position(double x, double y) {
     // Static Methods
     //================================================================================
 
-    // TODO we should replace `of` everywhere with more significant names for static imports
-    @Deprecated(forRemoval = true)
-    public static Position of(double x, double y) {
-        return new Position(x, y);
-    }
-
     public static Position position(double x, double y) {
         return new Position(x, y);
     }
 
     /// @return a new `Position` object with both x and y set to 0
     public static Position origin() {
-        return of(0, 0);
+        return position(0, 0);
     }
 
     //================================================================================

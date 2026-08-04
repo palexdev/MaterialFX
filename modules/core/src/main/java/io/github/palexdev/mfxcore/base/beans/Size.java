@@ -29,23 +29,18 @@ public record Size(double width, double height) {
     // Static Methods
     //================================================================================
 
-    @Deprecated(forRemoval = true)
-    public static Size of(double width, double height) {
-        return new Size(width, height);
-    }
-
     public static Size size(double width, double height) {
         return new Size(width, height);
     }
 
     /// @return a new `Size` object with both width and height set to 0
     public static Size zero() {
-        return of(0, 0);
+        return size(0, 0);
     }
 
     /// @return a new `Size` object with both width and height set to -1
     public static Size invalid() {
-        return of(-1, -1);
+        return size(-1, -1);
     }
 
     //================================================================================
