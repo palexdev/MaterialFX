@@ -18,60 +18,71 @@
 
 package apps;
 
+import java.util.Arrays;
+
+import io.github.palexdev.mcu.MaterialTheme;
+import io.github.palexdev.mcu.MaterialThemeBuilder;
 import io.github.palexdev.mfxcomponents.controls.MFXButton;
-import io.github.palexdev.mfxcomponents.controls.MFXButton.MFXToggleButton;
 import io.github.palexdev.mfxcomponents.controls.MFXButtonsGroup;
+import io.github.palexdev.mfxcomponents.controls.MFXCheckbox;
 import io.github.palexdev.mfxcomponents.controls.MFXIconButton;
-import io.github.palexdev.mfxcomponents.controls.MFXIconButton.MFXToggleIconButton;
+import io.github.palexdev.mfxcomponents.theming.MFXThemeEngine;
+import io.github.palexdev.mfxcomponents.theming.MaterialColors;
 import io.github.palexdev.mfxcomponents.variants.ButtonVariants;
-import io.github.palexdev.mfxcomponents.variants.ButtonVariants.StyleVariant;
 import io.github.palexdev.mfxcore.enums.SelectionMode;
-import io.github.palexdev.mfxresources.MFXResources;
-import io.github.palexdev.mfxresources.utils.IconUtils;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class Playground extends Application {
+import static io.github.palexdev.mcu.Colors.argbToWeb;
+import static io.github.palexdev.mfxcore.utils.fx.ColorUtils.getRandomColor;
+import static io.github.palexdev.mfxcore.utils.fx.ColorUtils.toArgb;
 
-    static void main(String[] args) {
-        launch(args);
-    }
+public class Playground extends Application {
 
     @Override
     public void start(Stage stage) {
         VBox root = new VBox(30.0);
         root.setAlignment(Pos.CENTER);
 
-        MFXButton sb = new MFXButton("Standard Button").setStyle(StyleVariant.FILLED);
-        MFXToggleButton tb = new MFXToggleButton("Toggle Button").setStyle(StyleVariant.FILLED);
-        MFXIconButton isb = new MFXIconButton(IconUtils.randomIcon("fas-")).setStyle(StyleVariant.TONAL);
-        MFXToggleIconButton tisb = new MFXToggleIconButton(IconUtils.randomIcon("fas-")).setStyle(StyleVariant.TONAL);
+        MFXCheckbox checkbox = new MFXCheckbox();
+        //checkbox.setAllowIndeterminate(true);
 
-        isb.setOnAction(_ -> isb.setIcon(IconUtils.randomIcon("fas-")));
+        MFXButton b1 = new MFXButton().setStyle(ButtonVariants.StyleVariant.TONAL);
+        b1.disableProperty().bind(checkbox.selectedProperty());
 
-        MFXButtonsGroup group = new MFXButtonsGroup().addButtons(
-            "First", IconUtils.randomIcon("fas-"),
-            "Second", IconUtils.randomIcon("fas-"),
-            "Third", IconUtils.randomIcon("fas-"),
-            "Fourth", IconUtils.randomIcon("fas-"),
-            "Fifth", IconUtils.randomIcon("fas-")
-        );
-        group.setGroupType(ButtonVariants.GroupVariant.CONNECTED);
-        group.setSelectionMode(SelectionMode.SINGLE);
+        MFXIconButton ib = new MFXIconButton().setStyle(ButtonVariants.StyleVariant.TONAL);
+        ib.disableProperty().bind(checkbox.selectedProperty());
 
-        root.getChildren().addAll(sb, tb, isb, tisb, group);
+        MFXButtonsGroup bg = new MFXButtonsGroup();
+        bg.setSelectionMode(SelectionMode.SINGLE);
+        Arrays.stream(MaterialColors.values()).forEach(c -> {
+            MFXButton.MFXToggleButton t = new MFXButton.MFXToggleButton(c.toString());
+            t.setOnAction(_ -> MFXThemeEngine.instance().setColor(c));
+            bg.addButtons(t);
+        });
 
+        MFXButton randBtn = new MFXButton("Random");
+        randBtn.setOnAction(_ -> {
+            int argb = toArgb(getRandomColor());
+            System.out.println(argbToWeb(argb));
+            MaterialTheme theme = MaterialThemeBuilder.theme(argb).generate();
+            MFXThemeEngine.instance().setColor(theme);
+        });
+
+        MFXButton modeBtn = new MFXButton("Mode");
+        modeBtn.setOnAction(_ -> MFXThemeEngine.instance().switchThemeMode());
+
+        root.getChildren().addAll(checkbox, ib, b1, bg, randBtn, modeBtn);
+
+        root.setStyle("-fx-background-color: -md-sys-color-surface");
         Scene scene = new Scene(root, 400, 600);
-        scene.getStylesheets().addAll(
-            MFXResources.loadTheme("material/md-preset-blue.css"),
-            MFXResources.loadTheme("material/md-theme.css"),
-            MFXResources.loadTheme("material/motion/md-motion.css")
-        );
-
         stage.setScene(scene);
+        MFXThemeEngine.instance()
+            .init(stage, true)
+            .animateApply(true);
         stage.show();
     }
 }

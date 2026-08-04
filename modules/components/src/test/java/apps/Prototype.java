@@ -18,36 +18,79 @@
 
 package apps;
 
+import io.github.palexdev.mfxcomponents.controls.MFXButton;
+import io.github.palexdev.mfxcomponents.controls.MFXCheckbox;
+import io.github.palexdev.mfxcomponents.controls.MFXIconButton;
+import io.github.palexdev.mfxcomponents.variants.ButtonVariants.StyleVariant;
+import io.github.palexdev.mfxcore.utils.fx.CSSFragment;
+import io.github.palexdev.mfxresources.MFXResources;
 import javafx.application.Application;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Prototype extends Application {
 
     @Override
     public void start(Stage stage) {
-/*        MFXCheckbox cb = new MFXCheckbox("Test!");
-        cb.setAllowIndeterminate(true);
+        MyButton mb = new MyButton();
 
-        cb.setPadding(InsetsBuilder.uniform(4).get());
-        cb.setOnMouseClicked(e -> {
-            if (e.getButton() == MouseButton.SECONDARY) {
-                cb.setContentDisplay(cb.getContentDisplay() == ContentDisplay.LEFT ? ContentDisplay.RIGHT : ContentDisplay.LEFT);
-            }
+        MFXCheckbox checkbox = new MFXCheckbox();
+        MFXButton mfxb = new MFXButton().setStyle(StyleVariant.TONAL);
+        MFXIconButton mfxib = new MFXIconButton().setStyle(StyleVariant.TONAL);
+
+        VBox root = new VBox(20.0, checkbox, mfxib, mfxb, mb);
+        root.setAlignment(Pos.CENTER);
+        root.setOnMousePressed(_ -> {
+            mb.setDisable(!mb.isDisable());
+            mfxb.setDisable(!mfxb.isDisable());
+            mfxib.setDisable(!mfxib.isDisable());
         });
-
-        // TODO test cb with expanding width
-
-        StackPane root = new StackPane(cb);
         Scene scene = new Scene(root, 400, 400);
-
         scene.getStylesheets().addAll(
             MFXResources.loadTheme("material/md-preset-blue.css"),
-            MFXResources.loadTheme("material/md-theme.css")
+            MFXResources.loadTheme("material/md-theme.css"),
+            MFXResources.loadTheme("material/motion/md-motion.css")
         );
-
         stage.setScene(scene);
         stage.show();
+    }
 
-        ScenicView.show(scene);*/
+    static class MyButton extends Region {
+        {
+            setPrefSize(200, 50);
+            setMaxSize(USE_PREF_SIZE, USE_PREF_SIZE);
+            getStyleClass().add("my-button");
+
+            CSSFragment.applyOn("""
+                    .my-button {
+                      -md-sys-color-primary: blue;
+                      -md-sys-color-outline: red;
+                    
+                      -fx-background-color: -md-sys-color-primary;
+                      -fx-background-radius: 24px;
+                      -fx-border-color: -md-sys-color-outline;
+                      -fx-border-radius: 24px;
+                      -fx-border-width: 2px;
+                      transition-property: -fx-background-color, -fx-background-radius, -fx-border-radius;
+                      transition-duration: 0.2s;
+                      transition-timing-function: ease-in-out;
+                    }
+                    
+                    .my-button:hover {
+                      -fx-background-radius: 12px;
+                      -fx-border-radius: 12px;
+                    }
+                    
+                    .my-button:disabled {
+                      -fx-background-color: null;
+                    }
+                    """,
+                this
+            );
+
+        }
     }
 }
