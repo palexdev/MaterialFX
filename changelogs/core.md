@@ -1,3 +1,46 @@
+## 25.8.0 - 16/07/2026 - 42b1a7c5
+
+### Removed
+
+- <c1c2a9f4> Remove animation property and methods from popups and dialogs
+
+### Features
+
+- <751d135a> Remake MFXPopups factory for better UX
+- <d6434ba8> Implement Theming API interface
+- <a4f21bb0> Integrate MFXTooltip with MFXControl and MFXLabeled
+- <053b454b> Rework/simplify the EventBusNetwork into EventsNetwork and TaggedEventBus interface
+- <97642a82> Implement one-shot subscriber functionality
+- <4343340e> Implement a doubly linked list with navigable nodes
+- <57a3bf98> SelectionGroup: allow querying the selection state as a list of indexes
+- <9a255110> AbstractDragResizer: add query methods for resizing state
+- <658f2082> EnumUtils: add capitalize utility
+- <c90d60e4> NodeUtils: rework inHierarchy methods, fix WindowMover logic
+- <bf9924e3> InsetsUtils: add vertical and horizontal factories
+- <1a65e2fd> ColorUtils: add utilities to convert colors to and from ARGB format
+
+### Bug Fixes
+
+- <d8b47507> MFXMenu: close menu when uninstalled
+- <05ce7e49> MenuBuilder: set group after selection callback for check menu items so that the action is called immediately if the group decides to select the item
+- <bf958287> MFXTooltip: close when uninstalled
+
+### Refactoring
+
+- <67ea0b11> Address some deprecations
+- <5d498e74> Integrate popups and dialogs with the new Theming API
+- <88691594> MFXNotificationPane: do not pre-set pref size, let notifications take the necessary space by default
+- <628d7c70> MFXMenu: allow for null content, do not call hook method
+- <c29ad25c> MenuBuilder: add subItems(MFXMenuItem...) method
+- <5c8d1a5e> SelectionGroup: set selection state before publishing the new selection set
+- <b81b1517> StringUtils: rework title case utility
+- <dd87a4f0> Position/Size: have more descriptive static factories rather than of(...)
+
+### Style
+
+- <a83f361d> MFXMenuItem, MFXCheckMenuItem: update style
+
+
 ## 25.7.0 - 27/05/2026 - 2f256d4c
 
 ### Removed
