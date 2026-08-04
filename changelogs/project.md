@@ -1,3 +1,11 @@
+## Project - 54d7f207
+
+- 04/08/2026 <bdf6e2f0> Update JavaFX to latest EA
+- 28/07/2026 <4b1d495c> Update VirtualizedFX to v25.3.0
+- 28/07/2026 <cb835f48> Add Material Color Utilities
+
+
+
 ## Project - 2f256d4c
 
 - 26/05/2026 <c03888a6> (project, components, ) Update VirtualizedFX to v25.1.16

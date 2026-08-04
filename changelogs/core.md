@@ -1,3 +1,27 @@
+## 25.9.0 - 04/08/2026 - 54d7f207
+
+### Removed
+
+- <f3162f3d> Address some deprecations
+- <2576b41a> Address some deprecations
+- <79af6278> Remove ResettableProperties
+
+### Features
+
+- <dd0942c7> Remake Resizer API
+- <6e296c77> CollectionUtils: add convenience factories for Maps and Sets
+- <a681e31b> Implement ExtendedProperty API (replaces ResettableProperties and does more)
+
+### Refactoring
+
+- <0480498a> Allow MFXCheckMenuItem to display icons when unselected (switches to checkmark when selected)
+
+### Documentation
+
+- <3b430788> Convert old javadocs to Markdown
+
+
+
 ## 25.8.0 - 16/07/2026 - 42b1a7c5
 
 ### Removed
