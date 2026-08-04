@@ -79,7 +79,7 @@ public enum Zone {
         }
     };
 
-    private static final Zone[] ALL_ZONES = new Zone[] {
+    private static final Zone[] ALL_ZONES = new Zone[]{
         TOP_LEFT, TOP_CENTER, TOP_RIGHT, CENTER_RIGHT,
         BOTTOM_RIGHT, BOTTOM_CENTER, BOTTOM_LEFT, CENTER_LEFT
     };

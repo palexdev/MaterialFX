@@ -86,7 +86,7 @@ public class NodeUtils {
         return false;
     }
 
-    /// @return  `true` if the event's intersected node is a descendant of `ancestor`.
+    /// @return `true` if the event's intersected node is a descendant of `ancestor`.
     public static boolean isDescendantOf(MouseEvent event, Node ancestor) {
         return isDescendantOf(event.getPickResult().getIntersectedNode(), ancestor);
     }
