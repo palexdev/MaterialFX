@@ -119,6 +119,9 @@ public class Resizer<T> implements Disposable {
     private final List<Disposable> disposables = new ArrayList<>();
 
     // Callbacks
+    private BiConsumer<MouseEvent, Zone> onPressed = (me, z) -> {
+        if (z != Zone.NONE) me.consume();
+    };
     private BiConsumer<Zone, Bounds> onResizing;
     private BiConsumer<Bounds, Bounds> onResized;
     private Runnable onCancelled;
@@ -127,7 +130,7 @@ public class Resizer<T> implements Disposable {
     // Constructors
     //================================================================================
 
-    private Resizer(ResizeTarget<T> target) {
+    protected Resizer(ResizeTarget<T> target) {
         this.target = target;
     }
 
@@ -274,7 +277,10 @@ public class Resizer<T> implements Disposable {
 
         // make sure zone and cursor are correct on press
         Zone zone = detectZone(me);
-        if (zone == Zone.NONE) return;
+        if (zone == Zone.NONE) {
+            if (onPressed != null) onPressed.accept(me, Zone.NONE);
+            return;
+        }
         cursorOwner.claim(this, zone.cursor());
 
         origin = target.pointer(me);
@@ -282,7 +288,7 @@ public class Resizer<T> implements Disposable {
         resizing = true;
         armed = threshold > 0.0;
         ratioLocked = me.isShiftDown();
-        me.consume();
+        if (onPressed != null) onPressed.accept(me, zone);
     }
 
     /// Delegates to [#resize(MouseEvent)] and consumes the event, but only while a gesture is in flight.
@@ -496,6 +502,15 @@ public class Resizer<T> implements Disposable {
     /// Once crossed, the edge moves to the pointer rather than trailing it by `threshold` px.
     public Resizer<T> threshold(double threshold) {
         this.threshold = threshold;
+        return this;
+    }
+
+    public BiConsumer<MouseEvent, Zone> onPressed() {
+        return onPressed;
+    }
+
+    public Resizer<T> onPressed(BiConsumer<MouseEvent, Zone> onPressed) {
+        this.onPressed = onPressed;
         return this;
     }
 
