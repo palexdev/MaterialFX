@@ -1,3 +1,11 @@
+## 25.9.1 - 06/08/2026 - f4481dd7
+
+### Refactoring
+
+- <fb7954e6> Resizer: add onPressed callback and make constructor protected
+
+
+
 ## 25.9.0 - 04/08/2026 - 54d7f207
 
 ### Removed
