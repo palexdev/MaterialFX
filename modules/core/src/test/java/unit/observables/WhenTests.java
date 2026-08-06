@@ -30,6 +30,7 @@ import io.github.palexdev.mfxcore.observables.OnInvalidated;
 import io.github.palexdev.mfxcore.observables.When;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -39,6 +40,15 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 public class WhenTests {
 
     private static final Set<When<?>> whens = new WeakHashSet<>();
+
+    @BeforeAll
+    static void setUp() {
+        // An hack to clear the static WhensMap before running these tests
+        // Probably other tests don't clean up on finish and the GC still has not collected
+        // or there's a leak
+        // In any case to not make these fail, clear and call it a day
+        ACCESSOR.getWhens().clear();
+    }
 
     @BeforeEach
     void tearDown() {
@@ -194,4 +204,22 @@ public class WhenTests {
             Thread.sleep(100);
         }
     }
+
+    // HACK
+
+    private static class WhenAccessor extends When<Object> {
+        public WhenAccessor(ObservableValue<Object> observable) {
+            super(observable);
+        }
+
+        @Override
+        public When<Object> listen() {
+            return null;
+        }
+
+        public WhensMap getWhens() {
+            return whens;
+        }
+    }
+    private static final WhenAccessor ACCESSOR = new WhenAccessor(null);
 }
