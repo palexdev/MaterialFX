@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * Copyright (C) 2026 Parisi Alessandro - alessandro.parisi406@gmail.com
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
  *
  * MaterialFX is free software: you can redistribute it and/or
@@ -178,6 +178,7 @@ public class MFXButton extends MFXButtonBase implements WithVariants {
         /// - [StyleVariant#ELEVATED]
         /// - [SizeVariant#S]
         /// - [ShapeVariant#ROUNDED]
+        @Override
         public MFXToggleButton defaultVariants() {
             variantsHandler.setVariants(StyleVariant.ELEVATED, SizeVariant.S, ShapeVariant.ROUNDED);
             return this;

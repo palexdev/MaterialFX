@@ -17,6 +17,7 @@
  */
 
 //@formatter:off
+/* TODO I think we should replace maps with functions/mixins, strive away from strings (error-prone) */
 
 @use 'sass:map';
 @use '../abstracts/logging' as *;

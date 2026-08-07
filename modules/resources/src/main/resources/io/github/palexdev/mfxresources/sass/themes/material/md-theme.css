@@ -15,14 +15,496 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
-@import url(../../../fonts/Fonts.css);
-
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+@import '../../../fonts/Fonts.css';
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/* TODO I think we should replace maps with functions/mixins, strive away from strings (error-prone) */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/* Standard */
+/* Emphasized */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * According to the specs, the non-extended FABs do not have padding
+ * However, for the expand animation to play properly it is needed
+ */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
 * {
-  -fx-font-smoothing-type: GRAY
+  -fx-font-smoothing-type: GRAY;
 }
 
 .surface-ripple {
-  -fx-opacity: 36%
+  -fx-opacity: 36%;
 }
 
 .vfx-scroll-pane {
@@ -30,12 +512,12 @@
   -vfx-clip-border-radius: 16px;
   -vfx-layout-mode: COMPACT;
   -vfx-min-bars-opacity: 0.2;
-  -vfx-smooth-scroll: true
+  -vfx-smooth-scroll: true;
 }
 
 .vfx-list {
   -fx-background-color: -md-sys-color-surface-container;
-  -fx-background-radius: 8px
+  -fx-background-radius: 8px;
 }
 
 .cell > .label {
@@ -44,42 +526,34 @@
   -fx-line-spacing: 20px;
   -fx-graphic-text-gap: 8px;
   -fx-padding: 0px 8px 0px 8px;
-  -fx-text-fill: -md-sys-color-on-surface
+  -fx-text-fill: -md-sys-color-on-surface;
 }
-
 .cell > .label > .mfx-font-icon {
   -mfx-color: -md-sys-color-on-surface;
-  -mfx-size: 16px
+  -mfx-size: 16px;
 }
-
 .cell > .surface {
-  -fx-background-color: -md-sys-color-on-surface
+  -fx-background-color: -md-sys-color-on-surface;
 }
-
 .cell > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-on-surface
+  -mfx-ripple-color: -md-sys-color-on-surface;
 }
-
 .cell:first-child > .surface {
-  -fx-background-radius: 8px 8px 0px 0px
+  -fx-background-radius: 8px 8px 0px 0px;
 }
-
 .cell:last-child > .surface {
-  -fx-background-radius: 0px 0px 8px 8px
+  -fx-background-radius: 0px 0px 8px 8px;
 }
-
 .cell:only-child > .surface {
-  -fx-background-radius: 8px
+  -fx-background-radius: 8px;
 }
 
 .mfx-button {
-  -fx-alignment: CENTER
+  -fx-alignment: CENTER;
 }
-
 .mfx-button > .surface {
-  -mfx-elevation: LEVEL0
+  -mfx-elevation: LEVEL0;
 }
-
 .mfx-button.xs {
   -fx-font-family: "MontSerrat Medium";
   -fx-font-size: 14px;
@@ -88,17 +562,14 @@
   -fx-border-radius: 32px;
   -fx-min-height: 32px;
   -fx-padding: 0px 12px 0px 12px;
-  -fx-graphic-text-gap: 4px
+  -fx-graphic-text-gap: 4px;
 }
-
 .mfx-button.xs > .label > .mfx-font-icon {
-  -mfx-size: 20px
+  -mfx-size: 20px;
 }
-
 .mfx-button.xs > .surface {
-  -fx-background-radius: 16px
+  -fx-background-radius: 16px;
 }
-
 .mfx-button.s {
   -fx-font-family: "MontSerrat Medium";
   -fx-font-size: 14px;
@@ -107,17 +578,14 @@
   -fx-border-radius: 40px;
   -fx-min-height: 40px;
   -fx-padding: 0px 16px 0px 16px;
-  -fx-graphic-text-gap: 8px
+  -fx-graphic-text-gap: 8px;
 }
-
 .mfx-button.s > .label > .mfx-font-icon {
-  -mfx-size: 20px
+  -mfx-size: 20px;
 }
-
 .mfx-button.s > .surface {
-  -fx-background-radius: 20px
+  -fx-background-radius: 20px;
 }
-
 .mfx-button.m {
   -fx-font-family: "MontSerrat Medium";
   -fx-font-size: 16px;
@@ -126,17 +594,14 @@
   -fx-border-radius: 56px;
   -fx-min-height: 56px;
   -fx-padding: 0px 24px 0px 24px;
-  -fx-graphic-text-gap: 8px
+  -fx-graphic-text-gap: 8px;
 }
-
 .mfx-button.m > .label > .mfx-font-icon {
-  -mfx-size: 24px
+  -mfx-size: 24px;
 }
-
 .mfx-button.m > .surface {
-  -fx-background-radius: 28px
+  -fx-background-radius: 28px;
 }
-
 .mfx-button.l {
   -fx-font-family: "MontSerrat Regular";
   -fx-font-size: 24px;
@@ -145,17 +610,14 @@
   -fx-border-radius: 96px;
   -fx-min-height: 96px;
   -fx-padding: 0px 48px 0px 48px;
-  -fx-graphic-text-gap: 12px
+  -fx-graphic-text-gap: 12px;
 }
-
 .mfx-button.l > .label > .mfx-font-icon {
-  -mfx-size: 32px
+  -mfx-size: 32px;
 }
-
 .mfx-button.l > .surface {
-  -fx-background-radius: 48px
+  -fx-background-radius: 48px;
 }
-
 .mfx-button.xl {
   -fx-font-family: "MontSerrat Regular";
   -fx-font-size: 32px;
@@ -164,636 +626,489 @@
   -fx-border-radius: 136px;
   -fx-min-height: 136px;
   -fx-padding: 0px 64px 0px 64px;
-  -fx-graphic-text-gap: 16px
+  -fx-graphic-text-gap: 16px;
 }
-
 .mfx-button.xl > .label > .mfx-font-icon {
-  -mfx-size: 40px
+  -mfx-size: 40px;
 }
-
 .mfx-button.xl > .surface {
-  -fx-background-radius: 68px
+  -fx-background-radius: 68px;
 }
-
-.mfx-button.s.squared,
-.mfx-button.s:selected,
-.mfx-button.xs.squared,
-.mfx-button.xs:selected {
+.mfx-button.xs.squared, .mfx-button.xs:selected, .mfx-button.s.squared, .mfx-button.s:selected {
   -fx-background-radius: 12px;
-  -fx-border-radius: 12px
+  -fx-border-radius: 12px;
 }
-
-.mfx-button.s.squared > .surface,
-.mfx-button.s:selected > .surface,
-.mfx-button.xs.squared > .surface,
-.mfx-button.xs:selected > .surface {
-  -fx-background-radius: 12px
+.mfx-button.xs.squared > .surface, .mfx-button.xs:selected > .surface, .mfx-button.s.squared > .surface, .mfx-button.s:selected > .surface {
+  -fx-background-radius: 12px;
 }
-
 .mfx-button.xs.squared:selected {
   -fx-background-radius: 16px;
-  -fx-border-radius: 16px
+  -fx-border-radius: 16px;
 }
-
 .mfx-button.xs.squared:selected > .surface {
-  -fx-border-radius: 16px
+  -fx-border-radius: 16px;
 }
-
 .mfx-button.s.squared:selected {
   -fx-background-radius: 20px;
-  -fx-border-radius: 20px
+  -fx-border-radius: 20px;
 }
-
 .mfx-button.s.squared:selected > .surface {
-  -fx-background-radius: 20px
+  -fx-background-radius: 20px;
 }
-
-.mfx-button.m.squared,
-.mfx-button.m:selected {
+.mfx-button.m.squared, .mfx-button.m:selected {
   -fx-background-radius: 16px;
-  -fx-border-radius: 16px
+  -fx-border-radius: 16px;
 }
-
-.mfx-button.m.squared > .surface,
-.mfx-button.m:selected > .surface {
-  -fx-background-radius: 16px
+.mfx-button.m.squared > .surface, .mfx-button.m:selected > .surface {
+  -fx-background-radius: 16px;
 }
-
 .mfx-button.m.squared:selected {
   -fx-background-radius: 28px;
-  -fx-border-radius: 28px
+  -fx-border-radius: 28px;
 }
-
 .mfx-button.m.squared:selected > .surface {
-  -fx-background-radius: 28px
-}
-
-.mfx-button.l.squared,
-.mfx-button.l:selected,
-.mfx-button.xl.squared,
-.mfx-button.xl:selected {
   -fx-background-radius: 28px;
-  -fx-border-radius: 28px
 }
-
-.mfx-button.l.squared > .surface,
-.mfx-button.l:selected > .surface,
-.mfx-button.xl.squared > .surface,
-.mfx-button.xl:selected > .surface {
-  -fx-background-radius: 28px
+.mfx-button.l.squared, .mfx-button.l:selected, .mfx-button.xl.squared, .mfx-button.xl:selected {
+  -fx-background-radius: 28px;
+  -fx-border-radius: 28px;
 }
-
+.mfx-button.l.squared > .surface, .mfx-button.l:selected > .surface, .mfx-button.xl.squared > .surface, .mfx-button.xl:selected > .surface {
+  -fx-background-radius: 28px;
+}
 .mfx-button.l.squared:selected {
   -fx-background-radius: 48px;
-  -fx-border-radius: 48px
+  -fx-border-radius: 48px;
 }
-
 .mfx-button.l.squared:selected > .surface {
-  -fx-background-radius: 48px
+  -fx-background-radius: 48px;
 }
-
 .mfx-button.xl.squared:selected {
   -fx-background-radius: 68px;
-  -fx-border-radius: 68px
+  -fx-border-radius: 68px;
 }
-
 .mfx-button.xl.squared:selected > .surface {
-  -fx-background-radius: 68px
+  -fx-background-radius: 68px;
 }
-
 .mfx-button:focus-visible {
   -fx-border-color: -md-sys-color-secondary;
   -fx-border-insets: -4px;
-  -fx-border-width: 3px
+  -fx-border-width: 3px;
 }
 
-.mfx-button.elevated:disabled,
-.mfx-button.filled:disabled,
-.mfx-button.outlined:disabled,
-.mfx-button.text:disabled,
-.mfx-button.tonal:disabled {
-  -fx-background-color: null!important;
-  -fx-text-fill: -md-sys-color-on-surface!important;
-  -mfx-text-opacity: 38%!important
+.mfx-button.elevated:disabled, .mfx-button.filled:disabled, .mfx-button.outlined:disabled, .mfx-button.text:disabled, .mfx-button.tonal:disabled {
+  -fx-background-color: null !important; /* crucial!! fixes color "flicker", must be null!! (transparent is bugged)*/
+  -fx-text-fill: -md-sys-color-on-surface !important;
+  -mfx-text-opacity: 38% !important;
 }
-
-.mfx-button.elevated:disabled > .label > .mfx-font-icon,
-.mfx-button.filled:disabled > .label > .mfx-font-icon,
-.mfx-button.outlined:disabled > .label > .mfx-font-icon,
-.mfx-button.text:disabled > .label > .mfx-font-icon,
-.mfx-button.tonal:disabled > .label > .mfx-font-icon {
-  -fx-opacity: 38%!important;
-  -mfx-color: -md-sys-color-on-surface!important
+.mfx-button.elevated:disabled > .label > .mfx-font-icon, .mfx-button.filled:disabled > .label > .mfx-font-icon, .mfx-button.outlined:disabled > .label > .mfx-font-icon, .mfx-button.text:disabled > .label > .mfx-font-icon, .mfx-button.tonal:disabled > .label > .mfx-font-icon {
+  -fx-opacity: 38% !important;
+  -mfx-color: -md-sys-color-on-surface !important;
 }
-
-.mfx-button.elevated:disabled > .surface,
-.mfx-button.filled:disabled > .surface,
-.mfx-button.outlined:disabled > .surface,
-.mfx-button.text:disabled > .surface,
-.mfx-button.tonal:disabled > .surface {
-  -fx-background-color: -md-sys-color-on-surface!important
+.mfx-button.elevated:disabled > .surface, .mfx-button.filled:disabled > .surface, .mfx-button.outlined:disabled > .surface, .mfx-button.text:disabled > .surface, .mfx-button.tonal:disabled > .surface {
+  -fx-background-color: -md-sys-color-on-surface !important;
 }
 
 .mfx-button.elevated {
   -fx-background-color: -md-sys-color-surface-container-low;
   -fx-border-insets: -6px;
-  -fx-text-fill: -md-sys-color-primary
+  -fx-text-fill: -md-sys-color-primary;
 }
-
 .mfx-button.elevated > .label > .mfx-font-icon {
-  -mfx-color: -md-sys-color-primary
+  -mfx-color: -md-sys-color-primary;
 }
-
 .mfx-button.elevated > .surface {
   -fx-background-color: -md-sys-color-primary;
   -fx-background-insets: -1px;
-  -mfx-elevation: LEVEL1
+  -mfx-elevation: LEVEL1;
 }
-
 .mfx-button.elevated > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-primary
+  -mfx-ripple-color: -md-sys-color-primary;
 }
-
 .mfx-button.elevated.toggle:selected {
   -fx-background-color: -md-sys-color-primary;
-  -fx-text-fill: -md-sys-color-on-primary
+  -fx-text-fill: -md-sys-color-on-primary;
 }
-
 .mfx-button.elevated.toggle:selected > .label > .mfx-font-icon {
-  -mfx-color: -md-sys-color-on-primary
+  -mfx-color: -md-sys-color-on-primary;
 }
-
 .mfx-button.elevated.toggle:selected > .surface {
-  -fx-background-color: -md-sys-color-on-primary
+  -fx-background-color: -md-sys-color-on-primary;
 }
-
 .mfx-button.elevated.toggle:selected > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-on-primary
+  -mfx-ripple-color: -md-sys-color-on-primary;
 }
-
 .mfx-button.elevated:disabled > .surface {
-  -mfx-elevation: LEVEL0
+  -mfx-elevation: LEVEL0;
 }
 
 .mfx-button.filled {
   -fx-background-color: -md-sys-color-primary;
-  -fx-text-fill: -md-sys-color-on-primary
+  -fx-text-fill: -md-sys-color-on-primary;
 }
-
 .mfx-button.filled > .label > .mfx-font-icon {
-  -mfx-color: -md-sys-color-on-primary
+  -mfx-color: -md-sys-color-on-primary;
 }
-
 .mfx-button.filled > .surface {
-  -fx-background-color: -md-sys-color-on-primary
+  -fx-background-color: -md-sys-color-on-primary;
 }
-
 .mfx-button.filled > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-on-primary
+  -mfx-ripple-color: -md-sys-color-on-primary;
 }
-
 .mfx-button.filled.toggle {
   -fx-background-color: -md-sys-color-surface-container;
-  -fx-text-fill: -md-sys-color-on-surface-variant
+  -fx-text-fill: -md-sys-color-on-surface-variant;
 }
-
 .mfx-button.filled.toggle > .label > .mfx-font-icon {
-  -mfx-color: -md-sys-color-on-surface-variant
+  -mfx-color: -md-sys-color-on-surface-variant;
 }
-
 .mfx-button.filled.toggle > .surface {
-  -fx-background-color: -md-sys-color-on-surface-variant
+  -fx-background-color: -md-sys-color-on-surface-variant;
 }
-
 .mfx-button.filled.toggle > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-on-surface-variant
+  -mfx-ripple-color: -md-sys-color-on-surface-variant;
 }
-
 .mfx-button.filled.toggle:selected {
   -fx-background-color: -md-sys-color-primary;
-  -fx-text-fill: -md-sys-color-on-primary
+  -fx-text-fill: -md-sys-color-on-primary;
 }
-
 .mfx-button.filled.toggle:selected > .label > .mfx-font-icon {
-  -mfx-color: -md-sys-color-on-primary
+  -mfx-color: -md-sys-color-on-primary;
 }
-
 .mfx-button.filled.toggle:selected > .surface {
-  -fx-background-color: -md-sys-color-on-primary
+  -fx-background-color: -md-sys-color-on-primary;
 }
-
 .mfx-button.filled.toggle:selected > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-on-primary
+  -mfx-ripple-color: -md-sys-color-on-primary;
 }
 
 .mfx-button.outlined {
   -fx-background-color: transparent;
   -fx-border-color: -md-sys-color-outline-variant;
   -fx-border-insets: -1px;
-  -fx-text-fill: -md-sys-color-on-surface-variant
+  -fx-text-fill: -md-sys-color-on-surface-variant;
 }
-
 .mfx-button.outlined > .label > .mfx-font-icon {
-  -mfx-color: -md-sys-color-on-surface-variant
+  -mfx-color: -md-sys-color-on-surface-variant;
 }
-
 .mfx-button.outlined > .surface {
-  -fx-background-color: -md-sys-color-on-surface-variant
+  -fx-background-color: -md-sys-color-on-surface-variant;
 }
-
 .mfx-button.outlined > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-on-surface-variant
+  -mfx-ripple-color: -md-sys-color-on-surface-variant;
 }
-
 .mfx-button.outlined:focus-visible {
-  -fx-border-color: -md-sys-color-outline-variant,-md-sys-color-secondary;
-  -fx-border-insets: -1px,-6px;
-  -fx-border-width: 1px,3px
+  -fx-border-color: -md-sys-color-outline-variant, -md-sys-color-secondary;
+  -fx-border-insets: -1px, -6px;
+  -fx-border-width: 1px, 3px;
 }
-
 .mfx-button.outlined.toggle:selected {
   -fx-background-color: -md-sys-color-inverse-surface;
   -fx-border-color: transparent;
-  -fx-text-fill: -md-sys-color-inverse-on-surface
+  -fx-text-fill: -md-sys-color-inverse-on-surface;
 }
-
 .mfx-button.outlined.toggle:selected > .label > .mfx-font-icon {
-  -mfx-color: -md-sys-color-inverse-on-surface
+  -mfx-color: -md-sys-color-inverse-on-surface;
 }
-
 .mfx-button.outlined.toggle:selected > .surface {
-  -fx-background-color: -md-sys-color-inverse-on-surface
+  -fx-background-color: -md-sys-color-inverse-on-surface;
 }
-
 .mfx-button.outlined.toggle:selected > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-inverse-on-surface
+  -mfx-ripple-color: -md-sys-color-inverse-on-surface;
 }
 
 .mfx-button.text {
   -fx-background-color: transparent;
-  -fx-text-fill: -md-sys-color-primary
+  -fx-text-fill: -md-sys-color-primary;
 }
-
 .mfx-button.text > .label > .mfx-font-icon {
-  -mfx-color: -md-sys-color-primary
+  -mfx-color: -md-sys-color-primary;
 }
-
 .mfx-button.text > .surface {
-  -fx-background-color: -md-sys-color-primary
+  -fx-background-color: -md-sys-color-primary;
 }
-
 .mfx-button.text > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-primary
+  -mfx-ripple-color: -md-sys-color-primary;
 }
-
 .mfx-button.text.toggle {
-  -fx-text-fill: -md-sys-color-on-surface
+  -fx-text-fill: -md-sys-color-on-surface;
 }
-
 .mfx-button.text.toggle:selected {
-  -fx-text-fill: -md-sys-color-primary
+  -fx-text-fill: -md-sys-color-primary;
 }
-
 .mfx-button.text.toggle:selected > .surface {
-  -mfx-default-opacity: 8%
+  -mfx-default-opacity: 8%;
 }
 
 .mfx-button.tonal {
   -fx-background-color: -md-sys-color-secondary-container;
-  -fx-text-fill: -md-sys-color-on-secondary-container
+  -fx-text-fill: -md-sys-color-on-secondary-container;
 }
-
 .mfx-button.tonal > .label > .mfx-font-icon {
-  -mfx-color: -md-sys-color-on-secondary-container
+  -mfx-color: -md-sys-color-on-secondary-container;
 }
-
 .mfx-button.tonal > .surface {
-  -fx-background-color: -md-sys-color-on-secondary-container
+  -fx-background-color: -md-sys-color-on-secondary-container;
 }
-
 .mfx-button.tonal > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-on-secondary-container
+  -mfx-ripple-color: -md-sys-color-on-secondary-container;
 }
-
 .mfx-button.tonal.toggle:selected {
   -fx-background-color: -md-sys-color-secondary;
-  -fx-text-fill: -md-sys-color-on-secondary
+  -fx-text-fill: -md-sys-color-on-secondary;
 }
-
 .mfx-button.tonal.toggle:selected > .label > .mfx-font-icon {
-  -mfx-color: -md-sys-color-on-secondary
+  -mfx-color: -md-sys-color-on-secondary;
 }
-
 .mfx-button.tonal.toggle:selected > .surface {
-  -fx-background-color: -md-sys-color-on-secondary
+  -fx-background-color: -md-sys-color-on-secondary;
 }
-
 .mfx-button.tonal.toggle:selected > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-on-secondary
-}
-
-.mfx-buttons-group > .mfx-button > .surface {
-  -mfx-elevation: LEVEL0!important
+  -mfx-ripple-color: -md-sys-color-on-secondary;
 }
 
 .mfx-buttons-group.xs {
-  -mfx-spacing: 18px
+  -mfx-spacing: 18px;
 }
-
 .mfx-buttons-group.s {
-  -mfx-spacing: 12px
+  -mfx-spacing: 12px;
 }
-
-.mfx-buttons-group.l,
-.mfx-buttons-group.m,
-.mfx-buttons-group.xl {
-  -mfx-spacing: 8px
+.mfx-buttons-group.m, .mfx-buttons-group.l, .mfx-buttons-group.xl {
+  -mfx-spacing: 8px;
 }
-
 .mfx-buttons-group.connected {
-  -mfx-spacing: 4px
+  -mfx-spacing: 4px;
 }
-
-.mfx-buttons-group.connected > .mfx-button.s,
 .mfx-buttons-group.connected > .mfx-button.xs,
-.mfx-buttons-group.connected > .mfx-icon-button.s,
-.mfx-buttons-group.connected > .mfx-icon-button.xs {
-  -fx-min-width: 48px
+.mfx-buttons-group.connected > .mfx-icon-button.xs,
+.mfx-buttons-group.connected > .mfx-button.s,
+.mfx-buttons-group.connected > .mfx-icon-button.s {
+  -fx-min-width: 48px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.xs,
 .mfx-buttons-group.connected > .mfx-icon-button.xs {
   -fx-background-radius: 8px;
-  -fx-border-radius: 8px
+  -fx-border-radius: 8px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.xs > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.xs > .surface {
-  -fx-background-radius: 8px
+  -fx-background-radius: 8px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.xs:first-child,
 .mfx-buttons-group.connected > .mfx-icon-button.xs:first-child {
   -fx-background-radius: 16px 8px 8px 16px;
-  -fx-border-radius: 32px 8px 8px 32px
+  -fx-border-radius: 32px 8px 8px 32px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.xs:first-child > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.xs:first-child > .surface {
-  -fx-background-radius: 32px 8px 8px 32px
+  -fx-background-radius: 32px 8px 8px 32px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.xs:last-child,
 .mfx-buttons-group.connected > .mfx-icon-button.xs:last-child {
   -fx-background-radius: 8px 16px 16px 8px;
-  -fx-border-radius: 8px 32px 32px 8px
+  -fx-border-radius: 8px 32px 32px 8px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.xs:last-child > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.xs:last-child > .surface {
-  -fx-background-radius: 8px 32px 32px 8px
+  -fx-background-radius: 8px 32px 32px 8px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.xs:only-child,
 .mfx-buttons-group.connected > .mfx-icon-button.xs:only-child {
   -fx-background-radius: 16px;
-  -fx-border-radius: 32px
+  -fx-border-radius: 32px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.xs:only-child > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.xs:only-child > .surface {
-  -fx-background-radius: 32px
+  -fx-background-radius: 32px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.s,
 .mfx-buttons-group.connected > .mfx-icon-button.s {
   -fx-background-radius: 8px;
-  -fx-border-radius: 8px
+  -fx-border-radius: 8px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.s > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.s > .surface {
-  -fx-background-radius: 8px
+  -fx-background-radius: 8px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.s:first-child,
 .mfx-buttons-group.connected > .mfx-icon-button.s:first-child {
   -fx-background-radius: 20px 8px 8px 20px;
-  -fx-border-radius: 40px 8px 8px 40px
+  -fx-border-radius: 40px 8px 8px 40px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.s:first-child > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.s:first-child > .surface {
-  -fx-background-radius: 40px 8px 8px 40px
+  -fx-background-radius: 40px 8px 8px 40px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.s:last-child,
 .mfx-buttons-group.connected > .mfx-icon-button.s:last-child {
   -fx-background-radius: 8px 20px 20px 8px;
-  -fx-border-radius: 8px 40px 40px 8px
+  -fx-border-radius: 8px 40px 40px 8px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.s:last-child > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.s:last-child > .surface {
-  -fx-background-radius: 8px 40px 40px 8px
+  -fx-background-radius: 8px 40px 40px 8px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.s:only-child,
 .mfx-buttons-group.connected > .mfx-icon-button.s:only-child {
   -fx-background-radius: 20px;
-  -fx-border-radius: 40px
+  -fx-border-radius: 40px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.s:only-child > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.s:only-child > .surface {
-  -fx-background-radius: 40px
+  -fx-background-radius: 40px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.m,
 .mfx-buttons-group.connected > .mfx-icon-button.m {
   -fx-background-radius: 8px;
-  -fx-border-radius: 8px
+  -fx-border-radius: 8px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.m > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.m > .surface {
-  -fx-background-radius: 8px
+  -fx-background-radius: 8px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.m:first-child,
 .mfx-buttons-group.connected > .mfx-icon-button.m:first-child {
   -fx-background-radius: 28px 8px 8px 28px;
-  -fx-border-radius: 56px 8px 8px 56px
+  -fx-border-radius: 56px 8px 8px 56px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.m:first-child > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.m:first-child > .surface {
-  -fx-background-radius: 56px 8px 8px 56px
+  -fx-background-radius: 56px 8px 8px 56px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.m:last-child,
 .mfx-buttons-group.connected > .mfx-icon-button.m:last-child {
   -fx-background-radius: 8px 28px 28px 8px;
-  -fx-border-radius: 8px 56px 56px 8px
+  -fx-border-radius: 8px 56px 56px 8px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.m:last-child > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.m:last-child > .surface {
-  -fx-background-radius: 8px 56px 56px 8px
+  -fx-background-radius: 8px 56px 56px 8px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.m:only-child,
 .mfx-buttons-group.connected > .mfx-icon-button.m:only-child {
   -fx-background-radius: 28px;
-  -fx-border-radius: 56px
+  -fx-border-radius: 56px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.m:only-child > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.m:only-child > .surface {
-  -fx-background-radius: 56px
+  -fx-background-radius: 56px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.l,
 .mfx-buttons-group.connected > .mfx-icon-button.l {
   -fx-background-radius: 16px;
-  -fx-border-radius: 16px
+  -fx-border-radius: 16px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.l > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.l > .surface {
-  -fx-background-radius: 16px
+  -fx-background-radius: 16px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.l:first-child,
 .mfx-buttons-group.connected > .mfx-icon-button.l:first-child {
   -fx-background-radius: 48px 16px 16px 48px;
-  -fx-border-radius: 96px 16px 16px 96px
+  -fx-border-radius: 96px 16px 16px 96px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.l:first-child > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.l:first-child > .surface {
-  -fx-background-radius: 96px 16px 16px 96px
+  -fx-background-radius: 96px 16px 16px 96px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.l:last-child,
 .mfx-buttons-group.connected > .mfx-icon-button.l:last-child {
   -fx-background-radius: 16px 48px 48px 16px;
-  -fx-border-radius: 16px 96px 96px 16px
+  -fx-border-radius: 16px 96px 96px 16px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.l:last-child > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.l:last-child > .surface {
-  -fx-background-radius: 16px 96px 96px 16px
+  -fx-background-radius: 16px 96px 96px 16px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.l:only-child,
 .mfx-buttons-group.connected > .mfx-icon-button.l:only-child {
   -fx-background-radius: 48px;
-  -fx-border-radius: 96px
+  -fx-border-radius: 96px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.l:only-child > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.l:only-child > .surface {
-  -fx-background-radius: 96px
+  -fx-background-radius: 96px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.xl,
 .mfx-buttons-group.connected > .mfx-icon-button.xl {
   -fx-background-radius: 20px;
-  -fx-border-radius: 20px
+  -fx-border-radius: 20px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.xl > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.xl > .surface {
-  -fx-background-radius: 20px
+  -fx-background-radius: 20px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.xl:first-child,
 .mfx-buttons-group.connected > .mfx-icon-button.xl:first-child {
   -fx-background-radius: 68px 20px 20px 68px;
-  -fx-border-radius: 136px 20px 20px 136px
+  -fx-border-radius: 136px 20px 20px 136px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.xl:first-child > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.xl:first-child > .surface {
-  -fx-background-radius: 136px 20px 20px 136px
+  -fx-background-radius: 136px 20px 20px 136px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.xl:last-child,
 .mfx-buttons-group.connected > .mfx-icon-button.xl:last-child {
   -fx-background-radius: 20px 68px 68px 20px;
-  -fx-border-radius: 20px 136px 136px 20px
+  -fx-border-radius: 20px 136px 136px 20px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.xl:last-child > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.xl:last-child > .surface {
-  -fx-background-radius: 20px 136px 136px 20px
+  -fx-background-radius: 20px 136px 136px 20px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.xl:only-child,
 .mfx-buttons-group.connected > .mfx-icon-button.xl:only-child {
   -fx-background-radius: 68px;
-  -fx-border-radius: 136px
+  -fx-border-radius: 136px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.xl:only-child > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.xl:only-child > .surface {
-  -fx-background-radius: 136px
+  -fx-background-radius: 136px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.xs.squared,
 .mfx-buttons-group.connected > .mfx-icon-button.xs.squared {
   -fx-background-radius: 8px;
-  -fx-border-radius: 8px
+  -fx-border-radius: 8px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.xs.squared > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.xs.squared > .surface {
-  -fx-background-radius: 8px
+  -fx-background-radius: 8px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.s.squared,
 .mfx-buttons-group.connected > .mfx-icon-button.s.squared {
   -fx-background-radius: 8px;
-  -fx-border-radius: 8px
+  -fx-border-radius: 8px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.s.squared > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.s.squared > .surface {
-  -fx-background-radius: 8px
+  -fx-background-radius: 8px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.m.squared,
 .mfx-buttons-group.connected > .mfx-icon-button.m.squared {
   -fx-background-radius: 8px;
-  -fx-border-radius: 8px
+  -fx-border-radius: 8px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.m.squared > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.m.squared > .surface {
-  -fx-background-radius: 8px
+  -fx-background-radius: 8px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.l.squared,
 .mfx-buttons-group.connected > .mfx-icon-button.l.squared {
   -fx-background-radius: 16px;
-  -fx-border-radius: 16px
+  -fx-border-radius: 16px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.l.squared > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.l.squared > .surface {
-  -fx-background-radius: 16px
+  -fx-background-radius: 16px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.xl.squared,
 .mfx-buttons-group.connected > .mfx-icon-button.xl.squared {
   -fx-background-radius: 20px;
-  -fx-border-radius: 20px
+  -fx-border-radius: 20px;
 }
-
 .mfx-buttons-group.connected > .mfx-button.xl.squared > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button.xl.squared > .surface {
-  -fx-background-radius: 20px
+  -fx-background-radius: 20px;
 }
 
 .mfx-checkbox {
@@ -801,9 +1116,8 @@
   -fx-font-size: 14px;
   -fx-line-spacing: 20px;
   -fx-text-fill: -md-sys-color-on-surface;
-  -fx-graphic-text-gap: 4px
+  -fx-graphic-text-gap: 4px;
 }
-
 .mfx-checkbox > .box {
   -mfx-animated: true;
   -mfx-animation: SCALE;
@@ -812,76 +1126,62 @@
   -fx-background-radius: 2px;
   -fx-border-color: -md-sys-color-on-surface-variant;
   -fx-border-radius: 2px;
-  -fx-border-width: 2px
+  -fx-border-width: 2px;
 }
-
 .mfx-checkbox > .box > .mfx-font-icon {
-  -mfx-color: -md-sys-color-on-primary
+  -mfx-color: -md-sys-color-on-primary;
 }
-
 .mfx-checkbox:focus-visible > .box {
-  -fx-border-color: -md-sys-color-on-surface-variant,-md-sys-color-secondary;
-  -fx-border-insets: 0px,-12px;
-  -fx-border-radius: 2px,999px;
-  -fx-border-width: 2px,3px
+  -fx-border-color: -md-sys-color-on-surface-variant, -md-sys-color-secondary;
+  -fx-border-insets: 0px, -12px;
+  -fx-border-radius: 2px, 999px;
+  -fx-border-width: 2px, 3px;
 }
-
 .mfx-checkbox > .surface {
   -mfx-disabled-opacity: 0;
   -fx-background-color: -md-sys-color-primary;
-  -fx-background-radius: 999px
+  -fx-background-radius: 999px;
 }
-
 .mfx-checkbox > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-primary
+  -mfx-ripple-color: -md-sys-color-primary;
 }
-
 .mfx-checkbox:indeterminate > .box {
   -mfx-icon: "fas-minus";
   -fx-background-color: -md-sys-color-primary;
-  -fx-border-color: transparent
+  -fx-border-color: transparent;
 }
-
 .mfx-checkbox:selected > .box {
   -mfx-icon: "fas-check";
   -fx-background-color: -md-sys-color-primary;
-  -fx-border-color: transparent
+  -fx-border-color: transparent;
 }
-
 .mfx-checkbox:error > .box {
   -mfx-icon: "fas-xmark";
   -fx-background-color: -md-sys-color-error;
-  -fx-border-color: transparent
+  -fx-border-color: transparent;
 }
-
 .mfx-checkbox:error > .box > .mfx-font-icon {
-  -mfx-color: -md-sys-color-on-error
+  -mfx-color: -md-sys-color-on-error;
 }
-
 .mfx-checkbox:error > .surface {
-  -fx-background-color: -md-sys-color-error
+  -fx-background-color: -md-sys-color-error;
 }
-
 .mfx-checkbox:error > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-error
+  -mfx-ripple-color: -md-sys-color-error;
 }
-
 .mfx-checkbox:disabled > .box {
   -fx-background-color: transparent;
   -fx-border-color: -md-sys-color-secondary;
-  -fx-opacity: 38%
+  -fx-opacity: 38%;
 }
-
-.mfx-checkbox:disabled:indeterminate > .box,
-.mfx-checkbox:disabled:selected > .box {
+.mfx-checkbox:disabled:selected > .box, .mfx-checkbox:disabled:indeterminate > .box {
   -fx-background-color: -md-sys-color-secondary;
-  -fx-border-color: transparent
+  -fx-border-color: transparent;
 }
 
 .mfx-fab .mfx-icon-wrapper {
-  -mfx-animation: SCALE
+  -mfx-animation: SCALE;
 }
-
 .mfx-fab.xs {
   -fx-font-family: "MontSerrat Medium";
   -fx-font-size: 14px;
@@ -889,21 +1189,17 @@
   -fx-background-radius: 12px;
   -fx-border-radius: 12px;
   -fx-padding: 0px 12px 0px 12px;
-  -mfx-min-size: 40px 40px
+  -mfx-min-size: 40px 40px;
 }
-
 .mfx-fab.xs > .label > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-size: 16px
+  -mfx-size: 16px;
 }
-
 .mfx-fab.xs > .surface {
-  -fx-background-radius: 12px
+  -fx-background-radius: 12px;
 }
-
 .mfx-fab.xs:extended {
-  -fx-graphic-text-gap: 4px
+  -fx-graphic-text-gap: 4px;
 }
-
 .mfx-fab.s {
   -fx-font-family: "MontSerrat Medium";
   -fx-font-size: 16px;
@@ -911,21 +1207,17 @@
   -fx-background-radius: 16px;
   -fx-border-radius: 16px;
   -fx-padding: 0px 16px 0px 16px;
-  -mfx-min-size: 56px 56px
+  -mfx-min-size: 56px 56px;
 }
-
 .mfx-fab.s > .label > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-size: 24px
+  -mfx-size: 24px;
 }
-
 .mfx-fab.s > .surface {
-  -fx-background-radius: 16px
+  -fx-background-radius: 16px;
 }
-
 .mfx-fab.s:extended {
-  -fx-graphic-text-gap: 8px
+  -fx-graphic-text-gap: 8px;
 }
-
 .mfx-fab.m {
   -fx-font-family: "MontSerrat Regular";
   -fx-font-size: 22px;
@@ -933,21 +1225,17 @@
   -fx-background-radius: 20px;
   -fx-border-radius: 20px;
   -fx-padding: 0px 26px 0px 26px;
-  -mfx-min-size: 80px 80px
+  -mfx-min-size: 80px 80px;
 }
-
 .mfx-fab.m > .label > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-size: 28px
+  -mfx-size: 28px;
 }
-
 .mfx-fab.m > .surface {
-  -fx-background-radius: 20px
+  -fx-background-radius: 20px;
 }
-
 .mfx-fab.m:extended {
-  -fx-graphic-text-gap: 12px
+  -fx-graphic-text-gap: 12px;
 }
-
 .mfx-fab.l {
   -fx-font-family: "MontSerrat Regular";
   -fx-font-size: 24px;
@@ -955,759 +1243,610 @@
   -fx-background-radius: 28px;
   -fx-border-radius: 28px;
   -fx-padding: 0px 28px 0px 28px;
-  -mfx-min-size: 96px 96px
+  -mfx-min-size: 96px 96px;
 }
-
 .mfx-fab.l > .label > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-size: 36px
+  -mfx-size: 36px;
 }
-
 .mfx-fab.l > .surface {
-  -fx-background-radius: 28px
+  -fx-background-radius: 28px;
 }
-
 .mfx-fab.l:extended {
-  -fx-graphic-text-gap: 16px
+  -fx-graphic-text-gap: 16px;
 }
-
 .mfx-fab > .surface {
-  -mfx-elevation: LEVEL3
+  -mfx-elevation: LEVEL3;
 }
-
 .mfx-fab:hover > .surface {
-  -mfx-elevation: LEVEL4
+  -mfx-elevation: LEVEL4;
 }
-
 .mfx-fab:pressed > .surface {
-  -mfx-elevation: LEVEL3
+  -mfx-elevation: LEVEL3;
 }
-
 .mfx-fab:focus-visible {
   -fx-border-color: -md-sys-color-secondary;
   -fx-border-insets: -4px;
-  -fx-border-width: 3px
+  -fx-border-width: 3px;
 }
 
 .mfx-fab.primary {
   -fx-background-color: -md-sys-color-primary;
-  -fx-text-fill: -md-sys-color-on-primary
+  -fx-text-fill: -md-sys-color-on-primary;
 }
-
 .mfx-fab.primary > .label > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-color: -md-sys-color-on-primary
+  -mfx-color: -md-sys-color-on-primary;
 }
-
 .mfx-fab.primary > .surface {
-  -fx-background-color: -md-sys-color-on-primary
+  -fx-background-color: -md-sys-color-on-primary;
 }
-
 .mfx-fab.primary > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-on-primary
+  -mfx-ripple-color: -md-sys-color-on-primary;
 }
 
 .mfx-fab.tonal-primary {
   -fx-background-color: -md-sys-color-primary-container;
-  -fx-text-fill: -md-sys-color-on-primary-container
+  -fx-text-fill: -md-sys-color-on-primary-container;
 }
-
 .mfx-fab.tonal-primary > .label > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-color: -md-sys-color-on-primary-container
+  -mfx-color: -md-sys-color-on-primary-container;
 }
-
 .mfx-fab.tonal-primary > .surface {
-  -fx-background-color: -md-sys-color-on-primary-container
+  -fx-background-color: -md-sys-color-on-primary-container;
 }
-
 .mfx-fab.tonal-primary > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-on-primary-container
+  -mfx-ripple-color: -md-sys-color-on-primary-container;
 }
 
 .mfx-fab.secondary {
   -fx-background-color: -md-sys-color-secondary;
-  -fx-text-fill: -md-sys-color-on-secondary
+  -fx-text-fill: -md-sys-color-on-secondary;
 }
-
 .mfx-fab.secondary > .label > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-color: -md-sys-color-on-secondary
+  -mfx-color: -md-sys-color-on-secondary;
 }
-
 .mfx-fab.secondary > .surface {
-  -fx-background-color: -md-sys-color-on-secondary
+  -fx-background-color: -md-sys-color-on-secondary;
 }
-
 .mfx-fab.secondary > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-on-secondary
+  -mfx-ripple-color: -md-sys-color-on-secondary;
 }
 
 .mfx-fab.tonal-secondary {
   -fx-background-color: -md-sys-color-secondary-container;
-  -fx-text-fill: -md-sys-color-on-secondary-container
+  -fx-text-fill: -md-sys-color-on-secondary-container;
 }
-
 .mfx-fab.tonal-secondary > .label > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-color: -md-sys-color-on-secondary-container
+  -mfx-color: -md-sys-color-on-secondary-container;
 }
-
 .mfx-fab.tonal-secondary > .surface {
-  -fx-background-color: -md-sys-color-on-secondary-container
+  -fx-background-color: -md-sys-color-on-secondary-container;
 }
-
 .mfx-fab.tonal-secondary > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-on-secondary-container
+  -mfx-ripple-color: -md-sys-color-on-secondary-container;
 }
 
 .mfx-fab.tertiary {
   -fx-background-color: -md-sys-color-tertiary;
-  -fx-text-fill: -md-sys-color-on-tertiary
+  -fx-text-fill: -md-sys-color-on-tertiary;
 }
-
 .mfx-fab.tertiary > .label > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-color: -md-sys-color-on-tertiary
+  -mfx-color: -md-sys-color-on-tertiary;
 }
-
 .mfx-fab.tertiary > .surface {
-  -fx-background-color: -md-sys-color-on-tertiary
+  -fx-background-color: -md-sys-color-on-tertiary;
 }
-
 .mfx-fab.tertiary > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-on-tertiary
+  -mfx-ripple-color: -md-sys-color-on-tertiary;
 }
 
 .mfx-fab.tonal-tertiary {
   -fx-background-color: -md-sys-color-tertiary-container;
-  -fx-text-fill: -md-sys-color-on-tertiary-container
+  -fx-text-fill: -md-sys-color-on-tertiary-container;
 }
-
 .mfx-fab.tonal-tertiary > .label > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-color: -md-sys-color-on-tertiary-container
+  -mfx-color: -md-sys-color-on-tertiary-container;
 }
-
 .mfx-fab.tonal-tertiary > .surface {
-  -fx-background-color: -md-sys-color-on-tertiary-container
+  -fx-background-color: -md-sys-color-on-tertiary-container;
 }
-
 .mfx-fab.tonal-tertiary > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-on-tertiary-container
+  -mfx-ripple-color: -md-sys-color-on-tertiary-container;
 }
 
 .mfx-fab-menu > .entry > .label > .mfx-icon-wrapper {
-  -mfx-icon: "fas-plus"
+  -mfx-icon: "fas-plus";
 }
-
-.mfx-fab-menu > .item,
+.mfx-fab-menu > .item {
+  -fx-background-radius: 999px;
+  -mfx-elevation: LEVEL0;
+}
 .mfx-fab-menu > .item > .surface {
   -fx-background-radius: 999px;
-  -mfx-elevation: LEVEL0
+  -mfx-elevation: LEVEL0;
 }
-
 .mfx-fab-menu:open > .entry {
+  /*
+   * It should be 0.9, but because there is technically a double scale applied to the FAB, we tone this value down a bit
+   * The reason for the double scale is explained in the skin documentation
+   */
   -fx-background-radius: 28px;
   -fx-border-radius: 28px;
   -fx-scale-x: 95%;
-  -fx-scale-y: 95%
+  -fx-scale-y: 95%;
 }
-
 .mfx-fab-menu:open > .entry > .label > .mfx-icon-wrapper {
-  -mfx-icon: "fas-xmark"
+  -mfx-icon: "fas-xmark";
 }
 
 .mfx-icon-button {
-  -fx-background-color: transparent
+  -fx-background-color: transparent;
 }
-
 .mfx-icon-button > .mfx-icon-wrapper {
   -mfx-animated: true;
-  -mfx-animation: SCALE
+  -mfx-animation: SCALE;
 }
-
 .mfx-icon-button > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-color: -md-sys-color-on-surface-variant
+  -mfx-color: -md-sys-color-on-surface-variant;
 }
-
 .mfx-icon-button > .surface {
-  -fx-background-color: -md-sys-color-on-surface-variant
+  -fx-background-color: -md-sys-color-on-surface-variant;
 }
-
 .mfx-icon-button > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-on-surface-variant
+  -mfx-ripple-color: -md-sys-color-on-surface-variant;
 }
-
 .mfx-icon-button:selected > .surface {
-  -fx-background-color: -md-sys-color-primary
+  -fx-background-color: -md-sys-color-primary;
 }
-
 .mfx-icon-button:selected > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-primary
+  -mfx-ripple-color: -md-sys-color-primary;
 }
-
 .mfx-icon-button:selected > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-color: -md-sys-color-primary
+  -mfx-color: -md-sys-color-primary;
 }
-
 .mfx-icon-button.xs {
   -fx-background-radius: 16px;
   -fx-border-radius: 16px;
   -fx-min-width: 32px;
   -fx-min-height: 32px;
-  -fx-padding: 0px 6px 0px 6px
+  -fx-padding: 0px 6px 0px 6px;
 }
-
 .mfx-icon-button.xs > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-size: 16px
+  -mfx-size: 16px;
 }
-
 .mfx-icon-button.xs > .surface {
-  -fx-background-radius: 16px
+  -fx-background-radius: 16px;
 }
-
 .mfx-icon-button.xs.narrow {
   -fx-min-width: 28px;
-  -fx-padding: 0px 4px 0px 4px
+  -fx-padding: 0px 4px 0px 4px;
 }
-
 .mfx-icon-button.xs.wide {
   -fx-min-width: 40px;
-  -fx-padding: 0px 10px 0px 10px
+  -fx-padding: 0px 10px 0px 10px;
 }
-
 .mfx-icon-button.s {
   -fx-background-radius: 20px;
   -fx-border-radius: 20px;
   -fx-min-width: 40px;
   -fx-min-height: 40px;
-  -fx-padding: 0px 8px 0px 8px
+  -fx-padding: 0px 8px 0px 8px;
 }
-
 .mfx-icon-button.s > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-size: 20px
+  -mfx-size: 20px;
 }
-
 .mfx-icon-button.s > .surface {
-  -fx-background-radius: 20px
+  -fx-background-radius: 20px;
 }
-
 .mfx-icon-button.s.narrow {
   -fx-min-width: 32px;
-  -fx-padding: 0px 4px 0px 4px
+  -fx-padding: 0px 4px 0px 4px;
 }
-
 .mfx-icon-button.s.wide {
   -fx-min-width: 52px;
-  -fx-padding: 0px 14px 0px 14px
+  -fx-padding: 0px 14px 0px 14px;
 }
-
 .mfx-icon-button.m {
   -fx-background-radius: 28px;
   -fx-border-radius: 28px;
   -fx-min-width: 56px;
   -fx-min-height: 56px;
-  -fx-padding: 0px 16px 0px 16px
+  -fx-padding: 0px 16px 0px 16px;
 }
-
 .mfx-icon-button.m > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-size: 24px
+  -mfx-size: 24px;
 }
-
 .mfx-icon-button.m > .surface {
-  -fx-background-radius: 28px
+  -fx-background-radius: 28px;
 }
-
 .mfx-icon-button.m.narrow {
   -fx-min-width: 48px;
-  -fx-padding: 0px 12px 0px 12px
+  -fx-padding: 0px 12px 0px 12px;
 }
-
 .mfx-icon-button.m.wide {
   -fx-min-width: 72px;
-  -fx-padding: 0px 24px 0px 24px
+  -fx-padding: 0px 24px 0px 24px;
 }
-
 .mfx-icon-button.l {
   -fx-background-radius: 48px;
   -fx-border-radius: 48px;
   -fx-min-width: 96px;
   -fx-min-height: 96px;
-  -fx-padding: 0px 32px 0px 32px
+  -fx-padding: 0px 32px 0px 32px;
 }
-
 .mfx-icon-button.l > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-size: 32px
+  -mfx-size: 32px;
 }
-
 .mfx-icon-button.l > .surface {
-  -fx-background-radius: 48px
+  -fx-background-radius: 48px;
 }
-
 .mfx-icon-button.l.narrow {
   -fx-min-width: 64px;
-  -fx-padding: 0px 16px 0px 16px
+  -fx-padding: 0px 16px 0px 16px;
 }
-
 .mfx-icon-button.l.wide {
   -fx-min-width: 128px;
-  -fx-padding: 0px 48px 0px 48px
+  -fx-padding: 0px 48px 0px 48px;
 }
-
 .mfx-icon-button.xl {
   -fx-background-radius: 68px;
   -fx-border-radius: 68px;
   -fx-min-width: 136px;
   -fx-min-height: 136px;
-  -fx-padding: 0px 48px 0px 48px
+  -fx-padding: 0px 48px 0px 48px;
 }
-
 .mfx-icon-button.xl > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-size: 40px
+  -mfx-size: 40px;
 }
-
 .mfx-icon-button.xl > .surface {
-  -fx-background-radius: 68px
+  -fx-background-radius: 68px;
 }
-
 .mfx-icon-button.xl.narrow {
   -fx-min-width: 104px;
-  -fx-padding: 0px 32px 0px 32px
+  -fx-padding: 0px 32px 0px 32px;
 }
-
 .mfx-icon-button.xl.wide {
   -fx-min-width: 184px;
-  -fx-padding: 0px 72px 0px 72px
+  -fx-padding: 0px 72px 0px 72px;
 }
-
-.mfx-icon-button.s.squared,
-.mfx-icon-button.s:selected,
-.mfx-icon-button.xs.squared,
-.mfx-icon-button.xs:selected {
+.mfx-icon-button.xs.squared, .mfx-icon-button.xs:selected, .mfx-icon-button.s.squared, .mfx-icon-button.s:selected {
   -fx-background-radius: 12px;
-  -fx-border-radius: 12px
+  -fx-border-radius: 12px;
 }
-
-.mfx-icon-button.s.squared > .surface,
-.mfx-icon-button.s:selected > .surface,
-.mfx-icon-button.xs.squared > .surface,
-.mfx-icon-button.xs:selected > .surface {
-  -fx-background-radius: 12px
+.mfx-icon-button.xs.squared > .surface, .mfx-icon-button.xs:selected > .surface, .mfx-icon-button.s.squared > .surface, .mfx-icon-button.s:selected > .surface {
+  -fx-background-radius: 12px;
 }
-
 .mfx-icon-button.xs.squared:selected {
   -fx-background-radius: 16px;
-  -fx-border-radius: 16px
+  -fx-border-radius: 16px;
 }
-
 .mfx-icon-button.xs.squared:selected > .surface {
-  -fx-background-radius: 16px
+  -fx-background-radius: 16px;
 }
-
 .mfx-icon-button.s.squared:selected {
   -fx-background-radius: 20px;
-  -fx-border-radius: 20px
+  -fx-border-radius: 20px;
 }
-
 .mfx-icon-button.s.squared:selected > .surface {
-  -fx-background-radius: 20px
+  -fx-background-radius: 20px;
 }
-
-.mfx-icon-button.m.squared,
-.mfx-icon-button.m:selected {
+.mfx-icon-button.m.squared, .mfx-icon-button.m:selected {
   -fx-background-radius: 16px;
-  -fx-border-radius: 16px
+  -fx-border-radius: 16px;
 }
-
-.mfx-icon-button.m.squared > .surface,
-.mfx-icon-button.m:selected > .surface {
-  -fx-background-radius: 16px
+.mfx-icon-button.m.squared > .surface, .mfx-icon-button.m:selected > .surface {
+  -fx-background-radius: 16px;
 }
-
 .mfx-icon-button.m.squared:selected {
   -fx-background-radius: 28px;
-  -fx-border-radius: 28px
+  -fx-border-radius: 28px;
 }
-
 .mfx-icon-button.m.squared:selected > .surface {
-  -fx-background-radius: 28px
-}
-
-.mfx-icon-button.l.squared,
-.mfx-icon-button.l:selected,
-.mfx-icon-button.xl.squared,
-.mfx-icon-button.xl:selected {
   -fx-background-radius: 28px;
-  -fx-border-radius: 28px
 }
-
-.mfx-icon-button.l.squared > .surface,
-.mfx-icon-button.l:selected > .surface,
-.mfx-icon-button.xl.squared > .surface,
-.mfx-icon-button.xl:selected > .surface {
-  -fx-background-radius: 28px
+.mfx-icon-button.l.squared, .mfx-icon-button.l:selected, .mfx-icon-button.xl.squared, .mfx-icon-button.xl:selected {
+  -fx-background-radius: 28px;
+  -fx-border-radius: 28px;
 }
-
+.mfx-icon-button.l.squared > .surface, .mfx-icon-button.l:selected > .surface, .mfx-icon-button.xl.squared > .surface, .mfx-icon-button.xl:selected > .surface {
+  -fx-background-radius: 28px;
+}
 .mfx-icon-button.l.squared:selected {
   -fx-background-radius: 48px;
-  -fx-border-radius: 48px
+  -fx-border-radius: 48px;
 }
-
 .mfx-icon-button.l.squared:selected > .surface {
-  -fx-background-radius: 48px
+  -fx-background-radius: 48px;
 }
-
 .mfx-icon-button.xl.squared:selected {
   -fx-background-radius: 68px;
-  -fx-border-radius: 68px
+  -fx-border-radius: 68px;
 }
-
 .mfx-icon-button.xl.squared:selected > .surface {
-  -fx-background-radius: 68px
+  -fx-background-radius: 68px;
 }
-
 .mfx-icon-button:focus-visible {
   -fx-border-color: -md-sys-color-secondary;
   -fx-border-insets: -4px;
-  -fx-border-width: 3px
+  -fx-border-width: 3px;
 }
 
 .mfx-icon-button:disabled {
-  -fx-background-color: null!important
+  -fx-background-color: null !important; /* crucial!! fixes color "flicker", must be null!! (transparent is bugged)*/
 }
-
 .mfx-icon-button:disabled > .mfx-icon-wrapper > .mfx-font-icon {
-  -fx-opacity: 38%!important;
-  -mfx-color: -md-sys-color-on-surface!important
+  -fx-opacity: 38% !important;
+  -mfx-color: -md-sys-color-on-surface !important;
 }
-
 .mfx-icon-button:disabled > .surface {
-  -fx-background-color: -md-sys-color-on-surface!important
+  -fx-background-color: -md-sys-color-on-surface !important;
 }
 
 .mfx-icon-button.filled {
-  -fx-background-color: -md-sys-color-primary
+  -fx-background-color: -md-sys-color-primary;
 }
-
 .mfx-icon-button.filled > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-color: -md-sys-color-on-primary
+  -mfx-color: -md-sys-color-on-primary;
 }
-
 .mfx-icon-button.filled > .surface {
-  -fx-background-color: -md-sys-color-on-primary
+  -fx-background-color: -md-sys-color-on-primary;
 }
-
 .mfx-icon-button.filled > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-on-primary
+  -mfx-ripple-color: -md-sys-color-on-primary;
 }
-
 .mfx-icon-button.filled.toggle {
-  -fx-background-color: -md-sys-color-surface-container
+  -fx-background-color: -md-sys-color-surface-container;
 }
-
 .mfx-icon-button.filled.toggle > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-color: -md-sys-color-on-surface-variant
+  -mfx-color: -md-sys-color-on-surface-variant;
 }
-
 .mfx-icon-button.filled.toggle > .surface {
-  -fx-background-color: -md-sys-color-on-surface-variant
+  -fx-background-color: -md-sys-color-on-surface-variant;
 }
-
 .mfx-icon-button.filled.toggle > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-on-surface-variant
+  -mfx-ripple-color: -md-sys-color-on-surface-variant;
 }
-
 .mfx-icon-button.filled.toggle:selected {
-  -fx-background-color: -md-sys-color-primary
+  -fx-background-color: -md-sys-color-primary;
 }
-
 .mfx-icon-button.filled.toggle:selected > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-color: -md-sys-color-on-primary
+  -mfx-color: -md-sys-color-on-primary;
 }
-
 .mfx-icon-button.filled.toggle:selected > .surface {
-  -fx-background-color: -md-sys-color-on-primary
+  -fx-background-color: -md-sys-color-on-primary;
 }
-
 .mfx-icon-button.filled.toggle:selected > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-on-primary
+  -mfx-ripple-color: -md-sys-color-on-primary;
 }
 
 .mfx-icon-button.outlined {
   -fx-background-color: transparent;
-  -fx-border-color: -md-sys-color-outline-variant
+  -fx-border-color: -md-sys-color-outline-variant;
 }
-
 .mfx-icon-button.outlined > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-color: -md-sys-color-on-surface-variant
+  -mfx-color: -md-sys-color-on-surface-variant;
 }
-
 .mfx-icon-button.outlined > .surface {
-  -fx-background-color: -md-sys-color-on-surface-variant
+  -fx-background-color: -md-sys-color-on-surface-variant;
 }
-
 .mfx-icon-button.outlined > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-on-surface-variant
+  -mfx-ripple-color: -md-sys-color-on-surface-variant;
 }
-
 .mfx-icon-button.outlined:focus-visible {
-  -fx-border-color: -md-sys-color-outline-variant,-md-sys-color-secondary;
-  -fx-border-insets: 0px,-4px;
-  -fx-border-width: 1px,3px
+  -fx-border-color: -md-sys-color-outline-variant, -md-sys-color-secondary;
+  -fx-border-insets: 0px, -4px;
+  -fx-border-width: 1px, 3px;
 }
-
 .mfx-icon-button.outlined.toggle:selected {
   -fx-background-color: -md-sys-color-inverse-surface;
-  -fx-border-color: transparent
+  -fx-border-color: transparent;
 }
-
 .mfx-icon-button.outlined.toggle:selected > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-color: -md-sys-color-inverse-on-surface
+  -mfx-color: -md-sys-color-inverse-on-surface;
 }
-
 .mfx-icon-button.outlined.toggle:selected > .surface {
-  -fx-background-color: -md-sys-color-inverse-on-surface
+  -fx-background-color: -md-sys-color-inverse-on-surface;
 }
-
 .mfx-icon-button.outlined.toggle:selected > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-inverse-on-surface
+  -mfx-ripple-color: -md-sys-color-inverse-on-surface;
 }
 
 .mfx-icon-button.tonal {
-  -fx-background-color: -md-sys-color-secondary-container
+  -fx-background-color: -md-sys-color-secondary-container;
 }
-
 .mfx-icon-button.tonal > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-color: -md-sys-color-on-secondary-container
+  -mfx-color: -md-sys-color-on-secondary-container;
 }
-
 .mfx-icon-button.tonal > .surface {
-  -fx-background-color: -md-sys-color-on-secondary-container
+  -fx-background-color: -md-sys-color-on-secondary-container;
 }
-
 .mfx-icon-button.tonal > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-on-secondary-container
+  -mfx-ripple-color: -md-sys-color-on-secondary-container;
 }
-
 .mfx-icon-button.tonal.toggle:selected {
-  -fx-background-color: -md-sys-color-secondary
+  -fx-background-color: -md-sys-color-secondary;
 }
-
 .mfx-icon-button.tonal.toggle:selected > .mfx-icon-wrapper > .mfx-font-icon {
-  -mfx-color: -md-sys-color-on-secondary
+  -mfx-color: -md-sys-color-on-secondary;
 }
-
 .mfx-icon-button.tonal.toggle:selected > .surface {
-  -fx-background-color: -md-sys-color-on-secondary
+  -fx-background-color: -md-sys-color-on-secondary;
 }
-
 .mfx-icon-button.tonal.toggle:selected > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-on-secondary
+  -mfx-ripple-color: -md-sys-color-on-secondary;
 }
 
 .mfx-menu {
   -fx-background-color: -md-sys-color-surface-container;
   -fx-background-radius: 8px;
-  -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.2),8,0.16,0,3);
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.16, 0, 3);
   -fx-min-width: 160px;
-  -fx-max-width: 280px
+  -fx-max-width: 280px;
 }
-
 .mfx-menu > .menu-content > .separator {
+  /*
+   * The reason for this value is that the recommended gap between the separator and other items is 8px.
+   * The separator itself is a line of width 1px, so 8+8+1. I don't know if there's a better way to do this.
+   */
   -fx-background-color: -md-sys-color-outline-variant;
   -fx-background-insets: 8px 0px 8px 0px;
-  -fx-pref-height: 17
+  -fx-pref-height: 17;
 }
-
 .mfx-menu > .menu-content > .menu-entry {
-  -fx-min-height: 40px;
-  -fx-padding: 0px 12px 0px 12px
+  -fx-min-height: 40px; /* For non-virtualized menus */
+  -fx-padding: 0px 12px 0px 12px;
+  /* For non-virtualized menus */
+  /* For non-virtualized menus */
 }
-
 .mfx-menu > .menu-content > .menu-entry > .pseudo-surface {
   -fx-background-color: -md-sys-color-on-surface;
-  -fx-opacity: 0
+  -fx-opacity: 0;
 }
-
 .mfx-menu > .menu-content > .menu-entry > .mfx-ripple-generator {
-  -mfx-ripple-color: -md-sys-color-on-surface
+  -mfx-ripple-color: -md-sys-color-on-surface;
 }
-
 .mfx-menu > .menu-content > .menu-entry > .label {
   -fx-font-family: "MontSerrat Medium";
   -fx-font-size: 14px;
   -fx-line-spacing: 20px;
   -fx-graphic-text-gap: 8px;
-  -fx-text-fill: -md-sys-color-on-surface
+  -fx-text-fill: -md-sys-color-on-surface;
 }
-
 .mfx-menu > .menu-content > .menu-entry > .label > .mfx-font-icon {
   -mfx-color: -md-sys-color-on-surface;
-  -mfx-size: 16px
+  -mfx-size: 16px;
 }
-
 .mfx-menu > .menu-content > .menu-entry > .label.trailing.sub > .mfx-font-icon {
-  -mfx-icon: "fas-angle-right"
+  -mfx-icon: "fas-angle-right";
 }
-
 .mfx-menu > .menu-content > .menu-entry > .label.trailing.sub > .svg-icon {
   -fx-background-color: -md-sys-color-on-surface;
   -fx-pref-width: 8px;
-  -fx-max-height: 12px
+  -fx-max-height: 12px;
 }
-
 .mfx-menu > .menu-content > .menu-entry:first-child > .pseudo-surface {
-  -fx-background-radius: 8px 8px 0px 0px
+  -fx-background-radius: 8px 8px 0px 0px;
 }
-
 .mfx-menu > .menu-content > .menu-entry:last-child > .pseudo-surface {
-  -fx-background-radius: 0px 0px 8px 8px
+  -fx-background-radius: 0px 0px 8px 8px;
 }
-
 .mfx-menu > .menu-content > .menu-entry:only-child > .pseudo-surface {
-  -fx-background-radius: 8px
+  -fx-background-radius: 8px;
 }
-
 .mfx-menu > .menu-content > .menu-entry:hover > .pseudo-surface {
-  -fx-opacity: 8%
+  -fx-opacity: 8%;
 }
-
 .mfx-menu > .menu-content > .menu-entry:focused > .pseudo-surface {
-  -fx-opacity: 10%
+  -fx-opacity: 10%;
 }
-
-.mfx-menu > .menu-content > .menu-entry:pressed > .pseudo-surface,
-.mfx-menu > .menu-content > .menu-entry:selected > .pseudo-surface {
-  -fx-opacity: 10%
+.mfx-menu > .menu-content > .menu-entry:pressed > .pseudo-surface, .mfx-menu > .menu-content > .menu-entry:selected > .pseudo-surface {
+  -fx-opacity: 10%;
 }
-
 .mfx-menu > .menu-content > .menu-entry:disabled > .pseudo-surface {
-  -fx-opacity: 10%
+  -fx-opacity: 10%;
 }
-
 .mfx-menu > .menu-content > .menu-entry:disabled > .label {
-  -fx-opacity: 38%
+  -fx-opacity: 38%;
 }
 
 .mfx-split-button > .mfx-button.leading.xs {
   -fx-background-radius: 16px 4px 4px 16px;
-  -fx-border-radius: 32px 4px 4px 32px
+  -fx-border-radius: 32px 4px 4px 32px;
 }
-
 .mfx-split-button > .mfx-button.leading.xs > .surface {
-  -fx-background-radius: 16px 4px 4px 16px
+  -fx-background-radius: 16px 4px 4px 16px;
 }
-
 .mfx-split-button > .mfx-button.trailing.xs {
   -fx-background-radius: 4px 16px 16px 4px;
   -fx-border-radius: 4px 32px 32px 4px;
   -fx-min-width: 48px;
-  -fx-padding: 0px 13px 0px 13px
+  -fx-padding: 0px 13px 0px 13px;
 }
-
 .mfx-split-button > .mfx-button.trailing.xs > .label > .mfx-font-icon {
-  -mfx-size: 22px
+  -mfx-size: 22px;
 }
-
 .mfx-split-button > .mfx-button.trailing.xs > .surface {
-  -fx-background-radius: 4px 16px 16px 4px
+  -fx-background-radius: 4px 16px 16px 4px;
 }
-
 .mfx-split-button > .mfx-button.leading.s {
   -fx-background-radius: 20px 4px 4px 20px;
-  -fx-border-radius: 40px 4px 4px 40px
+  -fx-border-radius: 40px 4px 4px 40px;
 }
-
 .mfx-split-button > .mfx-button.leading.s > .surface {
-  -fx-background-radius: 20px 4px 4px 20px
+  -fx-background-radius: 20px 4px 4px 20px;
 }
-
 .mfx-split-button > .mfx-button.trailing.s {
   -fx-background-radius: 4px 20px 20px 4px;
   -fx-border-radius: 4px 40px 40px 4px;
   -fx-min-width: 48px;
-  -fx-padding: 0px 13px 0px 13px
+  -fx-padding: 0px 13px 0px 13px;
 }
-
 .mfx-split-button > .mfx-button.trailing.s > .label > .mfx-font-icon {
-  -mfx-size: 22px
+  -mfx-size: 22px;
 }
-
 .mfx-split-button > .mfx-button.trailing.s > .surface {
-  -fx-background-radius: 4px 20px 20px 4px
+  -fx-background-radius: 4px 20px 20px 4px;
 }
-
 .mfx-split-button > .mfx-button.leading.m {
   -fx-background-radius: 28px 4px 4px 28px;
-  -fx-border-radius: 56px 4px 4px 56px
+  -fx-border-radius: 56px 4px 4px 56px;
 }
-
 .mfx-split-button > .mfx-button.leading.m > .surface {
-  -fx-background-radius: 28px 4px 4px 28px
+  -fx-background-radius: 28px 4px 4px 28px;
 }
-
 .mfx-split-button > .mfx-button.trailing.m {
   -fx-background-radius: 4px 28px 28px 4px;
   -fx-border-radius: 4px 56px 56px 4px;
   -fx-min-width: 56px;
-  -fx-padding: 0px 15px 0px 15px
+  -fx-padding: 0px 15px 0px 15px;
 }
-
 .mfx-split-button > .mfx-button.trailing.m > .label > .mfx-font-icon {
-  -mfx-size: 26px
+  -mfx-size: 26px;
 }
-
 .mfx-split-button > .mfx-button.trailing.m > .surface {
-  -fx-background-radius: 4px 28px 28px 4px
+  -fx-background-radius: 4px 28px 28px 4px;
 }
-
 .mfx-split-button > .mfx-button.leading.l {
   -fx-background-radius: 48px 8px 8px 48px;
-  -fx-border-radius: 96px 8px 8px 96px
+  -fx-border-radius: 96px 8px 8px 96px;
 }
-
 .mfx-split-button > .mfx-button.leading.l > .surface {
-  -fx-background-radius: 48px 8px 8px 48px
+  -fx-background-radius: 48px 8px 8px 48px;
 }
-
 .mfx-split-button > .mfx-button.trailing.l {
   -fx-background-radius: 8px 48px 48px 8px;
   -fx-border-radius: 8px 96px 96px 8px;
   -fx-min-width: 96px;
-  -fx-padding: 0px 29px 0px 29px
+  -fx-padding: 0px 29px 0px 29px;
 }
-
 .mfx-split-button > .mfx-button.trailing.l > .label > .mfx-font-icon {
-  -mfx-size: 38px
+  -mfx-size: 38px;
 }
-
 .mfx-split-button > .mfx-button.trailing.l > .surface {
-  -fx-background-radius: 8px 48px 48px 8px
+  -fx-background-radius: 8px 48px 48px 8px;
 }
-
 .mfx-split-button > .mfx-button.leading.xl {
   -fx-background-radius: 68px 12px 12px 68px;
-  -fx-border-radius: 136px 12px 12px 136px
+  -fx-border-radius: 136px 12px 12px 136px;
 }
-
 .mfx-split-button > .mfx-button.leading.xl > .surface {
-  -fx-background-radius: 68px 12px 12px 68px
+  -fx-background-radius: 68px 12px 12px 68px;
 }
-
 .mfx-split-button > .mfx-button.trailing.xl {
   -fx-background-radius: 12px 68px 68px 12px;
   -fx-border-radius: 12px 136px 136px 12px;
   -fx-min-width: 136px;
-  -fx-padding: 0px 43px 0px 43px
+  -fx-padding: 0px 43px 0px 43px;
 }
-
 .mfx-split-button > .mfx-button.trailing.xl > .label > .mfx-font-icon {
-  -mfx-size: 50px
+  -mfx-size: 50px;
 }
-
 .mfx-split-button > .mfx-button.trailing.xl > .surface {
-  -fx-background-radius: 12px 68px 68px 12px
+  -fx-background-radius: 12px 68px 68px 12px;
 }
-
 .mfx-split-button > .mfx-button.trailing > .label > .mfx-font-icon {
   -mfx-icon: "fas-angle-down";
-  -fx-rotate: 0deg
+  -fx-rotate: 0deg;
 }
-
 .mfx-split-button:open > .mfx-button.trailing > .label > .mfx-font-icon {
-  -fx-rotate: 180deg
+  -fx-rotate: 180deg;
 }
