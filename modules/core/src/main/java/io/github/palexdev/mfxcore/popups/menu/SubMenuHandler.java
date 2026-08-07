@@ -18,25 +18,34 @@
 
 package io.github.palexdev.mfxcore.popups.menu;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Function;
 
-import io.github.palexdev.mfxcore.observables.When;
+import io.github.palexdev.mfxcore.base.Disposable;
 import javafx.scene.Node;
 import javafx.scene.TraversalDirection;
 import javafx.scene.input.KeyEvent;
+
+import static io.github.palexdev.mfxcore.observables.When.observe;
 
 /// Utility class to make the submenu's handling easier and cleaner.
 public class SubMenuHandler {
     private MFXMenuItem item;
     private MFXMenu subMenu;
-    private When<?> hideListener;
+    private final List<Disposable> disposables = new ArrayList<>();
 
     public SubMenuHandler(MFXMenuItem item) {
         this.item = item;
         subMenu = item.getMenu().createSubMenu(item);
-        hideListener = When.onInvalidated(item.getMenu().hoveredItemProperty())
-            .then(_ -> hide())
-            .listen();
+        Collections.addAll(disposables,
+            observe(this::hide, item.getMenu().hoveredItemProperty()).listen(),
+            observe(() -> {
+                item.getMenu().setHoveredItem(null);
+                subMenu.hide();
+            }, item.getMenu().positionProperty()).listen()
+        );
     }
 
     /// Shows the submenu by calling [MFXMenu#showSub(Node)] with the placement specified by the submenu's config.
@@ -81,8 +90,8 @@ public class SubMenuHandler {
     }
 
     public void dispose() {
-        hideListener.dispose();
-        hideListener = null;
+        disposables.forEach(Disposable::dispose);
+        disposables.clear();
         subMenu.uninstall();
         subMenu = null;
         item = null;
