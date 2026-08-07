@@ -21,6 +21,7 @@ package io.github.palexdev.mfxcore.selection.model;
 import java.util.*;
 import java.util.function.Function;
 
+import io.github.palexdev.mfxcore.base.Disposable;
 import io.github.palexdev.mfxcore.base.beans.range.IntegerRange;
 import io.github.palexdev.mfxcore.collections.RefineList;
 import io.github.palexdev.mfxcore.utils.fx.ListChangeHelper;
@@ -32,6 +33,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
+import static io.github.palexdev.mfxcore.observables.When.onInvalidated;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 
@@ -45,52 +47,69 @@ import static java.util.stream.Collectors.toMap;
 ///
 /// To make operation on the selection appear as 'atomic', most of them are performed on a temporary map created by the
 /// aforementioned methods. At the end, the selection is replaced with the new map. See [MapProperty].
+///
+/// #### RefineList sources
+///
+/// When the source is a [RefineList], the items property stores its source list instead, so that indices are tracked in
+/// source-space and the [ListChangeHelper] only ever sees physical additions/removals, never filter or sort changes.
+/// Indexes accepted and reported by the public API stay in view-space; a [RefineSelectionShim] translates them, and owns
+/// the whole operation whenever it is present.
 @SuppressWarnings("unchecked")
 public class SelectionModel<T> implements ISelectionModel<T> {
     //================================================================================
     // Static Properties
     //================================================================================
+
     protected static final IntegerRange INVALID_RANGE = IntegerRange.of(-1);
 
     //================================================================================
     // Properties
     //================================================================================
-    private final ListProperty<T> items = new SimpleListProperty<>();
+
+    private final ListProperty<T> items = new SimpleListProperty<>() {
+        @Override
+        public void set(ObservableList<T> newValue) {
+            if (newValue instanceof RefineList<T> rl) {
+                shim = new RefineSelectionShim<>(SelectionModel.this, rl);
+                super.set(rl.getSource());
+            } else {
+                shim = null;
+                super.set(newValue);
+            }
+        }
+    };
+    private RefineSelectionShim<T> shim;
+
     private final MapProperty<Integer, T> selection = new SimpleMapProperty<>(newMap());
     protected SequencedMap<Integer, T> backingMap;
-    protected ListChangeHelper<T> lch;
     private boolean allowsMultipleSelection = true;
 
     private Function<ISelectionModel<T>, SelectionEventHandler> ehSupplier = sm ->
         sm.allowsMultipleSelection() ? new MultipleSelectionHandler(sm) : new SingleSelectionHandler(sm);
     private SelectionEventHandler eh = ehSupplier.apply(this);
 
+    private final List<Disposable> disposables = new ArrayList<>();
+
     //================================================================================
     // Constructors
     //================================================================================
+
     public SelectionModel(ObservableList<T> items) {
         this.items.set(items);
         init();
     }
 
-    /// When the selection source is a [RefineList], indices are tracked in source-space.
-    /// The [ListChangeHelper] is therefore attached to the raw source list so that filter and
-    /// sort changes do not perturb the selection — only physical additions/removals do.
-    public SelectionModel(RefineList<T> list) {
-        this.items.set(list.getSource());
-        init();
-    }
-
     public SelectionModel(ListProperty<T> list) {
-        this.items.bind(list);
-        init();
+        this(list.get());
+        disposables.add(onInvalidated(list).then(items::set).listen());
     }
 
     //================================================================================
     // Methods
     //================================================================================
+
     protected void init() {
-        lch = new ListChangeHelper<>(items)
+        disposables.add(new ListChangeHelper<>(items)
             .setOnClear(this::clearSelection)
             .setOnPermutation(p -> replaceSelection(
                 selection.keySet().stream()
@@ -110,8 +129,7 @@ public class SelectionModel<T> implements ISelectionModel<T> {
             .setOnAdded(add -> {
                 List<Integer> updated = ListChangeHelper.shiftOnAdd(selection.keySet(), add);
                 replaceSelection(updated.toArray(Integer[]::new));
-            })
-            .init();
+            }).init());
     }
 
     protected ObservableMap<Integer, T> newMap() {
@@ -142,8 +160,10 @@ public class SelectionModel<T> implements ISelectionModel<T> {
     //================================================================================
     // Overridden Methods
     //================================================================================
+
     @Override
     public boolean contains(int index) {
+        if (shim != null) return shim.contains(index);
         return selection.containsKey(index);
     }
 
@@ -162,11 +182,19 @@ public class SelectionModel<T> implements ISelectionModel<T> {
 
     @Override
     public void deselectIndex(int index) {
+        if (shim != null) {
+            shim.deselectIndex(index);
+            return;
+        }
         selection.remove(index);
     }
 
     @Override
     public void deselectIndexes(int... indexes) {
+        if (shim != null) {
+            shim.deselectIndexes(indexes);
+            return;
+        }
         ObservableMap<Integer, T> tmp = newMap(selection);
         for (int index : indexes) {
             tmp.remove(index);
@@ -176,6 +204,10 @@ public class SelectionModel<T> implements ISelectionModel<T> {
 
     @Override
     public void deselectIndexes(IntegerRange range) {
+        if (shim != null) {
+            shim.deselectRange(range);
+            return;
+        }
         range = clampRange(range);
         if (INVALID_RANGE.equals(range)) return;
         ObservableMap<Integer, T> tmp = newMap(selection);
@@ -211,6 +243,10 @@ public class SelectionModel<T> implements ISelectionModel<T> {
 
     @Override
     public void selectIndex(int index) {
+        if (shim != null) {
+            shim.selectIndex(index);
+            return;
+        }
         if (!isValidIndex(index)) return;
         T item = items.get(index);
         if (allowsMultipleSelection) {
@@ -224,6 +260,10 @@ public class SelectionModel<T> implements ISelectionModel<T> {
 
     @Override
     public void selectIndexes(Integer... indexes) {
+        if (shim != null) {
+            shim.selectIndexes(indexes);
+            return;
+        }
         if (indexes.length == 0) return;
         if (allowsMultipleSelection) {
             Map<Integer, T> newSelection = Arrays.stream(indexes)
@@ -242,6 +282,10 @@ public class SelectionModel<T> implements ISelectionModel<T> {
 
     @Override
     public void selectIndexes(IntegerRange range) {
+        if (shim != null) {
+            shim.selectRange(range);
+            return;
+        }
         range = clampRange(range);
         if (INVALID_RANGE.equals(range)) return;
         if (allowsMultipleSelection) {
@@ -264,6 +308,10 @@ public class SelectionModel<T> implements ISelectionModel<T> {
     /// Uses [List#indexOf(Object)]!
     @Override
     public void selectItem(T item) {
+        if (shim != null) {
+            shim.selectItem(item);
+            return;
+        }
         selectIndex(items.indexOf(item));
     }
 
@@ -272,6 +320,10 @@ public class SelectionModel<T> implements ISelectionModel<T> {
     /// Uses [List#indexOf(Object)] on each item!!
     @Override
     public void selectItems(T... items) {
+        if (shim != null) {
+            shim.selectItems(items);
+            return;
+        }
         if (items.length == 0) return;
         if (allowsMultipleSelection) {
             Map<Integer, T> newSelection = new LinkedHashMap<>();
@@ -289,6 +341,10 @@ public class SelectionModel<T> implements ISelectionModel<T> {
 
     @Override
     public void expandSelection(int index, boolean fromLast) {
+        if (shim != null) {
+            shim.expandSelection(index, fromLast);
+            return;
+        }
         if (selection.isEmpty()) {
             replaceSelection(IntegerRange.of(0, index));
             return;
@@ -320,6 +376,10 @@ public class SelectionModel<T> implements ISelectionModel<T> {
 
     @Override
     public void replaceSelection(Integer... indexes) {
+        if (shim != null) {
+            shim.replaceIndexes(indexes);
+            return;
+        }
         if (indexes.length == 0) return;
         if (allowsMultipleSelection) {
             ObservableMap<Integer, T> newSelection = Arrays.stream(indexes)
@@ -339,6 +399,10 @@ public class SelectionModel<T> implements ISelectionModel<T> {
 
     @Override
     public void replaceSelection(IntegerRange range) {
+        if (shim != null) {
+            shim.replaceRange(range);
+            return;
+        }
         range = clampRange(range);
         if (INVALID_RANGE.equals(range)) return;
         if (allowsMultipleSelection) {
@@ -361,6 +425,10 @@ public class SelectionModel<T> implements ISelectionModel<T> {
     /// Uses [List#indexOf(Object)] on each item!!
     @Override
     public void replaceSelection(T... items) {
+        if (shim != null) {
+            shim.replaceItems(items);
+            return;
+        }
         if (items.length == 0) return;
         if (allowsMultipleSelection) {
             ObservableMap<Integer, T> newSelection = newMap();
@@ -419,11 +487,9 @@ public class SelectionModel<T> implements ISelectionModel<T> {
     public void dispose() {
         ehSupplier = null;
         eh = null;
-        if (lch != null) {
-            lch.dispose();
-            lch = null;
-        }
-        items.unbind();
+        shim = null;
+        disposables.forEach(Disposable::dispose);
+        disposables.clear();
         selection.clear();
         selection.set(null);
     }

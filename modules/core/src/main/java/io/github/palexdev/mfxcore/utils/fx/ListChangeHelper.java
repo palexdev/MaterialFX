@@ -21,6 +21,7 @@ package io.github.palexdev.mfxcore.utils.fx;
 import java.util.*;
 import java.util.function.Consumer;
 
+import io.github.palexdev.mfxcore.base.Disposable;
 import io.github.palexdev.mfxcore.base.beans.range.IntegerRange;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
@@ -34,7 +35,7 @@ import javafx.collections.ObservableList;
 /// To attach the listener to the source [ObservableList], it's enough to call [#init()].
 ///
 /// Once this is not needed anymore, it should be properly disposed by invoking [#dispose()].
-public class ListChangeHelper<E> {
+public class ListChangeHelper<E> implements Disposable {
     //================================================================================
     // Properties
     //================================================================================
@@ -141,6 +142,7 @@ public class ListChangeHelper<E> {
     }
 
     /// Removes the listener from the source and sets the latter to `null`.
+    @Override
     public void dispose() {
         if (listener != null) source.removeListener(listener);
         source = null;

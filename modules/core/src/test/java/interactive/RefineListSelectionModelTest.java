@@ -65,7 +65,7 @@ class RefineListSelectionModelTest {
     // -------------------------------------------------------------------------
 
     @Test
-    @DisplayName("3. Filter hides some items - view indices differ from source indices")
+    @DisplayName("3. Filter hides some items - selection uses view indices")
     void filter_viewAndSourceIndicesDiffer() {
         // contains("e") → view: [apple(src0), cherry(src2), date(src3), elderberry(src4)]
         list.setPredicate(s -> s.contains("e"));
@@ -76,10 +76,13 @@ class RefineListSelectionModelTest {
         assertEquals("date", list.get(2));
         assertEquals("elderberry", list.get(3));
 
-        // Select "elderberry" by its SOURCE index (4)
-        model.selectIndex(4);
-        assertTrue(model.contains(4));
+        // Select "elderberry" by its VIEW index (3)
+        model.selectIndex(3);
+        assertTrue(model.contains(3));
         assertTrue(model.contains("elderberry"));
+
+        // Stored key is the source index
+        assertTrue(model.selection().containsKey(4));
     }
 
     @Test
@@ -116,21 +119,21 @@ class RefineListSelectionModelTest {
     }
 
     @Test
-    @DisplayName("7. Selecting via view index requires explicit translation")
-    void selectViaViewIndex_requiresTranslation() {
+    @DisplayName("7. Selecting via view index needs no translation")
+    void selectViaViewIndex_isImplicit() {
         // view: [apple(src0), cherry(src2), date(src3), elderberry(src4)]
         list.setPredicate(s -> s.contains("e"));
 
-        // Caller sees "date" at view index 2 and wants to select it
+        // Caller sees "date" at view index 2 and selects it directly
         int viewIdx = 2;
-        int sourceIdx = list.viewToSource(viewIdx);
-        assertEquals(3, sourceIdx);
+        model.selectIndex(viewIdx);
 
-        model.selectIndex(sourceIdx);
-
-        assertTrue(model.contains(3));
+        assertTrue(model.contains(viewIdx));
         assertEquals("date", list.get(viewIdx));
         assertTrue(model.contains("date"));
+
+        // The shim translated to source index 3 for storage
+        assertTrue(model.selection().containsKey(3));
     }
 
     // -------------------------------------------------------------------------
@@ -146,12 +149,15 @@ class RefineListSelectionModelTest {
         assertEquals("elderberry", list.get(0));
         assertEquals("apple", list.get(4));
 
-        // "banana" is still at source index 1
-        model.selectIndex(1);
-        assertTrue(model.contains("banana"));
-
         // In reverse order "banana" is at view index 3
         assertEquals(3, list.sourceToView(1));
+
+        model.selectIndex(3);
+        assertTrue(model.contains(3));
+        assertTrue(model.contains("banana"));
+
+        // "banana" is still at source index 1
+        assertTrue(model.selection().containsKey(1));
     }
 
     @Test
@@ -225,7 +231,8 @@ class RefineListSelectionModelTest {
     @Test
     @DisplayName("14. Changing predicate - selected item filtered out stays in selection map")
     void changePredicate_selectedItemFilteredOut_remainsInMap() {
-        model.selectIndex(1); // "banana"
+        // No transformation yet, so view index 1 is "banana"
+        model.selectIndex(1);
         assertTrue(model.contains("banana"));
 
         // Apply filter that excludes "banana" (it has no 'e')
@@ -233,25 +240,33 @@ class RefineListSelectionModelTest {
 
         assertFalse(list.contains("banana"), "'banana' must not appear in the view");
         // The model retains the entry at source index 1 — no auto-deselect on filter change.
-        assertTrue(model.contains(1));
         assertTrue(model.contains("banana"));
+        assertTrue(model.selection().containsKey(1));
+
+        // It is no longer addressable in view-space though
+        assertTrue(list.sourceToView(1) < 0);
+        assertFalse(model.contains(1), "view index 1 is now 'cherry', which is not selected");
     }
 
     @Test
-    @DisplayName("15. Multi-select with filter active - all indices in source space")
+    @DisplayName("15. Multi-select with filter active - all indices in view space")
     void multiSelect_withFilter() {
         // view: [apple(src0), cherry(src2), date(src3), elderberry(src4)]
         list.setPredicate(s -> s.contains("e"));
         model.setAllowsMultipleSelection(true);
 
-        // Select "apple" and "elderberry" by their source indices
-        model.selectIndexes(0, 4);
+        // Select "apple" and "elderberry" by their view indices
+        model.selectIndexes(0, 3);
 
         assertTrue(model.contains(0));
-        assertTrue(model.contains(4));
+        assertTrue(model.contains(3));
         assertEquals(2, model.selection().size());
         assertTrue(model.contains("apple"));
         assertTrue(model.contains("elderberry"));
+
+        // Stored keys are source indices
+        assertTrue(model.selection().containsKey(0));
+        assertTrue(model.selection().containsKey(4));
     }
 
     // -------------------------------------------------------------------------
@@ -325,9 +340,9 @@ class RefineListSelectionModelTest {
         list.setPredicate(s -> s.contains("e"));
         list.setComparator(Comparator.reverseOrder());
 
-        // Select "apple" and "date" by their source indices
+        // Select "apple" (view 3) and "date" (view 1) by their view indices
         model.setAllowsMultipleSelection(true);
-        model.selectIndexes(0, 3);
+        model.selectIndexes(1, 3);
         assertTrue(model.contains("apple"));
         assertTrue(model.contains("date"));
 
