@@ -21,7 +21,6 @@ package io.github.palexdev.mfxcore.popups.menu;
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -34,7 +33,6 @@ import io.github.palexdev.mfxcore.input.ShortcutManager;
 import io.github.palexdev.mfxcore.input.WhenEvent;
 import io.github.palexdev.mfxcore.popups.MFXPopover;
 import io.github.palexdev.mfxcore.popups.MFXPopup;
-import io.github.palexdev.mfxcore.popups.MFXPopupBase;
 import io.github.palexdev.mfxcore.popups.PopupState;
 import io.github.palexdev.mfxcore.popups.menu.MFXMenu.MenuConfig.Builder;
 import io.github.palexdev.mfxcore.utils.CollectionUtils;
@@ -60,6 +58,7 @@ import javafx.scene.layout.Region;
 
 import static io.github.palexdev.mfxcore.base.beans.Position.PositionBuilder.x;
 import static io.github.palexdev.mfxcore.base.beans.Position.position;
+import static java.util.Optional.ofNullable;
 
 /// Custom implementation of menus based on the [MFXPopup] API. It also implements [MFXStyleable], the default CSS
 /// style-class is set to '.root' and '.mfx-menu.'. This mimics JavaFX popups which also have the '.root' style class
@@ -145,7 +144,7 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
                 super.onContentChanged();
             } else {
                 throw new IllegalStateException("Content must be of type MFXMenuContent! Got: " +
-                                                Optional.ofNullable(content).map(Object::getClass).orElse(null)
+                                                ofNullable(content).map(Object::getClass).orElse(null)
                 );
             }
         }
@@ -283,7 +282,7 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
     }
 
     protected MFXMenu createSubMenu(MFXMenuItem item) {
-        MFXMenu subMenu = Optional.ofNullable(subMenuFactory)
+        MFXMenu subMenu = ofNullable(subMenuFactory)
             .map(f -> f.apply(item.getSubItems()))
             .orElse(null);
         if (subMenu == null) return null;
@@ -297,9 +296,9 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
         return subMenu;
     }
 
-    /// This should be used by submenus to appear on the screen, next to the element that owns the submenu. This is
-    /// typically one of the entries of the parent menu.
-    protected void showSub(Node owner) {
+    /// This is used by [SubMenuHandler] to show a sub-menu on the screen, next to the element that owns it.
+    /// The owner typically is one of the entries of the parent menu.
+    void showSub(Node owner) {
         peer.show(owner, placement);
     }
 
@@ -314,6 +313,10 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
 
     public void updateStylesheets() {
         peer.updateStylesheets();
+    }
+
+    protected MFXPopover getPeer() {
+        return peer;
     }
 
     //================================================================================
@@ -553,13 +556,13 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
         @Override
         public void set(WeakReference<MFXMenu> newValue) {
             // Keep track ONLY of root menus
-            boolean isRoot = Optional.ofNullable(newValue)
+            boolean isRoot = ofNullable(newValue)
                 .map(Reference::get)
                 .map(MFXMenu::isRootMenu)
                 .orElse(false);
             if (!isRoot) return;
 
-            Optional.ofNullable(get())
+            ofNullable(get())
                 .map(Reference::get)
                 .filter(old -> old != newValue.get() && old.isShowing())
                 .ifPresent(MFXMenu::hide);
