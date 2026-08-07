@@ -37,6 +37,8 @@ import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
+import static io.github.palexdev.mfxcore.observables.When.observe;
+
 /// Public API for all kinds of MaterialFX popups.
 ///
 /// ### History and Rant
@@ -202,15 +204,12 @@ public interface MFXPopup<O> {
     /// Specifies the popup's visibility state.
     ReadOnlyObjectProperty<PopupState> stateProperty();
 
-    /// Adds and returns a listener on the [#stateProperty()] which executes the given action when the given state is `null`
-    /// or is the same as the popup's.
+    /// Registers and returns a listener on the popup's [#stateProperty()] executing the given action whenever it changes.<br >
+    /// The action carries the popup instance and its current state.
     ///
     /// @see When
-    default When<?> onState(PopupState state, BiConsumer<MFXPopup<O>, PopupState> action) {
-        return When.onInvalidated(stateProperty())
-            .condition(s -> state == null || s == state)
-            .then(s -> action.accept(this, s))
-            .listen();
+    default When<?> onState(BiConsumer<MFXPopup<O>, PopupState> action) {
+        return observe(() -> action.accept(this, getState()), stateProperty()).listen();
     }
 
     /// As explained by [#contentProperty()], the popup's root may not necessarily be the content. This method can be used

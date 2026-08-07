@@ -99,7 +99,7 @@ public abstract class MFXChoiceSkin<T> extends MFXSkinBase<MFXChoice<T>> {
             onInvalidated(choice.selection())
                 .then(_ -> updateViewCell())
                 .executeNow(),
-            popup.onState(null, (_, s) -> onPopupState(s))
+            popup.onState((_, s) -> onPopupState(s))
         );
     }
 

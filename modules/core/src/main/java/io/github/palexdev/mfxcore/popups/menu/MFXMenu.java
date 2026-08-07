@@ -233,7 +233,6 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
                     return;
                 }
 
-                // TODO do we need to do this for anchor-based positioning too? probably not
                 if (isShowing()) {
                     setPosition(position(e.getScreenX(), e.getScreenY()));
                 } else {
