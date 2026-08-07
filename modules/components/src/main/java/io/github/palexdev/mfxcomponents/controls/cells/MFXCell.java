@@ -108,7 +108,7 @@ public class MFXCell<T> extends VFXSimpleCell<T> {
                     int index = getIndex();
                     return selectionModel.contains(index);
                 })
-                .addSources(indexProperty(), selectionModel.selection())
+                .addSources(indexProperty(), itemProperty(), selectionModel.selection())
                 .get()
             );
         }
@@ -197,7 +197,6 @@ public class MFXCell<T> extends VFXSimpleCell<T> {
                         rg.release();
                     }
                 }))
-
             );
         }
 
