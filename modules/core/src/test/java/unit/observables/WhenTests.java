@@ -221,5 +221,6 @@ public class WhenTests {
             return whens;
         }
     }
+
     private static final WhenAccessor ACCESSOR = new WhenAccessor(null);
 }
