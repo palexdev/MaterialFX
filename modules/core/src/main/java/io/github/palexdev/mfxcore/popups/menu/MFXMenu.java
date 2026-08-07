@@ -608,9 +608,13 @@ public class MFXMenu implements MFXPopup<Node>, MFXStyleable {
 
         public static Builder builder(MenuConfig config) {
             return new Builder()
+                .anchorBasedPositioning(config.anchorBasedPositioning)
                 .placement(config.placement)
                 .offset(config.offset)
-                .triggerButton(config.triggerButton);
+                .triggerButton(config.triggerButton)
+                .filterMouseEvents(config.filterMouseEvents)
+                .enableKeyTrigger(config.enableKeyTrigger)
+                .styleableParent(config.styleableParent);
         }
 
         public static final class Builder {
