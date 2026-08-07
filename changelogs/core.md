@@ -1,3 +1,25 @@
+## 25.9.2 - 07/08/2026 - 99cc8d8a
+
+### Features
+
+- <c85b04e0> Improve CircularQueue and ObservableCircularQueue
+
+### Bug Fixes
+
+- <e80e0e28> SubMenuHandler: hide submenus if parent changes position (menus positioned by screen coordinates rather than anchor)
+- <e87a4dab> MFXMenu: add missing carry properties to builder(config)
+
+### Refactoring
+
+- <600c9d93> MFXPopup: improve onState(...) method
+- <5e619425> MFXMenu: allow retrieving peer (for custom show logic) but restrict submenu handling to package-private
+
+### Tests
+
+- <a58895b3> Update tests
+
+
+
 ## 25.9.1 - 06/08/2026 - f4481dd7
 
 ### Refactoring
