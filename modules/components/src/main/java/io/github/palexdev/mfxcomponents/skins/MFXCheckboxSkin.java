@@ -24,16 +24,11 @@ import io.github.palexdev.mfxcomponents.skins.base.MFXLabeledSkin;
 import io.github.palexdev.mfxcore.behavior.MFXBehavior;
 import io.github.palexdev.mfxcore.controls.BoundLabel;
 import io.github.palexdev.mfxcore.controls.MFXLabeled;
-import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
 import io.github.palexdev.mfxeffects.beans.Position;
 import io.github.palexdev.mfxeffects.ripple.MFXRippleGenerator;
 import io.github.palexdev.mfxresources.icon.MFXIconWrapper;
-import javafx.geometry.Bounds;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.geometry.VPos;
+import javafx.geometry.*;
 import javafx.scene.Node;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
@@ -41,47 +36,44 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
 import static io.github.palexdev.mfxcore.input.WhenEvent.intercept;
-import static io.github.palexdev.mfxcore.observables.When.observe;
 import static io.github.palexdev.mfxcore.utils.fx.InsetsUtils.uniform;
 
 /// Default skin implementation for all [MFXCheckboxes][MFXCheckbox]. Extends [MFXLabeledSkin].
 ///
-/// It is composed of four nodes:
-/// - the label to show the text
-/// - the box to display the selection state. It's a [MFXIconWrapper] wrapping the font icon.
-/// - A [MFXSurface] and a [MFXRippleGenerator] for showing the various interaction states with the component and ripple
-/// effects.
+/// The layout is delegated almost entirely to the label:
+/// - the label shows the component's text
+/// - the `box`, which is the node showing the selection state, is set as the label's graphic, see [#buildLabelNode()]
 ///
-/// The surface (and the ripple) is designed to always be double in size of the icon. Can be changed by setting the
-/// [#SURFACE_SIZE_MULTIPLIER] variable.
+/// The advantage of this approach is that properties such as [MFXLabeled#contentDisplayProperty()] and
+/// [MFXLabeled#graphicTextGapProperty()] are supported out of the box, no extra code needed to position the text
+/// relative to the `box`.
 ///
-/// By design, at least for now, the [MFXCheckbox#contentDisplayProperty()] is not entirely supported. Only [ContentDisplay#RIGHT]
-/// and [ContentDisplay#LEFT] are managed and determine the position of the label relative to the box.<br >
-/// In my opinion, those are the most sensible values used 99% of the time.
+/// The `box` is a [StackPane] holding three nodes:
+/// - a [MFXSurface] to show the various interaction states with the component
+/// - a [MFXRippleGenerator] for the ripple effect, clipped to a circle
+/// - the `mark`, a [MFXIconWrapper] wrapping the font icon which represents the current [MFXCheckbox#stateProperty()].
+/// This wrapping may seem unnecessary, but it allows for symmetrical sizing and icon animations.
 public class MFXCheckboxSkin extends MFXLabeledSkin {
     //================================================================================
     // Properties
     //================================================================================
     private final MFXSurface surface;
     private final MFXRippleGenerator rg;
-    private final MFXIconWrapper icon;
-
-    protected double SURFACE_SIZE_MULTIPLIER = 2.0;
+    private final StackPane box;
 
     //================================================================================
     // Constructors
     //================================================================================
 
     public MFXCheckboxSkin(MFXCheckbox checkbox) {
+        box = new StackPane();
         super(checkbox);
 
         // Init
-        icon = new MFXIconWrapper();
-        icon.getStyleClass().add("box");
-
         surface = new MFXSurface(checkbox);
         rg = new MFXRippleGenerator(checkbox);
         rg.getStyleClass().add("surface-ripple");
@@ -95,26 +87,15 @@ public class MFXCheckboxSkin extends MFXLabeledSkin {
         rg.setMeToPosConverter(me ->
             (me.getButton() == MouseButton.PRIMARY) ? Position.of(me.getX(), me.getY()) : null
         );
+        MFXIconWrapper mark = new MFXIconWrapper();
+        mark.getStyleClass().add("mark");
+        box.getChildren().setAll(surface, rg, mark);
+        box.getStyleClass().add("box");
 
         initTextMeasurementCache();
 
         // Finalize
-        addListeners();
-        getChildren().setAll(surface, rg, icon, label);
-
-    }
-
-    //================================================================================
-    // Methods
-    //================================================================================
-
-    /// Adds the following listeners:
-    ///  - A listener on the [MFXCheckbox#contentDisplayProperty()] to update the layout when it changes
-    protected void addListeners() {
-        MFXLabeled checkbox = getSkinnable();
-        listeners(
-            observe(checkbox::requestLayout, checkbox.contentDisplayProperty())
-        );
+        getChildren().setAll(label);
     }
 
     //================================================================================
@@ -133,7 +114,7 @@ public class MFXCheckboxSkin extends MFXLabeledSkin {
             intercept(checkbox, MouseEvent.MOUSE_CLICKED).handle(behavior::mouseClicked),
             intercept(checkbox, KeyEvent.KEY_PRESSED).handle(e -> behavior.keyPressed(e, () -> {
                 if (e.getCode() == KeyCode.ENTER || e.getCode() == KeyCode.SPACE) {
-                    Bounds b = checkbox.getLayoutBounds();
+                    Bounds b = box.getLayoutBounds();
                     rg.generate(b.getCenterX(), b.getCenterY());
                     rg.release();
                 }
@@ -141,37 +122,26 @@ public class MFXCheckboxSkin extends MFXLabeledSkin {
         );
     }
 
+    /// {@inheritDoc}
+    ///
+    /// Overridden to unbind the graphic property and set the `box` as the label's graphic.
     @Override
     protected BoundLabel buildLabelNode() {
-        BoundLabel boundLabel = super.buildLabelNode();
-        boundLabel.graphicProperty().unbind();
-        boundLabel.contentDisplayProperty().unbind();
-        boundLabel.setGraphic(null);
-        boundLabel.setContentDisplay(ContentDisplay.TEXT_ONLY);
-        return boundLabel;
+        BoundLabel bl = super.buildLabelNode();
+        // checkbox does not have a graphic (it's the "box")
+        bl.graphicProperty().unbind();
+        bl.setGraphic(box);
+        return bl;
     }
 
     @Override
-    protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-        double iconSize = Math.max(
-            LayoutUtils.snappedBoundWidth(icon),
-            LayoutUtils.snappedBoundHeight(icon)
-        );
-        double stateLayerSize = iconSize * SURFACE_SIZE_MULTIPLIER;
-        double gap = label.getGraphicTextGap();
-        return leftInset + stateLayerSize + gap + tmCache.getSnappedWidth() + rightInset;
+    protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return leftInset + tmCache.getSnappedWidth() + rightInset;
     }
 
     @Override
-    protected double computePrefHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-        double iconSize = Math.max(
-            LayoutUtils.snappedBoundWidth(icon),
-            LayoutUtils.snappedBoundHeight(icon)
-        );
-        double stateLayerSize = iconSize * SURFACE_SIZE_MULTIPLIER;
-        return topInset +
-               Math.max(stateLayerSize, tmCache.getSnappedHeight()) +
-               bottomInset;
+    protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+        return topInset + tmCache.getSnappedHeight() + bottomInset;
     }
 
     @Override
@@ -186,24 +156,9 @@ public class MFXCheckboxSkin extends MFXLabeledSkin {
 
     @Override
     protected void layoutChildren(double x, double y, double w, double h) {
-        MFXLabeled checkbox = getSkinnable();
-
-        icon.autosize();
-        double stateLayerSize = Math.max(icon.getWidth(), icon.getHeight()) * SURFACE_SIZE_MULTIPLIER;
-
-        HPos sPos = checkbox.getContentDisplay() == ContentDisplay.RIGHT ? HPos.RIGHT : HPos.LEFT;
-        surface.resize(stateLayerSize, stateLayerSize);
-        rg.resize(stateLayerSize, stateLayerSize);
-        positionInArea(surface, x, y, w, h, 0, sPos, VPos.CENTER);
-        positionInArea(rg, x, y, w, h, 0, sPos, VPos.CENTER);
-
-        icon.relocate(
-            surface.getLayoutX() + (stateLayerSize - icon.getWidth()) / 2.0,
-            surface.getLayoutY() + (stateLayerSize - icon.getHeight()) / 2.0
-        );
-
-        HPos lPos = checkbox.getContentDisplay() == ContentDisplay.RIGHT ? HPos.LEFT : HPos.RIGHT;
-        layoutInArea(label, x, y, w, h, 0, lPos, VPos.CENTER);
+        layoutInArea(label, x, y, w, h, 0, HPos.CENTER, VPos.CENTER);
+        rg.resizeRelocate(0, 0, box.getWidth(), box.getHeight());
+        surface.resizeRelocate(0, 0, box.getWidth(), box.getHeight());
     }
 
     @Override

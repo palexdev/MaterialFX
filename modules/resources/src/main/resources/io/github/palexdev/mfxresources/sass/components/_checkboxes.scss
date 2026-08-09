@@ -1,5 +1,5 @@
-/*
- * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+/*!
+ * Copyright (C) 2026 Parisi Alessandro - alessandro.parisi406@gmail.com
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
  *
  * MaterialFX is free software: you can redistribute it and/or
@@ -23,58 +23,65 @@
 @mixin MaterialCheckboxes() {
   .mfx-checkbox {
     @include LabelLarge();
-    -fx-text-fill : -md-sys-color-on-surface;
+    -fx-text-fill        : -md-sys-color-on-surface;
     -fx-graphic-text-gap : 4px;
 
-    > .box {
-      -mfx-animated         : true;
-      -mfx-animation        : SCALE;
-      -mfx-size             : 20px;
-      -fx-background-color  : transparent;
-      -fx-background-radius : 2px;
-      -fx-border-color      : -md-sys-color-on-surface-variant;
-      -fx-border-radius     : 2px;
-      -fx-border-width      : 2px;
+    > .label > .box {
+      -fx-min-width  : 40px;
+      -fx-min-height : 40px;
+      -fx-max-width  : 40px;
+      -fx-max-height : 40px;
 
-      > .mfx-font-icon {
-        -mfx-color : -md-sys-color-on-primary;
+      > .mark {
+        -mfx-animated         : true;
+        -mfx-animation        : SCALE;
+        -mfx-size             : 20px;
+        -fx-background-color  : transparent;
+        -fx-background-radius : 2px;
+        -fx-border-color      : -md-sys-color-on-surface-variant;
+        -fx-border-radius     : 2px;
+        -fx-border-width      : 2px;
+
+        > .mfx-font-icon {
+          -mfx-color : -md-sys-color-on-primary;
+        }
+      }
+
+      > .surface {
+        -mfx-disabled-opacity : 0.0;
+        -fx-background-color  : -md-sys-color-primary;
+        -fx-background-radius : 999px;
+      }
+
+      > .surface-ripple {
+        -mfx-ripple-color : -md-sys-color-primary;
       }
     }
 
-    &:focus-visible > .box {
-      -fx-border-color  : -md-sys-color-on-surface-variant, -md-sys-color-secondary;
-      -fx-border-insets : 0px, -12px;
-      -fx-border-radius : 2px, 999px;
-      -fx-border-width  : 2px, 3px;
-    }
-
-    > .surface {
-      -mfx-disabled-opacity : 0.0;
-      -fx-background-color  : -md-sys-color-primary;
-      -fx-background-radius : 999px;
-    }
-
-    > .mfx-ripple-generator {
-      -mfx-ripple-color : -md-sys-color-primary;
+    &:focus-visible {
+      > .label > .box {
+        @include FocusRing($insets: 0px, $at-root : false);
+        -fx-border-radius : 999px;
+      }
     }
 
     // Indeterminate
-    &:indeterminate > .box {
+    &:indeterminate > .label > .box > .mark {
       -mfx-icon            : 'fas-minus';
       -fx-background-color : -md-sys-color-primary;
       -fx-border-color     : transparent;
     }
 
     // Selected
-    &:selected > .box {
+    &:selected > .label > .box > .mark {
       -mfx-icon            : 'fas-check';
       -fx-background-color : -md-sys-color-primary;
       -fx-border-color     : transparent;
     }
 
     // Error
-    &:error {
-      > .box {
+    &:error > .label > .box {
+      > .mark {
         -mfx-icon            : 'fas-xmark';
         -fx-background-color : -md-sys-color-error;
         -fx-border-color     : transparent;
@@ -88,25 +95,21 @@
         -fx-background-color : -md-sys-color-error;
       }
 
-      > .mfx-ripple-generator {
+      > .surface-ripple {
         -mfx-ripple-color : -md-sys-color-error;
       }
     }
 
-    &:disabled {
-      > .box {
-        -fx-background-color : transparent;
-        -fx-border-color     : -md-sys-color-secondary;
-        -fx-opacity          : opacity('disabled-text');
-      }
+    &:disabled > .label > .box > .mark {
+      -fx-background-color : transparent;
+      -fx-border-color     : -md-sys-color-secondary;
+      -fx-opacity          : opacity('disabled-text');
     }
 
-    &:disabled:selected,
-    &:disabled:indeterminate {
-      > .box {
-        -fx-background-color : -md-sys-color-secondary;
-        -fx-border-color     : transparent;
-      }
+    &:disabled:selected > .label > .box > .mark,
+    &:disabled:indeterminate > .label > .box > .mark {
+      -fx-background-color : -md-sys-color-secondary;
+      -fx-border-color     : transparent;
     }
   }
 }
