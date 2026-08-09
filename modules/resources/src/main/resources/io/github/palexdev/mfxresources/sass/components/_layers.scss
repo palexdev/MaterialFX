@@ -34,8 +34,14 @@
   }
 }
 
-@mixin FocusRing($color: -md-sys-color-secondary, $insets: -4px, $thickness: 3px) {
-  @at-root #{&}:focus-visible {
+@mixin FocusRing($color: -md-sys-color-secondary, $insets: -4px, $thickness: 3px, $at-root: true) {
+  @if $at-root {
+    @at-root #{&}:focus-visible {
+      -fx-border-color  : $color;
+      -fx-border-insets : $insets;
+      -fx-border-width  : $thickness;
+    }
+  } @else {
     -fx-border-color  : $color;
     -fx-border-insets : $insets;
     -fx-border-width  : $thickness;

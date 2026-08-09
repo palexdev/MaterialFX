@@ -1,0 +1,101 @@
+/*!
+ * Copyright (C) 2026 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@use '../base/typography' as *;
+@use '../base/vars' as *;
+@use 'layers' as *;
+
+@mixin MaterialRadioButtons() {
+  .mfx-radio-button {
+    @include LabelLarge();
+    -fx-text-fill        : -md-sys-color-on-surface;
+    -fx-graphic-text-gap : 4px;
+
+    > .label > .box {
+      -fx-min-width  : 40px;
+      -fx-min-height : 40px;
+      -fx-max-width  : 40px;
+      -fx-max-height : 40px;
+
+      > .outer {
+        -fx-min-width     : 20px;
+        -fx-min-height    : 20px;
+        -fx-max-width     : 20px;
+        -fx-max-height    : 20px;
+        -fx-border-color  : -md-sys-color-on-surface-variant;
+        -fx-border-radius : 999px;
+        -fx-border-width  : 2px;
+      }
+
+      > .outer > .inner {
+        -fx-background-color  : -md-sys-color-primary;
+        -fx-background-radius : 999px;
+        -fx-opacity           : 0%;
+        -fx-scale-x           : 0%;
+        -fx-scale-y           : 0%;
+        transition-property   : -fx-opacity, -fx-scale-x, -fx-scale-y;
+        @include motion('expressive-fast-effects'); // it's faster, looks better
+      }
+
+      > .surface {
+        -mfx-disabled-opacity : 0.0;
+        -fx-background-color  : -md-sys-color-primary;
+        -fx-background-radius : 999px;
+      }
+
+      > .surface-ripple {
+        -mfx-ripple-color : -md-sys-color-primary;
+      }
+    }
+
+    &:selected {
+      > .label > .box {
+        > .outer {
+          -fx-border-color : -md-sys-color-primary;
+        }
+
+        > .outer > .inner {
+          -fx-opacity : 100%;
+          -fx-scale-x : 60%;
+          -fx-scale-y : 60%;
+        }
+      }
+    }
+
+    &:focus-visible {
+      > .label > .box {
+        @include FocusRing($insets : 4px, $at-root : false);
+        -fx-border-radius : 999px;
+      }
+    }
+
+    &:disabled {
+      -fx-opacity : opacity('disabled-text');
+
+      > .label > .box {
+        > .outer {
+          -fx-border-color : -md-sys-color-on-surface-variant;
+        }
+
+        > .outer > .inner {
+          -fx-background-color : -md-sys-color-on-surface-variant;
+        }
+      }
+    }
+  }
+}

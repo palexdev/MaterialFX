@@ -24,6 +24,7 @@
 @use 'iconbuttons' as *;
 @use 'layers' as *;
 @use 'popups' as *;
+@use 'radiobuttons' as *;
 @use 'scrolling-misc' as *;
 @use 'splitbuttons' as *;
 
@@ -37,5 +38,6 @@
   @include MaterialFloatingActionButtonsMenu();
   @include MaterialIconButtons();
   @include MaterialPopups();
+  @include MaterialRadioButtons();
   @include MaterialSplitButtons();
 }
