@@ -42,21 +42,40 @@
   - [x] Focus ring and proper focus traversal
   - [x] CSS
 
-- 🟨 Split Buttons
+- ✅ Split Buttons
     - [x] Variants: elevated, filled, tonal, outlined
     - [x] Preset sizes: xs, s, m, l, xl
     - [x] Popup menu
-    - [ ] Placeholder
     - [x] Shape morphs
     - [x] CSS
 
-- ⬜ Segmented Buttons (even if deprecated, I still believe it's a good component)
+### ⬜ Components - Selection
+
+- 🟨 Checkboxes
+  - [x] Tri-state
+  - [ ] Validation
+  - [x] Icon animations
+  - [x] Focus ring
+  - [x] CSS
+
+- 🟨 Radio Buttons
+  - [ ] Validation
+  - [x] Focus ring
+  - [x] CSS
+
+- 🟨 Toggle Switches
+  - [ ] Validation
+  - [ ] Animation
+  - [ ] Focus ring
+  - [ ] CSS
 
 #### Misc
 
-- Popups facade over JavaFX complicated mess:
-  I also probably want to backport "Node" dialogs and Stage dialogs from legacy MaterialFX
-- [ ] Theme API
+- [x] Popups facade over JavaFX complicated mess
+  - [ ] Lightweight dialogs
+- [x] Theme API
 - [x] Variants API
 - [x] Spring motions
-- [ ] SceneBuilder integration (? probably will be dropped, not worth it)
+
+- ~~SceneBuilder integration~~
+  Officially dropped. I don't care, FXML is bad anyway.
