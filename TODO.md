@@ -65,9 +65,9 @@
 
 - 🟨 Toggle Switches
   - [ ] Validation
-  - [ ] Animation
-  - [ ] Focus ring
-  - [ ] CSS
+  - [x] Animation
+  - [x] Focus ring
+  - [x] CSS
 
 #### Misc
 
