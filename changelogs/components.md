@@ -1,3 +1,40 @@
+## 25.1.0-EA4 - 09/08/2026 - d871e30a
+
+### Features
+
+- [`a289b9ec`](https://github.com/palexdev/MaterialFX/commit/a289b9ec) Implement MFXSwitch
+- [`1c249431`](https://github.com/palexdev/MaterialFX/commit/1c249431) Implement radio buttons!
+- [`9835d0db`](https://github.com/palexdev/MaterialFX/commit/9835d0db) Remake MFXSplitButton
+- [`0e30e991`](https://github.com/palexdev/MaterialFX/commit/0e30e991) implement Theming API (part 2 of d6434ba8)
+
+### Bug Fixes
+
+- [`dfdfe0b3`](https://github.com/palexdev/MaterialFX/commit/dfdfe0b3) MFXCell: add itemProperty as a source of the selected binding
+
+### Refactoring
+
+- [`0bc8e99c`](https://github.com/palexdev/MaterialFX/commit/0bc8e99c) Minor cleanup here and there
+- [`5f3b1e10`](https://github.com/palexdev/MaterialFX/commit/5f3b1e10) Remake checkboxes layout/skin/CSS
+- [`c0ed3387`](https://github.com/palexdev/MaterialFX/commit/c0ed3387) MFXButtonsGroup: disallow text variant and fallback to filled
+- [`65e117e3`](https://github.com/palexdev/MaterialFX/commit/65e117e3) FABVariants: add XS size
+- [`918c1e2c`](https://github.com/palexdev/MaterialFX/commit/918c1e2c) MFXSurface: improve shadow handling
+- [`d84b6973`](https://github.com/palexdev/MaterialFX/commit/d84b6973) MFXSurface: do not check for focusVisible for FOCUSED state
+- [`891117d6`](https://github.com/palexdev/MaterialFX/commit/891117d6) MFXSurface: make fallback/default opacity CSS styleable
+- [`ea07fe1b`](https://github.com/palexdev/MaterialFX/commit/ea07fe1b) MFXIconButton: allow null style (unset)
+- [`1362a90d`](https://github.com/palexdev/MaterialFX/commit/1362a90d) MFXFabMenuSkin: minor improvements
+- [`b2e45e47`](https://github.com/palexdev/MaterialFX/commit/b2e45e47) MFXFabSkin: improve animation and layout handling
+- [`19b4618a`](https://github.com/palexdev/MaterialFX/commit/19b4618a) MFXFab: disallow direct write of minSizeProperty
+- [`86d20e56`](https://github.com/palexdev/MaterialFX/commit/86d20e56) MFXButtonsGroupSkip: get rid of clip
+- [`7ab0a398`](https://github.com/palexdev/MaterialFX/commit/7ab0a398) MFXButtonsGroup: allow groups of both standard and toggle buttons
+- [`e1602543`](https://github.com/palexdev/MaterialFX/commit/e1602543) WithVariants: pull defaultVariants() up to the interface
+- [`c6884ec1`](https://github.com/palexdev/MaterialFX/commit/c6884ec1) VariantsHandler: lazy instantiate and return the same instance of the unmodifiable variants map
+
+### Tests
+
+- [`c58db194`](https://github.com/palexdev/MaterialFX/commit/c58db194) Update test classes
+
+
+
 ## 25.1.0 - 28/05/2026 - b024b5bf
 
 ### Refactoring
@@ -70,4 +107,3 @@
 - <eced040c> Forgot to document MFXIconButton
 - <8078729b> Add missing documentation
 - <33afa6d5> Add/update documentation
-

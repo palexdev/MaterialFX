@@ -1,3 +1,12 @@
+## Project - d871e30a
+
+- 09/08/2026 [`8a51c439`](https://github.com/palexdev/MaterialFX/commit/8a51c439) Update TODO.md
+- 09/08/2026 [`298c14f6`](https://github.com/palexdev/MaterialFX/commit/298c14f6) Update VirtualizedFX to v25.3.3
+- 09/08/2026 [`b1f6e999`](https://github.com/palexdev/MaterialFX/commit/b1f6e999) Update TODO.md
+- 07/08/2026 [`e0964ad5`](https://github.com/palexdev/MaterialFX/commit/e0964ad5) Update copyright
+
+
+
 ## Project - 54d7f207
 
 - 04/08/2026 <bdf6e2f0> Update JavaFX to latest EA

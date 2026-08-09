@@ -1,3 +1,39 @@
+## 25.2.0 - 09/08/2026 - d871e30a
+
+### Features
+
+- [`a289b9ec`](https://github.com/palexdev/MaterialFX/commit/a289b9ec) Implement MFXSwitch
+- [`1c249431`](https://github.com/palexdev/MaterialFX/commit/1c249431) Implement radio buttons!
+- [`03e84b2c`](https://github.com/palexdev/MaterialFX/commit/03e84b2c) Add one more icon to MaterialFX icons pack
+
+### Bug Fixes
+
+- [`b124fd22`](https://github.com/palexdev/MaterialFX/commit/b124fd22) Fix surfaces color not updating when transitions are involved
+- [`2445a301`](https://github.com/palexdev/MaterialFX/commit/2445a301) IconUtils: fix randomFAS() utility
+
+### Refactoring
+
+- [`0bc8e99c`](https://github.com/palexdev/MaterialFX/commit/0bc8e99c) Minor cleanup here and there
+- [`5f3b1e10`](https://github.com/palexdev/MaterialFX/commit/5f3b1e10) Remake checkboxes layout/skin/CSS
+- [`918c1e2c`](https://github.com/palexdev/MaterialFX/commit/918c1e2c) MFXSurface: improve shadow handling
+
+### Style
+
+- [`0aeb2b5a`](https://github.com/palexdev/MaterialFX/commit/0aeb2b5a) Update compiled CSS
+- [`a58cd983`](https://github.com/palexdev/MaterialFX/commit/a58cd983) Update compiled CSS
+- [`345e6e30`](https://github.com/palexdev/MaterialFX/commit/345e6e30) Allow elevation in button groups (elevated style)
+- [`614383a1`](https://github.com/palexdev/MaterialFX/commit/614383a1) Update compiled CSS
+- [`1fc85e4a`](https://github.com/palexdev/MaterialFX/commit/1fc85e4a) Update split buttons after remake
+- [`7050f4d9`](https://github.com/palexdev/MaterialFX/commit/7050f4d9) Update FAB menu to spec
+- [`3c5b8d0f`](https://github.com/palexdev/MaterialFX/commit/3c5b8d0f) Update icon buttons to spec
+- [`c5bcced9`](https://github.com/palexdev/MaterialFX/commit/c5bcced9) Update buttons to spec and fix typo
+- [`0d8d8e68`](https://github.com/palexdev/MaterialFX/commit/0d8d8e68) Proper style connected button groups
+- [`b6c111ef`](https://github.com/palexdev/MaterialFX/commit/b6c111ef) Minor updates to FABs
+- [`58eb2386`](https://github.com/palexdev/MaterialFX/commit/58eb2386) Add missing 'selected' state layer for text buttons
+- [`60beaad0`](https://github.com/palexdev/MaterialFX/commit/60beaad0) Update state layer opacities
+
+
+
 ## 25.1.3 - 28/05/2026 - b024b5bf
 
 ### Features

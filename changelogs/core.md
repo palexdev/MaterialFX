@@ -1,3 +1,11 @@
+## 25.9.3 - 09/08/2026 - d871e30a
+
+### Features
+
+- [`922ff5a1`](https://github.com/palexdev/MaterialFX/commit/922ff5a1) SelectionModel: better handle RefineLists by automatically translating indexes from one space to the other using a shim
+
+
+
 ## 25.9.2 - 07/08/2026 - 99cc8d8a
 
 ### Features
