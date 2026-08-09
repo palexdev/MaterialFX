@@ -1,0 +1,167 @@
+/*
+ * Copyright (C) 2026 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@use '../base/typography' as *;
+@use '../base/vars' as *;
+@use 'layers' as *;
+
+// TODO maybe we could extract it as a util
+@mixin Square($w, $h: $w) {
+  -fx-min-width  : $w;
+  -fx-min-height : $h;
+  -fx-max-width  : $w;
+  -fx-max-height : $h;
+}
+
+@mixin MaterialSwitches() {
+  .mfx-switch {
+    @include LabelLarge();
+    -fx-text-fill        : -md-sys-color-on-surface;
+    -fx-graphic-text-gap : 4px;
+
+    > .label > .track {
+      @include Square(52px, 32px);
+      // The outline is a background layer, the border is left free for the focus ring
+      -fx-background-color  : -md-sys-color-outline, -md-sys-color-surface-container-highest;
+      -fx-background-insets : 0px, 2px;
+      -fx-background-radius : 999px;
+      transition-property   : -fx-background-color;
+      @include motion('expressive-fast-effects');
+
+      > .box {
+        @include Square(40px);
+        -fx-translate-x     : -4px;
+        transition-property : -fx-translate-x;
+        @include motion('expressive-fast-spatial');
+
+        > .surface {
+          -mfx-disabled-opacity : 0.0;
+          -fx-background-color  : -md-sys-color-on-surface;
+          -fx-background-radius : 999px;
+        }
+
+        > .surface-ripple {
+          -mfx-ripple-color : -md-sys-color-on-surface;
+        }
+
+        > .handle {
+          @include Square(16px);
+          -fx-background-color  : -md-sys-color-outline;
+          -fx-background-radius : 999px;
+          -fx-scale-x           : 1.0;
+          -fx-scale-y           : 1.0;
+          transition-property   : -fx-scale-x, -fx-scale-y, -fx-background-color;
+          @include motion('expressive-fast-spatial');
+        }
+
+        > .mfx-icon-wrapper {
+          -mfx-animated  : true;
+          -mfx-animation : SCALE;
+
+          > .mfx-font-icon {
+            -mfx-size  : 16px;
+            -mfx-color : -md-sys-color-surface-container-highest;
+          }
+        }
+      }
+
+      > .box:with-icon > .handle {
+        -fx-scale-x : 1.5;
+        -fx-scale-y : 1.5;
+      }
+    }
+
+    &:hover, &:focus-visible, &:pressed {
+      > .label > .track > .box > .handle {
+        -fx-background-color : -md-sys-color-on-surface-variant;
+      }
+    }
+
+    &:selected {
+      > .label > .track {
+        -fx-background-color : -md-sys-color-primary, -md-sys-color-primary;
+
+        > .box {
+          -fx-translate-x : 16px;
+
+          > .surface {
+            -fx-background-color : -md-sys-color-primary;
+          }
+
+          > .surface-ripple {
+            -mfx-ripple-color : -md-sys-color-primary;
+          }
+
+          > .handle {
+            -fx-background-color : -md-sys-color-on-primary;
+            -fx-scale-x          : 1.5;
+            -fx-scale-y          : 1.5;
+          }
+
+          > .mfx-icon-wrapper > .mfx-font-icon {
+            -mfx-color : -md-sys-color-primary;
+          }
+        }
+      }
+
+      &:hover, &:focus-visible, &:pressed {
+        > .label > .track > .box > .handle {
+          -fx-background-color : -md-sys-color-primary-container;
+        }
+      }
+    }
+
+    &:pressed > .label > .track > .box > .handle {
+      -fx-scale-x : 1.75;
+      -fx-scale-y : 1.75;
+    }
+
+    &:focus-visible > .label > .track {
+      @include FocusRing($insets : -5px, $at-root : false);
+      -fx-border-radius : 999px;
+    }
+
+    &:disabled {
+      -fx-opacity : opacity('disabled-text');
+
+      > .label > .track {
+        -fx-background-color : -md-sys-color-on-surface, -md-sys-color-surface-container-highest;
+
+        > .box > .handle {
+          -fx-background-color : -md-sys-color-on-surface;
+        }
+
+        > .box > .mfx-icon-wrapper > .mfx-font-icon {
+          -mfx-color : -md-sys-color-surface-container-highest;
+        }
+      }
+
+      &:selected > .label > .track {
+        -fx-background-color : -md-sys-color-on-surface, -md-sys-color-on-surface;
+
+        > .box > .handle {
+          -fx-background-color : -md-sys-color-surface;
+        }
+
+        > .box > .mfx-icon-wrapper > .mfx-font-icon {
+          -mfx-color : -md-sys-color-on-surface;
+        }
+      }
+    }
+  }
+}

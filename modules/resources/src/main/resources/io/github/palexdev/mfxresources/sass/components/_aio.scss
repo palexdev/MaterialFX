@@ -27,6 +27,7 @@
 @use 'radiobuttons' as *;
 @use 'scrolling-misc' as *;
 @use 'splitbuttons' as *;
+@use 'switches' as *;
 
 @mixin MaterialComponents() {
   @include SurfaceRipples();
@@ -40,4 +41,5 @@
   @include MaterialPopups();
   @include MaterialRadioButtons();
   @include MaterialSplitButtons();
+  @include MaterialSwitches();
 }
