@@ -16,40 +16,7 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 @import url(../../../fonts/Fonts.css);
-/*!
- * Copyright (C) 2026 Parisi Alessandro - alessandro.parisi406@gmail.com
- * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
- *
- * MaterialFX is free software: you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation; either version 3 of the License,
- * or (at your option) any later version.
- *
- * MaterialFX is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
- */
-/*!
- * Copyright (C) 2026 Parisi Alessandro - alessandro.parisi406@gmail.com
- * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
- *
- * MaterialFX is free software: you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation; either version 3 of the License,
- * or (at your option) any later version.
- *
- * MaterialFX is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
- */
+
 * {
   -fx-font-smoothing-type: GRAY
 }
@@ -1821,4 +1788,153 @@
 
 .mfx-split-button:open > .mfx-button.trailing > .label > .mfx-font-icon {
   -fx-rotate: 180deg
+}
+
+.mfx-switch {
+  -fx-font-family: "MontSerrat Medium";
+  -fx-font-size: 14px;
+  -fx-line-spacing: 20px;
+  -fx-text-fill: -md-sys-color-on-surface;
+  -fx-graphic-text-gap: 4px
+}
+
+.mfx-switch > .label > .track {
+  -fx-min-width: 52px;
+  -fx-min-height: 32px;
+  -fx-max-width: 52px;
+  -fx-max-height: 32px;
+  -fx-background-color: -md-sys-color-outline,-md-sys-color-surface-container-highest;
+  -fx-background-insets: 0px,2px;
+  -fx-background-radius: 999px;
+  transition-property: -fx-background-color;
+  transition-timing-function: cubic-bezier(0.31,0.94,0.34,1);
+  transition-duration: 150ms
+}
+
+.mfx-switch > .label > .track > .box {
+  -fx-min-width: 40px;
+  -fx-min-height: 40px;
+  -fx-max-width: 40px;
+  -fx-max-height: 40px;
+  -fx-translate-x: -4px;
+  transition-property: -fx-translate-x;
+  transition-timing-function: cubic-bezier(0.42,1.67,0.21,0.9);
+  transition-duration: 350ms
+}
+
+.mfx-switch > .label > .track > .box > .surface {
+  -mfx-disabled-opacity: 0;
+  -fx-background-color: -md-sys-color-on-surface;
+  -fx-background-radius: 999px
+}
+
+.mfx-switch > .label > .track > .box > .surface-ripple {
+  -mfx-ripple-color: -md-sys-color-on-surface
+}
+
+.mfx-switch > .label > .track > .box > .handle {
+  -fx-min-width: 16px;
+  -fx-min-height: 16px;
+  -fx-max-width: 16px;
+  -fx-max-height: 16px;
+  -fx-background-color: -md-sys-color-outline;
+  -fx-background-radius: 999px;
+  -fx-scale-x: 1;
+  -fx-scale-y: 1;
+  transition-property: -fx-scale-x,-fx-scale-y,-fx-background-color;
+  transition-timing-function: cubic-bezier(0.42,1.67,0.21,0.9);
+  transition-duration: 350ms
+}
+
+.mfx-switch > .label > .track > .box > .mfx-icon-wrapper {
+  -mfx-animated: true;
+  -mfx-animation: SCALE
+}
+
+.mfx-switch > .label > .track > .box > .mfx-icon-wrapper > .mfx-font-icon {
+  -mfx-size: 16px;
+  -mfx-color: -md-sys-color-surface-container-highest
+}
+
+.mfx-switch > .label > .track > .box:with-icon > .handle {
+  -fx-scale-x: 1.5;
+  -fx-scale-y: 1.5
+}
+
+.mfx-switch:focus-visible > .label > .track > .box > .handle,
+.mfx-switch:hover > .label > .track > .box > .handle,
+.mfx-switch:pressed > .label > .track > .box > .handle {
+  -fx-background-color: -md-sys-color-on-surface-variant
+}
+
+.mfx-switch:selected > .label > .track {
+  -fx-background-color: -md-sys-color-primary,-md-sys-color-primary
+}
+
+.mfx-switch:selected > .label > .track > .box {
+  -fx-translate-x: 16px
+}
+
+.mfx-switch:selected > .label > .track > .box > .surface {
+  -fx-background-color: -md-sys-color-primary
+}
+
+.mfx-switch:selected > .label > .track > .box > .surface-ripple {
+  -mfx-ripple-color: -md-sys-color-primary
+}
+
+.mfx-switch:selected > .label > .track > .box > .handle {
+  -fx-background-color: -md-sys-color-on-primary;
+  -fx-scale-x: 1.5;
+  -fx-scale-y: 1.5
+}
+
+.mfx-switch:selected > .label > .track > .box > .mfx-icon-wrapper > .mfx-font-icon {
+  -mfx-color: -md-sys-color-primary
+}
+
+.mfx-switch:selected:focus-visible > .label > .track > .box > .handle,
+.mfx-switch:selected:hover > .label > .track > .box > .handle,
+.mfx-switch:selected:pressed > .label > .track > .box > .handle {
+  -fx-background-color: -md-sys-color-primary-container
+}
+
+.mfx-switch:pressed > .label > .track > .box > .handle {
+  -fx-scale-x: 1.75;
+  -fx-scale-y: 1.75
+}
+
+.mfx-switch:focus-visible > .label > .track {
+  -fx-border-color: -md-sys-color-secondary;
+  -fx-border-insets: -5px;
+  -fx-border-width: 3px;
+  -fx-border-radius: 999px
+}
+
+.mfx-switch:disabled {
+  -fx-opacity: 38%
+}
+
+.mfx-switch:disabled > .label > .track {
+  -fx-background-color: -md-sys-color-on-surface,-md-sys-color-surface-container-highest
+}
+
+.mfx-switch:disabled > .label > .track > .box > .handle {
+  -fx-background-color: -md-sys-color-on-surface
+}
+
+.mfx-switch:disabled > .label > .track > .box > .mfx-icon-wrapper > .mfx-font-icon {
+  -mfx-color: -md-sys-color-surface-container-highest
+}
+
+.mfx-switch:disabled:selected > .label > .track {
+  -fx-background-color: -md-sys-color-on-surface,-md-sys-color-on-surface
+}
+
+.mfx-switch:disabled:selected > .label > .track > .box > .handle {
+  -fx-background-color: -md-sys-color-surface
+}
+
+.mfx-switch:disabled:selected > .label > .track > .box > .mfx-icon-wrapper > .mfx-font-icon {
+  -mfx-color: -md-sys-color-on-surface
 }
