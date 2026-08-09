@@ -85,8 +85,7 @@ public class MFXCheckboxSkin extends MFXLabeledSkin {
             return clip;
         });
         rg.setMeToPosConverter(me ->
-            (me.getButton() == MouseButton.PRIMARY) ? Position.of(me.getX(), me.getY()) : null
-        );
+            (me.getButton() == MouseButton.PRIMARY) ? Position.of(me.getX(), me.getY()) : null);
         MFXIconWrapper mark = new MFXIconWrapper();
         mark.getStyleClass().add("mark");
         box.getChildren().setAll(surface, rg, mark);

@@ -24,8 +24,9 @@ import java.util.function.Supplier;
 import io.github.palexdev.mfxcomponents.controls.base.MFXToggle;
 import io.github.palexdev.mfxcomponents.skins.MFXRadioButtonSkin;
 import io.github.palexdev.mfxcore.controls.MFXSkinBase;
-import io.github.palexdev.mfxcore.controls.MFXStyleable;
 import javafx.scene.Node;
+
+import static io.github.palexdev.mfxcore.controls.MFXStyleable.styleClasses;
 
 /// Custom implementation of a radio button which extends [MFXToggle] and has its own skin [MFXRadioButtonSkin].<br >
 /// The default style class of this component is: '.mfx-radio-button'.
@@ -59,6 +60,6 @@ public class MFXRadioButton extends MFXToggle {
 
     @Override
     public List<String> defaultStyleClasses() {
-        return MFXStyleable.styleClasses("mfx-radio-button");
+        return styleClasses("mfx-radio-button");
     }
 }

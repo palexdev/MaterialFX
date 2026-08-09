@@ -86,8 +86,7 @@ public class MFXRadioButtonSkin extends MFXLabeledSkin {
             return clip;
         });
         rg.setMeToPosConverter(me ->
-            (me.getButton() == MouseButton.PRIMARY) ? Position.of(me.getX(), me.getY()) : null
-        );
+            (me.getButton() == MouseButton.PRIMARY) ? Position.of(me.getX(), me.getY()) : null);
         Indicator indicator = new Indicator();
         box.getChildren().setAll(surface, rg, indicator);
         box.getStyleClass().add("box");
