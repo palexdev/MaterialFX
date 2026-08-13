@@ -17,7 +17,7 @@
  */
 
 @use '../../base/typography' as *;
-@use '../../base/vars' as *;
+@use '../../base/shapes' as shapes;
 @use '../layers' as *;
 
 /*
@@ -33,8 +33,8 @@
 
     &.xs {
       @include LabelLarge();
-      -fx-background-radius : shape('medium');
-      -fx-border-radius     : shape('medium');
+      -fx-background-radius : shapes.medium();
+      -fx-border-radius     : shapes.medium();
       -fx-padding           : 0px 12px 0px 12px;
       -mfx-min-size : 40px 40px;
 
@@ -43,7 +43,7 @@
       }
 
       > .surface {
-        -fx-background-radius : shape('medium');
+        -fx-background-radius : shapes.medium();
       }
 
       &:extended {
@@ -53,8 +53,8 @@
 
     &.s {
       @include TitleMedium();
-      -fx-background-radius : shape('large');
-      -fx-border-radius     : shape('large');
+      -fx-background-radius : shapes.large();
+      -fx-border-radius     : shapes.large();
       -fx-padding           : 0px 16px 0px 16px;
       -mfx-min-size : 56px 56px;
 
@@ -63,7 +63,7 @@
       }
 
       > .surface {
-        -fx-background-radius : shape('large');
+        -fx-background-radius : shapes.large();
       }
 
       &:extended {
@@ -73,8 +73,8 @@
 
     &.m {
       @include TitleLarge();
-      -fx-background-radius : shape('large-increased');
-      -fx-border-radius     : shape('large-increased');
+      -fx-background-radius : shapes.large-increased();
+      -fx-border-radius     : shapes.large-increased();
       -fx-padding           : 0px 26px 0px 26px;
       -mfx-min-size : 80px 80px;
 
@@ -83,7 +83,7 @@
       }
 
       > .surface {
-        -fx-background-radius : shape('large-increased');
+        -fx-background-radius : shapes.large-increased();
       }
 
       &:extended {
@@ -93,8 +93,8 @@
 
     &.l {
       @include HeadlineSmall();
-      -fx-background-radius : shape('extra-large');
-      -fx-border-radius     : shape('extra-large');
+      -fx-background-radius : shapes.extra-large();
+      -fx-border-radius     : shapes.extra-large();
       -fx-padding           : 0px 28px 0px 28px;
       -mfx-min-size : 96px 96px;
 
@@ -103,7 +103,7 @@
       }
 
       > .surface {
-        -fx-background-radius : shape('extra-large');
+        -fx-background-radius : shapes.extra-large();
       }
 
       &:extended {

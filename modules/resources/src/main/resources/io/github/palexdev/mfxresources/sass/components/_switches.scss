@@ -17,7 +17,8 @@
  */
 
 @use '../base/typography' as *;
-@use '../base/vars' as *;
+@use '../base/motion' as motion;
+@use '../base/states' as states;
 @use 'layers' as *;
 
 // TODO maybe we could extract it as a util
@@ -31,6 +32,7 @@
 @mixin MaterialSwitches() {
   .mfx-switch {
     @include LabelLarge();
+    @include SurfaceAt('> .label > .track > .box > .surface');
     -fx-text-fill        : -md-sys-color-on-surface;
     -fx-graphic-text-gap : 4px;
 
@@ -40,19 +42,20 @@
       -fx-background-color  : -md-sys-color-outline, -md-sys-color-surface-container-highest;
       -fx-background-insets : 0px, 2px;
       -fx-background-radius : 999px;
-      transition-property   : -fx-background-color;
-      @include motion('expressive-fast-effects');
+      transition            : motion.transition(-fx-background-color, motion.expressive-fast-effects());
 
       > .box {
         @include Square(40px);
         -fx-translate-x     : -4px;
-        transition-property : -fx-translate-x;
-        @include motion('expressive-fast-spatial');
+        transition          : motion.transition(-fx-translate-x, motion.expressive-fast-spatial());
 
         > .surface {
-          -mfx-disabled-opacity : 0.0;
           -fx-background-color  : -md-sys-color-on-surface;
           -fx-background-radius : 999px;
+
+          &:disabled {
+            -fx-opacity : 0.0;
+          }
         }
 
         > .surface-ripple {
@@ -65,8 +68,10 @@
           -fx-background-radius : 999px;
           -fx-scale-x           : 1.0;
           -fx-scale-y           : 1.0;
-          transition-property   : -fx-scale-x, -fx-scale-y, -fx-background-color;
-          @include motion('expressive-fast-spatial');
+          transition            :
+            motion.transition(-fx-background-color, motion.expressive-fast-effects()),
+            motion.transition(-fx-scale-x, motion.expressive-fast-spatial()),
+            motion.transition(-fx-scale-y, motion.expressive-fast-spatial());
         }
 
         > .mfx-icon-wrapper {
@@ -137,7 +142,7 @@
     }
 
     &:disabled {
-      -fx-opacity : opacity('disabled-text');
+      -fx-opacity : states.disabled-text();
 
       > .label > .track {
         -fx-background-color : -md-sys-color-on-surface, -md-sys-color-surface-container-highest;

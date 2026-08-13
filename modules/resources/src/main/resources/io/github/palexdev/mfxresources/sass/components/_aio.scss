@@ -30,6 +30,7 @@
 @use 'switches' as *;
 
 @mixin MaterialComponents() {
+  @include Surfaces();
   @include SurfaceRipples();
   @include MaterialScrolling();
   @include MaterialButtons();

@@ -17,12 +17,14 @@
  */
 
 @use '../base/typography' as *;
-@use '../base/vars' as *;
+@use '../base/motion' as motion;
+@use '../base/states' as states;
 @use 'layers' as *;
 
 @mixin MaterialRadioButtons() {
   .mfx-radio-button {
     @include LabelLarge();
+    @include SurfaceAt('> .label > .box > .surface');
     -fx-text-fill        : -md-sys-color-on-surface;
     -fx-graphic-text-gap : 4px;
 
@@ -48,14 +50,21 @@
         -fx-opacity           : 0%;
         -fx-scale-x           : 0%;
         -fx-scale-y           : 0%;
-        transition-property   : -fx-opacity, -fx-scale-x, -fx-scale-y;
-        @include motion('expressive-fast-effects'); // it's faster, looks better
+        // Unchecking must not shrink the dot: it fades at full scale, then the scale resets once invisible.
+        // The duration must not be 0, or TransitionTimer pins the property at its start value and never ends
+        transition            :
+          motion.transition(-fx-opacity, (50ms, linear)),
+          motion.transition(-fx-scale-x, (1ms, linear), 50ms),
+          motion.transition(-fx-scale-y, (1ms, linear), 50ms);
       }
 
       > .surface {
-        -mfx-disabled-opacity : 0.0;
         -fx-background-color  : -md-sys-color-primary;
         -fx-background-radius : 999px;
+
+        &:disabled {
+          -fx-opacity : 0.0;
+        }
       }
 
       > .surface-ripple {
@@ -73,6 +82,10 @@
           -fx-opacity : 100%;
           -fx-scale-x : 60%;
           -fx-scale-y : 60%;
+          transition  :
+            motion.transition(-fx-opacity, (50ms, linear)),
+            motion.transition(-fx-scale-x, motion.expressive-fast-spatial()),
+            motion.transition(-fx-scale-y, motion.expressive-fast-spatial());
         }
       }
     }
@@ -85,7 +98,7 @@
     }
 
     &:disabled {
-      -fx-opacity : opacity('disabled-text');
+      -fx-opacity : states.disabled-text();
 
       > .label > .box {
         > .outer {

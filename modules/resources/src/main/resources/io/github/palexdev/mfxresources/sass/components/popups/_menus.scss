@@ -17,7 +17,8 @@
  */
 
 @use '../../base/typography' as *;
-@use '../../base/vars' as *;
+@use '../../base/shapes' as shapes;
+@use '../../base/states' as states;
 @use '../layers' as *;
 
 // We are not 100% following the specs because Google designers are incompetent and use elephant sizes for everything
@@ -25,7 +26,7 @@
 @mixin MaterialMenus() {
   .mfx-menu {
     -fx-background-color  : -md-sys-color-surface-container;
-    -fx-background-radius : shape('small');
+    -fx-background-radius : shapes.small();
     -fx-effect            : dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.16, 0, 3);
     -fx-min-width : 160px;
     -fx-max-width         : 280px;
@@ -78,43 +79,43 @@
         }
 
         &:first-child > .pseudo-surface {
-          -fx-background-radius : shape('small') shape('small') 0px 0px;
+          -fx-background-radius : shapes.small() shapes.small() 0px 0px;
         }
 
         &:last-child > .pseudo-surface {
-          -fx-background-radius : 0px 0px shape('small') shape('small');
+          -fx-background-radius : 0px 0px shapes.small() shapes.small();
         }
 
         &:only-child > .pseudo-surface {
-          -fx-background-radius : shape('small');
+          -fx-background-radius : shapes.small();
         }
 
         &:hover {
           > .pseudo-surface {
-            -fx-opacity : opacity('hover');
+            -fx-opacity : states.hover();
           }
         }
 
         &:focused {
           > .pseudo-surface {
-            -fx-opacity : opacity('focused');
+            -fx-opacity : states.focused();
           }
         }
 
         &:pressed,
         &:selected {
           > .pseudo-surface {
-            -fx-opacity : opacity('pressed');
+            -fx-opacity : states.pressed();
           }
         }
 
         &:disabled {
           > .pseudo-surface {
-            -fx-opacity : opacity('disabled');
+            -fx-opacity : states.disabled();
           }
 
           > .label {
-            -fx-opacity : opacity('disabled-text');
+            -fx-opacity : states.disabled-text();
           }
         }
       }

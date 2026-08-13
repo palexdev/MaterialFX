@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * Copyright (C) 2026 Parisi Alessandro - alessandro.parisi406@gmail.com
  * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
  *
  * MaterialFX is free software: you can redistribute it and/or
@@ -16,32 +16,42 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
+@function uniform($val) {
+  @return $val $val $val $val;
+}
 
-@mixin MaterialButtonsText() {
-  .mfx-button.text {
-    -fx-background-color : transparent;
-    -fx-text-fill        : -md-sys-color-primary;
+@function none() {
+  @return 0px;
+}
 
-    > .label > .mfx-font-icon {
-      -mfx-color : -md-sys-color-primary;
-    }
+@function extra-small() {
+  @return 4px;
+}
 
-    > .surface {
-      -fx-background-color : -md-sys-color-primary;
-    }
+@function small() {
+  @return 8px;
+}
 
-    > .mfx-ripple-generator {
-      -mfx-ripple-color : -md-sys-color-primary;
-    }
+@function medium() {
+  @return 12px;
+}
 
-    // Unselected
-    &.toggle {
-      -fx-text-fill : -md-sys-color-on-surface;
-    }
+@function large() {
+  @return 16px;
+}
 
-    // Selected
-    &.toggle:selected {
-      -fx-text-fill : -md-sys-color-primary;
-    }
-  }
+@function large-increased() {
+  @return 20px;
+}
+
+@function extra-large() {
+  @return 28px;
+}
+
+@function extra-extra-large() {
+  @return 48px;
+}
+
+@function full() {
+  @return 999px;
 }

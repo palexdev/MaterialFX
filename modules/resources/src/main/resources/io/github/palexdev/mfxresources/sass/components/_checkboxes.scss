@@ -17,12 +17,13 @@
  */
 
 @use '../base/typography' as *;
-@use '../base/vars' as *;
+@use '../base/states' as states;
 @use 'layers' as *;
 
 @mixin MaterialCheckboxes() {
   .mfx-checkbox {
     @include LabelLarge();
+    @include SurfaceAt('> .label > .box > .surface');
     -fx-text-fill        : -md-sys-color-on-surface;
     -fx-graphic-text-gap : 4px;
 
@@ -48,9 +49,12 @@
       }
 
       > .surface {
-        -mfx-disabled-opacity : 0.0;
         -fx-background-color  : -md-sys-color-primary;
         -fx-background-radius : 999px;
+
+        &:disabled {
+          -fx-opacity : 0.0;
+        }
       }
 
       > .surface-ripple {
@@ -103,7 +107,7 @@
     &:disabled > .label > .box > .mark {
       -fx-background-color : transparent;
       -fx-border-color     : -md-sys-color-secondary;
-      -fx-opacity          : opacity('disabled-text');
+      -fx-opacity          : states.disabled-text();
     }
 
     &:disabled:selected > .label > .box > .mark,

@@ -16,21 +16,53 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-@use '../base/vars' as *;
+@use '../base/motion' as motion;
+@use '../base/states' as states;
 
 @mixin Surfaces() {
   .surface {
-    -mfx-disabled-opacity : opacity('disabled');
-    -mfx-focus-opacity    : opacity('focused');
-    -mfx-hover-opacity    : opacity('hover');
-    -mfx-press-opacity    : opacity('pressed');
-    -mfx-drag-opacity     : opacity('dragged');
+    -fx-opacity : 0.0;
+    transition  : motion.transition(-fx-opacity, (200ms, linear));
+  }
+
+  *:hover > .surface {
+    -fx-opacity : states.hover();
+  }
+
+  *:pressed:hover > .surface {
+    -fx-opacity : states.pressed();
+  }
+
+  *:focused > .surface,
+  *:focus-within > .surface {
+    -fx-opacity : states.focused();
+  }
+
+  *:disabled > .surface {
+    -fx-opacity : states.disabled();
+  }
+}
+
+// Surface not a direct child of the control: only :disabled propagates down, so the interaction states must be keyed
+// on the control itself, spelling out the path.
+@mixin SurfaceAt($path) {
+  &:hover #{$path} {
+    -fx-opacity : states.hover();
+  }
+
+  &:pressed:hover #{$path} {
+    -fx-opacity : states.pressed();
+  }
+
+  &:focused #{$path},
+  &:focus-within #{$path} {
+    -fx-opacity : states.focused();
   }
 }
 
 @mixin SurfaceRipples() {
   .surface-ripple {
-    -fx-opacity : opacity('ripple');
+    -fx-opacity : 36%;
   }
 }
 

@@ -1,0 +1,84 @@
+/*
+ * Copyright (C) 2026 Parisi Alessandro - alessandro.parisi406@gmail.com
+ * This file is part of MaterialFX (https://github.com/palexdev/MaterialFX)
+ *
+ * MaterialFX is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * MaterialFX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@use 'sass:list';
+@use 'sass:meta';
+
+@function transition($prop, $motion, $delay: null) {
+  @if meta.type-of($motion) != 'list' or list.length($motion) != 2 {
+    @error '`#{$prop}`: $motion must be a (duration, easing) pair, got `#{$motion}`.';
+  }
+  $duration : list.nth($motion, 1);
+  $easing   : list.nth($motion, 2);
+  @if $delay != null {
+    @return $prop $duration $easing $delay;
+  }
+  @return $prop $duration $easing;
+}
+
+// Expressive
+
+@function expressive-fast-spatial() {
+  @return 350ms, cubic-bezier(0.42, 1.67, 0.21, 0.90);
+}
+
+@function expressive-default-spatial() {
+  @return 500ms, cubic-bezier(0.38, 1.21, 0.22, 1.0);
+}
+
+@function expressive-slow-spatial() {
+  @return 650ms, cubic-bezier(0.39, 1.29, 0.35, 0.98);
+}
+
+@function expressive-fast-effects() {
+  @return 150ms, cubic-bezier(0.31, 0.94, 0.34, 1.0);
+}
+
+@function expressive-default-effects() {
+  @return 200ms, cubic-bezier(0.34, 0.80, 0.34, 1.0);
+}
+
+@function expressive-slow-effects() {
+  @return 300ms, cubic-bezier(0.34, 0.88, 0.34, 1.0);
+}
+
+// Standard
+
+@function standard-fast-spatial() {
+  @return 350ms, cubic-bezier(0.27, 1.06, 0.18, 1.0);
+}
+
+@function standard-default-spatial() {
+  @return 500ms, cubic-bezier(0.27, 1.06, 0.18, 1.0);
+}
+
+@function standard-slow-spatial() {
+  @return 750ms, cubic-bezier(0.27, 1.06, 0.18, 1.0);
+}
+
+@function standard-fast-effects() {
+  @return 150ms, cubic-bezier(0.31, 0.94, 0.34, 1.0);
+}
+
+@function standard-default-effects() {
+  @return 200ms, cubic-bezier(0.34, 0.80, 0.34, 1.0);
+}
+
+@function standard-slow-effects() {
+  @return 300ms, cubic-bezier(0.34, 0.88, 0.34, 1.0);
+}

@@ -17,7 +17,7 @@
  */
 
 @use '../base/typography' as *;
-@use '../base/vars' as *;
+@use '../base/shapes' as shapes;
 
 @mixin MaterialScrolling() {
   @include ScrollPanes();
@@ -28,7 +28,7 @@
 @mixin ScrollPanes() {
   .vfx-scroll-pane {
     -vfx-auto-hide-bars     : true;
-    -vfx-clip-border-radius : shape('large');
+    -vfx-clip-border-radius : shapes.large();
     -vfx-layout-mode        : COMPACT;
     -vfx-min-bars-opacity   : 0.2;
     -vfx-smooth-scroll      : true;
@@ -38,7 +38,7 @@
 @mixin MaterialLists() {
   .vfx-list {
     -fx-background-color  : -md-sys-color-surface-container;
-    -fx-background-radius : shape('small');
+    -fx-background-radius : shapes.small();
   }
 }
 
@@ -64,16 +64,48 @@
       -mfx-ripple-color : -md-sys-color-on-surface;
     }
 
-    &:first-child > .surface {
-      -fx-background-radius : shape('small') shape('small') 0px 0px;
+    &:selected {
+      -fx-background-color : -md-sys-color-secondary-container;
+
+      > .label {
+        -fx-text-fill : -md-sys-color-on-secondary-container;
+
+        > .mfx-font-icon {
+          -mfx-color : -md-sys-color-on-secondary-container;
+        }
+      }
+
+      > .surface {
+        -fx-background-color : -md-sys-color-on-secondary-container;
+      }
+
+      > .mfx-ripple-generator {
+        -mfx-ripple-color : -md-sys-color-on-secondary-container;
+      }
     }
 
-    &:last-child > .surface {
-      -fx-background-radius : 0px 0px shape('small') shape('small');
+    &:first-child {
+      -fx-background-radius : shapes.small() shapes.small() 0px 0px;
+
+      > .surface {
+        -fx-background-radius : shapes.small() shapes.small() 0px 0px;
+      }
     }
 
-    &:only-child > .surface {
-      -fx-background-radius : shape('small');
+    &:last-child {
+      -fx-background-radius : 0px 0px shapes.small() shapes.small();
+
+      > .surface {
+        -fx-background-radius : 0px 0px shapes.small() shapes.small();
+      }
+    }
+
+    &:only-child {
+      -fx-background-radius : shapes.small();
+
+      > .surface {
+        -fx-background-radius : shapes.small();
+      }
     }
   }
 }

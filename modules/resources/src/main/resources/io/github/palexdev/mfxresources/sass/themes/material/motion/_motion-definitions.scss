@@ -16,36 +16,42 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-@use '../../../base/vars' as *;
+@use '../../../base/motion' as motion;
+@use '../../../base/shapes' as shapes;
+
+// TODO should we move surfaces, radio and switches here
 
 @mixin MaterialButtonsMotion() {
   .mfx-button,
   .mfx-icon-button {
-    transition-property : -fx-background-color, -fx-background-radius;
-    @include motion('expressive-fast-spatial');
+    transition :
+      motion.transition(-fx-background-color, motion.expressive-fast-effects()),
+      motion.transition(-fx-background-radius, motion.expressive-fast-spatial());
 
     > .surface {
-      transition-property : -fx-background-color, -fx-background-radius;
-      @include motion('expressive-fast-spatial');
+      transition :
+        motion.transition(-fx-opacity, (200ms, linear)),
+        motion.transition(-fx-background-color, motion.expressive-fast-effects()),
+        motion.transition(-fx-background-radius, motion.expressive-fast-spatial());
     }
 
     &.xs.rounded:pressed:hover,
     &.s.rounded:pressed:hover,
     &.xs.squared:pressed:hover,
     &.s.squared:pressed:hover {
-      -fx-background-radius : shape('small');
+      -fx-background-radius : shapes.small();
 
       > .surface {
-        -fx-background-radius : shape('small');
+        -fx-background-radius : shapes.small();
       }
     }
 
     &.m.rounded:pressed:hover,
     &.m.squared:pressed:hover {
-      -fx-background-radius : shape('medium');
+      -fx-background-radius : shapes.medium();
 
       > .surface {
-        -fx-background-radius : shape('medium');
+        -fx-background-radius : shapes.medium();
       }
     }
 
@@ -53,10 +59,10 @@
     &.xl.rounded:pressed:hover,
     &.l.squared:pressed:hover,
     &.xl.squared:pressed:hover {
-      -fx-background-radius : shape('large');
+      -fx-background-radius : shapes.large();
 
       > .surface {
-        -fx-background-radius : shape('large');
+        -fx-background-radius : shapes.large();
       }
     }
   }
@@ -69,22 +75,24 @@
     &.m,
     &.l,
     &.xl {
-      transition-property : -fx-background-color, -fx-background-radius, -fx-border-radius;
-      @include motion('expressive-fast-spatial');
+      transition :
+        motion.transition(-fx-background-color, motion.expressive-fast-effects()),
+        motion.transition(-fx-background-radius, motion.expressive-fast-spatial()),
+        motion.transition(-fx-border-radius, motion.expressive-fast-spatial());
     }
 
     &.xs:pressed:hover,
     &.s:pressed:hover {
-        -fx-border-radius : shape('small');
+        -fx-border-radius : shapes.small();
     }
 
     &.m:pressed:hover {
-        -fx-border-radius : shape('medium');
+        -fx-border-radius : shapes.medium();
     }
 
     &.l:pressed:hover,
     &.xl:pressed:hover {
-        -fx-border-radius : shape('large');
+        -fx-border-radius : shapes.large();
     }
   }
 }
@@ -95,8 +103,12 @@
     > .mfx-icon-button {
       -fx-scale-x         : 1.0;
       -fx-scale-y         : 1.0;
-      transition-property : -fx-background-color, -fx-background-radius, -fx-border-radius, -fx-scale-x, -fx-scale-y;
-      @include motion('standard-fast-spatial');
+      transition :
+        motion.transition(-fx-background-color, motion.standard-fast-effects()),
+        motion.transition(-fx-background-radius, motion.standard-fast-spatial()),
+        motion.transition(-fx-border-radius, motion.standard-fast-spatial()),
+        motion.transition(-fx-scale-x, motion.standard-fast-spatial()),
+        motion.transition(-fx-scale-y, motion.standard-fast-spatial());
 
       &:pressed:hover {
         -fx-scale-x : 1.025;
@@ -110,12 +122,17 @@
   .mfx-buttons-group.connected {
     > .mfx-button,
     > .mfx-icon-button {
-      transition-property : -fx-background-color, -fx-background-radius, -fx-border-color, -fx-border-radius;
-      @include motion('expressive-fast-spatial');
+      transition :
+        motion.transition(-fx-background-color, motion.expressive-fast-effects()),
+        motion.transition(-fx-border-color, motion.expressive-fast-effects()),
+        motion.transition(-fx-background-radius, motion.expressive-fast-spatial()),
+        motion.transition(-fx-border-radius, motion.expressive-fast-spatial());
 
       > .surface {
-        transition-property : -fx-background-color, -fx-background-radius;
-        @include motion('expressive-fast-spatial');
+        transition :
+          motion.transition(-fx-opacity, (200ms, linear)),
+          motion.transition(-fx-background-color, motion.expressive-fast-effects()),
+          motion.transition(-fx-background-radius, motion.expressive-fast-spatial());
       }
     }
 
@@ -433,17 +450,21 @@
 
 @mixin MaterialFloatingActionButtonsMenuMotion() {
   .mfx-fab-menu > .entry {
-    transition-property : -fx-background-color, -fx-background-radius, -fx-scale-x, -fx-scale-y;
-    @include motion('expressive-fast-spatial');
+    transition :
+      motion.transition(-fx-background-color, motion.expressive-fast-effects()),
+      motion.transition(-fx-background-radius, motion.expressive-fast-spatial()),
+      motion.transition(-fx-scale-x, motion.expressive-fast-spatial()),
+      motion.transition(-fx-scale-y, motion.expressive-fast-spatial());
   }
 }
 
 @mixin MaterialSplitButtonsMotion() {
   .mfx-split-button {
     > .mfx-button > .surface {
-      // I fucking hate JavaFX
-      transition-property : -fx-background-color, -fx-background-radius;
-      transition-duration : 0s;
+      transition :
+        motion.transition(-fx-opacity, (200ms, linear)),
+        motion.transition(-fx-background-color, motion.expressive-fast-effects()),
+        motion.transition(-fx-background-radius, motion.expressive-fast-spatial());
     }
 
     // XS
@@ -597,8 +618,7 @@
     }
 
     > .mfx-button.trailing > .label > .mfx-font-icon {
-      transition-property : -fx-rotate;
-      @include motion('standard-fast-spatial');
+      transition : motion.transition(-fx-rotate, motion.standard-fast-spatial());
     }
   }
 }

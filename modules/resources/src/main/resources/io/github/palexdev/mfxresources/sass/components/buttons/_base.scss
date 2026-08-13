@@ -19,7 +19,8 @@
 @use '../layers' as *;
 @use '../../abstracts/utils' as *;
 @use '../../base/typography' as *;
-@use '../../base/vars' as *;
+@use '../../base/shapes' as shapes;
+@use '../../base/states' as states;
 
 @mixin MaterialButtonsBase() {
   .mfx-button {
@@ -123,11 +124,11 @@
     &.xs:selected,
     &.s.squared,
     &.s:selected {
-      -fx-background-radius : shape('medium');
-      -fx-border-radius     : shape('medium');
+      -fx-background-radius : shapes.medium();
+      -fx-border-radius     : shapes.medium();
 
       & > .surface {
-        -fx-background-radius : shape('medium');
+        -fx-background-radius : shapes.medium();
       }
     }
 
@@ -151,11 +152,11 @@
 
     &.m.squared,
     &.m:selected {
-      -fx-background-radius : shape('large');
-      -fx-border-radius     : shape('large');
+      -fx-background-radius : shapes.large();
+      -fx-border-radius     : shapes.large();
 
       & > .surface {
-        -fx-background-radius : shape('large');
+        -fx-background-radius : shapes.large();
       }
     }
 
@@ -172,11 +173,11 @@
     &.l:selected,
     &.xl.squared,
     &.xl:selected {
-      -fx-background-radius : shape('extra-large');
-      -fx-border-radius     : shape('extra-large');
+      -fx-background-radius : shapes.extra-large();
+      -fx-border-radius     : shapes.extra-large();
 
       > .surface {
-        -fx-background-radius : shape('extra-large');
+        -fx-background-radius : shapes.extra-large();
       }
     }
 
@@ -208,10 +209,10 @@
     &.tonal:disabled {
       -fx-background-color : null() !important; /* crucial!! fixes color "flicker", must be null!! (transparent is bugged)*/
       -fx-text-fill        : -md-sys-color-on-surface !important;
-      -mfx-text-opacity    : opacity('disabled-text') !important;
+      -mfx-text-opacity    : states.disabled-text() !important;
 
       > .label > .mfx-font-icon {
-        -fx-opacity : opacity('disabled-text') !important;
+        -fx-opacity : states.disabled-text() !important;
         -mfx-color  : -md-sys-color-on-surface !important;
       }
 
