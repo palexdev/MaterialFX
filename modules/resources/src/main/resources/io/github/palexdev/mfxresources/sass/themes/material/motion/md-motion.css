@@ -16,12 +16,13 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 .mfx-button,
-.mfx-button>.surface,
-.mfx-icon-button,
-.mfx-icon-button>.surface {
-  transition-property: -fx-background-color,-fx-background-radius;
-  transition-timing-function: cubic-bezier(0.42,1.67,0.21,0.9);
-  transition-duration: 350ms
+.mfx-icon-button {
+  transition: -fx-background-color 150ms cubic-bezier(.31, .94, .34, 1),-fx-background-radius 350ms cubic-bezier(.42, 1.67, .21, .9)
+}
+
+.mfx-button > .surface,
+.mfx-icon-button > .surface {
+  transition: -fx-opacity .2s linear,-fx-background-color 150ms cubic-bezier(.31, .94, .34, 1),-fx-background-radius 350ms cubic-bezier(.42, 1.67, .21, .9)
 }
 
 .mfx-button.s.rounded:pressed:hover,
@@ -92,9 +93,7 @@
 .mfx-icon-button.outlined.s,
 .mfx-icon-button.outlined.xl,
 .mfx-icon-button.outlined.xs {
-  transition-property: -fx-background-color,-fx-background-radius,-fx-border-radius;
-  transition-timing-function: cubic-bezier(0.42,1.67,0.21,0.9);
-  transition-duration: 350ms
+  transition: -fx-background-color 150ms cubic-bezier(.31, .94, .34, 1),-fx-background-radius 350ms cubic-bezier(.42, 1.67, .21, .9),-fx-border-radius 350ms cubic-bezier(.42, 1.67, .21, .9)
 }
 
 .mfx-button.outlined.s:pressed:hover,
@@ -120,9 +119,7 @@
 .mfx-buttons-group.standard > .mfx-icon-button {
   -fx-scale-x: 1;
   -fx-scale-y: 1;
-  transition-property: -fx-background-color,-fx-background-radius,-fx-border-radius,-fx-scale-x,-fx-scale-y;
-  transition-timing-function: cubic-bezier(0.27,1.06,0.18,1);
-  transition-duration: 350ms
+  transition: -fx-background-color 150ms cubic-bezier(.31, .94, .34, 1),-fx-background-radius 350ms cubic-bezier(.27, 1.06, .18, 1),-fx-border-radius 350ms cubic-bezier(.27, 1.06, .18, 1),-fx-scale-x 350ms cubic-bezier(.27, 1.06, .18, 1),-fx-scale-y 350ms cubic-bezier(.27, 1.06, .18, 1)
 }
 
 .mfx-buttons-group.standard > .mfx-button:pressed:hover,
@@ -133,16 +130,12 @@
 
 .mfx-buttons-group.connected > .mfx-button,
 .mfx-buttons-group.connected > .mfx-icon-button {
-  transition-property: -fx-background-color,-fx-background-radius,-fx-border-color,-fx-border-radius;
-  transition-timing-function: cubic-bezier(0.42,1.67,0.21,0.9);
-  transition-duration: 350ms
+  transition: -fx-background-color 150ms cubic-bezier(.31, .94, .34, 1),-fx-border-color 150ms cubic-bezier(.31, .94, .34, 1),-fx-background-radius 350ms cubic-bezier(.42, 1.67, .21, .9),-fx-border-radius 350ms cubic-bezier(.42, 1.67, .21, .9)
 }
 
 .mfx-buttons-group.connected > .mfx-button > .surface,
 .mfx-buttons-group.connected > .mfx-icon-button > .surface {
-  transition-property: -fx-background-color,-fx-background-radius;
-  transition-timing-function: cubic-bezier(0.42,1.67,0.21,0.9);
-  transition-duration: 350ms
+  transition: -fx-opacity .2s linear,-fx-background-color 150ms cubic-bezier(.31, .94, .34, 1),-fx-background-radius 350ms cubic-bezier(.42, 1.67, .21, .9)
 }
 
 .mfx-buttons-group.connected > .mfx-button.xs:selected,
@@ -476,14 +469,11 @@
 }
 
 .mfx-fab-menu > .entry {
-  transition-property: -fx-background-color,-fx-background-radius,-fx-scale-x,-fx-scale-y;
-  transition-timing-function: cubic-bezier(0.42,1.67,0.21,0.9);
-  transition-duration: 350ms
+  transition: -fx-background-color 150ms cubic-bezier(.31, .94, .34, 1),-fx-background-radius 350ms cubic-bezier(.42, 1.67, .21, .9),-fx-scale-x 350ms cubic-bezier(.42, 1.67, .21, .9),-fx-scale-y 350ms cubic-bezier(.42, 1.67, .21, .9)
 }
 
 .mfx-split-button > .mfx-button > .surface {
-  transition-property: -fx-background-color,-fx-background-radius;
-  transition-duration: 0s
+  transition: -fx-opacity .2s linear,-fx-background-color 150ms cubic-bezier(.31, .94, .34, 1),-fx-background-radius 350ms cubic-bezier(.42, 1.67, .21, .9)
 }
 
 .mfx-split-button > .mfx-button.leading.xs:pressed:hover {
@@ -622,7 +612,5 @@
 }
 
 .mfx-split-button > .mfx-button.trailing > .label > .mfx-font-icon {
-  transition-property: -fx-rotate;
-  transition-timing-function: cubic-bezier(0.27,1.06,0.18,1);
-  transition-duration: 350ms
+  transition: -fx-rotate 350ms cubic-bezier(.27, 1.06, .18, 1)
 }

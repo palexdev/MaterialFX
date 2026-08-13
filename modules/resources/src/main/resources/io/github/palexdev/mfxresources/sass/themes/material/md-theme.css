@@ -21,6 +21,28 @@
   -fx-font-smoothing-type: GRAY
 }
 
+.surface {
+  -fx-opacity: 0;
+  transition: -fx-opacity .2s linear
+}
+
+:hover > .surface {
+  -fx-opacity: 8%
+}
+
+:pressed:hover > .surface {
+  -fx-opacity: 10%
+}
+
+:focus-within > .surface,
+:focused > .surface {
+  -fx-opacity: 10%
+}
+
+:disabled > .surface {
+  -fx-opacity: 10%
+}
+
 .surface-ripple {
   -fx-opacity: 36%
 }
@@ -60,15 +82,38 @@
   -mfx-ripple-color: -md-sys-color-on-surface
 }
 
-.cell:first-child > .surface {
+.cell:selected {
+  -fx-background-color: -md-sys-color-secondary-container
+}
+
+.cell:selected > .label {
+  -fx-text-fill: -md-sys-color-on-secondary-container
+}
+
+.cell:selected > .label > .mfx-font-icon {
+  -mfx-color: -md-sys-color-on-secondary-container
+}
+
+.cell:selected > .surface {
+  -fx-background-color: -md-sys-color-on-secondary-container
+}
+
+.cell:selected > .mfx-ripple-generator {
+  -mfx-ripple-color: -md-sys-color-on-secondary-container
+}
+
+.cell:first-child,
+.cell:first-child>.surface {
   -fx-background-radius: 8px 8px 0px 0px
 }
 
-.cell:last-child > .surface {
+.cell:last-child,
+.cell:last-child>.surface {
   -fx-background-radius: 0px 0px 8px 8px
 }
 
-.cell:only-child > .surface {
+.cell:only-child,
+.cell:only-child>.surface {
   -fx-background-radius: 8px
 }
 
@@ -454,10 +499,6 @@
   -fx-text-fill: -md-sys-color-primary
 }
 
-.mfx-button.text.toggle:selected > .surface {
-  -mfx-default-opacity: 8%
-}
-
 .mfx-button.tonal {
   -fx-background-color: -md-sys-color-secondary-container;
   -fx-text-fill: -md-sys-color-on-secondary-container
@@ -800,6 +841,19 @@
   -fx-graphic-text-gap: 4px
 }
 
+.mfx-checkbox:hover > .label > .box > .surface {
+  -fx-opacity: 8%
+}
+
+.mfx-checkbox:pressed:hover > .label > .box > .surface {
+  -fx-opacity: 10%
+}
+
+.mfx-checkbox:focus-within > .label > .box > .surface,
+.mfx-checkbox:focused > .label > .box > .surface {
+  -fx-opacity: 10%
+}
+
 .mfx-checkbox > .label > .box {
   -fx-min-width: 40px;
   -fx-min-height: 40px;
@@ -823,9 +877,12 @@
 }
 
 .mfx-checkbox > .label > .box > .surface {
-  -mfx-disabled-opacity: 0;
   -fx-background-color: -md-sys-color-primary;
   -fx-background-radius: 999px
+}
+
+.mfx-checkbox > .label > .box > .surface:disabled {
+  -fx-opacity: 0
 }
 
 .mfx-checkbox > .label > .box > .surface-ripple {
@@ -1594,6 +1651,19 @@
   -fx-graphic-text-gap: 4px
 }
 
+.mfx-radio-button:hover > .label > .box > .surface {
+  -fx-opacity: 8%
+}
+
+.mfx-radio-button:pressed:hover > .label > .box > .surface {
+  -fx-opacity: 10%
+}
+
+.mfx-radio-button:focus-within > .label > .box > .surface,
+.mfx-radio-button:focused > .label > .box > .surface {
+  -fx-opacity: 10%
+}
+
 .mfx-radio-button > .label > .box {
   -fx-min-width: 40px;
   -fx-min-height: 40px;
@@ -1617,15 +1687,16 @@
   -fx-opacity: 0%;
   -fx-scale-x: 0%;
   -fx-scale-y: 0%;
-  transition-property: -fx-opacity,-fx-scale-x,-fx-scale-y;
-  transition-timing-function: cubic-bezier(0.31,0.94,0.34,1);
-  transition-duration: 150ms
+  transition: -fx-opacity 50ms linear,-fx-scale-x 1ms linear 50ms,-fx-scale-y 1ms linear 50ms
 }
 
 .mfx-radio-button > .label > .box > .surface {
-  -mfx-disabled-opacity: 0;
   -fx-background-color: -md-sys-color-primary;
   -fx-background-radius: 999px
+}
+
+.mfx-radio-button > .label > .box > .surface:disabled {
+  -fx-opacity: 0
 }
 
 .mfx-radio-button > .label > .box > .surface-ripple {
@@ -1639,7 +1710,8 @@
 .mfx-radio-button:selected > .label > .box > .outer > .inner {
   -fx-opacity: 100%;
   -fx-scale-x: 60%;
-  -fx-scale-y: 60%
+  -fx-scale-y: 60%;
+  transition: -fx-opacity 50ms linear,-fx-scale-x 350ms cubic-bezier(.42, 1.67, .21, .9),-fx-scale-y 350ms cubic-bezier(.42, 1.67, .21, .9)
 }
 
 .mfx-radio-button:focus-visible > .label > .box {
@@ -1798,6 +1870,19 @@
   -fx-graphic-text-gap: 4px
 }
 
+.mfx-switch:hover > .label > .track > .box > .surface {
+  -fx-opacity: 8%
+}
+
+.mfx-switch:pressed:hover > .label > .track > .box > .surface {
+  -fx-opacity: 10%
+}
+
+.mfx-switch:focus-within > .label > .track > .box > .surface,
+.mfx-switch:focused > .label > .track > .box > .surface {
+  -fx-opacity: 10%
+}
+
 .mfx-switch > .label > .track {
   -fx-min-width: 52px;
   -fx-min-height: 32px;
@@ -1806,9 +1891,7 @@
   -fx-background-color: -md-sys-color-outline,-md-sys-color-surface-container-highest;
   -fx-background-insets: 0px,2px;
   -fx-background-radius: 999px;
-  transition-property: -fx-background-color;
-  transition-timing-function: cubic-bezier(0.31,0.94,0.34,1);
-  transition-duration: 150ms
+  transition: -fx-background-color 150ms cubic-bezier(.31, .94, .34, 1)
 }
 
 .mfx-switch > .label > .track > .box {
@@ -1817,15 +1900,16 @@
   -fx-max-width: 40px;
   -fx-max-height: 40px;
   -fx-translate-x: -4px;
-  transition-property: -fx-translate-x;
-  transition-timing-function: cubic-bezier(0.42,1.67,0.21,0.9);
-  transition-duration: 350ms
+  transition: -fx-translate-x 350ms cubic-bezier(.42, 1.67, .21, .9)
 }
 
 .mfx-switch > .label > .track > .box > .surface {
-  -mfx-disabled-opacity: 0;
   -fx-background-color: -md-sys-color-on-surface;
   -fx-background-radius: 999px
+}
+
+.mfx-switch > .label > .track > .box > .surface:disabled {
+  -fx-opacity: 0
 }
 
 .mfx-switch > .label > .track > .box > .surface-ripple {
@@ -1841,9 +1925,7 @@
   -fx-background-radius: 999px;
   -fx-scale-x: 1;
   -fx-scale-y: 1;
-  transition-property: -fx-scale-x,-fx-scale-y,-fx-background-color;
-  transition-timing-function: cubic-bezier(0.42,1.67,0.21,0.9);
-  transition-duration: 350ms
+  transition: -fx-background-color 150ms cubic-bezier(.31, .94, .34, 1),-fx-scale-x 350ms cubic-bezier(.42, 1.67, .21, .9),-fx-scale-y 350ms cubic-bezier(.42, 1.67, .21, .9)
 }
 
 .mfx-switch > .label > .track > .box > .mfx-icon-wrapper {
