@@ -159,12 +159,6 @@ public class MFXCell<T> extends VFXSimpleCell<T> {
             super(cell);
 
             surface = new MFXSurface(cell);
-            surface.getStates().add(new MFXSurface.State(
-                1,
-                _ -> cell.isSelected(),
-                MFXSurface::getPressedOpacity
-            ));
-
             rg = new MFXRippleGenerator(cell);
             rg.getStyleClass().add("surface-ripple");
             rg.setMeToPosConverter(me ->
