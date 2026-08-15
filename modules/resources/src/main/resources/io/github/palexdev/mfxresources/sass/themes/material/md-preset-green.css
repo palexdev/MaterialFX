@@ -1,6 +1,6 @@
 .root {
-  /*! Palette */
-  -md-source: #4CAF50;
+  /* Light */
+  -md-seed: #4CAF50;
   -md-ref-palette-primary0: #000000;
   -md-ref-palette-primary4: #001202;
   -md-ref-palette-primary5: #001502;
@@ -163,7 +163,7 @@
   -md-ref-palette-neutral-variant98: #F5FBEF;
   -md-ref-palette-neutral-variant99: #F8FEF2;
   -md-ref-palette-neutral-variant100: #FFFFFF;
-  /*! Light Scheme */
+
   -md-sys-color-primary: #3B6939;
   -md-sys-color-surface-tint: #3B6939;
   -md-sys-color-on-primary: #FFFFFF;
@@ -212,11 +212,28 @@
   -md-sys-color-outline: #72796F;
   -md-sys-color-outline-variant: #C2C9BD;
   -md-sys-color-shadow: #000000;
-  -md-sys-color-scrim: #000000
+  -md-sys-color-scrim: #000000;
+  /* Custom */
+  -md-seed-success: #4CAF50;
+  -md-sys-color-success: #006E1C;
+  -md-sys-color-on-success: #FFFFFF;
+  -md-sys-color-success-container: #94F990;
+  -md-sys-color-on-success-container: #005313;
+  -md-seed-warn: #F57C00;
+  -md-sys-color-warn: #CE6700;
+  -md-sys-color-on-warn: #FFFFFF;
+  -md-sys-color-warn-container: #FFDCC6;
+  -md-sys-color-on-warn-container: #723600;
+  -md-seed-info: #0288D1;
+  -md-sys-color-info: #00639A;
+  -md-sys-color-on-info: #FFFFFF;
+  -md-sys-color-info-container: #CEE5FF;
+  -md-sys-color-on-info-container: #004A75;
 }
 
 .root:dark {
-  /*! Dark Scheme */
+  /* Dark */
+  -md-seed: #4CAF50;
   -md-sys-color-primary: #A1D39A;
   -md-sys-color-surface-tint: #A1D39A;
   -md-sys-color-on-primary: #0A390F;
@@ -265,5 +282,21 @@
   -md-sys-color-outline: #8C9388;
   -md-sys-color-outline-variant: #424940;
   -md-sys-color-shadow: #000000;
-  -md-sys-color-scrim: #000000
+  -md-sys-color-scrim: #000000;
+  /* Custom */
+  -md-seed-success: #4CAF50;
+  -md-sys-color-success: #78DC77;
+  -md-sys-color-on-success: #00390A;
+  -md-sys-color-success-container: #005313;
+  -md-sys-color-on-success-container: #94F990;
+  -md-seed-warn: #F57C00;
+  -md-sys-color-warn: #FFB786;
+  -md-sys-color-on-warn: #502400;
+  -md-sys-color-warn-container: #723600;
+  -md-sys-color-on-warn-container: #FFDCC6;
+  -md-seed-info: #0288D1;
+  -md-sys-color-info: #96CCFF;
+  -md-sys-color-on-info: #003353;
+  -md-sys-color-info-container: #004A75;
+  -md-sys-color-on-info-container: #CEE5FF;
 }

@@ -1,6 +1,6 @@
 .root {
-  /*! Palette */
-  -md-source: #FF9800;
+  /* Light */
+  -md-seed: #FF9800;
   -md-ref-palette-primary0: #000000;
   -md-ref-palette-primary4: #1A0B00;
   -md-ref-palette-primary5: #1D0D00;
@@ -80,7 +80,7 @@
   -md-ref-palette-tertiary95: #EAF7C2;
   -md-ref-palette-tertiary96: #EDF9C4;
   -md-ref-palette-tertiary98: #F3FFCB;
-  -md-ref-palette-tertiary99: #FAFFE2;
+  -md-ref-palette-tertiary99: #F9FFE5;
   -md-ref-palette-tertiary100: #FFFFFF;
   -md-ref-palette-error0: #000000;
   -md-ref-palette-error4: #280001;
@@ -163,7 +163,7 @@
   -md-ref-palette-neutral-variant98: #FFF8F5;
   -md-ref-palette-neutral-variant99: #FFFBFF;
   -md-ref-palette-neutral-variant100: #FFFFFF;
-  /*! Light Scheme */
+
   -md-sys-color-primary: #855318;
   -md-sys-color-surface-tint: #855318;
   -md-sys-color-on-primary: #FFFFFF;
@@ -212,11 +212,28 @@
   -md-sys-color-outline: #837468;
   -md-sys-color-outline-variant: #D5C3B5;
   -md-sys-color-shadow: #000000;
-  -md-sys-color-scrim: #000000
+  -md-sys-color-scrim: #000000;
+  /* Custom */
+  -md-seed-success: #4CAF50;
+  -md-sys-color-success: #006E1C;
+  -md-sys-color-on-success: #FFFFFF;
+  -md-sys-color-success-container: #94F990;
+  -md-sys-color-on-success-container: #005313;
+  -md-seed-warn: #F57C00;
+  -md-sys-color-warn: #CE6700;
+  -md-sys-color-on-warn: #FFFFFF;
+  -md-sys-color-warn-container: #FFDCC6;
+  -md-sys-color-on-warn-container: #723600;
+  -md-seed-info: #0288D1;
+  -md-sys-color-info: #00639A;
+  -md-sys-color-on-info: #FFFFFF;
+  -md-sys-color-info-container: #CEE5FF;
+  -md-sys-color-on-info-container: #004A75;
 }
 
 .root:dark {
-  /*! Dark Scheme */
+  /* Dark */
+  -md-seed: #FF9800;
   -md-sys-color-primary: #FDB975;
   -md-sys-color-surface-tint: #FDB975;
   -md-sys-color-on-primary: #4A2800;
@@ -265,5 +282,21 @@
   -md-sys-color-outline: #9D8E81;
   -md-sys-color-outline-variant: #51453A;
   -md-sys-color-shadow: #000000;
-  -md-sys-color-scrim: #000000
+  -md-sys-color-scrim: #000000;
+  /* Custom */
+  -md-seed-success: #4CAF50;
+  -md-sys-color-success: #78DC77;
+  -md-sys-color-on-success: #00390A;
+  -md-sys-color-success-container: #005313;
+  -md-sys-color-on-success-container: #94F990;
+  -md-seed-warn: #F57C00;
+  -md-sys-color-warn: #FFB786;
+  -md-sys-color-on-warn: #502400;
+  -md-sys-color-warn-container: #723600;
+  -md-sys-color-on-warn-container: #FFDCC6;
+  -md-seed-info: #0288D1;
+  -md-sys-color-info: #96CCFF;
+  -md-sys-color-on-info: #003353;
+  -md-sys-color-info-container: #004A75;
+  -md-sys-color-on-info-container: #CEE5FF;
 }
