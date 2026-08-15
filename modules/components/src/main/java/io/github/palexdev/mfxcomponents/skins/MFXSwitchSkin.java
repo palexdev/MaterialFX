@@ -169,4 +169,11 @@ public class MFXSwitchSkin extends MFXLabeledSkin {
         rg.resizeRelocate(0, 0, box.getWidth(), box.getHeight());
         surface.resizeRelocate(0, 0, box.getWidth(), box.getHeight());
     }
+
+    @Override
+    public void dispose() {
+        surface.dispose();
+        rg.dispose();
+        super.dispose();
+    }
 }
