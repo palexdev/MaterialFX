@@ -103,17 +103,17 @@
 }
 
 .cell:first-child,
-.cell:first-child>.surface {
+.cell:first-child > .surface {
   -fx-background-radius: 8px 8px 0px 0px
 }
 
 .cell:last-child,
-.cell:last-child>.surface {
+.cell:last-child > .surface {
   -fx-background-radius: 0px 0px 8px 8px
 }
 
 .cell:only-child,
-.cell:only-child>.surface {
+.cell:only-child > .surface {
   -fx-background-radius: 8px
 }
 
@@ -1154,8 +1154,8 @@
   -mfx-icon: "fas-plus"
 }
 
-.mfx-fab-menu>.item,
-.mfx-fab-menu>.item>.surface {
+.mfx-fab-menu > .item,
+.mfx-fab-menu > .item > .surface {
   -fx-background-radius: 999px;
   -mfx-elevation: LEVEL0
 }
@@ -1641,6 +1641,35 @@
 
 .mfx-menu > .menu-content > .menu-entry:disabled > .label {
   -fx-opacity: 38%
+}
+
+.mfx-progress-indicator > .track {
+  -fx-fill: transparent;
+  -fx-stroke: -md-sys-color-secondary-container;
+  -fx-stroke-line-cap: round;
+  -fx-stroke-width: 4px
+}
+
+.mfx-progress-indicator > .indicator {
+  -fx-fill: transparent;
+  -fx-stroke: -md-sys-color-primary;
+  -fx-stroke-line-cap: round;
+  -fx-stroke-width: 4px
+}
+
+.mfx-progress-indicator > .stop-indicator {
+  -fx-background-color: -md-sys-color-primary;
+  -fx-background-radius: 999px
+}
+
+.mfx-progress-indicator.m > .indicator,
+.mfx-progress-indicator.m > .track {
+  -fx-stroke-width: 6px
+}
+
+.mfx-progress-indicator.l > .indicator,
+.mfx-progress-indicator.l > .track {
+  -fx-stroke-width: 8px
 }
 
 .mfx-radio-button {
