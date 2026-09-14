@@ -70,7 +70,7 @@ public abstract class NumberRangeProperty<N extends Number & Comparable<N>> exte
     ///
     /// `Null` if the range is also `null`.
     public N getMax() {
-        return get() == null ? null : get().getMin();
+        return get() == null ? null : get().getMax();
     }
 
     //================================================================================
