@@ -65,43 +65,11 @@ public abstract class MFXChoiceSkin<T> extends MFXSkinBase<MFXChoice<T>> {
 
         popupConfig = choice.getPopupConfig();
         popup = buildPopup();
-
-        addListeners();
     }
 
     //================================================================================
     // Methods
     //================================================================================
-
-    /// Adds the following listeners:
-    /// - On [MFXChoice#cellFactoryProperty()] to call [#buildViewCell()]
-    /// - On [MFXChoice#popupConfigProperty()] to apply the new configuration to the popup.<br >
-    /// Note: the [ExtendedPopoverConfig#styleableParent()] is always overridden to be the [#getSkinnable()] node.
-    /// The popup is usually shown/hidden by an icon or a button, but the owner is not the same as the styleable parent.
-    /// For styling you want the styleable parent to be the control itself so that in CSS you can do: `.my-control .popup`
-    /// - On [MFXChoice#selection()] to call [#updateViewCell()]
-    protected void addListeners() {
-        MFXChoice<T> choice = getSkinnable();
-        listeners(
-            onInvalidated(choice.cellFactoryProperty())
-                .then(_ -> buildViewCell())
-                .executeNow(() -> choice.getCellFactory() != null),
-            onInvalidated(choice.popupConfigProperty())
-                .then(c -> {
-                    // Override styleable parent to always be the control
-                    this.popupConfig = ExtendedPopoverConfig.builder(c)
-                        .styleableParent(choice)
-                        .build();
-                    popupConfig.apply(popup);
-                    popup.getRoot().requestLayout();
-                })
-                .executeNow(),
-            onInvalidated(choice.selection())
-                .then(_ -> updateViewCell())
-                .executeNow(),
-            popup.onState((_, s) -> onPopupState(s))
-        );
-    }
 
     /// Updates the view cell with the current selection and issues a layout request.
     ///
@@ -182,5 +150,42 @@ public abstract class MFXChoiceSkin<T> extends MFXSkinBase<MFXChoice<T>> {
     protected void onPopupState(PopupState state) {
         MFXChoice<T> choice = getSkinnable();
         ((BooleanProperty) choice.openProperty()).set(state == PopupState.SHOWING || state == PopupState.SHOWN);
+    }
+
+    //================================================================================
+    // Overridden Methods
+    //================================================================================
+
+    /// Adds the following listeners:
+    /// - On [MFXChoice#cellFactoryProperty()] to call [#buildViewCell()]
+    /// - On [MFXChoice#popupConfigProperty()] to apply the new configuration to the popup.<br >
+    /// Note: the [ExtendedPopoverConfig#styleableParent()] is always overridden to be the [#getSkinnable()] node.
+    /// The popup is usually shown/hidden by an icon or a button, but the owner is not the same as the styleable parent.
+    /// For styling you want the styleable parent to be the control itself so that in CSS you can do: `.my-control .popup`
+    /// - On [MFXChoice#selection()] to call [#updateViewCell()]
+    @Override
+    public void install() {
+        MFXChoice<T> choice = getSkinnable();
+
+        // Listeners
+        listen(
+            onInvalidated(choice.cellFactoryProperty())
+                .then(_ -> buildViewCell())
+                .executeNow(() -> choice.getCellFactory() != null),
+            onInvalidated(choice.popupConfigProperty())
+                .then(c -> {
+                    // Override styleable parent to always be the control
+                    this.popupConfig = ExtendedPopoverConfig.builder(c)
+                        .styleableParent(choice)
+                        .build();
+                    popupConfig.apply(popup);
+                    popup.getRoot().requestLayout();
+                })
+                .executeNow(),
+            onInvalidated(choice.selection())
+                .then(_ -> updateViewCell())
+                .executeNow(),
+            popup.onState((_, s) -> onPopupState(s))
+        );
     }
 }

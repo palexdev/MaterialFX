@@ -23,7 +23,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import io.github.palexdev.mfxcomponents.behaviors.MFXButtonBehavior;
-import io.github.palexdev.mfxcore.behavior.MFXBehavior;
+import io.github.palexdev.mfxcore.controls.MFXBehavior;
 import io.github.palexdev.mfxcore.selection.Selectable;
 import io.github.palexdev.mfxcore.selection.SelectionGroup;
 import io.github.palexdev.mfxcore.selection.SelectionGroupProperty;

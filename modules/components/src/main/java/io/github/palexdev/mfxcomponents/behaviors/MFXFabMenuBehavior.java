@@ -19,7 +19,7 @@
 package io.github.palexdev.mfxcomponents.behaviors;
 
 import io.github.palexdev.mfxcomponents.controls.MFXFabMenu;
-import io.github.palexdev.mfxcore.behavior.MFXBehavior;
+import io.github.palexdev.mfxcore.controls.MFXBehavior;
 
 /// Default behavior implementation for [MFXFabMenus][MFXFabMenu].<br >
 /// Contains the logic to open/close the menu.

@@ -30,7 +30,7 @@ import io.github.palexdev.mfxcomponents.variants.api.Variant;
 import io.github.palexdev.mfxcomponents.variants.api.VariantsHandler;
 import io.github.palexdev.mfxcomponents.variants.api.WithVariants;
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableBooleanProperty;
-import io.github.palexdev.mfxcore.behavior.MFXBehavior;
+import io.github.palexdev.mfxcore.controls.MFXBehavior;
 import io.github.palexdev.mfxcore.controls.MFXControl;
 import io.github.palexdev.mfxcore.controls.MFXSkinBase;
 import io.github.palexdev.mfxcore.utils.fx.PropUtils;

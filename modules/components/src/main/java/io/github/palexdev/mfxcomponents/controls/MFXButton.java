@@ -32,7 +32,7 @@ import io.github.palexdev.mfxcomponents.variants.ButtonVariants.StyleVariant;
 import io.github.palexdev.mfxcomponents.variants.api.Variant;
 import io.github.palexdev.mfxcomponents.variants.api.VariantsHandler;
 import io.github.palexdev.mfxcomponents.variants.api.WithVariants;
-import io.github.palexdev.mfxcore.behavior.MFXBehavior;
+import io.github.palexdev.mfxcore.controls.MFXBehavior;
 import io.github.palexdev.mfxcore.controls.MFXSkinBase;
 import javafx.collections.ObservableMap;
 import javafx.scene.Node;

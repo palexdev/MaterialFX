@@ -21,7 +21,6 @@ package io.github.palexdev.mfxcomponents.skins;
 import io.github.palexdev.mfxcomponents.controls.MFXSurface;
 import io.github.palexdev.mfxcomponents.controls.MFXSwitch;
 import io.github.palexdev.mfxcomponents.skins.base.MFXLabeledSkin;
-import io.github.palexdev.mfxcore.behavior.MFXBehavior;
 import io.github.palexdev.mfxcore.controls.BoundLabel;
 import io.github.palexdev.mfxcore.controls.MFXLabeled;
 import io.github.palexdev.mfxcore.utils.fx.PseudoClasses;
@@ -100,7 +99,7 @@ public class MFXSwitchSkin extends MFXLabeledSkin {
         initTextMeasurementCache();
 
         // Finalize
-        listeners(
+        listen(
             onInvalidated(icon.iconProperty())
                 .then(i -> {
                     boolean present = ofNullable(i).map(MFXFontIcon::getIconName).filter(s -> !s.isBlank()).isPresent();
@@ -115,16 +114,14 @@ public class MFXSwitchSkin extends MFXLabeledSkin {
     //================================================================================
 
     @Override
-    protected void registerBehavior() {
-        super.registerBehavior();
+    public void install() {
         MFXLabeled rb = getSkinnable();
-        MFXBehavior<? extends Node> behavior = getBehavior();
-        events(
-            intercept(rb, MouseEvent.MOUSE_PRESSED).handle(e -> behavior.mousePressed(e, () -> rg.generate(e))),
+        onInput(
+            intercept(rb, MouseEvent.MOUSE_PRESSED).handle(e -> behavior().mousePressed(e, () -> rg.generate(e))),
             intercept(rb, MouseEvent.MOUSE_RELEASED).handle(_ -> rg.release()),
             intercept(rb, MouseEvent.MOUSE_EXITED).handle(_ -> rg.release()),
-            intercept(rb, MouseEvent.MOUSE_CLICKED).handle(behavior::mouseClicked),
-            intercept(rb, KeyEvent.KEY_PRESSED).handle(e -> behavior.keyPressed(e, () -> {
+            intercept(rb, MouseEvent.MOUSE_CLICKED).handle(e -> behavior().mouseClicked(e)),
+            intercept(rb, KeyEvent.KEY_PRESSED).handle(e -> behavior().keyPressed(e, () -> {
                 if (e.getCode() == KeyCode.ENTER || e.getCode() == KeyCode.SPACE) {
                     Bounds b = box.getLayoutBounds();
                     rg.generate(b.getCenterX(), b.getCenterY());

@@ -20,6 +20,7 @@ package io.github.palexdev.mfxcomponents.skins;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.github.palexdev.mfxcomponents.behaviors.MFXFabMenuBehavior;
 import io.github.palexdev.mfxcomponents.controls.MFXFab;
@@ -28,6 +29,7 @@ import io.github.palexdev.mfxcomponents.variants.FABVariants.StyleVariant;
 import io.github.palexdev.mfxcore.base.beans.Position;
 import io.github.palexdev.mfxcore.controls.MFXSkinBase;
 import io.github.palexdev.mfxcore.enums.Corner;
+import io.github.palexdev.mfxcore.input.WhenEvent;
 import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
 import io.github.palexdev.mfxcore.utils.fx.PivotUtils;
 import io.github.palexdev.mfxeffects.animations.Animations;
@@ -50,8 +52,7 @@ import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 
 import static io.github.palexdev.mfxcore.input.WhenEvent.intercept;
-import static io.github.palexdev.mfxcore.observables.When.observe;
-import static io.github.palexdev.mfxcore.observables.When.onInvalidated;
+import static io.github.palexdev.mfxcore.observables.When.*;
 
 /// Default skin implementation for all [MFXFabMenus][MFXFabMenu], expects behaviors of type [MFXFabMenuBehavior].
 ///
@@ -94,6 +95,8 @@ public class MFXFabMenuSkin extends MFXSkinBase<MFXFabMenu> {
     private Animation animation;
     protected double ANIMATIONS_DELAY = 40.0;
 
+    private WhenEvent<MouseEvent> outsidePress;
+
     //================================================================================
     // Constructors
     //================================================================================
@@ -110,35 +113,11 @@ public class MFXFabMenuSkin extends MFXSkinBase<MFXFabMenu> {
         scale.xProperty().bind(entry.scaleXProperty());
         scale.yProperty().bind(entry.scaleYProperty());
         entry.getTransforms().add(scale);
-
-        // Finalize
-        addListeners();
     }
 
     //================================================================================
     // Methods
     //================================================================================
-
-    /// Adds listeners to the following properties:
-    /// - [MFXFabMenu#openProperty()] to call [#animateOpenClose()]
-    /// - [MFXFabMenu#focusedProperty()] and [MFXFabMenu#focusWithinProperty()] to close the menu if focus is lost
-    /// - [MFXFabMenu#getButtons()] to call [#updateChildren()]
-    /// - [MFXFabMenu#getAppliedVariants()] to call [#updateStyle()]
-    protected void addListeners() {
-        MFXFabMenu menu = getSkinnable();
-        listeners(
-            onInvalidated(menu.openProperty())
-                .then(_ -> animateOpenClose())
-                .executeNow(menu::isOpen),
-            onInvalidated(menu.focusedProperty())
-                .condition(f -> !f || !menu.isFocusWithin())
-                .then(_ -> getBehavior().close())
-                .invalidating(menu.focusWithinProperty()),
-            observe(menu::requestLayout, menu.scalePivotProperty()),
-            observe(this::updateChildren, menu.getButtons()).executeNow(),
-            observe(this::updateStyle, menu.getAppliedVariants())
-        );
-    }
 
     /// Updates the children's list of this component with the 'entry' FAB from this skin, and the FABs contained in
     /// [MFXFabMenu#getButtons()].
@@ -235,28 +214,62 @@ public class MFXFabMenuSkin extends MFXSkinBase<MFXFabMenu> {
     // Overridden Methods
     //================================================================================
 
+    /// Adds listeners to the following properties:
+    /// - [MFXFabMenu#openProperty()] to call [#animateOpenClose()]
+    /// - [MFXFabMenu#focusedProperty()] and [MFXFabMenu#focusWithinProperty()] to close the menu if focus is lost
+    /// - [MFXFabMenu#getButtons()] to call [#updateChildren()]
+    /// - [MFXFabMenu#getAppliedVariants()] to call [#updateStyle()]
+    /// - [MFXFabMenu#sceneProperty()] to move the handler that closes the menu when the mouse is pressed outside of it
+    /// onto the new scene
     @Override
-    protected void registerBehavior() {
-        super.registerBehavior();
+    public void install() {
         MFXFabMenu menu = getSkinnable();
-        MFXFabMenuBehavior behavior = getBehavior();
-        events(
+
+        // Listeners
+        listen(
+            onInvalidated(menu.openProperty())
+                .then(_ -> animateOpenClose())
+                .executeNow(menu::isOpen),
+            onInvalidated(menu.focusedProperty())
+                .condition(f -> !f || !menu.isFocusWithin())
+                .then(_ -> behavior().close())
+                .invalidating(menu.focusWithinProperty()),
+            observe(menu::requestLayout, menu.scalePivotProperty()),
+            observe(this::updateChildren, menu.getButtons()).executeNow(),
+            observe(this::updateStyle, menu.getAppliedVariants()),
+            // Close if mouse pressed outside
+            onInvalidated(menu.sceneProperty())
+                .condition(Objects::nonNull)
+                .then(s -> {
+                    if (outsidePress != null) outsidePress.dispose();
+                    outsidePress = intercept(s, MouseEvent.MOUSE_PRESSED)
+                        .condition(_ -> menu.isOpen())
+                        .handle(_ -> behavior().close())
+                        .register();
+                })
+                .otherwise((_, _) -> {
+                    if (outsidePress != null) {
+                        outsidePress.dispose();
+                        outsidePress = null;
+                    }
+                })
+                .executeNow(() -> menu.getScene() != null)
+        );
+
+        // Input
+        onInput(
             intercept(entry, ActionEvent.ACTION)
                 .handle(e -> {
                     if (menu.isOpen()) {
-                        behavior.close();
+                        behavior().close();
                     } else {
-                        behavior.open();
+                        behavior().open();
                     }
                     e.consume();
                 }),
-            // Close if mouse pressed outside
-            intercept(menu.getScene(), MouseEvent.MOUSE_PRESSED)
-                .condition(_ -> menu.isOpen())
-                .handle(_ -> behavior.close()),
             // Actioning one of the buttons should close the menu
             intercept(menu, ActionEvent.ACTION)
-                .handle(_ -> behavior.close())
+                .handle(_ -> behavior().close())
         );
     }
 
@@ -325,11 +338,15 @@ public class MFXFabMenuSkin extends MFXSkinBase<MFXFabMenu> {
     public void dispose() {
         scale.xProperty().unbind();
         scale.yProperty().unbind();
+        if (outsidePress != null) {
+            outsidePress.dispose();
+            outsidePress = null;
+        }
         super.dispose();
     }
 
     @Override
-    protected MFXFabMenuBehavior getBehavior() {
-        return (MFXFabMenuBehavior) super.getBehavior();
+    protected MFXFabMenuBehavior behavior() {
+        return (MFXFabMenuBehavior) super.behavior();
     }
 }

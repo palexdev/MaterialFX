@@ -21,7 +21,6 @@ package io.github.palexdev.mfxcomponents.skins;
 import io.github.palexdev.mfxcomponents.controls.MFXFab;
 import io.github.palexdev.mfxcomponents.controls.MFXSurface;
 import io.github.palexdev.mfxcomponents.skins.base.MFXLabeledSkin;
-import io.github.palexdev.mfxcore.behavior.MFXBehavior;
 import io.github.palexdev.mfxcore.controls.BoundLabel;
 import io.github.palexdev.mfxcore.controls.Label;
 import io.github.palexdev.mfxcore.controls.MFXLabeled;
@@ -111,37 +110,12 @@ public class MFXFabSkin extends MFXLabeledSkin {
         initTextMeasurementCache();
         clip();
 
-        // Finalize
-        addListeners();
         getChildren().setAll(surface, rg, label);
     }
 
     //================================================================================
     // Methods
     //================================================================================
-
-    /// The listeners only record an intent and request a layout; the actual work happens in
-    /// [#layoutChildren(double, double, double, double)]:
-    /// - [MFXFab#extendedProperty()] sets [#animateNext] so the next re-sync is animated
-    /// - [MFXFab#iconProperty()] sets [#iconSwitch] so the next re-sync plays the collapse-then-re-extend effect
-    ///
-    /// Variant, min-size and text/label changes need no listener: they already dirty the layout and are re-synced by the
-    /// self-healing branch of [#layoutChildren(double, double, double, double)].
-    protected void addListeners() {
-        MFXFab fab = getControl();
-        listeners(
-            onInvalidated(fab.extendedProperty())
-                .then(_ -> {
-                    animateNext = true;
-                    fab.requestLayout();
-                }),
-            onInvalidated(fab.iconProperty())
-                .then(_ -> {
-                    iconSwitch = true;
-                    fab.requestLayout();
-                })
-        );
-    }
 
     /// Instantly sets the FAB's [MFXFab#prefWidthProperty()], the label's [Node#translateXProperty()] and the FAB's
     /// [MFXFab#textOpacityProperty()] to the targets computed for the given state. Does nothing if already on target, which
@@ -227,17 +201,38 @@ public class MFXFabSkin extends MFXLabeledSkin {
     // Overridden Methods
     //================================================================================
 
+    /// The listeners only record an intent and request a layout; the actual work happens in
+    /// [#layoutChildren(double, double, double, double)]:
+    /// - [MFXFab#extendedProperty()] sets [#animateNext] so the next re-sync is animated
+    /// - [MFXFab#iconProperty()] sets [#iconSwitch] so the next re-sync plays the collapse-then-re-extend effect
+    ///
+    /// Variant, min-size and text/label changes need no listener: they already dirty the layout and are re-synced by the
+    /// self-healing branch of [#layoutChildren(double, double, double, double)].
     @Override
-    protected void registerBehavior() {
-        super.registerBehavior();
-        MFXLabeled fab = getSkinnable();
-        MFXBehavior<? extends Node> behavior = getBehavior();
-        events(
-            intercept(fab, MouseEvent.MOUSE_PRESSED).handle(e -> behavior.mousePressed(e, () -> rg.generate(e))),
+    public void install() {
+        MFXFab fab = getControl();
+
+        // Listeners
+        listen(
+            onInvalidated(fab.extendedProperty())
+                .then(_ -> {
+                    animateNext = true;
+                    fab.requestLayout();
+                }),
+            onInvalidated(fab.iconProperty())
+                .then(_ -> {
+                    iconSwitch = true;
+                    fab.requestLayout();
+                })
+        );
+
+        // Input
+        onInput(
+            intercept(fab, MouseEvent.MOUSE_PRESSED).handle(e -> behavior().mousePressed(e, () -> rg.generate(e))),
             intercept(fab, MouseEvent.MOUSE_RELEASED).handle(_ -> rg.release()),
             intercept(fab, MouseEvent.MOUSE_EXITED).handle(_ -> rg.release()),
-            intercept(fab, MouseEvent.MOUSE_CLICKED).handle(behavior::mouseClicked),
-            intercept(fab, KeyEvent.KEY_PRESSED).handle(e -> behavior.keyPressed(e, () -> {
+            intercept(fab, MouseEvent.MOUSE_CLICKED).handle(e -> behavior().mouseClicked(e)),
+            intercept(fab, KeyEvent.KEY_PRESSED).handle(e -> behavior().keyPressed(e, () -> {
                 if (e.getCode() == KeyCode.ENTER || e.getCode() == KeyCode.SPACE) {
                     Bounds b = fab.getLayoutBounds();
                     rg.generate(b.getCenterX(), b.getCenterY());

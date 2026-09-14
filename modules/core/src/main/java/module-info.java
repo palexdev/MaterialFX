@@ -22,9 +22,6 @@ module mfx.core {
     exports io.github.palexdev.mfxcore.base.properties.styleable;
     exports io.github.palexdev.mfxcore.base.properties.synced;
 
-    // Behavior
-    exports io.github.palexdev.mfxcore.behavior;
-
     // Builders
     exports io.github.palexdev.mfxcore.builders.base;
     exports io.github.palexdev.mfxcore.builders.bindings;

@@ -30,7 +30,7 @@ import io.github.palexdev.mfxcomponents.variants.api.WithVariants;
 import io.github.palexdev.mfxcore.base.properties.EventHandlerProperty;
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableDoubleProperty;
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableObjectProperty;
-import io.github.palexdev.mfxcore.behavior.MFXBehavior;
+import io.github.palexdev.mfxcore.controls.MFXBehavior;
 import io.github.palexdev.mfxcore.controls.MFXControl;
 import io.github.palexdev.mfxcore.controls.MFXSkinBase;
 import io.github.palexdev.mfxcore.enums.Corner;

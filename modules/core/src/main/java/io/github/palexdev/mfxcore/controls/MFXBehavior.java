@@ -16,14 +16,14 @@
  * along with MaterialFX. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.palexdev.mfxcore.behavior;
+package io.github.palexdev.mfxcore.controls;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import io.github.palexdev.mfxcore.base.Disposable;
 import io.github.palexdev.mfxcore.input.WhenEvent;
+import io.github.palexdev.mfxcore.observables.When;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
@@ -34,14 +34,46 @@ import javafx.scene.input.TouchEvent;
 /// Base class to implement behavioral code for any kind of control. In the MVC pattern, the behavior would be the
 /// equivalent of the controller. This offers methods that cover most types of input events.
 ///
-/// The component's view (the skin) adds the necessary [EventHandlers][EventHandler] on the component itself or its children,
-/// and delegates to the behavior class.
+/// The component's view (the skin) adds the necessary [EventHandlers][EventHandler] on its sub-components, and
+/// delegates to the behavior class.
 ///
 /// Thanks to the encapsulation offered by this pattern, the skin and the behavior of a component can be easily changed
 /// with ease at any time, and it would still be functional.
 ///
-/// Actions are taken in the form of [WhenEvent] constructs, they can be added by wrapping them in a
-/// [#register(WhenEvent[])] call. The constructs are added into a list and can be deactivated/disposed by invoking [#dispose()].
+/// A behavior can also register listeners and handlers of its own, through [#listen(When\[\])] and
+/// [#onInput(WhenEvent\[\])]. Their scope is the control itself, or anything else that does not come from the skin: the
+/// skin's sub-components are the skin's business. The constructs are added into a list owned by the behavior and are
+/// deactivated/disposed by invoking [#dispose()]. Skins keep a separate list, so the two never interfere.
+///
+/// #### Lifecycle
+///
+/// Behaviors are managed by [MFXControl] and [MFXLabeled] through the behavior factory:
+///  - the behavior is **created** as soon as the factory is set, which for the default behavior happens while the control
+///  is being constructed
+///  - it is **installed** once, by calling [#install()], when the control's first skin is created. If the factory changes
+///  after that, the new behavior is installed immediately
+///  - it is **disposed** when the factory changes again, and a new one takes its place
+///
+/// Skin changes do not affect the behavior in any way.
+///
+/// **Construction rule:** since the default behavior is created during the initialization of [MFXControl] and
+/// [MFXLabeled], the fields of the concrete control do not exist yet at that time. For this reason, a behavior's
+/// constructor must not access the control's own properties. Any setup of that kind belongs to [#install()].
+///
+/// #### State
+///
+/// A behavior is replaced **only** when the control's behavior factory changes, that is, by
+/// [WithBehavior#setBehaviorFactory(java.util.function.Supplier)] or [WithBehavior#setDefaultBehaviorFactory()].
+/// Nothing else causes a replacement: skin changes, scene changes and CSS never do.
+///
+/// When that happens, the old instance is disposed and the new one starts from scratch. Behaviors should therefore be as
+/// stateless as possible. Those that do need state should be aware of what is lost and act accordingly:
+///  - **Interaction state**, such as the starting point of a drag or a running animation. An interaction in progress is
+///  interrupted: the registrations are disposed, but anything else the behavior started (animations, timers, scheduled
+///  tasks) keeps running unless it is stopped. Override [#dispose()] to stop it, and call `super.dispose()`
+///  - **Configuration state**, such as a threshold or a flag set through the behavior's own setters. The new instance
+///  comes with its defaults, and whoever replaces the behavior is responsible for configuring it again. If a setting
+///  must survive a replacement, it belongs to the control, not the behavior
 public abstract class MFXBehavior<N extends Node> implements Disposable {
     //================================================================================
     // Static Properties
@@ -52,37 +84,58 @@ public abstract class MFXBehavior<N extends Node> implements Disposable {
     // Properties
     //================================================================================
     private N node;
-    private final List<Disposable> handlers = new ArrayList<>();
+    private final List<Disposable> disposables = new ArrayList<>();
 
     //================================================================================
     // Constructors
     //================================================================================
 
-    protected MFXBehavior(N node) {this.node = node;}
+    protected MFXBehavior(N node) {
+        this.node = node;
+    }
 
     //================================================================================
     // Methods
     //================================================================================
 
-    /// Behaviors can specify a set of actions to initialize themselves if needed.
-    public void init() {}
+    /// Behaviors can override this to initialize themselves, for example to register listeners and handlers through
+    /// [#listen(When\[\])] and [#onInput(WhenEvent\[\])].
+    ///
+    /// This is called automatically by the control, exactly once per behavior instance: when the control's first skin is
+    /// created, or immediately if the behavior is set after that. See the class documentation for details.
+    ///
+    /// By default, does nothing.
+    protected void install() {}
+
+    /// Registers the given [When] constructs on this behavior. They are added to a list which will be used for disposal,
+    /// avoiding memory leaks when calling [#dispose()].
+    ///
+    /// Also note that if the constructs were not activated before by invoking [When#listen()], this method
+    /// will do it for you automatically.
+    public final void listen(When<?>... ws) {
+        for (When<?> w : ws) {
+            if (!w.isActive()) w.listen();
+            disposables.add(w);
+        }
+    }
 
     /// The behavior API registers input actions in the form of [WhenEvent] constructs. This method adds them
     /// to a list (which will be used for disposal, avoiding memory leaks when calling [#dispose()]).
     ///
     /// Also note that if the constructs were not activated before by invoking [WhenEvent#register()], this method
     /// will do it for you automatically.
-    public final void register(WhenEvent<?>... ws) {
+    public final void onInput(WhenEvent<?>... ws) {
         for (WhenEvent<?> w : ws) {
             if (!w.isActive()) w.register();
-            handlers.add(w);
+            disposables.add(w);
         }
     }
 
-    /// Disables and removes all the handlers registered on this behavior without disposing of it, allowing re-usage if needed.
-    public void clear() {
-        handlers.forEach(Disposable::dispose);
-        handlers.clear();
+    /// Disposes and removes all the constructs registered on this behavior through [#listen(When\[\])] and
+    /// [#onInput(WhenEvent\[\])], without disposing of the behavior itself.
+    public final void clear() {
+        disposables.forEach(Disposable::dispose);
+        disposables.clear();
     }
 
     //================================================================================
@@ -313,9 +366,5 @@ public abstract class MFXBehavior<N extends Node> implements Disposable {
 
     protected <N1 extends Node> N1 getNodeAs(Class<N1> klass) {
         return klass.cast(node);
-    }
-
-    public List<Disposable> getHandlers() {
-        return Collections.unmodifiableList(handlers);
     }
 }

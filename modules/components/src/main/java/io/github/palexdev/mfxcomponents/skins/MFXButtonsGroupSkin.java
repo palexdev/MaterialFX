@@ -20,13 +20,14 @@ package io.github.palexdev.mfxcomponents.skins;
 
 import io.github.palexdev.mfxcomponents.controls.MFXButtonsGroup;
 import io.github.palexdev.mfxcore.controls.MFXSkinBase;
-import io.github.palexdev.mfxcore.observables.When;
 import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
+
+import static io.github.palexdev.mfxcore.observables.When.observe;
 
 /// Default skin implementation for all [MFXButtonsGroups][MFXButtonsGroup].
 ///
@@ -40,24 +41,20 @@ public class MFXButtonsGroupSkin extends MFXSkinBase<MFXButtonsGroup> {
 
     public MFXButtonsGroupSkin(MFXButtonsGroup group) {
         super(group);
-        addListeners();
-    }
-
-    //================================================================================
-    // Methods
-    //================================================================================
-
-    protected void addListeners() {
-        MFXButtonsGroup group = getSkinnable();
-        Bindings.bindContent(getChildren(), group.getButtons());
-        listeners(
-            When.observe(group::requestLayout, group.spacingProperty())
-        );
     }
 
     //================================================================================
     // Overridden Methods
     //================================================================================
+
+    @Override
+    public void install() {
+        MFXButtonsGroup group = getSkinnable();
+        Bindings.bindContent(getChildren(), group.getButtons());
+
+        // Listeners
+        listen(observe(group::requestLayout, group.spacingProperty()));
+    }
 
     @Override
     protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {

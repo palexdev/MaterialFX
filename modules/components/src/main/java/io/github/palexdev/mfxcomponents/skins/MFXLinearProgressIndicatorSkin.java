@@ -68,7 +68,7 @@ public class MFXLinearProgressIndicatorSkin extends MFXProgressIndicatorSkin {
         getChildren().add(stopIndicator);
 
         initialize();
-        listeners(observe(control::requestLayout, control.showStopIndicatorProperty()));
+        listen(observe(control::requestLayout, control.showStopIndicatorProperty()));
     }
 
     //================================================================================

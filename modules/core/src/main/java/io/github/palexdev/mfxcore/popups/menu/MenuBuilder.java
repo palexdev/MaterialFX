@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import io.github.palexdev.mfxcore.behavior.MFXBehavior;
+import io.github.palexdev.mfxcore.controls.MFXBehavior;
 import io.github.palexdev.mfxcore.controls.MFXSkinBase;
 import io.github.palexdev.mfxcore.input.KeyStroke;
 import io.github.palexdev.mfxcore.popups.MFXPopups;
@@ -75,10 +75,7 @@ public class MenuBuilder {
 
                     @Override
                     public Supplier<MFXSkinBase<? extends Node>> defaultSkinFactory() {
-                        return () -> new MFXSkinBase<MFXMenuItem>(this) {
-                            @Override
-                            protected void registerBehavior() {}
-                        };
+                        return () -> new MFXSkinBase<MFXMenuItem>(this) {};
                     }
                 };
             }

@@ -21,14 +21,12 @@ package io.github.palexdev.mfxcomponents.skins;
 import io.github.palexdev.mfxcomponents.controls.MFXRadioButton;
 import io.github.palexdev.mfxcomponents.controls.MFXSurface;
 import io.github.palexdev.mfxcomponents.skins.base.MFXLabeledSkin;
-import io.github.palexdev.mfxcore.behavior.MFXBehavior;
 import io.github.palexdev.mfxcore.controls.BoundLabel;
 import io.github.palexdev.mfxcore.controls.MFXLabeled;
 import io.github.palexdev.mfxeffects.beans.Position;
 import io.github.palexdev.mfxeffects.ripple.MFXRippleGenerator;
 import javafx.geometry.*;
 import javafx.scene.CacheHint;
-import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
@@ -102,16 +100,14 @@ public class MFXRadioButtonSkin extends MFXLabeledSkin {
     //================================================================================
 
     @Override
-    protected void registerBehavior() {
-        super.registerBehavior();
+    public void install() {
         MFXLabeled rb = getSkinnable();
-        MFXBehavior<? extends Node> behavior = getBehavior();
-        events(
-            intercept(rb, MouseEvent.MOUSE_PRESSED).handle(e -> behavior.mousePressed(e, () -> rg.generate(e))),
+        onInput(
+            intercept(rb, MouseEvent.MOUSE_PRESSED).handle(e -> behavior().mousePressed(e, () -> rg.generate(e))),
             intercept(rb, MouseEvent.MOUSE_RELEASED).handle(_ -> rg.release()),
             intercept(rb, MouseEvent.MOUSE_EXITED).handle(_ -> rg.release()),
-            intercept(rb, MouseEvent.MOUSE_CLICKED).handle(behavior::mouseClicked),
-            intercept(rb, KeyEvent.KEY_PRESSED).handle(e -> behavior.keyPressed(e, () -> {
+            intercept(rb, MouseEvent.MOUSE_CLICKED).handle(e -> behavior().mouseClicked(e)),
+            intercept(rb, KeyEvent.KEY_PRESSED).handle(e -> behavior().keyPressed(e, () -> {
                 if (e.getCode() == KeyCode.ENTER || e.getCode() == KeyCode.SPACE) {
                     Bounds b = box.getLayoutBounds();
                     rg.generate(b.getCenterX(), b.getCenterY());

@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import io.github.palexdev.mfxcore.behavior.MFXBehavior;
+import io.github.palexdev.mfxcore.controls.MFXBehavior;
 import io.github.palexdev.mfxcore.controls.MFXSkinBase;
 import io.github.palexdev.mfxcore.controls.MFXStyleable;
 import io.github.palexdev.mfxcore.popups.menu.MenuBuilder.CheckMenuBuilder;
@@ -33,6 +33,7 @@ import io.github.palexdev.mfxcore.selection.SelectionProperty;
 import io.github.palexdev.mfxcore.utils.fx.CSSFragment;
 import io.github.palexdev.mfxcore.utils.fx.PseudoClasses;
 import javafx.scene.Node;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.layout.Region;
 
 /// Specialization of [MFXMenuItem] to add selectable options in [MFXMenu].
@@ -128,6 +129,14 @@ public class MFXCheckMenuItem extends MFXMenuItem implements Selectable {
         return MFXStyleable.extend(super.defaultStyleClasses(), "check");
     }
 
+    @Override
+    protected void onSubItemsChanged() {}
+
+    @Override
+    protected SubMenuHandler getSubMenuHandler() {
+        return null;
+    }
+
     //================================================================================
     // Getters/Setters
     //================================================================================
@@ -164,11 +173,18 @@ public class MFXCheckMenuItem extends MFXMenuItem implements Selectable {
         private final Region checkmark;
 
         public MFXCheckMenuItemSkin(MFXCheckMenuItem item) {
-            checkmark = new Region();
             super(item);
+            checkmark = new Region();
             checkmark.getStyleClass().add("mark");
             checkmark.visibleProperty().bind(item.selectedProperty());
             iconContainer.getChildren().addFirst(checkmark);
+        }
+
+        @Override
+        public void install() {
+            super.install();
+            trailing.contentDisplayProperty().unbind();
+            trailing.setContentDisplay(ContentDisplay.LEFT);
         }
 
         @Override
@@ -182,9 +198,6 @@ public class MFXCheckMenuItem extends MFXMenuItem implements Selectable {
                 iconContainer.getChildren().add(newIcon);
             }
         }
-
-        @Override
-        protected void handleSubMenu() {}
 
         @Override
         protected MFXCheckMenuItem getControl() {

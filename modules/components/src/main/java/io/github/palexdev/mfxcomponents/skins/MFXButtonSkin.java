@@ -21,7 +21,6 @@ package io.github.palexdev.mfxcomponents.skins;
 import io.github.palexdev.mfxcomponents.controls.MFXSurface;
 import io.github.palexdev.mfxcomponents.controls.base.MFXButtonBase;
 import io.github.palexdev.mfxcomponents.skins.base.MFXLabeledSkin;
-import io.github.palexdev.mfxcore.behavior.MFXBehavior;
 import io.github.palexdev.mfxcore.utils.fx.LayoutUtils;
 import io.github.palexdev.mfxeffects.beans.Position;
 import io.github.palexdev.mfxeffects.ripple.MFXRippleGenerator;
@@ -81,15 +80,14 @@ public class MFXButtonSkin extends MFXLabeledSkin {
     //================================================================================
 
     @Override
-    protected void registerBehavior() {
+    public void install() {
         MFXButtonBase button = getControl();
-        MFXBehavior<? extends Node> behavior = getBehavior();
-        events(
-            intercept(button, MouseEvent.MOUSE_PRESSED).handle(e -> behavior.mousePressed(e, () -> rg.generate(e))),
+        onInput(
+            intercept(button, MouseEvent.MOUSE_PRESSED).handle(e -> behavior().mousePressed(e, () -> rg.generate(e))),
             intercept(button, MouseEvent.MOUSE_RELEASED).handle(_ -> rg.release()),
             intercept(button, MouseEvent.MOUSE_EXITED).handle(_ -> rg.release()),
-            intercept(button, MouseEvent.MOUSE_CLICKED).handle(behavior::mouseClicked),
-            intercept(button, KeyEvent.KEY_PRESSED).handle(e -> behavior.keyPressed(e, () -> {
+            intercept(button, MouseEvent.MOUSE_CLICKED).handle(e -> behavior().mouseClicked(e)),
+            intercept(button, KeyEvent.KEY_PRESSED).handle(e -> behavior().keyPressed(e, () -> {
                 if (e.getCode() == KeyCode.ENTER || e.getCode() == KeyCode.SPACE) {
                     Bounds b = button.getLayoutBounds();
                     rg.generate(b.getCenterX(), b.getCenterY());

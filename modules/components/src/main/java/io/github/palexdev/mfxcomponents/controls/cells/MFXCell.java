@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import io.github.palexdev.mfxcomponents.controls.MFXSurface;
-import io.github.palexdev.mfxcore.behavior.MFXBehavior;
+import io.github.palexdev.mfxcore.controls.MFXBehavior;
 import io.github.palexdev.mfxcore.builders.bindings.BooleanBindingBuilder;
 import io.github.palexdev.mfxcore.controls.MFXSkinBase;
 import io.github.palexdev.mfxcore.selection.model.ISelectionModel;
@@ -175,16 +175,15 @@ public class MFXCell<T> extends VFXSimpleCell<T> {
         }
 
         @Override
-        protected void registerBehavior() {
-            super.registerBehavior();
+        public void install() {
+            super.install();
             MFXCell<T> cell = getControl();
-            MFXBehavior<? extends Node> behavior = getBehavior();
-            events(
+            onInput(
                 intercept(cell, MouseEvent.MOUSE_PRESSED).handle(rg::generate),
                 intercept(cell, MouseEvent.MOUSE_RELEASED).handle(_ -> rg.release()),
-                intercept(cell, MouseEvent.MOUSE_CLICKED).handle(behavior::mouseClicked),
+                intercept(cell, MouseEvent.MOUSE_CLICKED).handle(e -> behavior().mouseClicked(e)),
                 intercept(cell, MouseEvent.MOUSE_EXITED).handle(_ -> rg.release()),
-                intercept(cell, KeyEvent.KEY_PRESSED).handle(e -> behavior.keyPressed(e, () -> {
+                intercept(cell, KeyEvent.KEY_PRESSED).handle(e -> behavior().keyPressed(e, () -> {
                     if (e.getCode() == KeyCode.ENTER || e.getCode() == KeyCode.SPACE) {
                         Bounds b = cell.getLayoutBounds();
                         rg.generate(b.getCenterX(), b.getCenterY());
@@ -237,7 +236,7 @@ public class MFXCell<T> extends VFXSimpleCell<T> {
             }
 
             VFXListState<?, ?> state = list.getState();
-            Node focused = state.getCellsByIndexUnmodifiable().values().stream()
+            Node focused = state.getCellsByIndex().values().stream()
                 .map(VFXCell::toNode)
                 .filter(Node::isFocusVisible)
                 .findFirst()

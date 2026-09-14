@@ -27,20 +27,19 @@ import io.github.palexdev.mfxcore.base.beans.Size;
 import io.github.palexdev.mfxcore.base.properties.PositionProperty;
 import io.github.palexdev.mfxcore.base.properties.SizeProperty;
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableObjectProperty;
-import io.github.palexdev.mfxcore.behavior.MFXBehavior;
-import io.github.palexdev.mfxcore.controls.Label;
+import io.github.palexdev.mfxcore.controls.MFXBehavior;
 import io.github.palexdev.mfxcore.controls.MFXControl;
 import io.github.palexdev.mfxcore.controls.MFXSkinBase;
 import io.github.palexdev.mfxcore.utils.fx.CSSFragment;
 import io.github.palexdev.mfxcore.utils.fx.StyleUtils;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Skin;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxRobot;
@@ -50,6 +49,8 @@ import org.testfx.framework.junit5.Start;
 
 import static io.github.palexdev.mfxcore.base.beans.Position.position;
 import static io.github.palexdev.mfxcore.base.beans.Size.size;
+import static io.github.palexdev.mfxcore.input.WhenEvent.intercept;
+import static io.github.palexdev.mfxcore.observables.When.onInvalidated;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(ApplicationExtension.class)
@@ -60,63 +61,222 @@ public class TestCustomControls {
         stage.show();
     }
 
-    @BeforeEach
-    void setup() {
-        CustomBehavior.instances = 0;
-        CustomSkin.instances = 0;
+    @Test
+    void testBehaviorInstalledWithFirstSkin(FxRobot robot) {
+        StackPane pane = setupStage();
+        CustomControl control = new CustomControl();
+        CustomBehavior behavior = control.getBehavior();
+        assertNotNull(behavior);
+        assertNull(control.getSkin());
+        assertEquals(0, behavior.installs);
+
+        robot.interact(() -> Event.fireEvent(control, new ActionEvent()));
+        assertEquals(0, behavior.events);
+
+        robot.interact(() -> pane.getChildren().add(control));
+        CustomSkin skin = control.getCustomSkin();
+        assertNotNull(skin);
+        assertSame(behavior, control.getBehavior());
+        assertEquals(1, behavior.installs);
+        assertEquals(0, behavior.disposes);
+
+        robot.interact(() -> {
+            Event.fireEvent(control, new ActionEvent());
+            control.setOpacity(0.5);
+        });
+        assertEquals(1, behavior.events);
+        assertEquals(1, behavior.invalidations);
+        assertEquals(1, behavior.skinCalls);
+        assertEquals(1, skin.events);
+        assertEquals(1, skin.invalidations);
     }
 
     @Test
-    void testCustomControl(FxRobot robot) {
+    void testBehaviorChangeBeforeSkin(FxRobot robot) {
         StackPane pane = setupStage();
         CustomControl control = new CustomControl();
+        CustomBehavior first = control.getBehavior();
 
-        // The behavior is created with the control
-        assertEquals(1, CustomBehavior.instances);
-        assertEquals(0, CustomSkin.instances);
+        robot.interact(() -> control.setBehaviorFactory(() -> new CustomBehavior(control)));
+        CustomBehavior second = control.getBehavior();
+        assertNotSame(first, second);
+        assertEquals(0, first.installs);
+        assertEquals(1, first.disposes);
+        assertEquals(0, second.installs);
+        assertEquals(0, second.disposes);
 
         robot.interact(() -> pane.getChildren().add(control));
-
-        assertEquals(1, CustomBehavior.instances);
-        assertEquals(1, CustomSkin.instances);
-        assertEquals(1, control.getBehavior().initCount);
-        Skin<?> skin = control.getSkin();
+        assertNotNull(control.getCustomSkin());
+        assertSame(second, control.getBehavior());
+        assertEquals(0, first.installs);
+        assertEquals(1, second.installs);
 
         robot.interact(() -> {
-            pane.getChildren().clear();
-            assertNull(control.getScene());
-            control.setSkinFactory(() -> new CustomSkin(control) {
-                final Label label = new Label("Hello world!");
-
-                {
-                    getChildren().setAll(label);
-                }
-            });
-            pane.getChildren().add(control);
+            Event.fireEvent(control, new ActionEvent());
+            control.setOpacity(0.5);
         });
+        assertEquals(0, first.events);
+        assertEquals(0, first.invalidations);
+        assertEquals(0, first.skinCalls);
+        assertEquals(1, second.events);
+        assertEquals(1, second.invalidations);
+        assertEquals(1, second.skinCalls);
+    }
 
-        assertNotSame(skin, control.getSkin());
-        assertEquals(1, CustomBehavior.instances);
-        assertEquals(2, CustomSkin.instances);
-        assertEquals(2, control.getBehavior().initCount);
-        assertEquals(1, control.getChildrenUnmodifiable().size());
+    @Test
+    void testPreloadSkin(FxRobot robot) {
+        CustomControl control = new CustomControl();
+        CustomBehavior behavior = control.getBehavior();
 
-        robot.interact(() ->
-            control.setSkinFactory(() -> new CustomSkin(control) {
-                final Label label = new Label("Hello custom world!");
+        robot.interact(control::preloadSkin);
+        CustomSkin skin = control.getCustomSkin();
+        assertNotNull(skin);
+        assertEquals(1, behavior.installs);
 
-                {
-                    getChildren().setAll(label);
-                }
-            })
-        );
+        robot.interact(control::preloadSkin);
+        assertSame(skin, control.getCustomSkin());
+        assertEquals(0, skin.disposes);
+        assertEquals(1, behavior.installs);
 
-        assertEquals(1, CustomBehavior.instances);
-        assertEquals(3, CustomSkin.instances);
-        assertEquals(3, control.getBehavior().initCount);
-        assertEquals(1, control.getChildrenUnmodifiable().size());
-        Label label = (Label) control.lookup(".label");
-        assertEquals("Hello custom world!", label.getText());
+        robot.interact(() -> Event.fireEvent(control, new ActionEvent()));
+        assertEquals(1, behavior.events);
+        assertEquals(1, behavior.skinCalls);
+        assertEquals(1, skin.events);
+    }
+
+    @Test
+    void testSkinFactoryChangeKeepsBehavior(FxRobot robot) {
+        StackPane pane = setupStage();
+        CustomControl control = new CustomControl();
+        robot.interact(() -> pane.getChildren().add(control));
+
+        CustomBehavior behavior = control.getBehavior();
+        CustomSkin first = control.getCustomSkin();
+        assertNotNull(first);
+
+        robot.interact(() -> control.setSkinFactory(() -> new CustomSkin(control)));
+        CustomSkin second = control.getCustomSkin();
+        assertNotSame(first, second);
+        assertEquals(1, first.disposes);
+        assertEquals(0, second.disposes);
+        assertSame(behavior, control.getBehavior());
+        assertEquals(1, behavior.installs);
+        assertEquals(0, behavior.disposes);
+
+        robot.interact(() -> {
+            Event.fireEvent(control, new ActionEvent());
+            control.setOpacity(0.5);
+        });
+        assertEquals(0, first.events);
+        assertEquals(0, first.invalidations);
+        assertEquals(1, second.events);
+        assertEquals(1, second.invalidations);
+        assertEquals(1, behavior.events);
+        assertEquals(1, behavior.invalidations);
+        assertEquals(1, behavior.skinCalls);
+    }
+
+    @Test
+    void testSetSkinKeepsBehavior(FxRobot robot) {
+        StackPane pane = setupStage();
+        CustomControl control = new CustomControl();
+        robot.interact(() -> pane.getChildren().add(control));
+
+        CustomBehavior behavior = control.getBehavior();
+        CustomSkin first = control.getCustomSkin();
+        assertNotNull(first);
+
+        robot.interact(() -> control.setSkin(new CustomSkin(control)));
+        CustomSkin second = control.getCustomSkin();
+        assertNotSame(first, second);
+        assertEquals(1, first.disposes);
+        assertEquals(0, second.disposes);
+        assertSame(behavior, control.getBehavior());
+        assertEquals(1, behavior.installs);
+        assertEquals(0, behavior.disposes);
+
+        robot.interact(() -> {
+            Event.fireEvent(control, new ActionEvent());
+            control.setOpacity(0.5);
+        });
+        assertEquals(0, first.events);
+        assertEquals(0, first.invalidations);
+        assertEquals(1, second.events);
+        assertEquals(1, second.invalidations);
+        assertEquals(1, behavior.events);
+        assertEquals(1, behavior.invalidations);
+        assertEquals(1, behavior.skinCalls);
+    }
+
+    @Test
+    void testBehaviorChangeKeepsSkin(FxRobot robot) {
+        StackPane pane = setupStage();
+        CustomControl control = new CustomControl();
+        robot.interact(() -> pane.getChildren().add(control));
+
+        CustomBehavior first = control.getBehavior();
+        CustomSkin skin = control.getCustomSkin();
+        assertNotNull(skin);
+
+        robot.interact(() -> control.setBehaviorFactory(() -> new CustomBehavior(control)));
+        CustomBehavior second = control.getBehavior();
+        assertNotSame(first, second);
+        assertEquals(1, first.disposes);
+        assertEquals(1, second.installs);
+        assertEquals(0, second.disposes);
+        assertSame(skin, control.getCustomSkin());
+        assertEquals(0, skin.disposes);
+
+        robot.interact(() -> {
+            Event.fireEvent(control, new ActionEvent());
+            control.setOpacity(0.5);
+        });
+        assertEquals(0, first.events);
+        assertEquals(0, first.invalidations);
+        assertEquals(0, first.skinCalls);
+        assertEquals(1, second.events);
+        assertEquals(1, second.invalidations);
+        assertEquals(1, second.skinCalls);
+        assertEquals(1, skin.events);
+        assertEquals(1, skin.invalidations);
+    }
+
+    @Test
+    void testNullBehavior(FxRobot robot) {
+        StackPane pane = setupStage();
+        CustomControl control = new CustomControl();
+        robot.interact(() -> pane.getChildren().add(control));
+
+        CustomBehavior first = control.getBehavior();
+        CustomSkin skin = control.getCustomSkin();
+        assertNotNull(skin);
+
+        robot.interact(() -> control.setBehaviorFactory(null));
+        assertNull(control.getBehavior());
+        assertEquals(1, first.disposes);
+
+        robot.interact(() -> control.setOpacity(0.5));
+        assertEquals(0, first.invalidations);
+        assertEquals(1, skin.invalidations);
+
+        robot.interact(control::setDefaultBehaviorFactory);
+        CustomBehavior second = control.getBehavior();
+        assertNotNull(second);
+        assertNotSame(first, second);
+        assertEquals(1, second.installs);
+        assertSame(skin, control.getCustomSkin());
+        assertEquals(0, skin.disposes);
+
+        robot.interact(() -> {
+            Event.fireEvent(control, new ActionEvent());
+            control.setOpacity(1.0);
+        });
+        assertEquals(0, first.events);
+        assertEquals(1, second.events);
+        assertEquals(1, second.invalidations);
+        assertEquals(1, second.skinCalls);
+        assertEquals(1, skin.events);
+        assertEquals(2, skin.invalidations);
     }
 
     @Test
@@ -143,6 +303,10 @@ public class TestCustomControls {
         assertEquals(position(25.0, 10.0), control.position.get());
     }
 
+    //================================================================================
+    // Misc
+    //================================================================================
+
     StackPane setupStage() {
         StackPane pane = new StackPane();
         try {
@@ -157,6 +321,63 @@ public class TestCustomControls {
     //================================================================================
     // Inner Classes
     //================================================================================
+
+    static class CustomBehavior extends MFXBehavior<CustomControl> {
+        int installs = 0;
+        int disposes = 0;
+        int events = 0;
+        int invalidations = 0;
+        int skinCalls = 0;
+
+        public CustomBehavior(CustomControl node) {
+            super(node);
+        }
+
+        @Override
+        protected void install() {
+            installs++;
+            CustomControl control = getNode();
+            onInput(intercept(control, ActionEvent.ACTION).handle(_ -> events++));
+            listen(onInvalidated(control.opacityProperty()).then(_ -> invalidations++));
+        }
+
+        void onSkinAction() {
+            skinCalls++;
+        }
+
+        @Override
+        public void dispose() {
+            disposes++;
+            super.dispose();
+        }
+    }
+
+    static class CustomSkin extends MFXSkinBase<CustomControl> {
+        int disposes = 0;
+        int events = 0;
+        int invalidations = 0;
+
+        public CustomSkin(CustomControl control) {
+            super(control);
+        }
+
+        @Override
+        public void install() {
+            CustomControl control = getSkinnable();
+            onInput(intercept(control, ActionEvent.ACTION).handle(_ -> {
+                events++;
+                behaviorAs(CustomBehavior.class).onSkinAction();
+            }));
+            listen(onInvalidated(control.opacityProperty()).then(_ -> invalidations++));
+        }
+
+        @Override
+        public void dispose() {
+            disposes++;
+            super.dispose();
+        }
+    }
+
     static class CustomControl extends MFXControl {
 
         {
@@ -165,7 +386,11 @@ public class TestCustomControls {
 
         @Override
         public CustomBehavior getBehavior() {
-            return ((CustomBehavior) super.getBehavior());
+            return (CustomBehavior) super.getBehavior();
+        }
+
+        public CustomSkin getCustomSkin() {
+            return (CustomSkin) getSkin();
         }
 
         @Override
@@ -216,31 +441,6 @@ public class TestCustomControls {
         @Override
         public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
             return getClassCssMetaData();
-        }
-
-    }
-
-    static class CustomBehavior extends MFXBehavior<CustomControl> {
-        public static int instances = 0;
-        public int initCount = 0;
-
-        public CustomBehavior(CustomControl node) {
-            super(node);
-            instances++;
-        }
-
-        @Override
-        public void init() {
-            initCount++;
-        }
-    }
-
-    static class CustomSkin extends MFXSkinBase<CustomControl> {
-        public static int instances = 0;
-
-        public CustomSkin(CustomControl node) {
-            super(node);
-            instances++;
         }
     }
 }

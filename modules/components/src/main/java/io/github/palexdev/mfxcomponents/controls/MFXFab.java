@@ -33,7 +33,7 @@ import io.github.palexdev.mfxcore.base.beans.Size;
 import io.github.palexdev.mfxcore.base.properties.SizeProperty;
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableBooleanProperty;
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableObjectProperty;
-import io.github.palexdev.mfxcore.behavior.MFXBehavior;
+import io.github.palexdev.mfxcore.controls.MFXBehavior;
 import io.github.palexdev.mfxcore.controls.Label;
 import io.github.palexdev.mfxcore.controls.MFXSkinBase;
 import io.github.palexdev.mfxcore.utils.fx.PseudoClasses;

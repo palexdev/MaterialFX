@@ -27,7 +27,7 @@ import io.github.palexdev.mfxcomponents.controls.cells.MFXCell;
 import io.github.palexdev.mfxcomponents.popups.ExtendedPopoverConfig;
 import io.github.palexdev.mfxcore.base.properties.functional.ConsumerProperty;
 import io.github.palexdev.mfxcore.base.properties.functional.FunctionProperty;
-import io.github.palexdev.mfxcore.behavior.MFXBehavior;
+import io.github.palexdev.mfxcore.controls.MFXBehavior;
 import io.github.palexdev.mfxcore.controls.MFXControl;
 import io.github.palexdev.mfxcore.selection.model.ISelectionModel;
 import io.github.palexdev.mfxcore.selection.model.ISelectionModel.MultipleSelectionHandler;

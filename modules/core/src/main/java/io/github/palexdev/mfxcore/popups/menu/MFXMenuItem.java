@@ -22,14 +22,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import io.github.palexdev.mfxcore.behavior.MFXBehavior;
-import io.github.palexdev.mfxcore.controls.BoundLabel;
-import io.github.palexdev.mfxcore.controls.MFXLabeled;
-import io.github.palexdev.mfxcore.controls.MFXSkinBase;
-import io.github.palexdev.mfxcore.controls.MFXStyleable;
+import io.github.palexdev.mfxcore.controls.*;
 import io.github.palexdev.mfxcore.input.KeyStroke;
 import io.github.palexdev.mfxcore.observables.When;
 import io.github.palexdev.mfxcore.utils.fx.*;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -48,6 +45,7 @@ import javafx.scene.layout.StackPane;
 
 import static io.github.palexdev.mfxcore.input.WhenEvent.intercept;
 import static io.github.palexdev.mfxcore.utils.Functions.cachedSupplier;
+import static io.github.palexdev.mfxcore.utils.fx.FXCollectionsUtils.isEmpty;
 
 /// Base implementation of menu entries to be used in [MFXMenu]. Extends [MFXLabeled] as the most basic entry has at least
 /// three things: an icon, the text, and the shortcut.
@@ -58,7 +56,7 @@ import static io.github.palexdev.mfxcore.utils.Functions.cachedSupplier;
 /// Menu entries can also have:
 /// - An action to run on trigger (click, enter, etc... Depends on the behavior)
 /// - A list of [MFXMenuItems][MFXMenuItem], denoting, if not empty, that the entry can show a submenu. This is handled
-/// by the default skin.
+/// by the item itself, see [#getSubMenuHandler()] and [#onSubItemsChanged()].
 ///
 /// Other than that, there are just a few more things to note:
 /// - When an item has sub-items (can show a submenu), the style class `.sub` is added onto the item, allowing for
@@ -104,6 +102,8 @@ public class MFXMenuItem extends MFXLabeled {
     private MFXMenu menu;
     private final ObjectProperty<KeyStroke> shortcut = new SimpleObjectProperty<>();
     private final ObjectProperty<Runnable> action = new SimpleObjectProperty<>();
+
+    private SubMenuHandler subMenuHandler;
     private final ObservableList<MFXMenuItem> subItems = FXCollections.observableArrayList();
 
     private final TextMeasurementCache tmc;
@@ -125,6 +125,9 @@ public class MFXMenuItem extends MFXLabeled {
         super(text, graphic);
         tmc = new TextMeasurementCache(this);
         getStylesheets().add(DEFAULT_CSS);
+
+        // Init sub menu handling
+        subItems.addListener((InvalidationListener) _ -> onSubItemsChanged());
     }
 
     public static MenuBuilder menuItem(String text) {
@@ -157,6 +160,27 @@ public class MFXMenuItem extends MFXLabeled {
         // FIXME ugly! is there another way?
         Node iconContainer = icRetriever.get();
         return iconContainer != null ? LayoutUtils.snappedBoundWidth(iconContainer) : USE_COMPUTED_SIZE;
+    }
+
+    /// Called every time the [#getSubItems()] list changes.
+    ///
+    /// By default, adds the `.sub` style class when the list is not empty, and removes it otherwise. When the list becomes
+    /// empty, the current [SubMenuHandler] (if any) is also disposed.
+    ///
+    /// Subclasses that do not support submenus can override this to do nothing, see [MFXCheckMenuItem].
+    protected void onSubItemsChanged() {
+        if (subItems.isEmpty()) {
+            getStyleClass().remove("sub");
+            invalidateSubMenuHandler();
+        } else if (!getStyleClass().contains("sub")) {
+            getStyleClass().add("sub");
+        }
+    }
+
+    private void invalidateSubMenuHandler() {
+        if (subMenuHandler == null) return;
+        subMenuHandler.dispose();
+        subMenuHandler = null;
     }
 
     //================================================================================
@@ -194,6 +218,8 @@ public class MFXMenuItem extends MFXLabeled {
     }
 
     protected void setMenu(MFXMenu menu) {
+        if (this.menu == menu) return;
+        invalidateSubMenuHandler();
         this.menu = menu;
     }
 
@@ -225,6 +251,17 @@ public class MFXMenuItem extends MFXLabeled {
         return subItems;
     }
 
+    /// @return the [SubMenuHandler] responsible for this item's submenu, or `null` if the item has no sub-items or is not
+    /// part of a menu yet. The handler is created lazily on the first call that satisfies both conditions, and it is
+    /// disposed when the item is moved to another menu or its sub-items list becomes empty.
+    ///
+    /// Both the default skin and behavior access it through their own delegates, which custom implementations can use too.
+    protected SubMenuHandler getSubMenuHandler() {
+        if (subMenuHandler == null && menu != null && !subItems.isEmpty())
+            subMenuHandler = new SubMenuHandler(this);
+        return subMenuHandler;
+    }
+
     //================================================================================
     // Inner Classes
     //================================================================================
@@ -237,16 +274,14 @@ public class MFXMenuItem extends MFXLabeled {
     /// (run action or open submenu)
     public static class MFXMenuItemBehavior extends MFXBehavior<MFXMenuItem> {
 
-        private Supplier<SubMenuHandler> subMenuHandlerAccessor;
-
         public MFXMenuItemBehavior(MFXMenuItem item) {
             super(item);
         }
 
         @Override
-        public void init() {
+        public void install() {
             MFXMenuItem item = getNode();
-            register(
+            onInput(
                 intercept(item, MouseEvent.MOUSE_PRESSED).handle(this::mousePressed),
                 intercept(item, MouseEvent.MOUSE_RELEASED).handle(this::mouseReleased),
                 intercept(item, MouseEvent.MOUSE_EXITED).handle(this::mouseExited),
@@ -327,12 +362,9 @@ public class MFXMenuItem extends MFXLabeled {
             }
         }
 
+        /// Delegate for [MFXMenuItem#getSubMenuHandler()].
         protected SubMenuHandler getSubMenuHandler() {
-            return subMenuHandlerAccessor != null ? subMenuHandlerAccessor.get() : null;
-        }
-
-        protected void setSubMenuHandlerAccessor(Supplier<SubMenuHandler> subMenuHandlerAccessor) {
-            this.subMenuHandlerAccessor = subMenuHandlerAccessor;
+            return getNode().getSubMenuHandler();
         }
     }
 
@@ -340,11 +372,9 @@ public class MFXMenuItem extends MFXLabeled {
 
         protected final BoundLabel leading;
         protected final StackPane iconContainer;
-        private final Label trailing;
+        protected final Label trailing;
         private final Region tIcon;
         private final Region surface;
-
-        private SubMenuHandler subMenuHandler;
 
         public MFXMenuItemSkin(MFXMenuItem item) {
             super(item);
@@ -372,35 +402,7 @@ public class MFXMenuItem extends MFXLabeled {
             surface.setManaged(false);
             StyleUtils.initProperty(surface.visibleProperty(), false);
 
-            // Finalize
-            addListeners();
             getChildren().addAll(surface, iconContainer, leading, trailing);
-        }
-
-        /// Adds the following listeners:
-        /// - A listener on the entry's [#hoverProperty()] to show/hide the submenu if present. This also sets the parent menu's
-        /// [MFXMenu#hoveredItemProperty()] to this entry.
-        /// - A listener on the [MFXMenuItem#getSubItems()] list to build/dispose the submenu as needed.
-        protected void addListeners() {
-            MFXMenuItem item = getSkinnable();
-            listeners(
-                When.onInvalidated(item.hoverProperty())
-                    .then(h -> {
-                        setMenuHoveredItem();
-                        item.requestFocus(); // Reset focus acquired by key navigation
-                        if (subMenuHandler == null) return;
-                        if (h) {
-                            subMenuHandler.show();
-                        } else {
-                            subMenuHandler.hide();
-                        }
-                    })
-                    .executeNow(item::isHover),
-                When.onChanged(item.graphicProperty()).then(this::updateIcon).executeNow(),
-                When.observe(this::handleSubMenu, item.getSubItems()).executeNow()
-            );
-
-            trailing.textProperty().bind(item.shortcutProperty().map(KeyStroke::toDisplayString));
         }
 
         protected void updateIcon(Node oldIcon, Node newIcon) {
@@ -408,32 +410,11 @@ public class MFXMenuItem extends MFXLabeled {
             if (newIcon != null) iconContainer.getChildren().add(newIcon);
         }
 
-        /// This method is mainly responsible for creating or disposing the submenu depending on [MFXMenuItem#getSubItems()].
-        ///
-        /// It also updates the trailing label to only show the text or submenu icon accordingly ([ContentDisplay]),
-        /// and adds/removes the `.sub` style class to the item
-        protected void handleSubMenu() {
-            MFXMenuItem item = getSkinnable();
-            if (item.getSubItems().isEmpty()) {
-                item.getStyleClass().remove("sub");
-                trailing.setContentDisplay(ContentDisplay.TEXT_ONLY);
-                if (subMenuHandler != null) {
-                    subMenuHandler.dispose();
-                    subMenuHandler = null;
-                }
-            } else {
-                trailing.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                item.getStyleClass().add("sub");
-                subMenuHandler = new SubMenuHandler(item);
-            }
-        }
-
         protected void setMenuHoveredItem() {
             MFXMenuItem item = getSkinnable();
             MFXMenu menu = item.getMenu();
             menu.setHoveredItem(item);
         }
-
 
         protected double minIconWidth() {
             MFXMenuItem item = getSkinnable();
@@ -461,12 +442,34 @@ public class MFXMenuItem extends MFXLabeled {
             return label;
         }
 
+        /// Adds the following listeners:
+        /// - A listener on the entry's [#hoverProperty()] to show/hide the submenu if present. This also sets the parent menu's
+        /// [MFXMenu#hoveredItemProperty()] to this entry.
         @Override
-        protected void registerBehavior() {
-            super.registerBehavior();
-            if (getBehavior() instanceof MFXMenuItemBehavior mib) {
-                mib.setSubMenuHandlerAccessor(() -> this.subMenuHandler);
-            }
+        public void install() {
+            MFXMenuItem item = getSkinnable();
+
+            // Listeners
+            listen(
+                When.onInvalidated(item.hoverProperty())
+                    .then(h -> {
+                        SubMenuHandler subMenuHandler = getSubMenuHandler();
+                        setMenuHoveredItem();
+                        item.requestFocus(); // Reset focus acquired by key navigation
+                        if (subMenuHandler == null) return;
+                        if (h) {
+                            subMenuHandler.show();
+                        } else {
+                            subMenuHandler.hide();
+                        }
+                    })
+                    .executeNow(item::isHover),
+                When.onChanged(item.graphicProperty()).then(this::updateIcon).executeNow()
+            );
+
+            trailing.textProperty().bind(item.shortcutProperty().map(KeyStroke::toDisplayString));
+            trailing.contentDisplayProperty().bind(isEmpty(item.getSubItems())
+                .map(e -> e ? ContentDisplay.TEXT_ONLY : ContentDisplay.GRAPHIC_ONLY));
         }
 
         // Ensures that the sub icon is not too close to the leading text
@@ -474,7 +477,6 @@ public class MFXMenuItem extends MFXLabeled {
         protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
             return 120.0;
         }
-
         @Override
         protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
             return leftInset + minIconWidth() + minLeadingWidth() + LayoutUtils.snappedBoundWidth(trailing) + rightInset;
@@ -505,13 +507,9 @@ public class MFXMenuItem extends MFXLabeled {
             positionInArea(leading, x + iconContainer.getWidth(), y, w, h, 0, HPos.LEFT, VPos.CENTER);
         }
 
-        @Override
-        public void dispose() {
-            if (subMenuHandler != null) {
-                subMenuHandler.dispose();
-                subMenuHandler = null;
-            }
-            super.dispose();
+        /// Delegate for [MFXMenuItem#getSubMenuHandler()].
+        protected SubMenuHandler getSubMenuHandler() {
+            return getSkinnable().getSubMenuHandler();
         }
     }
 }

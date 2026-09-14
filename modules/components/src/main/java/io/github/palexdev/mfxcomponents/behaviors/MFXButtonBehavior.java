@@ -19,7 +19,7 @@
 package io.github.palexdev.mfxcomponents.behaviors;
 
 import io.github.palexdev.mfxcomponents.controls.base.MFXButtonBase;
-import io.github.palexdev.mfxcore.behavior.MFXBehavior;
+import io.github.palexdev.mfxcore.controls.MFXBehavior;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;

@@ -102,29 +102,12 @@ public class MFXSplitButtonSkin extends MFXSkinBase<MFXSplitButton> {
             menu.install(trail);
         }
 
-        // Finalize
-        addListeners();
         getChildren().setAll(lead, trail);
     }
 
     //================================================================================
     // Methods
     //================================================================================
-
-    /// Adds listeners to the following properties:
-    /// - [MFXSplitButton#menuConfigProperty()] to re-apply the config on the menu
-    /// - [MFXMenu#stateProperty()] to de-/activate the ':open' pseudo state on the [MFXSplitButton]
-    /// - [MFXSplitButton#getAppliedVariants()] to call [#updateVariants()]
-    protected void addListeners() {
-        MFXSplitButton button = getSkinnable();
-        listeners(
-            onInvalidated(button.menuConfigProperty())
-                .then(cfg -> cfg.apply(menu)),
-            onInvalidated(menu.stateProperty())
-                .then(s -> PseudoClasses.OPEN.setOn(button, s == PopupState.SHOWING || s == PopupState.SHOWN)),
-            observe(this::updateVariants, button.getAppliedVariants()).executeNow()
-        );
-    }
 
     /// Responsible for mirroring the [StyleVariant] and [SizeVariant] applied on the [MFXSplitButton] onto the leading
     /// and trailing buttons, since they are standard [MFXButtons][MFXButton] and thus have their own variants.
@@ -153,6 +136,24 @@ public class MFXSplitButtonSkin extends MFXSkinBase<MFXSplitButton> {
     //================================================================================
     // Overridden Methods
     //================================================================================
+
+    /// Adds listeners to the following properties:
+    /// - [MFXSplitButton#menuConfigProperty()] to re-apply the config on the menu
+    /// - [MFXMenu#stateProperty()] to de-/activate the ':open' pseudo state on the [MFXSplitButton]
+    /// - [MFXSplitButton#getAppliedVariants()] to call [#updateVariants()]
+    @Override
+    public void install() {
+        MFXSplitButton button = getSkinnable();
+
+        // Listeners
+        listen(
+            onInvalidated(button.menuConfigProperty())
+                .then(cfg -> cfg.apply(menu)),
+            onInvalidated(menu.stateProperty())
+                .then(s -> PseudoClasses.OPEN.setOn(button, s == PopupState.SHOWING || s == PopupState.SHOWN)),
+            observe(this::updateVariants, button.getAppliedVariants()).executeNow()
+        );
+    }
 
     @Override
     protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {

@@ -20,18 +20,14 @@ package io.github.palexdev.mfxcore.controls;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import io.github.palexdev.mfxcore.base.Disposable;
-import io.github.palexdev.mfxcore.behavior.MFXBehavior;
-import io.github.palexdev.mfxcore.behavior.WithBehavior;
 import io.github.palexdev.mfxcore.input.WhenEvent;
 import io.github.palexdev.mfxcore.observables.When;
 import javafx.scene.Node;
 import javafx.scene.control.SkinBase;
 
 /// Extension of [SkinBase] used by components that want a seamless integration with the new Behavior API.
-/// The skin is responsible for initializing the behavior as needed.
 ///
 /// This integration defines a specific and recommended strategy to develop UI components. There are three main parts:
 ///  - the Control, which is the component, the class has all its specs
@@ -43,61 +39,68 @@ import javafx.scene.control.SkinBase;
 /// its view.
 ///
 /// [MFXControl] and [MFXLabeled] are a bridge between these three parts. They retain the reference of the current
-/// built behavior object, which can be retrieved via [#getBehavior()]. They are responsible for calling
-/// [#registerBehavior()] every time the behavior changes, as well as dispose it, of course.
-///
-/// The behavior is specifically responsible for managing user input, in other words, event handlers and filters.
-/// On the other hand, the skin is responsible for handling listeners related to the control's properties.
+/// built behavior object, which can be retrieved via [#behavior()], and they manage its entire lifecycle: creation,
+/// installation and disposal. The skin never drives the behavior's lifecycle, and the behavior never drives the skin's.
 ///
 /// Essentially, this follows the MVC (Model-View-Controller) pattern applied to UI controls. You have the flexibility to
 /// change either the skin or the behavior at any time, and the component will remain functional
 /// without requiring extensive code modifications.
 /// This high degree of modularity, given by the pattern, allows users to customize such components with ease.
 ///
-/// In all of this, the skin plays a central role. Because user input originates from UI elements,
-/// which are part of the view (the skin), it is responsible for creating the handlers that will invoke behavior methods.
-/// Additionally, the view (the skin) must respond to any changes in the control (essentially the model),
-/// which means it also adds the necessary listeners to monitor property changes.
+/// #### Responsibilities
 ///
+/// Both the skin and the behavior can register listeners and handlers, what differs is their scope:
+///  - the **skin** operates on its sub-components. It listens to the control's properties to keep the view up to date,
+///  and it registers handlers on the nodes it creates, which delegate to the behavior's methods
+///  - the **behavior** hosts the methods that react to user input. Optionally, it can register listeners and handlers
+///  of its own on the control directly, or on anything else that does not come from the skin
+///
+/// #### Registrations and ownership
+///
+/// Every listener and handler is owned by whoever registers it, and only its owner disposes it. A skin registers its
+/// constructs through [#listen(When\[\])] and [#onInput(WhenEvent\[\])], and they are all disposed together with the
+/// skin, see [#dispose()]. The same applies to behaviors, which have their own list.
+///
+/// Since a handler registered by the skin outlives any behavior swap, it must look up the behavior **when the event
+/// fires**, never before:
+/// ```java
+/// // Correct, the behavior is resolved on every event
+/// onInput(intercept(node, MouseEvent.MOUSE_CLICKED).handle(e -> behavior().mouseClicked(e)));
+///
+/// // Wrong, both capture the behavior at registration time and keep calling it after it has been replaced
+/// MFXBehavior<?> behavior = behavior();
+/// onInput(intercept(node, MouseEvent.MOUSE_CLICKED).handle(behavior::mouseClicked));
+/// onInput(intercept(node, MouseEvent.MOUSE_CLICKED).handle(behavior()::mouseClicked));
+/// ```
+/// Note that the last form is subtle: the receiver of a method reference is evaluated once, when the reference is created.
+///
+/// #### Development flow
 ///
 /// The development flow for controls with the new Behavior and Skin API would be:
 ///  - Have a component that extends either [MFXControl], [MFXLabeled] or any of their subclasses
 ///  - Having an implementation of this base Skin, either one of the already provided or a custom one
 ///  - Having a behavior class and set the factory on the component, or using [MFXBehavior] if you don't need it
-///  - Override the [#registerBehavior()] to initialize the behavior if needed
+///  - Override [#install()] to register the skin's listeners and handlers. JavaFX calls it automatically when the skin
+///  is set on the control, after the previous skin (if any) has been disposed. Registering there rather than in the
+///  constructor also guarantees that a skin which is built but never set on the control registers nothing
 ///  - Initialization and changes to the behavior factory are automatically handled, hassle-free
 public abstract class MFXSkinBase<C extends javafx.scene.control.Control & WithBehavior> extends SkinBase<C> {
+
     //================================================================================
     // Properties
     //================================================================================
-    private List<Disposable> listeners = new ArrayList<>();
+
+    private List<Disposable> disposables = new ArrayList<>();
 
     //================================================================================
     // Constructors
     //================================================================================
+
     public MFXSkinBase(C control) {super(control);}
-
-    //================================================================================
-    // Methods
-    //================================================================================
-
-    /// This should be overridden when needed to register additional behavior logic onto the control's behavior class.
-    ///
-    /// By default, calls [MFXBehavior#init()]
-    protected void registerBehavior() {
-        getBehavior().init();
-    }
 
     //================================================================================
     // Delegate Methods
     //================================================================================
-
-    /// Delegate for [#register(WhenEvent[])].
-    ///
-    /// Note this will do nothing if the return value of [#getBehavior()] is `null`.
-    public void events(WhenEvent<?>... wes) {
-        Optional.ofNullable(getBehavior()).ifPresent(b -> b.register(wes));
-    }
 
     /// While making skins for MaterialFX, I always make a great use of [When] constructs, simply because they are so
     /// useful and easy to use, there is no point in not doing it. This, however, comes with a little issue, the more
@@ -106,27 +109,45 @@ public abstract class MFXSkinBase<C extends javafx.scene.control.Control & WithB
     /// automatically without having every single construct instance in the class.
     ///
     /// Not only that, I'm actually so happy with the work done on [When] that I decided to create an equivalent
-    /// for `Events` too, see [WhenEvent], and a delegate method [#events(WhenEvent\[\])]
+    /// for `Events` too, see [WhenEvent], and a delegate method [#onInput(WhenEvent\[\])]
     ///
     /// **Note:** one-shot constructs (see [When#oneShot(boolean)] or [When#oneShot()])
     /// do not need to be registered as they will be automatically disposed on their first trigger.
     /// Doing so brings no harm, it's just useless.
-    public void listeners(When<?>... listeners) {
-        for (When<?> w : listeners) {
+    public void listen(When<?>... ws) {
+        for (When<?> w : ws) {
             if (!w.isActive()) w.listen();
-            this.listeners.add(w);
+            disposables.add(w);
+        }
+    }
+
+    /// The equivalent of [#listen(When\[\])] for [WhenEvent] constructs. They are stored in the same list and disposed
+    /// together with the skin, see [#dispose()].
+    ///
+    /// If the constructs were not activated before by invoking [WhenEvent#register()], this method will do it for you
+    /// automatically.
+    ///
+    /// Handlers that call into the behavior must resolve it through [#behavior()] every time they run, see the class
+    /// documentation.
+    public void onInput(WhenEvent<?>... ws) {
+        for (WhenEvent<?> w : ws) {
+            if (!w.isActive()) w.register();
+            disposables.add(w);
         }
     }
 
     //================================================================================
     // Overridden Methods
     //================================================================================
+
+    /// Disposes every construct registered through [#listen(When\[\])] and [#onInput(WhenEvent\[\])].
+    ///
+    /// Only what this skin registered is released, the behavior and its registrations are never touched.
     @Override
     public void dispose() {
-        listeners.forEach(Disposable::dispose);
-        listeners.clear();
-        listeners = null;
-        Optional.ofNullable(getBehavior()).ifPresent(MFXBehavior::clear);
+        disposables.forEach(Disposable::dispose);
+        disposables.clear();
+        disposables = null;
         super.dispose();
     }
 
@@ -143,12 +164,12 @@ public abstract class MFXSkinBase<C extends javafx.scene.control.Control & WithB
     ///
     /// Since this is called on the component, the return value could also be `null` if the behavior
     /// factory was not set or produces `null` references.
-    protected MFXBehavior<? extends Node> getBehavior() {
+    protected MFXBehavior<? extends Node> behavior() {
         return getSkinnable().getBehavior();
     }
 
     /// Convenience method to get and cast the control's behavior to the given class.
-    protected <B extends MFXBehavior<? extends Node>> B getBehaviorAs(Class<B> klass) {
-        return klass.cast(getBehavior());
+    protected <B extends MFXBehavior<? extends Node>> B behaviorAs(Class<B> klass) {
+        return klass.cast(behavior());
     }
 }

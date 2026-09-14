@@ -18,7 +18,7 @@
 
 package io.github.palexdev.mfxcore.popups.menu;
 
-import io.github.palexdev.mfxcore.behavior.MFXBehavior;
+import io.github.palexdev.mfxcore.controls.MFXBehavior;
 import javafx.scene.Node;
 import javafx.scene.TraversalDirection;
 import javafx.scene.input.KeyCode;

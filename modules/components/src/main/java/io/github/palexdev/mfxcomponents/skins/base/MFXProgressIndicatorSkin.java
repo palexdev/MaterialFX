@@ -134,7 +134,7 @@ public abstract class MFXProgressIndicatorSkin extends MFXSkinBase<MFXProgressIn
             ((ObservableValue<?>) o).getValue();
             indicator.requestLayout();
         };
-        listeners(
+        listen(
             onInvalidated(indicator.progressProperty())
                 .then(_ -> onProgressChanged())
                 .executeNow(),

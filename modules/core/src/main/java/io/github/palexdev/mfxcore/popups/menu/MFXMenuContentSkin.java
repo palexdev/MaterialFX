@@ -21,7 +21,6 @@ package io.github.palexdev.mfxcore.popups.menu;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import io.github.palexdev.mfxcore.behavior.MFXBehavior;
 import io.github.palexdev.mfxcore.controls.MFXSkinBase;
 import io.github.palexdev.mfxcore.input.WhenEvent;
 import io.github.palexdev.mfxcore.observables.When;
@@ -55,19 +54,11 @@ public class MFXMenuContentSkin extends MFXSkinBase<MFXMenuContent> {
 
     public MFXMenuContentSkin(MFXMenuContent mc) {
         super(mc);
-        addListeners();
     }
 
     //================================================================================
     // Methods
     //================================================================================
-
-    protected void addListeners() {
-        MFXMenuContent mc = getSkinnable();
-        listeners(
-            When.observe(this::updateChildren, getMenuItems(), mc.placeholderSupplierProperty()).executeNow()
-        );
-    }
 
     /// Updates the [MFXMenuContent]'s children list with the items retrieved from [MFXMenuContent#getMenu()].
     ///
@@ -111,12 +102,17 @@ public class MFXMenuContentSkin extends MFXSkinBase<MFXMenuContent> {
     //================================================================================
 
     @Override
-    protected void registerBehavior() {
-        super.registerBehavior();
+    public void install() {
         MFXMenuContent mc = getSkinnable();
-        MFXBehavior<? extends Node> behavior = getBehavior();
-        events(
-            WhenEvent.intercept(mc, KeyEvent.KEY_PRESSED).handle(behavior::keyPressed)
+
+        // Listeners
+        listen(
+            When.observe(this::updateChildren, getMenuItems(), mc.placeholderSupplierProperty()).executeNow()
+        );
+
+        // Input
+        onInput(
+            WhenEvent.intercept(mc, KeyEvent.KEY_PRESSED).handle(e -> behavior().keyPressed(e))
         );
     }
 

@@ -20,11 +20,10 @@ package io.github.palexdev.mfxcore.controls;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import io.github.palexdev.mfxcore.base.properties.functional.SupplierProperty;
 import io.github.palexdev.mfxcore.base.properties.styleable.StyleableDoubleProperty;
-import io.github.palexdev.mfxcore.behavior.MFXBehavior;
-import io.github.palexdev.mfxcore.behavior.WithBehavior;
 import io.github.palexdev.mfxcore.popups.MFXTooltip;
 import io.github.palexdev.mfxcore.utils.fx.StyleUtils;
 import javafx.beans.property.ObjectProperty;
@@ -36,19 +35,25 @@ import javafx.scene.Node;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.Skin;
 
+import static java.util.Optional.ofNullable;
+
 /// Base class that can be used as a starting point to implement text-based UI components that perfectly integrate with the
 /// new Behavior and Skin APIs, see [WithBehavior] and [MFXSkinnable]. It also implements the [MFXStyleable] interface.
 ///
 /// The integration with the new Behavior API is achieved by having a specific property, [#behaviorFactoryProperty()],
-/// which allows changing at any time the component's behavior. The property automatically handles initialization and disposal
-/// of behaviors. A reference to the current built behavior object is kept to be retrieved via [#getBehavior()].
+/// which allows changing at any time the component's behavior. The property automatically handles creation, installation
+/// and disposal of behaviors. A reference to the current built behavior object is kept to be retrieved via [#getBehavior()].
 ///
+/// A behavior is created as soon as the factory is set, but it is installed ([MFXBehavior#install()]) only when the
+/// first skin is created, see [#createDefaultSkin()]. When the factory changes after that, the old behavior is disposed,
+/// and the new one is created and installed immediately. Skin changes never affect the behavior.
 ///
 /// Enforces the use of [MFXSkinBase] instances as Skin implementations and makes the [#createDefaultSkin()] method final,
 /// thus denying users to override it. Similar to the behavior, to set custom skins, you can:
 ///  - Use the factory property, [#skinFactoryProperty()]
 ///  - Override [#buildSkin()] **(not recommended)**
-///  - Call [#setSkin(Skin)] directly **(absolutely not recommended)**
+///  - Call [#setSkin(Skin)] directly **(absolutely not recommended)**. If the very first skin is set this way, the
+///  behavior is never installed, since [#createDefaultSkin()] is bypassed
 ///
 /// The skin factory is more of a convenience to the user that does not need to inline-override the method responsible for
 /// creating the skin. The new mechanism is much more flexible and automatically integrates with the behavior API.<br >
@@ -62,9 +67,8 @@ public abstract class MFXLabeled extends Labeled implements WithBehavior, MFXSki
         @Override
         protected void invalidated() {
             if (behavior != null) behavior.dispose();
-            behavior = get().get();
-            MFXSkinBase<?> skin = (MFXSkinBase<?>) getSkin();
-            if (skin != null && behavior != null) skin.registerBehavior();
+            behavior = ofNullable(get()).map(Supplier::get).orElse(null);
+            if (getSkin() != null && behavior != null) behavior.install();
         }
     };
     private final SupplierProperty<MFXSkinBase<? extends Node>> skinFactory = new SupplierProperty<>() {
@@ -117,17 +121,15 @@ public abstract class MFXLabeled extends Labeled implements WithBehavior, MFXSki
     // Methods
     //================================================================================
 
-    /// This is the core method responsible for creating the component's skin when the [#skinFactoryProperty()]
-    /// changes. Does not allow `null` skins and automatically call [MFXSkinBase#registerBehavior()]
-    /// with the current behavior.
+    /// This is the core method responsible for creating the component's skin when the [#skinFactoryProperty()] changes.
     ///
     /// Note that the very first skin instance is created by JavaFX with the usual [#createDefaultSkin()].
+    ///
+    /// @throws NullPointerException if either the skin factory or the produced skin are `null`
     protected MFXSkinBase<?> buildSkin() {
-        MFXSkinBase<?> skin = getSkinFactory().get();
-        if (skin == null)
-            throw new IllegalArgumentException("The new skin cannot be null!");
-        skin.registerBehavior();
-        return skin;
+        return ofNullable(getSkinFactory())
+            .map(Supplier::get)
+            .orElseThrow(() -> new NullPointerException("Either the skin factory or the produced skin are null!"));
     }
 
     //================================================================================
@@ -136,21 +138,26 @@ public abstract class MFXLabeled extends Labeled implements WithBehavior, MFXSki
 
     /// {@inheritDoc}
     ///
-    /// Overridden to also initialize the behavior on the preloaded skin!
+    /// Overridden to go through [#createDefaultSkin()], so that the behavior is installed as it would be for a skin
+    /// created by JavaFX. Does nothing if the control already has a skin.
     @Override
     public void preloadSkin() {
-        MFXSkinnable.super.preloadSkin();
-        if (getSkin() instanceof MFXSkinBase<?> sb)
-            sb.registerBehavior();
+        if (getSkin() == null)
+            setSkin(createDefaultSkin());
     }
 
     /// {@inheritDoc}
     ///
-    ///
     /// Overridden to be final and to delegate to [#buildSkin()]. We still need this to initialize the component.
+    ///
+    /// This is also where the current behavior is installed. JavaFX calls this method only when the control has no skin,
+    /// which guarantees that the behavior is installed once, together with the first skin. Later skin changes go through
+    /// [#buildSkin()] only.
     @Override
     protected final MFXSkinBase<?> createDefaultSkin() {
-        return buildSkin();
+        MFXSkinBase<?> skin = buildSkin();
+        if (behavior != null) behavior.install();
+        return skin;
     }
 
     //================================================================================
@@ -214,6 +221,7 @@ public abstract class MFXLabeled extends Labeled implements WithBehavior, MFXSki
     //================================================================================
     // Getters/Setters
     //================================================================================
+
     @Override
     public MFXBehavior<? extends Node> getBehavior() {
         return behavior;
