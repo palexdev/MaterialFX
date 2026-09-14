@@ -56,6 +56,11 @@ public class FXCollectionsUtils {
             protected boolean computeValue() {
                 return collection.isEmpty();
             }
+
+            @Override
+            public void dispose() {
+                unbind(collection);
+            }
         };
     }
 
@@ -72,6 +77,11 @@ public class FXCollectionsUtils {
             @Override
             protected int computeValue() {
                 return collection.size();
+            }
+
+            @Override
+            public void dispose() {
+                unbind(collection);
             }
         };
     }
