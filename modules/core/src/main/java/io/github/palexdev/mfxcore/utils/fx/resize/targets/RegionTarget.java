@@ -28,7 +28,7 @@ import javafx.scene.layout.Region;
 /// The min/max bounds read the size *override* rather than the resolved value, because the resizer is what writes pref
 /// and a [Region#USE_PREF_SIZE] override would otherwise pin the node to the size it already has. A plain
 /// [Region#USE_COMPUTED_SIZE] still resolves: a skin that genuinely caps itself should be respected.
-public record RegionTarget(Region target) implements ResizeTarget<Region> {
+public record RegionTarget<R extends Region>(R target) implements ResizeTarget<R> {
 
     //================================================================================
     // Overridden Methods

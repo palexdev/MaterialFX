@@ -145,9 +145,8 @@ public class Resizer<T> implements Disposable {
     }
 
     /// @return a resizer working on a [RegionTarget]
-    @SuppressWarnings("unchecked")
     public static <R extends Region> Resizer<R> resizer(R region) {
-        return new Resizer<>((ResizeTarget<R>) new RegionTarget(region));
+        return new Resizer<>(new RegionTarget<>(region));
     }
 
     /// @return a resizer working on a [StageTarget]. The stage must have a scene by the time [#install()] runs
