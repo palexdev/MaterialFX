@@ -26,6 +26,8 @@ import io.github.palexdev.mfxcore.base.Disposable;
 import io.github.palexdev.mfxcore.enums.Zone;
 import io.github.palexdev.mfxcore.input.WhenEvent;
 import io.github.palexdev.mfxcore.utils.fx.resize.targets.*;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -99,7 +101,15 @@ public class Resizer<T> implements Disposable {
     //================================================================================
 
     private ResizeTarget<T> target;
-    private Node hitSource;
+    private final ObjectProperty<Node> hitSource = new SimpleObjectProperty<>() {
+        @Override
+        protected void invalidated() {
+            if (!isInstalled()) return;
+            cancel();
+            uninstall();
+            install();
+        }
+    };
     private CursorOwner cursorOwner;
 
     private ResizeBand band = ResizeBand.DEFAULT;
@@ -170,18 +180,18 @@ public class Resizer<T> implements Disposable {
     /// @throws IllegalStateException if already installed
     public Resizer<T> install() {
         if (isInstalled()) throw new IllegalStateException("Resizer is already installed");
-        hitSource = hitSource == null ? target.hitNode() : hitSource;
-        cursorOwner = CursorOwner.forNode(hitSource);
+        Node source = ofNullable(hitSource()).orElseGet(target::hitNode);
+        cursorOwner = CursorOwner.forNode(source);
         Collections.addAll(disposables,
-            intercept(hitSource, MouseEvent.MOUSE_PRESSED).handle(this::onMousePressed).asFilter().register(),
-            intercept(hitSource, MouseEvent.MOUSE_DRAGGED).handle(this::onMouseDragged).asFilter().register(),
-            intercept(hitSource, MouseEvent.MOUSE_RELEASED).handle(this::onMouseReleased).asFilter().register(),
-            intercept(hitSource, MouseEvent.MOUSE_MOVED).handle(this::onMouseMoved).asFilter().register(),
-            intercept(hitSource, MouseEvent.MOUSE_EXITED).handle(this::onMouseExited).asFilter().register(),
-            onInvalidated(hitSource.sceneProperty())
+            intercept(source, MouseEvent.MOUSE_PRESSED).handle(this::onMousePressed).asFilter().register(),
+            intercept(source, MouseEvent.MOUSE_DRAGGED).handle(this::onMouseDragged).asFilter().register(),
+            intercept(source, MouseEvent.MOUSE_RELEASED).handle(this::onMouseReleased).asFilter().register(),
+            intercept(source, MouseEvent.MOUSE_MOVED).handle(this::onMouseMoved).asFilter().register(),
+            intercept(source, MouseEvent.MOUSE_EXITED).handle(this::onMouseExited).asFilter().register(),
+            onInvalidated(source.sceneProperty())
                 .condition(Objects::nonNull)
                 .then(s -> disposables.add(escFilter(s).register()))
-                .executeNow(() -> hitSource.getScene() != null)
+                .executeNow(() -> source.getScene() != null)
                 .listen()
         );
         return this;
@@ -419,13 +429,12 @@ public class Resizer<T> implements Disposable {
     // Overridden Methods
     //================================================================================
 
-    /// Calls [#cancel()], then [#uninstall()], then drops the references to the target and the hit source.
+    /// Calls [#cancel()], then [#uninstall()], then drops the reference to the target.
     @Override
     public void dispose() {
         cancel();
         uninstall();
         target = null;
-        hitSource = null;
     }
 
     //================================================================================
@@ -433,13 +442,22 @@ public class Resizer<T> implements Disposable {
     //================================================================================
 
     public Node hitSource() {
+        return hitSource.get();
+    }
+
+    /// Specifies the Node on which the handlers are registered.
+    ///
+    /// On a `null` hit source the resizer falls back to [ResizeTarget#hitNode()]. Pass the target's parent to make the
+    /// outer half of the band reachable, see the class documentation.
+    ///
+    /// It can be changed, or bound, at any time. Changing it after [#install()] cancels a gesture in flight, see
+    /// [#cancel()], and re-registers the handlers on the new source.
+    public ObjectProperty<Node> hitSourceProperty() {
         return hitSource;
     }
 
-    /// Sets where the handlers are registered. Defaults to [ResizeTarget#hitNode()]; pass the parent to make the outer
-    /// half of the band reachable. Has no effect after [#install()].
     public Resizer<T> hitSource(Node node) {
-        hitSource = node;
+        hitSource.set(node);
         return this;
     }
 
