@@ -440,6 +440,15 @@ public class Resizer<T> implements Disposable {
     // Getters/Setters
     //================================================================================
 
+    protected ResizeTarget<T> target() {
+        return target;
+    }
+
+    /// Delegate to [ResizeTarget#hitNode()].
+    public Node hitNode() {
+        return target.hitNode();
+    }
+
     public Node hitSource() {
         return hitSource.get();
     }
