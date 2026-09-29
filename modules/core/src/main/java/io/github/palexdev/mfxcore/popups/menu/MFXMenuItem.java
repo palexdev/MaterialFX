@@ -477,6 +477,7 @@ public class MFXMenuItem extends MFXLabeled {
         protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
             return 120.0;
         }
+
         @Override
         protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
             return leftInset + minIconWidth() + minLeadingWidth() + LayoutUtils.snappedBoundWidth(trailing) + rightInset;
