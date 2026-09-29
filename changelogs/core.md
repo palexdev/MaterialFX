@@ -1,3 +1,23 @@
+## 25.10.0 - 29/09/2026 - 40d7aa32
+
+### Features
+
+- [`1b5c687f`](https://github.com/palexdev/MaterialFX/commit/1b5c687f) Add ObservableArrayList, an open replacement for FXCollections.observableArrayList
+- [`3cd5826b`](https://github.com/palexdev/MaterialFX/commit/3cd5826b) Rework the behavior and skin lifecycle, every registration now stays on its registrant
+
+### Bug Fixes
+
+- [`49ca8190`](https://github.com/palexdev/MaterialFX/commit/49ca8190) FXCollectionsUtils: properly handle disposal of custom bindings
+- [`54ca3a75`](https://github.com/palexdev/MaterialFX/commit/54ca3a75) NumberRangeProperty: getMax would return min
+
+### Refactoring
+
+- [`996dfe94`](https://github.com/palexdev/MaterialFX/commit/996dfe94) Resizer: allow retrieving the hitNode and subclasses to retrieve target
+- [`8014434e`](https://github.com/palexdev/MaterialFX/commit/8014434e) RegionTarget: make it work on generic Regions
+- [`cc38eeef`](https://github.com/palexdev/MaterialFX/commit/cc38eeef) Resizer: make hitSource a property that can be bound
+
+
+
 ## 25.9.3 - 09/08/2026 - d871e30a
 
 ### Features
