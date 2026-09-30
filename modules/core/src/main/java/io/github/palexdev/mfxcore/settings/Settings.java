@@ -49,44 +49,58 @@ public abstract class Settings {
         return prefs;
     }
 
+    protected <E extends Enum<E>> EnumSetting<E> registerEnum(String name, String description, E defaultValue) {
+        EnumSetting<E> setting = EnumSetting.of(name, description, defaultValue, this);
+        Set<Setting<?>> set = settingsDB.computeIfAbsent(getClass(), _ -> new LinkedHashSet<>());
+        set.add(setting);
+        return setting;
+    }
+    
     protected StringSetting registerString(String name, String description, String defaultValue) {
         StringSetting setting = StringSetting.of(name, description, defaultValue, this);
-        Set<Setting<?>> set = settingsDB.computeIfAbsent(getClass(), c -> new LinkedHashSet<>());
+        Set<Setting<?>> set = settingsDB.computeIfAbsent(getClass(), _ -> new LinkedHashSet<>());
         set.add(setting);
         return setting;
     }
 
     protected BooleanSetting registerBoolean(String name, String description, boolean defaultValue) {
         BooleanSetting setting = BooleanSetting.of(name, description, defaultValue, this);
-        Set<Setting<?>> set = settingsDB.computeIfAbsent(getClass(), c -> new LinkedHashSet<>());
+        Set<Setting<?>> set = settingsDB.computeIfAbsent(getClass(), _ -> new LinkedHashSet<>());
         set.add(setting);
         return setting;
     }
 
     protected NumberSetting<Double> registerDouble(String name, String description, double defaultValue) {
         NumberSetting<Double> setting = NumberSetting.forDouble(name, description, defaultValue, this);
-        Set<Setting<?>> set = settingsDB.computeIfAbsent(getClass(), c -> new LinkedHashSet<>());
+        Set<Setting<?>> set = settingsDB.computeIfAbsent(getClass(), _ -> new LinkedHashSet<>());
         set.add(setting);
         return setting;
     }
 
     protected NumberSetting<Float> registerFloat(String name, String description, float defaultValue) {
         NumberSetting<Float> setting = NumberSetting.forFloat(name, description, defaultValue, this);
-        Set<Setting<?>> set = settingsDB.computeIfAbsent(getClass(), c -> new LinkedHashSet<>());
+        Set<Setting<?>> set = settingsDB.computeIfAbsent(getClass(), _ -> new LinkedHashSet<>());
         set.add(setting);
         return setting;
     }
 
     protected NumberSetting<Integer> registerInteger(String name, String description, int defaultValue) {
         NumberSetting<Integer> setting = NumberSetting.forInteger(name, description, defaultValue, this);
-        Set<Setting<?>> set = settingsDB.computeIfAbsent(getClass(), c -> new LinkedHashSet<>());
+        Set<Setting<?>> set = settingsDB.computeIfAbsent(getClass(), _ -> new LinkedHashSet<>());
         set.add(setting);
         return setting;
     }
 
     protected NumberSetting<Long> registerLong(String name, String description, long defaultValue) {
         NumberSetting<Long> setting = NumberSetting.forLong(name, description, defaultValue, this);
-        Set<Setting<?>> set = settingsDB.computeIfAbsent(getClass(), c -> new LinkedHashSet<>());
+        Set<Setting<?>> set = settingsDB.computeIfAbsent(getClass(), _ -> new LinkedHashSet<>());
+        set.add(setting);
+        return setting;
+    }
+    
+    protected ByteArraySetting registerByteArray(String name, String description, Byte[] defaultValue) {
+        ByteArraySetting setting = ByteArraySetting.of(name, description, defaultValue, this);
+        Set<Setting<?>> set = settingsDB.computeIfAbsent(getClass(), _ -> new LinkedHashSet<>());
         set.add(setting);
         return setting;
     }
