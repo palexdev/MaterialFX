@@ -31,25 +31,18 @@ public class EnumUtils {
         return e.name().charAt(0) + e.name().substring(1).toLowerCase();
     }
 
-    /// Checks if the given enumerator (as a class) contains the given String,
-    /// same as [Enum#valueOf(Class, String)] but case-insensitive.
+    /// Same as [Enum#valueOf(Class, String)] but case-insensitive. If multiple constants differ only by case,
+    /// the first declared one is returned.
     ///
     /// @param clazz the Class object of the enum class from which to return a constant
     /// @param name the name of the constant to return
     /// @return the enum constant of the specified enum class with the specified name
+    /// @throws IllegalArgumentException if no constant matches the given name
     public static <E extends Enum<E>> E valueOfIgnoreCase(Class<E> clazz, String name) {
-        E enumeration = null;
         for (E e : clazz.getEnumConstants()) {
-            if (e.name().equalsIgnoreCase(name)) {
-                enumeration = e;
-            }
+            if (e.name().equalsIgnoreCase(name)) return e;
         }
-
-        if (enumeration == null) {
-            throw new IllegalArgumentException("No enum constant " + clazz.getCanonicalName() + "." + name);
-        }
-
-        return enumeration;
+        throw new IllegalArgumentException("No enum constant " + clazz.getCanonicalName() + "." + name);
     }
 
     /// Given an enum class and an enumeration of the given enum returns the next enumeration.
