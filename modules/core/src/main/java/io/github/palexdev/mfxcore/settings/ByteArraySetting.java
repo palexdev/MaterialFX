@@ -18,6 +18,8 @@
 
 package io.github.palexdev.mfxcore.settings;
 
+import java.util.Arrays;
+
 public class ByteArraySetting extends Setting<Byte[]> {
 
     //================================================================================
@@ -66,7 +68,9 @@ public class ByteArraySetting extends Setting<Byte[]> {
     }
 
     @Override
-    public void set(Byte[] val) {
+    protected boolean write(Byte[] val) {
+        if (Arrays.equals(val, get())) return false;
         container.prefs.putByteArray(name, toPrimitive(val));
+        return true;
     }
 }

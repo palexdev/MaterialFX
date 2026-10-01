@@ -40,7 +40,9 @@ public class StringSetting extends Setting<String> {
     }
 
     @Override
-    public void set(String val) {
+    protected boolean write(String val) {
+        if (val.equals(get())) return false;
         container.prefs().put(name, val);
+        return true;
     }
 }

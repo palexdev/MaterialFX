@@ -54,7 +54,9 @@ public class EnumSetting<E extends Enum<E>> extends Setting<E> {
     }
 
     @Override
-    public void set(E val) {
+    protected boolean write(E val) {
+        if (val == get()) return false;
         container.prefs().put(name, val.name());
+        return true;
     }
 }

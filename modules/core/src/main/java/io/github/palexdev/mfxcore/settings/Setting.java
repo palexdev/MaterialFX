@@ -18,7 +18,10 @@
 
 package io.github.palexdev.mfxcore.settings;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public abstract class Setting<T> {
 
@@ -31,6 +34,7 @@ public abstract class Setting<T> {
     protected final T defaultValue;
     protected final Settings container;
     protected boolean avoidEmpty = false;
+    private final List<Consumer<T>> listeners = new ArrayList<>();
 
     //================================================================================
     // Constructors
@@ -49,11 +53,23 @@ public abstract class Setting<T> {
 
     public abstract T get();
 
-    public abstract void set(T val);
+    protected abstract boolean write(T val);
 
     //================================================================================
     // Methods
     //================================================================================
+
+    public final void set(T val) {
+        if (write(val)) listeners.forEach(l -> l.accept(val));
+    }
+
+    public void onChange(Consumer<T> listener) {
+        listeners.add(listener);
+    }
+
+    public void removeOnChange(Consumer<T> listener) {
+        listeners.remove(listener);
+    }
 
     public void reset() {
         set(defaultValue);

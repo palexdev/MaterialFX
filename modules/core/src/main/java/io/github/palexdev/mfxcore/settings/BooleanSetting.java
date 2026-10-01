@@ -40,7 +40,9 @@ public class BooleanSetting extends Setting<Boolean> {
     }
 
     @Override
-    public void set(Boolean val) {
+    protected boolean write(Boolean val) {
+        if (val.equals(get())) return false;
         container.prefs().putBoolean(name, val);
+        return true;
     }
 }

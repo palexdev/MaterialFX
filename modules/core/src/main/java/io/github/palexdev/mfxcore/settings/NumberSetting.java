@@ -45,8 +45,10 @@ public class NumberSetting<N extends Number> extends Setting<N> {
     }
 
     @Override
-    public void set(N val) {
+    protected boolean write(N val) {
+        if (val.equals(get())) return false;
         updater.accept(container.prefs(), val);
+        return true;
     }
 
     //================================================================================
