@@ -23,27 +23,30 @@ import java.util.prefs.PreferenceChangeListener;
 import java.util.prefs.Preferences;
 
 public abstract class Settings {
+
     //================================================================================
     // Properties
     //================================================================================
+
+    private final String node;
     protected final Preferences prefs;
     protected static final Map<Class<? extends Settings>, Set<Setting<?>>> settingsDB = new HashMap<>();
 
     //================================================================================
     // Constructors
+
     //================================================================================
-    protected Settings() {
+    protected Settings(String node) {
+        if (node == null || node.isBlank())
+            throw new IllegalArgumentException("Node cannot be null or blank");
+        this.node = node;
         prefs = init();
     }
 
     //================================================================================
-    // Abstract Methods
-    //================================================================================
-    protected abstract String node();
-
-    //================================================================================
     // Methods
     //================================================================================
+
     protected Preferences init() {
         if (prefs == null) return Preferences.userRoot().node(node());
         return prefs;
@@ -132,6 +135,11 @@ public abstract class Settings {
     //================================================================================
     // Getters/Setters
     //================================================================================
+
+    protected String node() {
+        return node;
+    }
+
     protected Preferences prefs() {
         return prefs;
     }
