@@ -18,7 +18,9 @@
 
 package io.github.palexdev.mfxcore.settings;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.prefs.PreferenceChangeListener;
 import java.util.prefs.Preferences;
 
@@ -30,7 +32,7 @@ public abstract class Settings {
 
     private final String node;
     protected final Preferences prefs;
-    protected static final Map<Class<? extends Settings>, Set<Setting<?>>> settingsDB = new HashMap<>();
+    private final Set<Setting<?>> settings = new LinkedHashSet<>();
 
     //================================================================================
     // Constructors
@@ -54,57 +56,49 @@ public abstract class Settings {
 
     protected <E extends Enum<E>> EnumSetting<E> registerEnum(String name, String description, E defaultValue) {
         EnumSetting<E> setting = EnumSetting.of(name, description, defaultValue, this);
-        Set<Setting<?>> set = settingsDB.computeIfAbsent(getClass(), _ -> new LinkedHashSet<>());
-        set.add(setting);
+        settings.add(setting);
         return setting;
     }
     
     protected StringSetting registerString(String name, String description, String defaultValue) {
         StringSetting setting = StringSetting.of(name, description, defaultValue, this);
-        Set<Setting<?>> set = settingsDB.computeIfAbsent(getClass(), _ -> new LinkedHashSet<>());
-        set.add(setting);
+        settings.add(setting);
         return setting;
     }
 
     protected BooleanSetting registerBoolean(String name, String description, boolean defaultValue) {
         BooleanSetting setting = BooleanSetting.of(name, description, defaultValue, this);
-        Set<Setting<?>> set = settingsDB.computeIfAbsent(getClass(), _ -> new LinkedHashSet<>());
-        set.add(setting);
+        settings.add(setting);
         return setting;
     }
 
     protected NumberSetting<Double> registerDouble(String name, String description, double defaultValue) {
         NumberSetting<Double> setting = NumberSetting.forDouble(name, description, defaultValue, this);
-        Set<Setting<?>> set = settingsDB.computeIfAbsent(getClass(), _ -> new LinkedHashSet<>());
-        set.add(setting);
+        settings.add(setting);
         return setting;
     }
 
     protected NumberSetting<Float> registerFloat(String name, String description, float defaultValue) {
         NumberSetting<Float> setting = NumberSetting.forFloat(name, description, defaultValue, this);
-        Set<Setting<?>> set = settingsDB.computeIfAbsent(getClass(), _ -> new LinkedHashSet<>());
-        set.add(setting);
+        settings.add(setting);
         return setting;
     }
 
     protected NumberSetting<Integer> registerInteger(String name, String description, int defaultValue) {
         NumberSetting<Integer> setting = NumberSetting.forInteger(name, description, defaultValue, this);
-        Set<Setting<?>> set = settingsDB.computeIfAbsent(getClass(), _ -> new LinkedHashSet<>());
-        set.add(setting);
+        settings.add(setting);
         return setting;
     }
 
     protected NumberSetting<Long> registerLong(String name, String description, long defaultValue) {
         NumberSetting<Long> setting = NumberSetting.forLong(name, description, defaultValue, this);
-        Set<Setting<?>> set = settingsDB.computeIfAbsent(getClass(), _ -> new LinkedHashSet<>());
-        set.add(setting);
+        settings.add(setting);
         return setting;
     }
     
     protected ByteArraySetting registerByteArray(String name, String description, Byte[] defaultValue) {
         ByteArraySetting setting = ByteArraySetting.of(name, description, defaultValue, this);
-        Set<Setting<?>> set = settingsDB.computeIfAbsent(getClass(), _ -> new LinkedHashSet<>());
-        set.add(setting);
+        settings.add(setting);
         return setting;
     }
 
@@ -117,19 +111,7 @@ public abstract class Settings {
     }
 
     public void reset() {
-        Optional.ofNullable(settingsDB.get(getClass()))
-            .ifPresent(s -> s.forEach(Setting::reset));
-    }
-
-    public static void reset(Class<? extends Settings> klass) {
-        Optional.ofNullable(settingsDB.get(klass))
-            .ifPresent(s -> s.forEach(Setting::reset));
-    }
-
-    public static void resetAll() {
-        settingsDB.values().stream()
-            .flatMap(Collection::stream)
-            .forEach(Setting::reset);
+        settings.forEach(Setting::reset);
     }
 
     //================================================================================
@@ -144,13 +126,7 @@ public abstract class Settings {
         return prefs;
     }
 
-    public static Set<Setting<?>> getSettings(Class<? extends Settings> c) {
-        return Optional.ofNullable(settingsDB.get(c))
-            .map(Collections::unmodifiableSet)
-            .orElse(Collections.emptySet());
-    }
-
-    public static Map<Class<? extends Settings>, Set<Setting<?>>> getSettingsDB() {
-        return Collections.unmodifiableMap(settingsDB);
+    public Set<Setting<?>> settings() {
+        return Collections.unmodifiableSet(settings);
     }
 }
