@@ -18,10 +18,14 @@
 
 package io.github.palexdev.mfxcore.settings;
 
+import java.util.Objects;
+
 public abstract class Setting<T> {
+
     //================================================================================
     // Properties
     //================================================================================
+
     protected final String name;
     protected final String description;
     protected final T defaultValue;
@@ -31,6 +35,7 @@ public abstract class Setting<T> {
     //================================================================================
     // Constructors
     //================================================================================
+
     protected Setting(String name, String description, T defaultValue, Settings container) {
         this.name = name;
         this.description = description;
@@ -41,6 +46,7 @@ public abstract class Setting<T> {
     //================================================================================
     // Abstract Methods
     //================================================================================
+
     public abstract T get();
 
     public abstract void set(T val);
@@ -48,13 +54,31 @@ public abstract class Setting<T> {
     //================================================================================
     // Methods
     //================================================================================
+
     public void reset() {
         set(defaultValue);
     }
 
     //================================================================================
+    // Overridden Methods
+    //================================================================================
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof Setting<?> other
+               && name.equals(other.name)
+               && container.prefs().absolutePath().equals(other.container.prefs().absolutePath());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, container.prefs().absolutePath());
+    }
+
+    //================================================================================
     // Getters/Setters
     //================================================================================
+
     public String name() {
         return name;
     }
