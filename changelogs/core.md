@@ -1,3 +1,29 @@
+## 25.11.0 - 02/10/2026 - c94a9824
+
+### Removed
+
+- [`365fafcc`](https://github.com/palexdev/MaterialFX/commit/365fafcc) Remove FXML utils and module
+
+### Features
+
+- [`e407bdcd`](https://github.com/palexdev/MaterialFX/commit/e407bdcd) Implement setting class for enum values
+
+### Bug Fixes
+
+- [`f351b503`](https://github.com/palexdev/MaterialFX/commit/f351b503) Setting: treat null as reset and disallow null defaults
+
+### Refactoring
+
+- [`91889c06`](https://github.com/palexdev/MaterialFX/commit/91889c06) ByteArraySetting: use byte[] type instead of Byte[]
+- [`a67012ca`](https://github.com/palexdev/MaterialFX/commit/a67012ca) Setting: do not write if the value is the same and add our own listeners mechanism
+- [`6cf72b16`](https://github.com/palexdev/MaterialFX/commit/6cf72b16) Settings: remove static settingsDB in favor of per-instance collection
+- [`2fe56a7d`](https://github.com/palexdev/MaterialFX/commit/2fe56a7d) Setting: add equals and hashCode overrides
+- [`83c7e978`](https://github.com/palexdev/MaterialFX/commit/83c7e978) Settings: have the preferences node as a constructor arg
+- [`ccdfaa73`](https://github.com/palexdev/MaterialFX/commit/ccdfaa73) EnumUtils: make valueOfIgnoreCase return the first declared constant that matches
+- [`e60bf78f`](https://github.com/palexdev/MaterialFX/commit/e60bf78f) MenuBuilder: set the selection callback before the selection state, so that it can be run at build time
+
+
+
 ## 25.10.0 - 29/09/2026 - 40d7aa32
 
 ### Features

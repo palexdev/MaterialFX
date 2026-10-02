@@ -1,3 +1,9 @@
+## Project - c94a9824
+
+- 01/10/2026 [`e6218b5e`](https://github.com/palexdev/MaterialFX/commit/e6218b5e) Upgrade VirtualizedFX to v25.4.1
+
+
+
 ## Project - 40d7aa32
 
 - 15/08/2026 [`46cbad06`](https://github.com/palexdev/MaterialFX/commit/46cbad06) Update Material Color Utilities
