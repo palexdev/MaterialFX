@@ -59,7 +59,7 @@ public abstract class Settings {
         settings.add(setting);
         return setting;
     }
-    
+
     protected StringSetting registerString(String name, String description, String defaultValue) {
         StringSetting setting = StringSetting.of(name, description, defaultValue, this);
         settings.add(setting);
@@ -95,7 +95,7 @@ public abstract class Settings {
         settings.add(setting);
         return setting;
     }
-    
+
     protected ByteArraySetting registerByteArray(String name, String description, byte[] defaultValue) {
         ByteArraySetting setting = ByteArraySetting.of(name, description, defaultValue, this);
         settings.add(setting);
