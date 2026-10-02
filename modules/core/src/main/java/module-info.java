@@ -1,14 +1,12 @@
 import io.github.palexdev.mfxcore.controls.ThemeEngine;
 
 module mfx.core {
-    requires transitive javafx.controls;
-    requires transitive javafx.fxml;
-    requires transitive javafx.graphics;
-    requires transitive java.desktop;
-
     requires transitive mfx.localization;
 
-    requires java.prefs;
+    requires transitive java.desktop;
+    requires transitive java.prefs;
+    requires transitive javafx.controls;
+    requires transitive javafx.graphics;
 
     // Base
     exports io.github.palexdev.mfxcore.base;
@@ -67,7 +65,6 @@ module mfx.core {
     exports io.github.palexdev.mfxcore.utils;
     exports io.github.palexdev.mfxcore.utils.converters;
     exports io.github.palexdev.mfxcore.utils.fx;
-    exports io.github.palexdev.mfxcore.utils.fx.loader;
     exports io.github.palexdev.mfxcore.utils.fx.resize;
     exports io.github.palexdev.mfxcore.utils.fx.resize.targets;
 
