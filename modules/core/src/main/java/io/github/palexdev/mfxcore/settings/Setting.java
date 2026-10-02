@@ -43,7 +43,7 @@ public abstract class Setting<T> {
     protected Setting(String name, String description, T defaultValue, Settings container) {
         this.name = name;
         this.description = description;
-        this.defaultValue = defaultValue;
+        this.defaultValue = Objects.requireNonNull(defaultValue, "Default value cannot be null");
         this.container = container;
     }
 
@@ -60,7 +60,8 @@ public abstract class Setting<T> {
     //================================================================================
 
     public final void set(T val) {
-        if (write(val)) listeners.forEach(l -> l.accept(val));
+        T value = (val == null) ? defaultValue : val;
+        if (write(value) || val == null) listeners.forEach(l -> l.accept(value));
     }
 
     public void onChange(Consumer<T> listener) {

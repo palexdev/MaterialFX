@@ -20,8 +20,6 @@ package io.github.palexdev.mfxcore.settings;
 
 import io.github.palexdev.mfxcore.utils.EnumUtils;
 
-import static java.util.Objects.requireNonNull;
-
 /// A [Setting] for enum values, stored by [Enum#name()]. Lookup is case-insensitive, see
 /// [EnumUtils#valueOfIgnoreCase(Class, String)]. If the stored value matches no constant, the default value is returned.
 public class EnumSetting<E extends Enum<E>> extends Setting<E> {
@@ -31,7 +29,6 @@ public class EnumSetting<E extends Enum<E>> extends Setting<E> {
     //================================================================================
 
     public EnumSetting(String name, String description, E defaultValue, Settings container) {
-        requireNonNull(defaultValue);
         super(name, description, defaultValue, container);
     }
 
