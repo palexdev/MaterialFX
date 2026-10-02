@@ -20,57 +20,31 @@ package io.github.palexdev.mfxcore.settings;
 
 import java.util.Arrays;
 
-public class ByteArraySetting extends Setting<Byte[]> {
+public class ByteArraySetting extends Setting<byte[]> {
 
     //================================================================================
     // Constructors
     //================================================================================
-    public ByteArraySetting(String name, String description, Byte[] defaultValue, Settings container) {
+    public ByteArraySetting(String name, String description, byte[] defaultValue, Settings container) {
         super(name, description, defaultValue, container);
     }
 
-    public static ByteArraySetting of(String name, String description, Byte[] defaultValue, Settings container) {
+    public static ByteArraySetting of(String name, String description, byte[] defaultValue, Settings container) {
         return new ByteArraySetting(name, description, defaultValue, container);
-    }
-
-    //================================================================================
-    // Methods
-    //================================================================================
-    protected byte[] toPrimitive(Byte[] boxed) {
-        if (boxed == null) return null;
-        if (boxed.length == 0) return new byte[0];
-
-        byte[] result = new byte[boxed.length];
-        for (int i = 0; i < boxed.length; i++) {
-            result[i] = boxed[i];
-        }
-        return result;
-    }
-
-    protected Byte[] toBoxed(byte[] boxed) {
-        if (boxed == null) return null;
-        if (boxed.length == 0) return new Byte[0];
-
-        Byte[] result = new Byte[boxed.length];
-        for (int i = 0; i < boxed.length; i++) {
-            result[i] = boxed[i];
-        }
-        return result;
     }
 
     //================================================================================
     // Overridden Methods
     //================================================================================
     @Override
-    public Byte[] get() {
-        byte[] arr = container.prefs().getByteArray(name, toPrimitive(defaultValue));
-        return toBoxed(arr);
+    public byte[] get() {
+        return container.prefs().getByteArray(name, defaultValue);
     }
 
     @Override
-    protected boolean write(Byte[] val) {
+    protected boolean write(byte[] val) {
         if (Arrays.equals(val, get())) return false;
-        container.prefs.putByteArray(name, toPrimitive(val));
+        container.prefs.putByteArray(name, val);
         return true;
     }
 }

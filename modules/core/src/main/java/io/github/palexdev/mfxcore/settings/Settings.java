@@ -96,7 +96,7 @@ public abstract class Settings {
         return setting;
     }
     
-    protected ByteArraySetting registerByteArray(String name, String description, Byte[] defaultValue) {
+    protected ByteArraySetting registerByteArray(String name, String description, byte[] defaultValue) {
         ByteArraySetting setting = ByteArraySetting.of(name, description, defaultValue, this);
         settings.add(setting);
         return setting;
