@@ -19,6 +19,7 @@
 package io.github.palexdev.mfxcore.input;
 
 import java.lang.ref.Cleaner;
+import java.lang.ref.WeakReference;
 import java.util.*;
 
 import io.github.palexdev.mfxcore.observables.When;
@@ -41,9 +42,11 @@ import javafx.scene.Scene;
 /// 2) [#installOn(Node, Action...)] - Installs shortcuts on a node's scene.<br >
 /// When the node's scene changes, shortcuts are automatically migrated.
 /// Shortcuts are disposed when the node is garbage collected (via [Cleaner]).
+/// Shortcuts don't fire while the node is disabled.
 ///
 /// 3) [#installFor(MFXMenu)] - Convenience method to install shortcuts for all [MFXMenuItem]s that have a shortcut.<br >
 /// (the system is similar to JavaFX's menu items with the `accelerator` property)
+/// Shortcuts don't fire while the menu's owner is disabled.
 ///
 /// **Usage Example**
 ///
@@ -76,10 +79,13 @@ public class ShortcutManager {
 
     /// Installs the given [Action]s on the specified [Scene].
     ///
-    /// @see #doInstall(Scene, Action...)
+    /// These shortcuts always fire. To make them depend on the root's state, use
+    /// `installOn(scene.getRoot(), ...)` instead, see [#installOn(Node, Action...)].
+    ///
+    /// @see #doInstall(Scene, Node, Action...)
     public static void installOn(Scene scene, Action... actions) {
         Objects.requireNonNull(scene);
-        doInstall(scene, actions);
+        doInstall(scene, null, actions);
     }
 
     /// Installs shortcuts for all [MFXMenuItems][MFXMenuItem] in the given [MFXMenu] that have a [shortcut][KeyStroke].
@@ -126,11 +132,13 @@ public class ShortcutManager {
     /// When the node's scene changes, shortcuts are removed from the old scene and installed on the new one.
     ///
     /// Shortcuts are automatically disposed when the node is garbage collected.
+    ///
+    /// Shortcuts don't fire while the node is disabled (see [Node#isDisabled()]).
     public static void installOn(Node node, Action... actions) {
         When<Scene> listener = When.onChanged(node.sceneProperty())
             .then((o, n) -> {
                 if (o != null) doUninstall(o, actions);
-                if (n != null) doInstall(n, actions);
+                if (n != null) doInstall(n, node, actions);
             })
             .executeNow(() -> node.getScene() != null)
             .listen();
@@ -159,10 +167,13 @@ public class ShortcutManager {
 
     /// Creates or retrieves the [ShortcutManager] for the given scene, adds all actions to its [KeyMap],
     /// and installs the [KeyMap] if not already installed.
-    private static void doInstall(Scene scene, Action... actions) {
+    private static void doInstall(Scene scene, Node target, Action... actions) {
         ShortcutManager manager = sceneShortcutManagers.computeIfAbsent(scene, _ -> new ShortcutManager());
+        WeakReference<Node> targetRef = target != null ? new WeakReference<>(target) : null;
         for (Action action : actions) {
-            manager.keyMap.put(action.shortcut(), (_, _) -> action.action().run());
+            manager.keyMap.put(action.shortcut(), (_, _) -> {
+                if (canFire(targetRef)) action.action().run();
+            });
         }
         if (!manager.keyMap.isInstalled()) {
             cleaner.register(scene, manager.keyMap::dispose);
@@ -183,6 +194,12 @@ public class ShortcutManager {
                 }
                 sceneShortcutManagers.remove(scene);
             });
+    }
+
+    private static boolean canFire(WeakReference<Node> targetRef) {
+        if (targetRef == null) return true;
+        Node target = targetRef.get();
+        return target != null && !target.isDisabled();
     }
 
     //================================================================================
