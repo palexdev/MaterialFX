@@ -1,3 +1,11 @@
+## 25.11.1 - 14/10/2026 - b5c2a91c
+
+### Refactoring
+
+- [`1e1f457b`](https://github.com/palexdev/MaterialFX/commit/1e1f457b) ShortcutManager: prevent shortcuts from firing when the owner/target is disabled
+
+
+
 ## 25.11.0 - 02/10/2026 - c94a9824
 
 ### Removed
